@@ -76,7 +76,7 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts
+     * covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts
      *     ::getAssociatedProducts
      */
     public function testGetAssociatedProducts()

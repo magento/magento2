@@ -2,17 +2,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true sub:true*/
+/*jshint browser:true sub:true*/
 /*global alert*/
-/*global Handlebars*/
 define([
-    "jquery",
-    "handlebars",
-    "jquery/ui",
-    "mage/validation/validation",
-    "mage/dataPost"
-], function($){
-    "use strict";
+    'jquery',
+    'mage/template',
+    'jquery/ui',
+    'mage/validation/validation',
+    'mage/dataPost'
+], function ($, mageTemplate) {
+    'use strict';
 
     $.widget('mage.wishlist', {
         options: {
@@ -29,17 +28,18 @@ define([
         /**
          * Bind handlers to events.
          */
-        _create: function() {
+        _create: function () {
             var _this = this;
+
             if (!this.options.infoList) {
                 this.element
-                    .on('click', this.options.addToCartSelector, function() {
+                    .on('click', this.options.addToCartSelector, function () {
                         $.proxy(_this._addItemsToCart($(this)), _this);
                     })
-                    .on('addToCart', function(event, context) {
+                    .on('addToCart', function (event, context) {
                         $.proxy(_this._addItemsToCart($(context).parents('.cart-cell').find(_this.options.addToCartSelector)), _this);
                     })
-                    .on('click', this.options.btnRemoveSelector, $.proxy(function(event) {
+                    .on('click', this.options.btnRemoveSelector, $.proxy(function (event) {
                         event.preventDefault();
                         $.mage.dataPost().postData($(event.currentTarget).data('post-remove'));
                     }, this))
@@ -47,22 +47,22 @@ define([
                     .on('focusin focusout', this.options.commentInputType, $.proxy(this._focusComment, this));
             }
 
-			// Setup validation for the form
-			this.element.mage('validation', {
-				errorPlacement: function(error, element) { 
-					error.insertAfter(element.next()); 
-				}
-			});
+            // Setup validation for the form
+            this.element.mage('validation', {
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.next());
+                }
+            });
         },
 
         /**
          * Validate and Redirect.
          * @private
-         * @param {string} url
+         * @param {String} url
          */
-        _validateAndRedirect: function(url) {
+        _validateAndRedirect: function (url) {
             if (this.element.validation({
-                errorPlacement: function(error, element) {
+                errorPlacement: function (error, element) {
                     error.insertAfter(element.next());
                 }
             }).valid()) {
@@ -76,7 +76,7 @@ define([
          * @private
          * @param {jQuery object} elem - clicked 'add to cart' button
          */
-        _addItemsToCart: function(elem) {
+        _addItemsToCart: function (elem) {
             if (elem.data(this.options.dataAttribute)) {
                 var itemId = elem.data(this.options.dataAttribute),
                     url = this.options.addToCartUrl.replace('%item%', itemId),
@@ -85,7 +85,6 @@ define([
                     separator = (url.indexOf('?') >= 0) ? '&' : '?';
                 url += separator + inputName + '=' + encodeURIComponent(inputValue);
                 this._validateAndRedirect(url);
-                return;
             }
 
         },
@@ -94,23 +93,26 @@ define([
          * Add all wish list items to cart
          * @private
          */
-        _addAllWItemsToCart: function() {
+        _addAllWItemsToCart: function () {
             var url = this.options.addAllToCartUrl,
                 separator = (url.indexOf('?') >= 0) ? '&' : '?';
-            this.element.find(this.options.qtySelector).each(function(index, element) {
+
+            this.element.find(this.options.qtySelector).each(function (index, element) {
                 url += separator + $(element).prop('name') + '=' + encodeURIComponent($(element).val());
                 separator = '&';
             });
+
             this._validateAndRedirect(url);
         },
 
         /**
          * Toggle comment string.
          * @private
-         * @param {event} e
+         * @param {Event} e
          */
-        _focusComment: function(e) {
+        _focusComment: function (e) {
             var commentInput = e.currentTarget;
+
             if (commentInput.value === '' || commentInput.value === this.options.commentString) {
                 commentInput.value = commentInput.value === this.options.commentString ?
                     '' : this.options.commentString;
@@ -125,17 +127,17 @@ define([
             parentContainer: '#wishlist-table'
         },
 
-        _create: function() {
+        _create: function () {
             this._super();
             var selectAllCheckboxParent = $(this.options.selectAllCheckbox).parents(this.options.parentContainer),
                 checkboxCount = selectAllCheckboxParent.find('input:checkbox:not(' + this.options.selectAllCheckbox + ')').length;
             // If Select all checkbox is checked, check all item checkboxes, if unchecked, uncheck all item checkboxes
-            $(this.options.selectAllCheckbox).on('click', function() {
+            $(this.options.selectAllCheckbox).on('click', function () {
                 selectAllCheckboxParent.find('input:checkbox').attr('checked', $(this).is(':checked'));
             });
             // If all item checkboxes are checked, check select all checkbox,
             // if not all item checkboxes are checked, uncheck select all checkbox
-            selectAllCheckboxParent.on('click', 'input:checkbox:not(' + this.options.selectAllCheckbox + ')', $.proxy(function() {
+            selectAllCheckboxParent.on('click', 'input:checkbox:not(' + this.options.selectAllCheckbox + ')', $.proxy(function () {
                 var checkedCount = selectAllCheckboxParent.find('input:checkbox:checked:not(' + this.options.selectAllCheckbox + ')').length;
                 $(this.options.selectAllCheckbox).attr('checked', checkboxCount === checkedCount);
             }, this));
@@ -143,10 +145,11 @@ define([
     });
     // Extension for mage.wishlist info add to cart
     $.widget('mage.wishlist', $.mage.wishlist, {
-        _create: function() {
+        _create: function () {
             this._super();
+
             if (this.options.infoList) {
-                this.element.on('addToCart', $.proxy(function(event, context) {
+                this.element.on('addToCart', $.proxy(function (event, context) {
                     this.element.find('input:checkbox').attr('checked', false);
                     $(context).closest('tr').find('input:checkbox').attr('checked', true);
                     this.element.submit();
@@ -159,9 +162,9 @@ define([
          * validate checkbox selection.
          * @private
          */
-        _checkBoxValidate: function() {
+        _checkBoxValidate: function () {
             this.element.validation({
-                submitHandler: $.proxy(function(form) {
+                submitHandler: $.proxy(function (form) {
                     if ($(form).find('input:checkbox:checked').length) {
                         form.submit();
                     } else {
@@ -179,20 +182,21 @@ define([
             formTmplId: '#wishlist-hidden-form'
         },
 
-        _create: function() {
+        _create: function () {
             this._super();
             var _this = this;
-            this.element.on('click', '[data-wishlist-to-giftregistry]', function() {
+            this.element.on('click', '[data-wishlist-to-giftregistry]', function () {
                 var json = $(this).data('wishlist-to-giftregistry'),
                     tmplJson = {
-                        item: json['itemId'],
-                        entity: json['entity'],
-                        url: json['url']
+                        item: json.itemId,
+                        entity: json.entity,
+                        url: json.url
                     },
-                    source = $(_this.options.formTmplSelector).html(),
-                    template = Handlebars.compile(source),
-                    html = template(tmplJson);
-                    $(html).appendTo('body');
+                    html = mageTemplate(_this.options.formTmplSelector, {
+                        data: tmplJson
+                    });
+
+                $(html).appendTo('body');
                 $(_this.options.formTmplId).submit();
             });
         }

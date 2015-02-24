@@ -85,13 +85,20 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('name', ['header' => __('Product'), 'sortable' => false, 'index' => 'product_name']);
+        $this->addColumn(
+            'name', [
+                'header' => __('Product'),
+                'sortable' => false,
+                'index' => 'product_name',
+                'header_css_class' => 'col-product',
+                'column_css_class' => 'col-product'
+            ]
+        );
 
         $this->addColumn(
             'price',
             [
                 'header' => __('Price'),
-                'width' => '120px',
                 'type' => 'currency',
                 'currency_code' => (string)$this->_storeManager->getStore(
                     (int)$this->getParam('store')
@@ -104,12 +111,12 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
         $this->addColumn(
             'ordered_qty',
             [
-                'header' => __('Order Quantity'),
-                'width' => '120px',
-                'align' => 'right',
+                'header' => __('Quantity'),
                 'sortable' => false,
                 'index' => 'qty_ordered',
-                'type' => 'number'
+                'type' => 'number',
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
             ]
         );
 

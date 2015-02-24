@@ -69,7 +69,7 @@ class DisableOutput extends \Magento\Backend\Block\System\Config\Form\Fieldset
         sort($modules);
 
         foreach ($modules as $moduleName) {
-            if ($moduleName === 'Magento_Adminhtml' || $moduleName === 'Magento_Backend') {
+            if ($moduleName === 'Magento_Backend') {
                 continue;
             }
             $html .= $this->_getFieldHtml($element, $moduleName);

@@ -63,7 +63,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->jsHelperMock = $this->getMock('Magento\Backend\Helper\Js', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->websiteMock = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->stockFilterMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter',
@@ -103,7 +103,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
+     * covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testInitialize()

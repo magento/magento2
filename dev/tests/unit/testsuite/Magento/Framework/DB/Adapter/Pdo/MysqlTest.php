@@ -499,8 +499,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedQuery
      *
      * @dataProvider addColumnDataProvider
-     * @covers \Magento\Framework\DB\Adapter\Pdo\Mysql::addColumn
-     * @covers \Magento\Framework\DB\Adapter\Pdo\Mysql::_getColumnDefinition
+     * covers \Magento\Framework\DB\Adapter\Pdo\Mysql::addColumn
+     * covers \Magento\Framework\DB\Adapter\Pdo\Mysql::_getColumnDefinition
      */
     public function testAddColumn($options, $expectedQuery)
     {

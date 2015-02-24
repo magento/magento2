@@ -1,0 +1,68 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+// ToDo UI: When Installer will be merged in mainline: Expand functionality of responsive.less in lib and merge it with this collector
+
+//
+//  Media variables, that can be used for splitting styles into several files
+//  _____________________________________________
+
+// Sets whether to output common styles (true|false)
+@media-common: true;
+// Sets target device for styles output ('all' | 'desktop' | 'mobile')
+@media-target: 'all';
+
+//
+//  Media width mixin used to group styles output based on media queries
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
+}
+
+//
+//  Style groups for 'mobile' devices
+//  _____________________________________________
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+
+    @media all and (max-width: (@screen-l - 1)) {
+        .media-width('max', @screen-l);
+    }
+
+    @media all and (min-width: @screen-m) {
+        .media-width('min', @screen-m);
+    }
+
+    @media all and (min-width: @screen-l) {
+        .media-width('min', @screen-l);
+    }
+
+    @media all and (min-width: @screen-xl) {
+        .media-width('min', @screen-xl);
+    }
+}
+
+//
+//  Style groups for 'desktop' devices
+//  _____________________________________________
+
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+
+    @media all and (min-width: @screen-s) {
+        .media-width('min', @screen-s);
+    }
+
+    @media all and (max-width: (@screen-m - 1)) {
+        .media-width('max', @screen-m);
+    }
+
+    @media all and (max-width: (@screen-s - 1)) {
+        .media-width('max', @screen-s);
+    }
+
+    @media all and (max-width: (@screen-xs - 1)) {
+        .media-width('max', @screen-xs);
+    }
+}

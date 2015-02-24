@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Model\Template;
 
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($baseUrl);
 
         /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManagerMock */
-        $storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         /** @var \Magento\Widget\Model\Template\Filter $filter */

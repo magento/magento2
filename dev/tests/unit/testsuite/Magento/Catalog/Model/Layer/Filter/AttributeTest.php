@@ -40,7 +40,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
     private $filterItemFactory;
 
-    /** @var  \Magento\Framework\Store\StoreManagerInterface|MockObject */
+    /** @var  \Magento\Store\Model\StoreManagerInterface|MockObject */
     private $storeManager;
 
     /** @var  \Magento\Catalog\Model\Layer|MockObject */
@@ -60,8 +60,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
-        $this->storeManager = $this->getMockBuilder('\Magento\Framework\Store\StoreManagerInterface')
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();

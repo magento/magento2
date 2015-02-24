@@ -18,7 +18,7 @@ class Sendemail extends Element
     protected $_template = 'edit/tab/account/form/renderer/sendemail.phtml';
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|null
+     * @var \Magento\Store\Model\StoreManagerInterface|null
      */
     protected $_storeManager = null;
 

@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page mca="multishipping/checkout/overview" module="Magento_Multishipping">
-    <blocks>
-        <overviewBlock>
-            <class>Magento\Multishipping\Test\Block\Checkout\Overview</class>
-            <locator>#review-order-form</locator>
-            <strategy>css selector</strategy>
-        </overviewBlock>
-    </blocks>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="MultishippingCheckoutOverview" mca="multishipping/checkout/overview" module="Magento_Multishipping">
+        <block name="overviewBlock" class="Magento\Multishipping\Test\Block\Checkout\Overview" locator="#review-order-form" strategy="css selector"/>
+    </page>
+</config>

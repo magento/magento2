@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Checks that prices excl tax on order review and customer order pages are equal to specified in dataset.
@@ -50,7 +50,7 @@ class AssertTaxCalculationAfterCheckoutDownloadableExcludingTax extends
      */
     public function getOrderTotals($actualPrices)
     {
-        $viewBlock = $this->orderView->getOrderViewBlock();
+        $viewBlock = $this->customerOrderView->getOrderViewBlock();
         $actualPrices['subtotal_excl_tax'] = $viewBlock->getSubtotal();
         $actualPrices['subtotal_incl_tax'] = null;
 

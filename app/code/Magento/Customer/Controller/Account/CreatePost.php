@@ -13,7 +13,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
@@ -28,7 +28,7 @@ use Magento\Framework\Escaper;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -276,7 +276,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
             $this->messageManager->addException($e, __('Cannot save the customer.'));
         }
 
-        $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
+        $this->_getSession()->setCustomerFormData($this->getRequest()->getPostValue());
         $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
         $resultRedirect->setUrl($this->_redirect->error($defaultUrl));
         return $resultRedirect;

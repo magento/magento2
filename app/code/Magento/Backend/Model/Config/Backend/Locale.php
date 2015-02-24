@@ -95,14 +95,14 @@ class Locale extends \Magento\Framework\App\Config\Value
                             $scopeName = __('Default scope');
                             break;
 
-                        case \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE:
+                        case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
                             /** @var $website \Magento\Store\Model\Website */
                             $website = $this->_websiteFactory->create();
                             $websiteName = $website->load($data->getScopeId())->getName();
                             $scopeName = __('website(%1) scope', $websiteName);
                             break;
 
-                        case \Magento\Framework\Store\ScopeInterface::SCOPE_STORE:
+                        case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
                             /** @var $store \Magento\Store\Model\Store */
                             $store = $this->_storeFactory->create();
                             $storeName = $store->load($data->getScopeId())->getName();

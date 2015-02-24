@@ -27,7 +27,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Date::outputValue
+     * covers \Magento\Eav\Model\Attribute\Data\Date::outputValue
      *
      * @param string $format
      * @param mixed $value
@@ -70,7 +70,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Date::validateValue
+     * covers \Magento\Eav\Model\Attribute\Data\Date::validateValue
      *
      * @param mixed $value
      * @param array $rules
@@ -146,7 +146,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Date::compactValue
+     * covers \Magento\Eav\Model\Attribute\Data\Date::compactValue
      *
      * @param string $value
      * @param string $expectedResult
@@ -177,7 +177,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\Date::compactValue
+     * covers \Magento\Eav\Model\Attribute\Data\Date::compactValue
      */
     public function testCompactValueWithFalseValue()
     {

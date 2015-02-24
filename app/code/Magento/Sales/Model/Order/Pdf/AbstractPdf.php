@@ -231,7 +231,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         $this->y = $this->y ? $this->y : 815;
         $image = $this->_scopeConfig->getValue(
             'sales/identity/logo',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($image) {
@@ -291,7 +291,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             "\n",
             $this->_scopeConfig->getValue(
                 'sales/identity/address',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
         ) as $value) {

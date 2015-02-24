@@ -12,7 +12,7 @@ namespace Magento\DesignEditor\Model\Editor\QuickStyles\Renderer;
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\DefaultRenderer::toCss
+     * covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\DefaultRenderer::toCss
      * @dataProvider colorPickerData
      */
     public function testToCss($expectedResult, $data)

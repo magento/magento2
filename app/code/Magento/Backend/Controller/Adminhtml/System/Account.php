@@ -19,6 +19,6 @@ class Account extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::myaccount');
+        return $this->_authorization->isAllowed('Magento_Backend::myaccount');
     }
 }

@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Test Flow:
@@ -34,10 +34,10 @@ class AddProductToWishlistEntityTest extends AbstractWishlistTest
     /**
      * Prepare data for test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -47,13 +47,12 @@ class AddProductToWishlistEntityTest extends AbstractWishlistTest
     /**
      * Run Add Product To Wishlist test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $product
      * @return array
      */
-    public function test(CustomerInjectable $customer, $product)
+    public function test(Customer $customer, $product)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-32813');
         $product = $this->createProducts($product)[0];
 
         // Steps:

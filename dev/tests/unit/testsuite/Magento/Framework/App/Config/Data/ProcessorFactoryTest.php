@@ -30,7 +30,7 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
+     * covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      */
     public function testGetModelWithCorrectInterface()
     {
@@ -51,7 +51,7 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
+     * covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /\w+\\WrongBackendModel is not instance of \w+\\ProcessorInterface/
      */
@@ -73,7 +73,7 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
+     * covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      */
     public function testGetMemoryCache()
     {

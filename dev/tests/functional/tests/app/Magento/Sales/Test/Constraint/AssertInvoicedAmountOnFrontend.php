@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Constraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\InvoiceView;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\OrderView;
+use Magento\Sales\Test\Page\CustomerOrderView;
 
 /**
  * Class AssertInvoicedAmountOnFrontend
@@ -26,7 +26,7 @@ class AssertInvoicedAmountOnFrontend extends AbstractAssertOrderOnFrontend
      *
      * @param OrderHistory $orderHistory
      * @param OrderInjectable $order
-     * @param OrderView $orderView
+     * @param CustomerOrderView $customerOrderView
      * @param InvoiceView $invoiceView
      * @param array $ids
      * @return void
@@ -34,13 +34,13 @@ class AssertInvoicedAmountOnFrontend extends AbstractAssertOrderOnFrontend
     public function processAssert(
         OrderHistory $orderHistory,
         OrderInjectable $order,
-        OrderView $orderView,
+        CustomerOrderView $customerOrderView,
         InvoiceView $invoiceView,
         array $ids
     ) {
         $this->loginCustomerAndOpenOrderPage($order->getDataFieldConfig('customer_id')['source']->getCustomer());
         $orderHistory->getOrderHistoryBlock()->openOrderById($order->getId());
-        $orderView->getOrderViewBlock()->openLinkByName('Invoices');
+        $customerOrderView->getOrderViewBlock()->openLinkByName('Invoices');
         foreach ($ids['invoiceIds'] as $key => $invoiceId) {
             \PHPUnit_Framework_Assert::assertEquals(
                 number_format($order->getPrice()[$key]['grand_invoice_total'], 2),

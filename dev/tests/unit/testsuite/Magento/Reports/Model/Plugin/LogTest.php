@@ -66,7 +66,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Reports\Model\Plugin\Log::afterClean
+     * covers \Magento\Reports\Model\Plugin\Log::afterClean
      */
     public function testAfterClean()
     {

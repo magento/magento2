@@ -19,7 +19,7 @@ class State
      *
      * @var string
      */
-    private $_appMode;
+    protected $_appMode;
 
     /**
      * Is downloader flag

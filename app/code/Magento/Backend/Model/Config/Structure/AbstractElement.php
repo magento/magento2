@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure;
 
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 abstract class AbstractElement implements ElementInterface
 {
@@ -26,12 +26,12 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(StoreManagerInterface $storeManager)
     {
@@ -134,8 +134,8 @@ abstract class AbstractElement implements ElementInterface
     public function isVisible()
     {
         $showInScope = [
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
             \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
         ];
 

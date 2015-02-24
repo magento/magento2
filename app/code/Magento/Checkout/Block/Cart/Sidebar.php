@@ -73,7 +73,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
         if (is_null($count)) {
             $count = $this->_scopeConfig->getValue(
                 self::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $this->setData('item_count', $count);
         }
@@ -179,7 +179,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     {
         return (bool)$this->_scopeConfig->getValue(
             'checkout/sidebar/display',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

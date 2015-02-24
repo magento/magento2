@@ -60,18 +60,23 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     private $typeHandler;
 
     /**
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $_coreData;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory
      * @param \Magento\Downloadable\Model\Resource\Link $linkResource
      * @param \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory
@@ -86,12 +91,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
+        \Magento\Core\Helper\Data $coreData,
         \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory,
         \Magento\Downloadable\Model\Resource\Link $linkResource,
         \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory,
@@ -107,12 +112,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $this->_sampleFactory = $sampleFactory;
         $this->_linkFactory = $linkFactory;
         $this->typeHandler = $typeHandler;
+        $this->_coreData = $coreData;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
             $catalogProductType,
             $eventManager,
-            $coreData,
             $fileStorageDb,
             $filesystem,
             $coreRegistry,
@@ -485,7 +490,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             return $result;
         }
         if ($this->getLinkSelectionRequired($product) && $this->_isStrictProcessMode($processMode)) {
-            return __('Please specify product link(s).');
+            return __('Please specify product link(s).')->render();
         }
         return $result;
     }

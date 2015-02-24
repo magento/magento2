@@ -36,7 +36,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
     public function execute()
     {
         $hasError = false;
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         $queryId = $this->getRequest()->getPost('query_id', null);
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
         $redirectResult = $this->resultRedirectFactory->create();
