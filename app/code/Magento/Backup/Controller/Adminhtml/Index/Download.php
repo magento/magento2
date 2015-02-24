@@ -38,7 +38,8 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
         \Magento\Backup\Model\BackupFactory $backupModelFactory,
         \Magento\Framework\App\MaintenanceMode $maintenanceMode,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory) {
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
         parent::__construct(
             $context,
             $coreRegistry,

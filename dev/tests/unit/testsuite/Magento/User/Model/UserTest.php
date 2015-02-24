@@ -368,7 +368,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with($password, $this->_model->getPassword())
             ->will($this->returnValue(true));
         $this->_model->setIsActive(false);
-        $this->setExpectedException('Magento\\Framework\\Exception\\AuthenticationException', 'This account is inactive.');
+        $this->setExpectedException(
+            'Magento\\Framework\\Exception\\AuthenticationException',
+            'This account is inactive.'
+        );
         $this->_model->verifyIdentity($password);
     }
 

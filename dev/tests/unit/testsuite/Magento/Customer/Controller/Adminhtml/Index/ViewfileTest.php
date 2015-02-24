@@ -6,6 +6,9 @@
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ViewfileTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -125,7 +128,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
                     ['Magento\Core\Helper\File\Storage', $this->storage]
                 ]
-        );
+            );
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
 
