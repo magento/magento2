@@ -47,8 +47,7 @@ class DataProvider implements SuggestedQueriesInterface
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\AdvancedSearch\Model\Resource\RecommendationsFactory $recommendationsFactory,
         \Magento\Search\Model\QueryResultFactory $queryResultFactory
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->searchLayer = $layerResolver->get();
         $this->recommendationsFactory = $recommendationsFactory;
