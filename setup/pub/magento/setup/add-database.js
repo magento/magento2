@@ -21,8 +21,14 @@ angular.module('add-database', ['ngStorage'])
         $scope.testConnection = function () {
             $http.post('index.php/database-check', $scope.db)
                 .success(function (data) {
+                    // expected JSON response
                     $scope.testConnection.result = data;
-                    if (!(($scope.testConnection.result !== undefined) && (!$scope.testConnection.result.success))) {
+                    if (typeof $scope.testConnection.result !== 'object') {
+                        // not a JSON response, it's a string
+                        var rawData = data.split("{\"success\"");
+                        $scope.testConnection.result = JSON.parse("{\"success\"" + rawData[1]);
+                    }
+                    if ($scope.testConnection.result.success) {
                         $scope.nextState();
                     }
                 })
