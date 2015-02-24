@@ -15,4 +15,16 @@ interface ConfigInterface
      * @return bool
      */
     public function isSplit(FallbackContext $assetContext);
+
+    /**
+     * @param FallbackContext $assetContext
+     * @return \Magento\Framework\Config\View
+     */
+    public function getConfig(FallbackContext $assetContext);
+
+    /**
+     * @param FallbackContext $assetContext
+     * @return false|float|int|string
+     */
+    public function getPartSize(FallbackContext $assetContext);
 }
