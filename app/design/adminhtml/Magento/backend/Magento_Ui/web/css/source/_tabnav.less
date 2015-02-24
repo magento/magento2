@@ -4,6 +4,21 @@
 //  */
 
 //
+//  Variables
+//  _____________________________________________
+
+@admin__section-nav-title__color: @color-very-dark-gray-black;
+@admin__section-nav-title__bg-color: @color-white-fog2;
+@admin__section-nav-title__border-color: @color-lighter-gray2;
+
+@admin__section-nav-item__border-color: @color-lighter-gray2;
+@admin__section-nav-item__active__color: @color-phoenix;
+
+@admin__section-nav-link__color: @color-very-dark-gray-black;
+@admin__section-nav-link__hover__color: @color-very-dark-gray-black;
+@admin__section-nav-link__changed__color: @color-phoenix;
+
+//
 //  Tab Left Navigation
 //  _____________________________________________
 
@@ -13,12 +28,12 @@
 .admin__section-nav-title {
     padding: 0;
     margin: 0 0 -1px;
-    color: #333333;
+    color: @admin__section-nav-title__color;
     display: block;
     padding: 20px 13px;
-    background: #f1f1f1;
+    background: @admin__section-nav-title__bg-color;
     text-transform: uppercase;
-    border: 1px solid #e3e3e3;
+    border: 1px solid @admin__section-nav-title__border-color;
     line-height: 1.2;
     &._collapsible {
         padding-right: 35px;
@@ -35,7 +50,7 @@
         }
     }
     strong {
-        font-weight: 700;
+        font-weight: @font-weight__bold;
     }
 }
 .admin__section-nav-items {
@@ -48,9 +63,9 @@
     border-left: 3px solid transparent;
     margin: 0 0 -1px;
     &._active {
-        border-color: #eb5202;
+        border-color: @admin__section-nav-item__active__color;
         .admin__section-nav-link {
-            border-color: #e3e3e3;
+            border-color: @admin__section-nav-item__border-color;
             margin: 0;
             &:hover {
                 text-decoration: none;
@@ -80,11 +95,11 @@
     border-width: 1px 0;
     line-height: 1.2;
     font-weight: 500;
-    color: #333333;
+    color: @admin__section-nav-link__color;
     display: block;
     padding: 20px 30px 20px 10px;
     &:hover {
-        color: #333333;
+        color: @admin__section-nav-link__hover__color;
         text-decoration: underline;
     }
     &._changed {
@@ -100,7 +115,7 @@
             position: absolute;
             z-index: 2;
             font-size: 17px;
-            color: #eb5202;
+            color: @admin__section-nav-link__changed__color;
             width: 20px;
             height: 20px;
             top: 15px;
