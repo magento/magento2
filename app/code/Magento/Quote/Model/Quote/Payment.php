@@ -404,10 +404,10 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * Set payment additional details
      *
-     * @param string[] $additionalData
+     * @param string $additionalData
      * @return $this
      */
-    public function setAdditionalData(array $additionalData = null)
+    public function setAdditionalData($additionalData)
     {
         return $this->setData(self::KEY_ADDITIONAL_DATA, $additionalData);
     }

@@ -143,8 +143,8 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Set payment additional details
      *
-     * @param string[] $additionalData
+     * @param string $additionalData
      * @return $this
      */
-    public function setAdditionalData(array $additionalData = null);
+    public function setAdditionalData($additionalData);
 }

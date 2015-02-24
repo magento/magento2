@@ -57,7 +57,7 @@ class OrderCreateTest extends WebapiAbstract
         $orderItem->setSku('sku#1');
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $orderItem->setData('parent_item', $orderItem->getData() + ['parent_item' => null]);
-            $orderItem->setAdditionalData(['test']);
+            $orderItem->setAdditionalData('test');
         } else {
             $orderItem->setData('parent_item', ['weight' => 1]);
         }

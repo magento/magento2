@@ -28,6 +28,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the shipping carrier code.
      *
+     * @param string $carrierCode
      * @return $this
      */
     public function setCarrierCode($carrierCode)
@@ -48,6 +49,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the shipping method code.
      *
+     * @param string $methodCode
      * @return $this
      */
     public function setMethodCode($methodCode)
@@ -68,6 +70,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the shipping carrier title.
      *
+     * @param string $carrierTitle
      * @return $this
      */
     public function setCarrierTitle($carrierTitle)
@@ -88,6 +91,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the shipping method title.
      *
+     * @param string $methodTitle
      * @return $this
      */
     public function setMethodTitle($methodTitle)
@@ -108,6 +112,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the shipping amount in store currency.
      *
+     * @param float $amount
      * @return $this
      */
     public function setAmount($amount)
@@ -128,6 +133,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the shipping amount in base currency.
      *
+     * @param float $baseAmount
      * @return $this
      */
     public function setBaseAmount($baseAmount)
@@ -149,6 +155,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     /**
      * Sets the value of the availability flag for the current shipping method.
      *
+     * @param bool $available
      * @return $this
      */
     public function setAvailable($available)

@@ -22,6 +22,6 @@ $quote->getPayment()
     ->setCcType('visa')
     ->setCcExpYear(2014)
     ->setCcExpMonth(1)
-    ->setAdditionalData($paymentDetails);
+    ->setAdditionalData(serialize($paymentDetails));
 
 $quote->collectTotals()->save();
