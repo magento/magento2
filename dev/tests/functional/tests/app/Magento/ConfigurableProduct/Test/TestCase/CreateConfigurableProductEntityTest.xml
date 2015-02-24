@@ -130,8 +130,8 @@
       <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" next="Magento\Catalog\Test\Constraint\AssertProductInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" next="Magento\Configurable\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
-      <constraint name="Magento\Configurable\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" next="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
     </variation>
     <variation name="CreateConfigurableProductEntityTestVariation6" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-13361: Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)</data>
@@ -151,10 +151,10 @@
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
       <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
       <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Configurable\Test\Constraint\AssertConfigurableProductForm"/>
-      <constraint name="Magento\Configurable\Test\Constraint\AssertConfigurableProductForm" next="Magento\Catalog\Test\Constraint\AssertProductInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" next="Magento\Configurable\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Configurable\Test\Constraint\AssertConfigurableProductForm"/>
-      <constraint name="Magento\Configurable\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" next="Magento\Catalog\Test\Constraint\AssertProductInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" next="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" prev="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
     </variation>
   </testCase>
 </config>

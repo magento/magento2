@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="EditCurrencySymbolEntityTest">
+  <testCase name="Magento\CurrencySymbol\Test\TestCase\EditCurrencySymbolEntityTest">
     <variation name="EditCurrencySymbolEntityTestVariation1" firstConstraint="Magento\CurrencySymbol\Test\Constraint\AssertCurrencySymbolSuccessSaveMessage" method="test">
       <data name="configData" xsi:type="string">config_currency_symbols_usd_and_uah</data>
       <data name="currencySymbol/data/code" xsi:type="string">UAH</data>

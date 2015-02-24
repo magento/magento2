@@ -184,7 +184,7 @@ class Options extends Tab
                     );
                 }
             }
-            $formData[$fields['attribute_code']][$keyRoot] = $formDataItem;
+            $formData[$fields['name']][$keyRoot] = $formDataItem;
         }
 
         return $formData;

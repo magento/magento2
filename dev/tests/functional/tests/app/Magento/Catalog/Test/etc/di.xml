@@ -46,7 +46,7 @@
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
   </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertRelatedProductsSection">
+  <type name="Magento\Catalog\Test\Constraint\AssertProductRelatedProducts">
     <arguments>
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
@@ -56,7 +56,7 @@
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>
   </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertNoRelatedProductsSection">
+  <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentRelatedProducts">
     <arguments>
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>

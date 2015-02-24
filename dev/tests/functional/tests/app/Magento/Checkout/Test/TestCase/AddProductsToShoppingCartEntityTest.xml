@@ -75,9 +75,9 @@
       <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
       <data name="cart/data/grand_total" xsi:type="string">3249</data>
       <data name="issue" xsi:type="string">Bug: MAGETWO-24195</data>
-      <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" next="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" prev="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
-      <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" next="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" prev="Magento\Catalog\Test\Constraint\AssertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" next="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" next="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" prev="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" next="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" prev="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" next="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" prev="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart"/>
       <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" prev="Magento\Checkout\Test\Constraint\AssertCartItemsOptions"/>
     </variation>

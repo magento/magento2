@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-  <type name="Magento\Multishipping\Test\Constraint\AssertOrderSuccessPlacedMessage">
+  <type name="Magento\Multishipping\Test\Constraint\AssertMultishippingOrderSuccessPlacedMessage">
     <arguments>
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>

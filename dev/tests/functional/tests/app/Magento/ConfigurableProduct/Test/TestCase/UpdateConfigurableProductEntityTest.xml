@@ -123,8 +123,8 @@
       <data name="updatedProduct/data/weight" xsi:type="string">-</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Configurable\Test\Constraint\AssertConfigurableProductPage"/>
-      <constraint name="Magento\Configurable\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>

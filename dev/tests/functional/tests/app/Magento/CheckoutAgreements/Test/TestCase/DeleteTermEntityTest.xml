@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteTermEntityTest">
+  <testCase name="Magento\CheckoutAgreements\Test\TestCase\DeleteTermEntityTest">
     <variation name="DeleteTermEntityTestVariation1" firstConstraint="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage" method="test">
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="agreement/dataSet" xsi:type="string">term_enabled_text</data>
