@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Code\Generator\CodeGenerator;
+namespace Magento\Framework\Code\Generator;
 
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 
-class Zend extends \Zend\Code\Generator\ClassGenerator implements
-    \Magento\Framework\Code\Generator\CodeGenerator\CodeGeneratorInterface
+class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
+    \Magento\Framework\Code\Generator\CodeGeneratorInterface
 {
     /**
      * Possible doc block options
@@ -99,7 +99,7 @@ class Zend extends \Zend\Code\Generator\ClassGenerator implements
     public function addMethods(array $methods)
     {
         foreach ($methods as $methodOptions) {
-            $methodObject = new MethodGenerator();
+            $methodObject = $this->createMethodGenerator();
             $this->_setDataToObject($methodObject, $methodOptions, $this->_methodOptions);
 
             if (isset(
@@ -190,5 +190,23 @@ class Zend extends \Zend\Code\Generator\ClassGenerator implements
         }
 
         return parent::addPropertyFromGenerator($property);
+    }
+
+    /**
+     * Instantiate method generator object.
+     *
+     * @return MethodGenerator
+     */
+    protected function createMethodGenerator()
+    {
+        return new MethodGenerator();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNamespaceName()
+    {
+        return ltrim(parent::getNamespaceName(), '\\');
     }
 }

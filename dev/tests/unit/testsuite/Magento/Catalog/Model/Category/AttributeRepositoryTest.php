@@ -34,11 +34,6 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataConfigMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $searchResultMock;
 
     protected function setUp()
@@ -49,8 +44,6 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
         $this->attributeRepositoryMock =
             $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
-        $this->metadataConfigMock =
-            $this->getMock('Magento\Framework\Api\Config\MetadataConfig', [], [], '', false);
         $this->searchResultMock =
             $this->getMock(
                 'Magento\Framework\Api\SearchResultsInterface',
@@ -62,12 +55,16 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
                 [],
                 '',
-                false);
-        $this->model = new AttributeRepository(
-            $this->metadataConfigMock,
-            $this->searchBuilderMock,
-            $this->filterBuilderMock,
-            $this->attributeRepositoryMock
+                false
+            );
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            'Magento\Catalog\Model\Category\AttributeRepository',
+            [
+                'searchCriteriaBuilder' => $this->searchBuilderMock,
+                'filterBuilder' => $this->filterBuilderMock,
+                'eavAttributeRepository' => $this->attributeRepositoryMock
+            ]
         );
     }
 
@@ -113,9 +110,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
             $searchCriteriaMock
         )->willReturn($this->searchResultMock);
         $this->searchResultMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
-        $this->metadataConfigMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')->with(null)->willReturn(['attribute']);
-        $expected = array_merge([$itemMock], ['attribute']);
+        $expected = [$itemMock];
 
         $this->assertEquals($expected, $this->model->getCustomAttributesMetadata(null));
     }

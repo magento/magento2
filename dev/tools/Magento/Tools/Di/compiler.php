@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\ObjectManager\Code\Generator\Persistor;
+use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
 use Magento\Tools\Di\Code\Scanner;
 use Magento\Tools\Di\Compiler\Log\Log;
 use Magento\Tools\Di\Compiler\Log\Writer;
@@ -94,7 +95,9 @@ try {
             Persistor::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Persistor',
             Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
             Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-            SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults'
+            SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+            ObjectExtensionInterface::ENTITY_TYPE =>
+                'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'
         ]
     );
 
