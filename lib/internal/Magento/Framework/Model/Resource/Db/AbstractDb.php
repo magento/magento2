@@ -11,6 +11,7 @@ use Magento\Framework\Model\Exception as ModelException;
 /**
  * Abstract resource model class
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
 {
@@ -116,13 +117,29 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     protected $_serializableFields = [];
 
     /**
+     * @var TransactionManagerInterface
+     */
+    protected $transactionManager;
+
+    /**
+     * @var ObjectRelationProcessor
+     */
+    protected $objectRelationProcessor;
+
+    /**
      * Class constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\Model\Resource\Db\Context $context, $resourcePrefix = null)
     {
-        $this->_resources = $resource;
+        $this->transactionManager = $context->getTransactionManager();
+        $this->_resources = $context->getResources();
+        $this->objectRelationProcessor = $context->getObjectRelationProcessor();
+        if (!is_null($resourcePrefix)) {
+            $this->_resourcePrefix = $resourcePrefix;
+        }
         parent::__construct();
     }
 
@@ -260,7 +277,8 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         }
 
         if (!isset($this->_tables[$cacheName])) {
-            $this->_tables[$cacheName] = $this->_resources->getTableName($tableName);
+            $connectionName = $this->_resourcePrefix . '_read';
+            $this->_tables[$cacheName] = $this->_resources->getTableName($tableName, $connectionName);
         }
         return $this->_tables[$cacheName];
     }
@@ -391,6 +409,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                 $this->_serializeFields($object);
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
                 if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
                     $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
                     /**
@@ -454,25 +473,28 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws \Exception
      */
     public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->beginTransaction();
+        $connection = $this->transactionManager->start($this->_getWriteAdapter());
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
-            $this->_getWriteAdapter()->delete(
+            $this->objectRelationProcessor->delete(
+                $this->transactionManager,
+                $connection,
                 $this->getMainTable(),
-                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId())
+                $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId()),
+                $object->getData()
             );
             $this->_afterDelete($object);
-
             $object->isDeleted(true);
             $object->afterDelete();
-            $this->commit();
+            $this->transactionManager->commit();
             $object->afterDeleteCommit();
         } catch (\Exception $e) {
-            $this->rollBack();
+            $this->transactionManager->rollBack();
             throw $e;
         }
         return $this;
