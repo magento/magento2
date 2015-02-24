@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\Object\Copy;
 use Magento\Quote\Model\Quote\Item;
-use Magento\Sales\Api\Data\OrderItemDataBuilder as OrderItemBuilder;
+use Magento\Sales\Api\Data\OrderItemInterfaceFactory as OrderItemFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
@@ -22,20 +22,28 @@ class ToOrderItem
     protected $objectCopyService;
 
     /**
-     * @var OrderItemBuilder
+     * @var OrderItemFactory
      */
-    protected $orderItemBuilder;
+    protected $orderItemFactory;
 
     /**
-     * @param OrderItemBuilder $orderItemBuilder
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @param OrderItemFactory $orderItemFactory
      * @param Copy $objectCopyService
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OrderItemBuilder $orderItemBuilder,
-        Copy $objectCopyService
+        OrderItemFactory $orderItemFactory,
+        Copy $objectCopyService,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->orderItemBuilder = $orderItemBuilder;
+        $this->orderItemFactory = $orderItemFactory;
         $this->objectCopyService = $objectCopyService;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -64,16 +72,19 @@ class ToOrderItem
                 )
             );
         }
-        $this->orderItemBuilder->populateWithArray(array_merge($orderItemData, $data));
 
-        $this->orderItemBuilder->setProductOptions($options);
-
+        $orderItem = $this->orderItemFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $orderItem,
+            array_merge($orderItemData, $data),
+            '\Magento\Sales\Api\Data\OrderItemInterface'
+        );
+        $orderItem->setProductOptions($options);
         if ($quoteItem->getParentItem()) {
-            $this->orderItemBuilder->setQtyOrdered(
+            $orderItem->setQtyOrdered(
                 $orderItemData[OrderItemInterface::QTY_ORDERED] * $quoteItem->getParentItem()->getQty()
             );
         }
-
-        return $this->orderItemBuilder->create();
+        return $orderItem;
     }
 }

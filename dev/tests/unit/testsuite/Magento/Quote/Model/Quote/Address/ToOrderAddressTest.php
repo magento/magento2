@@ -18,9 +18,9 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderAddressDataBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderAddressInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderAddressBuilderMock;
+    protected $orderAddressFactoryMock;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -34,8 +34,8 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderAddressBuilderMock = $this->getMock(
-            'Magento\Sales\Api\Data\OrderAddressDataBuilder',
+        $this->orderAddressFactoryMock = $this->getMock(
+            'Magento\Sales\Api\Data\OrderAddressInterfaceFactory',
             ['populateWithArray', 'create'],
             [],
             '',
@@ -43,12 +43,14 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderInterface', [], [], '', false);
+        $dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Quote\Address\ToOrderAddress',
             [
-                'orderAddressBuilder' => $this->orderAddressBuilderMock,
-                'objectCopyService' => $this->objectCopyMock
+                'orderAddressFactory' => $this->orderAddressFactoryMock,
+                'objectCopyService' => $this->objectCopyMock,
+                'dataObjectHelper' => $dataObjectHelper
             ]
         );
     }
@@ -66,10 +68,10 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
             'to_order_address',
             $object
         )->willReturn($orderData);
-        $this->orderAddressBuilderMock->expects($this->once())->method('populateWithArray')
+        $this->orderAddressFactoryMock->expects($this->never())->method('populateWithArray')
             ->with(['test' => 'beer'])
             ->willReturnSelf();
-        $this->orderAddressBuilderMock->expects($this->once())
+        $this->orderAddressFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderInterfaceMock);
         $this->assertSame($this->orderInterfaceMock, $this->converter->convert($object, $data));

@@ -7,7 +7,7 @@
 namespace Magento\Quote\Model\Quote\Payment;
 
 use Magento\Quote\Model\Quote\Payment;
-use Magento\Sales\Api\Data\OrderPaymentDataBuilder as OrderPaymentBuilder;
+use Magento\Sales\Api\Data\OrderPaymentInterfaceFactory as OrderPaymentFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Framework\Object\Copy;
 use Magento\Payment\Model\Method\Substitution;
@@ -23,20 +23,28 @@ class ToOrderPayment
     protected $objectCopyService;
 
     /**
-     * @var OrderPaymentBuilder|\Magento\Framework\Api\Builder
+     * @var OrderPaymentFactory|\Magento\Framework\Api\Builder
      */
-    protected $orderPaymentBuilder;
+    protected $orderPaymentFactory;
 
     /**
-     * @param OrderPaymentBuilder $orderPaymentBuilder
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @param OrderPaymentFactory $orderPaymentFactory
      * @param Copy $objectCopyService
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OrderPaymentBuilder $orderPaymentBuilder,
-        Copy $objectCopyService
+        OrderPaymentFactory $orderPaymentFactory,
+        Copy $objectCopyService,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->orderPaymentBuilder = $orderPaymentBuilder;
+        $this->orderPaymentFactory = $orderPaymentFactory;
         $this->objectCopyService = $objectCopyService;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -51,20 +59,24 @@ class ToOrderPayment
             'to_order_payment',
             $object
         );
-        $payment = $this->orderPaymentBuilder
-            ->populateWithArray(array_merge($paymentData, $data))
-            ->setAdditionalInformation(
-                serialize(
-                    array_merge(
-                        $object->getAdditionalInformation(),
-                        [Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()]
-                    )
+
+        $orderPayment = $this->orderPaymentFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $orderPayment,
+            array_merge($paymentData, $data),
+            '\Magento\Sales\Api\Data\OrderPaymentInterface'
+        );
+        $orderPayment->setAdditionalInformation(
+            serialize(
+                array_merge(
+                    $object->getAdditionalInformation(),
+                    [Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()]
                 )
             )
-            ->create();
-        $payment->setCcNumber($object->getCcNumber());
-        $payment->setCcCid($object->getCcCid());
+        );
+        $orderPayment->setCcNumberEnc($object->getCcNumber());
+        $orderPayment->setCcCidEnc($object->getCcCidEnc());
 
-        return $payment;
+        return $orderPayment;
     }
 }
