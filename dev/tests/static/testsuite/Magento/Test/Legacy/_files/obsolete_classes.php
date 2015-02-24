@@ -1525,7 +1525,7 @@ return [
     ],
     ['Magento\Adminhtml\Controller\System\Design', 'Magento\Backend\Controller\Adminhtml\System\Design'],
     ['Magento\Adminhtml\Controller\System\Store', 'Magento\Backend\Controller\Adminhtml\System\Store'],
-    ['Magento\Adminhtml\Controller\System\Variable', 'Magento\Backend\Controller\Adminhtml\System\Variable'],
+    ['Magento\Adminhtml\Controller\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
     ['Magento\Adminhtml\Block\System\Account\Edit\Form', 'Magento\Backend\Block\System\Account\Edit\Form'],
     ['Magento\Adminhtml\Block\System\Account\Edit', 'Magento\Backend\Block\System\Account\Edit'],
     ['Magento\Adminhtml\Block\System\Cache\Edit', 'Magento\Backend\Block\System\Cache\Edit'],
@@ -1572,9 +1572,11 @@ return [
         'Magento\Backend\Block\System\Store\Grid\Render\Website'
     ],
     ['Magento\Adminhtml\Block\System\Store\Store', 'Magento\Backend\Block\System\Store\Store'],
-    ['Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Backend\Block\System\Variable\Edit\Form'],
-    ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Backend\Block\System\Variable\Edit'],
-    ['Magento\Adminhtml\Block\System\Variable', 'Magento\Backend\Block\System\Variable'],
+    ['Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Variable\Block\System\Variable\Edit\Form'],
+    ['Magento\Backend\Block\System\Variable\Edit\Form', 'Magento\Variable\Block\System\Variable\Edit\Form'],
+    ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Variable\Block\System\Variable\Edit'],
+    ['Magento\Backend\Block\System\Variable\Edit', 'Magento\Variable\Block\System\Variable\Edit'],
+    ['Magento\Adminhtml\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     [
         'Magento\Adminhtml\Block\Checkout\Agreement\Edit\Form',
         'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit\Form'
@@ -1589,6 +1591,7 @@ return [
     ],
     ['Magento\Adminhtml\Block\Checkout\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Adminhtml\Controller\Checkout\Agreement', 'Magento\Checkout\Controller\Adminhtml\Agreement'],
+    ['Magento\Backend\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     ['Magento\Core\Model\View\PublicFilesManagerInterface', 'Magento\Framework\View\Asset\SourceFileInterface'],
     ['Magento\Core\Model\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'],
     ['Magento\Framework\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'],
@@ -1760,6 +1763,35 @@ return [
     ['Magento\Adminhtml\Block\Report\Wishlist\Grid', 'Magento\Reports\Block\Adminhtml\Wishlist\Grid'],
     ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
+    ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Delete',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Delete'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Edit',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Edit'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Index',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Index'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\NewAction',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\NewAction'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Save',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Save'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Validate',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Validate'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\WysiwygPlugin',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\WysiwygPlugin'
+    ],
     ['Magento\Core\Model\Cookie', 'Magento\Framework\Stdlib\Cookie'],
     ['Magento\Core\Model\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Core\Block\Template\Context', 'Magento\Framework\View\Element\Template\Context'],
@@ -2302,6 +2334,10 @@ return [
     ['Magento\Core\Model\App\Area', 'Magento\Framework\App\Area'],
     ['Magento\Core\Model\App\Area\DesignExceptions', 'Magento\Framework\View\DesignExceptions'],
     ['Magento\Core\App\Action\FormKeyValidator', 'Magento\Framework\Data\Form\FormKey\Validator'],
+    ['Magento\Core\Model\Resource\Variable', 'Magento\Variable\Model\Resource\Variable'],
+    ['Magento\Core\Model\Resource\Variable\Collection', 'Magento\Variable\Model\Resource\Variable\Collection'],
+    ['Magento\Core\Model\Variable', 'Magento\Variable\Model\Variable'],
+    ['Magento\Core\Model\Variable\Config', 'Magento\Variable\Model\Variable\Config'],
     ['Magento\Checkout\Block\Adminhtml\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Checkout\Block\Adminhtml\Agreement\Edit', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit'],
     [

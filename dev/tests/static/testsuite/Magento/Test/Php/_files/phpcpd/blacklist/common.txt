@@ -128,7 +128,6 @@ Magento/Usps/Model/Carrier
 Magento/Dhl/Model
 Magento/Shipping/Model
 Magento/Ui
-setup
 Magento/Sales/Service/V1
 Magento/Sales/Api
 Magento/Sales/Spi

@@ -39,9 +39,7 @@
                     <resource id="Magento_Backend::tools" title="Tools" sortOrder="50">
                         <resource id="Magento_Backend::cache" title="Cache Management"  sortOrder="10" />
                     </resource>
-                    <resource id="Magento_Backend::system_other_settings" title="Other Settings"  sortOrder="80">
-                        <resource id="Magento_Backend::variable" title="Custom Variables"  sortOrder="20" />
-                    </resource>
+                    <resource id="Magento_Backend::system_other_settings" title="Other Settings"  sortOrder="80" />
                 </resource>
             </resource>
         </resources>
