@@ -376,10 +376,10 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the street values, if any, for the order address.
      *
-     * @param string[] $street
+     * @param string|string[] $street
      * @return $this
      */
-    public function setStreet(array $street = null);
+    public function setStreet($street);
 
     /**
      * Sets the city for the order address.

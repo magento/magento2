@@ -475,14 +475,6 @@ class Address extends AbstractAddress implements OrderAddressInterface
     /**
      * {@inheritdoc}
      */
-    public function setStreet(array $street = null)
-    {
-        return $this->setData(OrderAddressInterface::STREET, $street);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setCity($city)
     {
         return $this->setData(OrderAddressInterface::CITY, $city);
