@@ -60,7 +60,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected function _isAllowed()
     {
         $sectionId = $this->_request->getParam('section');
-        return $this->_authorization->isAllowed('Magento_Backend::config')
+        return $this->_authorization->isAllowed('Magento_Config::config')
             || $this->_configStructure->getElement($sectionId)->isAllowed();
     }
 

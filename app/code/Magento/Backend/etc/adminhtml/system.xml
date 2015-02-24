@@ -99,7 +99,7 @@
         <section id="design" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Design</label>
             <tab>general</tab>
-            <resource>Magento_Backend::config_design</resource>
+            <resource>Magento_Config::config_design</resource>
             <group id="theme" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Design Theme</label>
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -236,7 +236,7 @@
         <section id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>General</label>
             <tab>general</tab>
-            <resource>Magento_Backend::config_general</resource>
+            <resource>Magento_Config::config_general</resource>
             <group id="country" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Country Options</label>
                 <field id="allow" translate="label" type="multiselect" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -321,7 +321,7 @@
             <class>separator-top</class>
             <label>System</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::config_system</resource>
+            <resource>Magento_Config::config_system</resource>
             <group id="smtp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Mail Sending Settings</label>
                 <field id="disable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -375,7 +375,7 @@
         <section id="admin" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
             <label>Admin</label>
             <tab>advanced</tab>
-            <resource>Magento_Backend::config_admin</resource>
+            <resource>Magento_Config::config_admin</resource>
             <group id="emails" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Admin User Emails</label>
                 <field id="forgot_email_template" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
