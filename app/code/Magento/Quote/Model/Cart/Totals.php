@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Cart Totals
  *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @codeCoverageIgnore
  */
 class Totals extends AbstractExtensibleModel implements TotalsInterface

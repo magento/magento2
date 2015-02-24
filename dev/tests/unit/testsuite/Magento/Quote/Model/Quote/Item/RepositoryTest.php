@@ -313,19 +313,21 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
         $itemId = 5;
-//        $this->itemDataFactoryMock->expects($this->once())->method('create')->willReturn($this->dataMock);
-//        $this->itemDataFactoryMock->expects($this->once())->method('setQuoteId')->with($cartId)->willReturn($this->itemDataFactoryMock);
-//        $this->itemDataFactoryMock->expects($this->once())->method('setItemId')->with($itemId)->willReturn($this->itemDataFactoryMock);
-//        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-//        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
-//        $this->quoteRepositoryMock->expects($this->once())
-//            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-//        $this->quoteMock->expects($this->once())
-//            ->method('getItemById')->with($itemId)->will($this->returnValue($this->quoteItemMock));
-//        $this->quoteMock->expects($this->once())->method('removeItem');
-//        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-//        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-//
-//        $this->assertTrue($this->repository->deleteById($cartId, $itemId));
+        $this->itemDataFactoryMock->expects($this->once())->method('create')->willReturn($this->itemDataFactoryMock);
+        $this->itemDataFactoryMock->expects($this->once())->method('setQuoteId')
+            ->with($cartId)->willReturn($this->itemDataFactoryMock);
+        $this->itemDataFactoryMock->expects($this->once())->method('setItemId')
+            ->with($itemId)->willReturn($this->dataMock);
+        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
+        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getItemById')->with($itemId)->will($this->returnValue($this->quoteItemMock));
+        $this->quoteMock->expects($this->once())->method('removeItem');
+        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
+
+        $this->assertTrue($this->repository->deleteById($cartId, $itemId));
     }
 }

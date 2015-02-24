@@ -96,6 +96,8 @@ use Magento\Framework\Api\MetadataServiceInterface;
  * @method \Magento\Quote\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Quote\Model\Quote\Item unsHasConfigurationUnavailableError()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {

@@ -232,16 +232,23 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
 
     /**
      * @codeCoverageIgnoreStart
+     */
+
+    /**
+     * Get purchase order number
      *
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getPoNumber()
     {
         return $this->getData(self::KEY_PO_NUMBER);
     }
 
-    /*
-     * {@inheritdoc}
+    /**
+     * Set purchase order number
+     *
+     * @param string $poNumber
+     * @return $this
      */
     public function setPoNumber($poNumber)
     {
@@ -249,7 +256,9 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Get payment method code
+     *
+     * @return string
      */
     public function getMethod()
     {
@@ -257,7 +266,10 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set payment method code
+     *
+     * @param string $method
+     * @return $this
      */
     public function setMethod($method)
     {
@@ -265,7 +277,9 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Get credit card owner
+     *
+     * @return string|null
      */
     public function getCcOwner()
     {
@@ -273,7 +287,10 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card owner
+     *
+     * @param string $ccOwner
+     * @return $this
      */
     public function setCcOwner($ccOwner)
     {
@@ -281,7 +298,9 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Get credit card number
+     *
+     * @return string|null
      */
     public function getCcNumber()
     {
@@ -289,7 +308,10 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card number
+     *
+     * @param string $ccNumber
+     * @return $this
      */
     public function setCcNumber($ccNumber)
     {
@@ -297,7 +319,9 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Get credit card type
+     *
+     * @return string|null
      */
     public function getCcType()
     {
@@ -305,15 +329,20 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card type
+     *
+     * @param string $ccType
+     * @return $this
      */
     public function setCcType($ccType)
     {
-        return $this->setData(self::KEY_CC_TYPE,$ccType);
+        return $this->setData(self::KEY_CC_TYPE, $ccType);
     }
 
     /**
-     * {@inheritdoc}
+     * Get credit card expiration year
+     *
+     * @return string|null
      */
     public function getCcExpYear()
     {
@@ -322,7 +351,10 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card expiration year
+     *
+     * @param string $ccExpYear
+     * @return $this
      */
     public function setCcExpYear($ccExpYear)
     {
@@ -330,7 +362,9 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Get credit card expiration month
+     *
+     * @return string|null
      */
     public function getCcExpMonth()
     {
@@ -338,15 +372,20 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card expiration month
+     *
+     * @param string $ccExpMonth
+     * @return $this
      */
     public function setCcExpMonth($ccExpMonth)
     {
-        return $this->setData(self::KEY_CC_EXP_MONTH,$ccExpMonth);
+        return $this->setData(self::KEY_CC_EXP_MONTH, $ccExpMonth);
     }
 
     /**
-     * {@inheritdoc}
+     * Get payment additional details
+     *
+     * @return string[]|null
      */
     public function getAdditionalData()
     {
@@ -363,7 +402,10 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
-     * {@inheritdoc}
+     * Set payment additional details
+     *
+     * @param string[] $additionalData
+     * @return $this
      */
     public function setAdditionalData(array $additionalData = null)
     {
