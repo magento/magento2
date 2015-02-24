@@ -6,10 +6,11 @@
 //
 //  Variables
 //  _____________________________________________
-@field-tooltip-icon--color: #fff;
-@field-tooltip-icon--bg-color: #514943;
-@field-tooltip-content--bg-color: #fff8d7;
-@field-tooltip-content--border-color: #adadad;
+
+@field-tooltip-icon__color: @color-white;
+@field-tooltip-icon__background-color: @color-brownie;
+@field-tooltip-content__background-color: @color-lazy-sun;
+@field-tooltip-content__border-color: @color-dark-grayish-orange;
 
 //
 //  Form Fields
@@ -39,7 +40,7 @@
         cursor: pointer;
         &:before {
             content: "?";
-            font-weight: 500;
+            font-weight: @font-weight__heavier;
             font-size: 18px;
             display: inline-block;
             overflow: hidden;
@@ -48,8 +49,8 @@
             line-height: 22px;
             width: 22px;
             text-align: center;
-            color: @field-tooltip-icon--color;
-            background-color: @field-tooltip-icon--bg-color;
+            color: @field-tooltip-icon__color;
+            background-color: @field-tooltip-icon__background-color;
         }
         span {
             .visually-hidden();
@@ -64,10 +65,10 @@
         position: absolute;
         z-index: 1;
         width: 320px;
-        background: @field-tooltip-content--bg-color;
+        background: @field-tooltip-content__background-color;
         padding: 15px 25px;
         right: -66px;
-        border: 1px solid @field-tooltip-content--border-color;
+        border: 1px solid @field-tooltip-content__border-color;
         border-radius: 1px;
         bottom: 42px;
         @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
@@ -76,14 +77,14 @@
         &:before {
             content: "";
             display: block;
-            .arrow(down,16px,@field-tooltip-content--border-color);
+            .arrow(down,16px,@field-tooltip-content__border-color);
             position: absolute;
             right: 20px;
             top: 100%;
             z-index: 3;
         }
         &:after {
-            border-top-color: @field-tooltip-content--bg-color;
+            border-top-color: @field-tooltip-content__background-color;
             margin-top: -1px;
             z-index: 4;
         }
