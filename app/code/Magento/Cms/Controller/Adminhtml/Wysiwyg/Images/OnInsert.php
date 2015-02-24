@@ -9,9 +9,28 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+    ) {
+        $this->resultRawFactory = $resultRawFactory;
+        parent::__construct($context, $coreRegistry);
+    }
+
+    /**
      * Fire when select image
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -26,6 +45,9 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         $helper->setStoreId($storeId);
 
         $image = $helper->getImageHtmlDeclaration($filename, $asIs);
-        $this->getResponse()->setBody($image);
+
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+        return $resultRaw->setContents($image);
     }
 }

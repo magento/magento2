@@ -1,26 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalog/category/edit" module="Magento_Catalog">
-    <blocks>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <formPageActions>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Category\Edit\PageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </formPageActions>
-        <editForm>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm</class>
-            <locator>#category-edit-container</locator>
-            <strategy>css selector</strategy>
-        </editForm>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogCategoryEdit" area="Adminhtml" mca="catalog/category/edit" module="Magento_Catalog">
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+    <block name="formPageActions" class="Magento\Catalog\Test\Block\Adminhtml\Category\Edit\PageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="editForm" class="Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm" locator="#category-edit-container" strategy="css selector"/>
+  </page>
+</config>

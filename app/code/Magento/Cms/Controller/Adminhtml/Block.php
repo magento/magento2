@@ -30,24 +30,17 @@ class Block extends \Magento\Backend\App\Action
     }
 
     /**
-     * Init actions
+     * Init page
      *
-     * @return $this
+     * @param \Magento\Backend\Model\View\Result\Page $resultPage
+     * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    protected function initPage($resultPage)
     {
-        // load layout, set active menu and breadcrumbs
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Cms::cms_block'
-        )->_addBreadcrumb(
-            __('CMS'),
-            __('CMS')
-        )->_addBreadcrumb(
-            __('Static Blocks'),
-            __('Static Blocks')
-        );
-        return $this;
+        $resultPage->setActiveMenu('Magento_Cms::cms_block')
+            ->addBreadcrumb(__('CMS'), __('CMS'))
+            ->addBreadcrumb(__('Static Blocks'), __('Static Blocks'));
+        return $resultPage;
     }
 
     /**

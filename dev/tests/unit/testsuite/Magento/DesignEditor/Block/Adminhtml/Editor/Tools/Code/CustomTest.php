@@ -80,7 +80,7 @@ class CustomTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom::getDownloadCustomCssUrl
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom::getDownloadCustomCssUrl
      */
     public function testGetDownloadCustomCssUrl()
     {

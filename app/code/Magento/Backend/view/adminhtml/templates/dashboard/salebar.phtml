@@ -10,13 +10,13 @@
 <?php if (sizeof($block->getTotals()) > 0): ?>
     <?php foreach ($block->getTotals() as $_total): ?>
     <div class="dashboard-item dashboard-item-primary">
-        <header class="dashboard-item-header">
-            <h3 class="title"><?php echo $_total['label'] ?></h3>
-        </header>
-        <strong class="dashboard-sales-value">
-            <?php echo $_total['value'] ?>
-            <span class="dashboard-sales-decimals"><?php echo $_total['decimals'] ?></span>
-        </strong>
+        <div class="dashboard-item-title"><?php echo $_total['label'] ?></div>
+        <div class="dashboard-item-content">
+            <strong class="dashboard-sales-value">
+                <?php echo $_total['value'] ?>
+                <span class="dashboard-sales-decimals"><?php echo $_total['decimals'] ?></span>
+            </strong>
+        </div>
     </div>
     <?php endforeach; ?>
 <?php endif; ?>

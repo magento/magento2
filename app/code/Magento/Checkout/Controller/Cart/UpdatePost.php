@@ -67,13 +67,12 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
     /**
      * Update shopping cart data action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
         $updateAction = (string)$this->getRequest()->getParam('update_cart_action');
@@ -89,6 +88,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
                 $this->_updateShoppingCart();
         }
 
-        $this->_goBack();
+        return $this->_goBack();
     }
 }

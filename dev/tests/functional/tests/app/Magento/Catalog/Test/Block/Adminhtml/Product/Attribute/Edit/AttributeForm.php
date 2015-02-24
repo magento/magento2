@@ -34,6 +34,13 @@ class AttributeForm extends FormTabs
     protected $propertiesTab = '#product_attribute_tabs_main';
 
     /**
+     * Page title.
+     *
+     * @var string
+     */
+    protected $pageTitle = '.page-title .title';
+
+    /**
      * Get data of the tabs.
      *
      * @param FixtureInterface $fixture
@@ -94,15 +101,8 @@ class AttributeForm extends FormTabs
      */
     public function openTab($tabName)
     {
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
-            : Locator::SELECTOR_CSS;
-        $tab = $this->_rootElement->find($selector, $strategy);
-        $target = $this->browser->find('.page-title .title');// Handle menu overlap problem
-        $this->_rootElement->dragAndDrop($target);
-        $tab->click();
-        return $this;
+        $this->browser->find($this->pageTitle)->click(); // Handle menu overlap problem
+        return parent::openTab($tabName);
     }
 
     /**

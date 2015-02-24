@@ -93,7 +93,7 @@ class Types extends \Magento\Backend\App\Action
     public function _getStore()
     {
         $storeId = (int)$this->getRequest()->getParam('store', 0);
-        $storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
         if ($storeId == 0) {
             $defaultStore = $storeManager->getDefaultStoreView();
             if (!$defaultStore) {

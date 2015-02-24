@@ -12,6 +12,9 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemContainer/Enhanced.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemContainerPlugin/Simple.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Simple.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
+require_once __DIR__ . '/../Custom/Module/Model/StartingBackslash.php';
+require_once __DIR__ . '/../Custom/Module/Model/StartingBackslash/Plugin.php';
+
 class PluginListTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -75,6 +78,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
         $this->_configScopeMock->expects($this->any())->method('getCurrentScope')->will($this->returnValue('backend'));
         $this->_model->getNext('Magento\Framework\Interception\Custom\Module\Model\Item', 'getName');
         $this->_model->getNext('Magento\Framework\Interception\Custom\Module\Model\ItemContainer', 'getName');
+        $this->_model->getNext('Magento\Framework\Interception\Custom\Module\Model\StartingBackslash', 'getName');
 
         $this->assertEquals(
             'Magento\Framework\Interception\Custom\Module\Model\ItemPlugin\Simple',
@@ -88,6 +92,13 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Interception\Custom\Module\Model\ItemContainerPlugin\Simple',
             $this->_model->getPlugin(
                 'Magento\Framework\Interception\Custom\Module\Model\ItemContainer',
+                'simple_plugin'
+            )
+        );
+        $this->assertEquals(
+            'Magento\Framework\Interception\Custom\Module\Model\StartingBackslash\Plugin',
+            $this->_model->getPlugin(
+                'Magento\Framework\Interception\Custom\Module\Model\StartingBackslash',
                 'simple_plugin'
             )
         );
@@ -169,8 +180,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
+     * covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
      */
     public function testInheritPluginsWithNonExistingClass()
     {
@@ -182,8 +193,8 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
-     * @covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
+     * covers \Magento\Framework\Interception\PluginList\PluginList::getNext
+     * covers \Magento\Framework\Interception\PluginList\PluginList::_loadScopedData
      */
     public function testLoadScopedDataCached()
     {

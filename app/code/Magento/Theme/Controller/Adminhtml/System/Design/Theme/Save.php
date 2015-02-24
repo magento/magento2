@@ -32,7 +32,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             ['fileService' => $cssService]
         );
         try {
-            if ($this->getRequest()->getPost()) {
+            if ($this->getRequest()->getPostValue()) {
                 /** @var $theme \Magento\Theme\Model\Theme */
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);

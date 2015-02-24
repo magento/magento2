@@ -159,7 +159,7 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
     public function testIsAllowed()
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')
-            ->with('rss/order/status', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with('rss/order/status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertTrue($this->model->isAllowed());
     }

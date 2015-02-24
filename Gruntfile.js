@@ -9,7 +9,9 @@ module.exports = function (grunt) {
 
     //  Required plugins
     //  _____________________________________________
-    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt);
+
+    var specRunner = require('./dev/tests/js/framework/spec_runner')(grunt),
+        svgo = require('imagemin-svgo');
 
     require('./dev/tools/grunt/tasks/mage-minify')(grunt);
 
@@ -20,8 +22,6 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt, {
         pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']
     });
-
-    var svgo = require('imagemin-svgo');
 
     //  Configuration
     //  _____________________________________________
@@ -126,6 +126,23 @@ module.exports = function (grunt) {
         }
     };
 
+    //  Banners
+    //  ---------------------------------------------
+
+    var banner = {
+        firstLine: 'Copyright © <%= grunt.template.today("yyyy") %> Magento. All rights reserved.',
+        secondLine: 'See COPYING.txt for license details.',
+        css: function(){
+            return '/**\n * ' + this.firstLine + '\n * ' + this.secondLine + '\n */\n';
+        },
+        less: function(){
+            return '// /**\n//  * ' + this.firstLine + '\n//  * ' + this.secondLine + '\n//  */\n';
+        },
+        html: function(){
+            return '<!--\n/**\n * ' + this.firstLine + '\n * ' + this.secondLine + '\n */\n-->\n';
+        }
+    };
+
     //  Tasks
     //  _____________________________________________
 
@@ -135,6 +152,7 @@ module.exports = function (grunt) {
         path: path,
         theme: theme,
         combo: combo,
+        banner: banner,
 
         //  Execution into cmd
         //  ---------------------------------------------
@@ -318,7 +336,8 @@ module.exports = function (grunt) {
 
         cssmin: {
             options: {
-                report: 'gzip'
+                report: 'gzip',
+                keepSpecialComments: 0
             },
             setup: {
                 files: {
@@ -342,6 +361,47 @@ module.exports = function (grunt) {
             }
         },
 
+        //  Banners
+        //  ---------------------------------------------
+
+        usebanner: {
+            options: {
+                position: 'top',
+                linebreak: true
+            },
+            setup: {
+                options: {
+                    banner: banner.css()
+                },
+                files: {
+                    src: '<%= path.css.setup %>/*.css'
+                }
+            },
+            documentationCss: {
+                options: {
+                    banner: banner.css()
+                },
+                files: {
+                    src: '<%= path.doc %>/**/*.css'
+                }
+            },
+            documentationLess: {
+                options: {
+                    banner: banner.less()
+                },
+                files: {
+                    src: '<%= path.doc %>/**/*.less'
+                }
+            },
+            documentationHtml: {
+                options: {
+                    banner: banner.html()
+                },
+                files: {
+                    src: '<%= path.doc %>/**/*.html'
+                }
+            }
+        },
 
         //  Watches files for changes and runs tasks based on the changed files
         //  ---------------------------------------------
@@ -537,6 +597,12 @@ module.exports = function (grunt) {
         'clean:pub'
     ]);
 
+    grunt.registerTask('documentation-banners', [
+        'usebanner:documentationCss',
+        'usebanner:documentationLess',
+        'usebanner:documentationHtml'
+    ]);
+
     //  Production
     //  ---------------------------------------------
 
@@ -545,7 +611,8 @@ module.exports = function (grunt) {
             grunt.task.run([
                 'less:' + component,
                 'autoprefixer:' + component,
-                'cssmin:' + component
+                'cssmin:' + component,
+                'usebanner:' + component
             ]);
         }
         if (component == undefined) {

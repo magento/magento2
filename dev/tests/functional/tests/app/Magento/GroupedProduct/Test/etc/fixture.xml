@@ -6,7 +6,7 @@
  */
 -->
 <fixture>
-    <groupedProductInjectable module="Magento_GroupedProduct">
+    <groupedProduct module="Magento_GroupedProduct">
         <type>eav</type>
         <entity_type>catalog_product</entity_type>
         <product_type>grouped</product_type>
@@ -33,5 +33,5 @@
             </create_url_params>
             <input_prefix>product</input_prefix>
         </data_config>
-    </groupedProductInjectable>
+    </groupedProduct>
 </fixture>

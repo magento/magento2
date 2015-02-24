@@ -14,4 +14,11 @@ interface ScopeResolverInterface
      * @return \Magento\Framework\App\ScopeInterface
      */
     public function getScope($scopeId = null);
+
+    /**
+     * Retrieve scopes array
+     *
+     * @return \Magento\Framework\App\ScopeInterface[]
+     */
+    public function getScopes();
 }

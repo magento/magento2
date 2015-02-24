@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\TestCase\Injectable;
@@ -61,10 +61,10 @@ class DeleteCustomerBackendEntityTest extends Injectable
     /**
      * Runs Delete Customer Backend Entity test
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    public function testDeleteCustomerBackendEntity(CustomerInjectable $customer)
+    public function testDeleteCustomerBackendEntity(Customer $customer)
     {
         // Preconditions:
         $customer->persist();

@@ -105,7 +105,8 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
                 'setActionName',
                 'getParam',
                 'getPost',
-                'getCookie'
+                'getCookie',
+                'isSecure',
             ],
             [],
             '',

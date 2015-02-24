@@ -64,7 +64,10 @@ class Config extends \Magento\Framework\Config\AbstractXml
         }
 
         if ($withEmpty) {
-            array_unshift($options, ['value' => '', 'label' => __('-- Please Select --')]);
+            array_unshift($options, [
+                'value' => '',
+                'label' => (string)new \Magento\Framework\Phrase('-- Please Select --')
+            ]);
         }
         return $options;
     }

@@ -21,7 +21,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Store\StoreManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
@@ -36,7 +36,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
             '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory', ['create'], [], '', false);
 
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Framework\Store\StoreManagerInterface', [], [], '', false
+            '\Magento\Store\Model\StoreManagerInterface', [], [], '', false
         );
 
         $this->layerMock = $this->getMock(

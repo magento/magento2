@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="search/term/edit" module="Magento_CatalogSearch">
-    <blocks>
-        <form>
-            <class>Magento\CatalogSearch\Test\Block\Adminhtml\Edit\SearchTermForm</class>
-            <locator>#edit_form</locator>
-            <strategy>css selector</strategy>
-        </form>
-        <formPageActions>
-            <class>Magento\Backend\Test\Block\FormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </formPageActions>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogSearchEdit" area="Adminhtml" mca="search/term/edit" module="Magento_CatalogSearch">
+    <block name="form" class="Magento\CatalogSearch\Test\Block\Adminhtml\Edit\SearchTermForm" locator="#edit_form" strategy="css selector"/>
+    <block name="formPageActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+  </page>
+</config>

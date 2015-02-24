@@ -135,7 +135,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getParam', 'getPost']
+            ['getParam', 'getPost', 'getPostValue']
         );
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager',
@@ -328,11 +328,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         /**
-         * @var \Magento\Framework\Store\StoreManagerInterface
+         * @var \Magento\Store\Model\StoreManagerInterface
          * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
          */
         $storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface',
+            'Magento\Store\Model\StoreManagerInterface',
             [],
             '',
             false,
@@ -408,7 +408,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                         ['Magento\Backend\Model\Auth\Session', $sessionMock],
                         ['Magento\Framework\Registry', $registryMock],
                         ['Magento\Cms\Model\Wysiwyg\Config', $wysiwygConfigMock],
-                        ['Magento\Framework\Store\StoreManagerInterface', $storeManagerMock],
+                        ['Magento\Store\Model\StoreManagerInterface', $storeManagerMock],
                     ]
                 )
             );
@@ -441,13 +441,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        [$postData],
                         ['use_config', ['attribute']],
                         ['use_default', ['default-attribute']],
                         ['return_session_messages_only', true],
                     ]
                 )
             );
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getPostValue')
+            ->willReturn($postData);
         $categoryMock->expects($this->once())
             ->method('addData')
             ->with($postData['general']);

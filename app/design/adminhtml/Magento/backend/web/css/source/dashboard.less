@@ -6,8 +6,8 @@
 /*
     Dashboard
 -------------------------------------- */
-@dashboard-bg: #f7f3eb;
-@dashboard-tab-content-bg: #fff;
+@dashboard-background-color: #f7f3eb;
+@dashboard-tab-content-background-color: #fff;
 @dashboard-active-color: #ef672f;
 
 /*
@@ -18,10 +18,10 @@
     border: none; // resets global styles
     border-radius: 0; // resets global styles
     padding: 0; // resets global styles
-    background: @dashboard-bg; // resets global styles
+    background: @dashboard-background-color; // resets global styles
 }
 
-.dashboard-inner {
+.dashboard-container {
     .clearfix();
     padding-top: 35px;
 }
@@ -50,7 +50,13 @@
         padding: 20px 0;
     }
     &-image {
-        background: @dashboard-tab-content-bg url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+        background: @dashboard-tab-content-background-color url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+    }
+    .form-select-label {
+        display: inline-block;
+    }
+    &-disabled {
+        padding: 10px;
     }
 }
 
@@ -59,27 +65,35 @@
 -------------------------------------- */
 .dashboard-container {
     .ui-tabs-panel {
-        background-color: @dashboard-tab-content-bg;
+        background-color: @dashboard-tab-content-background-color;
         min-height: 40px;
         padding: 15px;
+    }
+    .empty-text {
+        padding: 10px 12px;
+        text-align: center;
     }
 }
 
 .dashboard-store-stats {
     margin-top: 35px;
     .ui-tabs-panel {
-        background: @dashboard-tab-content-bg url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+        background: @dashboard-tab-content-background-color url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+    }
+    .empty-text { // "no data" messages
+        background: #f7f3eb;
     }
 }
 
 .dashboard-item {
     margin-bottom: 30px;
-    &-header {
+    &-title {
+        font-weight: 700;
         margin-left: 5px;
     }
     &.dashboard-item-primary {
         margin-bottom: 35px;
-        .title {
+        .dashboard-item-title {
             font-size: 22px;
             margin-bottom: 5px;
         }
@@ -93,9 +107,6 @@
         }
         &:first-child {
             color: @dashboard-active-color;
-            .title {
-                color: @dashboard-active-color;
-            }
         }
     }
     .dashboard-secondary & {
@@ -104,10 +115,13 @@
             &:extend(.ellipsis all);
         }
     }
+    .empty-text {
+        background: #e1dbcf;
+    }
 }
 
 .dashboard-totals {
-    background: @dashboard-tab-content-bg;
+    background: @dashboard-tab-content-background-color;
     padding: 50px 15px 25px;
     &-list {
         .clearfix();
@@ -174,11 +188,8 @@
             }
         }
     }
-    td.empty-text { // "no data" messages
-        text-align: center;
-    }
     .ui-tabs-panel & {
-        background-color: @dashboard-tab-content-bg;
+        background-color: @dashboard-tab-content-background-color;
         .col-name {
             &:extend(.ellipsis all);
             &:extend(.col-370-max all);

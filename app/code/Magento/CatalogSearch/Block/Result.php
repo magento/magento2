@@ -184,7 +184,7 @@ class Result extends Template
     /**
      * Get search query text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSearchQueryText()
     {
@@ -209,7 +209,7 @@ class Result extends Template
     /**
      * Retrieve No Result or Minimum query length Text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getNoResultText()
     {

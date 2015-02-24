@@ -1,26 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="wishlist/index/index" module="Magento_Wishlist">
-    <blocks>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>.messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <wishlistBlock>
-            <class>Magento\Wishlist\Test\Block\Customer\Wishlist</class>
-            <locator>#wishlist-view-form</locator>
-            <strategy>css selector</strategy>
-        </wishlistBlock>
-        <itemsBlock>
-            <class>Magento\Wishlist\Test\Block\Customer\Wishlist\Items</class>
-            <locator>.products-grid.wishlist</locator>
-            <strategy>css selector</strategy>
-        </itemsBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="WishlistIndex" mca="wishlist/index/index" module="Magento_Wishlist">
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator=".messages" strategy="css selector"/>
+    <block name="wishlistBlock" class="Magento\Wishlist\Test\Block\Customer\Wishlist" locator="#wishlist-view-form" strategy="css selector"/>
+    <block name="itemsBlock" class="Magento\Wishlist\Test\Block\Customer\Wishlist\Items" locator=".products-grid.wishlist" strategy="css selector"/>
+  </page>
+</config>

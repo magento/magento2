@@ -78,7 +78,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve the header text, either editing an existing group or creating a new one.
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

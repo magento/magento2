@@ -131,7 +131,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -139,7 +139,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

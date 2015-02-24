@@ -24,7 +24,7 @@ class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts::getParentTab
+     * covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts::getParentTab
      */
     public function testGetParentTab()
     {
@@ -32,7 +32,7 @@ class AssociatedProductsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts::getTabLabel
+     * covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts::getTabLabel
      */
     public function testGetTabLabel()
     {

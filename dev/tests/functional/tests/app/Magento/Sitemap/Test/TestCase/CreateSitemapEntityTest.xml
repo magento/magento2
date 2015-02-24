@@ -5,22 +5,23 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateSitemapEntityTest">
-        <variation name="CreateSitemapEntityTestVariation1">
-            <data name="sitemap/data/sitemap_filename">sitemap.xml</data>
-            <data name="sitemap/data/sitemap_path">/</data>
-            <data name="constraint">assertSitemapSuccessSaveMessage, assertSitemapInGrid</data>
-        </variation>
-        <variation name="CreateSitemapEntityTestVariation2">
-            <data name="sitemap/data/sitemap_filename">%isolation%</data>
-            <data name="sitemap/data/sitemap_path">/</data>
-            <data name="constraint">assertSitemapFailPathSaveMessage</data>
-        </variation>
-        <variation name="CreateSitemapEntityTestVariation3">
-            <data name="sitemap/data/sitemap_filename">sitemap.xml</data>
-            <data name="sitemap/data/sitemap_path">/%isolation%</data>
-            <data name="constraint">assertSitemapFailFolderSaveMessage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateSitemapEntityTest">
+    <variation name="CreateSitemapEntityTestVariation1" firstConstraint="assertSitemapSuccessSaveMessage" method="test">
+      <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
+      <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
+      <constraint name="assertSitemapSuccessSaveMessage" next="assertSitemapInGrid"/>
+      <constraint name="assertSitemapInGrid" prev="assertSitemapSuccessSaveMessage"/>
+    </variation>
+    <variation name="CreateSitemapEntityTestVariation2" firstConstraint="assertSitemapFailPathSaveMessage" method="test">
+      <data name="sitemap/data/sitemap_filename" xsi:type="string">%isolation%</data>
+      <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
+      <constraint name="assertSitemapFailPathSaveMessage"/>
+    </variation>
+    <variation name="CreateSitemapEntityTestVariation3" firstConstraint="assertSitemapFailFolderSaveMessage" method="test">
+      <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
+      <data name="sitemap/data/sitemap_path" xsi:type="string">/%isolation%</data>
+      <constraint name="assertSitemapFailFolderSaveMessage"/>
+    </variation>
+  </testCase>
 </config>

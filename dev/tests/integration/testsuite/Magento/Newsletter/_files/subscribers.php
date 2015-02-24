@@ -8,10 +8,10 @@ require __DIR__ . '/../../../Magento/Core/_files/store.php';
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 
 $currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Framework\Store\StoreManagerInterface'
+    'Magento\Store\Model\StoreManagerInterface'
 )->getStore()->getId();
 $otherStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Framework\Store\StoreManagerInterface'
+    'Magento\Store\Model\StoreManagerInterface'
 )->getStore(
     'fixturestore'
 )->getId();

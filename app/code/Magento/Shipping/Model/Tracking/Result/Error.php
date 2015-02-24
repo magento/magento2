@@ -16,7 +16,7 @@ class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getErrorMessage()
     {

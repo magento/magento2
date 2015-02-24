@@ -5,15 +5,16 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteAdminUserEntityTest">
-        <variation name="DeleteAdminUserEntityTestVariation1">
-            <data name="isDefaultUser">0</data>
-            <data name="constraint">assertImpossibleDeleteYourOwnAccount, assertUserInGrid</data>
-        </variation>
-        <variation name="DeleteAdminUserEntityTestVariation2">
-            <data name="isDefaultUser">1</data>
-            <data name="constraint">assertUserSuccessDeleteMessage, assertUserNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteAdminUserEntityTest">
+    <variation name="DeleteAdminUserEntityTestVariation1" firstConstraint="assertImpossibleDeleteYourOwnAccount" method="test">
+      <constraint name="assertImpossibleDeleteYourOwnAccount" next="assertUserInGrid"/>
+      <constraint name="assertUserInGrid" prev="assertImpossibleDeleteYourOwnAccount"/>
+    </variation>
+    <variation name="DeleteAdminUserEntityTestVariation2" firstConstraint="assertUserSuccessDeleteMessage" method="test">
+      <data name="isDefaultUser" xsi:type="string">1</data>
+      <constraint name="assertUserSuccessDeleteMessage" next="assertUserNotInGrid"/>
+      <constraint name="assertUserNotInGrid" prev="assertUserSuccessDeleteMessage"/>
+    </variation>
+  </testCase>
 </config>

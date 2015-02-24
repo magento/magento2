@@ -1,26 +1,14 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalogsearch/advanced/result" module="Magento_CatalogSearch">
-    <blocks>
-        <searchResultBlock>
-            <class>Magento\CatalogSearch\Test\Block\Advanced\Result</class>
-            <locator>.column.main</locator>
-            <strategy>css selector</strategy>
-        </searchResultBlock>
-        <bottomToolbar>
-            <class>Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar</class>
-            <locator>.//*[contains(@class,"toolbar-products")][2]</locator>
-            <strategy>xpath</strategy>
-        </bottomToolbar>
-        <listProductBlock>
-            <class>Magento\Catalog\Test\Block\Product\ListProduct</class>
-            <locator>.search.results</locator>
-            <strategy>css selector</strategy>
-        </listProductBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="AdvancedResult" mca="catalogsearch/advanced/result" module="Magento_CatalogSearch">
+    <block name="searchResultBlock" class="Magento\CatalogSearch\Test\Block\Advanced\Result" locator=".column.main" strategy="css selector"/>
+    <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath"/>
+    <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".search.results" strategy="css selector"/>
+  </page>
+</config>

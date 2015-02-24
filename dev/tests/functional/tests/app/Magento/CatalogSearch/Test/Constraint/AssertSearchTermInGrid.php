@@ -47,6 +47,7 @@ class AssertSearchTermInGrid extends AbstractConstraint
             'display_in_terms' => strtolower($searchTerm->getDisplayInTerms()),
         ];
 
+        $filters = array_filter($filters);
         $grid->search($filters);
         unset($filters['store_id']);
         \PHPUnit_Framework_Assert::assertTrue(

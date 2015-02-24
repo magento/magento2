@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View;
 
-use Magento\Catalog\Test\Fixture\Product;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Items
@@ -22,7 +22,7 @@ class Items extends Block
      *
      * @var string
      */
-    protected $priceSelector = '//div[@class="price-excl-tax"]//span[@class="price"]';
+    protected $priceSelector = '//td[@class="col-price"]//div[@class="price-excl-tax"]//span[@class="price"]';
 
     // @codingStandardsIgnoreStart
     /**
@@ -57,31 +57,42 @@ class Items extends Block
     /**
      * Returns the item price for the specified product.
      *
-     * @param Product $product
+     * @param InjectableFixture $product
      * @return array|string
      */
-    public function getPrice(Product $product)
+    public function getPrice(InjectableFixture $product)
     {
         $productName = $product->getName();
 
         if ($product instanceof ConfigurableProduct) {
             // Find the price for the specific configurable product that was purchased
-            $configurableAttributes = $product->getConfigurableAttributes();
-            $productOptions = $product->getCheckoutData()['options']['configurable_options'];
-            $checkoutOption = reset($productOptions);
-            $attributeKey = $checkoutOption['title'];
-            $optionKey = $checkoutOption['value'];
-            $attributeValue = $configurableAttributes[$attributeKey]['label']['value'];
-            $optionValue = $configurableAttributes[$attributeKey][$optionKey]['option_label']['value'];
+            $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
+            $matrix = $product->getConfigurableAttributesData()['matrix'];
+            $checkoutOptions = $product->getCheckoutData()['options']['configurable_options'];
+            $optionsDetails = [];
+            $matrixKey = [];
+            $optionsPrice = 0;
 
-            $productDisplay = $productName . ' SKU: ' . $product->getVariationSku($checkoutOption);
-            $productDisplay .= ' ' . $attributeValue . ' ' . $optionValue;
+            foreach ($checkoutOptions as $checkoutOption) {
+                $titleKey = $checkoutOption['title'];
+                $valueKey = $checkoutOption['value'];
+                $attributeName = $attributesData[$titleKey]['frontend_label'];
+                $optionLabel = $attributesData[$titleKey]['options'][$valueKey]['label'];
+                $optionsDetails[] = "{$attributeName}{$optionLabel}";
+                $matrixKey[] = "{$titleKey}:{$valueKey}";
+
+                $optionsPrice += $attributesData[$titleKey]['options'][$valueKey]['pricing_value'];
+            }
+            $optionsDetails = implode(' ', $optionsDetails);
+            $matrixKey = implode(' ', $matrixKey);
+
+            $productDisplay = $productName . 'SKU: ' . $matrix[$matrixKey]['sku'] . $optionsDetails;
         } else {
-            $productDisplay = $productName . ' SKU: ' . $product->getSku();
+            $productDisplay = $productName . 'SKU: ' . $product->getSku();
         }
-        $selector = '//tr[normalize-space(td)="' . $productDisplay . '"]' . $this->priceSelector;
 
-        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+        $selector = '//tr[normalize-space(td)="' . $productDisplay . '"]' . $this->priceSelector;
+        return $this->escapeCurrency($this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText());
     }
 
     /**

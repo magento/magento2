@@ -69,7 +69,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $optionCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Store\StoreManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
@@ -136,7 +136,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $this->optionCollectionFactoryMock = $this->getMock(
             '\Magento\Bundle\Model\Resource\Option\CollectionFactory', ['create'], [], '', false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
