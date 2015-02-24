@@ -26,18 +26,6 @@
                 <resource id="Magento_Backend::stores" title="Stores" sortOrder="80">
                     <resource id="Magento_Backend::stores_settings" title="Settings" sortOrder="10">
                         <resource id="Magento_Backend::store" title="All Stores" sortOrder="10"/>
-                        <resource id="Magento_Backend::config" title="Configuration" sortOrder="20">
-                            <resource id="Magento_Backend::advanced" title="Advanced Section" sortOrder="90" />
-                            <resource id="Magento_Backend::config_admin" title="Advanced Admin Section" sortOrder="100" />
-                            <resource id="Magento_Backend::config_design" title="Design Section" sortOrder="40" />
-                            <resource id="Magento_Backend::config_general" title="General Section" sortOrder="20" />
-                            <resource id="Magento_Backend::config_system" title="System Section" sortOrder="80" />
-                            <resource id="Magento_Backend::currency" title="Currency Setup Section" sortOrder="120" />
-                            <resource id="Magento_Backend::dev" title="Developer Section" sortOrder="110" />
-                            <resource id="Magento_Backend::web" title="Web Section" sortOrder="30" />
-                            <resource id="Magento_Backend::trans_email" title="Store Email Addresses Section" sortOrder="100" />
-                            <resource id="Magento_Backend::sendfriend" title="Email to a Friend" sortOrder="140" />
-                        </resource>
                     </resource>
                     <resource id="Magento_Backend::stores_attributes" title="Attributes" sortOrder="40" />
                     <resource id="Magento_Backend::stores_other_settings" title="Other Settings" sortOrder="50" />

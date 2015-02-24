@@ -18,7 +18,7 @@
         <module>Magento_Core</module>
         <type>flat</type>
         <entity_type>core_config_data</entity_type>
-        <collection>Magento\Core\Model\Resource\Config\Data\Collection</collection>
+        <collection>Magento\Config\Model\Resource\Config\Data\Collection</collection>
         <fields>
             <section>
                 <attribute_code>section</attribute_code>

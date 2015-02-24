@@ -3,6 +3,7 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
+        "magento/module-config": "0.42.0-beta9",
         "magento/module-store": "0.42.0-beta9",
         "magento/module-page-cache": "0.42.0-beta9",
         "magento/module-directory": "0.42.0-beta9",
@@ -11,7 +12,7 @@
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.42.0-beta9",
+    "version": "0.42.0-beta8",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

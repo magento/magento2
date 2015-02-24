@@ -79,7 +79,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
      */
     protected function prepareFaviconFile()
     {
-        $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
+        $folderName = \Magento\Config\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $scopeConfig = $this->scopeConfig->getValue(
             'design/head/shortcut_icon',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
