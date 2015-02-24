@@ -152,18 +152,18 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * Instantiates the object with mocks
      *
      * @param \PHPUnit_Framework_MockObject_MockObject|bool $connectionFactory
-     * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerFactory
+     * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerProvider
      * @return Installer
      */
-    private function createObject($connectionFactory = false, $objectManagerFactory = false)
+    private function createObject($connectionFactory = false, $objectManagerProvider = false)
     {
         if (!$connectionFactory) {
             $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
             $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         }
-        if (!$objectManagerFactory) {
-            $objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
-            $objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
+        if (!$objectManagerProvider) {
+            $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+            $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
         }
         return new Installer(
             $this->filePermissions,
@@ -180,7 +180,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->maintenanceMode,
             $this->filesystem,
             $this->sampleData,
-            $objectManagerFactory
+            $objectManagerProvider
         );
     }
 
