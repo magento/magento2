@@ -82,7 +82,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
                 ],
                 'out' => [
                     'parameters' => [
-                        'result' => ['type' => 'str', 'documentation' => 'random string', 'required' => true],
+                        'result' => ['type' => 'string', 'documentation' => 'random string', 'required' => true],
                     ],
                 ],
             ]

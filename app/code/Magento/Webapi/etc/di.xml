@@ -27,4 +27,9 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Webapi</argument>
         </arguments>
     </type>
+    <type name="Magento\Webapi\Model\Soap\Wsdl\Generator">
+        <arguments>
+            <argument name="customAttributeMap" xsi:type="object">CustomAttributeMap</argument>
+        </arguments>
+    </type>
 </config>
