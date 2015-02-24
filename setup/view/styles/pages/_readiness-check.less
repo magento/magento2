@@ -22,7 +22,7 @@
 
 .readiness-check-title {
     font-size: @base__font-size;
-    font-weight: @font-weight-bold;
+    font-weight: @font-weight__bold;
     margin-bottom: .1rem;
     margin-left: @readiness-check-content__indent;
 }
@@ -57,7 +57,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .readiness-check-content {
         margin-right: 2rem;
     }
