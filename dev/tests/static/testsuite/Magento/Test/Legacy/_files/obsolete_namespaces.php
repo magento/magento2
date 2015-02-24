@@ -11,7 +11,6 @@ return [
     ['Magento\App', 'Magento\Framework\App'],
     ['Magento\Data', 'Magento\Framework\Data'],
     ['Magento\Filesystem', 'Magento\Framework\Filesystem'],
-    ['Magento\Config', 'Magento\Framework\Config'],
     ['Magento\Model', 'Magento\Framework\Model'],
     ['Magento\View', 'Magento\Framework\View'],
     ['Magento\DB', 'Magento\Framework\DB'],
@@ -71,8 +70,12 @@ return [
     ['Magento\PayPalRecurringPayment'],
     ['Magento\ConfigurableProduct\Service'],
     ['Magento\Core\Model\TemplateEngine\Decorator', 'Magento\Developer\Model\TemplateEngine\Decorator'],
+    ['Magento\Core\Model\Resource\Config', 'Magento\Config\Model\Resource\Config'],
+    ['Magento\Backend\Block\System\Config', 'Magento\Config\Block\System\Config'],
+    ['Magento\Backend\Controller\Adminhtml\System\Config', 'Magento\Config\Controller\Adminhtml\System\Config'],
+    ['Magento\Backend\Model\Config', 'Magento\Config\Model\Config'],
     ['Magento\Catalog\Service'],
     ['Magento\CheckoutAgreements\Service'],
     ['Magento\Checkout\Service'],
-    ['Magento\GiftMessage\Service']
+    ['Magento\GiftMessage\Service'],
 ];

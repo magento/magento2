@@ -71,6 +71,7 @@
         "magento/module-checkout-agreements": "self.version",
         "magento/module-cms": "self.version",
         "magento/module-cms-url-rewrite": "self.version",
+        "magento/module-config": "self.version",
         "magento/module-configurable-import-export": "self.version",
         "magento/module-configurable-product": "self.version",
         "magento/module-contact": "self.version",

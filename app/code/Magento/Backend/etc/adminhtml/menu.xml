@@ -11,7 +11,6 @@
         <add id="Magento_Backend::system_currency" title="Currency" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::stores" action="adminhtml/system_currency" resource="Magento_CurrencySymbol::system_currency"/>
         <add id="Magento_Backend::system_variable" title="Custom Variables" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::system_other_settings" action="adminhtml/system_variable" resource="Magento_Backend::variable"/>
         <add id="Magento_Backend::system_store" title="All Stores" module="Magento_Core" sortOrder="10" parent="Magento_Backend::stores_settings" action="adminhtml/system_store/" resource="Magento_Backend::store"/>
-        <add id="Magento_Backend::system_config" title="Configuration" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::stores_settings" action="adminhtml/system_config" resource="Magento_Backend::config"/>
         <add id="Magento_Backend::dashboard" title="Dashboard" module="Magento_Backend" sortOrder="10" action="adminhtml/dashboard" resource="Magento_Backend::dashboard"/>
         <add id="Magento_Backend::system" title="System" module="Magento_Backend" sortOrder="80" resource="Magento_Backend::system"/>
         <add id="Magento_Backend::system_tools" title="Tools" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::system" resource="Magento_Backend::tools"/>

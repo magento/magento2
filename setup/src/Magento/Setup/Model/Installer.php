@@ -597,8 +597,8 @@ class Installer
             return;
         }
 
-        /** @var \Magento\Backend\Model\Config\Factory $configFactory */
-        $configFactory = $this->getObjectManager()->create('Magento\Backend\Model\Config\Factory');
+        /** @var \Magento\Config\Model\Config\Factory $configFactory */
+        $configFactory = $this->getObjectManager()->create('Magento\Config\Model\Config\Factory');
         foreach ($configData as $key => $val) {
             $configModel = $configFactory->create();
             $configModel->setDataByPath($key, $val);

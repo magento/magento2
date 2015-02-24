@@ -11,7 +11,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\System\Config;
 
-class Validatevat extends \Magento\Backend\Block\System\Config\Form\Field
+class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * Merchant Country Field Name
