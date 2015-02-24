@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
-use Magento\Framework\Controller\Result\JSONFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 

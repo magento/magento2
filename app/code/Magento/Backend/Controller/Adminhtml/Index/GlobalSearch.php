@@ -9,7 +9,7 @@ namespace Magento\Backend\Controller\Adminhtml\Index;
 class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -22,12 +22,12 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param array $searchModules
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         array $searchModules = []
     ) {
         $this->_searchModules = $searchModules;

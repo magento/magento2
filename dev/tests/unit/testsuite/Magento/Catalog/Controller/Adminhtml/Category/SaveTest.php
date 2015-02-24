@@ -22,7 +22,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonFactoryMock;
 
@@ -115,7 +115,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resultJsonFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\JSONFactory',
+            'Magento\Framework\Controller\Result\JsonFactory',
             ['create'],
             [],
             '',

@@ -56,7 +56,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $resultJson;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory| \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonFactory;
 
@@ -130,7 +130,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -16,19 +16,19 @@ class Translate extends \Magento\Backend\App\Action
     protected $inlineParser;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Translate\Inline\ParserInterface $inlineParser,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;

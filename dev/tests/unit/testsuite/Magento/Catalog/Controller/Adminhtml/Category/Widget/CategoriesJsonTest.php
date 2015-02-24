@@ -87,7 +87,7 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

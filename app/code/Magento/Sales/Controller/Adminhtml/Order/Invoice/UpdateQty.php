@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Framework\Model\Exception;
 use Magento\Backend\App\Action;
-use Magento\Framework\Controller\Result\JSONFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Backend\App\Action\Context;
