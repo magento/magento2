@@ -1370,7 +1370,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
-    public function setStreet(array $street = null)
+    public function setStreet($street)
     {
         return $this->setData(self::KEY_STREET, $street);
     }

@@ -135,10 +135,10 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Set street
      *
-     * @param string[] $street
+     * @param string|string[] $street
      * @return $this
      */
-    public function setStreet(array $street = null);
+    public function setStreet($street);
 
     /**
      * Get company
