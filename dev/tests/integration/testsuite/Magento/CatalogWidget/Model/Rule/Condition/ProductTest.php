@@ -12,7 +12,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\CatalogWidget\Model\Rule\Condition\Product
      */
-    protected $object;
+    protected $conditionProduct;
 
     /**
      * @var \Magento\Framework\ObjectManager
@@ -23,16 +23,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $rule = $this->objectManager->create('Magento\CatalogWidget\Model\Rule');
-        $this->object = $this->objectManager->create(
-            'Magento\CatalogWidget\Model\Rule\Condition\Product'
-        );
-        $this->object->setRule($rule);
+        $this->conditionProduct = $this->objectManager->create('Magento\CatalogWidget\Model\Rule\Condition\Product');
+        $this->conditionProduct->setRule($rule);
     }
 
     public function testLoadAttributeOptions()
     {
-        $this->object->loadAttributeOptions();
-        $options = $this->object->getAttributeOption();
+        $this->conditionProduct->loadAttributeOptions();
+        $options = $this->conditionProduct->getAttributeOption();
         $this->assertArrayHasKey('sku', $options);
         $this->assertArrayHasKey('attribute_set_id', $options);
         $this->assertArrayHasKey('category_ids', $options);
@@ -45,29 +43,29 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testAddGlobalAttributeToCollection()
     {
         $collection = $this->objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
-        $this->object->setAttribute('special_price');
-        $this->object->addToCollection($collection);
-        $collectedAttributes = $this->object->getRule()->getCollectedAttributes();
+        $this->conditionProduct->setAttribute('special_price');
+        $this->conditionProduct->addToCollection($collection);
+        $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('special_price', $collectedAttributes);
         $query = (string)$collection->getSelect();
         $this->assertContains('special_price', $query);
-        $this->assertEquals('at_special_price.value', $this->object->getMappedSqlField());
+        $this->assertEquals('at_special_price.value', $this->conditionProduct->getMappedSqlField());
     }
 
     public function testAddNonGlobalAttributeToCollectionNoProducts()
     {
         $collection = $this->objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
-        $this->object->setAttribute('visibility');
-        $this->object->setOperator('()');
-        $this->object->setValue('4');
-        $this->object->addToCollection($collection);
-        $collectedAttributes = $this->object->getRule()->getCollectedAttributes();
+        $this->conditionProduct->setAttribute('visibility');
+        $this->conditionProduct->setOperator('()');
+        $this->conditionProduct->setValue('4');
+        $this->conditionProduct->addToCollection($collection);
+        $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
         $query = (string)$collection->getSelect();
         $this->assertNotContains('visibility', $query);
-        $this->assertEquals('', $this->object->getMappedSqlField());
-        $this->assertFalse($this->object->hasValueParsed());
-        $this->assertFalse($this->object->hasValue());
+        $this->assertEquals('', $this->conditionProduct->getMappedSqlField());
+        $this->assertFalse($this->conditionProduct->hasValueParsed());
+        $this->assertFalse($this->conditionProduct->hasValue());
     }
 
     /**
@@ -76,14 +74,23 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testAddNonGlobalAttributeToCollection()
     {
         $collection = $this->objectManager->create('Magento\Catalog\Model\Resource\Product\Collection');
-        $this->object->setAttribute('visibility');
-        $this->object->setOperator('()');
-        $this->object->setValue('4');
-        $this->object->addToCollection($collection);
-        $collectedAttributes = $this->object->getRule()->getCollectedAttributes();
+        $this->conditionProduct->setAttribute('visibility');
+        $this->conditionProduct->setOperator('()');
+        $this->conditionProduct->setValue('4');
+        $this->conditionProduct->addToCollection($collection);
+        $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
         $query = (string)$collection->getSelect();
         $this->assertNotContains('visibility', $query);
-        $this->assertEquals('e.entity_id', $this->object->getMappedSqlField());
+        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetMappedSqlFieldCategoryIdsAttribute()
+    {
+        $this->conditionProduct->setAttribute('category_ids');
+        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }
 }
