@@ -12,6 +12,10 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      */
     const KEY_ITEMS = 'items';
 
+    const KEY_SEARCH_CRITERIA = 'search_criteria';
+
+    const KEY_TOTAL_COUNT = 'total_count';
+
     /**#@-*/
 
     /**
@@ -28,4 +32,34 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * @return $this
      */
     public function setItems(array $items = null);
+
+    /**
+     * Get search criteria.
+     *
+     * @return \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    public function getSearchCriteria();
+
+    /**
+     * Set search criteria.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return $this
+     */
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * Get total count.
+     *
+     * @return int
+     */
+    public function getTotalCount();
+
+    /**
+     * Set total count.
+     *
+     * @param int $totalCount
+     * @return $this
+     */
+    public function setTotalCount($totalCount);
 }
