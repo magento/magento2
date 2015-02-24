@@ -7,7 +7,7 @@
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -39,8 +39,8 @@ class ServiceArgsSerializer
     /** @var ServiceConfigReader */
     protected $serviceConfigReader;
 
-    /** @var AttributeDataBuilder */
-    protected $attributeValueBuilder;
+    /** @var AttributeValueFactory */
+    protected $attributeValueFactory;
 
     /** @var WebapiCache */
     protected $cache;
@@ -51,20 +51,20 @@ class ServiceArgsSerializer
      * @param TypeProcessor $typeProcessor
      * @param DataBuilderFactory $builderFactory
      * @param ServiceConfigReader $serviceConfigReader
-     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param AttributeValueFactory $attributeValueFactory
      * @param WebapiCache $cache
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         DataBuilderFactory $builderFactory,
         ServiceConfigReader $serviceConfigReader,
-        AttributeDataBuilder $attributeValueBuilder,
+        AttributeValueFactory $attributeValueFactory,
         WebapiCache $cache
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->builderFactory = $builderFactory;
         $this->serviceConfigReader = $serviceConfigReader;
-        $this->attributeValueBuilder = $attributeValueBuilder;
+        $this->attributeValueFactory = $attributeValueFactory;
         $this->cache = $cache;
     }
 
@@ -200,10 +200,9 @@ class ServiceArgsSerializer
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }
             //Populate the attribute value data object once the value for custom attribute is derived based on type
-            $result[] = $this->attributeValueBuilder
+            $result[] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
-                ->setValue($attributeValue)
-                ->create();
+                ->setValue($attributeValue);
         }
 
         return $result;
