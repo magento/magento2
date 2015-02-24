@@ -30,7 +30,7 @@ class InjectTemplateListener extends ZendInjectTemplateListener
     }
 
     /**
-     * @param $namespace
+     * @param string $namespace
      * @return string
      */
     protected function deriveControllerSubNamespace($namespace)
