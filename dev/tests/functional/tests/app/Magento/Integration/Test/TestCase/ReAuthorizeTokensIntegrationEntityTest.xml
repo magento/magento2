@@ -9,9 +9,8 @@
   <testCase name="ReAuthorizeTokensIntegrationEntityTest">
     <variation name="ReAuthorizeTokensIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessReauthorizeMessage" method="test">
       <data name="description" xsi:type="string">Re-authorize integration</data>
-      <constraint name="assertIntegrationSuccessReauthorizeMessage" next="assertIntegrationForm"/>
-      <constraint name="assertIntegrationForm" next="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationSuccessReauthorizeMessage"/>
-      <constraint name="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationForm"/>
+      <constraint name="assertIntegrationSuccessReauthorizeMessage" next="assertIntegrationTokensAfterReauthorize"/>
+      <constraint name="assertIntegrationTokensAfterReauthorize" prev="assertIntegrationSuccessReauthorizeMessage"/>
     </variation>
   </testCase>
 </config>

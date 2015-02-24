@@ -31,13 +31,9 @@
     font-size: @sizeValue;
 }
 
-.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, px)) {
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and not (isunit(@sizeValue, em)) and not (isunit(@sizeValue, rem)) {
     .to-rem(@sizeValue);
     font-size: @valueRem;
-}
-
-.font-size(@sizeValue) when (ispercentage(@sizeValue)) and not (@sizeValue = false) {
-    font-size: @sizeValue;
 }
 
 //  Rem line height

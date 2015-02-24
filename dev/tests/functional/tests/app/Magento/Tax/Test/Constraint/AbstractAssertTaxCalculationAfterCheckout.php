@@ -10,8 +10,8 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Magento\Sales\Test\Page\OrderView;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
@@ -29,9 +29,9 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
     /**
      * Order view page.
      *
-     * @var OrderView
+     * @var CustomerOrderView
      */
-    protected $orderView;
+    protected $customerOrderView;
 
     /**
      * Constraint severeness.
@@ -64,7 +64,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
      * @param CheckoutCart $checkoutCart
      * @param CheckoutOnepage $checkoutOnepage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
-     * @param OrderView $orderView
+     * @param CustomerOrderView $customerOrderView
      * @return void
      */
     public function processAssert(
@@ -73,10 +73,10 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         CheckoutCart $checkoutCart,
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
-        OrderView $orderView
+        CustomerOrderView $customerOrderView
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
-        $this->orderView = $orderView;
+        $this->customerOrderView = $customerOrderView;
 
         $checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
         $checkoutOnepage->getBillingBlock()->clickContinue();
@@ -154,7 +154,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
      */
     public function getOrderPrices($actualPrices, InjectableFixture $product)
     {
-        $viewBlock = $this->orderView->getOrderViewBlock();
+        $viewBlock = $this->customerOrderView->getOrderViewBlock();
         $actualPrices['cart_item_price_excl_tax'] = $viewBlock->getItemPriceExclTax($product->getName());
         $actualPrices['cart_item_price_incl_tax'] = $viewBlock->getItemPriceInclTax($product->getName());
         $actualPrices['cart_item_subtotal_excl_tax'] = $viewBlock->getItemSubExclTax($product->getName());

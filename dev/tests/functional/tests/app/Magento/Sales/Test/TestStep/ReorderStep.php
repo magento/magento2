@@ -20,15 +20,15 @@ class ReorderStep implements TestStepInterface
      *
      * @var SalesOrderView
      */
-    protected $orderView;
+    protected $salesOrderView;
 
     /**
      * @construct
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      */
-    public function __construct(SalesOrderView $orderView)
+    public function __construct(SalesOrderView $salesOrderView)
     {
-        $this->orderView = $orderView;
+        $this->salesOrderView = $salesOrderView;
     }
 
     /**
@@ -38,6 +38,6 @@ class ReorderStep implements TestStepInterface
      */
     public function run()
     {
-        $this->orderView->getPageActions()->reorder();
+        $this->salesOrderView->getPageActions()->reorder();
     }
 }

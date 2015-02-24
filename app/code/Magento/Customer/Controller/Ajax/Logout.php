@@ -10,7 +10,7 @@ namespace Magento\Customer\Controller\Ajax;
 /**
  * Logout controller
  *
- * @method \Zend_Controller_Request_Http getRequest()
+ * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
 class Logout extends \Magento\Framework\App\Action\Action

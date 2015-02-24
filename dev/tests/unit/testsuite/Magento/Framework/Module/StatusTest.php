@@ -73,7 +73,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             true,
             ['Module_Foo' => '', 'Module_Bar' => ''],
             ['Module_baz', 'Module_quz']
-            );
+        );
         $this->assertEquals([], $result);
     }
 

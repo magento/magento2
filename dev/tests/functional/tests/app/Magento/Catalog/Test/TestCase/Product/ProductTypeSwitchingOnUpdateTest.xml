@@ -9,7 +9,7 @@
   <testCase name="ProductTypeSwitchingOnUpdateTest">
     <variation name="ProductTypeSwitchingOnUpdateTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
@@ -27,14 +27,14 @@
       <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="productOrigin" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="productOrigin" xsi:type="string">configurableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="actionName" xsi:type="string">deleteAttributes</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="productOrigin" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="productOrigin" xsi:type="string">configurableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
       <data name="actionName" xsi:type="string">deleteAttributes</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
@@ -49,7 +49,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
@@ -61,7 +61,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
-      <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="product" xsi:type="string">downloadableProduct::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>
@@ -71,15 +71,15 @@
       <constraint name="assertDownloadableLinksData" prev="assertProductInStock"/>
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="productOrigin" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductSimple::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" prev="assertProductSaveMessage"/>
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="productOrigin" xsi:type="string">downloadableProductInjectable::default</data>
-      <data name="product" xsi:type="string">configurableProductInjectable::not_virtual_for_type_switching</data>
+      <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertChildProductsInGrid" prev="assertProductSaveMessage"/>
@@ -90,7 +90,7 @@
       <constraint name="assertChildProductIsNotDisplayedSeparately" prev="assertProductInStock"/>
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
-      <data name="productOrigin" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
       <data name="product" xsi:type="string">catalogProductVirtual::default</data>
       <data name="actionName" xsi:type="string">clearDownloadableData</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
@@ -98,7 +98,7 @@
     </variation>
     <variation name="ProductTypeSwitchingOnUpdateTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
       <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
-      <data name="product" xsi:type="string">downloadableProductInjectable::default</data>
+      <data name="product" xsi:type="string">downloadableProduct::default</data>
       <data name="actionName" xsi:type="string">-</data>
       <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
       <constraint name="assertProductInGrid" next="assertDownloadableProductForm" prev="assertProductSaveMessage"/>

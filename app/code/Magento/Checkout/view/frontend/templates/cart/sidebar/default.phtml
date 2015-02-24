@@ -19,7 +19,10 @@ $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
 <li class="item product product-item">
     <div class="product">
         <?php if ($block->hasProductUrl()): ?>
-            <a href="<?php echo $block->getProductUrl()?>" title="<?php echo $block->escapeHtml($block->getProductName()) ?>" class="product-item-photo">
+            <a href="<?php echo $block->getProductUrl()?>"
+               title="<?php echo $block->escapeHtml($block->getProductName()) ?>"
+               tabindex="-1"
+               class="product-item-photo">
                 <?php echo $imageBlock->init($block->getProductForThumbnail(), 'mini_cart_product_thumbnail')->toHtml() ?>
             </a>
         <?php else: ?>

@@ -62,7 +62,8 @@ class View extends \Magento\Catalog\Controller\Product
      */
     protected function noProductRedirect()
     {
-        if (isset($_GET['store']) && !$this->getResponse()->isRedirect()) {
+        $store = $this->getRequest()->getQuery('store');
+        if (isset($store) && !$this->getResponse()->isRedirect()) {
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('');
         } elseif (!$this->getResponse()->isRedirect()) {

@@ -44,7 +44,7 @@ class Modules extends AbstractActionController
     {
         $allModules = $this->allModules->getAllModules();
         $enabledModules = [];
-        foreach ($allModules as $module ) {
+        foreach ($allModules as $module) {
             if ($module['selected']) {
                 $enabledModules[] = $module['name'];
             }
@@ -55,7 +55,7 @@ class Modules extends AbstractActionController
             return new JsonModel(['success' => true, 'modules' => $allModules]);
         } else {
             $errorMessage = $validity->getVariable("error");
-            return new JsonModel(['success' => false,  'modules' => $allModules,
+            return new JsonModel(['success' => false, 'modules' => $allModules,
                 'error' => '<b> Corrupt config.php!</b> <br />' . $errorMessage]);
         }
     }
@@ -103,8 +103,11 @@ class Modules extends AbstractActionController
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $status = $this->objectManager->create('Magento\Framework\Module\Status');
 
-        $constraints = $status->checkConstraints($params['status'], [$params['module']],
-            array_diff($params['selectedModules'], [$params['module']]));
+        $constraints = $status->checkConstraints(
+            $params['status'],
+            [$params['module']],
+            array_diff($params['selectedModules'], [$params['module']])
+        );
         if ($constraints) {
             $message = $this->getConstraintsFailureMessage($params['status'], $constraints);
             return new JsonModel(['success' => false, 'error' => $message]);

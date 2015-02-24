@@ -5,6 +5,8 @@
  */
 namespace Magento\Developer\Helper;
 
+use \Zend\Stdlib\Parameters;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\TestFramework\Request $request */
         $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['REMOTE_ADDR' => '192.168.0.1']);
+        $request->setServer(new Parameters(['REMOTE_ADDR' => '192.168.0.1']));
 
         $this->assertTrue($this->helper->isDevAllowed());
     }
@@ -52,7 +54,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\TestFramework\Request $request */
         $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setServer(['REMOTE_ADDR' => '192.168.0.3']);
+        $request->setServer(new Parameters(['REMOTE_ADDR' => '192.168.0.3']));
 
         $this->assertFalse($this->helper->isDevAllowed());
     }

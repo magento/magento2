@@ -126,13 +126,6 @@ class ConsoleController extends AbstractActionController
     private $objectManagerProvider;
 
     /**
-     * Object manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * Gets router configuration to be used in module definition
      *
      * @return array

@@ -43,7 +43,7 @@ class Fixture extends AbstractFactory
 
         $this->factoryContent .= "\n";
         $this->factoryContent .= "    /**\n";
-        $this->factoryContent .= "     * @return \\{$item['class']}\n";
+        $this->factoryContent .= "     * @return {$item['class']}\n";
         $this->factoryContent .= "     */\n";
         $this->factoryContent .= "    public function get{$methodNameSuffix}(array \$placeholders = [])\n";
         $this->factoryContent .= "    {";

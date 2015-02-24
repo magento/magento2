@@ -67,7 +67,7 @@ class BaseTest extends \Magento\Test\BaseTestCase
             'setAlias',
             'getCookie',
             'getOriginalPathInfo',
-            'getPost',
+            'getPostValue',
             'isSecure',
             'setParams',
         ];

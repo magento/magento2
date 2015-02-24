@@ -134,7 +134,7 @@ class Send extends Action\Action implements IndexInterface
             $this->_objectManager->get(
                 'Magento\Wishlist\Model\Session'
             )->setSharingForm(
-                $this->getRequest()->getPost()
+                $this->getRequest()->getPostValue()
             );
             $this->_redirect('*/*/share');
             return;
@@ -210,7 +210,7 @@ class Send extends Action\Action implements IndexInterface
             $this->_objectManager->get(
                 'Magento\Wishlist\Model\Session'
             )->setSharingForm(
-                $this->getRequest()->getPost()
+                $this->getRequest()->getPostValue()
             );
             $this->_redirect('*/*/share');
         }

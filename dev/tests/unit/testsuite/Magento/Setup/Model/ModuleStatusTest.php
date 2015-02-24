@@ -73,6 +73,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedAllModules
      * @param array $expectedConfig
      * @param array $expectedResult
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @dataProvider getAllModulesDataProvider
      */
@@ -86,7 +87,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
         );
 
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
-        $allModules = $moduleStatus->getAllModules(['module1' , 'module2']);
+        $allModules = $moduleStatus->getAllModules(['module1', 'module2']);
         $this->assertSame(true, $allModules['module1']['selected']);
         $this->assertSame(true, $allModules['module2']['selected']);
         $this->assertSame(false, $allModules['module3']['selected']);
@@ -98,7 +99,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedConfig
      * @param array $expectedResult
      *
-     *  @dataProvider getAllModulesDataProvider
+     * @dataProvider getAllModulesDataProvider
      */
     public function testSetIsEnabled($expectedAllModules, $expectedConfig, $expectedResult)
     {

@@ -124,7 +124,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->resultRedirectFactory->create()->setPath('sales/order/history');
         }
 
-        $post = $request->getPost();
+        $post = $request->getPostValue();
         $errors = false;
 
         /** @var $order \Magento\Sales\Model\Order */

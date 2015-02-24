@@ -32,17 +32,17 @@
       <constraint name="assertWishlistIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromWishlistOnFrontendTestVariation6" firstConstraint="assertWishlistIsEmpty" method="test">
-      <data name="products" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="products" xsi:type="string">configurableProduct::default</data>
       <data name="removedProductsIndex" xsi:type="string">1</data>
       <constraint name="assertWishlistIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromWishlistOnFrontendTestVariation7" firstConstraint="assertWishlistIsEmpty" method="test">
-      <data name="products" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <data name="products" xsi:type="string">downloadableProduct::with_two_separately_links</data>
       <data name="removedProductsIndex" xsi:type="string">1</data>
       <constraint name="assertWishlistIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromWishlistOnFrontendTestVariation8" firstConstraint="assertWishlistIsEmpty" method="test">
-      <data name="products" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <data name="products" xsi:type="string">groupedProduct::three_simple_products</data>
       <data name="removedProductsIndex" xsi:type="string">1</data>
       <constraint name="assertWishlistIsEmpty"/>
     </variation>

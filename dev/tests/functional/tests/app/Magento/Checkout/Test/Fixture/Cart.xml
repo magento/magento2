@@ -11,7 +11,6 @@
     <module>Magento_Checkout</module>
     <type>flat</type>
     <entity_type>quote</entity_type>
-    <collection>Magento\Checkout\Model\Resource\Cart</collection>
     <repository_class>Magento\Checkout\Test\Repository\Cart</repository_class>
     <handler_interface>Magento\Checkout\Test\Handler\Cart\CartInterface</handler_interface>
     <fields>
