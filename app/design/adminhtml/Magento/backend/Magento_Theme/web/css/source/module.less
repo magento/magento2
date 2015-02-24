@@ -43,7 +43,7 @@ body {
     min-height: 100%;
     width: 100%;
     max-width: 100%;
-    min-width: @layout-min-width + 2 * @layout-indent;
+    min-width: @layout__min-width + 2 * @layout-indent__width;
     & > * {
         .vendor-prefix-flex-grow(0);
         .vendor-prefix-flex-shrink(0);
@@ -397,7 +397,7 @@ body {
         border-radius: 10px;
         vertical-align: middle;
         .icon-font(
-            @_icon-font: @font-family-base,
+            @_icon-font: @font-family__base,
             @_icon-font-content: '?',
             @_icon-font-size: 13px,
             @_icon-font-line-height: 16px,

@@ -85,7 +85,7 @@
 
     //  Progress line tunnel
     &:before {
-        .background-gradient( @_background-gradient: true, @_background-gradient-direction: vertical, @_background-gradient-start-color: @color-gray82, @_background-gradient-end-color: @color-gray83 );
+        .background-gradient( @_background-gradient: true, @_background-gradient-direction: vertical, @_background-gradient-color-start: @color-gray82, @_background-gradient-color-end: @color-gray83 );
         border-bottom: 1px solid @nav-bar-bullet-wrap__border-bottom-color;
         border-top: 1px solid @nav-bar-bullet-wrap__border-top-color;
         content: '';
@@ -175,7 +175,7 @@
         color: @nav-bar__color;
         display: block;
         font-size: @nav-bar__font-size;
-        font-weight: @font-weight-semibold;
+        font-weight: @font-weight__semibold;
         line-height: 1.2;
         overflow: hidden;
         padding: 3rem .5em 0;
@@ -228,9 +228,9 @@
 //  Desktop
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-l) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
     .nav {
-        padding-bottom: @btn-base__height + @nav-bar-items__indent-bottom;
+        padding-bottom: @btn__height__base + @nav-bar-items__indent-bottom;
         padding-left: 1.5rem;
         text-align: center;
     }
@@ -244,7 +244,7 @@
     .nav-bar-outer-actions {
         display: inline-block;
         float: none;
-        margin-top: -(@main__indent-top + @btn-base__height + @nav-bar-items__indent-bottom + .1rem);
+        margin-top: -(@main__indent-top + @btn__height__base + @nav-bar-items__indent-bottom + .1rem);
         text-align: center;
         vertical-align: top;
         width: 100%;
@@ -261,7 +261,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .nav {
         padding-bottom: 0;
         padding-left: 0;
@@ -296,7 +296,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-xs) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     .nav-bar {
         width: @nav-bar-step__width * .75 * 3;
         > li {
