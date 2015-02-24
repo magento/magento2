@@ -176,7 +176,11 @@ class Customer extends WebapiAbstract
             ],
         ];
         $customer = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($customer, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         return $customer;
     }
 }

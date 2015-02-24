@@ -43,7 +43,11 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
                 unset($data['website_id']);
             }
 
-            $this->dataObjectHelper->populateWithArray($customer, $data);
+            $this->dataObjectHelper->populateWithArray(
+                $customer,
+                $data,
+                '\Magento\Customer\Api\Data\CustomerInterface'
+            );
             $errors = $this->customerAccountManagement->validate($customer);
         } catch (\Magento\Framework\Model\Exception $exception) {
             /* @var $error Error */

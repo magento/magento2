@@ -44,7 +44,7 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      */
-    public function populateWithArray(ExtensibleDataInterface $dataObject, array $data, $interfaceName = null)
+    public function populateWithArray(ExtensibleDataInterface $dataObject, array $data, $interfaceName)
     {
         $this->_setDataValues($dataObject, $data, $interfaceName);
         return $this;

@@ -102,18 +102,22 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->objectProcessorMock->expects($this->at(0))
             ->method('getMethodReturnType')
-            ->with('Magento\Customer\Model\Data\Address', 'getStreet')
+            ->with('\Magento\Customer\Api\Data\AddressInterface', 'getStreet')
             ->willReturn('string[]');
         $this->objectProcessorMock->expects($this->at(1))
             ->method('getMethodReturnType')
-            ->with('Magento\Customer\Model\Data\Address', 'getRegion')
+            ->with('\Magento\Customer\Api\Data\AddressInterface', 'getRegion')
             ->willReturn('\Magento\Customer\Api\Data\RegionInterface');
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with('\Magento\Customer\Api\Data\RegionInterface', [])
             ->willReturn($regionDataObject);
 
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $data,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
 
         $this->assertEquals($id, $addressDataObject->getId());
         $this->assertEquals($countryId, $addressDataObject->getCountryId());
@@ -164,7 +168,11 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $this->attributeValueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($customAttribute);
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $data,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
 
         $this->assertEquals($id, $addressDataObject->getId());
         $this->assertEquals(
@@ -223,7 +231,11 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $this->attributeValueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($customAttribute);
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $data,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
 
         $this->assertEquals($id, $addressDataObject->getId());
         $this->assertEquals(

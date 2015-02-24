@@ -87,7 +87,8 @@ class Carts extends \Magento\Backend\Block\Template
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
-            $this->_backendSession->getCustomerData()['account']
+            $this->_backendSession->getCustomerData()['account'],
+            '\Magento\Customer\Api\Data\CustomerInterface'
         );
         return $customerDataObject;
     }

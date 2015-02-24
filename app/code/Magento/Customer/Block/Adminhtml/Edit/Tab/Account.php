@@ -245,7 +245,11 @@ class Account extends GenericMetadata
             $customerData = $this->_backendSession->getCustomerData();
             $accountData = isset($customerData['account']) ? $customerData['account'] : [];
             $this->_customerDataObject = $this->customerDataFactory->create();
-            $this->dataObjectHelper->populateWithArray($this->_customerDataObject, $accountData);
+            $this->dataObjectHelper->populateWithArray(
+                $this->_customerDataObject,
+                $accountData,
+                '\Magento\Customer\Api\Data\CustomerInterface'
+            );
         }
         return $this->_customerDataObject;
     }

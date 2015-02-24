@@ -89,7 +89,11 @@ class Status extends \Magento\Backend\Block\Template
         if (!$this->customer) {
             $this->customer = $this->customerFactory->create();
             $this->dataObjectHelper
-                ->populateWithArray($this->customer, $this->_backendSession->getCustomerData()['account']);
+                ->populateWithArray(
+                    $this->customer,
+                    $this->_backendSession->getCustomerData()['account'],
+                    '\Magento\Customer\Api\Data\CustomerInterface'
+                );
         }
         return $this->customer;
     }
