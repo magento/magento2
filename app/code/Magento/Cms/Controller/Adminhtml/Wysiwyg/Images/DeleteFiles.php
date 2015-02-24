@@ -67,7 +67,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
             return $this->resultRawFactory->create();
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData($result);
         }

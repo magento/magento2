@@ -38,7 +38,7 @@ class SuggestProductTemplates extends \Magento\Catalog\Controller\Adminhtml\Prod
     /**
      * Action for product template selector
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

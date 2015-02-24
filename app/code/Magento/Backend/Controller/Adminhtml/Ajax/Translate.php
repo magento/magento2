@@ -38,13 +38,13 @@ class Translate extends \Magento\Backend\App\Action
     /**
      * Ajax action for inline translation
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
         $translate = (array)$this->getRequest()->getPost('translate');
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
             $this->inlineParser->processAjaxPost($translate);

@@ -75,7 +75,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonMock;
 
@@ -146,7 +146,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

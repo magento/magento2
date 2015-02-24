@@ -45,7 +45,7 @@ class Logout extends \Magento\Framework\App\Action\Action
     /**
      * Customer logout action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -54,7 +54,7 @@ class Logout extends \Magento\Framework\App\Action\Action
             ->setBeforeAuthUrl($this->_redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['message' => 'Logout Successful']);
     }

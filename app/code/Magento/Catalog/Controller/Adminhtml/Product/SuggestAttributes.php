@@ -38,7 +38,7 @@ class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * Search for attributes by part of attribute's label in admin store
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

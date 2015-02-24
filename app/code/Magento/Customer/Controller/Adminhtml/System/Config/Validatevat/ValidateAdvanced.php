@@ -28,7 +28,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
     /**
      * Retrieve validation result as JSON
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -49,7 +49,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
                 $storeId
             );
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['valid' => $valid, 'group' => $groupId, 'success' => $success]);
     }

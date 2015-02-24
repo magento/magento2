@@ -61,7 +61,7 @@ class UpdateQty extends \Magento\Backend\App\Action
     /**
      * Update items qty action
      *
-     * @return \Magento\Framework\Controller\Result\JSON|\Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {

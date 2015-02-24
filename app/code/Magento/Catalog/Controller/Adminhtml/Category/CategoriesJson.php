@@ -57,7 +57,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
             }
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setJsonData(
                 $this->layoutFactory->create()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Tree')

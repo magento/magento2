@@ -62,7 +62,7 @@ class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
             return $resultLayout;
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setData($result);
             return $resultJson;

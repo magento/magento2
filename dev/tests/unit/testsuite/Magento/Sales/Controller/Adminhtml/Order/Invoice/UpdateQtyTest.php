@@ -271,8 +271,8 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
-        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -309,8 +309,8 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
-        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

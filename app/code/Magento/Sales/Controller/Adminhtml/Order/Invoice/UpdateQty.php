@@ -96,7 +96,7 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
             $response = ['error' => true, 'message' => __('Cannot update item quantity.')];
         }
         if (is_array($response)) {
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setData($response);
             return $resultJson;

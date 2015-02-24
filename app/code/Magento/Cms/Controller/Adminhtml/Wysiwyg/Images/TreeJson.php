@@ -42,7 +42,7 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
             $this->_initAction();

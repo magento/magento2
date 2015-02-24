@@ -40,7 +40,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
     /**
      * Categories tree node (Ajax version)
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -53,7 +53,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
                 $this->_coreRegistry->register('current_category', $category);
             }
             $categoryTreeBlock = $this->_getCategoryTreeBlock()->setSelectedCategories(explode(',', $selected));
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setJsonData($categoryTreeBlock->getTreeJson($category));
         }

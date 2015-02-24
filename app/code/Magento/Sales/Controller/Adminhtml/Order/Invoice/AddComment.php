@@ -101,7 +101,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setData($response);
             return $resultJson;

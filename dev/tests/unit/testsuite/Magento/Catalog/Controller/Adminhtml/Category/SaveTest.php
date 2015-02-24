@@ -354,7 +354,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['getMessagesBlock']
         );
         /**
-         * @var \Magento\Framework\Controller\Result\JSON
+         * @var \Magento\Framework\Controller\Result\Json
          * |\PHPUnit_Framework_MockObject_MockObject $resultJsonMock
          */
         $resultJsonMock = $this->getMock(

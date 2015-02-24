@@ -106,7 +106,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                 'category_prepare_ajax_response',
                 ['response' => $eventResponse, 'controller' => $this]
             );
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setHeader('Content-type', 'application/json', true);
             $resultJson->setData($eventResponse->getData());

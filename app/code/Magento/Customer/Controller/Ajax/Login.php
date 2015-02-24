@@ -112,7 +112,7 @@ class Login extends \Magento\Framework\App\Action\Action
         } else {
             $responseText = __('Login successful.');
         }
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['message' => $responseText]);
     }

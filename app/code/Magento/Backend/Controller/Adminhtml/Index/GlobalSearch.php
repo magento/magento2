@@ -38,7 +38,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     /**
      * Global Search Action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -87,7 +87,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
             }
         }
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($items);
     }

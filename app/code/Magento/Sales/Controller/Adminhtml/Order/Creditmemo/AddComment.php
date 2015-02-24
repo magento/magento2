@@ -70,7 +70,7 @@ class AddComment extends \Magento\Backend\App\Action
     /**
      * Add comment to creditmemo history
      *
-     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

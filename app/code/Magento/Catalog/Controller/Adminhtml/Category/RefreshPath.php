@@ -30,7 +30,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Build response for refresh input element 'path' in form
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -38,7 +38,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($categoryId) {
             $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
 
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData(['id' => $categoryId, 'path' => $category->getPath()]);
         }

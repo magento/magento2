@@ -28,7 +28,7 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
     /**
      * Retrieve synchronize process state and it's parameters in json format
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -111,7 +111,7 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
             $state = \Magento\Core\Model\File\Storage\Flag::STATE_INACTIVE;
         }
         $result['state'] = $state;
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($result);
     }
