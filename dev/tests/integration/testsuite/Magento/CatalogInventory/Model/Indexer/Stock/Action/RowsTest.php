@@ -36,11 +36,6 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Block\Product\ListProduct'
         );
 
-        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory */
-        $stockItemFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory'
-        );
-
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             '\Magento\Framework\Api\DataObjectHelper'

@@ -111,13 +111,6 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             'position' => 'pos1',
         ];
         $itemCollection = [$item];
-        $expectedItem = [
-            'product_sku' => $productSku,
-            'link_type' => $linkType,
-            'linked_product_sku' => $item['sku'],
-            'linked_product_type' => $item['type'],
-            'position' => $item['position'],
-        ];
         $this->collectionProviderMock->expects($this->once())
             ->method('getCollection')
             ->with($this->productMock, $linkType)

@@ -57,6 +57,7 @@ class DataObjectHelper
      * @param array $data
      * @param string $interfaceName
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {

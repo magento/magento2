@@ -26,6 +26,7 @@ use Magento\Framework\Model\Exception;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
 {

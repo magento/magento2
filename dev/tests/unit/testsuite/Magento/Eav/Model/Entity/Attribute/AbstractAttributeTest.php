@@ -96,7 +96,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToObjects()
     {
-        $AttributeOptionMock = $this->getMock('\Magento\Eav\Api\Data\AttributeOptionInterface');
+        $attributeOptionMock = $this->getMock('\Magento\Eav\Api\Data\AttributeOptionInterface');
         $dataFactoryMock = $this->getMock(
             'Magento\Eav\Api\Data\AttributeOptionInterfaceFactory',
             ['create'],
@@ -120,11 +120,11 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $dataObjectHelperMock->expects($this->once())->method('populateWithArray')
-            ->with($AttributeOptionMock, ['some value'], '\Magento\Eav\Api\Data\AttributeOptionInterface')
+            ->with($attributeOptionMock, ['some value'], '\Magento\Eav\Api\Data\AttributeOptionInterface')
             ->willReturnSelf();
-        $dataFactoryMock->expects($this->once())->method('create')->willReturn($AttributeOptionMock);
+        $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 
-        $this->assertEquals([$AttributeOptionMock], $model->getOptions());
+        $this->assertEquals([$attributeOptionMock], $model->getOptions());
     }
 
     public function testGetValidationRulesWhenRuleIsArray()

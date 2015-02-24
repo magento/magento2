@@ -88,6 +88,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $entryFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,

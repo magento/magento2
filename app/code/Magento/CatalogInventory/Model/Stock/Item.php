@@ -18,6 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * Catalog Inventory Stock Item Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Item extends AbstractExtensibleModel implements StockItemInterface
 {

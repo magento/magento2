@@ -13,6 +13,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     AttributeInterface,

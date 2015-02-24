@@ -6,6 +6,7 @@
  */
 
 // @codingStandardsIgnoreFile
+//@SuppressWarnings(PHPMD.TooManyFields)
 
 namespace Magento\Bundle\Model;
 

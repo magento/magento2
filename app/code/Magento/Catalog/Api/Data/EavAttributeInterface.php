@@ -151,7 +151,7 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
     /**
      * Set apply to value for the element
      *
-     * @param string[]|string
+     * @param string[]|string $applyTo
      * @return $this
      */
     public function setApplyTo($applyTo);

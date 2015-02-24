@@ -215,7 +215,8 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
      * @param string $isComparable
      * @return $this
      */
-    public function setIsComparable($isComparable) {
+    public function setIsComparable($isComparable)
+    {
         return $this->setData(self::IS_COMPARABLE, $isComparable);
     }
 

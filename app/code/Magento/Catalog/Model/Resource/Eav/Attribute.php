@@ -26,6 +26,8 @@ use Magento\Framework\Api\AttributeValueFactory;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\ProductAttributeInterface

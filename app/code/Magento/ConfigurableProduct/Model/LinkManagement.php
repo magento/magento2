@@ -79,7 +79,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $attributes['store_id'] = $child->getStoreId();
             /** @var \Magento\Catalog\Api\Data\ProductInterface $productDataObject */
             $productDataObject = $this->productFactory->create();
-            $this->dataObjectHelper->populateWithArray($productDataObject,
+            $this->dataObjectHelper->populateWithArray(
+                $productDataObject,
                 $attributes,
                 '\Magento\Catalog\Api\Data\ProductInterface'
             );
