@@ -10,6 +10,7 @@
     <variation name="ProductsInCartReportEntityVariation1">
       <data name="product/dataSet" xsi:type="string">default</data>
       <data name="carts" xsi:type="string">1</data>
+      <data name="isGuest" xsi:type="string">0</data>
       <constraint name="Magento\Reports\Test\Constraint\AssertProductInCartResult"/>
     </variation>
     <variation name="ProductsInCartReportEntityVariation2">
