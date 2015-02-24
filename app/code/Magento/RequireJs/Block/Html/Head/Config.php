@@ -26,6 +26,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected $pageConfig;
 
+    /** @var \Magento\Framework\View\Asset\ConfigInterface */
+    protected $bundleConfig;
+
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\RequireJs\Config $config
@@ -38,12 +41,14 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         \Magento\Framework\RequireJs\Config $config,
         \Magento\RequireJs\Model\FileManager $fileManager,
         \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
         $this->fileManager = $fileManager;
         $this->pageConfig = $pageConfig;
+        $this->bundleConfig = $bundleConfig;
     }
 
     /**
@@ -53,14 +58,16 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        /** @var \Magento\Framework\View\Asset\File $bundleAsset */
-        foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
-            $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
-        }
+        if ($this->bundleConfig->isBundlingJsFiles()) {
+            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
+            foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
+                $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
+            }
 
-        $staticAsset = $this->fileManager->createStaticJsAsset();
-        if ($staticAsset !== false) {
-            $this->pageConfig->getAssetCollection()->add($staticAsset->getFilePath(), $staticAsset);
+            $staticAsset = $this->fileManager->createStaticJsAsset();
+            if ($staticAsset !== false) {
+                $this->pageConfig->getAssetCollection()->add($staticAsset->getFilePath(), $staticAsset);
+            }
         }
 
         $asset = $this->fileManager->createRequireJsAsset();
