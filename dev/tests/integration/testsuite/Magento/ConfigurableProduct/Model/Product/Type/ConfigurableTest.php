@@ -291,7 +291,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSpecifyOptionMessage()
     {
-        $this->assertEquals('Please specify the product\'s option(s).', $this->_model->getSpecifyOptionMessage());
+        $this->assertEquals(
+            'Please specify the product\'s option(s).',
+            (string)$this->_model->getSpecifyOptionMessage()
+        );
     }
 
     /**

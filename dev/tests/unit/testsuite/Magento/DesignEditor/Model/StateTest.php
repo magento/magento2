@@ -20,7 +20,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     /**#@+
      * Layout update resource models
      */
-    const LAYOUT_UPDATE_RESOURCE_MODEL_CORE_CLASS_NAME = 'Magento\Core\Model\Resource\Layout\Update';
+    const LAYOUT_UPDATE_RESOURCE_MODEL_CORE_CLASS_NAME = 'Magento\Widget\Model\Resource\Layout\Update';
 
     const LAYOUT_UPDATE_RESOURCE_MODEL_VDE_CLASS_NAME = 'Magento\DesignEditor\Model\Resource\Layout\Update';
 
@@ -149,7 +149,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo(\Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID),
             $this->equalTo(self::THEME_ID),
-            $this->equalTo(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
         )->will(
             $this->returnSelf()
         );

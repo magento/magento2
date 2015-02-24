@@ -59,7 +59,7 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
             $this->serviceLocator->get('Magento\Setup\Model\SampleData'),
-            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerFactory'),
+            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
             $this->getResource()
         );
     }

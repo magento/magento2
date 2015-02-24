@@ -52,7 +52,7 @@ abstract class Validator
     {
         return $this->scopeConfig->getValue(
             'catalog/custom_options/' . $key,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

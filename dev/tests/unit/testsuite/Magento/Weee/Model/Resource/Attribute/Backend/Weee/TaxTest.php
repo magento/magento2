@@ -29,7 +29,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
 
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);

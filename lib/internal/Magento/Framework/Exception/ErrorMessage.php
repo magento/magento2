@@ -56,11 +56,11 @@ class ErrorMessage
     /**
      * Return the message localized to based on the locale of the current request.
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getMessage()
     {
-        return __($this->message, $this->params);
+        return (string)new \Magento\Framework\Phrase($this->message, $this->params);
     }
 
     /**

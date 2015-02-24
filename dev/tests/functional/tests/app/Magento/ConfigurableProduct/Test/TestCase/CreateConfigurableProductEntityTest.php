@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -39,6 +39,8 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateConfigurableProductEntityTest extends Injectable
 {
     /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    const STABLE = 'no';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -73,10 +75,10 @@ class CreateConfigurableProductEntityTest extends Injectable
     /**
      * Test create catalog Configurable product run
      *
-     * @param ConfigurableProductInjectable $product
+     * @param ConfigurableProduct $product
      * @return void
      */
-    public function test(ConfigurableProductInjectable $product)
+    public function test(ConfigurableProduct $product)
     {
         // Steps
         $this->productIndex->open();

@@ -597,7 +597,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * Retrieve invoice state name by state identifier
      *
      * @param   int|null $stateId
-     * @return  string
+     * @return \Magento\Framework\Phrase
      */
     public function getStateName($stateId = null)
     {

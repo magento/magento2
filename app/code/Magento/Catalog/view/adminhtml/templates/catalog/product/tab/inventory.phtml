@@ -69,7 +69,7 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
         <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_min_qty"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$block->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(["prototype"], function(){
 toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_min_qty').parentNode);
 });

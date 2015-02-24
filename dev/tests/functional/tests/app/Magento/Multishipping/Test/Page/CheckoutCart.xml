@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page mca="checkout/cart/index">
-    <blocks>
-        <multipleAddressCheckoutBlock>
-            <class>Magento\Multishipping\Test\Block\Checkout\Link</class>
-            <locator>.action.multicheckout</locator>
-            <strategy>css selector</strategy>
-        </multipleAddressCheckoutBlock>
-    </blocks>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CheckoutCart" mca="checkout/cart/index">
+        <block name="multipleAddressCheckoutBlock" class="Magento\Multishipping\Test\Block\Checkout\Link" locator=".action.multicheckout" strategy="css selector"/>
+    </page>
+</config>

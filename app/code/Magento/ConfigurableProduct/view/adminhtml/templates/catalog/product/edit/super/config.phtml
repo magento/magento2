@@ -45,12 +45,13 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 <script>
 require([
     'jquery',
+    'mage/template',
     'jquery/ui',
     'jquery/jquery.tabs',
     'mage/mage',
     'mage/backend/menu',
     'Magento_ConfigurableProduct/catalog/product-variation'
-], function($){
+], function($, mageTemplate){
     'use strict';
 
     var variationsContainer = $("#<?php echo $block->getId()?>"),
@@ -137,15 +138,24 @@ require([
             var attributeContainer = $(event.target).closest('[data-role=configurable-attribute]'),
                 panel = attributeContainer.closest('[data-panel=product-variations]'),
                 newOptionsCount = attributeContainer.data('newOptionsCount') || 0,
-                attribute = attributeContainer.data('attribute');
+                attribute = attributeContainer.data('attribute'),
+                tmpl;
+
+            tmpl = mageTemplate(panel.find('[data-template-for=new-option]').html(), {
+                data: {
+                    attribute: {
+                        id: attribute.attribute_id || attribute.id
+                    },
+                    option: {
+                        id: 'new-option-' + newOptionsCount
+                    }
+                }
+            });
+
             attributeContainer.find('[data-role=options]')
-                .append(
-                    panel.find('[data-template-for=new-option]').tmpl({
-                        attribute: {id: attribute.attribute_id || attribute.id},
-                        option: {id: 'new-option-' + newOptionsCount}
-                    })
-                )
+                .append($(tmpl))
                 .trigger('contentUpdated');
+            
             attributeContainer.data('newOptionsCount', ++newOptionsCount);
         })
         .on('disable', '[data-role=product-variations-matrix]', function() {
@@ -207,10 +217,15 @@ require([
                     if (imageElement.length) {
                         imageElement.attr('src', $gridRow.find('[data-role=image-url]').val());
                     } else {
-                        var matrix = $('[data-role=product-variations-matrix]');
-                        $.tmpl(matrix.find('[data-template-for=variation-image]').html(), {
-                            url: $gridRow.find('[data-role=image-url]').val()
-                        }).prependTo(uploaderControl);
+                        var tmpl = matrix.find('[data-template-for=variation-image]').html();
+
+                        tmpl = mageTemplate(tmpl, {
+                            data: {
+                                url: $gridRow.find('[data-role=image-url]').val()
+                            }
+                        });
+
+                        $(tmpl).prependTo(uploaderControl);
                     }
 
                     $matrixRow.find('[name=image]')

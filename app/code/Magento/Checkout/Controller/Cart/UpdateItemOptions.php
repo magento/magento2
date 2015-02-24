@@ -14,7 +14,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
     /**
      * Update product configuration for a cart item
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -68,7 +68,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                $this->_goBack();
+                return $this->_goBack();
             }
         } catch (\Magento\Framework\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
@@ -82,16 +82,16 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
             if ($url) {
-                $this->getResponse()->setRedirect($url);
+                return $this->resultRedirectFactory->create()->setUrl($url);
             } else {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($cartUrl));
+                return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot update the item.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_goBack();
+            return $this->_goBack();
         }
-        $this->_redirect('*/*');
+        return $this->resultRedirectFactory->create()->setPath('*/*');
     }
 }

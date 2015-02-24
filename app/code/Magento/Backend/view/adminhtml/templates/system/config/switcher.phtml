@@ -28,7 +28,7 @@
         </select>
     </div>
     <?php echo $block->getHintHtml() ?>
-    <?php if ($block->getAuthorization()->isAllowed('Magento_Adminhtml::store')): ?>
+    <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
         <div class="actions">
             <a href="<?php echo $block->getUrl('*/system_store') ?>"><?php echo __('Stores') ?></a>
         </div>

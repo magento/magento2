@@ -34,8 +34,8 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAndSetResponse()
     {
-        $this->assertInstanceOf('Zend_Controller_Response_Abstract', $this->_output->getResponse());
-        $response = $this->getMock('Zend_Controller_Response_Abstract');
+        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $this->_output->getResponse());
+        $response = $this->getMock('Magento\Framework\App\Response\Http', null, [], '', false);
         $this->_output->setResponse($response);
         $this->assertSame($response, $this->_output->getResponse());
     }

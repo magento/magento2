@@ -9,7 +9,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -28,7 +28,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Http\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface
      */
     protected $requestMock;
 
@@ -57,10 +57,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getActionName',
             'setActionName',
             'getParam',
-            'getQuery',
+            'getQueryValue',
             'getCookie',
             'getDistroBaseUrl',
             'isSecure',
+            'getServer',
         ], [], '', false);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMock(
@@ -130,7 +131,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWebsite($websiteId, $website)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->with($websiteId)
@@ -166,7 +167,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('test/route'), $this->equalTo($params))
             ->will($this->returnValue('http://test/url'));
 
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($defaultStore));
@@ -183,10 +184,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getBaseUrlDataProvider
      *
-     * @covers \Magento\Store\Model\Store::getBaseUrl
-     * @covers \Magento\Store\Model\Store::getCode
-     * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
-     * @covers \Magento\Store\Model\Store::_getConfig
+     * covers \Magento\Store\Model\Store::getBaseUrl
+     * covers \Magento\Store\Model\Store::getCode
+     * covers \Magento\Store\Model\Store::_updatePathUseRewrites
+     * covers \Magento\Store\Model\Store::_getConfig
      *
      * @param string $type
      * @param boolean $secure
@@ -343,7 +344,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
 
         $this->requestMock->expects($this->atLeastOnce())->method('getRequestString')->will($this->returnValue(''));
-        $this->requestMock->expects($this->atLeastOnce())->method('getQuery')->will($this->returnValue([
+        $this->requestMock->expects($this->atLeastOnce())->method('getQueryValue')->will($this->returnValue([
             'SID' => 'sid'
         ]));
 
@@ -353,7 +354,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $urlMock->expects($this->any())->method('getUrl')
             ->will($this->returnValue($url));
 
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($defaultStore));
@@ -403,7 +404,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     'scope_code',
                     'UAH'
                 ],
@@ -543,12 +544,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isCurrentlySecureDataProvider
      *
      * @param bool $expected
-     * @param array $serverValues
+     * @param array $value
      * @param string|null $secureBaseUrl
      */
     public function testIsCurrentlySecure(
         $expected,
-        $serverValues,
+        $value,
         $requestSecure = false,
         $secureBaseUrl = 'https://example.com:443'
     ) {
@@ -569,37 +570,36 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->method('isSecure')
             ->willReturn($requestSecure);
 
+        $this->requestMock->expects($this->any())
+            ->method('getServer')
+            ->with($this->equalTo('SERVER_PORT'))
+            ->willReturn($value);
+
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             'Magento\Store\Model\Store',
             ['config' => $configMock, 'request' => $this->requestMock]
         );
 
-        $server = $_SERVER;
-        foreach ($serverValues as $key => $value) {
-            $_SERVER[$key] = $value;
-        }
-
         if ($expected) {
             $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
         } else {
             $this->assertFalse($model->isCurrentlySecure(), "Was expecting this test to show as not secure!");
         }
-        $_SERVER = $server;
     }
 
     public function isCurrentlySecureDataProvider()
     {
         return [
             'secure request, no server setting' => [true, [], true],
-            'unsecure request, using registered port' => [true, ['SERVER_PORT' => 443]],
-            'unsecure request, no secure base url registered' => [false, ['SERVER_PORT' => 443], false, null],
-            'unsecure request, not using registered port' => [false, ['SERVER_PORT' => 80]],
+            'unsecure request, using registered port' => [true, 443],
+            'unsecure request, no secure base url registered' => [false, 443, false, null],
+            'unsecure request, not using registered port' => [false, 80],
         ];
     }
 
     /**
-     * @covers \Magento\Store\Model\Store::getBaseMediaDir
+     * covers \Magento\Store\Model\Store::getBaseMediaDir
      */
     public function testGetBaseMediaDir()
     {
@@ -612,7 +612,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Store::getBaseStaticDir
+     * covers \Magento\Store\Model\Store::getBaseStaticDir
      */
     public function testGetBaseStaticDir()
     {

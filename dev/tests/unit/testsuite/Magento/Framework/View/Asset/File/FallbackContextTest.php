@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Asset\File;
 
 /**
- * @covers \Magento\Framework\View\Asset\File\FallbackContext
+ * covers \Magento\Framework\View\Asset\File\FallbackContext
  */
 class FallbackContextTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class FallbackContextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\View\Asset\File\FallbackContext::getConfigPath
+     * covers \Magento\Framework\View\Asset\File\FallbackContext::getConfigPath
      * @param string $baseUrl
      * @param string $areaType
      * @param string $themePath

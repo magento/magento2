@@ -12,6 +12,7 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemContainer/Enhanced.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemContainerPlugin/Simple.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Simple.php';
 require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -99,6 +100,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'Magento\Framework\Interception\Custom\Module\Model\ItemProxy',
                     ],
                     [
+                        'Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy',
+                        'Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy'
+                    ],
+                    [
                         'virtual_custom_item',
                         'Magento\Framework\Interception\Custom\Module\Model\Item',
                     ],
@@ -107,6 +112,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->definitionMock->expects($this->any())->method('getClasses')->will($this->returnValue(
             [
                 'Magento\Framework\Interception\Custom\Module\Model\ItemProxy',
+                '\Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy',
             ]
         ));
         $model = new \Magento\Framework\Interception\Config\Config(

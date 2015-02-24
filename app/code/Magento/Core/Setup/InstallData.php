@@ -28,13 +28,6 @@ class InstallData implements InstallDataInterface
             Migration::FIELD_CONTENT_TYPE_PLAIN,
             ['config_id']
         );
-        $installer->appendClassAliasReplace(
-            'core_layout_update',
-            'xml',
-            Migration::ENTITY_TYPE_BLOCK,
-            Migration::FIELD_CONTENT_TYPE_XML,
-            ['layout_update_id']
-        );
         $installer->doUpdateClassAliases();
         
         /**
@@ -44,7 +37,7 @@ class InstallData implements InstallDataInterface
         if ($tableName) {
             $setup->getConnection()->delete($tableName, ['resource_id = ?' => 'admin/system/tools/compiler']);
         }
-        
+
         $setup->endSetup();
         
     }

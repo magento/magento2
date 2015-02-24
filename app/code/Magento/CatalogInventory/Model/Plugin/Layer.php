@@ -61,7 +61,7 @@ class Layer
     {
         return $this->scopeConfig->isSetFlag(
             'cataloginventory/options/show_out_of_stock',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

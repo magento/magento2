@@ -101,7 +101,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->giftMessageManagerMock =
             $this->getMock('Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\GiftMessage\Helper\Message', [], [], '', false);

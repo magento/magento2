@@ -81,6 +81,16 @@ class CreateProductReviewBackendEntityTest extends Injectable
     protected $review;
 
     /**
+     * Skip test due to a Magento bug.
+     *
+     * @return void
+     */
+    public function __prepare()
+    {
+        $this->markTestIncomplete('Bug: MAGETWO-33912');
+    }
+
+    /**
      * Inject pages into test
      *
      * @param ReviewIndex $reviewIndex

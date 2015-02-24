@@ -9,12 +9,33 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Delete extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        parent::__construct($context, $coreRegistry);
+    }
+
+    /**
      * Delete action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('block_id');
         if ($id) {
@@ -26,19 +47,17 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
                 // display success message
                 $this->messageManager->addSuccess(__('The block has been deleted.'));
                 // go to grid
-                $this->_redirect('*/*/');
-                return;
+                return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
                 // display error message
                 $this->messageManager->addError($e->getMessage());
                 // go back to edit form
-                $this->_redirect('*/*/edit', ['block_id' => $id]);
-                return;
+                return $resultRedirect->setPath('*/*/edit', ['block_id' => $id]);
             }
         }
         // display error message
         $this->messageManager->addError(__('We can\'t find a block to delete.'));
         // go to grid
-        $this->_redirect('*/*/');
+        return $resultRedirect->setPath('*/*/');
     }
 }

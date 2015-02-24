@@ -124,4 +124,11 @@ interface ProcessorInterface
      * @return array
      */
     public function getContainers();
+
+    /**
+     * Return cache ID based current area/package/theme/store and handles
+     *
+     * @return string
+     */
+    public function getCacheId();
 }

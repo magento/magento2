@@ -43,15 +43,32 @@
     </fieldset>
 </div>
 <?php endif; ?>
-
 <script>
-require([
-    "jquery",
-    "mage/mage",
-    "Magento_Catalog/product/view/validation"
-], function($){
-    $('#product_addtocart_form').mage('validation', {
-        radioCheckboxClosest: '.nested'
-    });
-});
+    <?php if ($block->isRedirectToCartEnabled()) : ?>
+        require([
+            "jquery",
+            "mage/mage",
+            "Magento_Catalog/product/view/validation"
+        ], function($){
+            $('#product_addtocart_form').mage('validation', {
+                radioCheckboxClosest: '.nested'
+            });
+        });
+    <?php else : ?>
+        require([
+            "jquery",
+            "mage/mage",
+            "Magento_Catalog/product/view/validation",
+            "Magento_Catalog/js/catalog-add-to-cart"
+        ], function($){
+            $('#product_addtocart_form').mage('validation', {
+                radioCheckboxClosest: '.nested',
+                submitHandler: function(form) {
+                    var widget = $(form).catalogAddToCart({bindSubmit: false});
+                    widget.catalogAddToCart('submitForm', $(form));
+                    return false;
+                }
+            });
+        });
+    <?php endif; ?>
 </script>

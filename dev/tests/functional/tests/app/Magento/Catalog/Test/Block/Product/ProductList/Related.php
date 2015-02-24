@@ -6,77 +6,48 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Magento\Mtf\Block\Block;
+use Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem as RelatedProductItem;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Related
- * Related product block on the page
+ * Related products section on the page.
  */
-class Related extends Block
+class Related extends PromotedSection
 {
     /**
-     * Related product locator on the page
+     * Return product item block.
      *
-     * @var string
+     * @param FixtureInterface $product
+     * @return RelatedProductItem
      */
-    protected $relatedProduct = "//div[normalize-space(div//a)='%s']";
-
-    /**
-     * Checking related product visibility
-     *
-     * @param string $productName
-     * @return bool
-     */
-    public function isRelatedProductVisible($productName)
+    public function getProductItem(FixtureInterface $product)
     {
-        return $this->getProductElement($productName)->isVisible();
+        $locator = sprintf($this->productItemByName, $product->getName());
+
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+            ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
+        );
     }
 
     /**
-     * Verify that you can choose the related products
+     * Return list of products.
      *
-     * @param string $productName
-     * @return bool
+     * @return RelatedProductItem[]
      */
-    public function isRelatedProductSelectable($productName)
+    public function getProducts()
     {
-        return $this->getProductElement($productName)->find("[name='related_products[]']")->isVisible();
-    }
+        $elements = $this->_rootElement->getElements($this->productItem, Locator::SELECTOR_CSS);
+        $result = [];
 
-    /**
-     * Open related product
-     *
-     * @param string $productName
-     * @return void
-     */
-    public function openRelatedProduct($productName)
-    {
-        $this->getProductElement($productName)->find('.product.name>a')->click();
-    }
+        foreach ($elements as $element) {
+            $result[] = $this->blockFactory->create(
+                'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+                ['element' => $element]
+            );
+        }
 
-    /**
-     * Select related product
-     *
-     * @param string $productName
-     * @return void
-     */
-    public function selectProductForAddToCart($productName)
-    {
-        $this->getProductElement($productName)
-            ->find("[name='related_products[]']", Locator::SELECTOR_CSS, 'checkbox')
-            ->setValue('Yes');
-    }
-
-    /**
-     * Get related product element
-     *
-     * @param string $productName
-     * @return SimpleElement
-     */
-    private function getProductElement($productName)
-    {
-        return $this->_rootElement->find(sprintf($this->relatedProduct, $productName), Locator::SELECTOR_XPATH);
+        return $result;
     }
 }

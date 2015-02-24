@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Model\Config;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -20,7 +22,11 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->_model = new \Magento\Backend\Model\Config\ScopeDefiner($this->_requestMock);
+        $objectManager = new ObjectManager($this);
+        $this->_model = $objectManager->getObject(
+            'Magento\Backend\Model\Config\ScopeDefiner',
+            ['request' => $this->_requestMock]
+        );
     }
 
     public function testGetScopeReturnsDefaultScopeIfNoScopeDataIsSpecified()
@@ -37,7 +43,7 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, 'someStore']])
         );
-        $this->assertEquals(\Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
+        $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsWebsiteScopeIfWebsiteIsSpecified()
@@ -49,6 +55,6 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap([['website', null, 'someWebsite'], ['store', null, null]])
         );
-        $this->assertEquals(\Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
+        $this->assertEquals(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_model->getScope());
     }
 }

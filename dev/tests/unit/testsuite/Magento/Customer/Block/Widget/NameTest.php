@@ -367,13 +367,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStoreLabel($attributeCode, $storeLabel, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-            'getStoreLabel'
-        )->will(
-            $this->returnValue($storeLabel)
-        );
+        $this->attribute->expects($this->atLeastOnce())->method('getStoreLabel')->willReturn($storeLabel);
         $this->assertEquals($expectedValue, $this->_block->getStoreLabel($attributeCode));
     }
 
@@ -405,7 +399,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertSame('', $this->_block->getStoreLabel('attributeCode'));
+        $this->assertSame('', (string)$this->_block->getStoreLabel('attributeCode'));
     }
 
     /**

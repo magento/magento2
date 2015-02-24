@@ -36,6 +36,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Class Installer contains the logic to install Magento application.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Installer
 {
@@ -183,11 +185,6 @@ class Installer
     private $installInfo = [];
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
@@ -198,9 +195,9 @@ class Installer
     private $sampleData;
 
     /**
-     * @var ObjectManagerFactory
+     * @var ObjectManagerProvider
      */
-    private $objectManagerFactory;
+    private $objectManagerProvider;
 
     /**
      * @var Resource
@@ -223,8 +220,10 @@ class Installer
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
      * @param SampleData $sampleData
-     * @param ObjectManagerFactory $objectManagerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      * @param \Magento\Framework\App\Resource $resource
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FilePermissions $filePermissions,
@@ -240,7 +239,7 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         SampleData $sampleData,
-        ObjectManagerFactory $objectManagerFactory,
+        ObjectManagerProvider $objectManagerProvider,
         \Magento\Framework\App\Resource $resource
     ) {
         $this->filePermissions = $filePermissions;
@@ -256,9 +255,9 @@ class Installer
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
         $this->sampleData = $sampleData;
-        $this->installInfo[self::INFO_MESSAGE] = array();
+        $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
-        $this->objectManagerFactory = $objectManagerFactory;
+        $this->objectManagerProvider = $objectManagerProvider;
         $this->resource = $resource;
     }
 
@@ -707,7 +706,7 @@ class Installer
         }
 
         /** @var \Magento\Backend\Model\Config\Factory $configFactory */
-        $configFactory = $this->getObjectManager()->create('Magento\Backend\Model\Config\Factory');
+        $configFactory = $this->objectManagerProvider->get()->create('Magento\Backend\Model\Config\Factory');
         foreach ($configData as $key => $val) {
             $configModel = $configFactory->create();
             $configModel->setDataByPath($key, $val);
@@ -720,10 +719,12 @@ class Installer
      *
      * @param string $orderIncrementPrefix Value to use for order increment prefix
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->getObjectManager()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -766,7 +767,7 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->getObjectManager()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
     }
@@ -793,11 +794,13 @@ class Installer
      * Enables caches after installing application
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function enableCaches()
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->getObjectManager()->create('Magento\Framework\App\Cache\Manager');
+        $cacheManager = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache\Manager');
         $types = $cacheManager->getAvailableTypes();
         $enabledTypes = $cacheManager->setEnabled($types, true);
         $cacheManager->clean($enabledTypes);
@@ -811,6 +814,8 @@ class Installer
      *
      * @param int $value
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function setMaintenanceMode($value)
     {
@@ -947,23 +952,10 @@ class Installer
     }
 
     /**
-     * Get object manager for Magento application
-     *
-     * @return \Magento\Framework\ObjectManagerInterface
-     */
-    private function getObjectManager()
-    {
-        if (null === $this->objectManager) {
-            $this->assertDeploymentConfigExists();
-            $this->objectManager = $this->objectManagerFactory->create();
-        }
-        return $this->objectManager;
-    }
-
-    /**
      * Validates that deployment configuration exists
      *
      * @throws \Magento\Setup\Exception
+     * @return void
      */
     private function assertDeploymentConfigExists()
     {
@@ -995,11 +987,13 @@ class Installer
      *
      * @param array $request
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      */
     private function installSampleData($request)
     {
         $userName = isset($request[AdminAccount::KEY_USERNAME]) ? $request[AdminAccount::KEY_USERNAME] : '';
-        $this->sampleData->install($this->getObjectManager(), $this->log, $userName);
+        $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
     }
 
     /**
@@ -1021,7 +1015,7 @@ class Installer
                         && $className !== self::SCHEMA_INSTALL) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
                     } else {
-                        return $this->getObjectManager()->create($className);
+                        return $this->objectManagerProvider->create($className);
                     }
                 }
                 break;
@@ -1033,7 +1027,7 @@ class Installer
                     ) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_UPGRADE);
                     } else {
-                        return $this->getObjectManager()->create($className);
+                        return $this->objectManagerProvider->create($className);
                     }
                 }
                 break;
@@ -1044,7 +1038,7 @@ class Installer
                         && $className !== self::SCHEMA_INSTALL) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
                     } else {
-                        return $this->getObjectManager()->create($className);
+                        return $this->objectManagerProvider->create($className);
                     }
                 }
                 break;
@@ -1056,7 +1050,7 @@ class Installer
                     ) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_INSTALL);
                     } else {
-                        return $this->getObjectManager()->create($className);
+                        return $this->objectManagerProvider->create($className);
                     }
                 }
                 break;
@@ -1068,7 +1062,7 @@ class Installer
                     ) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_UPGRADE);
                     } else {
-                        return $this->getObjectManager()->create($className);
+                        return $this->objectManagerProvider->create($className);
                     }
                 }
                 break;

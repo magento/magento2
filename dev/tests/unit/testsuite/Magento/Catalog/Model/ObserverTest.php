@@ -36,7 +36,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_categoryFlatState;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,7 +58,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model;
 
 /**
- * @covers \Magento\Cms\Model\Page
+ * covers \Magento\Cms\Model\Page
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,7 +91,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Page::noRoutePage
+     * covers \Magento\Cms\Model\Page::noRoutePage
      */
     public function testNoRoutePage()
     {
@@ -99,7 +99,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Page::checkIdentifier
+     * covers \Magento\Cms\Model\Page::checkIdentifier
      */
     public function testCheckIdentifier()
     {

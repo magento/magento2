@@ -115,8 +115,8 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $writeAdapter = $this->_getWriteAdapter();
         $pageLayoutUpdateIds = [];
         $storeIds = $this->_prepareStoreIds($widgetInstance->getStoreIds());
-        $layoutUpdateTable = $this->getTable('core_layout_update');
-        $layoutUpdateLinkTable = $this->getTable('core_layout_link');
+        $layoutUpdateTable = $this->getTable('layout_update');
+        $layoutUpdateLinkTable = $this->getTable('layout_link');
 
         foreach ($pageGroupData['layout_handle_updates'] as $handle) {
             $xml = $widgetInstance->generateLayoutUpdateXml(
@@ -226,7 +226,7 @@ class Instance extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $writeAdapter = $this->_getWriteAdapter();
         if ($layoutUpdateIds) {
             $inCond = $writeAdapter->prepareSqlCondition('layout_update_id', ['in' => $layoutUpdateIds]);
-            $writeAdapter->delete($this->getTable('core_layout_update'), $inCond);
+            $writeAdapter->delete($this->getTable('layout_update'), $inCond);
         }
         return $this;
     }

@@ -11,7 +11,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -108,7 +108,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $this->catalogProductView = $catalogProductView;
         $this->checkoutCart = $checkoutCart;
         //Preconditions
-        $address = $fixtureFactory->createByCode('addressInjectable', ['dataSet' => 'US_address_NY']);
+        $address = $fixtureFactory->createByCode('address', ['dataSet' => 'US_address_NY']);
         $shipping = ['carrier' => 'Flat Rate', 'method' => 'Fixed'];
         $actualPrices = [];
         //Assertion steps
@@ -165,11 +165,11 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     /**
      * Fill estimate block.
      *
-     * @param AddressInjectable $address
+     * @param Address $address
      * @param array $shipping
      * @return void
      */
-    public function fillEstimateBlock(AddressInjectable $address, $shipping)
+    public function fillEstimateBlock(Address $address, $shipping)
     {
         $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($address);
         $this->checkoutCart->getShippingBlock()->selectShippingMethod($shipping);

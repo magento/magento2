@@ -42,7 +42,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Plugin\Log::afterClean
+     * covers \Magento\Catalog\Model\Plugin\Log::afterClean
      */
     public function testAfterClean()
     {

@@ -28,7 +28,6 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $coreData = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $fileStorageDb = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
@@ -40,7 +39,6 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config'),
                 $catalogProductType,
                 $eventManager,
-                $coreData,
                 $fileStorageDb,
                 $filesystem,
                 $registry,

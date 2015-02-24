@@ -206,7 +206,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\TransportBuilder::addTo
+     * covers \Magento\Framework\Mail\Template\TransportBuilder::addTo
      */
     public function testAddTo()
     {
@@ -219,7 +219,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\TransportBuilder::addBcc
+     * covers \Magento\Framework\Mail\Template\TransportBuilder::addBcc
      */
     public function testAddBcc()
     {
@@ -232,7 +232,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Mail\Template\TransportBuilder::setReplyTo
+     * covers \Magento\Framework\Mail\Template\TransportBuilder::setReplyTo
      */
     public function testSetReplyTo()
     {

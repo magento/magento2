@@ -18,7 +18,7 @@ return [
             'parameters' => [
                 ['name' => 'class', '#text' => 'css class'],
                 ['name' => 'label', '#text' => 'section label'],
-                ['name' => 'resource', '#text' => 'Magento_Adminhtml::acl'],
+                ['name' => 'resource', '#text' => 'Magento_Backend::acl'],
                 ['name' => 'header_css', '#text' => 'some css class'],
                 ['name' => 'tab', '#text' => 'tab_1'],
             ],

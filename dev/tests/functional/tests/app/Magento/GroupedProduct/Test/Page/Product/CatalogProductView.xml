@@ -1,23 +1,15 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalog/product/view">
-    <blocks>
-        <viewBlock>
-            <renders>
-                <grouped>
-                    <class>Magento\GroupedProduct\Test\Block\Catalog\Product\View</class>
-                </grouped>
-            </renders>
-        </viewBlock>
-        <groupedProductViewBlock>
-            <class>Magento\GroupedProduct\Test\Block\Catalog\Product\View</class>
-            <locator>#maincontent</locator>
-            <strategy>css selector</strategy>
-        </groupedProductViewBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogProductView" area="Product" mca="catalog/product/view">
+    <block name="viewBlock">
+      <render name="grouped" class="Magento\GroupedProduct\Test\Block\Catalog\Product\View"/>
+    </block>
+    <block name="groupedProductViewBlock" class="Magento\GroupedProduct\Test\Block\Catalog\Product\View" locator="#maincontent" strategy="css selector"/>
+  </page>
+</config>

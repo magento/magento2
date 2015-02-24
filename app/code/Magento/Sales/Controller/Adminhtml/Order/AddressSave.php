@@ -17,7 +17,7 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $addressId = $this->getRequest()->getParam('address_id');
         $address = $this->_objectManager->create('Magento\Sales\Model\Order\Address')->load($addressId);
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
             $address->addData($data);

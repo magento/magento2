@@ -133,15 +133,20 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Magento\Indexer\Model\Indexer\State', $this->model->getState());
     }
 
-    public function testGetLatestUpdated()
+    /**
+     * @param bool $getViewIsEnabled
+     * @param string $getViewGetUpdated
+     * @param string $getStateGetUpdated
+     * @dataProvider getLatestUpdatedDataProvider
+     */
+    public function testGetLatestUpdated($getViewIsEnabled, $getViewGetUpdated, $getStateGetUpdated)
     {
-        $checkValue = 1;
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);
 
         $this->viewMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
-        $this->viewMock->expects($this->any())->method('getUpdated')->will($this->returnValue($checkValue));
+        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue($getViewIsEnabled));
+        $this->viewMock->expects($this->any())->method('getUpdated')->will($this->returnValue($getViewGetUpdated));
 
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
@@ -150,10 +155,41 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $stateMock->expects($this->once())->method('getUpdated')->will($this->returnValue(0));
+
+        $stateMock->expects($this->any())->method('getUpdated')->will($this->returnValue($getStateGetUpdated));
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
 
-        $this->assertEquals($checkValue, $this->model->getLatestUpdated());
+        if ($getViewIsEnabled && $getViewGetUpdated) {
+            if (!$getStateGetUpdated) {
+                $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
+            } else {
+                if ($getViewGetUpdated == $getStateGetUpdated) {
+                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
+                } else {
+                    $this->assertEquals($getViewGetUpdated, $this->model->getLatestUpdated());
+                }
+            }
+        } else {
+            $this->assertEquals($getStateGetUpdated, $this->model->getLatestUpdated());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getLatestUpdatedDataProvider()
+    {
+        return [
+            [false, '06-Jan-1944', '06-Jan-1944'],
+            [false, '', '06-Jan-1944'],
+            [false, '06-Jan-1944', ''],
+            [false, '', ''],
+            [true, '06-Jan-1944', '06-Jan-1944'],
+            [true, '', '06-Jan-1944'],
+            [true, '06-Jan-1944', ''],
+            [true, '', ''],
+            [true, '06-Jan-1944', '05-Jan-1944']
+        ];
     }
 
     public function testReindexAll()
@@ -281,5 +317,206 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->getIndexerData())
         );
         $this->model->load($indexId);
+    }
+
+    public function testGetTitle()
+    {
+        $result = 'Test Result';
+        $this->model->setTitle($result);
+        $this->assertEquals($result, $this->model->getTitle());
+    }
+
+    public function testGetDescription()
+    {
+        $result = 'Test Result';
+        $this->model->setDescription($result);
+        $this->assertEquals($result, $this->model->getDescription());
+    }
+
+    public function testSetState()
+    {
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['loadByIndexer', 'getId', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $this->model->setState($stateMock);
+        $this->assertInstanceOf('\Magento\Indexer\Model\Indexer\State', $this->model->getState());
+    }
+
+    public function testIsScheduled()
+    {
+        $result = true;
+        $this->viewMock->expects($this->once())->method('load')->will($this->returnSelf());
+        $this->viewMock->expects($this->once())->method('isEnabled')->will($this->returnValue($result));
+        $this->assertEquals($result, $this->model->isScheduled());
+    }
+
+    /**
+     * @param bool $scheduled
+     * @param string $method
+     * @dataProvider setScheduledDataProvider
+     */
+    public function testSetScheduled($scheduled, $method)
+    {
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['load', 'save'],
+            [],
+            '',
+            false
+        );
+
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $this->viewMock->expects($this->once())->method('load')->will($this->returnSelf());
+        $this->viewMock->expects($this->once())->method($method)->will($this->returnValue(true));
+        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->model->setScheduled($scheduled);
+    }
+
+    /**
+     * @return array
+     */
+    public function setScheduledDataProvider()
+    {
+        return [
+            [true, 'subscribe'],
+            [false, 'unsubscribe']
+        ];
+    }
+
+    public function testGetStatus()
+    {
+        $status = Indexer\State::STATUS_WORKING;
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['load', 'getStatus'],
+            [],
+            '',
+            false
+        );
+
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
+        $this->assertEquals($status, $this->model->getStatus());
+    }
+
+    /**
+     * @param string $method
+     * @param string $status
+     * @dataProvider statusDataProvider
+     */
+    public function testStatus($method, $status)
+    {
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['load', 'getStatus'],
+            [],
+            '',
+            false
+        );
+
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
+        $this->assertEquals(true, $this->model->$method());
+    }
+
+    /**
+     * @return array
+     */
+    public function statusDataProvider()
+    {
+        return [
+            ['isValid', Indexer\State::STATUS_VALID],
+            ['isInvalid', Indexer\State::STATUS_INVALID],
+            ['isWorking', Indexer\State::STATUS_WORKING]
+        ];
+    }
+
+    public function testInvalidate()
+    {
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['load', 'setStatus', 'save'],
+            [],
+            '',
+            false
+        );
+
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('setStatus')->with(Indexer\State::STATUS_INVALID)->will(
+            $this->returnSelf()
+        );
+        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->model->invalidate();
+    }
+
+    public function testReindexRow()
+    {
+        $id = 1;
+
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['load', 'save'],
+            [],
+            '',
+            false
+        );
+        $actionMock = $this->getMock(
+            'Magento\Indexer\Model\ActionInterface',
+            ['executeFull', 'executeList', 'executeRow'],
+            [],
+            '',
+            false
+        );
+
+        $this->actionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValue($actionMock)
+        );
+
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $actionMock->expects($this->once())->method('executeRow')->with($id)->will($this->returnSelf());
+        $this->model->reindexRow($id);
+    }
+
+    public function testReindexList()
+    {
+        $ids = [1];
+
+        $stateMock = $this->getMock(
+            '\Magento\Indexer\Model\Indexer\State',
+            ['load', 'save'],
+            [],
+            '',
+            false
+        );
+        $actionMock = $this->getMock(
+            'Magento\Indexer\Model\ActionInterface',
+            ['executeFull', 'executeList', 'executeRow'],
+            [],
+            '',
+            false
+        );
+
+        $this->actionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValue($actionMock)
+        );
+
+        $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
+        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $actionMock->expects($this->once())->method('executeList')->with($ids)->will($this->returnSelf());
+        $this->model->reindexList($ids);
     }
 }
