@@ -95,8 +95,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @param bool $dateInInterval
      * @param float $expected
      *
-     * @covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
-     * @covers \Magento\Bundle\Model\Product\Price::__construct
+     * covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
+     * covers \Magento\Bundle\Model\Product\Price::__construct
      * @dataProvider calculateSpecialPrice
      */
     public function testCalculateSpecialPrice($finalPrice, $specialPrice, $callsNumber, $dateInInterval, $expected)

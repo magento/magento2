@@ -9,6 +9,7 @@
  */
 namespace Magento\Store\Block;
 
+use Magento\Directory\Helper\Data;
 use Magento\Store\Model\Group;
 
 class Switcher extends \Magento\Framework\View\Element\Template
@@ -94,7 +95,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
                     continue;
                 }
                 $localeCode = $this->_scopeConfig->getValue(
-                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE,
+                    Data::XML_PATH_DEFAULT_LOCALE,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $store
                 );
@@ -126,7 +127,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
             $groups = [];
             $localeCode = $this->_scopeConfig->getValue(
-                \Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE,
+                Data::XML_PATH_DEFAULT_LOCALE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             foreach ($rawGroups as $group) {

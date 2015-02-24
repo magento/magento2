@@ -143,7 +143,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test entity type id getter
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEav::getEntityTypeId
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEav::getEntityTypeId
      */
     public function testGetEntityTypeId()
     {

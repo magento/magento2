@@ -15,7 +15,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
@@ -30,7 +30,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
@@ -44,7 +44,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     ) {
         parent::__construct(
             $context,
-            $coreData,
+            $directoryHelper,
             $configCacheType,
             $customerSession,
             $resourceSession,

@@ -8,9 +8,8 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Request;
-
-use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\App\ScopeInterface;
+use Zend\Stdlib\Parameters;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,14 +67,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $_SERVER = $this->serverArray;
     }
 
-    public function testGetOriginalPathInfoWithTestUri()
-    {
-        $uri = 'http://test.com/value';
-        $this->_model = $this->getModel($uri);
-
-        $this->assertEquals('/value', $this->_model->getOriginalPathInfo());
-    }
-
     private function getModel($uri = null)
     {
         return new \Magento\Framework\App\Request\Http(
@@ -87,97 +78,45 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetOriginalPathInfoWithTestUri()
+    {
+        $uri = 'http://test.com/value';
+        $this->_model = $this->getModel($uri);
+        $this->assertEquals('/value', $this->_model->getOriginalPathInfo());
+    }
+
     public function testGetOriginalPathInfoWithEmptyUri()
     {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $this->assertEmpty($this->_model->getOriginalPathInfo());
-    }
-
-    public function testSetPathInfoWithNullValue()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $actual = $this->_model->setPathInfo();
-        $this->assertEquals($this->_model, $actual);
-    }
-
-    public function testSetPathInfoWithValue()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $expected = 'testPathInfo';
-        $this->_model->setPathInfo($expected);
-        $this->assertEquals($expected, $this->_model->getPathInfo());
-    }
-
-    public function testSetPathInfoWithQueryPart()
-    {
-
-        $uri = 'http://test.com/node?queryValue';
-        $this->_model = $this->_model = $this->getModel($uri);
-        $this->_model->setPathInfo();
-        $this->assertEquals('/node', $this->_model->getPathInfo());
-    }
-
-    public function testRewritePathInfoWithNewValue()
-    {
-        $expected = '/other/path';
-        $uri = 'http://test.com/one/two';
-        $this->_model = $this->_model = $this->getModel($uri);
-        $this->_model->rewritePathInfo($expected);
-        $this->assertEquals($expected, $this->_model->getPathInfo());
-    }
-
-    public function testRewritePathInfoWithSameValue()
-    {
-        $expected = '/one/two';
-
-        $uri = 'http://test.com' . $expected;
-        $this->_model = $this->_model = $this->getModel($uri);
-        $this->_model->rewritePathInfo($expected);
-        $this->assertEquals($expected, $this->_model->getPathInfo());
     }
 
     public function testGetBasePathWithPath()
     {
-
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $this->_model->setBasePath('http:\/test.com\one/two');
         $this->assertEquals('http://test.com/one/two', $this->_model->getBasePath());
     }
 
     public function testGetBasePathWithoutPath()
     {
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setBasePath();
+        $this->_model = $this->getModel();
+        $this->_model->setBasePath(null);
         $this->assertEquals('/', $this->_model->getBasePath());
-    }
-
-    public function testGetBaseUrlWithUrl()
-    {
-
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setBaseUrl('http:\/test.com\one/two');
-        $this->assertEquals('http://test.com/one/two', $this->_model->getBaseUrl());
-    }
-
-    public function testGetBaseUrlWithEmptyUrl()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setBaseUrl();
-        $this->assertEmpty($this->_model->getBaseUrl());
     }
 
     public function testSetRouteNameWithRouter()
     {
         $router = $this->getMock('Magento\Framework\App\Router\AbstractRouter', [], [], '', false);
         $this->_routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $this->_model->setRouteName('RouterName');
         $this->assertEquals('RouterName', $this->_model->getRouteName());
     }
 
     public function testSetRouteNameWithNullRouterValue()
     {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $this->_routerListMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue(null));
         $this->_model->setRouteName('RouterName');
     }
@@ -190,121 +129,24 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('one', $this->_model->getFrontName());
     }
 
-    public function testGetAliasWhenAliasExists()
+    public function testGetRouteNameWithNullValueRouteName()
     {
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setAlias('AliasName', 'AliasTarget');
-        $this->assertEquals('AliasTarget', $this->_model->getAlias('AliasName'));
-    }
-
-    public function testGetAliasWhenAliasesIsNull()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->assertNull($this->_model->getAlias('someValue'));
-    }
-
-    public function testGetAliasesWhenAliasSet()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setAlias('AliasName', 'AliasTarget');
-        $this->assertEquals(['AliasName' => 'AliasTarget'], $this->_model->getAliases());
-    }
-
-    public function testGetAliasesWhenAliasAreEmpty()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->assertEmpty($this->_model->getAliases());
-    }
-
-    public function testGetRequestedRouteNameWhenRequestedRouteIsSet()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setRoutingInfo(['requested_route' => 'ExpectedValue']);
-        $this->assertEquals('ExpectedValue', $this->_model->getRequestedRouteName());
-    }
-
-    public function testGetRequestedRouteNameWithNullValueRouteName()
-    {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $this->_model->setRouteName('RouteName');
-        $this->assertEquals('RouteName', $this->_model->getRequestedRouteName());
+        $this->assertEquals('RouteName', $this->_model->getRouteName());
     }
 
-    public function testGetRequestedRouteNameWithRewritePathInfo()
+    public function testGetRouteName()
     {
-        $this->_model = $this->_model = $this->getModel();
-        $expected = 'TestValue';
-        $this->_model->setPathInfo($expected);
-        $this->_model->rewritePathInfo($expected . '/other');
-        $this->_routerListMock->expects(
-            $this->once()
-        )->method(
-            'getRouteByFrontName'
-        )->with(
-            $expected
-        )->will(
-            $this->returnValue($expected)
-        );
-        $this->assertEquals($expected, $this->_model->getRequestedRouteName());
-    }
-
-    public function testGetRequestedRouteNameWithoutRewritePathInfo()
-    {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $expected = 'RouteName';
         $this->_model->setRouteName($expected);
-        $this->assertEquals($expected, $this->_model->getRequestedRouteName());
-    }
-
-    public function testGetRequestedControllerNameWithRequestedController()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $expected = ['requested_controller' => 'ControllerName'];
-        $this->_model->setRoutingInfo($expected);
-        $test = $this->_model->getRequestedControllerName();
-        $this->assertEquals($expected['requested_controller'], $test);
-    }
-
-    public function testGetRequestedControllerNameWithRewritePathInfo()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $path = 'one/two/';
-        $this->_model->setPathInfo($path);
-        $this->_model->rewritePathInfo($path . '/last');
-        $this->assertEquals('two', $this->_model->getRequestedControllerName());
-    }
-
-    public function testGetRequestedActionNameWithRoutingInfo()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->_model->setRoutingInfo(['requested_action' => 'ExpectedValue']);
-        $this->assertEquals('ExpectedValue', $this->_model->getRequestedActionName());
-    }
-
-    public function testGetRequestedActionNameWithRewritePathInfo()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $path = 'one/two/three';
-        $this->_model->setPathInfo($path);
-        $this->_model->rewritePathInfo($path . '/last');
-        $this->assertEquals('three', $this->_model->getRequestedActionName());
-    }
-
-    public function testIsStraightWithTrueValue()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->assertTrue($this->_model->isStraight(true));
-    }
-
-    public function testIsStraightWithDefaultValue()
-    {
-        $this->_model = $this->_model = $this->getModel();
-        $this->assertFalse($this->_model->isStraight());
+        $this->assertEquals($expected, $this->_model->getRouteName());
     }
 
     public function testGetFullActionName()
     {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         /* empty request */
         $this->assertEquals('__', $this->_model->getFullActionName());
         $this->_model->setRouteName('test')->setControllerName('controller')->setActionName('action');
@@ -334,7 +176,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected function _initForward()
     {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $beforeForwardInfo = [
             'params' => ['one' => '111', 'two' => '222'],
             'action_name' => 'ActionName',
@@ -353,7 +195,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAjax()
     {
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
 
         $this->assertFalse($this->_model->isAjax());
 
@@ -366,44 +208,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isAjax());
 
         $this->_model->clearParams();
-        $server = $_SERVER;
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'XMLHttpRequest');
         $this->assertTrue($this->_model->isAjax());
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'NotXMLHttpRequest';
+
+        $this->_model->getHeaders()->clearHeaders();
+        $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'NotXMLHttpRequest');
         $this->assertFalse($this->_model->isAjax());
-        $_SERVER = $server;
-    }
-
-    public function testSetPost()
-    {
-        $this->_model = $this->_model = $this->getModel();
-
-        $post = ['one' => '111', 'two' => '222'];
-        $this->_model->setPost($post);
-        $this->assertEquals($post, $_POST);
-
-        $this->_model->setPost([]);
-        $this->assertEmpty($_POST);
-
-        $_POST = ['post_var' => 'post_value'];
-        $this->_model->setPost('post_var 2', 'post_value 2');
-        $this->assertEquals(['post_var' => 'post_value', 'post_var 2' => 'post_value 2'], $_POST);
-    }
-
-    public function testGetFiles()
-    {
-        $this->_model = $this->_model = $this->getModel();
-
-        $_FILES = ['one' => '111', 'two' => '222'];
-        $this->assertEquals($_FILES, $this->_model->getFiles());
-
-        foreach ($_FILES as $key => $value) {
-            $this->assertEquals($value, $this->_model->getFiles($key));
-        }
-
-        $this->assertNull($this->_model->getFiles('no_such_file'));
-
-        $this->assertEquals('default', $this->_model->getFiles('no_such_file', 'default'));
     }
 
     /**
@@ -415,7 +225,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $originalServerValue = $_SERVER;
         $_SERVER = $serverVariables;
-        $this->_model = $this->_model = $this->getModel();
+        $this->_model = $this->getModel();
         $this->assertEquals($expectedResult, $this->_model->getDistroBaseUrl());
 
         $_SERVER = $originalServerValue;
@@ -555,15 +365,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(Request::XML_PATH_OFFLOADER_HEADER, ScopeInterface::SCOPE_DEFAULT)
+            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeInterface::SCOPE_DEFAULT)
             ->willReturn($configOffloadHeader);
         $this->objectManager->expects($this->exactly($configCall))
             ->method('get')
             ->with('Magento\Framework\App\Config')
             ->will($this->returnValue($configMock));
 
-        $_SERVER[$headerOffloadKey] = $headerOffloadValue;
-        $_SERVER['HTTPS'] = $serverHttps;
+        $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
+        $this->_model->getServer()->set('HTTPS', $serverHttps);
 
         $this->assertSame($isSecure, $this->_model->isSecure());
     }

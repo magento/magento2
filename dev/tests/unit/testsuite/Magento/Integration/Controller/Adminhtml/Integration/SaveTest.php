@@ -22,7 +22,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getPost'
+                'getPostValue'
             )->will(
                 $this->returnValue(
                     [
@@ -112,7 +112,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getPost'
+                'getPostValue'
             )->will(
                 $this->returnValue($integration->getData())
             );
@@ -158,7 +158,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
         $this->_requestMock->expects(
             $this->any()
         )->method(
-                'getPost'
+                'getPostValue'
             )->will(
                 $this->returnValue($integration->getData())
             );

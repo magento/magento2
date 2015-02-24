@@ -8,6 +8,8 @@
 
 namespace Magento\AdminNotification\Model\System\Message;
 
+use Magento\Store\Model\Store;
+
 class Baseurl implements \Magento\Framework\Notification\MessageInterface
 {
     /**
@@ -56,9 +58,9 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
     protected function _getConfigUrl()
     {
         $output = '';
-        $defaultUnsecure = $this->_config->getValue(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default');
+        $defaultUnsecure = $this->_config->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        $defaultSecure = $this->_config->getValue(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, 'default');
+        $defaultSecure = $this->_config->getValue(Store::XML_PATH_SECURE_BASE_URL, 'default');
 
         if ($defaultSecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER ||
             $defaultUnsecure == \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER

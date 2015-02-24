@@ -31,7 +31,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     protected $logger;
 
     /**
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
      * @param Logger $logger
      */

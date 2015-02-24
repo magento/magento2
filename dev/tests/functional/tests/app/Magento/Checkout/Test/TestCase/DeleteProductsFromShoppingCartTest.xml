@@ -24,19 +24,19 @@
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation5" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="productsData" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="productsData" xsi:type="string">configurableProduct::default</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation6" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="productsData" xsi:type="string">downloadableProductInjectable::with_two_separately_links</data>
+      <data name="productsData" xsi:type="string">downloadableProduct::with_two_separately_links</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation7" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="productsData" xsi:type="string">groupedProductInjectable::three_simple_products</data>
+      <data name="productsData" xsi:type="string">groupedProduct::three_simple_products</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
     <variation name="DeleteProductsFromShoppingCartTestVariation8" firstConstraint="assertCartIsEmpty" method="test">
-      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+      <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
       <constraint name="assertCartIsEmpty"/>
     </variation>
   </testCase>

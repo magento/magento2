@@ -2209,6 +2209,7 @@ return [
         'Magento\Store\App\FrontController\Plugin\RequestPreprocessor'
     ],
     ['Magento\Core\App\Response\Redirect', 'Magento\Store\App\Response\Redirect'],
+    ['Magento\Core\App\Router\Base', 'Magento\Framework\App\Router\Base'],
     ['Magento\Core\Block\Store\Switcher', 'Magento\Store\Block\Store\Switcher'],
     ['Magento\Core\Block\Switcher', 'Magento\Store\Block\Switcher'],
     ['Magento\Core\Helper\Cookie', 'Magento\Store\Helper\Cookie'],
@@ -2287,6 +2288,7 @@ return [
     ['Magento\Core\Model\App\Area\CacheIdentifierPlugin', 'Magento\PageCache\App\CacheIdentifierPlugin'],
     ['Magento\Core\Model\App\Area', 'Magento\Framework\App\Area'],
     ['Magento\Core\Model\App\Area\DesignExceptions', 'Magento\Framework\View\DesignExceptions'],
+    ['Magento\Core\App\Action\FormKeyValidator', 'Magento\Framework\Data\Form\FormKey\Validator'],
     ['Magento\Checkout\Block\Adminhtml\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Checkout\Block\Adminhtml\Agreement\Edit', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit'],
     [
@@ -2901,6 +2903,9 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal'],
     ['Magento\Core\Model\Url\RouteParamsResolver', 'Magento\Framework\Url\RouteParamsResolver'],
     ['Magento\Core\Model\Url\SecurityInfo', 'Magento\Framework\Url\SecurityInfo'],
+    ['Magento\Core\App\Action\Plugin\Design', 'Magento\Framework\App\Action\Plugin\Design'],
+    ['Magento\Core\App\Action\Plugin\LastUrl'],
+    ['Magento\Core\App\Router\NoRouteHandler', 'Magento/Framework/App/Router/NoRouteHandler'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
@@ -2918,6 +2923,7 @@ return [
     ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
     ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
     ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],
+    ['Magento\Framework\App\Http\RequestInterface'],
     ['Magento\Core\Model\Layout\Merge', 'Magento\Framework\View\Model\Layout\Merge'],
     ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
     ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],
@@ -2929,4 +2935,9 @@ return [
     ['Magento\Core\Model\Resource\Layout\Link\Collection', 'Magento\Widget\Model\Resource\Layout\Link\Collection'],
     ['Magento\Core\Model\Resource\Layout\Update', 'Magento\Widget\Model\Resource\Layout\Update'],
     ['Magento\Core\Model\Resource\Layout\Update\Collection', 'Magento\Widget\Model\Resource\Layout\Update\Collection'],
+    ['Magento\Backend\Model\View', 'Magento\Framework\App\View'],
+    ['Zend_Controller_Router_Route'],
+    ['Zend_Controller_Router_Route_Interface'],
+    ['Zend_Controller_Response_Abstract', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
+    ['Zend_Controller_Response_Http', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
 ];

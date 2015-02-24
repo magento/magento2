@@ -44,7 +44,7 @@ class HiddenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Hidden::__construct
+     * covers \Magento\Framework\Data\Form\Element\Hidden::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class HiddenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Hidden::getDefaultHtml
+     * covers \Magento\Framework\Data\Form\Element\Hidden::getDefaultHtml
      */
     public function testGetDefaultHtml()
     {

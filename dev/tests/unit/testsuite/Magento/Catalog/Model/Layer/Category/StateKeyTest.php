@@ -31,8 +31,8 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Layer\Category\StateKey::toString
-     * @covers \Magento\Catalog\Model\Layer\Category\StateKey::__construct
+     * covers \Magento\Catalog\Model\Layer\Category\StateKey::toString
+     * covers \Magento\Catalog\Model\Layer\Category\StateKey::__construct
      */
     public function testToString()
     {

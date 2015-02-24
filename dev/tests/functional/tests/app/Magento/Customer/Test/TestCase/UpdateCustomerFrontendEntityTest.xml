@@ -80,7 +80,7 @@
       <data name="address/data/telephone" xsi:type="string">555-55-555-55</data>
       <data name="address/data/fax" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">90230</data>
-      <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
       <constraint name="assertCustomerAddressSuccessSaveMessage" next="assertCustomerDefaultAddresses"/>
       <constraint name="assertCustomerDefaultAddresses" prev="assertCustomerAddressSuccessSaveMessage"/>
     </variation>

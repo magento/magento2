@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="DeleteProductFromCustomerWishlistOnBackendTest">
     <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation1" firstConstraint="assertProductsIsAbsentInWishlist" method="test">
-      <data name="product" xsi:type="string">configurableProductInjectable::default</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
       <constraint name="assertProductsIsAbsentInWishlist"/>
     </variation>
     <variation name="DeleteProductFromCustomerWishlistOnBackendTestVariation2" firstConstraint="assertProductsIsAbsentInWishlist" method="test">

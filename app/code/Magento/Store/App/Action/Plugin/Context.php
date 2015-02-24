@@ -6,6 +6,8 @@
 
 namespace Magento\Store\App\Action\Plugin;
 
+use Magento\Framework\App\Http\Context as HttpContext;
+
 /**
  * Class ContextPlugin
  */
@@ -63,13 +65,13 @@ class Context
     ) {
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
-            \Magento\Core\Helper\Data::CONTEXT_CURRENCY,
+            HttpContext::CONTEXT_CURRENCY,
             $this->session->getCurrencyCode(),
             $defaultStore->getDefaultCurrency()->getCode()
         );
 
         $this->httpContext->setValue(
-            \Magento\Core\Helper\Data::CONTEXT_STORE,
+            HttpContext::CONTEXT_STORE,
             $this->httpRequest->getParam(
                 '___store',
                 $defaultStore->getStoreCodeFromCookie()

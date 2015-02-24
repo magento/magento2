@@ -63,7 +63,8 @@ class ExportTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('isAjax', true);
 
         // Provide X_REQUESTED_WITH header in response to mark next action as ajax
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $this->getRequest()->getHeaders()
+            ->addHeaderLine('X_REQUESTED_WITH', 'XMLHttpRequest');
 
         $url = 'backend/admin/export/getFilter/entity/' . $entityType;
         if ($customerEntityType) {

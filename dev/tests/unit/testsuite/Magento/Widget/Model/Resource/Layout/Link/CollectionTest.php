@@ -77,7 +77,7 @@ class CollectionTest extends \Magento\Widget\Model\Resource\Layout\AbstractTestC
     }
 
     /**
-     * @covers \Magento\Widget\Model\Resource\Layout\Link\Collection::_joinWithUpdate
+     * covers \Magento\Widget\Model\Resource\Layout\Link\Collection::_joinWithUpdate
      */
     public function testJoinWithUpdate()
     {

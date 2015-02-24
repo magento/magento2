@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
   <scenario name="UpdateConfigurableProductEntityTest" firstStep="createProduct">
     <step name="createProduct" module="Magento_Catalog" next="openProductOnBackend">
-      <item name="product" value="configurableProductInjectable::default"/>
+      <item name="product" value="configurableProduct::default"/>
     </step>
     <step name="openProductOnBackend" module="Magento_Catalog" next="updateConfigurableProduct"/>
     <step name="updateConfigurableProduct" module="Magento_ConfigurableProduct" next="saveProduct"/>

@@ -20,7 +20,7 @@ use Magento\Framework\Data\SearchResultIteratorFactory;
 class AbstractCollection extends AbstractSearchResult
 {
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -46,7 +46,7 @@ class AbstractCollection extends AbstractSearchResult
      * @param EntityFactoryInterface $entityFactory
      * @param ManagerInterface $eventManager
      * @param SearchResultIteratorFactory $resultIteratorFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param SearchResultProcessorFactory $searchResultProcessorFactory
      */
     public function __construct(

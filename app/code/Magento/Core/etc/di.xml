@@ -12,19 +12,9 @@
             <argument name="moduleName" xsi:type="string">Magento_Core</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\App\Router\Base">
+    <type name="Magento\Framework\App\Router\Base">
         <arguments>
             <argument name="routerId" xsi:type="string">standard</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Router\NoRouteHandlerList">
-        <arguments>
-            <argument name="handlerClassesList" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Core\App\Router\NoRouteHandler</item>
-                    <item name="sortOrder" xsi:type="string">100</item>
-                </item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\DB\Helper">
@@ -50,9 +40,6 @@
             <argument name="fileStorage" xsi:type="object">Magento\Core\Model\File\Storage\File\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="30"/>
-    </type>
     <virtualType name="Magento\Core\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">core</argument>
@@ -68,14 +55,14 @@
     </type>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>
-            <argument name="defaultTimezonePath" xsi:type="const">Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
+            <argument name="defaultTimezonePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Locale\Resolver">
         <plugin name="initLocale" type="Magento\Framework\Translate\Locale\Resolver\Plugin" sortOrder="10"/>
         <arguments>
-            <argument name="defaultLocalePath" xsi:type="const">Magento\Core\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
+            <argument name="defaultLocalePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>

@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\Wysiwyg;
 
 /**
- * @covers \Magento\Cms\Model\Wysiwyg\Config
+ * covers \Magento\Cms\Model\Wysiwyg\Config
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -116,7 +116,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::getConfig
+     * covers \Magento\Cms\Model\Wysiwyg\Config::getConfig
      * @param array $data
      * @param boolean $isAuthorizationAllowed
      * @param array $expectedResults
@@ -187,7 +187,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderPath
+     * covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderPath
      */
     public function testGetSkinImagePlaceholderPath()
     {
@@ -213,7 +213,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::isEnabled
+     * covers \Magento\Cms\Model\Wysiwyg\Config::isEnabled
      * @param string $wysiwygState
      * @param boolean $expectedResult
      *
@@ -245,7 +245,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::isHidden
+     * covers \Magento\Cms\Model\Wysiwyg\Config::isHidden
      * @param string $status
      * @param boolean $expectedResult
      *

@@ -25,7 +25,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $coreHelperMock;
+    protected $pricingHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,7 +36,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
+        $this->pricingHelperMock = $this->getMock('\Magento\Framework\Pricing\Helper\Data', [], [], '', false);
         $this->storeManagerMock = $this->getMock(
             '\Magento\Store\Model\StoreManagerInterface',
             [],
@@ -56,14 +56,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             [
                 'registry' => $this->registryMock,
                 'storeManager' => $this->storeManagerMock,
-                'coreHelper' => $this->coreHelperMock,
+                'pricingHelper' => $this->pricingHelperMock,
                 'data' => ['product' => $this->productMock]
             ]
         );
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
      */
     public function testGetProductPositive()
     {
@@ -86,7 +86,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getProduct
      */
     public function testGetProductNegative()
     {
@@ -130,7 +130,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getAssociatedProducts
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getAssociatedProducts
      */
     public function testGetAssociatedProducts()
     {
@@ -166,7 +166,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::setPreconfiguredValue
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::setPreconfiguredValue
      */
     public function testSetPreconfiguredValue()
     {
@@ -213,7 +213,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCanShowProductPrice
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCanShowProductPrice
      */
     public function testGetCanShowProductPrice()
     {
@@ -221,7 +221,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
      */
     public function testGetIsLastFieldsetPositive()
     {
@@ -236,7 +236,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      * @param array|bool $options
      * @param bool $expectedResult
      *
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getIsLastFieldset
      * @dataProvider getIsLastFieldsetDataProvider
      */
     public function testGetIsLastFieldsetNegative($options, $expectedResult)
@@ -274,7 +274,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCurrencyPrice
+     * covers Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::getCurrencyPrice
      */
     public function testGetCurrencyPrice()
     {
@@ -296,7 +296,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('getStore')->will($this->returnValue($storeId));
 
-        $this->coreHelperMock->expects(
+        $this->pricingHelperMock->expects(
             $this->once()
         )->method(
             'currencyByStore'

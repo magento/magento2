@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -23,10 +23,10 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
      * Asserts that Default Billing Address and Default Shipping Address equal to data from fixture
      *
      * @param CustomerAccountIndex $customerAccountIndex
-     * @param AddressInjectable $address
+     * @param Address $address
      * @return void
      */
-    public function processAssert(CustomerAccountIndex $customerAccountIndex, AddressInjectable $address)
+    public function processAssert(CustomerAccountIndex $customerAccountIndex, Address $address)
     {
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('Account Dashboard');
         $defaultBillingAddress = explode(
@@ -80,10 +80,10 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
     /**
      * Make pattern for form verifying
      *
-     * @param AddressInjectable $address
+     * @param Address $address
      * @return array
      */
-    protected function makeAddressPattern(AddressInjectable $address)
+    protected function makeAddressPattern(Address $address)
     {
         $pattern = [];
         $regionId = $address->getRegionId();

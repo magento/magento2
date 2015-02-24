@@ -29,25 +29,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_googleAnalyticsHelperMock = $this->getMock(
-            'Magento\GoogleAnalytics\Helper\Data',
-            [],
-            [],
-            '',
-            false
-        );
-
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->_helper = $objectManagerHelper->getObject(
-            'Magento\GoogleOptimizer\Helper\Data',
-            [
-                'scopeConfig' => $this->_scopeConfigMock,
-                'analyticsHelper' => $this->_googleAnalyticsHelperMock,
-                'context' => $context
-            ]
-        );
+        $className = 'Magento\GoogleOptimizer\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->_scopeConfigMock = $context->getScopeConfig();
+        $this->_googleAnalyticsHelperMock = $arguments['analyticsHelper'];
+        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     /**

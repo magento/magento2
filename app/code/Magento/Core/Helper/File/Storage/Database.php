@@ -58,28 +58,20 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_fileStorage;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $config;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory
      * @param \Magento\Core\Model\File\Storage\File $fileStorage
      * @param Filesystem $filesystem
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Model\File\Storage\DatabaseFactory $dbStorageFactory,
         \Magento\Core\Model\File\Storage\File $fileStorage,
-        Filesystem $filesystem,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config
+        Filesystem $filesystem
     ) {
         $this->_filesystem = $filesystem;
         $this->_dbStorageFactory = $dbStorageFactory;
         $this->_fileStorage = $fileStorage;
-        $this->config = $config;
         parent::__construct($context);
     }
 
@@ -92,7 +84,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function checkDbUsage()
     {
         if (null === $this->_useDb) {
-            $currentStorage = (int)$this->config->getValue(
+            $currentStorage = (int)$this->scopeConfig->getValue(
                 \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA,
                 'default'
             );

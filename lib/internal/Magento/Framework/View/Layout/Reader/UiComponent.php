@@ -29,16 +29,6 @@ class UiComponent implements Layout\ReaderInterface
     protected $layoutHelper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
      * @var string|null
      */
     protected $scopeType;
@@ -47,19 +37,13 @@ class UiComponent implements Layout\ReaderInterface
      * Constructor
      *
      * @param Layout\ScheduledStructure\Helper $helper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param string|null $scopeType
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
-        App\Config\ScopeConfigInterface $scopeConfig,
-        App\ScopeResolverInterface $scopeResolver,
         $scopeType = null
     ) {
         $this->layoutHelper = $helper;
-        $this->scopeConfig = $scopeConfig;
-        $this->scopeResolver = $scopeResolver;
         $this->scopeType = $scopeType;
     }
 
@@ -93,10 +77,8 @@ class UiComponent implements Layout\ReaderInterface
             'attributes' => $this->getAttributes($currentElement)
         ]);
         $configPath = (string)$currentElement->getAttribute('ifconfig');
-        if (!empty($configPath)
-            && !$this->scopeConfig->isSetFlag($configPath, $this->scopeType, $this->scopeResolver->getScope())
-        ) {
-            $scheduledStructure->setElementToRemoveList($referenceName);
+        if (!empty($configPath)) {
+            $scheduledStructure->setElementToIfconfigList($referenceName, $configPath, $this->scopeType);
         }
         return $this;
     }

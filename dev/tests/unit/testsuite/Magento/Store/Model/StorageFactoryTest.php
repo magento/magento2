@@ -251,11 +251,11 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\StorageFactory::_reinitStores
-     * @covers \Magento\Store\Model\StorageFactory::_getStoreByGroup
-     * @covers \Magento\Store\Model\StorageFactory::_getStoreByWebsite
-     * @covers \Magento\Store\Model\StorageFactory::_checkCookieStore
-     * @covers \Magento\Store\Model\StorageFactory::_checkRequestStore
+     * covers \Magento\Store\Model\StorageFactory::_reinitStores
+     * covers \Magento\Store\Model\StorageFactory::_getStoreByGroup
+     * covers \Magento\Store\Model\StorageFactory::_getStoreByWebsite
+     * covers \Magento\Store\Model\StorageFactory::_checkCookieStore
+     * covers \Magento\Store\Model\StorageFactory::_checkRequestStore
      *
      * @dataProvider getWithStoresReinitDataProvider
      *
@@ -313,9 +313,9 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\StorageFactory::_checkCookieStore
-     * @covers \Magento\Store\Model\StorageFactory::getActiveStoreByCode
-     * @covers \Magento\Store\Model\StorageFactory::setCurrentStore
+     * covers \Magento\Store\Model\StorageFactory::_checkCookieStore
+     * covers \Magento\Store\Model\StorageFactory::getActiveStoreByCode
+     * covers \Magento\Store\Model\StorageFactory::setCurrentStore
      *
      * @dataProvider getFromCookieDataProvider
      */
@@ -352,9 +352,9 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\StorageFactory::_checkRequestStore
-     * @covers \Magento\Store\Model\StorageFactory::getActiveStoreByCode
-     * @covers \Magento\Store\Model\StorageFactory::setCurrentStore
+     * covers \Magento\Store\Model\StorageFactory::_checkRequestStore
+     * covers \Magento\Store\Model\StorageFactory::getActiveStoreByCode
+     * covers \Magento\Store\Model\StorageFactory::setCurrentStore
      *
      * @dataProvider getFromRequestDataProvider
      *

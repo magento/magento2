@@ -84,7 +84,7 @@ class Cleanup
     public function clearMaterializedViewFiles()
     {
         $this->emptyDir(DirectoryList::STATIC_VIEW);
-        $this->emptyDir(DirectoryList::VAR_DIR, Source::TMP_MATERIALIZATION_DIR);
+        $this->emptyDir(DirectoryList::VAR_DIR, DirectoryList::TMP_MATERIALIZATION_DIR);
     }
 
     /**

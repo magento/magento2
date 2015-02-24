@@ -12,7 +12,7 @@ namespace Magento\Payment\Block\Form;
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Payment\Block\Form\Container::getChildBlock
+     * covers \Magento\Payment\Block\Form\Container::getChildBlock
      */
     public function testSetMethodFormTemplate()
     {

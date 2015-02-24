@@ -27,7 +27,7 @@ class Register extends \Magento\Directory\Block\Data
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
@@ -41,7 +41,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
@@ -56,7 +56,7 @@ class Register extends \Magento\Directory\Block\Data
         $this->_customerSession = $customerSession;
         parent::__construct(
             $context,
-            $coreData,
+            $directoryHelper,
             $jsonEncoder,
             $configCacheType,
             $regionCollectionFactory,

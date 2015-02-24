@@ -21,7 +21,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_argParser = $objectManager->get('Magento\Framework\View\Layout\Argument\Parser');
-        $this->_argInterpreter = $objectManager->get('layoutArgumentInterpreter');
+        $this->_argInterpreter = $objectManager->get('layoutArgumentGeneratorInterpreter');
     }
 
     /**
