@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Io;
+namespace Magento\Framework\Filesystem\Io;
 
 /**
  * Install and upgrade client abstract class
