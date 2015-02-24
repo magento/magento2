@@ -12,6 +12,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**  @var \Magento\Webapi\Model\Soap\Wsdl\Generator */
     protected $_wsdlGenerator;
 
+    /**  @var \Magento\Framework\Object */
+    protected $customAttributeMap;
+
     /**  @var \Magento\Webapi\Model\Soap\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $_soapConfigMock;
 
@@ -88,8 +91,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->will($this->returnValue('store_code'));
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_wsdlGenerator = $helper->getObject(
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $this->customAttributeMap = $objectManager->getObject('Magento\Framework\Object');
+        $this->_wsdlGenerator = $objectManager->getObject(
             'Magento\Webapi\Model\Soap\Wsdl\Generator',
             [
                 'apiConfig' => $this->_soapConfigMock,
@@ -97,7 +102,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->_cacheMock,
                 'typeProcessor' => $this->_typeProcessor,
                 'storeManagerMock' => $this->storeManagerMock,
-                'customAttributeMap' => new \Magento\Framework\Api\CustomAttributeMap()
+                'customAttributeMap' => $this->customAttributeMap
             ]
         );
 
@@ -191,7 +196,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 $this->_cacheMock,
                 $this->_typeProcessor,
                 $this->storeManagerMock,
-                new \Magento\Framework\Api\CustomAttributeMap()
+                $this->customAttributeMap
             ]
         )->getMock();
 
