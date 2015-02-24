@@ -85,7 +85,7 @@ class FileManager
      */
     public function createStaticJsAsset()
     {
-        if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
+        if ($this->appState->getMode() != \Magento\Framework\App\State::MODE_PRODUCTION) {
             return false;
         }
         $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
@@ -101,22 +101,20 @@ class FileManager
      *
      * @return \Magento\Framework\View\Asset\File[]
      */
-    public function createBandleJsPool()
+    public function createBundleJsPool()
     {
         $bundles = [];
         if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
-            return $bundles;
-        }
-        $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
-        $context = $this->assetRepo->getStaticViewFileContext();
+            $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+            /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+            $context = $this->assetRepo->getStaticViewFileContext();
 
-        $bundleDir = $libDir->read($context->getPath() . '/' .\Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR);
-        foreach ($bundleDir as $bundleFile) {
-            $relPath = $libDir->getRelativePath($bundleFile);
-            $bundles[] = $this->assetRepo->createArbitrary($relPath, '');
+            $bundleDir = $libDir->read($context->getPath() . '/' .\Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR);
+            foreach ($bundleDir as $bundleFile) {
+                $relPath = $libDir->getRelativePath($bundleFile);
+                $bundles[] = $this->assetRepo->createArbitrary($relPath, '');
+            }
         }
-
         return $bundles;
     }
 }

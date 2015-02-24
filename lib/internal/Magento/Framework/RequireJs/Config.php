@@ -25,7 +25,7 @@ class Config
     /**
      * File name of StaticJs
      */
-    const STATIC_FILE_NAME = 'static.js';
+    const STATIC_FILE_NAME = 'mage\requirejs\static.js';
 
     /**
      * File name of StaticJs

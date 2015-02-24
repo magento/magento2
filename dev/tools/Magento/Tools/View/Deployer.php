@@ -38,8 +38,11 @@ class Deployer
     /** @var \Magento\Framework\App\View\Asset\Publisher */
     private $assetPublisher;
 
-    /** @var \Magento\Framework\View\Asset\Bundle\Service */
-    private $bundleService;
+    /** @var \Magento\Framework\View\Asset\Bundle\Manager */
+    private $bundleManager;
+
+    /** @var \Magento\Framework\View\Asset\ConfigInterface */
+    private $bundleConfig;
 
     /** @var bool */
     private $isDryRun;
@@ -62,6 +65,7 @@ class Deployer
      * @param Version\StorageInterface $versionStorage
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\View\Asset\MinifyService $minifyService
+     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
      * @param bool $isDryRun
      */
     public function __construct(
@@ -70,6 +74,7 @@ class Deployer
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\View\Asset\MinifyService $minifyService,
+        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
@@ -78,6 +83,7 @@ class Deployer
         $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
+        $this->bundleConfig = $bundleConfig;
     }
 
     /**
@@ -111,10 +117,10 @@ class Deployer
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);
                     }
+                    $this->bundleManager->flush();
                     $this->logger->logMessage("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
-            $this->bundleService->save();
         }
         $this->logger->logMessage("=== Minify templates ===");
         $this->count = 0;
@@ -186,8 +192,8 @@ class Deployer
         $objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
         $this->assetPublisher = $objectManager->get('Magento\Framework\App\View\Asset\Publisher');
-        $this->bundleService = $objectManager->get('Magento\Framework\View\Asset\Bundle\Service');
         $this->htmlMinifier = $objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
+        $this->bundleManager = $objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
     }
 
     /**
@@ -222,7 +228,9 @@ class Deployer
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
-                $this->bundleService->collect($asset);
+                if ($this->bundleConfig->isBundlingJsFiles()) {
+                    $this->bundleManager->addAsset($asset);
+                }
             }
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {

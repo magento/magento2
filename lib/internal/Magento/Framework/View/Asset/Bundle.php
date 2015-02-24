@@ -6,135 +6,43 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\App;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\Asset\Bundle\ResolverInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\Asset\Bundle\Manager;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle
 {
-    const BUNDLE_TYPE_JS = 'js';
-
-    const BUNDLE_TYPE_HTML = 'html';
-
-    /**
-     * @var string
-     */
-    protected $bundlePath;
-
     /**
      * @var array
      */
     protected $assets = [];
 
-    /**
-     * @var array
-     */
-    protected $htmlAssets = [];
-
-    /**
-     * @var array
-     */
-    protected $bundle = [];
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var ContextInterface
-     */
-    protected $context;
-
-    /**
-     * @var ResolverInterface
-     */
-    protected $resolver;
+    /** @var Config  */
+    protected $bundleConfig;
 
     /**
      * @var array
      */
     protected $bundleNames = [
-        self::BUNDLE_TYPE_JS => 'jsbuild',
-        self::BUNDLE_TYPE_HTML => 'text'
+        Manager::ASSET_TYPE_JS => 'jsbuild',
+        Manager::ASSET_TYPE_HTML => 'text'
     ];
 
     /**
-     * @var array
-     */
-    protected static $availableTypes = [self::BUNDLE_TYPE_JS, self::BUNDLE_TYPE_HTML];
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param ResolverInterface $resolver
+     * @param Filesystem $filesystem
+     * @param Bundle\ConfigInterface $bundleConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        ResolverInterface $resolver
+        Filesystem $filesystem,
+        Bundle\ConfigInterface $bundleConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->resolver = $resolver;
+        $this->filesystem = $filesystem;
+        $this->bundleConfig = $bundleConfig;
     }
 
-    /**
-     * @param LocalInterface $asset
-     * @return bool
-     */
-    public static function isValid(LocalInterface $asset)
-    {
-        $type = $asset->getContentType();
-        if (!in_array($type, self::$availableTypes)) {
-            return false;
-        }
-
-        if ($type == self::BUNDLE_TYPE_HTML) {
-            return $asset->getModule() !== '';
-        }
-
-        return true;
-    }
-
-    /**
-     * Set bundle area
-     *
-     * @param ContextInterface $context
-     * @return void
-     */
-    protected function setContext($context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     * @return ContextInterface
-     */
-    protected function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return void
-     */
-    public function setPath($path)
-    {
-        $this->bundlePath = $path;
-    }
-
-    /**
-     * Get bundle save path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->bundlePath;
-    }
 
     /**
      * @param LocalInterface $asset
@@ -143,15 +51,45 @@ class Bundle
      */
     public function addAsset(LocalInterface $asset)
     {
-        $this->setContext($asset->getContext());
-        if ($asset->getContentType() == self::BUNDLE_TYPE_HTML) {
-            $this->htmlAssets[$this->getAssetKey($asset)] = $asset;
-        } else {
-            $this->assets[$this->getAssetKey($asset)] = $asset;
+        $contextCode = $asset->getContext()->getAreaCode()
+            . ':' . $asset->getContext()->getThemePath()
+            . ':' . $asset->getContext()->getLocaleCode();
+        $type = $asset->getContentType();
+        if (!isset($this->assets[$contextCode][$type])) {
+            $this->assets[$contextCode][$type] = [];
         }
+        $parts = $this->assets[$contextCode][$type];
+
+        $maxSize = $this->bundleConfig->getPartSize($asset->getContext());
+        $assetSize = mb_strlen(utf8_encode($asset->getContent()), 'utf-8') / 1024;
+        $minSpace = $maxSize + 1;
+        $minIndex = -1;
+        if ($maxSize && count($parts)) {
+            foreach ($parts as $partIndex => $part) {
+                $space = $part['space'] - $assetSize;
+                if ($space >= 0 && $space < $minSpace) {
+                    $minSpace = $space;
+                    $minIndex = $partIndex;
+                }
+            }
+        }
+        $index = null;
+        if ($maxSize == 0) {
+            $index = 0;
+        } elseif ($minIndex >= 0) {
+            $index = $minIndex;
+        } else {
+            $index = count($parts);
+        }
+        if (!isset($this->assets[$contextCode][$type][$index])) {
+            $this->assets[$contextCode][$type][$index]['assets'] = [];
+            $this->assets[$contextCode][$type][$index]['space'] = $maxSize;
+        }
+        $this->assets[$contextCode][$type][$index]['assets'][$this->getAssetKey($asset)] = $asset;
+        $this->assets[$contextCode][$type][$index]['space'] -= $assetSize;
     }
 
-    /**
+      /**
      * Build asset key
      *
      * @param LocalInterface $asset
@@ -163,56 +101,34 @@ class Bundle
     }
 
     /**
-     * Divided bundle on small parts
-     *
-     * @return bool
-     */
-    protected function divide()
-    {
-        $this->bundle = $this->resolver->resolve($this->assets);
-    }
-
-    /**
-     * @return void
-     */
-    protected function merge()
-    {
-        foreach ($this->htmlAssets as $path => $asset) {
-            $this->htmlAssets[$path] = utf8_encode($asset->getContent());
-        }
-        $this->bundle[] = $this->htmlAssets;
-    }
-
-    /**
      * Prepare bundle for executing in js
      *
-     * @return void
+     * @return array
      */
-    protected function prepare()
+    protected function getPartContent($assets)
     {
-        foreach ($this->bundle as $key => $part) {
-            if (empty($part)) {
-                continue;
-            }
-            $path = array_keys($part)[0];
-            $partType = substr($path, strrpos($path, '.') + 1);
-            $part = json_encode($part, JSON_UNESCAPED_SLASHES);
-            $part = "require.config({\n" .
-                "    config: {\n" .
-                "        '" . $this->bundleNames[$partType] . "':" . $part . "\n" .
-                "    }\n" .
-                "});\n";
-            $this->bundle[$key] = $part;
+        $contents = [];
+        foreach ($assets as $key => $asset) {
+            $contents[$key] = utf8_encode($asset->getContent());
         }
+
+        $partType = reset($assets)->getContentType();
+        $content = json_encode($contents, JSON_UNESCAPED_SLASHES);
+        $content = "require.config({\n" .
+            "    config: {\n" .
+            "        '" . $this->bundleNames[$partType] . "':" . $content . "\n" .
+            "    }\n" .
+            "});\n";
+
+        return $content;
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    protected function addInitJs()
+    protected function getInitJs()
     {
-        $part = reset($this->bundle);
-        $part = "require.config({\n" .
+        return "require.config({\n" .
                 "    bundles: {\n" .
                 "        'mage/requirejs/static': [\n" .
                 "            'jsbuild',\n" .
@@ -224,26 +140,48 @@ class Bundle
                 "    deps: [\n" .
                 "        'jsbuild'\n" .
                 "    ]\n" .
-                "});\n" .
-                $part;
-        $this->bundle[0] = $part;
-
-        return true;
+                "});\n";
     }
 
     /**
-     * Get bundle content
-     *
-     * @return LocalInterface[]
+     * @return void
      */
-    public function getContent()
+    public function flush()
     {
-        $this->divide();
-        $this->merge();
-        $this->prepare();
-        $this->addInitJs();
-        $this->bundle = $this->resolver->appendHtmlPart($this->bundle, $this->getContext());
+        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
 
-        return $this->bundle;
+        foreach ($this->assets as $types) {
+            $content = '';
+            $bundlePath = '';
+            $partIndex = 0;
+            $isSplit = null;
+            foreach ($types as $parts) {
+                /** @var LocalInterface $firstAsset */
+                $firstAsset = reset(reset($parts)['assets']);
+                if ($firstAsset) {
+                    $bundlePath = $firstAsset->getContext()->getPath() . Manager::BUNDLE_PATH;
+                    $isSplit = $this->bundleConfig->isSplit($firstAsset->getContext());
+                    foreach ($parts as $part) {
+                        if ($isSplit) {
+                            $content = '';
+                        }
+                        $content .= $this->getPartContent($part['assets']);
+                        if ($partIndex == 0) {
+                            $content = $this->getInitJs() . $content;
+                        }
+                        if ($isSplit) {
+                            $dir->writeFile($bundlePath . "$partIndex.js", $content);
+                        }
+                        $partIndex++;
+                    }
+
+                }
+            }
+            if ($bundlePath && !$isSplit) {
+                $dir->writeFile($bundlePath . "0.js", $content);
+            }
+        }
+
+        $this->assets = [];
     }
 }

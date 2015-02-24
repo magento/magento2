@@ -53,11 +53,8 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $asset = $this->fileManager->createRequireJsAsset();
-        $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
-
         /** @var \Magento\Framework\View\Asset\File $bundleAsset */
-        foreach ($this->fileManager->createBandleJsPool() as $bundleAsset) {
+        foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
             $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
         }
 
@@ -65,6 +62,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         if ($staticAsset !== false) {
             $this->pageConfig->getAssetCollection()->add($staticAsset->getFilePath(), $staticAsset);
         }
+
+        $asset = $this->fileManager->createRequireJsAsset();
+        $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
 
         return parent::_prepareLayout();
     }

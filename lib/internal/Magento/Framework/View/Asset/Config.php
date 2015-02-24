@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\View\Asset;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * View asset configuration interface
@@ -34,6 +35,11 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     const XML_PATH_MINIFICATION_ADAPTER = 'dev/%s/minify_adapter';
 
     /**
+     * XML path for asset minification adapter configuration
+     */
+    const XML_PATH_JS_BUNDLING = 'dev/js/enable_js_bundling';
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -53,7 +59,17 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeCssFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_CSS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_CSS_FILES, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * Check whether bundling of JavScript files is on
+     *
+     * @return bool
+     */
+    public function isBundlingJsFiles()
+    {
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_JS_BUNDLING, ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -63,7 +79,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeJsFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_JS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_JS_FILES, ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -76,7 +92,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (bool)$this->scopeConfig->isSetFlag(
             sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -90,7 +106,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (string)$this->scopeConfig->getValue(
             sprintf(self::XML_PATH_MINIFICATION_ADAPTER, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 }
