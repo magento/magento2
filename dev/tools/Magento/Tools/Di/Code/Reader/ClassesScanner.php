@@ -16,22 +16,21 @@ class ClassesScanner
     protected $excludePatterns = [];
 
     /**
-     * adds exclude patterns
+     * Adds exclude patterns
      *
      * @param array $excludePatterns
+     * @return void
      */
     public function addExcludePatterns(array $excludePatterns)
     {
         $this->excludePatterns = array_merge($this->excludePatterns, $excludePatterns);
     }
-    
+
     /**
      * Retrieves list of classes for given path
      *
      * @param string $path
-     *
      * @return array
-     *
      * @throws FilesystemException
      */
     public function getList($path)
