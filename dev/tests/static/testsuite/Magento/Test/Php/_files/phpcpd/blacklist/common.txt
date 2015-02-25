@@ -156,5 +156,4 @@ Magento/Quote/Setup
 Magento/Reports/Setup
 Magento/Sales/Setup
 Magento/SalesRule/Setup
-Magento/CatalogPermissions/Setup
 Magento/Eav/Setup
