@@ -47,12 +47,13 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
                     basename($file),
                     'Recurring scripts are obsolete. Please create class Recurring in module\'s Setup folder'
                 );
-                $this->fail('Invalid directory. Please convert data/sql scripts to a class within module\'s Setup'
-                    . ' folder');
+                $this->fail(
+                    'Invalid directory. Please convert data/sql scripts to a class within module\'s Setup folder'
+                );
             },
             $this->convertArray(Files::init()->getFiles(
-                [BP . '/app/code/*/*/sql', BP . '/app/code/*/*/data'],
-                '*.php'
+                    [BP . '/app/code/*/*/sql', BP . '/app/code/*/*/data'],
+                    '*.php'
                 )
             )
         );

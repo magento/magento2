@@ -27,12 +27,9 @@ class InstallerFactory
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
+     * @param ResourceFactory $resourceFactory
      */
-    public function __construct(
-        ServiceLocatorInterface $serviceLocator,
-        ResourceFactory $resourceFactory
-    )
-    {
+    public function __construct(ServiceLocatorInterface $serviceLocator, ResourceFactory $resourceFactory) {
         $this->serviceLocator = $serviceLocator;
         $this->resourceFactory = $resourceFactory;
     }
@@ -64,6 +61,11 @@ class InstallerFactory
         );
     }
 
+    /**
+     * creates Resource Factory
+     *
+     * @return Resource
+     */
     private function getResource()
     {
         $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(

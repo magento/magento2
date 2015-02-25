@@ -38,6 +38,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Installer
 {
@@ -595,7 +596,10 @@ class Installer
      */
     public function installSchema()
     {
-        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Module\Setup',
+            ['resource' => $this->resource]
+        );
         $this->setupModuleRegistry($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
@@ -622,6 +626,9 @@ class Installer
      * @param string $type
      * @return void
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function handleDBSchemaData($setup, $type)
     {
@@ -724,8 +731,10 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup',
-            ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Module\Setup',
+            ['resource' => $this->resource]
+        );
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -768,8 +777,10 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup',
-            ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Module\Setup',
+            ['resource' => $this->resource]
+        );
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
     }
@@ -1005,6 +1016,8 @@ class Installer
      * @param string $type
      * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
      * @throws \Magento\Setup\Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
