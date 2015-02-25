@@ -311,183 +311,6 @@ a:hover {
   font-weight: normal;
   speak: none;
 }
-.icon-info:before {
-  content: '\e61a';
-}
-.icon-lock:before {
-  content: '\e61b';
-}
-.icon-loop:before {
-  content: '\e61c';
-}
-.icon-plus:before {
-  content: '\e61d';
-}
-.icon-recover:before {
-  content: '\e61e';
-}
-.icon-refresh:before {
-  content: '\e61f';
-}
-.icon-remove-small:before {
-  content: '\e620';
-}
-.icon-retweet:before {
-  content: '\e621';
-}
-.icon-unlocked:before {
-  content: '\e622';
-}
-.icon-warning:before {
-  content: '\e623';
-}
-.icon-arrow-left:before {
-  content: '\e624';
-}
-.icon-arrow-right:before {
-  content: '\e625';
-}
-.icon-back-arrow:before {
-  content: '\e626';
-}
-.icon-calendar:before {
-  content: '\e627';
-}
-.icon-caret-down:before {
-  content: '\e628';
-}
-.icon-caret-left:before {
-  content: '\e629';
-}
-.icon-caret-right:before {
-  content: '\e62a';
-}
-.icon-caret-up:before {
-  content: '\e62b';
-}
-.icon-ccw:before {
-  content: '\e62c';
-}
-.icon-check-mage:before {
-  content: '\e62d';
-}
-.icon-clock:before {
-  content: '\e62e';
-}
-.icon-close-mage:before {
-  content: '\e62f';
-}
-.icon-delete:before {
-  content: '\e630';
-}
-.icon-edit:before {
-  content: '\e631';
-}
-.icon-error:before {
-  content: '\e632';
-}
-.icon-help:before {
-  content: '\e633';
-}
-.icon-history:before {
-  content: '\e634';
-}
-.icon-icon-not-installed:before {
-  content: '\e638';
-}
-.icon-icon-disabled:before {
-  content: '\e639';
-}
-.icon-icon-enable:before {
-  content: '\e637';
-}
-.icon-icon-export:before {
-  content: '\e635';
-}
-.icon-icon-import:before {
-  content: '\e636';
-}
-.icon-icon-gripper:before {
-  content: '\e617';
-}
-.icon-icon-forward:before {
-  content: '\e618';
-}
-.icon-icon-backward:before {
-  content: '\e619';
-}
-.icon-icon-expand-close:before {
-  content: '\e615';
-}
-.icon-icon-expand-open:before {
-  content: '\e616';
-}
-.icon-icon-system-config:before {
-  content: '\e610';
-}
-.icon-icon-home:before {
-  content: '\e611';
-}
-.icon-icon-lego:before {
-  content: '\e612';
-}
-.icon-icon-tool:before {
-  content: '\e613';
-}
-.icon-icon-upgrade:before {
-  content: '\e614';
-}
-.icon-notification-02:before {
-  content: '\e607';
-}
-.icon-product:before {
-  content: '\e608';
-}
-.icon-logo:before {
-  content: '\e606';
-}
-.icon-account:before {
-  content: '\e600';
-}
-.icon-arrowdown:before {
-  content: '\e601';
-}
-.icon-cms:before {
-  content: '\e602';
-}
-.icon-customers:before {
-  content: '\e603';
-}
-.icon-dashboard:before {
-  content: '\e604';
-}
-.icon-filter:before {
-  content: '\e605';
-}
-.icon-promotions:before {
-  content: '\e609';
-}
-.icon-reports:before {
-  content: '\e60a';
-}
-.icon-sales:before {
-  content: '\e60b';
-}
-.icon-search:before {
-  content: '\e60c';
-}
-.icon-stores:before {
-  content: '\e60d';
-}
-.icon-systems:before {
-  content: '\e60e';
-}
-.icon-views:before {
-  content: '\e60f';
-}
-.icon-menu-item:before {
-  content: '\e63a';
-}
 ul,
 ol,
 dl {
@@ -531,14 +354,15 @@ nav ol {
 .admin__control-multiselect,
 .admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"]:before {
   background-color: #ffffff;
-  border-radius: 1px;
+  border-radius: .1rem;
   border: 1px solid #adadad;
   color: #303030;
-  font-size: 15px;
-  font-weight: 500;
-  height: 33px;
+  font-size: 1.4rem;
+  font-weight: 400;
+  height: 3.3rem;
   max-width: 100%;
-  padding: 0 10px;
+  padding: 0 1rem;
+  transition: border-color 0.1s ease-in;
 }
 .admin__control-text:focus,
 .admin__control-select:focus,
@@ -570,13 +394,13 @@ nav ol {
   appearance: none;
   background-repeat: no-repeat;
   background-image: url('../images/arrows-bg.svg'), linear-gradient(#e3e3e3, #e3e3e3), linear-gradient(#adadad, #adadad);
-  background-position: ~" calc(100% - 12px) -34px, 100%, calc(100% - 33px) 0";
-  background-size: auto, 33px 100%, 1px 100%;
+  background-position: ~" calc(100% - 12px) -34px, 100%, calc(100% - 34px -1px) 0";
+  background-size: auto, 3.3rem 100%, 1px 100%;
   padding-right: 44px;
 }
 .admin__control-select:focus {
   background-image: url('../images/arrows-bg.svg'), linear-gradient(#e3e3e3, #e3e3e3), linear-gradient(#007bdb, #007bdb);
-  background-position: ~" calc(100% - 12px) 13px, 100%, calc(100% - 33px) 0";
+  background-position: ~" calc(100% - 12px) 13px, 100%, calc(100% - @field-control__height) 0";
 }
 .admin__control-select::-ms-expand {
   display: none;
@@ -596,18 +420,18 @@ option:empty {
 }
 .admin__control-textarea,
 .admin__control-multiselect {
-  height: ~" calc(6 * 1.2em + 14px)";
+  height: ~" calc(6 * 1.2em + 1.4rem)";
   line-height: 1.2;
-  padding: 6px 10px;
+  padding: .6rem 1rem;
   width: 100%;
 }
 .admin__control-textarea {
-  line-height: 1.18em;
-  padding-top: 8px;
+  line-height: 1.18;
+  padding-top: .8rem;
 }
 .admin__control-radio,
 .admin__control-checkbox {
-  margin: 3px 0 0 0;
+  margin: .3rem 0 0;
   opacity: 0;
   overflow: hidden;
   position: absolute;
@@ -621,17 +445,19 @@ option:empty {
 }
 .admin__control-radio + label:before,
 .admin__control-checkbox + label:before {
-  background: url('../Magento_Ui/images/choice_bkg.png') no-repeat -100% -100% #ffffff;
-  border-radius: 2px;
+  background: none;
+  border-radius: .2rem;
   border: 1px solid #adadad;
-  content: '';
+  color: transparent;
+  content: '\e62d';
   float: left;
-  height: 16px;
-  line-height: 16px;
+  font: 0/1.4rem 'Admin Icons';
+  height: 1.6rem;
   margin: 1px 10px 0 -26px;
   text-align: center;
+  transition: border-color 0.1s ease-in, color 0.1s ease-in, font-size 0.1s ease-in;
   vertical-align: top;
-  width: 16px;
+  width: 1.6rem;
 }
 .admin__control-radio:focus + label:before,
 .admin__control-checkbox:focus + label:before {
@@ -648,13 +474,16 @@ option:empty {
   border-color: #adadad;
 }
 .admin__control-radio + label:before {
-  border-radius: 8px;
+  border-radius: .8rem;
+  content: '\e637';
 }
 .admin__control-radio:checked + label:before {
-  background-position: -26px -1px;
+  color: #514943;
+  font-size: 1rem;
 }
 .admin__control-checkbox:checked + label:before {
-  background-position: -1px -1px;
+  color: #514943;
+  font-size: 1.1rem;
 }
 .admin__control-addon {
   display: -webkit-inline-flex;
@@ -693,7 +522,7 @@ option:empty {
   box-shadow: 0;
 }
 .admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"] {
-  padding-left: 10px;
+  padding-left: 1rem;
   position: static !important;
   z-index: 0;
 }
@@ -718,17 +547,17 @@ option:empty {
   box-sizing: border-box;
   color: #858585;
   display: inline-block;
-  font-size: 15px;
-  font-weight: 300;
-  height: 33px;
-  line-height: 33px;
-  padding: 0 3px;
+  font-size: 1.4rem;
+  font-weight: 400;
+  height: 3.3rem;
+  line-height: 3.3rem;
+  padding: 0 .3rem;
 }
 .admin__addon-suffix {
   order: 3;
 }
 .admin__addon-suffix:last-child {
-  padding-right: 10px;
+  padding-right: 1rem;
 }
 .admin__addon-prefix {
   order: 0;
@@ -751,69 +580,7 @@ option:empty {
 }
 .admin__control-value {
   display: inline-block;
-  padding: 6px 10px;
-}
-.admin__control-text.hasDatepicker {
-  width: 200px;
-}
-.admin__control-text + .ui-datepicker-trigger {
-  background-image: none;
-  background: none;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  -moz-box-sizing: content-box;
-  box-shadow: none;
-  text-shadow: none;
-  line-height: inherit;
-  font-weight: 400;
-  text-decoration: none;
-  vertical-align: top;
-  margin-left: -40px;
-  display: inline-block;
-}
-.admin__control-text + .ui-datepicker-trigger img {
-  display: none;
-}
-.admin__control-text + .ui-datepicker-trigger:focus,
-.admin__control-text + .ui-datepicker-trigger:active {
-  background: none;
-  border: none;
-}
-.admin__control-text + .ui-datepicker-trigger:hover {
-  background: none;
-  border: none;
-}
-.admin__control-text + .ui-datepicker-trigger.disabled,
-.admin__control-text + .ui-datepicker-trigger[disabled],
-fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
-  cursor: not-allowed;
-  pointer-events: none;
-  opacity: 0.5;
-}
-.admin__control-text + .ui-datepicker-trigger > span {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-.admin__control-text + .ui-datepicker-trigger:after {
-  font-family: 'icons-blank-theme';
-  content: '\e612';
-  font-size: 38px;
-  line-height: 33px;
-  color: #514943;
-  overflow: hidden;
-  speak: none;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
+  padding: .6rem 1rem;
 }
 .col-2-left-layout {
   margin-top: 50px;
@@ -890,7 +657,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   font-size: 14px;
   font-weight: 600;
   padding-top: 0;
-  line-height: 33px;
+  line-height: 3.2rem;
   white-space: nowrap;
 }
 [class]:not(.admin__field-option) > .admin__field-label:before {
@@ -1112,89 +879,73 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .admin__field-tooltip {
   display: inline-block;
-  vertical-align: top;
   margin-top: 5px;
-  position: relative;
-  z-index: 1;
-  width: 0;
   overflow: visible;
+  vertical-align: top;
+  width: 0;
+}
+.admin__field-tooltip:hover {
+  position: relative;
+  z-index: 500;
 }
 .admin__field-option .admin__field-tooltip {
   margin-top: 10px;
 }
-.admin__field-tooltip:hover {
-  z-index: 99;
-}
 .admin__field-tooltip-action {
-  position: relative;
-  z-index: 2;
-  margin-left: 18px;
-  width: 22px;
-  height: 22px;
+  margin-left: 20px;
   display: inline-block;
-  cursor: pointer;
+  text-decoration: none;
 }
 .admin__field-tooltip-action:before {
-  content: "?";
-  font-weight: 500;
-  font-size: 18px;
+  font-family: 'Admin Icons';
+  content: '\e633';
+  font-size: 2.2rem;
+  line-height: 1;
+  color: #514943;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
   display: inline-block;
-  overflow: hidden;
-  height: 22px;
-  border-radius: 11px;
-  line-height: 22px;
-  width: 22px;
+  vertical-align: middle;
   text-align: center;
-  color: #ffffff;
-  background-color: #514943;
-}
-.admin__field-tooltip-action span {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
 }
 .admin__control-text:focus + .admin__field-tooltip-content,
 .admin__field-tooltip:hover .admin__field-tooltip-content {
   display: block;
 }
 .admin__field-tooltip-content {
-  display: none;
-  position: absolute;
-  z-index: 1;
-  width: 320px;
-  background: #fff8d7;
-  padding: 15px 25px;
-  right: -66px;
-  border: 1px solid #adadad;
-  border-radius: 1px;
-  bottom: 42px;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+  background: #fff8d6;
+  border-radius: 1px;
+  border: 1px solid #afadac;
+  bottom: 42px;
+  display: none;
+  padding: 15px 25px;
+  position: absolute;
+  right: -70px;
+  width: 320px;
+  z-index: 1;
 }
 .admin__field-tooltip-content:after,
 .admin__field-tooltip-content:before {
-  content: "";
-  display: block;
   border: 16px solid transparent;
   height: 0;
   width: 0;
-  border-top-color: #adadad;
+  border-top-color: #afadac;
+  content: "";
+  display: block;
   position: absolute;
   right: 20px;
   top: 100%;
   z-index: 3;
 }
 .admin__field-tooltip-content:after {
-  border-top-color: #fff8d7;
+  border-top-color: #fff8d6;
   margin-top: -1px;
   z-index: 4;
 }
-.action,
-button {
+.action {
   background: #e3e3e3;
   border: 1px solid transparent;
   color: #514943;
@@ -1206,28 +957,20 @@ button {
   text-align: center;
   vertical-align: middle;
 }
-.action:hover,
-button:hover {
+.action:hover {
   background-color: #dbdbdb;
   box-shadow: 0 0 0 1px #008bdb;
   color: #514943;
   text-decoration: none;
 }
-.action:active,
-button:active {
+.action:active {
   background-color: #d6d6d6;
 }
 .action[disabled],
-.action.disabled,
-button[disabled],
-button.disabled {
+.action.disabled {
   cursor: default;
   opacity: 0.7;
   pointer-events: none;
-}
-.action-large {
-  font-size: 1.6rem;
-  padding: 0.7em 1.45em;
 }
 .action-link {
   background-color: transparent;
@@ -1243,44 +986,35 @@ button.disabled {
   color: #007bdb;
   text-decoration: underline;
 }
-.action-primary,
-button.primary {
+.action-primary {
   background-color: #eb5202;
   color: #ffffff;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 .action-primary:hover,
-.action-primary:active,
-button.primary:hover,
-button.primary:active {
+.action-primary:active {
   background-color: #b84002;
   border-color: #b84002;
   color: #ffffff;
 }
 .action-primary.disabled,
-.action-primary[disabled],
-button.primary.disabled,
-button.primary[disabled] {
+.action-primary[disabled] {
   cursor: default;
   opacity: 0.7;
   pointer-events: none;
 }
-.action-secondary,
-button.secondary {
+.action-secondary {
   background-color: #514943;
   border-color: #514943;
   color: #ffffff;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 .action-secondary:hover,
-.action-secondary:active,
-button.secondary:hover,
-button.secondary:active {
+.action-secondary:active {
   background-color: #35302c;
   color: #ffffff;
 }
-.action-secondary:active,
-button.secondary:active {
+.action-secondary:active {
   background-color: #35302c;
 }
 .action-reset {
@@ -1292,16 +1026,12 @@ button.secondary:active {
 .action-reset:active {
   background-color: transparent;
 }
-.action-tertiary,
-button.tertiary {
-  background: #e3e3e3;
+.action-tertiary {
   border-color: #adadad;
   color: #333333;
 }
 .action-tertiary:hover,
-.action-tertiary:active,
-button.tertiary:hover,
-button.tertiary:active {
+.action-tertiary:active {
   background-color: #cacaca;
   border-color: #8f8f8f;
 }
@@ -1469,7 +1199,7 @@ button.tertiary:active {
   margin-left: 0;
 }
 .actions-split button.action-toggle {
-  border-left: 1px solid #c34706;
+  border-left: 1px solid #b84002;
   padding: 0.55em 0;
 }
 .actions-split button.action-large.action-toggle {
@@ -1702,6 +1432,94 @@ table.table tbody tr:last-child td {
   font-weight: normal;
   speak: none;
 }
+.abs-action,
+button {
+  background: #e3e3e3;
+  border: 1px solid transparent;
+  color: #514943;
+  display: inline-block;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  padding: 0.55em 1em;
+  text-align: center;
+  vertical-align: middle;
+}
+.abs-action:hover,
+button:hover {
+  background-color: #dbdbdb;
+  box-shadow: 0 0 0 1px #008bdb;
+  color: #514943;
+  text-decoration: none;
+}
+.abs-action:active,
+button:active {
+  background-color: #d6d6d6;
+}
+.abs-action[disabled],
+.abs-action.disabled,
+button[disabled],
+button.disabled {
+  cursor: default;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.abs-action-primary,
+button.primary {
+  background-color: #eb5202;
+  color: #ffffff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.abs-action-primary:hover,
+.abs-action-primary:active,
+button.primary:hover,
+button.primary:active {
+  background-color: #b84002;
+  border-color: #b84002;
+  color: #ffffff;
+}
+.abs-action-primary.disabled,
+.abs-action-primary[disabled],
+button.primary.disabled,
+button.primary[disabled] {
+  cursor: default;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.abs-action-secondary,
+button.secondary {
+  background-color: #514943;
+  border-color: #514943;
+  color: #ffffff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.abs-action-secondary:hover,
+.abs-action-secondary:active,
+button.secondary:hover,
+button.secondary:active {
+  background-color: #35302c;
+  color: #ffffff;
+}
+.abs-action-secondary:active,
+button.secondary:active {
+  background-color: #35302c;
+}
+.abs-action-big {
+  font-size: 1.6rem;
+  padding: 0.7em 1.45em;
+}
+.abs-action-tertiary,
+button.tertiary {
+  border-color: #adadad;
+  color: #333333;
+}
+.abs-action-tertiary:hover,
+.abs-action-tertiary:active,
+button.tertiary:hover,
+button.tertiary:active {
+  background-color: #cacaca;
+  border-color: #8f8f8f;
+}
 .abs-btn-reset,
 .admin__menu .submenu-close {
   background-color: transparent;
@@ -1803,6 +1621,68 @@ body {
   padding-left: 3rem;
   padding-right: 3rem;
 }
+.admin__control-text.hasDatepicker {
+  width: 15rem;
+}
+.admin__control-text + .ui-datepicker-trigger {
+  background-image: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: content-box;
+  box-shadow: none;
+  text-shadow: none;
+  line-height: inherit;
+  font-weight: 400;
+  text-decoration: none;
+  vertical-align: top;
+  margin-left: -4rem;
+  display: inline-block;
+}
+.admin__control-text + .ui-datepicker-trigger img {
+  display: none;
+}
+.admin__control-text + .ui-datepicker-trigger:focus,
+.admin__control-text + .ui-datepicker-trigger:active {
+  background: none;
+  border: none;
+}
+.admin__control-text + .ui-datepicker-trigger:hover {
+  background: none;
+  border: none;
+}
+.admin__control-text + .ui-datepicker-trigger.disabled,
+.admin__control-text + .ui-datepicker-trigger[disabled],
+fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.admin__control-text + .ui-datepicker-trigger > span {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.admin__control-text + .ui-datepicker-trigger:after {
+  font-family: 'icons-blank-theme';
+  content: '\e612';
+  font-size: 3.8rem;
+  line-height: 3rem;
+  color: #514943;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
 .ui-datepicker {
   background: #ffffff;
   border: 1px solid #007dbd;
@@ -1821,7 +1701,7 @@ body {
 .ui-datepicker-next {
   cursor: pointer;
   position: absolute;
-  line-height: 32px;
+  line-height: 3rem;
   top: 0;
 }
 .ui-datepicker-prev span,
@@ -1985,14 +1865,14 @@ body {
   -webkit-border-radius: 10px;
   border-radius: 10px;
   border: none;
-  background: #dadada;
+  background: #adadad;
 }
 .ui-slider-handle {
   height: 10px;
   width: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: #f98b25;
+  background: #514943;
   display: block;
   position: absolute;
 }
@@ -3160,8 +3040,7 @@ fieldset[disabled] .page-main-actions .page-actions button.delete {
 .store-switcher .actions.dropdown.active .dropdown-menu {
   display: block;
 }
-.store-switcher .actions.dropdown .action.toggle,
-.store-switcher .actions.dropdown button.toggle {
+.store-switcher .actions.dropdown .action.toggle {
   background-image: none;
   background: none;
   border: 0;
@@ -3180,23 +3059,17 @@ fieldset[disabled] .page-main-actions .page-actions button.delete {
   vertical-align: middle;
 }
 .store-switcher .actions.dropdown .action.toggle:focus,
-.store-switcher .actions.dropdown .action.toggle:active,
-.store-switcher .actions.dropdown button.toggle:focus,
-.store-switcher .actions.dropdown button.toggle:active {
+.store-switcher .actions.dropdown .action.toggle:active {
   background: none;
   border: none;
 }
-.store-switcher .actions.dropdown .action.toggle:hover,
-.store-switcher .actions.dropdown button.toggle:hover {
+.store-switcher .actions.dropdown .action.toggle:hover {
   background: none;
   border: none;
 }
 .store-switcher .actions.dropdown .action.toggle.disabled,
 .store-switcher .actions.dropdown .action.toggle[disabled],
-fieldset[disabled] .store-switcher .actions.dropdown .action.toggle,
-.store-switcher .actions.dropdown button.toggle.disabled,
-.store-switcher .actions.dropdown button.toggle[disabled],
-fieldset[disabled] .store-switcher .actions.dropdown button.toggle {
+fieldset[disabled] .store-switcher .actions.dropdown .action.toggle {
   cursor: not-allowed;
   pointer-events: none;
   opacity: 0.5;
@@ -3352,8 +3225,7 @@ fieldset[disabled] .store-switcher .actions.dropdown button.toggle {
   position: relative;
   z-index: 1;
 }
-.notifications-entry:hover .action,
-.notifications-entry:hover button {
+.notifications-entry:hover .action {
   display: block;
 }
 .notifications-entry-title {
@@ -3372,8 +3244,7 @@ fieldset[disabled] .store-switcher .actions.dropdown button.toggle {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.notifications-close.action,
-.notifications-closebutton {
+.notifications-close.action {
   background-image: none;
   background: none;
   border: 0;
@@ -3393,29 +3264,22 @@ fieldset[disabled] .store-switcher .actions.dropdown button.toggle {
   z-index: 1;
 }
 .notifications-close.action:focus,
-.notifications-close.action:active,
-.notifications-closebutton:focus,
-.notifications-closebutton:active {
+.notifications-close.action:active {
   background: none;
   border: none;
 }
-.notifications-close.action:hover,
-.notifications-closebutton:hover {
+.notifications-close.action:hover {
   background: none;
   border: none;
 }
 .notifications-close.action.disabled,
 .notifications-close.action[disabled],
-fieldset[disabled] .notifications-close.action,
-.notifications-closebutton.disabled,
-.notifications-closebutton[disabled],
-fieldset[disabled] .notifications-closebutton {
+fieldset[disabled] .notifications-close.action {
   cursor: not-allowed;
   pointer-events: none;
   opacity: 0.5;
 }
-.notifications-close.action > span,
-.notifications-closebutton > span {
+.notifications-close.action > span {
   border: 0;
   clip: rect(0, 0, 0, 0);
   height: 1px;
@@ -3425,8 +3289,7 @@ fieldset[disabled] .notifications-closebutton {
   position: absolute;
   width: 1px;
 }
-.notifications-close.action:before,
-.notifications-closebutton:before {
+.notifications-close.action:before {
   font-family: 'MUI-Icons';
   content: '\e07f';
   font-size: 16px;
@@ -3608,7 +3471,7 @@ fieldset[disabled] .notifications-closebutton {
   position: absolute;
   right: 18px;
   top: 22px;
-  font-size: 13px;
+  font-size: 1.3rem;
 }
 .admin__section-nav-title strong {
   font-weight: 700;
@@ -3644,10 +3507,10 @@ fieldset[disabled] .notifications-closebutton {
   z-index: 2;
   background: url("../images/loader-2.gif") no-repeat 50% 50%;
   background-size: 120px;
-  width: 20px;
-  height: 20px;
-  top: 21px;
-  right: 5px;
+  width: 2rem;
+  height: 2rem;
+  top: 2.1rem;
+  right: .5rem;
 }
 .admin__section-nav-link {
   border: 1px solid transparent;
