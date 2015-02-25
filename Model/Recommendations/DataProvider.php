@@ -6,7 +6,7 @@
 namespace Magento\AdvancedSearch\Model\Recommendations;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
