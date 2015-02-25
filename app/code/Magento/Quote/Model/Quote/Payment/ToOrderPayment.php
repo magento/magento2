@@ -23,7 +23,7 @@ class ToOrderPayment
     protected $objectCopyService;
 
     /**
-     * @var OrderPaymentFactory|\Magento\Framework\Api\Builder
+     * @var OrderPaymentFactory
      */
     protected $orderPaymentFactory;
 
@@ -74,8 +74,9 @@ class ToOrderPayment
                 )
             )
         );
-        $orderPayment->setCcNumberEnc($object->getCcNumber());
-        $orderPayment->setCcCidEnc($object->getCcCidEnc());
+        // set directly on the model
+        $orderPayment->setCcNumber($object->getCcNumber());
+        $orderPayment->setCcCid($object->getCcCid());
 
         return $orderPayment;
     }
