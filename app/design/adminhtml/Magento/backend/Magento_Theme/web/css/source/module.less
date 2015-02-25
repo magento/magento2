@@ -53,43 +53,6 @@ body {
 //    }
 }
 
-.page-header {
-    &:extend(._layout-width all);
-    text-align: right;
-     .clearer();
-    .logo {
-        margin-top: 5px;
-        float: left;
-        text-decoration: none;
-        display: inline-block;
-        &:before {
-            content:"";
-            display: inline-block;
-            vertical-align: middle;
-            width: 109px;
-            height: 35px;
-            background-image: url("@{baseDir}images/logo-admin.svg");
-            background-size: 109px 70px;
-            background-repeat: no-repeat;
-        }
-        &:after {
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 10px;
-            content: attr(data-edition);
-            font-weight: 600;
-            font-size: 16px;
-            color: #ef672f;
-            margin-top:-2px;
-        }
-        span {
-            .visually-hidden();
-        }
-    }
-    .dropdown-menu {
-        border: 0;
-    }
-}
 .admin-user {
     display: inline-block;
     vertical-align: top;

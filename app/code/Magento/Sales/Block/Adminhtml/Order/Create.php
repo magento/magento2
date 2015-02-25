@@ -91,8 +91,8 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     protected function _prepareLayout()
     {
         $pageTitle = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Header')->toHtml();
-        if (is_object($this->getLayout()->getBlock('page-title'))) {
-            $this->getLayout()->getBlock('page-title')->setPageTitle($pageTitle);
+        if (is_object($this->getLayout()->getBlock('page-title-wrapper'))) {
+            $this->getLayout()->getBlock('page-title-wrapper')->setPageTitle($pageTitle);
         }
         return parent::_prepareLayout();
     }

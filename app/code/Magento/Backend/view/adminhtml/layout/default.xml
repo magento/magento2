@@ -47,7 +47,7 @@
             <block class="Magento\Framework\View\Element\Template" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
         </referenceContainer>
         <referenceContainer name="main.top">
-            <block class="Magento\Theme\Block\Html\Title" name="page-title" template="title.phtml"/>
+            <block class="Magento\Theme\Block\Html\Title" name="page.title" template="title.phtml"/>
         </referenceContainer>
         <referenceContainer name="page.messages">
             <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>

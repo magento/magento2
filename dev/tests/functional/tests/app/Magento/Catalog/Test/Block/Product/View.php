@@ -61,7 +61,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productName = '.page-title.product h1.title .base';
+    protected $productName = '.page-title-wrapper.product h1.page-title .base';
 
     /**
      * Product sku element.

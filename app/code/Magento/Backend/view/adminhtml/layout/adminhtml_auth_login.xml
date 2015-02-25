@@ -12,7 +12,7 @@
         <remove name="page.menu"/>
         <remove name="header"/>
         <remove name="logo"/>
-        <remove name="page-title"/>
+        <remove name="page.title"/>
         <remove name="user"/>
         <remove name="global.search"/>
         <remove name="notification.messages"/>

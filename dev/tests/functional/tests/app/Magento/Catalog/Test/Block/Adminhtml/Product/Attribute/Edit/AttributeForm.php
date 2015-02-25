@@ -99,7 +99,7 @@ class AttributeForm extends FormTabs
             ? $this->tabs[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
         $tab = $this->_rootElement->find($selector, $strategy);
-        $target = $this->browser->find('.page-title .title');// Handle menu overlap problem
+        $target = $this->browser->find('.page-title-wrapper .page-title');// Handle menu overlap problem
         $this->_rootElement->dragAndDrop($target);
         $tab->click();
         return $this;

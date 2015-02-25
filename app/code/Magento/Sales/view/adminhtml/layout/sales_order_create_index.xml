@@ -13,7 +13,7 @@
     </head>
     <update handle="sales_order_create_item_price"/>
     <body>
-        <referenceBlock name="page-title">
+        <referenceBlock name="page.title">
             <action method="setTitleId">
                 <argument translate="true" name="id" xsi:type="string">order-header</argument>
             </action>
