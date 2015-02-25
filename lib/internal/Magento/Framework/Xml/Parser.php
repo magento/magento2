@@ -201,10 +201,10 @@ class Parser
     {
 	$this->loadXML($string);
 	$e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
-	if(empty($e) === true){
+	if (empty($e) === true) {
 	    return true;
 	}
-	throw new ValidationException(implode(PHP_EOL,$e));
+	throw new ValidationException(implode(PHP_EOL, $e));
     }
 
     /**
