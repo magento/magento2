@@ -1,0 +1,93 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Loaders
+//  _____________________________________________
+
+.loader(
+    @_loader-overlay-background-color: @loader-overlay__background-color,
+    @_loader-overlay-z-index: @loader-overlay__z-index,
+    @_loader-icon-width: @loader-icon__width,
+    @_loader-icon-height: @loader-icon__height,
+    @_loader-icon-background-color: @loader-icon__background-color,
+    @_loader-icon-background-image: @loader-icon__background-image,
+    @_loader-icon-background-position: @loader-icon__background-position,
+    @_loader-icon-border-radius: @loader-icon__border-radius,
+    @_loader-icon-padding: @loader-icon__padding,
+    @_loader-text: @loader-text,
+    @_loader-text-color: @loader-text__color,
+    @_loader-text-font-size: @loader-text__font-size,
+    @_loader-text-font-family: @loader-text__font-family,
+    @_loader-text-font-weight: @loader-text__font-weight,
+    @_loader-text-font-style: @loader-text__font-style,
+    @_loader-text-padding: @loader-text__padding
+) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    .css(background-color, @_loader-overlay-background-color);
+    .css(z-index, @_loader-overlay-z-index);
+    &:before {
+        .css(border-radius, @_loader-icon-border-radius);
+        .css(background, @_loader-icon-background-color @_loader-icon-background-image no-repeat @_loader-icon-background-position);
+        box-sizing: border-box;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+        .css(padding, @_loader-icon-padding);
+        .css(width, @_loader-icon-width);
+        .css(height, @_loader-icon-height);
+        ._loader-text(@_loader-text);
+    }
+}
+
+._loader-text(
+    @_loader-text
+) when (@_loader-text = true) {
+    content: attr(data-text);
+    .css(padding, @_loader-text-padding);
+    vertical-align: baseline;
+    text-align: center;
+    .typography(
+        @_color: @_loader-text-color,
+        @_font-size: @_loader-text-font-size,
+        @_font-family: @_loader-text-font-family,
+        @_font-weight: @_loader-text-font-weight,
+        @_font-style: @_loader-text-font-style
+    );
+}
+
+.loading(
+    @_loading-background-color: @loading__background-color,
+    @_loading-background-image: @loading__background-image
+) {
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        .css(background, @_loading-background-color @_loading-background-image no-repeat 50% 50%);
+    }
+}
+
+.loading-mask() {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 100;
+}
