@@ -9,27 +9,10 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Helper;
+namespace Magento\Framework\Url;
 
-class Url extends \Magento\Framework\App\Helper\AbstractHelper
+class Helper extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
-    ) {
-        parent::__construct($context);
-        $this->_storeManager = $storeManager;
-    }
-
     /**
      * Retrieve current url in base64 encoding
      *
@@ -50,16 +33,6 @@ class Url extends \Magento\Framework\App\Helper\AbstractHelper
             $url = $this->_urlBuilder->getCurrentUrl();
         }
         return $this->urlEncoder->encode($url);
-    }
-
-    /**
-     * Retrieve homepage url
-     *
-     * @return string
-     */
-    public function getHomeUrl()
-    {
-        return $this->_storeManager->getStore()->getBaseUrl();
     }
 
     /**

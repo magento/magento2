@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Helper;
+namespace Magento\Framework\Url;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -19,9 +19,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCurrentBase64Url()
     {
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-        ->disableOriginalConstructor()
-        ->getMock();
         $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -43,8 +40,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'urlEncoder' => $urlEncoder,
             ]
         );
-        /** @var \Magento\Core\Helper\Url $helper */
-        $helper = new Url($context, $storeManagerMock);
+        /** @var \Magento\Framework\Url\Helper $helper */
+        $helper = new Helper($context);
         $this->assertEquals($encodedUrl, $helper->getCurrentBase64Url());
     }
 
@@ -55,9 +52,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEncodedUrl($url, $callNum)
     {
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
         $urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,8 +75,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var \Magento\Core\Helper\Url $helper */
-        $helper = new Url($context, $storeManagerMock);
+        /** @var \Magento\Framework\Url\Helper $helper */
+        $helper = new Helper($context);
         $this->assertEquals($encodedUrl, $helper->getEncodedUrl($url));
     }
 
@@ -92,25 +86,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'no url' => [null, 1],
             'with url' => ['http://test.com', 0],
         ];
-    }
-
-    public function testGetHomeUrl()
-    {
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
-        $baseUrl = 'baseUrl';
-        $storeMock->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValue($baseUrl));
-        $helper = $this->getHelper(['storeManager' => $storeManagerMock]);
-        $this->assertEquals($baseUrl, $helper->getHomeUrl());
     }
 
     /**
@@ -197,6 +172,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     private function getHelper($arguments)
     {
-        return $this->objectManager->getObject('Magento\Core\Helper\Url', $arguments);
+        return $this->objectManager->getObject('Magento\Framework\Url\Helper', $arguments);
     }
 }

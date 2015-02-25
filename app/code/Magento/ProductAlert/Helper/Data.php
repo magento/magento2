@@ -12,7 +12,7 @@ use Magento\Store\Model\Store;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Helper\Url
+class Data extends \Magento\Framework\Url\Helper
 {
     /**
      * Current product instance (override registry one)
@@ -33,6 +33,9 @@ class Data extends \Magento\Core\Helper\Url
      */
     protected $_layout;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    private $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -47,7 +50,8 @@ class Data extends \Magento\Core\Helper\Url
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_layout = $layout;
-        parent::__construct($context, $storeManager);
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**

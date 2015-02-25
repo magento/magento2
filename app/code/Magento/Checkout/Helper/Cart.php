@@ -7,13 +7,14 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Checkout\Helper;
+use Magento\Framework\Url\Helper;
 
 /**
  * Shopping cart helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Cart extends \Magento\Core\Helper\Url
+class Cart extends \Magento\Framework\Url\Helper
 {
     /**
      * Path to controller to delete item from cart
@@ -42,19 +43,17 @@ class Cart extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {
         $this->_checkoutCart = $checkoutCart;
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $storeManager);
+        parent::__construct($context);
     }
 
     /**

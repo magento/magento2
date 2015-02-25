@@ -9,13 +9,14 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Url\Helper;
 use Magento\Store\Model\Store;
 
 /**
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Core\Helper\Url
+class Product extends \Magento\Framework\Url\Helper
 {
     const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
 
@@ -93,6 +94,9 @@ class Product extends \Magento\Core\Helper\Url
      */
     protected $categoryRepository;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    protected $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -129,7 +133,8 @@ class Product extends \Magento\Core\Helper\Url
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->_reindexProductCategoryIndexerData = $reindexProductCategoryIndexerData;
-        parent::__construct($context, $storeManager);
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
