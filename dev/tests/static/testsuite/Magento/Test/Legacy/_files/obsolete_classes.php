@@ -600,6 +600,8 @@ return [
     ['Mage_Backend_Model_Menu_Config_Menu'],
     ['Mage_Backend_Model_Menu_Director_Dom'],
     ['Mage_Backend_Model_Menu_Factory', 'Mage_Backend_Model_MenuFactory'],
+    ['Magento\Backend\Model\Auth\Exception', 'Magento\Framework\Exception\AuthenticationException'],
+    ['Magento\Backend\Model\Auth\Plugin\Exception', 'Magento\Framework\Exception\Plugin\AuthenticationException'],
     ['Mage_Bundle_Product_EditController', 'Mage_Bundle_Controller_Adminhtml_Bundle_Selection'],
     ['Mage_Bundle_SelectionController', 'Mage_Bundle_Controller_Adminhtml_Bundle_Selection'],
     ['Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatproduct'],
@@ -753,6 +755,15 @@ return [
         'Magento\Catalog\Model\Product\Type\Configurable\Price',
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price'
     ],
+    ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
+    ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
+    [
+        'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
+        'Magento\Framework\Exception\File\LargeSizeException'
+    ],
+    ['Magento\Catalog\Model\Product\Option\Type\File\NotImageException'],
+    ['Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException'],
+    ['Magento\Catalog\Model\Product\Option\Type\File\RunValidationException'],
     [
         'Magento\Checkout\Block\Cart\Item\Renderer\Configurable',
         'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable'
@@ -782,7 +793,7 @@ return [
     ['Mage_Core_Model_Design_Source_Apply'],
     ['Mage_Core_Model_Language'],
     ['Magento\Core\Model\Flag', 'Magento\Framework\Flag'],
-    ['Magento\Core\Exception', 'Magento\Framework\Model\Exception'],
+    ['Magento\Framework\Model\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Core\Model\AbstractModel', 'Magento\Framework\Model\AbstractModel'],
     ['Magento\Core\Model\Email\Info', 'Magento\Framework\Mail\MessageInterface'],
     ['Magento\Core\Model\Email\Sender', 'Magento\Framework\Mail\Template\TransportBuilder'],
@@ -839,9 +850,11 @@ return [
         'Mage_Customer_Model_Resource_Address_Attribute_Backend_Street',
         'Mage_Eav_Model_Entity_Attribute_Backend_Default'
     ],
+    ['Magento\Customer\Exception'],
     ['Mage_DesignEditor_Block_Page_Html_Head_Vde'],
     ['Mage_DesignEditor_Block_Page_Html_Head'],
     ['Mage_Directory_Model_Resource_Currency_Collection'],
+    ['Magento\Directory\Exception'],
     ['Mage_Downloadable_FileController', 'Magento\Downloadable\Controller\Adminhtml\Downloadable\File'],
     ['Mage_Downloadable_Product_EditController', 'Magento\Backend\Controller\Catalog\Product'],
     ['Mage_Eav_Model_Convert_Adapter_Entity'],
@@ -859,6 +872,7 @@ return [
     ['Mage_ImportExport_Model_Import_Adapter_Abstract', 'Mage_ImportExport_Model_Import_SourceAbstract'],
     ['Mage_ImportExport_Model_Import_Adapter_Csv', 'Mage_ImportExport_Model_Import_Source_Csv'],
     ['Mage_Install_Model_Installer_Env'],
+    ['Magento\Integration\Exception', 'Magento\Framework\Exception\IntegrationException'],
     ['Mage_Ogone_Model_Api_Debug'],
     ['Mage_Ogone_Model_Resource_Api_Debug'],
     ['Mage_Page_Block_Html_Toplinks'],
@@ -1263,6 +1277,7 @@ return [
     ['Magento\Core\Model\Resource\HelperPool'],
     ['Magento\Core\Model\Resource\Transaction', 'Magento\Framework\DB\Transaction'],
     ['Magento\Catalog\Model\Resource\Helper\Mysql4', 'Magento\Catalog\Model\Resource\Helper'],
+    ['Magento\Cron\Exception', 'Magento\Framework\Exception\CronException'],
     ['Magento\Eav\Model\Resource\Helper\Mysql4', 'Magento\Eav\Model\Resource\Helper'],
     [
         'Magento\Eav\Model\Entity\Attribute\Backend\Array',
@@ -1278,6 +1293,7 @@ return [
     ['Magento\Payment\Block\Info\Ccsave', 'Magento\OfflinePayments\Block\Info\Ccsave'],
     ['Magento\Payment\Block\Info\Checkmo', 'Magento\OfflinePayments\Block\Info\Checkmo'],
     ['Magento\Payment\Block\Info\Purchaseorder', 'Magento\OfflinePayments\Block\Info\Purchaseorder'],
+    ['Magento\Payment\Model\Info\Exception', 'Magento\Framework\Exception\PaymentException'],
     ['Magento\Payment\Model\Method\Banktransfer', 'Magento\OfflinePayments\Model\Banktransfer'],
     ['Magento\Payment\Model\Method\Cashondelivery', 'Magento\OfflinePayments\Model\Cashondelivery'],
     ['Magento\Payment\Model\Method\Ccsave', 'Magento\OfflinePayments\Model\Ccsave'],
@@ -2229,7 +2245,10 @@ return [
     ['Magento\Core\Model\Resource\Website\Grid\Collection', 'Magento\Store\Model\Resource\Website\Grid\Collection'],
     ['Magento\Core\Model\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
-    ['Magento\Store\Model\Exception', 'Magento\Framework\Model\Exception, Magento\Framework\App\InitException'],
+    [
+        'Magento\Store\Model\Exception',
+        'Magento\Framework\Exception\LocalizedException, Magento\Framework\App\InitException'
+    ],
     ['Magento\Core\Model\Store\Group', 'Magento\Store\Model\Group'],
     ['Magento\Core\Model\Store\Group\Factory', 'Magento\Store\Model\GroupFactory'],
     ['Magento\Core\Model\Store\Storage\Db', 'Magento\Store\Model\Storage\Db'],
@@ -2897,6 +2916,7 @@ return [
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Weee\Model\Total\Quote\Nominal\Weee'],
+    ['Magento\Tax\Exception'],
     ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax'],
     ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal'],
     ['Magento\SalesRule\Model\Quote\Nominal\Discount'],

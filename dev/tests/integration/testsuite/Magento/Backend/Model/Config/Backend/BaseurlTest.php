@@ -74,7 +74,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
      * @param string $path
      * @param string $value
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider validationExceptionDataProvider
      */
     public function testValidationException($path, $value)
