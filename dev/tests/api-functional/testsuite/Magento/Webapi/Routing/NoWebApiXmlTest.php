@@ -50,8 +50,8 @@ class NoWebApiXmlTest extends \Magento\Webapi\Routing\BaseService
     {
         $this->_markTestAsRestOnly();
         $serviceInfo = [
-            'rest' => ['
-            resourcePath' => $this->_restResourcePath,
+            'rest' => [
+                'resourcePath' => $this->_restResourcePath,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
             ],
         ];
