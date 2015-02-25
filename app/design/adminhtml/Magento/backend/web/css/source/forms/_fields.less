@@ -27,6 +27,11 @@
 @field-error--border-color: #E22626;
 
 
+
+@field-error__color: @color-very-dark-gray2;
+@field-error__backroundg-color: @color-lazy-sun;
+@field-error__border-color: @color-tomato-brick;
+
 //
 //  Form Fields
 //  _____________________________________________
@@ -101,9 +106,9 @@
     [class]:not(.admin__field-option) > & {
         font-family: 'Open Sans', arial, sans-serif;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: @font-weight__semibold;
         padding-top: 0;
-        line-height: 33px;
+        line-height: 3.2rem;
         white-space: nowrap;
         &:before {
             content: ".";
