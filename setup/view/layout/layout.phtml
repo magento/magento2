@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Magento Setup Tool</title>
     <?php echo $this->headLink()
-        ->appendStylesheet($this->basePath() . '/pub/magento/setup/css/setup.css');
+        ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
     <?php echo $this->headScript()
         ->appendFile('pub/angular/angular.min.js')
@@ -33,10 +33,26 @@
         ->appendFile('pub/magento/setup/install.js')
         ->appendFile('pub/magento/setup/success.js');
     ?>
-    <link rel="icon" type="image/x-icon" href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon.ico" sizes="16x16">
-    <link rel="icon" type="image/png" href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png" sizes="16x16">
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon.ico"
+        sizes="16x16">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-96x96.png"
+        sizes="96x96">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-32x32.png"
+        sizes="32x32">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
+        sizes="16x16">
     <?php echo $this->inlineScript() ?>
 </head>
 <body>
