@@ -40,10 +40,10 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
     protected $deploymentConfig;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject */
     protected $productMetadata;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
     protected function setUp()
@@ -87,7 +87,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->productMetadata = $this->getMock('Magento\Framework\App\ProductMetadata');
-        $this->urlBuilder = $this->getMock('Magento\Framework\Url', [], [], '', false);
+        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
 
         $this->feed = $this->objectManagerHelper->getObject(
             'Magento\AdminNotification\Model\Feed',
