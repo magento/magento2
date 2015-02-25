@@ -4,30 +4,30 @@
 //  */
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/light/opensans-300',
-    @font-weight: @font-weight-light,
+    @font-weight: @font-weight__light,
     @font-style: normal
 );
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/regular/opensans-400',
-    @font-weight: @font-weight-regular,
+    @font-weight: @font-weight__regular,
     @font-style: normal
 );
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/semibold/opensans-600',
-    @font-weight: @font-weight-semibold,
+    @font-weight: @font-weight__semibold,
     @font-style: normal
 );
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/bold/opensans-700',
-    @font-weight: @font-weight-bold,
+    @font-weight: @font-weight__bold,
     @font-style: normal
 );
 
@@ -37,12 +37,12 @@ html {
 
 body {
     .typography(
-        @_font-size: @font-size-base,
-        @_color: @color-base,
-        @_font-family: @font-family-base,
-        @_font-weight: @font-weight-base,
-        @_line-height: @line-height-base,
-        @_font-style: @font-style-base
+        @_font-size: @font-size__base,
+        @_color: @color__base,
+        @_font-family: @font-family__base,
+        @_font-weight: @font-weight__regular,
+        @_line-height: @line-height__base,
+        @_font-style: @font-style__base
     );
 }
 
@@ -54,7 +54,7 @@ h1 {
     .typography(
         @_font-size: 2.8rem,
         @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-regular,
+        @_font-weight: @font-weight__regular,
         @_line-height: 3.4rem,
         @_font-family: false,
         @_font-style: false
@@ -66,7 +66,7 @@ h2 {
     .typography(
         @_font-size: 2rem,
         @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-regular,
+        @_font-weight: @font-weight__regular,
         @_line-height: 2.5rem,
         @_font-family: false,
         @_font-style: false
@@ -78,7 +78,7 @@ h3 {
     .typography(
         @_font-size: 1.7rem,
         @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-semibold,
+        @_font-weight: @font-weight__semibold,
         @_line-height: 2.2rem,
         @_font-family: false,
         @_font-style: false
@@ -89,7 +89,7 @@ h3 {
 h4,
 h5,
 h6 {
-    font-weight: @font-weight-semibold;
+    font-weight: @font-weight__semibold;
     margin-top: 0;
 }
 

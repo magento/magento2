@@ -46,7 +46,7 @@ class Allow extends AbstractCurrency
      * Check allowed currencies is available in installed currencies
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave()
     {
@@ -68,7 +68,7 @@ class Allow extends AbstractCurrency
         }
 
         if ($exceptions) {
-            throw new \Magento\Framework\Model\Exception(join("\n", $exceptions));
+            throw new \Magento\Framework\Exception\LocalizedException(join("\n", $exceptions));
         }
 
         return $this;

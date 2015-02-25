@@ -63,13 +63,13 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Shipment $object */
         if ((!$object->getId() || null !== $object->getItems()) && !count($object->getAllItems())) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot create an empty shipment.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create an empty shipment.'));
         }
 
         if (!$object->getOrderId() && $object->getOrder()) {
