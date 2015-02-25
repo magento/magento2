@@ -26,19 +26,18 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('\Magento\Framework\Option\ArrayInterface', $this->model);
         $this->assertCount(3, $this->model->toOptionArray());
-        $this->assertCount(3, WorkflowType::$labels);
-
         $option = current($this->model->toOptionArray());
-
-        $this->assertArrayHasKey('value', $option);
-        $this->assertArrayHasKey('label', $option);
 
         /** @var \Magento\Framework\Phrase $label */
         $label = $option['label'];
         $this->assertInstanceOf('\Magento\Framework\Phrase', $label);
-        $this->assertSame(
-            WorkflowType::$labels[WorkflowType::CLIENT_SIDE_COMPILATION],
-            $label->render()
-        );
+    }
+
+    public function testOptionStructure()
+    {
+        foreach ($this->model->toOptionArray() as $option) {
+            $this->assertArrayHasKey('value', $option);
+            $this->assertArrayHasKey('label', $option);
+        }
     }
 }

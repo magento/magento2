@@ -32,27 +32,16 @@ class WorkflowType implements ArrayInterface
     const ADVANCED_COMPILATION = 'advanced_compilation';
 
     /**
-     * list of Workflow types
-     *
-     * @var array
-     */
-    public static $labels = [
-        self::CLIENT_SIDE_COMPILATION => 'Client side less compilation',
-        self::SERVER_SIDE_COMPILATION => 'Server side less compilation',
-        self::ADVANCED_COMPILATION => 'Advanced less compilation'
-    ];
-
-    /**
      * Return list of Workflow types
      *
-     * @return array
+     * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
      */
     public function toOptionArray()
     {
         return [
-            ['value' => self::CLIENT_SIDE_COMPILATION, 'label' => __(self::$labels[self::CLIENT_SIDE_COMPILATION])],
-            ['value' => self::SERVER_SIDE_COMPILATION, 'label' => __(self::$labels[self::SERVER_SIDE_COMPILATION])],
-            ['value' => self::ADVANCED_COMPILATION, 'label' => __(self::$labels[self::ADVANCED_COMPILATION])]
+            ['value' => self::CLIENT_SIDE_COMPILATION, 'label' => __('Client side less compilation')],
+            ['value' => self::SERVER_SIDE_COMPILATION, 'label' => __('Server side less compilation')],
+            ['value' => self::ADVANCED_COMPILATION, 'label' => __('Advanced less compilation')]
         ];
     }
 }
