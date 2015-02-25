@@ -8,13 +8,13 @@
 //  _____________________________________________
 
 //  Sizes
-@button__font-size__base: 1.4rem;
-@button__padding-vertical__base: .55em;
-@button__padding-horizontal__base: 1em;
+@button__base__font-size: 1.4rem;
+@button__base__padding-vertical: .55em;
+@button__base__padding-horizontal: 1em;
 
 //  Colors
-@button__color__base: @color-brownie;
-@button__background-color__base: @color-gray89;
+@button__base__color: @color-brownie;
+@button__base__background-color: @color-gray89;
 
 @button-primary__color: @color-white;
 @button-primary__background-color: @primary__color;
@@ -23,9 +23,7 @@
 @button-secondary__background-color: @color-brownie;
 @button-secondary__border-color: @color-brownie;
 
-//  ToDo UI: Seems we don't need tertiary color cuz it the same as base
 @button-tertiary__color: @color-gray20;
-@button-tertiary__background-color: @color-gray89;
 @button-tertiary__border-color: @color-gray68;
 
 //  States
@@ -33,9 +31,9 @@
 @button__base__large__padding-vertical: .7em;
 @button__base__large__padding-horizontal: 1.45em;
 
-@button__base__hover__background-color: darken(@button__background-color__base, 3%);
+@button__base__hover__background-color: darken(@button__base__background-color, 3%);
 @button__base__hover__box-shadow: 0 0 0 1px @color-dodger-blue;
-@button__base__active__background-color: darken(@button__background-color__base, 5%);
+@button__base__active__background-color: darken(@button__base__background-color, 5%);
 
 @button-primary__hover__background-color: @color-phoenix-brown;
 @button-primary__hover__border-color: @color-phoenix-brown;
@@ -43,7 +41,7 @@
 @button-secondary__hover__background-color: @color-very-dark-gray-black2;
 @button-secondary__active__background-color: @color-very-dark-gray-black2;
 
-@button-tertiary__hover_bg-color: @color-lighter-grayish;
+@button-tertiary__hover__background-color: @color-lighter-grayish;
 @button-tertiary__hover__border-color: @color-gray56;
 
 //
@@ -51,20 +49,20 @@
 //  _____________________________________________
 
 .action {
-    background: @button__background-color__base;
+    background: @button__base__background-color;
     border: 1px solid transparent;
-    color: @button__color__base;
+    color: @button__base__color;
     display: inline-block;
     font-family: @font-family__base;
-    font-size: @button__font-size__base;
+    font-size: @button__base__font-size;
     font-weight: @font-weight__regular;
-    padding: @button__padding-vertical__base @button__padding-horizontal__base;
+    padding: @button__base__padding-vertical @button__base__padding-horizontal;
     text-align: center;
     vertical-align: middle;
     &:hover {
         background-color: @button__base__hover__background-color;
         .css(box-shadow, @button__base__hover__box-shadow);
-        color: @button__color__base;
+        color: @button__base__color;
         text-decoration: none;
     }
     &:active {
@@ -78,9 +76,16 @@
     }
 }
 
-.action-large {
-    font-size: @button__font-size__large;
-    padding: @button__base__large__padding-vertical @button__base__large__padding-horizontal;
+//
+//  Action size
+//  ---------------------------------------------
+
+.action-size(
+    @_action-font-size: @button__font-size__large,
+    @_action-padding:  @button__base__large__padding-vertical @button__base__large__padding-horizontal
+) {
+    .css(font-size, @_action-font-size);
+    .css(padding, @_action-padding);
 }
 
 //
@@ -166,12 +171,11 @@
 //  ---------------------------------------------
 
 .action-tertiary {
-    background: @button-tertiary__background-color;
     border-color: @button-tertiary__border-color;
     color: @button-tertiary__color;
     &:hover,
     &:active {
-        background-color: @button-tertiary__hover_bg-color;
+        background-color: @button-tertiary__hover__background-color;
         border-color: @button-tertiary__hover__border-color;
     }
 }
@@ -200,8 +204,8 @@
     button {
         margin-left: 0;
         &.action-toggle {
-            border-left: 1px solid #c34706;
-            padding: @button__padding-vertical__base 0;
+            border-left: 1px solid @color-phoenix-brown;
+            padding: @button__base__padding-vertical 0;
         }
         &.action-large {
             &.action-toggle {
