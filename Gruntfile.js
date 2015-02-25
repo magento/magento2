@@ -371,7 +371,7 @@ module.exports = function (grunt) {
         replace: {
             example: {
                 src: ['<%= combo.autopath("backend","pub") %>/css/styles.css'], // source files array (supports minimatch)
-                dest: '<%= combo.autopath("backend","pub") %>/css/override.css', // destination directory or file
+                dest: '<%= combo.autopath("backend","pub") %>/css/override.less', // destination directory or file
                 replacements: [{
                     from: /:(.*calc.*);/g, // regex replacement ('Fooo' to 'Mooo')
                     to: ': ~"$1";'

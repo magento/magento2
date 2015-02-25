@@ -147,7 +147,6 @@
         margin-top: 15px;
     }
     &:not(.admin__field-option) ~ .admin__field-option {
-        margin-left: 20px;
         margin-top: 5px;
     }
     &.admin__field-option ~ .admin__field-option {
@@ -190,21 +189,22 @@
 }
 
 .admin__field-error {
-    border: 1px solid @field-error--border-color;
-    display: block;
-    margin: 2px 0 0;
-    padding: 6px 10px 10px;
     background: @field-error--bg-color;
+    border: 1px solid @field-error--border-color;
+    box-sizing: border-box;
     color: @field-error--color;
+    display: block;
     font-size: 12px;
     font-weight: 500;
-    box-sizing: border-box;
+    margin: 2px 0 0;
+    padding: 6px 10px 10px;
 }
 
 .admin__field-note {
     color: @field-note--color;
-    padding: 0;
+    font-size: 12px;
     margin: 10px 0 0;
+    padding: 0;
 }
 
 .admin__control-fields {
@@ -228,14 +228,14 @@
                 margin-top: 0;
             }
             & + .admin__field-option:before {
+                background: @field-divider--color;
                 content: "";
-                position: absolute;
                 display: inline-block;
                 height: 20px;
-                top: 8px;
                 left: -20px;
+                position: absolute;
+                top: 8px;
                 width: 1px;
-                background: @field-divider--color;
             }
         }
     }
@@ -250,17 +250,17 @@
 }
 
 [class*="admin__control-grouped"] {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
     box-sizing: border-box;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
     & > .admin__field {
         display: table-cell;
-        width: 50%;
         vertical-align: top;
+        width: 50%;
         > .admin__field-control {
-            width: 100%;
             float: none;
+            width: 100%;
         }
         &:nth-child(n+2) {
             padding-left: 20px;
@@ -276,13 +276,12 @@
     & > .admin__field:first-child {
         position: static;
         & > .admin__field-label {
-
-            position: absolute;
-            left: 0;
-            top: 0;
             .mix-grid-width(3);
-            opacity: 0;
             cursor: pointer;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
         }
     }
 }
@@ -292,14 +291,18 @@
     padding: 15px 30px;
     .admin__field > .admin__field-control,
     .admin__field > .admin__field-label {
-        text-align: left;
         float: none;
+        width: auto;
+        text-align: left;
     }
     .admin__field > .admin__field-control {
-        width: ~'calc( 100% - 30px )';
+        float: none;
+        width: auto;
     }
     .admin__field-label {
+        float: none;
         margin-top: -16px;
+        width: auto;
     }
     ._required .admin__field-label span {
         padding-left: 15px;
@@ -308,14 +311,13 @@
             margin-left: 30px;
         }
     }
-
 }
 .address-list {
+    float: left;
     list-style-type: none;
     margin:0;
     padding: 0;
     width: 360px;
-    float: left;
     .address-list-item {
         margin-bottom: 30px;
     }
@@ -323,8 +325,8 @@
         background-color: transparent;
         padding: 0;
         &:hover {
-            box-shadow: 0;
             border: 0;
+            box-shadow: 0;
         }
     }
 }

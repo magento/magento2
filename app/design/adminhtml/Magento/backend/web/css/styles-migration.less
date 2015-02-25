@@ -8,13 +8,17 @@
 //  _____________________________________________
 
 @import 'source/_keyfocus__temp';
+@import (reference) 'override.less';
+
+.ie9 #html-body[class][data-container="body"] .admin__scope:extend(.ie9 all) {}
+#html-body[class][data-container="body"].keyfocus:extend(.keyfocus all) {}
 
 #html-body[class][data-container="body"] .admin__scope {
     box-sizing: border-box;
-    @import (less) 'override.css';
+    @import (multiple) 'override.less';
 }
 
-// ToDo UI: Hidding menu (should be fixed in layouts)
+// @ToDo UI: Hidding menu (should be fixed in layouts)
 
 .attribute-popup,
 .adminhtml-auth-login {
@@ -25,3 +29,6 @@
         display: none;
     }
 }
+
+@import 'source/_calendar';
+
