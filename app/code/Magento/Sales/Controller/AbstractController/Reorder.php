@@ -66,7 +66,7 @@ abstract class Reorder extends Action\Action
         foreach ($items as $item) {
             try {
                 $cart->addOrderItem($item);
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
                     $this->messageManager->addNotice($e->getMessage());
                 } else {

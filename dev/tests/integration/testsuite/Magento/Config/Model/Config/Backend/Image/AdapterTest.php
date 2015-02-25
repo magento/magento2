@@ -21,7 +21,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * expectedExceptionMessage  The specified image adapter cannot be used because of some missed dependencies.
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled

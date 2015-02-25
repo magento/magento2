@@ -74,7 +74,7 @@ class Void extends \Magento\Backend\App\Action
                 }
                 $transactionSave->save();
                 $this->messageManager->addSuccess(__('You voided the credit memo.'));
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We can\'t void the credit memo.'));
