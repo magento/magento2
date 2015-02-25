@@ -16,7 +16,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\AdminNotification\Model\InboxFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $inboxFactory;
 
     /** @var \Magento\AdminNotification\Model\Inbox|\PHPUnit_Framework_MockObject_MockObject */
@@ -40,21 +40,21 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
     protected $deploymentConfig;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject */
     protected $productMetadata;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlBuilder;
 
     protected function setUp()
     {
         $this->inboxFactory = $this->getMock('Magento\AdminNotification\Model\InboxFactory', ['create'], [], '', false);
-        $this->curlFactory = $this->getMock('\Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
-        $this->curl = $this->getMockBuilder('\Magento\Framework\HTTP\Adapter\Curl')
+        $this->curlFactory = $this->getMock('Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
+        $this->curl = $this->getMockBuilder('Magento\Framework\HTTP\Adapter\Curl')
             ->disableOriginalConstructor()->getMock();
-        $this->appState = $this->getMock('\Magento\Framework\App\State', ['getInstallDate'], [], '', false);
+        $this->appState = $this->getMock('Magento\Framework\App\State', ['getInstallDate'], [], '', false);
         $this->inboxModel = $this->getMock(
-            '\Magento\AdminNotification\Model\Inbox',
+            'Magento\AdminNotification\Model\Inbox',
             [
                 '__wakeup',
                 'parse'
@@ -72,7 +72,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->cacheManager = $this->getMock(
-            '\Magento\Framework\App\CacheInterface',
+            'Magento\Framework\App\CacheInterface',
             [
                 'load',
                 'getFrontend',
@@ -82,7 +82,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder('\Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfig = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -112,7 +112,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     public function testCheckUpdate($callInbox, $curlRequest)
     {
         $mockName    = 'Test Product Name';
-        $mockVersion = '0.42.0-beta7';
+        $mockVersion = '0.0.0';
         $mockEdition = 'Test Edition';
         $mockUrl = 'http://test-url';
 
