@@ -126,14 +126,14 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Returns the item quantity.
      *
-     * @return int Item quantity.
+     * @return float Item quantity.
      */
     public function getQty();
 
     /**
      * Sets the item quantity.
      *
-     * @param int $qty
+     * @param float $qty
      * @return $this
      */
     public function setQty($qty);
@@ -216,14 +216,14 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Returns the tax percent.
      *
-     * @return int|null Tax percent. Otherwise, null.
+     * @return float|null Tax percent. Otherwise, null.
      */
     public function getTaxPercent();
 
     /**
      * Sets the tax percent.
      *
-     * @param int $taxPercent
+     * @param float $taxPercent
      * @return $this
      */
     public function setTaxPercent($taxPercent);
@@ -261,14 +261,14 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Returns the discount percent.
      *
-     * @return int|null Discount percent. Otherwise, null.
+     * @return float|null Discount percent. Otherwise, null.
      */
     public function getDiscountPercent();
 
     /**
      * Sets the discount percent.
      *
-     * @param int $discountPercent
+     * @param float $discountPercent
      * @return $this
      */
     public function setDiscountPercent($discountPercent);

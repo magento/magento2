@@ -55,9 +55,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->productRepositoryMock =
             $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
-        $methods = ['setQuoteId', 'setItemId', 'create'];
         $this->itemDataFactoryMock =
-            $this->getMock('Magento\Quote\Api\Data\CartItemInterfaceFactory', $methods, [], '', false);
+            $this->getMock('Magento\Quote\Api\Data\CartItemInterfaceFactory', ['create'], [], '', false);
         $this->dataMock = $this->getMock('Magento\Quote\Api\Data\CartItemInterface');
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
@@ -313,10 +312,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
         $itemId = 5;
-        $this->itemDataFactoryMock->expects($this->once())->method('create')->willReturn($this->itemDataFactoryMock);
-        $this->itemDataFactoryMock->expects($this->once())->method('setQuoteId')
-            ->with($cartId)->willReturn($this->itemDataFactoryMock);
-        $this->itemDataFactoryMock->expects($this->once())->method('setItemId')
+        $this->itemDataFactoryMock->expects($this->once())->method('create')->willReturn($this->dataMock);
+        $this->dataMock->expects($this->once())->method('setQuoteId')
+            ->with($cartId)->willReturn($this->dataMock);
+        $this->dataMock->expects($this->once())->method('setItemId')
             ->with($itemId)->willReturn($this->dataMock);
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
         $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);

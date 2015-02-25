@@ -331,6 +331,31 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
+     * Declare quote item quantity
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        $qty = $this->_prepareQty($qty);
+        $oldQty = $this->_getData(self::KEY_QTY);
+        $this->setData(self::KEY_QTY, $qty);
+
+        $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
+
+        if ($this->getQuote() && $this->getQuote()->getIgnoreOldQty()) {
+            return $this;
+        }
+
+        if ($this->getUseOldQty()) {
+            $this->setData(self::KEY_QTY, $oldQty);
+        }
+
+        return $this;
+    }
+
+    /**
      * Retrieve option product with Qty
      *
      * Return array
@@ -479,6 +504,25 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function compare($item)
     {
         return $this->quoteItemCompare->compare($this, $item);
+    }
+
+    /**
+     * Get item product type
+     *
+     * @return string
+     */
+    public function getProductType()
+    {
+        $option = $this->getOptionByCode(self::KEY_PRODUCT_TYPE);
+        if ($option) {
+            return $option->getValue();
+        }
+        $product = $this->getProduct();
+        if ($product) {
+            return $product->getTypeId();
+        }
+        // $product should always exist or there will be an error in getProduct()
+        return $this->_getData(self::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -903,31 +947,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     }
 
     /**
-     * Declare quote item quantity
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty)
-    {
-        $qty = $this->_prepareQty($qty);
-        $oldQty = $this->_getData(self::KEY_QTY);
-        $this->setData(self::KEY_QTY, $qty);
-
-        $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
-
-        if ($this->getQuote() && $this->getQuote()->getIgnoreOldQty()) {
-            return $this;
-        }
-
-        if ($this->getUseOldQty()) {
-            $this->setData(self::KEY_QTY, $oldQty);
-        }
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getName()
@@ -957,25 +976,6 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function setPrice($price)
     {
         return $this->setData(self::KEY_PRICE, $price);
-    }
-
-    /**
-     * Get item product type
-     *
-     * @return string
-     */
-    public function getProductType()
-    {
-        $option = $this->getOptionByCode(self::KEY_PRODUCT_TYPE);
-        if ($option) {
-            return $option->getValue();
-        }
-        $product = $this->getProduct();
-        if ($product) {
-            return $product->getTypeId();
-        }
-        // $product should always exist or there will be an error in getProduct()
-        return $this->_getData(self::KEY_PRODUCT_TYPE);
     }
 
     /**

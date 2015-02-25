@@ -83,14 +83,14 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Get region id
      *
-     * @return string
+     * @return int
      */
     public function getRegionId();
 
     /**
      * Set region id
      *
-     * @param string $regionId
+     * @param int $regionId
      * @return $this
      */
     public function setRegionId($regionId);
@@ -308,14 +308,14 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Get customer id
      *
-     * @return string|null
+     * @return int
      */
     public function getCustomerId();
 
     /**
      * Set customer id
      *
-     * @param string $customerId
+     * @param int $customerId
      * @return $this
      */
     public function setCustomerId($customerId);

@@ -59,14 +59,14 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Returns the product quantity.
      *
-     * @return int Product quantity.
+     * @return float Product quantity.
      */
     public function getQty();
 
     /**
      * Sets the product quantity.
      *
-     * @param int $qty
+     * @param float $qty
      * @return $this
      */
     public function setQty($qty);

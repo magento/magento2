@@ -27,8 +27,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  sales_quote_delete_after
  *
  * @method Quote setStoreId(int $value)
- * @method Quote setCreatedAt(string $value)
- * @method Quote setUpdatedAt(string $value)
  * @method Quote setIsVirtual(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
@@ -505,9 +503,25 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * {@inheritdoc}
      */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(self::KEY_CREATED_AT, $createdAt);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUpdatedAt()
     {
         return $this->_getData(self::KEY_UPDATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData(self::KEY_UPDATED_AT, $updatedAt);
     }
 
     /**

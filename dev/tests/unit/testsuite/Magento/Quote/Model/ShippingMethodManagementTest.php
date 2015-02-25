@@ -35,6 +35,11 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $shippingMethodMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $methodDataFactoryMock;
 
     /**
@@ -54,19 +59,13 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->methodDataFactoryMock = $this->getMock(
             '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
             [
-                'create',
-                'setCarrierCode',
-                'setMethodCode',
-                'setCarrierTitle',
-                'setMethodTitle',
-                'setAmount',
-                'setBaseAmount',
-                'setAvailable'
+                'create'
             ],
             [],
             '',
             false
         );
+
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
@@ -174,36 +173,38 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('getBaseShippingAmount')->will($this->returnValue(100.06));
 
+        $this->shippingMethodMock = $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterface');
+
         $this->methodDataFactoryMock->expects($this->once())
-            ->method('create')->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->method('create')->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setCarrierCode')
             ->with('one')
-            ->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setMethodCode')
             ->with('two')
-            ->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setCarrierTitle')
             ->with('carrier')
-            ->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setMethodTitle')
             ->with('method')
-            ->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setAmount')
             ->with('123.56')
-            ->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setBaseAmount')
             ->with('100.06')
-            ->willReturn($this->methodDataFactoryMock);
-        $this->methodDataFactoryMock->expects($this->once())
+            ->willReturn($this->shippingMethodMock);
+        $this->shippingMethodMock->expects($this->once())
             ->method('setAvailable')
             ->with(true)
-            ->willReturn($this->methodDataFactoryMock);
+            ->willReturn($this->shippingMethodMock);
 
         $this->model->get($cartId);
     }

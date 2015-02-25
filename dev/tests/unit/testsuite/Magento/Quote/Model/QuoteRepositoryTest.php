@@ -63,7 +63,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->searchResultsDataFactory = $this->getMock(
             '\Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory',
-            ['setSearchCriteria', 'setTotalCount', 'setItems', 'create'],
+            ['create'],
             [],
             '',
             false

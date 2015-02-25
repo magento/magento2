@@ -62,7 +62,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Sets the cart/quote ID.
      *
-     * @param string $id
+     * @param int $id
      * @return $this
      */
     public function setId($id);
@@ -75,11 +75,27 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getCreatedAt();
 
     /**
+     * Sets the cart creation date and time.
+     *
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Returns the cart last update date and time.
      *
      * @return string|null Cart last update date and time. Otherwise, null.
      */
     public function getUpdatedAt();
+
+    /**
+     * Sets the cart last update date and time.
+     *
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt);
 
     /**
      * Returns the cart conversion date and time.
@@ -228,14 +244,14 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns the reserved order ID for the cart.
      *
-     * @return string|null Reserved order ID. Otherwise, null.
+     * @return int|null Reserved order ID. Otherwise, null.
      */
     public function getReservedOrderId();
 
     /**
      * Sets the reserved order ID for the cart.
      *
-     * @param string $reservedOrderId
+     * @param int $reservedOrderId
      * @return $this
      */
     public function setReservedOrderId($reservedOrderId);
@@ -243,14 +259,14 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns the original order ID for the cart.
      *
-     * @return string|null Original order ID. Otherwise, null.
+     * @return int|null Original order ID. Otherwise, null.
      */
     public function getOrigOrderId();
 
     /**
      * Sets the original order ID for the cart.
      *
-     * @param string $origOrderId
+     * @param int $origOrderId
      * @return $this
      */
     public function setOrigOrderId($origOrderId);
@@ -318,14 +334,14 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get customer tax class ID.
      *
-     * @return string|null
+     * @return int|null
      */
     public function getCustomerTaxClassId();
 
     /**
      * Set customer tax class ID.
      *
-     * @param string $customerTaxClassId
+     * @param int $customerTaxClassId
      * @return $this
      */
     public function setCustomerTaxClassId($customerTaxClassId);
