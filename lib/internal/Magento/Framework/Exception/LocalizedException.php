@@ -7,31 +7,29 @@
  */
 namespace Magento\Framework\Exception;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 
 class LocalizedException extends \Exception
 {
-    /** @var array */
-    protected $params = [];
-
-    /** @var string */
-    protected $rawMessage;
-
-    /** @var Placeholder */
-    private $renderer;
+    /**
+     * @var \Magento\Framework\Phrase\Renderer\Placeholder
+     */
+    private static $renderer;
 
     /**
-     * @param string     $message
-     * @param array      $params
+     * @var \Magento\Framework\Phrase
+     */
+    private $phrase;
+
+    /**
+     * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      */
-    public function __construct($message, array $params = [], \Exception $cause = null)
+    public function __construct(Phrase $phrase, \Exception $cause = null)
     {
-        $this->params = $params;
-        $this->rawMessage = $message;
-        $this->renderer = new Placeholder();
-
-        parent::__construct((string)new \Magento\Framework\Phrase($message, $params), 0, $cause);
+        $this->phrase = $phrase;
+        parent::__construct($phrase->render(), 0, $cause);
     }
 
     /**
@@ -41,7 +39,17 @@ class LocalizedException extends \Exception
      */
     public function getRawMessage()
     {
-        return $this->rawMessage;
+        return $this->phrase->getText();
+    }
+
+    /**
+     * Returns the array of parameters in the message
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->phrase->getArguments();
     }
 
     /**
@@ -51,16 +59,9 @@ class LocalizedException extends \Exception
      */
     public function getLogMessage()
     {
-        return $this->renderer->render([$this->rawMessage], $this->params);
-    }
-
-    /**
-     * Returns the array of parameters in the message
-     *
-     * @return array Parameter name => values
-     */
-    public function getParameters()
-    {
-        return $this->params;
+        if (!self::$renderer) {
+            self::$renderer = new Placeholder();
+        }
+        return self::$renderer->render([$this->getRawMessage()], $this->getParameters());
     }
 }
