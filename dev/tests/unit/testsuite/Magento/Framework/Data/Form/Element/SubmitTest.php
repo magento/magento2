@@ -44,7 +44,7 @@ class SubmitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Submit::__construct
+     * covers \Magento\Framework\Data\Form\Element\Submit::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class SubmitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Submit::getHtml
+     * covers \Magento\Framework\Data\Form\Element\Submit::getHtml
      */
     public function testGetHtml()
     {

@@ -34,7 +34,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $themeImageFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\Layout\Update\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Resource\Layout\Update\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $updateCollection;
 
@@ -103,7 +103,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->updateCollection = $this->getMockBuilder('Magento\Core\Model\Resource\Layout\Update\Collection')
+        $this->updateCollection = $this->getMockBuilder('Magento\Widget\Model\Resource\Layout\Update\Collection')
             ->setMethods(['addThemeFilter', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -215,7 +215,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->themeConfig->expects($this->any())->method('isThemeAssignedToStore')->with($themeMock)->willReturn(true);
 
 
-        $this->setExpectedException('Magento\Framework\Model\Exception', 'Theme isn\'t deletable.');
+        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', 'Theme isn\'t deletable.');
         $this->themeObserver->cleanThemeRelatedContent($observerMock);
     }
 

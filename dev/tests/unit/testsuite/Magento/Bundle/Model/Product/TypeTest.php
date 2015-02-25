@@ -8,7 +8,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Bundle\Model\Resource\Option\Collection;
 use Magento\Bundle\Model\Resource\Selection\Collection as SelectionCollection;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class TypeTest
@@ -32,7 +32,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected $catalogData;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -70,7 +70,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->catalogData = $this->getMockBuilder('Magento\Catalog\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleOptionFactory = $this->getMockBuilder('Magento\Bundle\Model\OptionFactory')
@@ -1270,7 +1270,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->at(0))
             ->method('getOptions')
-            ->willThrowException(new Exception($exceptedResult));
+            ->willThrowException(new LocalizedException($exceptedResult));
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals($exceptedResult, $result);

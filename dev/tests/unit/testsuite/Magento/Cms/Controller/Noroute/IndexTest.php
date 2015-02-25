@@ -62,7 +62,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\Framework\App\Config\ScopeConfigInterface',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $scopeConfigMock,
             ],
             ['Magento\Cms\Helper\Page', $this->_cmsHelperMock],
@@ -90,11 +90,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock->expects(
             $this->at(0)
         )->method(
-            'setHeader'
-        )->with(
-            'HTTP/1.1',
-            '404 Not Found'
-        )->will(
+            'setStatusHeader'
+        )->with(404, '1.1', 'Not Found')->will(
             $this->returnSelf()
         );
         $this->resultPageMock->expects(

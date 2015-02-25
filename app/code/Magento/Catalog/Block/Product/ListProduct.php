@@ -329,11 +329,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
     {
         $url = $this->getAddToCartUrl($product);
-        $data = [
-            'product' => $product->getEntityId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->_postDataHelper->getEncodedUrl($url),
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                    $this->_postDataHelper->getEncodedUrl($url),
+            ]
         ];
-        return $this->_postDataHelper->getPostData($url, $data);
     }
 
     /**

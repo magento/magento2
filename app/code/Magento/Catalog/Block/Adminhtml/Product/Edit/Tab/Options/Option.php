@@ -209,11 +209,11 @@ class Option extends Widget
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
             [
-                'id' => $this->getFieldId() . '_${id}_type',
+                'id' => $this->getFieldId() . '_<%= data.id %>_type',
                 'class' => 'select select-product-option-type required-option-select',
             ]
         )->setName(
-            $this->getFieldName() . '[${id}][type]'
+            $this->getFieldName() . '[<%= data.id %>][type]'
         )->setOptions(
             $this->_optionType->toOptionArray()
         );
@@ -229,9 +229,9 @@ class Option extends Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            ['id' => $this->getFieldId() . '_${id}_is_require', 'class' => 'select']
+            ['id' => $this->getFieldId() . '_<%= data.id %>_is_require', 'class' => 'select']
         )->setName(
-            $this->getFieldName() . '[${id}][is_require]'
+            $this->getFieldName() . '[<%= data.id %>][is_require]'
         )->setOptions(
             $this->_configYesNo->toOptionArray()
         );
@@ -284,7 +284,7 @@ class Option extends Widget
             $values = [];
             $scope = (int)$this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             foreach ($optionsArr as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */

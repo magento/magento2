@@ -22,7 +22,7 @@ class CustomerExtractor
     protected $customerFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -39,14 +39,14 @@ class CustomerExtractor
     /**
      * @param Metadata\FormFactory $formFactory
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $customerGroupManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         GroupManagementInterface $customerGroupManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {

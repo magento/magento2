@@ -74,7 +74,7 @@
             <argument name="intervals" xsi:type="array">
                 <item name="Magento\CatalogSearch\Model\Resource\Engine" xsi:type="string">Magento\CatalogSearch\Model\Price\Interval</item>
             </argument>
-            <argument name="scope" xsi:type="const">\Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scope" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">

@@ -572,8 +572,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * Test Address::validateRow()
      * with 2 rows with identical PKs in case when add/update behavior is performed
      *
-     * @covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
-     * @covers \Magento\CustomerImportExport\Model\Import\Address::_validateRowForUpdate
+     * covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
+     * covers \Magento\CustomerImportExport\Model\Import\Address::_validateRowForUpdate
      */
     public function testValidateRowForUpdateDuplicateRows()
     {
@@ -622,7 +622,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Test Address::validateRow() with delete action
      *
-     * @covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
+     * covers \Magento\CustomerImportExport\Model\Import\Address::validateRow
      * @dataProvider validateRowForDeleteDataProvider
      *
      * @param array $rowData
@@ -671,7 +671,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if correct methods are invoked according to different custom behaviours
      *
-     * @covers \Magento\CustomerImportExport\Model\Import\Address::_importData
+     * covers \Magento\CustomerImportExport\Model\Import\Address::_importData
      */
     public function testImportDataWithCustomBehaviour()
     {

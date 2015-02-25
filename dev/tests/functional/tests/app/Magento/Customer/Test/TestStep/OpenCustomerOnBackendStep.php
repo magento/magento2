@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -19,23 +19,23 @@ class OpenCustomerOnBackendStep implements TestStepInterface
     /**
      * Customer fixture
      *
-     * @var CustomerInjectable
+     * @var Customer
      */
     protected $customer;
 
     /**
      * Customer index page
      *
-     * @var CustomerInjectable
+     * @var Customer
      */
     protected $customerIndex;
 
     /**
      * @constructor
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CustomerIndex $customerIndex
      */
-    public function __construct(CustomerInjectable $customer, CustomerIndex $customerIndex)
+    public function __construct(Customer $customer, CustomerIndex $customerIndex)
     {
         $this->customer = $customer;
         $this->customerIndex = $customerIndex;

@@ -40,7 +40,7 @@ class ImagefileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Imagefile::__construct
+     * covers \Magento\Framework\Data\Form\Element\Imagefile::__construct
      */
     public function testConstruct()
     {

@@ -304,7 +304,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     protected $entityType = 'order';
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -395,7 +395,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
@@ -425,7 +425,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
@@ -1072,7 +1072,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param bool $isCustomerNotified
      * @param bool $shouldProtectState
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _setState(
         $state,
@@ -1084,7 +1084,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         // attempt to set the specified state
         if ($shouldProtectState) {
             if ($this->isStateProtected($state)) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('The Order State "%1" must not be set manually.', $state)
                 );
             }
@@ -1206,12 +1206,12 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function hold()
     {
         if (!$this->canHold()) {
-            throw new \Magento\Framework\Model\Exception(__('A hold action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('A hold action is not available.'));
         }
         $this->setHoldBeforeState($this->getState());
         $this->setHoldBeforeStatus($this->getStatus());
@@ -1223,12 +1223,12 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Attempt to unhold the order
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function unhold()
     {
         if (!$this->canUnhold()) {
-            throw new \Magento\Framework\Model\Exception(__('You cannot remove the hold.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('You cannot remove the hold.'));
         }
         $this->setState($this->getHoldBeforeState(), $this->getHoldBeforeStatus());
         $this->setHoldBeforeState(null);
@@ -1258,7 +1258,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param string $comment
      * @param bool $graceful
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function registerCancellation($comment = '', $graceful = true)
     {
@@ -1292,7 +1292,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
 
             $this->_setState($cancelState, true, $comment);
         } elseif (!$graceful) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot cancel this order.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot cancel this order.'));
         }
         return $this;
     }

@@ -95,7 +95,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\Backend\Model\View')
+        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -259,7 +259,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     {
         $message = 'model exception';
         $response = ['error' => true, 'message' => $message];
-        $e = new \Magento\Framework\Model\Exception($message);
+        $e = new \Magento\Framework\Exception\LocalizedException($message);
 
         $this->requestMock->expects($this->once())
             ->method('getParam')

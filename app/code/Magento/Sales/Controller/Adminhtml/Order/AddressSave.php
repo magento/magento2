@@ -17,7 +17,7 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $addressId = $this->getRequest()->getParam('address_id');
         $address = $this->_objectManager->create('Magento\Sales\Model\Order\Address')->load($addressId);
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
             $address->addData($data);
@@ -25,7 +25,7 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
                 $address->save();
                 $this->messageManager->addSuccess(__('You updated the order address.'));
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong updating the order address.'));

@@ -28,7 +28,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\Store */
     protected $_storeMock;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManagerMock;
 
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */

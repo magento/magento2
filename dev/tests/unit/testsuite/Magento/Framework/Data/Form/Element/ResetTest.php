@@ -44,7 +44,7 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Reset::__construct
+     * covers \Magento\Framework\Data\Form\Element\Reset::__construct
      */
     public function testConstruct()
     {

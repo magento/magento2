@@ -142,9 +142,9 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         $headerFound = false;
         $headers = $this->getResponse()->getHeaders();
         foreach ($headers as $header) {
-            if ($header['name'] === $headerName) {
+            if ($header->getFieldName() === $headerName) {
                 $headerFound = true;
-                $this->assertRegExp($valueRegex, $header['value']);
+                $this->assertRegExp($valueRegex, $header->getFieldValue());
             }
         }
         if (!$headerFound) {
@@ -169,8 +169,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         if ($urlConstraint) {
             $actualUrl = '';
             foreach ($this->getResponse()->getHeaders() as $header) {
-                if ($header['name'] == 'Location') {
-                    $actualUrl = $header['value'];
+                if ($header->getFieldName() == 'Location') {
+                    $actualUrl = $header->getFieldValue();
                     break;
                 }
             }

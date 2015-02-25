@@ -98,7 +98,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -117,7 +117,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory
      * @param \Magento\Review\Model\Review\SummaryFactory $summaryModFactory
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -132,7 +132,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
         \Magento\Review\Model\Resource\Review\Summary\CollectionFactory $summaryFactory,
         \Magento\Review\Model\Review\SummaryFactory $summaryModFactory,
         \Magento\Review\Model\Review\Summary $reviewSummary,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,

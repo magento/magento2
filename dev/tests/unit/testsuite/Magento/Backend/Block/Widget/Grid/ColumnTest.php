@@ -97,8 +97,8 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::setFilterType
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
+     * covers \Magento\Backend\Block\Widget\Grid\Column::setFilterType
      */
     public function testGetFilterWithSetEmptyCustomFilterType()
     {
@@ -108,7 +108,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
      */
     public function testGetFilterWithInvalidFilterTypeWhenUseDefaultFilter()
     {
@@ -128,7 +128,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
      */
     public function testGetFilterWhenUseCustomFilter()
     {
@@ -149,8 +149,8 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::setFilter
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getFilter
+     * covers \Magento\Backend\Block\Widget\Grid\Column::setFilter
      */
     public function testGetFilterWhenFilterWasSetPreviously()
     {
@@ -213,7 +213,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getRenderer
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getRenderer
      */
     public function testGetRendererWheRendererSetFalse()
     {
@@ -235,8 +235,8 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getRenderer
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::setRendererType
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getRenderer
+     * covers \Magento\Backend\Block\Widget\Grid\Column::setRendererType
      */
     public function testGetRendererWhenUseCustomRenderer()
     {
@@ -259,8 +259,8 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::getRenderer
-     * @covers \Magento\Backend\Block\Widget\Grid\Column::setRenderer
+     * covers \Magento\Backend\Block\Widget\Grid\Column::getRenderer
+     * covers \Magento\Backend\Block\Widget\Grid\Column::setRenderer
      */
     public function testGetRendererWhenRendererWasSetPreviously()
     {

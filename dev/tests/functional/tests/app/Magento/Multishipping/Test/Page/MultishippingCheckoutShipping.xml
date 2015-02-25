@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page mca="multishipping/checkout/shipping" module="Magento_Multishipping">
-    <blocks>
-        <shippingBlock>
-            <class>Magento\Multishipping\Test\Block\Checkout\Shipping</class>
-            <locator>#shipping_method_form</locator>
-            <strategy>css selector</strategy>
-        </shippingBlock>
-    </blocks>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="MultishippingCheckoutShipping" mca="multishipping/checkout/shipping" module="Magento_Multishipping">
+        <block name="shippingBlock" class="Magento\Multishipping\Test\Block\Checkout\Shipping" locator="#shipping_method_form" strategy="css selector"/>
+    </page>
+</config>

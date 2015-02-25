@@ -54,7 +54,7 @@ class Validate extends \Magento\ImportExport\Controller\Adminhtml\Import
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $this->_view->loadLayout(false);
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */

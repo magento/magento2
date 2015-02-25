@@ -1,34 +1,25 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertCurrencySymbolSuccessSaveMessage module="Magento_CurrencySymbol">
-        <severity>low</severity>
-        <require>
-            <currencySymbolIndex class="Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex" />
-        </require>
-    </assertCurrencySymbolSuccessSaveMessage>
-    <assertCurrencySymbolOnProductPage module="Magento_CurrencySymbol">
-        <severity>low</severity>
-        <require>
-            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
-            <product class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <currencySymbol class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity" />
-        </require>
-    </assertCurrencySymbolOnProductPage>
-    <assertCurrencySymbolOnCatalogPage module="Magento_CurrencySymbol">
-        <severity>low</severity>
-        <require>
-            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
-            <product class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
-            <currencySymbol class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity" />
-        </require>
-    </assertCurrencySymbolOnCatalogPage>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertCurrencySymbolSuccessSaveMessage" module="Magento_CurrencySymbol" severity="low">
+        <argument name="currencySymbolIndex">Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex</argument>
+    </constraint>
+    <constraint name="assertCurrencySymbolOnProductPage" module="Magento_CurrencySymbol" severity="low">
+        <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
+        <argument name="catalogCategoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        <argument name="product">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+        <argument name="catalogProductView">Magento\Catalog\Test\Page\Product\CatalogProductView</argument>
+        <argument name="currencySymbol">Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity</argument>
+    </constraint>
+    <constraint name="assertCurrencySymbolOnCatalogPage" module="Magento_CurrencySymbol" severity="low">
+        <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
+        <argument name="catalogCategoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        <argument name="product">Magento\Catalog\Test\Fixture\CatalogProductSimple</argument>
+        <argument name="currencySymbol">Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity</argument>
+    </constraint>
+</config>

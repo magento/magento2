@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
     <acl>
         <resources>
-            <resource id="Magento_Adminhtml::admin">
-                <resource id="Magento_Adminhtml::system">
-                    <resource id="Magento_Adminhtml::tools">
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::system">
+                    <resource id="Magento_Backend::tools">
                         <resource id="Magento_Backup::backup" title="Backups" sortOrder="30">
                             <resource id="Magento_Backup::rollback" title="Rollback" />
                         </resource>

@@ -104,6 +104,14 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectation, $this->_typeList->getTypes());
     }
 
+    public function testGetTypeLabels()
+    {
+        $expectation = [
+            self::TYPE_KEY => $this->_typesArray[self::TYPE_KEY]['label'],
+        ];
+        $this->assertEquals($expectation, $this->_typeList->getTypeLabels());
+    }
+
     public function testGetInvalidated()
     {
         $expectation = [self::TYPE_KEY => $this->_getPreparedType()];

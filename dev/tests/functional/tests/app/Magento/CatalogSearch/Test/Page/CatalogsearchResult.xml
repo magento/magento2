@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalogsearch/result" module="Magento_CatalogSearch">
-    <blocks>
-        <listProductBlock>
-            <class>Magento\Catalog\Test\Block\Product\ListProduct</class>
-            <locator>.search.results</locator>
-            <strategy>css selector</strategy>
-        </listProductBlock>
-        <bottomToolbar>
-            <class>Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar</class>
-            <locator>.//*[contains(@class,"toolbar-products")][2]</locator>
-            <strategy>xpath</strategy>
-        </bottomToolbar>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogsearchResult" mca="catalogsearch/result" module="Magento_CatalogSearch">
+    <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".search.results" strategy="css selector"/>
+    <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath"/>
+  </page>
+</config>

@@ -43,7 +43,7 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\AttributeFactory::createAttribute
+     * covers \Magento\Eav\Model\AttributeFactory::createAttribute
      */
     public function testCreateAttribute()
     {

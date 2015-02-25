@@ -9,7 +9,7 @@
 namespace Magento\Checkout\Helper;
 
 use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,29 +51,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected  $_storeManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_eventManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected  $_context;
 
     protected function setUp()
     {
-        $this->_translator = $this->getMockBuilder('Magento\Framework\Translate\Inline\StateInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_context = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->_eventManager = $this->getMockForAbstractClass('\Magento\Framework\Event\ManagerInterface');
-        $this->_context->expects($this->once())
-            ->method('getEventManager')
-            ->will($this->returnValue($this->_eventManager));
-        $this->_scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Checkout\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->_translator = $arguments['inlineTranslation'];
+        $this->_eventManager = $context->getEventManager();
+        $this->_scopeConfig = $context->getScopeConfig();
         $this->_scopeConfig->expects($this->any())
             ->method('getValue')
             ->will(
@@ -81,49 +70,49 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'checkout/payment_failed/template',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
                             'fixture_email_template_payment_failed'
                         ],
                         [
                             'checkout/payment_failed/receiver',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
                             'sysadmin'
                         ],
                         [
                             'trans_email/ident_sysadmin/email',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
                             'sysadmin@example.com'
                         ],
                         [
                             'trans_email/ident_sysadmin/name',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
                             'System Administrator'
                         ],
                         [
                             'checkout/payment_failed/identity',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             8,
                             'noreply@example.com'
                         ],
                         [
                             'carriers/ground/title',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
                             'Ground Shipping'
                         ],
                         [
                             'payment/fixture-payment-method/title',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
                             'Check Money Order'
                         ],
                         [
                             'checkout/options/onepage_checkout_enabled',
-                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                             null,
                             'One Page Checkout'
                         ]
@@ -131,35 +120,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->_storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
-
-        $this->_checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-
-        $localeDate = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_checkoutSession = $arguments['checkoutSession'];
+        $localeDate = $arguments['localeDate'];
         $localeDate->expects($this->any())->method('date')->will($this->returnValue('Oct 02, 2013'));
 
-        $this->_transportBuilder = $this->getMockBuilder('Magento\Framework\Mail\Template\TransportBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_transportBuilder = $arguments['transportBuilder'];
 
-        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency = $arguments['priceCurrency'];
 
-        $this->_helper = new Data(
-            $this->_context,
-            $this->_scopeConfig,
-            $this->_storeManager,
-            $this->_checkoutSession,
-            $localeDate,
-            $this->_transportBuilder,
-            $this->_translator,
-            $this->priceCurrency
-        );
+        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
     /**
@@ -342,7 +311,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_scopeConfig->expects($this->once())->method('isSetFlag')->with(
             'checkout/options/customer_must_be_logged',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will($this->returnValue(true));
         $this->assertTrue($this->_helper->isCustomerMustBeLogged());
     }
@@ -362,7 +331,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $rowTotal = 15;
         $roundPrice = 17;
         $expected = 17;
-        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             '\Magento\Checkout\Helper\Data',
@@ -421,7 +390,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBasePriceInclTaxWithoutQty()
     {
-        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             '\Magento\Checkout\Helper\Data',
@@ -438,7 +407,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBasePriceInclTax()
     {
-        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             '\Magento\Checkout\Helper\Data',

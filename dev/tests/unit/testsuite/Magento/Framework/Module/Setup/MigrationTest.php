@@ -135,7 +135,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Module\Setup\Migration::appendClassAliasReplace
+     * covers \Magento\Framework\Module\Setup\Migration::appendClassAliasReplace
      */
     public function testAppendClassAliasReplace()
     {

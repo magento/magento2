@@ -5,13 +5,15 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="MassDeleteCustomerBackendEntityTest">
-        <variation name="MassDeleteCustomerBackendEntityTestVariation1">
-            <data name="customer/dataSet">default</data>
-            <data name="customersQty">3</data>
-            <data name="customersQtyToDelete">2</data>
-            <data name="constraint">assertCustomerMassDeleteSuccessMessage, assertCustomerMassDeleteNotInGrid, assertCustomerMassDeleteInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="MassDeleteCustomerBackendEntityTest">
+    <variation name="MassDeleteCustomerBackendEntityTestVariation1" firstConstraint="assertCustomerMassDeleteSuccessMessage" method="test">
+      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customersQty" xsi:type="string">3</data>
+      <data name="customersQtyToDelete" xsi:type="string">2</data>
+      <constraint name="assertCustomerMassDeleteSuccessMessage" next="assertCustomerMassDeleteNotInGrid"/>
+      <constraint name="assertCustomerMassDeleteNotInGrid" next="assertCustomerMassDeleteInGrid" prev="assertCustomerMassDeleteSuccessMessage"/>
+      <constraint name="assertCustomerMassDeleteInGrid" prev="assertCustomerMassDeleteNotInGrid"/>
+    </variation>
+  </testCase>
 </config>

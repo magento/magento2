@@ -34,16 +34,16 @@ class Index extends \Magento\Framework\App\Action\Action
     {
         $pageId = $this->_objectManager->get(
             'Magento\Framework\App\Config\ScopeConfigInterface',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->getValue(
             \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         /** @var \Magento\Cms\Helper\Page $pageHelper */
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
         $resultPage = $pageHelper->prepareResultPage($this, $pageId);
         if ($resultPage) {
-            $resultPage->setHeader('HTTP/1.1', '404 Not Found');
+            $resultPage->setStatusHeader(404, '1.1', 'Not Found');
             $resultPage->setHeader('Status', '404 File not found');
             return $resultPage;
         } else {

@@ -88,6 +88,7 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundDispatchProcessIfCacheMissed($state)
     {
+        $header = \Zend\Http\Header\GenericHeader::fromString('Cache-Control: no-cache');
         $this->configMock
             ->expects($this->once())
             ->method('getType')
@@ -116,6 +117,11 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             $this->responseMock->expects($this->never())
                 ->method('setHeader');
         }
+        $this->responseMock
+            ->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->will($this->returnValue($header));
         $this->kernelMock
             ->expects($this->once())
             ->method('process')

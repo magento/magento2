@@ -10,6 +10,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\ObjectManager\Environment;
 use Magento\Framework\ObjectManager\EnvironmentFactory;
 use Magento\Framework\ObjectManager\EnvironmentInterface;
@@ -88,12 +89,11 @@ class ObjectManagerFactory
      * Create ObjectManager
      *
      * @param array $arguments
-     * @param bool $useCompiled
      * @return \Magento\Framework\ObjectManagerInterface
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function create(array $arguments, $useCompiled = true)
+    public function create(array $arguments)
     {
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $arguments);
 
@@ -101,10 +101,10 @@ class ObjectManagerFactory
             $this->driverPool->getDriver(DriverPool::FILE),
             $this->directoryList->getPath(DirectoryList::DI),
             $this->directoryList->getPath(DirectoryList::GENERATION),
-            $deploymentConfig->get('definition/format', 'serialized')
+            $deploymentConfig->get('definition/format', Serialized::MODE_NAME)
         );
 
-        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'), $useCompiled);
+        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
         /** @var \Magento\Framework\ObjectManager\EnvironmentFactory $enFactory */

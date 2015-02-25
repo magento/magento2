@@ -26,7 +26,7 @@ class Delete extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             $this->messageManager->addSuccess(__('The condition has been deleted.'));
             $this->_redirect('checkout/*/');
             return;
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));

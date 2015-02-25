@@ -85,7 +85,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -130,7 +130,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -146,7 +146,7 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -481,6 +481,6 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getProductListDefaultSortBy($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_LIST_DEFAULT_SORT_BY, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->getValue(self::XML_PATH_LIST_DEFAULT_SORT_BY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 }

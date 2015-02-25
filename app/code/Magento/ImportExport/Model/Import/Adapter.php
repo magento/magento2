@@ -21,22 +21,26 @@ class Adapter
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
      * @return AbstractSource
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function factory($type, $directory, $options = null)
     {
         if (!is_string($type) || !$type) {
-            throw new \Magento\Framework\Model\Exception(__('The adapter type must be a non empty string.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The adapter type must be a non empty string.')
+            );
         }
         $adapterClass = 'Magento\ImportExport\Model\Import\Source\\' . ucfirst(strtolower($type));
 
         if (!class_exists($adapterClass)) {
-            throw new \Magento\Framework\Model\Exception("'{$type}' file extension is not supported");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('\'%1\' file extension is not supported', $type)
+            );
         }
         $adapter = new $adapterClass($options, $directory);
 
         if (!$adapter instanceof AbstractSource) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Adapter must be an instance of \Magento\ImportExport\Model\Import\AbstractSource')
             );
         }

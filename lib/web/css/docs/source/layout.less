@@ -34,19 +34,19 @@ footer.footer {
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@layout-width</th>
+//            <th>@layout__width</th>
 //            <td class="vars_value">''</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Page minimum width</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-max-width</th>
+//            <th>@layout__max-width</th>
 //            <td class="vars_value">1280px</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Page maximum width</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-indent</th>
+//            <th>@layout-indent__width</th>
 //            <td class="vars_value">20px</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Page indents on the left and right</td>
@@ -61,13 +61,13 @@ footer.footer {
 //            <td>Class name for one column layout</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-class-2columns-left</th>
+//            <th>@layout-class-2columns__left</th>
 //            <td class="vars_value">page-layout-2columns-left</td>
 //            <td class="vars_value">'' | false | <nobr>page-layout-1column</nobr> | <nobr>page-layout-2columns-left</nobr> | <nobr>page-layout-2columns-right</nobr> | <nobr>page-layout-3columns</nobr></td>
 //            <td>Class name for two columns layout with left sidebar</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@layout-class-2columns-right</th>
+//            <th nowrap="nowrap">@layout-class-2columns__right</th>
 //            <td class="vars_value">page-layout-2columns-right</td>
 //            <td class="vars_value">'' | false | <nobr>page-layout-1column</nobr> | <nobr>page-layout-2columns-left</nobr> | <nobr>page-layout-2columns-right</nobr> | <nobr>page-layout-3columns</nobr></td>
 //            <td>Class name for two columns layout with right sidebar</td>
@@ -97,26 +97,26 @@ footer.footer {
 //            <th colspan="3" class="vars_section">Variables for layout columns</th>
 //        </tr>
 //        <tr>
-//            <th>@layout-columns-width</th>
+//            <th>@layout-column__width</th>
 //            <td class="vars_value">@total-columns</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets base columns number</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-column-sidebar-width</th>
+//            <th>@layout-column__sidebar-width</th>
 //            <td class="vars_value">2</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets sidebar width</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-column-left-width</th>
-//            <td class="vars_value">@layout-column-sidebar-width</td>
+//            <th>@layout-column__left-width</th>
+//            <td class="vars_value">@layout-column__sidebar-width</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets left column width</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-column-right-width</th>
-//            <td class="vars_value">@layout-column-sidebar-width</td>
+//            <th>@layout-column__right-width</th>
+//            <td class="vars_value">@layout-column__sidebar-width</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets right column width</td>
 //        </tr>
@@ -124,26 +124,26 @@ footer.footer {
 //            <th colspan="3" class="vars_section">Variables for layout columns depending on layout used</th>
 //        </tr>
 //        <tr>
-//            <th>@layout-column-main-width-1</th>
+//            <th>@layout-column-main__width-1</th>
 //            <td class="vars_value">100%</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets one column width</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-column-main-width-2-left</th>
-//            <td class="vars_value">@layout-columns-width - @layout-column-left-width</td>
+//            <th>@layout-column-main__width-2-left</th>
+//            <td class="vars_value">@layout-column__width - @layout-column__left-width</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets left column width</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@layout-column-main-width-2-right</th>
-//            <td class="vars_value">@layout-columns-width - @layout-column-right-width</td>
+//            <th nowrap="nowrap">@layout-column-main__width-2-right</th>
+//            <td class="vars_value">@layout-column__width - @layout-column__right-width</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets right column width</td>
 //        </tr>
 //        <tr>
-//            <th>@layout-column-main-width-3</th>
-//            <td class="vars_value">@layout-columns-width - @layout-column-left-width - @layout-column-right-width</td>
+//            <th>@layout-column-main__width-3</th>
+//            <td class="vars_value">@layout-column__width - @layout-column__left-width - @layout-column__right-width</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Sets three columns layout main column width</td>
 //        </tr>
@@ -244,7 +244,7 @@ footer.footer {
     #layout-columns();
     > .column {
         &:extend(.add-box-sizing all);
-        .css(padding-bottom, @indent-xl-base);
+        .css(padding-bottom, @indent__xl);
     }
 }
 
@@ -340,7 +340,7 @@ footer.footer {
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_layout-min-width </th>
+//            <th>@_layout__min-width </th>
 //            <td class="vars_value">number</td>
 //            <td>Number of total columns in layout (i.e. <em>1, 2, 3</em>)</td>
 //        </tr>
@@ -372,19 +372,19 @@ footer.footer {
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_layout-min-width</th>
+//            <th>@_layout__min-width</th>
 //            <td class="vars_value">''</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Page minimum width</td>
 //        </tr>
 //        <tr>
-//            <th>@_layout-max-width</th>
+//            <th>@_layout__max-width</th>
 //            <td class="vars_value">1280px</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Page maximum width</td>
 //        </tr>
 //        <tr>
-//            <th>@_layout-indent</th>
+//            <th>@_layout__indent</th>
 //            <td class="vars_value">20px</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Page indents on the left and right</td>

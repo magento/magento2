@@ -39,13 +39,13 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     protected $config;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder $groupPriceBuilder
      * @param GroupRepositoryInterface $groupRepository
      * @param PriceModifier $priceModifier
@@ -57,7 +57,7 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         GroupRepositoryInterface $groupRepository,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->productRepository = $productRepository;
         $this->groupPriceBuilder = $groupPriceBuilder;
@@ -81,7 +81,7 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         $product = $this->productRepository->get($productSku, true);
         $groupPrices = $product->getData('group_price');
         $websiteIdentifier = 0;
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
@@ -126,7 +126,7 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     {
         $product = $this->productRepository->get($productSku, true);
         $websiteIdentifier = 0;
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
@@ -141,7 +141,7 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     {
         $product = $this->productRepository->get($productSku, true);
         $priceKey = 'website_price';
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value == 0) {
             $priceKey = 'price';
         }

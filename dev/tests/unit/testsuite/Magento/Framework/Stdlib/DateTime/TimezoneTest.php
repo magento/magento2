@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Stdlib\DateTime;
 
+use Magento\Directory\Helper\Data;
+
 class TimezoneTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Stdlib\DateTime\Timezone */
@@ -40,7 +42,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         $this->localeResolver->expects($this->any())->method('getLocale')->will($this->returnValue($this->locale));
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->with(\Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE, 'store')
+            ->with(Data::XML_PATH_DEFAULT_TIMEZONE, 'store')
             ->will($this->returnValue('America/Los_Angeles'));
         $this->locale->expects($this->any())->method('toString')->will($this->returnValue('en_US'));
 
@@ -54,7 +56,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
                 'dateFactory' => $this->dateFactory,
                 'scopeConfig' => $this->scopeConfig,
                 'scopeType' => 'store',
-                'defaultTimezonePath' => \Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE
+                'defaultTimezonePath' => Data::XML_PATH_DEFAULT_TIMEZONE
             ]
         );
     }
@@ -160,7 +162,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
             ->with(['date' => 1347260470, 'part' => null, 'locale' => $this->locale])
             ->will($this->returnValue(new \Magento\Framework\Stdlib\DateTime\Date(1347260470, null, $this->locale)));
 
-        $date = $this->timezone->utcDate(\Magento\Core\Helper\Data::XML_PATH_DEFAULT_TIMEZONE, 1347260470);
+        $date = $this->timezone->utcDate(Data::XML_PATH_DEFAULT_TIMEZONE, 1347260470);
         $this->assertSame('UTC', $date->getTimezone());
     }
 

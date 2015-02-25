@@ -103,13 +103,18 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            ['isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->setMethods([
+                'isPost',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam',
+                'getCookie',
+                'isSecure',
+            ])
+            ->getMock();
         $this->response = $this->getMock(
             'Magento\Framework\App\ResponseInterface',
             ['setRedirect', 'sendResponse'],
@@ -133,7 +138,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_formKeyValidator = $this->getMock(
-            'Magento\Core\App\Action\FormKeyValidator',
+            'Magento\Framework\Data\Form\FormKey\Validator',
             [],
             [],
             '',
@@ -187,7 +192,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Account::getAllowedActions
+     * covers \Magento\Customer\Controller\Account::getAllowedActions
      */
     public function testGetAllowedActions()
     {

@@ -30,7 +30,7 @@ class Post extends \Magento\Review\Controller\Product
                 $rating = $data['ratings'];
             }
         } else {
-            $data = $this->getRequest()->getPost();
+            $data = $this->getRequest()->getPostValue();
             $rating = $this->getRequest()->getParam('ratings', []);
         }
 

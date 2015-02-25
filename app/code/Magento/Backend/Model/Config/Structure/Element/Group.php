@@ -24,13 +24,13 @@ class Group extends AbstractComposite
     protected $_dependencyMapper;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator
      * @param \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator,
         \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
@@ -54,12 +54,14 @@ class Group extends AbstractComposite
      * Retrieve clone model
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCloneModel()
     {
         if (!isset($this->_data['clone_model']) || !$this->_data['clone_model']) {
-            throw new \Magento\Framework\Model\Exception('Config form fieldset clone model required to be able to clone fields');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Config form fieldset clone model required to be able to clone fields')
+            );
         }
         return $this->_cloneModelFactory->create($this->_data['clone_model']);
     }

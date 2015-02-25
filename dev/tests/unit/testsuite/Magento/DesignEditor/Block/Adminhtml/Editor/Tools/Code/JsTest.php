@@ -88,7 +88,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getJsUploadUrl
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getJsUploadUrl
      */
     public function testGetDownloadCustomCssUrl()
     {
@@ -108,7 +108,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getJsReorderUrl
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getJsReorderUrl
      */
     public function testGetJsReorderUrl()
     {
@@ -128,7 +128,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getTitle
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getTitle
      */
     public function testGetTitle()
     {
@@ -136,7 +136,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getFiles
+     * covers \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js::getFiles
      */
     public function testGetJsFiles()
     {
