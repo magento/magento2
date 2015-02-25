@@ -50,6 +50,15 @@ class Collection
     {
         unset($this->assets[$identifier]);
     }
+    /**
+     * Remove all items from the list
+     *
+     * @return void
+     */
+    public function removeAll()
+    {
+        $this->assets = [];
+    }
 
     /**
      * Retrieve all items in the collection

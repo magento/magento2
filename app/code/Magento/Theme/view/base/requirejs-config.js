@@ -7,7 +7,7 @@ var config = {
     "waitSeconds": 0,
     "shim": {
         "jquery/jquery-migrate": ["jquery"],
-        "jquery/jquery.hashchange": ["jquery"],
+        "jquery/jquery.hashchange": ["jquery", "jquery/jquery-migrate"],
         "jquery/jstree/jquery.hotkeys": ["jquery"],
         "jquery/hover-intent": ["jquery"],
         "mage/adminhtml/backup": ["prototype"],

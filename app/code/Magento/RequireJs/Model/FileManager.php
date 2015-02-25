@@ -55,9 +55,21 @@ class FileManager
      *
      * @return \Magento\Framework\View\Asset\File
      */
-    public function createRequireJsAsset()
+    public function createRequireJsConfigAsset()
     {
         $relPath = $this->config->getConfigFileRelativePath();
+        $this->ensureSourceFile($relPath);
+        return $this->assetRepo->createArbitrary($relPath, '');
+    }
+
+    /**
+     * Create a view asset representing the aggregated configuration file
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createRequireJsAsset()
+    {
+        $relPath = $this->config->getRequireJsFileRelativePath();
         $this->ensureSourceFile($relPath);
         return $this->assetRepo->createArbitrary($relPath, '');
     }

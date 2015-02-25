@@ -23,6 +23,11 @@ class Config
     const CONFIG_FILE_NAME = 'requirejs-config.js';
 
     /**
+     * File name of RequireJs
+     */
+    const REQUIRE_JS_FILE_NAME = 'requirejs/require.js';
+
+    /**
      * File name of StaticJs
      */
     const STATIC_FILE_NAME = 'mage\requirejs\static.js';
@@ -129,6 +134,16 @@ config;
     public function getConfigFileRelativePath()
     {
         return self::DIR_NAME . '/' . $this->staticContext->getConfigPath() . '/' . self::CONFIG_FILE_NAME;
+    }
+
+    /**
+     * Get path to config file relative to directory, where all config files with different context are located
+     *
+     * @return string
+     */
+    public function getRequireJsFileRelativePath()
+    {
+        return $this->staticContext->getConfigPath() . '/' .self::REQUIRE_JS_FILE_NAME;
     }
 
     /**
