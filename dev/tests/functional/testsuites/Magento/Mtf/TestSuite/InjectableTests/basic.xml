@@ -9,12 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testsuite">
         <allow>
-            <namespace value="Magento" />
+            <class value="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest"/>
         </allow>
-    </rule>
-    <rule scope="testcase">
-        <deny>
-            <tag group="test_type" value="3rd_party_test" />
-        </deny>
     </rule>
 </config>

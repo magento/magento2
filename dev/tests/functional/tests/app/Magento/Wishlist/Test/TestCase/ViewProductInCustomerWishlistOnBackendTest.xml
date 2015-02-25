@@ -7,9 +7,9 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Wishlist\Test\TestCase\ViewProductInCustomerWishlistOnBackendTest">
-    <variation name="ViewProductInCustomerWishlistOnBackendTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid" method="test">
+    <variation name="ViewProductInCustomerWishlistOnBackendTestVariation1" firstConstraint="Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid" method="test">
       <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
-      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid"/>
     </variation>
     <variation name="ViewProductInCustomerWishlistOnBackendTestVariation2" firstConstraint="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCustomerWishlistOnBackendGrid" method="test">
       <data name="product" xsi:type="string">configurableProduct::default</data>

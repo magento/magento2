@@ -31,7 +31,7 @@
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>
   </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertCrossSellsProductsSection">
+  <type name="Magento\Catalog\Test\Constraint\AssertProductCrossSells">
     <arguments>
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
@@ -41,7 +41,7 @@
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>
   </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertNoCrossSellsProductsSection">
+  <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentCrossSells">
     <arguments>
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
@@ -61,7 +61,7 @@
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
   </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertUpSellsProductsSection">
+  <type name="Magento\Catalog\Test\Constraint\AssertProductUpSells">
     <arguments>
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
@@ -71,7 +71,7 @@
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>
   </type>
-  <type name="Magento\Catalog\Test\Constraint\AssertNoUpSellsProductsSection">
+  <type name="Magento\Catalog\Test\Constraint\AssertProductAbsentUpSells">
     <arguments>
       <argument name="severity" xsi:type="string">middle</argument>
     </arguments>
