@@ -6,12 +6,16 @@
  */
 
 // @codingStandardsIgnoreFile
-//@SuppressWarnings(PHPMD.TooManyFields)
 
 namespace Magento\Bundle\Model;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
+/**
+ * Class LinkManagementTest
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class LinkManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
