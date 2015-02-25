@@ -70,7 +70,6 @@ class FileManager
     public function createRequireJsAsset()
     {
         $relPath = $this->config->getRequireJsFileRelativePath();
-        $this->ensureSourceFile($relPath);
         return $this->assetRepo->createArbitrary($relPath, '');
     }
 
