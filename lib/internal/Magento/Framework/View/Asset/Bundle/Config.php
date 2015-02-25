@@ -27,6 +27,10 @@ class Config implements Bundle\ConfigInterface
      */
     protected $viewConfig;
 
+    /**
+     * @param View\ConfigInterface $viewConfig
+     * @param ListInterface $themeList
+     */
     public function __construct(
         View\ConfigInterface $viewConfig,
         ListInterface $themeList
@@ -39,7 +43,7 @@ class Config implements Bundle\ConfigInterface
      * @param FallbackContext $assetContext
      * @return bool
      */
-    function isSplit(FallbackContext $assetContext)
+    public function isSplit(FallbackContext $assetContext)
     {
         return (bool)$this->getPartSize($assetContext);
     }
@@ -64,7 +68,10 @@ class Config implements Bundle\ConfigInterface
      */
     public function getPartSize(FallbackContext $assetContext)
     {
-        $size = $this->getConfig($assetContext)->getVarValue(self::VIEW_CONFIG_MODULE, self::VIEW_CONFIG_BUNDLE_SIZE_NAME);
+        $size = $this->getConfig($assetContext)->getVarValue(
+            self::VIEW_CONFIG_MODULE,
+            self::VIEW_CONFIG_BUNDLE_SIZE_NAME
+        );
         $unit = preg_replace('/[^a-zA-Z]+/', '', $size);
         $unit = strtoupper($unit);
         switch ($unit) {

@@ -48,6 +48,7 @@ class Bundle
      * @param LocalInterface $asset
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAsset(LocalInterface $asset)
     {
@@ -89,7 +90,7 @@ class Bundle
         $this->assets[$contextCode][$type][$index]['space'] -= $assetSize;
     }
 
-      /**
+    /**
      * Build asset key
      *
      * @param LocalInterface $asset
@@ -146,6 +147,8 @@ class Bundle
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function flush()
     {
