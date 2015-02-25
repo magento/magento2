@@ -10,7 +10,6 @@ use Magento\Framework\View\Asset;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\ConfigInterface;
 
 /**
  * BundleService model
@@ -30,10 +29,10 @@ class Manager
     /** @var  Bundle */
     protected $bundle;
 
-    /** @var Config  */
+    /** @var Bundle\ConfigInterface  */
     protected $bundleConfig;
 
-    /** @var ConfigInterface  */
+    /** @var Asset\ConfigInterface  */
     protected $assetConfig;
 
     /** @var array */
@@ -46,7 +45,7 @@ class Manager
      * @param Filesystem $filesystem
      * @param Bundle $bundle
      * @param Bundle\ConfigInterface $bundleConfig
-     * @param ConfigInterface $assetConfig
+     * @param Asset\ConfigInterface $assetConfig
      */
     public function __construct(
         Filesystem $filesystem,
@@ -63,6 +62,7 @@ class Manager
     /**
      * Check if asset in exclude list
      *
+     * @param LocalInterface $asset
      * @return bool
      */
     protected function isExcluded(LocalInterface $asset)
@@ -87,7 +87,7 @@ class Manager
 
 
     /**
-     * Collect bundle
+     * Add asset to the bundle
      *
      * @param LocalInterface $asset
      * @return bool
@@ -176,7 +176,7 @@ class Manager
 
 
     /**
-     * Save bundle to js file
+     * Flush bundle
      *
      * @return bool
      */

@@ -159,7 +159,8 @@ class Bundle
             foreach ($types as $parts) {
                 /** @var LocalInterface $firstAsset */
                 $firstAsset = reset(reset($parts)['assets']);
-                $amountParts = count($types[Manager::ASSET_TYPE_JS]) + count($types[Manager::ASSET_TYPE_HTML]);
+                $amountParts = isset($types[Manager::ASSET_TYPE_JS]) ? count($types[Manager::ASSET_TYPE_JS]) : '';
+                $amountParts += isset($types[Manager::ASSET_TYPE_HTML]) ? count($types[Manager::ASSET_TYPE_HTML]) : 0;
                 if ($firstAsset) {
                     $bundlePath = $firstAsset->getContext()->getPath() . Manager::BUNDLE_PATH;
                     $isSplit = $this->bundleConfig->isSplit($firstAsset->getContext());
@@ -179,7 +180,7 @@ class Bundle
                 }
             }
             if ($bundlePath && !$isSplit) {
-                $dir->writeFile($bundlePath . "0.js", $content);
+                $dir->writeFile($bundlePath . "1.js", $content);
             }
         }
 

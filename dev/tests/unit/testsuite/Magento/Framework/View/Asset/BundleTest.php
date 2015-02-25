@@ -8,20 +8,26 @@ namespace Magento\Framework\View\Asset;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config */
-    protected $scopeConf;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle */
     protected $bundle;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Bundle\ResolverInterface */
-    protected $resolver;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|File */
     protected $asset;
 
     /** @var array */
-    protected $assetSet = [];
+    protected $assets = [];
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
+    protected $filesystem;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Bundle\ConfigInterface */
+    protected $bundleConfig;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File\FallbackContext */
+    protected $context;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write */
+    protected $directoryWrite;
 
     // @codingStandardsIgnoreStart
     /**
@@ -29,6 +35,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $expectedResult = <<<EOL
 require.config({
+    config: {
+        'jsbuild':{"cf/cf.js":"Content","c4/c4.js":"Content","c8/c8.js":"Content","ec/ec.js":"Content","a8/a8.js":"Content","e4/e4.js":"Content","16/16.js":"Content","8f/8f.js":"Content","c9/c9.js":"Content","45/45.js":"Content"}
+    }
+});
+require.config({
     bundles: {
         'mage/requirejs/static': [
             'jsbuild',
@@ -41,17 +52,30 @@ require.config({
         'jsbuild'
     ]
 });
+
+EOL;
+
+    /**
+     * @var string
+     */
+    protected $expectedFirstPart = <<<EOL
 require.config({
     config: {
-        'jsbuild':{"cf/cf.js.js":"Content","c4/c4.js.js":"Content","c8/c8.js.js":"Content","ec/ec.js.js":"Content","a8/a8.js.js":"Content","e4/e4.js.js":"Content","16/16.js.js":"Content","8f/8f.js.js":"Content","c9/c9.js.js":"Content","45/45.js.js":"Content"}
+        'jsbuild':{"cf/cf.js":"Content","c4/c4.js":"Content","c8/c8.js":"Content","ec/ec.js":"Content","a8/a8.js":"Content"}
     }
 });
 
 EOL;
+
     /**
      * @var string
      */
-    protected $expectedHtmlTypeResult = <<<EOL
+    protected $expectedSecondPart = <<<EOL
+require.config({
+    config: {
+        'jsbuild':{"e4/e4.js":"Content","16/16.js":"Content","8f/8f.js":"Content","c9/c9.js":"Content","45/45.js":"Content"}
+    }
+});
 require.config({
     bundles: {
         'mage/requirejs/static': [
@@ -64,11 +88,6 @@ require.config({
     deps: [
         'jsbuild'
     ]
-});
-require.config({
-    config: {
-        'text':{"cf/cf":"Content","c4/c4":"Content","c8/c8":"Content","ec/ec":"Content","a8/a8":"Content","e4/e4":"Content","16/16":"Content","8f/8f":"Content","c9/c9":"Content","45/45":"Content"}
-    }
 });
 
 EOL;
@@ -76,19 +95,28 @@ EOL;
 
     protected function setUp()
     {
-        $this->scopeConf = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
-            [],
-            '',
-            false
-        );
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
-        $this->resolver = $this->getMock('Magento\Framework\View\Asset\Bundle\ResolverInterface', [], [], '', false);
+        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->bundleConfig = $this->getMock('Magento\Framework\View\Asset\Bundle\ConfigInterface', [], [], '', false);
+        $this->context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
+        $this->directoryWrite = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->context
+            ->expects($this->atLeastOnce())
+            ->method('getAreaCode')
+            ->willReturn('testArea');
+        $this->context
+            ->expects($this->atLeastOnce())
+            ->method('getThemePath')
+            ->willReturn('testTheme');
+        $this->context
+            ->expects($this->atLeastOnce())
+            ->method('getLocaleCode')
+            ->willReturn('testLocale');
     }
 
-    protected function getBundle($contentType)
+    protected function initBundle($contentType)
     {
-        $bundle = $this->bundle = new Bundle($this->scopeConf, $this->resolver);
+        $this->bundle = new Bundle($this->filesystem, $this->bundleConfig);
 
         for ($i = 0; $i < 10; $i++) {
             $assetMock = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
@@ -105,37 +133,79 @@ EOL;
                 ->method('getContent')
                 ->willReturn('Content');
             $assetMock
-                ->expects($this->once())
+                ->expects($this->any())
+                ->method('getContentType')
+                ->willReturn($contentType);
+            $assetMock
+                ->expects($this->any())
+                ->method('getContext')
+                ->willReturn($this->context);
+            $assetMock
+                ->expects($this->any())
                 ->method('getContentType')
                 ->willReturn($contentType);
 
-            $bundle->addAsset($assetMock);
+            $this->bundle->addAsset($assetMock);
             $assetKey = $assetMock->getModule() . '/' .$assetMock->getFilePath();
-            $this->assetSet[$assetKey] = $assetMock;
+            $this->assets[$assetKey] = $assetMock;
         }
-        return $bundle;
+        return $this->bundle;
     }
 
-    public function testGetContentWithoutHtmlAndWithoutDividing()
+    public function testAddAssetAndFlushWithoutSplit()
     {
-        $bundle = $this->getBundle('js');
-        $resolvedAssets = [];
-        foreach ($this->assetSet as $asset) {
-            $assetKey = $asset->getModule() . '/' .$asset->getFilePath() . '.js';
-            $resolvedAssets[$assetKey] = $asset->getContent();
-        }
-        $this->resolver
+        $this->bundleConfig
+            ->expects($this->exactly(10))
+            ->method('getPartSize')
+            ->willReturn('0');
+        $this->bundleConfig
             ->expects($this->once())
-            ->method('resolve')
-            ->with($this->assetSet)
-            ->willReturn([$resolvedAssets]);
-        $this->resolver
-            ->expects($this->once())
-            ->method('appendHtmlPart')
-            ->with([$this->expectedResult, []])
-            ->willReturn($this->expectedResult);
+            ->method('isSplit')
+            ->willReturn(false);
 
-        $result = $bundle->getContent();
-        $this->assertEquals($this->expectedResult, $result);
+        $this->directoryWrite
+            ->expects($this->once())
+            ->method('writeFile')
+            ->with('/js/bundle/bundle1.js', $this->expectedResult)
+            ->willReturn(true);
+
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->directoryWrite);
+
+        $this->initBundle('js');
+        $this->bundle->flush();
+    }
+
+    public function testAddAssetAndFlushWithSplit()
+    {
+        $this->bundleConfig
+            ->expects($this->exactly(10))
+            ->method('getPartSize')
+            ->willReturn(0.035);
+        $this->bundleConfig
+            ->expects($this->once())
+            ->method('isSplit')
+            ->willReturn(true);
+
+        $this->directoryWrite
+            ->expects($this->at(0))
+            ->method('writeFile')
+            ->with('/js/bundle/bundle1.js', $this->expectedFirstPart)
+            ->willReturn(true);
+        $this->directoryWrite
+            ->expects($this->at(1))
+            ->method('writeFile')
+            ->with('/js/bundle/bundle2.js', $this->expectedSecondPart)
+            ->willReturn(true);
+
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->directoryWrite);
+
+        $this->initBundle('js');
+        $this->bundle->flush();
     }
 }
