@@ -2011,41 +2011,6 @@ address {
 }
 
 /*
-    Page title
--------------------------------------- */
-.page-title {
-    position: relative;
-    margin: 20px 0;
-}
-
-.page-content > .page-title {
-    max-width: 1300px;
-    min-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.page-title-inner > .title {
-    .style23();
-    display: inline-block;
-    margin: 0;
-    width: 100%;
-    word-wrap: break-word;
-}
-
-.page-title-inner .title > h3 {
-    margin: 0;
-}
-
-.page-title-inner .actions {
-    float: right;
-}
-
-.page-title-inner .actions form {
-    display: inline-block;
-}
-
-/*
     Messages (Global)
 -------------------------------------- */
 
@@ -2392,15 +2357,15 @@ address {
     Page Structure
 -------------------------------------- */
 
-.page-title.complex .title {
-    float: left;
-    width: 70%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+//.page-title-wrapper.complex .title {
+//    float: left;
+//    width: 70%;
+//    overflow: hidden;
+//    text-overflow: ellipsis;
+//    white-space: nowrap;
+//}
 
-.page-title.complex .store-switcher-alt {
+.page-title-wrapper.complex .store-switcher-alt {
     float: right;
     margin: 12px 0 0;
 }
@@ -3528,8 +3493,6 @@ tr.dynamic-grid input.input-text {
 [class$="-layout"]:after,
 .footer-content:before,
 .footer-content:after,
-.page-title-inner:before,
-.page-title-inner:after,
 .tabs-horiz:before,
 .tabs-horiz:after,
 .actions-split:before,
@@ -3555,7 +3518,6 @@ tr.dynamic-grid input.input-text {
 .clearfix:after,
 [class$="-layout"]:after,
 .footer-content:after,
-.page-title-inner:after,
 .tabs-horiz:after,
 .actions-split:after,
 .page-create-order:after,

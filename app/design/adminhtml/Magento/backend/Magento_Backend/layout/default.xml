@@ -10,19 +10,30 @@
         <css src="mui/mui_legacy.css"/>
         <css src="css/styles-old.css"/>
         <css src="Magento_Theme::prototype/magento.css"/>
-
-        <css src="css/styles-migration.css"/> <!--New styles scope -->
+        <css src="css/styles-migration.css"/> <!-- New styles scope -->
     </head>
 
     <body>
+
         <referenceContainer name="page.wrapper">
-            <container name="menu.wrapper.scope" htmlClass="admin__scope" before="-" htmlTag="div">
-                <container name="menu.wrapper" htmlClass="menu-wrapper" before="-" htmlTag="div"/>
+            <container name="header.wrapper.scope" before="-" htmlTag="div" htmlClass="admin__scope"/>
+            <container name="menu.wrapper.scope" before="-" htmlTag="div" htmlClass="admin__scope">
+                <container name="menu.wrapper" before="-" htmlTag="div" htmlClass="menu-wrapper"/>
             </container>
         </referenceContainer>
 
+        <referenceContainer name="header" htmlClass="page-header row">
+            <container name="header.inner.left" before="-" htmlTag="div" htmlClass="col-m-8"/>
+            <container name="header.inner.right" after="header.inner.left" htmlTag="div" htmlClass="col-m-4"/>
+        </referenceContainer>
+
         <move element="page.menu" destination="menu.wrapper" />
+        <move element="header" destination="header.wrapper.scope" />
         <move element="logo" before="-" destination="menu.wrapper" />
+        <move element="page-title" before="-" destination="header.inner.left" />
+        <move element="user" before="-" destination="header.inner.right" />
+        <move element="global.search" destination="header.inner.right" />
+        <move element="notification.messages" after="global.search" destination="header.inner.right" />
 
     </body>
 </page>

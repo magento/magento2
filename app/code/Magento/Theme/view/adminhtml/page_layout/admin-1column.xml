@@ -12,10 +12,8 @@
             <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
                 <container name="notification.window" as="notification_window" before="-"/>
                 <container name="global.notices" as="global_notices" after="notification.window"/>
-                <container name="page.header.wrapper" as="page_header_wrapper" after="global.notices" htmlTag="div" htmlClass="page-header-wrapper">
-                    <container name="header" htmlTag="header" htmlClass="page-header"/>
-                </container>
-                <container name="page.menu" as="page.menu" after="page.header.wrapper"/>
+                <container name="header" after="global.notices" htmlTag="header" htmlClass="page-header"/>
+                <container name="page.menu" as="page.menu" after="header"/>
                 <container name="notifications" as="notifications" after="page.menu"/>
                 <container name="page.breadcrumbs" after="notifications" as="page.breadcrumbs"/>
 
