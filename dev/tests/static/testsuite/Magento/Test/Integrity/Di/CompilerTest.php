@@ -208,19 +208,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $replacements = ['', '', ''];
 
         /** Convert file names into class name format */
-        $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
         $classes = [];
         foreach ($files as $file) {
             $file = str_replace($basePath . '/', '', $file);
-            if (!in_array($file, $blackList)) {
-                $file = str_replace('/', '\\', $file);
-                $filePath = preg_replace($patterns, $replacements, $file);
-                $className = substr($filePath, 0, -4);
-                $phpClassFile = !preg_match('/\\\\[A-Za-z0-9_]*\\\\[A-Za-z0-9_]*\\\\(data|sql)\\\\.*/', $className);
-                if ($phpClassFile && class_exists($className)) {
-                    $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
-                    $classes[$file] = $className;
-                }
+            $file = str_replace('/', '\\', $file);
+            $filePath = preg_replace($patterns, $replacements, $file);
+            $className = substr($filePath, 0, -4);
+            if (class_exists($className)) {
+                $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
+                $classes[$file] = $className;
             }
         }
 

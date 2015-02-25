@@ -35,13 +35,7 @@ class DbRuleTest extends \PHPUnit_Framework_TestCase
             ['any', 'non-resource-file-path.php', 'any', []],
             [
                 'any',
-                '/app/some/path/sql/some-file.php',
-                '$install->getTableName("unknown_table")',
-                [['module' => 'Unknown', 'source' => 'unknown_table']]
-            ],
-            [
-                'any',
-                '/app/some/path/data/some-file.php',
+                '/app/some/path/Setup/some-file.php',
                 '$install->getTableName("unknown_table")',
                 [['module' => 'Unknown', 'source' => 'unknown_table']]
             ],
