@@ -10,6 +10,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Model\AttributeMetadataConverter;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Api\Config\MetadataConfig;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -24,6 +25,11 @@ class AddressMetadata implements AddressMetadataInterface
     private $addressDataObjectMethods;
 
     /**
+     * @var MetadataConfig
+     */
+    private $metadataConfig;
+
+    /**
      * @var AttributeMetadataConverter
      */
     private $attributeMetadataConverter;
@@ -34,13 +40,16 @@ class AddressMetadata implements AddressMetadataInterface
     private $attributeMetadataDataProvider;
 
     /**
+     * @param MetadataConfig $metadataConfig
      * @param AttributeMetadataConverter $attributeMetadataConverter
      * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
      */
     public function __construct(
+        MetadataConfig $metadataConfig,
         AttributeMetadataConverter $attributeMetadataConverter,
         AttributeMetadataDataProvider $attributeMetadataDataProvider
     ) {
+        $this->metadataConfig = $metadataConfig;
         $this->attributeMetadataConverter = $attributeMetadataConverter;
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
     }
@@ -118,6 +127,7 @@ class AddressMetadata implements AddressMetadataInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = AddressMetadataInterface::DATA_INTERFACE_NAME)
     {
+        $customAttributes = [];
         if (!$this->addressDataObjectMethods) {
             $dataObjectMethods = array_flip(get_class_methods($dataObjectClassName));
             $baseClassDataObjectMethods = array_flip(
@@ -125,7 +135,6 @@ class AddressMetadata implements AddressMetadataInterface
             );
             $this->addressDataObjectMethods = array_diff_key($dataObjectMethods, $baseClassDataObjectMethods);
         }
-        $customAttributes = [];
         foreach ($this->getAllAttributesMetadata() as $attributeMetadata) {
             $attributeCode = $attributeMetadata->getAttributeCode();
             $camelCaseKey = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($attributeCode);
@@ -136,6 +145,6 @@ class AddressMetadata implements AddressMetadataInterface
                 $customAttributes[] = $attributeMetadata;
             }
         }
-        return $customAttributes;
+        return array_merge($customAttributes, $this->metadataConfig->getCustomAttributesMetadata($dataObjectClassName));
     }
 }

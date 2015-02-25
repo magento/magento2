@@ -25,15 +25,18 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     protected $eavAttributeRepository;
 
     /**
+     * @param \Magento\Framework\Api\Config\MetadataConfig $metadataConfig
      * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
      */
     public function __construct(
+        \Magento\Framework\Api\Config\MetadataConfig $metadataConfig,
         \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
     ) {
+        $this->metadataConfig = $metadataConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->eavAttributeRepository = $eavAttributeRepository;
@@ -63,7 +66,6 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
@@ -76,6 +78,12 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
             ]
         );
 
-        return $this->getList($searchCriteria->create())->getItems();
+        $customAttributes = [];
+        $entityAttributes = $this->getList($searchCriteria->create())->getItems();
+
+        foreach ($entityAttributes as $attributeMetadata) {
+            $customAttributes[] = $attributeMetadata;
+        }
+        return array_merge($customAttributes, $this->metadataConfig->getCustomAttributesMetadata($dataObjectClassName));
     }
 }

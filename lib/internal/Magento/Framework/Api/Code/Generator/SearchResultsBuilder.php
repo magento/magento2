@@ -54,7 +54,7 @@ class SearchResultsBuilder extends EntityAbstract
                 ],
                 [
                     'name' => 'metadataService',
-                    'type' => '\\Magento\Framework\Api\DefaultMetadataService'
+                    'type' => '\\Magento\Framework\Api\Config\MetadataConfig'
                 ],
                 [
                     'name' => 'searchCriteriaBuilder',
