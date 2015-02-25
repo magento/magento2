@@ -101,7 +101,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
                 $this->_addUserToRole($nRuid, $role->getId());
             }
             $this->messageManager->addSuccess(__('You saved the role.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while saving this role.'));
