@@ -18,8 +18,6 @@
 
 @page-content__padding-horizontal: @content__indent;
 
-//
-
 body {
     background-color: @body__background-color;
 }
@@ -32,4 +30,20 @@ body {
 .page-content {
     padding-left: @page-content__padding-horizontal;
     padding-right: @page-content__padding-horizontal;
+}
+
+button {
+    &:extend(.abs-action all);
+
+    &.primary {
+        &:extend(.abs-action-primary all);
+    }
+
+    &.secondary {
+        &:extend(.abs-action-secondary all);
+    }
+
+    &.tertiary  {
+        &:extend(.abs-action-tertiary all);
+    }
 }

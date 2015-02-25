@@ -24,6 +24,26 @@
 //  Buttons
 //  ---------------------------------------------
 
+.abs-action {
+    .action();
+}
+
+.abs-action-primary {
+    .action-primary();
+}
+
+.abs-action-secondary {
+    .action-secondary();
+}
+
+.abs-action-big {
+    .action-size();
+}
+
+.abs-action-tertiary {
+    .action-tertiary();
+}
+
 .abs-btn-reset {
     background-color: transparent;
     border: none;
@@ -31,22 +51,6 @@
     padding: 0;
     &:hover {
         box-shadow: none;
-    }
-}
-
-button {
-    &:extend(.action all);
-
-    &.primary {
-        &:extend(.action-primary all);
-    }
-
-    &.secondary {
-        &:extend(.action-secondary all);
-    }
-
-    &.tertiary  {
-        &:extend(.action-tertiary all);
     }
 }
 
