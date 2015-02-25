@@ -595,7 +595,7 @@ class Installer
      */
     public function installSchema()
     {
-        $setup = $this->getObjectManager()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
         $this->setupModuleRegistry($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
@@ -609,7 +609,7 @@ class Installer
      */
     public function installDataFixtures()
     {
-        $setup = $this->getObjectManager()->create('Magento\Setup\Module\DataSetup');
+        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\DataSetup');
         $this->checkInstallationFilePermissions();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
@@ -724,7 +724,8 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->objectManagerProvider->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup',
+            ['resource' => $this->resource]);
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -767,7 +768,8 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->objectManagerProvider->create('Magento\Setup\Module\Setup', ['resource' => $this->resource]);
+        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup',
+            ['resource' => $this->resource]);
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
     }
@@ -1015,7 +1017,7 @@ class Installer
                         && $className !== self::SCHEMA_INSTALL) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
                     } else {
-                        return $this->objectManagerProvider->create($className);
+                        return $this->objectManagerProvider->get()->create($className);
                     }
                 }
                 break;
@@ -1027,7 +1029,7 @@ class Installer
                     ) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_UPGRADE);
                     } else {
-                        return $this->objectManagerProvider->create($className);
+                        return $this->objectManagerProvider->get()->create($className);
                     }
                 }
                 break;
@@ -1038,7 +1040,7 @@ class Installer
                         && $className !== self::SCHEMA_INSTALL) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
                     } else {
-                        return $this->objectManagerProvider->create($className);
+                        return $this->objectManagerProvider->get()->create($className);
                     }
                 }
                 break;
@@ -1050,7 +1052,7 @@ class Installer
                     ) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_INSTALL);
                     } else {
-                        return $this->objectManagerProvider->create($className);
+                        return $this->objectManagerProvider->get()->create($className);
                     }
                 }
                 break;
@@ -1062,7 +1064,7 @@ class Installer
                     ) {
                         throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_UPGRADE);
                     } else {
-                        return $this->objectManagerProvider->create($className);
+                        return $this->objectManagerProvider->get()->create($className);
                     }
                 }
                 break;
