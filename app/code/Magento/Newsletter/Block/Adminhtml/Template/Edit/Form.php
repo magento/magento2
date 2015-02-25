@@ -58,15 +58,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $model = $this->getModel();
         $identity = $this->_scopeConfig->getValue(
             \Magento\Newsletter\Model\Subscriber::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $identityName = $this->_scopeConfig->getValue(
             'trans_email/ident_' . $identity . '/name',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $identityEmail = $this->_scopeConfig->getValue(
             'trans_email/ident_' . $identity . '/email',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         /** @var \Magento\Framework\Data\Form $form */

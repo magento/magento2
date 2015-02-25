@@ -4,7 +4,7 @@
 //  */
 
 //  # Utilities
-//  <code>utilities.less</code> is a reuseable collection of basic Less mixins.
+//  <code>_utilities.less</code> is a reuseable collection of basic Less mixins.
 //
 // # .clearfix()
 //
@@ -126,8 +126,8 @@
 //
 
 .example-css-container {
-    .css(padding, @indent-base);
-    .css(background, @color-secondary);
+    .css(padding, @indent__base);
+    .css(background, @secondary__color);
 }
 
 //
@@ -248,13 +248,13 @@
 //        </tr>
 //        <tr>
 //            <th>@_input-placeholder-color</th>
-//            <td class="vars_value">@form-element-input-placeholder-color</td>
+//            <td class="vars_value">@form-element-input-placeholder__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Input placeholder color</td>
 //        </tr>
 //        <tr>
 //            <th>@_input-placeholder-font-weight</th>
-//            <td class="vars_value">@form-element-input-font-weight</td>
+//            <td class="vars_value">@form-element-input__font-weight</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Input placeholder font-weight</td>
 //        </tr>
@@ -270,8 +270,8 @@
     .background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: vertical,
-        @_background-gradient-start-color: #cff,
-        @_background-gradient-end-color: #ccf
+        @_background-gradient-color-start: #cff,
+        @_background-gradient-color-end: #ccf
     );
 }
 
@@ -279,24 +279,49 @@
     .background-gradient(
         @_background-gradient: true,
         @_background-gradient-direction: horizontal,
-        @_background-gradient-start-color: #cff,
-        @_background-gradient-end-color: #ccf
+        @_background-gradient-color-start: #cff,
+        @_background-gradient-color-end: #ccf
+    );
+}
+
+.example-background-gradient-3-wrapper {
+    background: #ffc;
+    padding: 10px;
+}
+
+.example-background-gradient-3 {
+    .background-gradient(
+        @_background-gradient: true,
+        @_background-gradient-direction: horizontal,
+        @_background-gradient-color-start: rgba(255,255,255,0),
+        @_background-gradient-color-end: #ccf,
+        @_background-gradient-color-position: false
     );
 }
 
 //
 //  ```
-// <div class="example-background-gradient-1">
-//      Hey! I`m gradient with vertical direction!
-//</div>
+//  <div class="example-background-gradient-1">
+//      I`m gradient with vertical direction
+//  </div>
 //  ```
 //
 
 //
 //  ```
-// <div class="example-background-gradient-2">
-//      Hey! I`m gradient with horizontal direction!
-//</div>
+//  <div class="example-background-gradient-2">
+//      I`m gradient with horizontal direction
+//  </div>
+//  ```
+//
+
+//
+//  ```
+//  <div class="example-background-gradient-3-wrapper">
+//  <div class="example-background-gradient-3">
+//      I`m gradient with horizontal direction from transparent to a color
+//  </div>
+//  </div>
 //  ```
 //
 
@@ -306,7 +331,7 @@
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Default value </th>
+//            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
@@ -323,16 +348,22 @@
 //            <td>Gradient direction (horizontal or vertical)</td>
 //        </tr>
 //        <tr>
-//            <th>@_background-gradient-start-color</th>
+//            <th>@_background-gradient-color-start</th>
 //            <td class="vars_value">''</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Gradient start color (any css color)</td>
 //        </tr>
 //        <tr>
-//            <th>@_background-gradient-end-color</th>
+//            <th>@_background-gradient-color-end</th>
 //            <td class="vars_value">''</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Gradient end color (any css color) </td>
+//        </tr>
+//        <tr>
+//            <th>@_background-gradient-color-position</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | true</td>
+//            <td>Sets the background-color fallback property. When set to 'false', the background-color property will be set to @_background-gradient-color-end. When set to 'true', the background-color property will be set to @_background-gradient-color-start</td>
 //        </tr>
 //    </table>
 //  </pre>

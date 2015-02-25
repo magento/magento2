@@ -36,8 +36,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testCssMinifierLibrary()
     {
-        /** @var \Magento\Core\Model\Asset\Config $config */
-        $config = $this->objectManager->get('\Magento\Core\Model\Asset\Config');
+        /** @var \Magento\Framework\View\Asset\Config $config */
+        $config = $this->objectManager->get('Magento\Framework\View\Asset\Config');
         $adapterClass = $config->getAssetMinificationAdapter('css');
 
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
@@ -216,6 +216,10 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $filesUtil = $this->getMock('\Magento\Framework\Test\Utility\Files', [], [], '', false);
         $filesUtil->expects($this->any())
             ->method('getStaticLibraryFiles')
+            ->will($this->returnValue([]));
+
+        $filesUtil->expects($this->any())
+            ->method('getPhtmlFiles')
             ->will($this->returnValue([]));
 
         $filesUtil->expects($this->any())

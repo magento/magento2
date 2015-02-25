@@ -47,7 +47,7 @@ if ($rulesCollection->count() == 0) {
     $this->createRules()->setData(
         [
             'role_id' => $admGroupRole->getId(),
-            'resource_id' => 'Magento_Adminhtml::all',
+            'resource_id' => 'Magento_Backend::all',
             'privileges' => null,
             'permission' => 'allow',
         ]
@@ -55,6 +55,6 @@ if ($rulesCollection->count() == 0) {
 } else {
     /** @var \Magento\Authorization\Model\Rules $rule */
     foreach ($rulesCollection as $rule) {
-        $rule->setData('resource_id', 'Magento_Adminhtml::all')->save();
+        $rule->setData('resource_id', 'Magento_Backend::all')->save();
     }
 }

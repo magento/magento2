@@ -154,7 +154,7 @@ HTML;
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -162,7 +162,7 @@ HTML;
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

@@ -81,7 +81,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $filteredData = $metadataForm->extractData($request, $scope);
 
-        $object = $this->_objectFactory->create(['data' => $request->getPost()]);
+        $object = $this->_objectFactory->create(['data' => $request->getPostValue()]);
         $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
             $filteredData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
@@ -178,7 +178,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $returnToEdit = false;
         $customerId = (int)$this->getRequest()->getParam('id');
-        $originalRequestData = $this->getRequest()->getPost();
+        $originalRequestData = $this->getRequest()->getPostValue();
         if ($originalRequestData) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules
@@ -186,7 +186,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $addressesData = $this->_extractCustomerAddressData($customerData);
                 $request = $this->getRequest();
                 $isExistingCustomer = (bool)$customerId;
-                $customerBuilder = $this->customerDataBuilder;
+                $customer = $this->customerDataFactory->create();
                 if ($isExistingCustomer) {
                     $savedCustomerData = $this->_customerRepository->getById($customerId);
                     $customerData = array_merge(
@@ -196,7 +196,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customerData['id'] = $customerId;
                 }
 
-                $customerBuilder->populateWithArray($customerData);
+                $this->dataObjectHelper->populateWithArray($customer, $customerData);
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
                     $region = isset($addressData['region']) ? $addressData['region'] : null;
@@ -205,15 +205,16 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                         'region' => $region,
                         'region_id' => $regionId,
                     ];
-                    $addresses[] = $this->addressDataBuilder->populateWithArray($addressData)->create();
+                    $addressDataObject = $this->addressDataFactory->create();
+                    $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+                    $addresses[] = $addressDataObject;
                 }
 
                 $this->_eventManager->dispatch(
                     'adminhtml_customer_prepare_save',
-                    ['customer' => $customerBuilder, 'request' => $request]
+                    ['customer' => $customer, 'request' => $request]
                 );
-                $customerBuilder->setAddresses($addresses);
-                $customer = $customerBuilder->create();
+                $customer->setAddresses($addresses);
 
                 // Save customer
                 if ($isExistingCustomer) {

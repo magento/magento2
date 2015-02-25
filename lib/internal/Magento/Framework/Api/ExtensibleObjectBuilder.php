@@ -13,9 +13,9 @@ namespace Magento\Framework\Api;
 class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements BuilderInterface
 {
     /**
-     * @var AttributeDataBuilder
+     * @var \Magento\Framework\Api\AttributeValueFactory
      */
-    protected $attributeValueBuilder;
+    protected $attributeValueFactory;
 
     /**
      * @var MetadataServiceInterface
@@ -34,20 +34,36 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
 
     /**
      * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeDataBuilder $valueBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory $valueFactory
      * @param MetadataServiceInterface $metadataService
      * @param string|null $modelClassInterface
      */
     public function __construct(
         \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeDataBuilder $valueBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $valueFactory,
         MetadataServiceInterface $metadataService,
         $modelClassInterface = null
     ) {
-        $this->attributeValueBuilder = $valueBuilder;
+        $this->attributeValueFactory = $valueFactory;
         $this->metadataService = $metadataService;
         $this->modelClassInterface = $modelClassInterface;
         parent::__construct($objectFactory);
+    }
+
+    /**
+     * Builds the Data Object
+     *
+     * @return AbstractExtensibleObject
+     */
+    public function create()
+    {
+        $dataObjectType = $this->_getDataObjectType();
+        $dataObject = $this->objectFactory->create(
+            $dataObjectType,
+            ['attributeValueFactory' => $this->attributeValueFactory, 'data' => $this->getData()]
+        );
+        $this->data = [];
+        return $dataObject;
     }
 
     /**
@@ -76,10 +92,9 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
         $customAttributesCodes = $this->getCustomAttributesCodes();
         /* If key corresponds to custom attribute code, populate custom attributes */
         if (in_array($attributeCode, $customAttributesCodes)) {
-            $attribute = $this->attributeValueBuilder
+            $attribute = $this->attributeValueFactory->create()
                 ->setAttributeCode($attributeCode)
-                ->setValue($attributeValue)
-                ->create();
+                ->setValue($attributeValue);
             $this->data[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY][$attributeCode] = $attribute;
         }
         return $this;

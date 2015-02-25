@@ -26,6 +26,14 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getClassId();
 
     /**
+     * Set tax class ID.
+     *
+     * @param int $classId
+     * @return $this
+     */
+    public function setClassId($classId);
+
+    /**
      * Get tax class name.
      *
      * @return string
@@ -33,9 +41,25 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getClassName();
 
     /**
+     * Set tax class name.
+     *
+     * @param string $className
+     * @return $this
+     */
+    public function setClassName($className);
+
+    /**
      * Get tax class type.
      *
      * @return string
      */
     public function getClassType();
+
+    /**
+     * Set tax class type.
+     *
+     * @param string $classType
+     * @return $this
+     */
+    public function setClassType($classType);
 }

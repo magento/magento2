@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sales/order/view">
-    <blocks>
-        <giftOptionsBlock>
-            <class>Magento\GiftMessage\Test\Block\Adminhtml\Order\View\GiftOptions</class>
-            <locator>.order-gift-options</locator>
-            <strategy>css selector</strategy>
-        </giftOptionsBlock>
-        <giftItemsBlock>
-            <class>Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Items</class>
-            <locator>#sales_order_view_tabs_order_info_content .grid</locator>
-            <strategy>css selector</strategy>
-        </giftItemsBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="SalesOrderView" area="Adminhtml" mca="sales/order/view">
+    <block name="giftOptionsBlock" class="Magento\GiftMessage\Test\Block\Adminhtml\Order\View\GiftOptions" locator=".order-gift-options" strategy="css selector"/>
+    <block name="giftItemsBlock" class="Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Items" locator="#sales_order_view_tabs_order_info_content .grid" strategy="css selector"/>
+  </page>
+</config>

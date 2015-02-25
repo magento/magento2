@@ -29,6 +29,14 @@ interface RegionInterface extends ExtensibleDataInterface
     public function getRegionCode();
 
     /**
+     * Set region code
+     *
+     * @param string $regionCode
+     * @return $this
+     */
+    public function setRegionCode($regionCode);
+
+    /**
      * Get region
      *
      * @return string
@@ -36,9 +44,25 @@ interface RegionInterface extends ExtensibleDataInterface
     public function getRegion();
 
     /**
+     * Set region
+     *
+     * @param string $region
+     * @return $this
+     */
+    public function setRegion($region);
+
+    /**
      * Get region id
      *
      * @return int
      */
     public function getRegionId();
+
+    /**
+     * Set region id
+     *
+     * @param int $regionId
+     * @return $this
+     */
+    public function setRegionId($regionId);
 }

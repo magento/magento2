@@ -44,7 +44,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Column::__construct
+     * covers \Magento\Framework\Data\Form\Element\Column::__construct
      */
     public function testConstruct()
     {

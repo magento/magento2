@@ -38,9 +38,9 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     protected $groupFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\GroupDataBuilder
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
-    protected $groupBuilder;
+    protected $groupDataFactory;
 
     /**
      * @var \Magento\Customer\Model\Resource\Group
@@ -65,7 +65,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * @param \Magento\Customer\Model\GroupRegistry $groupRegistry
      * @param \Magento\Customer\Model\GroupFactory $groupFactory
-     * @param \Magento\Customer\Api\Data\GroupDataBuilder $groupBuilder
+     * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
      * @param \Magento\Customer\Model\Resource\Group $groupResourceModel
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder $searchResultsBuilder
@@ -74,7 +74,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     public function __construct(
         \Magento\Customer\Model\GroupRegistry $groupRegistry,
         \Magento\Customer\Model\GroupFactory $groupFactory,
-        \Magento\Customer\Api\Data\GroupDataBuilder $groupBuilder,
+        \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory,
         \Magento\Customer\Model\Resource\Group $groupResourceModel,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder $searchResultsBuilder,
@@ -82,7 +82,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     ) {
         $this->groupRegistry = $groupRegistry;
         $this->groupFactory = $groupFactory;
-        $this->groupBuilder = $groupBuilder;
+        $this->groupDataFactory = $groupDataFactory;
         $this->groupResourceModel = $groupResourceModel;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->searchResultsBuilder = $searchResultsBuilder;
@@ -124,7 +124,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
              * Would like a better way to determine this error condition but
              *  difficult to do without imposing more database calls
              */
-            if ($e->getMessage() === __('Customer Group already exists.')) {
+            if ($e->getMessage() == (string)__('Customer Group already exists.')) {
                 throw new InvalidTransitionException('Customer Group already exists.');
             }
             throw $e;
@@ -132,11 +132,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         $this->groupRegistry->remove($groupModel->getId());
 
-        $this->groupBuilder->setId($groupModel->getId());
-        $this->groupBuilder->setCode($groupModel->getCode());
-        $this->groupBuilder->setTaxClassId($groupModel->getTaxClassId());
-        $this->groupBuilder->setTaxClassName($groupModel->getTaxClassName());
-        return $this->groupBuilder->create();
+        $groupDataObject = $this->groupDataFactory->create()
+            ->setId($groupModel->getId())
+            ->setCode($groupModel->getCode())
+            ->setTaxClassId($groupModel->getTaxClassId())
+            ->setTaxClassName($groupModel->getTaxClassName());
+        return $groupDataObject;
     }
 
     /**
@@ -145,11 +146,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     public function getById($id)
     {
         $groupModel = $this->groupRegistry->retrieve($id);
-        return $this->groupBuilder->setId($groupModel->getId())
+        $groupDataObject = $this->groupDataFactory->create()
+            ->setId($groupModel->getId())
             ->setCode($groupModel->getCode())
             ->setTaxClassId($groupModel->getTaxClassId())
-            ->setTaxClassName($groupModel->getTaxClassName())
-            ->create();
+            ->setTaxClassName($groupModel->getTaxClassName());
+        return $groupDataObject;
     }
 
     /**
@@ -186,11 +188,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $groups = [];
         /** @var \Magento\Customer\Model\Group $group */
         foreach ($collection as $group) {
-            $this->groupBuilder->setId($group->getId());
-            $this->groupBuilder->setCode($group->getCode());
-            $this->groupBuilder->setTaxClassId($group->getTaxClassId());
-            $this->groupBuilder->setTaxClassName($group->getTaxClassName());
-            $groups[] = $this->groupBuilder->create();
+            $groupDataObject = $this->groupDataFactory->create()
+                ->setId($group->getId())
+                ->setCode($group->getCode())
+                ->setTaxClassId($group->getTaxClassId())
+                ->setTaxClassName($group->getTaxClassName());
+            $groups[] = $groupDataObject;
         }
         return $this->searchResultsBuilder->setItems($groups)->create();
     }

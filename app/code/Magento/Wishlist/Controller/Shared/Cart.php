@@ -14,7 +14,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      * If Product has required options - redirect
      * to product view page with message about needed defined required options
      *
-     * @return \Zend_Controller_Response_Abstract
+     * @return \Magento\Framework\App\Response\Http
      */
     public function execute()
     {

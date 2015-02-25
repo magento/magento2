@@ -9,7 +9,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
@@ -35,7 +35,7 @@ class Group
     /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface  */
+    /** @var StoreManagerInterface  */
     protected $storeManager;
 
     /**

@@ -74,8 +74,8 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method getProductPrice
      *
-     * @covers \Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml
-     * @covers \Magento\Catalog\Block\Product\AbstractProduct::getProductPrice
+     * covers \Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml
+     * covers \Magento\Catalog\Block\Product\AbstractProduct::getProductPrice
      */
     public function testGetProductPrice()
     {

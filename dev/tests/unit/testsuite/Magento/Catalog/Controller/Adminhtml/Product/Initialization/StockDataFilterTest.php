@@ -49,7 +49,7 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
      * @param array $inputStockData
      * @param array $outputStockData
      *
-     * @covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::filter
+     * covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::filter
      * @dataProvider filterDataProvider
      */
     public function testFilter(array $inputStockData, array $outputStockData)

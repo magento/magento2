@@ -34,9 +34,25 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     public function getType();
 
     /**
+     * Set type of tax class key
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type);
+
+    /**
      * Get value of tax class key
      *
      * @return string
      */
     public function getValue();
+
+    /**
+     * Set value of tax class key
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value);
 }

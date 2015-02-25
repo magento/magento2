@@ -86,7 +86,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
     /**
      * Return Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -109,7 +109,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
     /**
      * Get note string for js file to Upload
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getUploadJsFileNote()
     {

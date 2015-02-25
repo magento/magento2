@@ -9,10 +9,27 @@ namespace Magento\Checkout\Controller\Index;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @return void
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        $this->_redirect('checkout/onepage', ['_secure' => true]);
+        return $this->resultRedirectFactory->create()->setPath('checkout/onepage', ['_secure' => true]);
     }
 }

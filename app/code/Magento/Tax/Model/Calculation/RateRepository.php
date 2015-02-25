@@ -33,13 +33,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $converter;
 
     /**
-     * Tax rate data object builder
-     *
-     * @var  \Magento\Tax\Api\Data\TaxRateDataBuilder
-     */
-    protected $rateBuilder;
-
-    /**
      * Tax rate registry
      *
      * @var  RateRegistry
@@ -72,7 +65,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $resourceModel;
 
     /**
-     * @param \Magento\Tax\Api\Data\TaxRateDataBuilder $rateBuilder
      * @param Converter $converter
      * @param RateRegistry $rateRegistry
      * @param \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder
@@ -82,7 +74,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
      */
     public function __construct(
-        \Magento\Tax\Api\Data\TaxRateDataBuilder $rateBuilder,
         Converter $converter,
         RateRegistry $rateRegistry,
         \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder,
@@ -91,7 +82,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         RegionFactory $regionFactory,
         \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
     ) {
-        $this->rateBuilder = $rateBuilder;
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;
         $this->taxRateSearchResultsBuilder = $taxRateSearchResultsBuilder;

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteProductAttributeEntityTest">
+    <variation name="DeleteProductAttributeEntityTestVariation1" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
+      <data name="attribute/dataSet" xsi:type="string">attribute_type_text_field</data>
+      <data name="isRequired" xsi:type="string">Yes</data>
+      <constraint name="assertProductAttributeSuccessDeleteMessage" next="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceInGrid" next="assertProductAttributeAbsenceInSearchOnProductForm" prev="assertProductAttributeSuccessDeleteMessage"/>
+      <constraint name="assertProductAttributeAbsenceInSearchOnProductForm" next="assertProductAttributeAbsenceForExport" prev="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceForExport" prev="assertProductAttributeAbsenceInSearchOnProductForm"/>
+    </variation>
+    <variation name="DeleteProductAttributeEntityTestVariation2" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
+      <data name="attribute/dataSet" xsi:type="string">attribute_type_dropdown</data>
+      <data name="isRequired" xsi:type="string">No</data>
+      <constraint name="assertProductAttributeSuccessDeleteMessage" next="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceInGrid" next="assertProductAttributeAbsenceInSearchOnProductForm" prev="assertProductAttributeSuccessDeleteMessage"/>
+      <constraint name="assertProductAttributeAbsenceInSearchOnProductForm" next="assertProductAttributeAbsenceForExport" prev="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceForExport" prev="assertProductAttributeAbsenceInSearchOnProductForm"/>
+    </variation>
+  </testCase>
+</config>

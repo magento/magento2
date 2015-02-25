@@ -42,7 +42,7 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
         $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
 

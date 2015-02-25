@@ -1,2 +1,0 @@
-"urlRewrite/data/target_path/entity";"urlRewrite/data/store_id";"urlRewrite/data/request_path";"urlRewrite/data/redirect_type";"urlRewrite/data/description";"isRequired";"constraint"
-"product/%catalogProductSimple::product_100_dollar%";"Main Website/Main Website Store/Default Store View";"test_%isolation%.html";"Temporary (302)";"description_%isolation%";"Yes";"assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect"

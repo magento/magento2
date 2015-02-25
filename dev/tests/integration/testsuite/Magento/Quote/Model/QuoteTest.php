@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class QuoteTest extends \PHPUnit_Framework_TestCase
@@ -40,10 +40,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
-        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
         $expected = $this->_getCustomerDataArray();
-        $customer = $customerBuilder->populateWithArray($expected)->create();
+        $customer = $customerFactory->create();
+        $dataObjectHelper->populateWithArray($customer, $expected);
 
 
         $this->assertEquals($expected, $this->convertToArray($customer));
@@ -58,12 +61,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
+        $customerFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
         $expected = $this->_getCustomerDataArray();
         //For save in repository
         $expected = $this->removeIdFromCustomerData($expected);
-        $customerBuilder->populateWithArray($expected);
-        $customerDataSet = $customerBuilder->create();
+        $customerDataSet = $customerFactory->create();
+        $dataObjectHelper->populateWithArray($customerDataSet, $expected);
         $this->assertEquals($expected, $this->convertToArray($customerDataSet));
         /**
          * @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
@@ -74,8 +79,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote->setCustomer($customerDataSet);
         $expected = $this->_getCustomerDataArray();
         $expected = $this->changeEmailInCustomerData('test@example.com', $expected);
-        $customerBuilder->populateWithArray($expected);
-        $customerDataUpdated = $customerBuilder->create();
+        $customerDataUpdated = $customerFactory->create();
+        $dataObjectHelper->populateWithArray($customerDataUpdated, $expected);
         $quote->updateCustomerData($customerDataUpdated);
         $customer = $quote->getCustomer();
         $expected = $this->changeEmailInCustomerData('test@example.com', $expected);
@@ -92,10 +97,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerGroupFromCustomer()
     {
         /** Preconditions */
-        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
         $customerGroupId = 3;
-        $customerData = $customerBuilder->setId(1)->setGroupId($customerGroupId)->create();
+        $customerData = $customerFactory->create()->setId(1)->setGroupId($customerGroupId);
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->setCustomer($customerData);

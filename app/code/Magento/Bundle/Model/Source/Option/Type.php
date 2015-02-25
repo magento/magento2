@@ -8,7 +8,7 @@
 
 namespace Magento\Bundle\Model\Source\Option;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\MetadataServiceInterface;
 
 class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -24,7 +24,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param array $options
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -34,7 +34,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         array $options,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -45,7 +45,7 @@ class Type extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

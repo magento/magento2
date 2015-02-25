@@ -36,7 +36,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         // fixture
         /** @var $pageHelper \Magento\Cms\Helper\Page */
         $pageHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Helper\Page');
-        $result = $pageHelper->renderPage(
+        $result = $pageHelper->prepareResultPage(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\Framework\App\Action\Action',
                 ['context' => $context]
@@ -47,6 +47,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\DesignInterface'
         );
         $this->assertEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
-        $this->assertTrue($result);
+        $this->assertInstanceOf('Magento\Framework\View\Result\Page', $result);
     }
 }

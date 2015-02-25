@@ -19,7 +19,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Sendfriend\Model\Sendfriend $sendFriend
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
@@ -27,7 +27,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Sendfriend\Model\Sendfriend $sendFriend,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
@@ -50,7 +50,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
         }
 
         $product = $this->_initProduct();
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
 
         if (!$product || !$data) {
             $this->_forward('noroute');

@@ -1,0 +1,5 @@
+<?php
+
+$obj1->___toString('Irrelevant string');
+$obj2->__('Some string');
+$obj3->__('One more string');

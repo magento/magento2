@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Gift Message model
@@ -31,7 +31,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param Resource\Message $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param TypeFactory $typeFactory
@@ -41,7 +41,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\GiftMessage\Model\Resource\Message $resource,
         \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
@@ -52,7 +52,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

@@ -16,9 +16,12 @@ class DirectoryScanner
      */
     public function scan($dir, array $patterns = [])
     {
+        $recursiveIterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::FOLLOW_SYMLINKS)
+        );
         $output = [];
-        /** @var $file \DirectoryIterator */
-        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir)) as $file) {
+        foreach ($recursiveIterator as $file) {
+            /** @var $file \SplFileInfo */
             if ($file->isDir()) {
                 continue;
             }

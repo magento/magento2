@@ -28,4 +28,26 @@ class ValidationResults extends \Magento\Framework\Api\AbstractExtensibleObject 
     {
         return $this->_get(self::MESSAGES);
     }
+
+    /**
+     * Set if the provided data is valid.
+     *
+     * @param bool $isValid
+     * @return $this
+     */
+    public function setIsValid($isValid)
+    {
+        return $this->setData(self::VALID, $isValid);
+    }
+
+    /**
+     * Set error messages as array in case of validation failure.
+     *
+     * @param string[] $messages
+     * @return string[]
+     */
+    public function setMessages(array $messages)
+    {
+        return $this->setData(self::MESSAGES, $messages);
+    }
 }

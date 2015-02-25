@@ -20,7 +20,7 @@ class CollectionProvider implements CollectionProviderInterface
     protected $objectManager;
 
     /**
-     * Magetno resource instance.
+     * Magento resource instance.
      *
      * @var \Magento\Framework\App\Resource
      */
@@ -62,7 +62,7 @@ class CollectionProvider implements CollectionProviderInterface
     {
         $type = $fixture['type'];
         $method = $type . 'Collection';
-        if (!method_exists($this, $method)) {
+        if (!method_exists($this, $method) || empty($fixture['collection'])) {
             return [];
         }
 

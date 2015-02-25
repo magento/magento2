@@ -87,28 +87,26 @@ ORDER_DATA_JSON;
 
     private function setUpMockAddress()
     {
-        $regionBuilder1 = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
-        $regionBuilder2 = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
+        /** @var \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory */
+        $regionFactory = $this->_objectManager->create('Magento\Customer\Api\Data\RegionInterfaceFactory');
 
-        /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
+        /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
+        $addressFactory = $this->_objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
 
-        $addressData1 = $addressBuilder->setCountryId(
+        $addressData1 = $addressFactory->create()->setCountryId(
             'US'
         )->setCustomerId(
             1
-        )->setDefaultBilling(
+        )->setIsDefaultBilling(
             true
-        )->setDefaultShipping(
+        )->setIsDefaultShipping(
             true
         )->setPostcode(
             '75477'
         )->setRegion(
-            $regionBuilder1->populateWithArray(
-                ['region_code' => 'AL', 'region' => 'Alabama', 'region_id' => 1]
-            )->create()
+            $regionFactory->create()->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)
         )->setStreet(
             ['Green str, 67']
         )->setTelephone(
@@ -119,22 +117,20 @@ ORDER_DATA_JSON;
             'John'
         )->setLastname(
             'Smith'
-        )->create();
+        );
 
-        $addressData2 = $addressBuilder->setCountryId(
+        $addressData2 = $addressFactory->create()->setCountryId(
             'US'
         )->setCustomerId(
             1
-        )->setDefaultBilling(
+        )->setIsDefaultBilling(
             false
-        )->setDefaultShipping(
+        )->setIsDefaultShipping(
             false
         )->setPostcode(
             '47676'
         )->setRegion(
-            $regionBuilder2->populateWithArray(
-                ['region_code' => 'AL', 'region' => 'Alabama', 'region_id' => 1]
-            )->create()
+            $regionFactory->create()->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)
         )->setStreet(
             ['Black str, 48']
         )->setCity(
@@ -145,7 +141,7 @@ ORDER_DATA_JSON;
             'John'
         )->setLastname(
             'Smith'
-        )->create();
+        );
 
         $savedAddress1 = $addressRepository->save($addressData1);
         $savedAddress2 = $addressRepository->save($addressData2);

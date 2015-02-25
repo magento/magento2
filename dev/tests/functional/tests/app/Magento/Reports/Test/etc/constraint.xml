@@ -1,84 +1,34 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertSearchTermsInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertSearchTermsInGrid>
-    <assertSearchTermReportForm module="Magento_Reports">
-        <severity>low</severity>
-    </assertSearchTermReportForm>
-    <assertLowStockProductInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertLowStockProductInGrid>
-    <assertProductReviewReportIsVisibleInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductReviewReportIsVisibleInGrid>
-    <assertProductReviewIsAvailableForProduct module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductReviewIsAvailableForProduct>
-    <assertNewAccountsReportTotalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertNewAccountsReportTotalResult>
-    <assertProductReviewsQtyByCustomer module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductReviewsQtyByCustomer>
-    <assertProductReportByCustomerInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductReportByCustomerInGrid>
-    <assertProductReportByCustomerNotInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductReportByCustomerNotInGrid>
-    <assertProductViewsReportTotalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductViewsReportTotalResult>
-    <assertProductInCartResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertProductInCartResult>
-    <assertOrderedProductResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertOrderedProductResult>
-    <assertBestsellerReportResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertBestsellerReportResult>
-    <assertCouponReportResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertCouponReportResult>
-    <assertCustomerOrderTotalReportResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertCustomerOrderTotalReportResult>
-    <assertAbandonedCartCustomerInfoResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertAbandonedCartCustomerInfoResult>
-    <assertCustomerOrderCountReportResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertCustomerOrderCountReportResult>
-    <assertTaxReportInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertTaxReportInGrid>
-    <assertTaxReportNotInGrid module="Magento_Reports">
-        <severity>low</severity>
-    </assertTaxReportNotInGrid>
-    <assertDownloadsReportResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertDownloadsReportResult>
-    <assertSalesReportIntervalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertSalesReportIntervalResult>
-    <assertSalesReportTotalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertSalesReportTotalResult>
-    <assertInvoiceReportIntervalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertInvoiceReportIntervalResult>
-    <assertInvoiceReportTotalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertInvoiceReportTotalResult>
-    <assertRefundReportIntervalResult module="Magento_Reports">
-        <severity>low</severity>
-    </assertRefundReportIntervalResult>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertSearchTermsInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertSearchTermReportForm" module="Magento_Reports" severity="low"/>
+    <constraint name="assertLowStockProductInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductReviewReportIsVisibleInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductReviewIsAvailableForProduct" module="Magento_Reports" severity="low"/>
+    <constraint name="assertNewAccountsReportTotalResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductReviewsQtyByCustomer" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductReportByCustomerInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductReportByCustomerNotInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductViewsReportTotalResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertProductInCartResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertOrderedProductResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertBestsellerReportResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertCouponReportResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertCustomerOrderTotalReportResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertAbandonedCartCustomerInfoResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertCustomerOrderCountReportResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertTaxReportInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertTaxReportNotInGrid" module="Magento_Reports" severity="low"/>
+    <constraint name="assertDownloadsReportResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertSalesReportIntervalResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertSalesReportTotalResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertInvoiceReportIntervalResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertInvoiceReportTotalResult" module="Magento_Reports" severity="low"/>
+    <constraint name="assertRefundReportIntervalResult" module="Magento_Reports" severity="low"/>
+</config>

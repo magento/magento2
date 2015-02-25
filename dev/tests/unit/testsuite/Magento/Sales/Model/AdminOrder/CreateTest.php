@@ -26,8 +26,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $formFactoryMock;
 
-    /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerBuilderMock;
+    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerFactoryMock;
 
     /** @var \Magento\Quote\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
     protected $itemUpdater;
@@ -51,9 +51,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     protected $addressRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $addressBuilderMock;
+    protected $addressFactoryMock;
 
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -100,9 +100,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerDataBuilder',
-            ['mergeDataObjectWithArray', 'populateWithArray', 'create'],
+        $this->customerFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -138,8 +138,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->addressBuilderMock = $this->getMock(
-            'Magento\Customer\Api\Data\AddressDataBuilder',
+        $this->addressFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\AddressInterfaceFactory',
             [],
             [],
             '',
@@ -186,9 +186,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'quoteInitializer' => $this->quoteInitializerMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressRepository' => $this->addressRepositoryMock,
-                'addressBuilder' => $this->addressBuilderMock,
+                'addressFactory' => $this->addressFactoryMock,
                 'metadataFormFactory' => $this->formFactoryMock,
-                'customerBuilder' => $this->customerBuilderMock,
+                'customerFactory' => $this->customerFactoryMock,
                 'groupRepository' => $this->groupRepositoryMock,
                 'quoteItemUpdater' => $this->itemUpdater,
                 'customerMapper' => $this->customerMapper,
@@ -257,10 +257,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));
         $this->sessionQuoteMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->customerBuilderMock->expects($this->any())
-            ->method('mergeDataObjectWithArray')
-            ->will($this->returnSelf());
-        $this->customerBuilderMock->expects($this->any())->method('create')->will($this->returnValue($customerMock));
+        $this->customerFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerMock));
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('getById')

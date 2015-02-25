@@ -167,7 +167,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         );
         $storage = $this->getMock('Magento\Framework\Session\Storage', null);
         $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface');
 
@@ -286,7 +286,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsiteId')
             ->will($this->returnValue($websiteId));
 
-        $storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));

@@ -11,7 +11,7 @@ namespace Magento\Framework\File\Transfer\Adapter;
 class Http
 {
     /**
-     * @var \Zend_Controller_Response_Http
+     * @var \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     private $response;
 
@@ -21,10 +21,10 @@ class Http
     private $mime;
 
     /**
-     * @param \Magento\Framework\Controller\Response\Http $response
+     * @param \Magento\Framework\App\Response\Http
      * @param \Magento\Framework\File\Mime $mime
      */
-    public function __construct(\Magento\Framework\Controller\Response\Http $response, \Magento\Framework\File\Mime $mime)
+    public function __construct(\Magento\Framework\HTTP\PhpEnvironment\Response $response, \Magento\Framework\File\Mime $mime)
     {
         $this->response = $response;
         $this->mime = $mime;

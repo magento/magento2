@@ -35,7 +35,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String as StringHelper;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Handle various customer account actions
@@ -95,14 +95,9 @@ class AccountManagement implements AccountManagementInterface
     private $customerFactory;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory
      */
-    private $customerDataBuilder;
-
-    /**
-     * @var \Magento\Customer\Api\Data\ValidationResultsDataBuilder
-     */
-    private $validationResultsDataBuilder;
+    private $validationResultsDataFactory;
 
     /**
      * @var ManagerInterface
@@ -110,7 +105,7 @@ class AccountManagement implements AccountManagementInterface
     private $eventManager;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -218,7 +213,7 @@ class AccountManagement implements AccountManagementInterface
      * @param StoreManagerInterface $storeManager
      * @param Random $mathRandom
      * @param Validator $validator
-     * @param \Magento\Customer\Api\Data\ValidationResultsDataBuilder $validationResultsDataBuilder
+     * @param \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory $validationResultsDataFactory
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerMetadataInterface $customerMetadataService
      * @param CustomerRegistry $customerRegistry
@@ -230,7 +225,6 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerRepositoryInterface $customerRepository
      * @param ScopeConfigInterface $scopeConfig
      * @param TransportBuilder $transportBuilder
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerDataBuilder
      * @param DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Registry $registry
      * @param CustomerViewHelper $customerViewHelper
@@ -247,7 +241,7 @@ class AccountManagement implements AccountManagementInterface
         StoreManagerInterface $storeManager,
         Random $mathRandom,
         Validator $validator,
-        \Magento\Customer\Api\Data\ValidationResultsDataBuilder $validationResultsDataBuilder,
+        \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory $validationResultsDataFactory,
         AddressRepositoryInterface $addressRepository,
         CustomerMetadataInterface $customerMetadataService,
         CustomerRegistry $customerRegistry,
@@ -259,7 +253,6 @@ class AccountManagement implements AccountManagementInterface
         CustomerRepositoryInterface $customerRepository,
         ScopeConfigInterface $scopeConfig,
         TransportBuilder $transportBuilder,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerDataBuilder,
         DataObjectProcessor $dataProcessor,
         \Magento\Framework\Registry $registry,
         CustomerViewHelper $customerViewHelper,
@@ -273,7 +266,7 @@ class AccountManagement implements AccountManagementInterface
         $this->storeManager = $storeManager;
         $this->mathRandom = $mathRandom;
         $this->validator = $validator;
-        $this->validationResultsDataBuilder = $validationResultsDataBuilder;
+        $this->validationResultsDataFactory = $validationResultsDataFactory;
         $this->addressRepository = $addressRepository;
         $this->customerMetadataService = $customerMetadataService;
         $this->customerRegistry = $customerRegistry;
@@ -285,7 +278,6 @@ class AccountManagement implements AccountManagementInterface
         $this->customerRepository = $customerRepository;
         $this->scopeConfig = $scopeConfig;
         $this->transportBuilder = $transportBuilder;
-        $this->customerDataBuilder = $customerDataBuilder;
         $this->dataProcessor = $dataProcessor;
         $this->registry = $registry;
         $this->customerViewHelper = $customerViewHelper;
@@ -354,10 +346,7 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException('Invalid confirmation token');
         }
 
-        $customer = $this->dataProcessor
-            ->buildOutputDataArray($customer, '\Magento\Customer\Api\Data\CustomerInterface');
-
-        $customer = $this->customerDataBuilder->populateWithArray($customer)->setConfirmation(null)->create();
+        $customer->setConfirmation(null);
         $this->customerRepository->save($customer);
         $this->sendNewAccountEmail($customer, 'confirmed', '', $this->storeManager->getStore()->getId());
         return $customer;
@@ -516,9 +505,7 @@ class AccountManagement implements AccountManagementInterface
                 $storeId = $this->storeManager->getStore()->getId();
             }
 
-            $customer = $this->customerDataBuilder->populate($customer)
-                ->setStoreId($storeId)
-                ->create();
+            $customer->setStoreId($storeId);
         }
 
         try {
@@ -690,28 +677,25 @@ class AccountManagement implements AccountManagementInterface
             'customer'
         );
 
+        $validationResults = $this->validationResultsDataFactory->create();
         if ($customerErrors !== true) {
-            return $this->validationResultsDataBuilder
-                ->setValid(false)
-                ->setMessages($this->validator->getMessages())
-                ->create();
+            return $validationResults->setIsValid(false)
+                ->setMessages($this->validator->getMessages());
         }
 
+        $oldAddresses = $customer->getAddresses();
         $customerModel = $this->customerFactory->create()->updateData(
-            $this->customerDataBuilder->populate($customer)->setAddresses([])->create()
+            $customer->setAddresses([])
         );
+        $customer->setAddresses($oldAddresses);
 
         $result = $customerModel->validate();
         if (true !== $result && is_array($result)) {
-            return $this->validationResultsDataBuilder
-                ->setValid(false)
-                ->setMessages($result)
-                ->create();
+            return $validationResults->setIsValid(false)
+                ->setMessages($result);
         }
-        return $this->validationResultsDataBuilder
-            ->setValid(true)
-            ->setMessages([])
-            ->create();
+        return $validationResults->setIsValid(true)
+            ->setMessages([]);
     }
 
     /**
@@ -856,7 +840,7 @@ class AccountManagement implements AccountManagementInterface
         $transport = $this->transportBuilder->setTemplateIdentifier(
             $this->scopeConfig->getValue(
                 self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         )->setTemplateOptions(
@@ -866,7 +850,7 @@ class AccountManagement implements AccountManagementInterface
         )->setFrom(
             $this->scopeConfig->getValue(
                 self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
         )->addTo(
@@ -927,13 +911,13 @@ class AccountManagement implements AccountManagementInterface
     {
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->transportBuilder->setTemplateIdentifier(
-            $this->scopeConfig->getValue($template, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
         )->setFrom(
-            $this->scopeConfig->getValue($sender, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
         )->addTo(
             $customer->getEmail(),
             $this->customerViewHelper->getCustomerName($customer)
@@ -958,7 +942,7 @@ class AccountManagement implements AccountManagementInterface
 
         return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_IS_CONFIRM,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }

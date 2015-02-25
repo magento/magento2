@@ -28,7 +28,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
@@ -44,7 +44,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
@@ -109,5 +109,18 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         }
 
         return $widget->toHtml();
+    }
+
+    /**
+     * Retrieve media file URL directive
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function mediaDirective($construction)
+    {
+        $params = $this->_getIncludeParameters($construction[2]);
+        return $this->_storeManager->getStore()
+            ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 }

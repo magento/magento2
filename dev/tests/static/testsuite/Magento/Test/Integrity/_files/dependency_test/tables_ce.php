@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 return [
-    'admin_assert' => 'Magento_Adminhtml',
+    'admin_assert' => 'Magento_Backend',
     'authorization_role' => 'Magento_Authorization',
     'authorization_rule' => 'Magento_Authorization',
-    'admin_user' => 'Magento_Adminhtml',
+    'admin_user' => 'Magento_Backend',
     'adminnotification_inbox' => 'Magento_AdminNotification',
     'catalog_category_entity_datetime' => 'Magento_Catalog',
     'catalog_category_entity_decimal' => 'Magento_Catalog',
@@ -115,8 +115,6 @@ return [
     'core_email_template' => 'Magento_Core',
     'core_file_storage' => 'Magento_Core',
     'core_flag' => 'Magento_Core',
-    'core_layout_link' => 'Magento_Core',
-    'core_layout_update' => 'Magento_Core',
     'core_resource' => 'Magento_Core',
     'core_variable' => 'Magento_Core',
     'core_variable_value' => 'Magento_Core',
@@ -189,6 +187,8 @@ return [
     'googleshopping_types' => 'Magento_GoogleShopping',
     'importexport_importdata' => 'Magento_ImportExport',
     'integration' => 'Magento_Integration',
+    'layout_link' => 'Magento_Widget',
+    'layout_update' => 'Magento_Widget',
     'log_customer' => 'Magento_Log',
     'log_quote' => 'Magento_Log',
     'log_summary' => 'Magento_Log',

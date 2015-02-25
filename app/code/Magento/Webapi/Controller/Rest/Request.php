@@ -114,7 +114,7 @@ class Request extends \Magento\Webapi\Controller\Request
     public function getBodyParams()
     {
         if (null == $this->_bodyParams) {
-            $this->_bodyParams = (array)$this->_getDeserializer()->deserialize((string)$this->getRawBody());
+            $this->_bodyParams = (array)$this->_getDeserializer()->deserialize((string)$this->getContent());
         }
         return $this->_bodyParams;
     }

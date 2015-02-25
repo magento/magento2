@@ -193,16 +193,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAddresses()
     {
-        /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
-        $addressBuilder->populateWithArray(
-            ['id' => 1, 'street' => ['Street1'], 'firstname' => 'FirstName1', 'lastname' => 'LastName1']
-        );
-        $addressData[] = $addressBuilder->create();
-        $addressBuilder->populateWithArray(
-            ['id' => 2, 'street' => ['Street2'], 'firstname' => 'FirstName2', 'lastname' => 'LastName2']
-        );
-        $addressData[] = $addressBuilder->create();
+        /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
+        $addressFactory = $this->_objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $addressData[] = $addressFactory->create()
+            ->setId(1)
+            ->setStreet(['Street1'])
+            ->setFirstname('FirstName1')
+            ->setLastname('LastName1');
+        $addressData[] = $addressFactory->create()
+            ->setId(2)
+            ->setStreet(['Street2'])
+            ->setFirstname('FirstName2')
+            ->setLastname('LastName2');
         return $addressData;
     }
 }

@@ -253,7 +253,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate widget instance data
      *
-     * @return string|boolean
+     * @return \Magento\Framework\Phrase|bool
      */
     public function validate()
     {

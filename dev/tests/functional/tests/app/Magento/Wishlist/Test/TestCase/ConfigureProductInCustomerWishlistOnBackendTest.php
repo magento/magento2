@@ -6,13 +6,11 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer
  * 2. Create products
@@ -39,12 +37,12 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
     /* end tags */
 
     /**
-     * Prepare data
+     * Create customer.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -52,16 +50,16 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
     }
 
     /**
-     * Configure customer wish list on backend
+     * Configure customer wish list on backend.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $product
      * @param CustomerIndex $customerIndex
      * @param CustomerIndexEdit $customerIndexEdit
      * @return array
      */
     public function test(
-        CustomerInjectable $customer,
+        Customer $customer,
         $product,
         CustomerIndex $customerIndex,
         CustomerIndexEdit $customerIndexEdit

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteAssignedToTemplateProductAttributeTest">
+    <variation name="DeleteAssignedToTemplateProductAttributeTestVariation1" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
+      <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+      <data name="productTemplate/data/assigned_attributes/presets" xsi:type="string">attribute_type_dropdown</data>
+      <constraint name="assertProductAttributeSuccessDeleteMessage" next="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceInGrid" next="assertProductAttributeAbsenceForAttributeMapping" prev="assertProductAttributeSuccessDeleteMessage"/>
+      <constraint name="assertProductAttributeAbsenceForAttributeMapping" next="assertProductAttributeAbsenceInTemplateGroups" prev="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceInTemplateGroups" next="assertProductAttributeAbsenceInUnassignedAttributes" prev="assertProductAttributeAbsenceForAttributeMapping"/>
+      <constraint name="assertProductAttributeAbsenceInUnassignedAttributes" prev="assertProductAttributeAbsenceInTemplateGroups"/>
+    </variation>
+    <variation name="DeleteAssignedToTemplateProductAttributeTestVariation2" firstConstraint="assertProductAttributeSuccessDeleteMessage" method="test">
+      <data name="productTemplate/dataSet" xsi:type="string">default</data>
+      <data name="productTemplate/data/assigned_attributes/presets" xsi:type="string">attribute_type_text_field</data>
+      <constraint name="assertProductAttributeSuccessDeleteMessage" next="assertProductAttributeAbsenceInGrid"/>
+      <constraint name="assertProductAttributeAbsenceInGrid" next="assertProductAttributeAbsenceInVariationsSearch" prev="assertProductAttributeSuccessDeleteMessage"/>
+      <constraint name="assertProductAttributeAbsenceInVariationsSearch" prev="assertProductAttributeAbsenceInGrid"/>
+    </variation>
+  </testCase>
+</config>

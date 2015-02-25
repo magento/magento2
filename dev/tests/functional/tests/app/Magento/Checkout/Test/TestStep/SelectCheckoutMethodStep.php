@@ -7,7 +7,7 @@
 namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -33,17 +33,17 @@ class SelectCheckoutMethodStep implements TestStepInterface
     /**
      * Customer fixture
      *
-     * @var CustomerInjectable
+     * @var Customer
      */
     protected $customer;
 
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $checkoutMethod
      */
-    public function __construct(CheckoutOnepage $checkoutOnepage, CustomerInjectable $customer, $checkoutMethod)
+    public function __construct(CheckoutOnepage $checkoutOnepage, Customer $customer, $checkoutMethod)
     {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->checkoutMethod = $checkoutMethod;

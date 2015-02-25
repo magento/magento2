@@ -126,13 +126,18 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->request = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            ['isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->setMethods([
+                'isPost',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam',
+                'getCookie',
+                'isSecure',
+            ])
+            ->getMock();
         $this->messageManager = $this->getMock(
             'Magento\Framework\Message\Manager',
             ['addSuccess', 'addError'],

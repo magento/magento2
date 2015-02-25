@@ -299,14 +299,14 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($headerValue, $this->context->getHeader($headerName));
     }
 
-    public function testGetRawBody()
+    public function testContent()
     {
-        $rawBody = 'body string';
+        $content = 'body string';
 
         $this->request->expects($this->once())
-            ->method('getRawBody')
-            ->will($this->returnValue($rawBody));
+            ->method('getContent')
+            ->will($this->returnValue($content));
 
-        $this->assertEquals($rawBody, $this->context->getRawBody());
+        $this->assertEquals($content, $this->context->getContent());
     }
 }

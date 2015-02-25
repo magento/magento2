@@ -258,7 +258,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      * Test that after cloning collection $this->_select in initial and cloned collections
      * do not reference the same object
      *
-     * @covers \Magento\Framework\Data\Collection\Db::__clone
+     * covers \Magento\Framework\Data\Collection\Db::__clone
      */
     public function testClone()
     {

@@ -112,6 +112,6 @@ class Variable extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::variable');
+        return $this->_authorization->isAllowed('Magento_Backend::variable');
     }
 }

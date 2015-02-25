@@ -61,7 +61,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

@@ -509,13 +509,33 @@ SuggestTest.prototype.testClose = function() {
     assertTrue(closeTriggered);
 };
 SuggestTest.prototype.testSetTemplate = function() {
-    /*:DOC += <script type="text/template" id="test-template"><div>${test}</div></script>*/
-    var suggestInstance = this.suggestCreate({template: '<div>${test}</div>'});
-    var html = jQuery('<div />').append($.tmpl(suggestInstance.templateName, {test: 'test'})).html();
+    /*:DOC += <script type="text/template" id="test-template"><div><%= data.test %></div></script>*/
+    var suggestInstance = this.suggestCreate({template: '<div><%= data.test %></div>'}),
+        tmpl,
+        html;
+
+    tmpl = suggestInstance.templates[suggestInstance.templateName]
+
+    html = jQuery('<div />').append(tmpl({
+        data: {
+            test: 'test'
+        }
+    })).html();
+
     assertEquals(html, '<div>test</div>');
 
-    suggestInstance = this.suggestCreate({template: '#test-template'});
-    html = jQuery('<div />').append(jQuery.tmpl(suggestInstance.templateName, {test: 'test'})).html();
+    suggestInstance = this.suggestCreate({
+        template: '#test-template'
+    });
+
+    tmpl = suggestInstance.templates[suggestInstance.templateName];
+
+    html = jQuery('<div />').append(tmpl({
+        data: {
+            test: 'test'
+        }
+    })).html();
+
     assertEquals(html, '<div>test</div>');
 };
 SuggestTest.prototype.testSearch = function() {
@@ -641,7 +661,7 @@ SuggestTest.prototype.testRenderDropdown = function() {
         },
         contentUpdatedTriggered = false,
         suggestOptions = {
-            template: '<div>${test}</div>'
+            template: '<div><%= data.test %></div>'
         },
         suggestInstance = this.suggestCreate(suggestOptions);
 
@@ -665,7 +685,7 @@ SuggestTest.prototype.testProcessResponse = function() {
         },
         responseTriggered = false,
         suggestOptions = {
-            template: '<div>${test}</div>'
+            template: '<div><%= data.test %></div>'
         },
         responcePropagationStopped = true,
         rendererExists,
@@ -915,11 +935,16 @@ SuggestTest.prototype.testRemoveOption = function() {
     assertFalse(selectTarget.hasClass(suggestInstance.options.selectedClass));
 };
 SuggestTest.prototype.testRenderOption = function() {
-    var suggestInstance = this.suggestCreate();
+    var suggestInstance = this.suggestCreate(),
+        choiceTmpl;
 
     suggestInstance.elementWrapper = jQuery('<div />').appendTo('body');
-    jQuery.template('test-choice-template', suggestInstance.options.choiceTemplate);
-    var testOption = jQuery.tmpl('test-choice-template', {text: this.uiHash.item.label}),
+
+    choiceTmpl = mageTemplate(suggestInstance.options.choiceTemplate, {
+        text: this.uiHash.item.label
+    });
+
+    var testOption = jQuery(choiceTmpl),
         option = suggestInstance._renderOption(this.uiHash.item);
 
     assertTrue(option.next().is(suggestInstance.elementWrapper));
