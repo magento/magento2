@@ -21,7 +21,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         try {
             $theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
             if ($themeId && (!$theme->load($themeId)->getId() || !$theme->isVisible())) {
-                throw new \Magento\Framework\Model\Exception(__('We cannot find theme "%1".', $themeId));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We cannot find theme "%1".', $themeId));
             }
             $this->_coreRegistry->register('current_theme', $theme);
 
@@ -36,7 +36,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             }
             $this->_setActiveMenu('Magento_Theme::system_design_theme');
             $this->_view->renderLayout();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {

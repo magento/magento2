@@ -57,7 +57,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * Cron settings after save
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave()
     {
@@ -100,7 +100,7 @@ class Cron extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Model\Exception(__('We can\'t save the Cron expression.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t save the Cron expression.'));
         }
     }
 }
