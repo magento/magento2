@@ -72,14 +72,14 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
 
         if ($this->bundleConfig->isBundlingJsFiles()) {
-            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
-            foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
-                $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
-            }
-
             $staticAsset = $this->fileManager->createStaticJsAsset();
             if ($staticAsset !== false) {
                 $this->pageConfig->getAssetCollection()->add($staticAsset->getFilePath(), $staticAsset);
+            }
+
+            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
+            foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
+                $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
             }
         }
 
