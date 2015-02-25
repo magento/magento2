@@ -27,7 +27,7 @@ class Locale extends \Magento\Backend\Block\Template
     protected $_localeResolver;
 
     /**
-     * @var \Magento\Core\Helper\Url
+     * @var \Magento\Framework\Url\Helper
      */
     protected $_urlHelper;
 
@@ -35,14 +35,14 @@ class Locale extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Core\Helper\Url $urlHelper
+     * @param \Magento\Framework\Url\Helper $urlHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Core\Helper\Url $urlHelper,
+        \Magento\Framework\Url\Helper $urlHelper,
         array $data = []
     ) {
         $this->_localeLists = $localeLists;

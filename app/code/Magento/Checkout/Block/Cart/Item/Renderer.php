@@ -60,7 +60,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $_productConfig = null;
 
     /**
-     * @var \Magento\Core\Helper\Url
+     * @var \Magento\Framework\Url\Helper
      */
     protected $_urlHelper;
 
@@ -89,7 +89,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Core\Helper\Url $urlHelper
+     * @param \Magento\Framework\Url\Helper $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -100,7 +100,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Core\Helper\Url $urlHelper,
+        \Magento\Framework\Url\Helper $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,

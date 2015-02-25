@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Helper;
+namespace Magento\Framework\Url;
 
-class UrlTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Helper\Url
+     * @var \Magento\Framework\Url\Helper
      */
     protected $_helper = null;
 
@@ -16,7 +16,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_HOST'] = 'example.com';
         $_SERVER['REQUEST_URI'] = '/fancy_uri';
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Url');
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Url\Helper');
     }
 
     public function testGetCurrentBase64Url()
@@ -28,10 +28,5 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('aHR0cDovL2xvY2FsaG9zdA,,', $this->_helper->getEncodedUrl());
         $this->assertEquals('aHR0cDovL2V4YW1wbGUuY29tLw,,', $this->_helper->getEncodedUrl('http://example.com/'));
-    }
-
-    public function testGetHomeUrl()
-    {
-        $this->assertEquals('http://localhost/index.php/', $this->_helper->getHomeUrl());
     }
 }

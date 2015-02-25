@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Compare extends \Magento\Core\Helper\Url
+class Compare extends \Magento\Framework\Url\Helper
 {
     /**
      * Product Compare Items Collection
@@ -94,6 +94,9 @@ class Compare extends \Magento\Core\Helper\Url
      */
     protected $_coreHelper;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    private $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -127,7 +130,8 @@ class Compare extends \Magento\Core\Helper\Url
         $this->_formKey = $formKey;
         $this->_wishlistHelper = $wishlistHelper;
         $this->_coreHelper = $coreHelper;
-        parent::__construct($context, $storeManager);
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
