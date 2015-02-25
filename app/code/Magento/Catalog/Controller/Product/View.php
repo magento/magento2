@@ -96,7 +96,7 @@ class View extends \Magento\Catalog\Controller\Product
             }
             if ($this->getRequest()->isAjax()) {
                 $this->getResponse()->representJson(
-                    $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode([
+                    $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode([
                         'backUrl' => $this->_redirect->getRedirectUrl()
                     ])
                 );

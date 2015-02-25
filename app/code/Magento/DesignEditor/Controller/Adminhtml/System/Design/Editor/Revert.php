@@ -51,8 +51,8 @@ class Revert extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => true, 'message' => __('Unknown error')];
         }
-        /** @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
-        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
+        /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */
+        $jsonHelper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
+        $this->getResponse()->representJson($jsonHelper->jsonEncode($response));
     }
 }

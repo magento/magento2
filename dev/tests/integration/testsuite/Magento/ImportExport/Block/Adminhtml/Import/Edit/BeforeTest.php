@@ -54,11 +54,13 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', ['jsonEncode'], [], '', false, false);
-        $coreHelper->expects(
+        $jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $jsonEncoderMock->expects(
             $this->any()
         )->method(
-            'jsonEncode'
+            'encode'
         )->will(
             $this->returnCallback([$this, 'jsonEncodeCallback'])
         );
@@ -86,7 +88,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
         );
 
         $arguments = [
-            'coreData' => $coreHelper,
+            'jsonEncoder' => $jsonEncoderMock,
             'importModel' => $importModel,
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
         ];
@@ -100,7 +102,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Callback method for \Magento\Core\Helper\Data::jsonEncode
+     * Callback method for \Magento\Framework\Json\EncoderInterface::jsonEncode
      *
      * @param mixed $data
      * @return string

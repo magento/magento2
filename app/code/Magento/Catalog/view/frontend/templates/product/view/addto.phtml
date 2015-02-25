@@ -33,7 +33,7 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
       "mage/mage"
   ], function(jQuery){
       jQuery('body').mage('addToWishlist',
-          <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
+          <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
       );
   });
 </script>

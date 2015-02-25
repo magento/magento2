@@ -16,7 +16,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var ErrorProcessor */
     protected $_errorProcessor;
 
-    /** @var \Magento\Core\Helper\Data */
+    /** @var \Magento\Framework\Json\Helper\Data */
     protected $_helperMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -29,7 +29,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     {
         /** Set up mocks for SUT. */
         $this->_helperMock = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
+            'Magento\Framework\Json\Helper\Data'
         )->disableOriginalConstructor()->getMock();
 
         $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')

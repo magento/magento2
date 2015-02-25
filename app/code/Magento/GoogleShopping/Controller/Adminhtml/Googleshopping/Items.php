@@ -69,7 +69,7 @@ class Items extends \Magento\Backend\App\Action
         );
         if ($this->getRequest()->isAjax()) {
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(['redirect' => $redirectUrl])
+                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode(['redirect' => $redirectUrl])
             );
         } else {
             $this->_redirect($redirectUrl);

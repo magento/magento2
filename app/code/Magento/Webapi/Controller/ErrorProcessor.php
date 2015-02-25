@@ -39,9 +39,9 @@ class ErrorProcessor
     /**#@-*/
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\App\State
@@ -66,18 +66,18 @@ class ErrorProcessor
     protected $directoryWrite;
 
     /**
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Json\Helper\Data $helper
      * @param \Magento\Framework\App\State $appState
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Core\Helper\Data $helper,
+        \Magento\Framework\Json\Helper\Data $helper,
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem
     ) {
-        $this->_coreHelper = $helper;
+        $this->jsonHelper = $helper;
         $this->_appState = $appState;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
@@ -244,7 +244,7 @@ class ErrorProcessor
         $errorData['messages']['error'][] = $message;
         switch ($format) {
             case self::DATA_FORMAT_JSON:
-                $errorData = $this->_coreHelper->jsonEncode($errorData);
+                $errorData = $this->jsonHelper->jsonEncode($errorData);
                 break;
             case self::DATA_FORMAT_XML:
                 $errorData = '<?xml version="1.0"?>'

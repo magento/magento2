@@ -52,11 +52,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_postCodeSubStringLength = 10;
 
     /**
-     * Core data
+     * Json Helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData;
+    protected $jsonHelper;
 
     /**
      * Core registry
@@ -126,7 +126,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context                         $context
-     * @param \Magento\Core\Helper\Data                                     $coreData
+     * @param \Magento\Framework\Json\Helper\Data                                     $jsonHelper
      * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param Config                                                        $taxConfig
      * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
@@ -144,7 +144,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\Registry $coreRegistry,
         Config $taxConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -162,7 +162,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct($context);
         $this->priceCurrency = $priceCurrency;
         $this->_config = $taxConfig;
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->_coreRegistry = $coreRegistry;
         $this->_storeManager = $storeManager;
         $this->_localeFormat = $localeFormat;
@@ -385,7 +385,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $priceFormat['pattern'] = $this->_storeManager->getStore($store)->getCurrentCurrency()->getOutputFormat();
         }
 
-        return $this->_coreData->jsonEncode($priceFormat);
+        return $this->jsonHelper->jsonEncode($priceFormat);
     }
 
     /**

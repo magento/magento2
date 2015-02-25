@@ -47,7 +47,7 @@ require([
         'checkoutAgreements': '#checkout-agreements',
         'checkoutProgressContainer': '#checkout-progress-wrapper',
         'methodDescription': '.items'
-    },<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>);
+    },<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>);
 
     accordion({
         'collapsibleElement': ' > li',

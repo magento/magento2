@@ -67,9 +67,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $_productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\EntityFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\
      */
-    protected $_coreDataMock;
+    protected $jsonHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
@@ -88,8 +88,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->_coreDataMock = $this->getMock(
-            'Magento\Core\Helper\Data',
+        $this->jsonHelperMock = $this->getMock(
+            'Magento\Framework\Json\Helper\Data',
             ['jsonDecode'],
             [],
             '',
@@ -179,7 +179,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'productCollectionFactory' => $this->_productCollectionFactory,
                 'attributeCollectionFactory' => $this->_attributeCollectionFactory,
                 'eventManager' => $eventManager,
-                'coreData' => $this->_coreDataMock,
+                'coreData' => $this->jsonHelperMock,
                 'fileStorageDb' => $fileStorageDbMock,
                 'filesystem' => $filesystem,
                 'coreRegistry' => $coreRegistry,
@@ -818,7 +818,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $attributeMock->expects($this->once())->method('save')->willReturnSelf();
         $this->_productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
-        $this->_coreDataMock->expects($this->once())
+        $this->jsonHelperMock->expects($this->once())
             ->method('jsonDecode')
             ->with('{"new_attr":"6"}')
             ->willReturn(['new_attr' => 6]);

@@ -12,14 +12,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Rest\Response\Renderer\Json */
     protected $_restJsonRenderer;
 
-    /** @var \Magento\Core\Helper\Data */
+    /** @var \Magento\Framework\Json\Helper\Data */
     protected $_helperMock;
 
     protected function setUp()
     {
         /** Prepare mocks and objects for SUT constructor. */
         $this->_helperMock = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
+            'Magento\Framework\Json\Helper\Data'
         )->disableOriginalConstructor()->getMock();
         /** Initialize SUT. */
         $this->_restJsonRenderer = new \Magento\Webapi\Controller\Rest\Response\Renderer\Json($this->_helperMock);

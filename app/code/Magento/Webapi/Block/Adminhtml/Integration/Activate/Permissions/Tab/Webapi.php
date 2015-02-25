@@ -31,8 +31,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var WebapiHelper */
     protected $_webapiHelper;
 
-    /** @var \Magento\Core\Helper\Data  */
-    protected $_coreHelper;
+    /** @var \Magento\Framework\Json\Helper\Data  */
+    protected $jsonHelper;
 
     /**
      * Initialize dependencies.
@@ -40,7 +40,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
@@ -51,7 +51,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
@@ -62,7 +62,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->_resourceProvider = $resourceProvider;
         $this->_integrationData = $integrationData;
         $this->_webapiHelper = $webapiData;
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -133,7 +133,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         $resources = $this->_resourceProvider->getAclResources();
         $aclResourcesTree = $this->_integrationData->mapResources($resources[1]['children']);
 
-        return $this->_coreHelper->jsonEncode($aclResourcesTree);
+        return $this->jsonHelper->jsonEncode($aclResourcesTree);
     }
 
     /**
@@ -150,7 +150,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
             $resources = $this->_resourceProvider->getAclResources();
             $selectedResources = $this->_getAllResourceIds($resources[1]['children']);
         }
-        return $this->_coreHelper->jsonEncode($selectedResources);
+        return $this->jsonHelper->jsonEncode($selectedResources);
     }
 
     /**

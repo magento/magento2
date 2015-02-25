@@ -12,7 +12,7 @@ use Magento\Framework\App\State;
 class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
 {
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
     protected $_helper;
 
@@ -22,10 +22,10 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
     protected $_appState;
 
     /**
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Json\Helper\Data $helper
      * @param \Magento\Framework\App\State $appState
      */
-    public function __construct(\Magento\Core\Helper\Data $helper, State $appState)
+    public function __construct(\Magento\Framework\Json\Helper\Data $helper, State $appState)
     {
         $this->_helper = $helper;
         $this->_appState = $appState;

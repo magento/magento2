@@ -71,7 +71,7 @@ if ($product->isSaleable()) {
     <span id="<?php echo $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
     <a href="#"
        id="<?php echo($popupId);?>"
-       data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
+       data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp message">

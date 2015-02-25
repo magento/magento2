@@ -15,7 +15,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Rest\Request\Deserializer\Json */
     protected $_jsonDeserializer;
 
-    /** @var \Magento\Core\Helper\Data */
+    /** @var \Magento\Framework\Json\Helper\Data */
     protected $_helperMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -24,7 +24,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
+        $this->_helperMock = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')->disableOriginalConstructor()->getMock();
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         /** Initialize SUT. */
         $this->_jsonDeserializer = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Json(
