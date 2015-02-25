@@ -11,6 +11,21 @@ use Zend\Code\Scanner\FileScanner;
 class ClassesScanner
 {
     /**
+     * @var array
+     */
+    protected $excludePatterns = [];
+
+    /**
+     * adds exclude patterns
+     *
+     * @param array $excludePatterns
+     */
+    public function addExcludePatterns(array $excludePatterns)
+    {
+        $this->excludePatterns = array_merge($this->excludePatterns, $excludePatterns);
+    }
+    
+    /**
      * Retrieves list of classes for given path
      *
      * @param string $path
@@ -36,6 +51,11 @@ class ClassesScanner
             /** @var $fileItem \SplFileInfo */
             if ($fileItem->getExtension() !== 'php') {
                 continue;
+            }
+            foreach ($this->excludePatterns as $excludePattern) {
+                if (preg_match($excludePattern, $fileItem->getRealPath())) {
+                    continue 2;
+                }
             }
             $fileScanner = new FileScanner($fileItem->getRealPath());
             $classNames = $fileScanner->getClassNames();
