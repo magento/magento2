@@ -11,8 +11,8 @@
                 <label>Front-end development workflow</label>
                 <field id="front_end_development_workflow_type" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Workflow type</label>
-                    <comment>Don't available in production mode</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Dev\WorkflowType</source_model>
+                    <comment>Not available in production mode</comment>
+                    <source_model>Magento\Developer\Model\Config\Source\Dev\WorkflowType</source_model>
                 </field>
             </group>
         </section>
