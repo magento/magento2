@@ -80,6 +80,5 @@ return [
     ['Magento\CheckoutAgreements\Service'],
     ['Magento\Checkout\Service'],
     ['Magento\GiftMessage\Service'],
-    ['Magento\GiftMessage\Service'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
 ];
