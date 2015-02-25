@@ -24,7 +24,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $invoiceCommentSender;
 
     /**
-     * @var JSONFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -43,7 +43,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param InvoiceCommentSender $invoiceCommentSender
-     * @param JSONFactory $resultJsonFactory
+     * @param JsonFactory $resultJsonFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
      */
@@ -52,7 +52,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         Registry $registry,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         InvoiceCommentSender $invoiceCommentSender,
-        JSONFactory $resultJsonFactory,
+        JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory
     ) {

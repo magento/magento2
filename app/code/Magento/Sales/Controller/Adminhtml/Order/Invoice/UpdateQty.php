@@ -17,7 +17,7 @@ use Magento\Framework\Registry;
 class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
-     * @var JSONFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -36,7 +36,7 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
-     * @param JSONFactory $resultJsonFactory
+     * @param JsonFactory $resultJsonFactory
      * @param RawFactory $resultRawFactory
      */
     public function __construct(
@@ -44,7 +44,7 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
         Registry $registry,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
-        JSONFactory $resultJsonFactory,
+        JsonFactory $resultJsonFactory,
         RawFactory $resultRawFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
