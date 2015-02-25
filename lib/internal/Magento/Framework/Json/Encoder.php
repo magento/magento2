@@ -26,11 +26,13 @@ class Encoder implements EncoderInterface
      * Encode the mixed $data into the JSON format.
      *
      * @param mixed $data
+     * @param  boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
+     * @param  array $options Additional options used during encoding
      * @return string
      */
-    public function encode($data)
+    public function encode($data, $cycleCheck = false, $options = [])
     {
-        $json = \Zend_Json::encode($data);
+        $json = \Zend_Json::encode($data, $cycleCheck, $options);
         $this->translateInline->processResponseBody($json, true);
         return $json;
     }
