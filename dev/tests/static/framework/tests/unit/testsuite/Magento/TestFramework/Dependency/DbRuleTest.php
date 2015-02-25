@@ -26,7 +26,7 @@ class DbRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($module, $file, $contents, array $expected)
     {
-        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'any', $file, $contents));
+        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $contents));
     }
 
     public function getDependencyInfoDataProvider()
