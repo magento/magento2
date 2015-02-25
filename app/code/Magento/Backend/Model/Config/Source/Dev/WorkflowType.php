@@ -32,23 +32,15 @@ class WorkflowType implements ArrayInterface
     const ADVANCED_COMPILATION = 'advanced_compilation';
 
     /**
-     * @var string
+     * list of Workflow types
+     *
+     * @var array
      */
-    private $appMode;
-
     public static $labels = [
         self::CLIENT_SIDE_COMPILATION => 'Client side less compilation',
         self::SERVER_SIDE_COMPILATION => 'Server side less compilation',
         self::ADVANCED_COMPILATION => 'Advanced less compilation'
     ];
-    
-    /**
-     * @param string $appMode
-     */
-    function __construct($appMode = State::MODE_DEFAULT)
-    {
-        $this->appMode = $appMode;
-    }
 
     /**
      * Return list of Workflow types
@@ -57,30 +49,10 @@ class WorkflowType implements ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->getOptionsByAppMode($this->appMode);
-    }
-
-    /**
-     * Return list of Workflow types by mode
-     *
-     * @param string $appMode
-     *
-     * @return array
-     */
-    private function getOptionsByAppMode($appMode)
-    {
-        $commonOptions = [
+        return [
+            ['value' => self::CLIENT_SIDE_COMPILATION, 'label' => __(self::$labels[self::CLIENT_SIDE_COMPILATION])],
             ['value' => self::SERVER_SIDE_COMPILATION, 'label' => __(self::$labels[self::SERVER_SIDE_COMPILATION])],
-        ];
-        $options[State::MODE_DEFAULT] = [
-            ['value' => self::CLIENT_SIDE_COMPILATION, 'label' => __(self::$labels[self::CLIENT_SIDE_COMPILATION])],
             ['value' => self::ADVANCED_COMPILATION, 'label' => __(self::$labels[self::ADVANCED_COMPILATION])]
         ];
-        $options[State::MODE_DEVELOPER] = [
-            ['value' => self::CLIENT_SIDE_COMPILATION, 'label' => __(self::$labels[self::CLIENT_SIDE_COMPILATION])],
-            ['value' => self::ADVANCED_COMPILATION, 'label' => __(self::$labels[self::ADVANCED_COMPILATION])]
-        ];
-
-        return array_merge($commonOptions, $options[$appMode]);
     }
 }
