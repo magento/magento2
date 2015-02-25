@@ -850,14 +850,17 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address)
+    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getBillingAddress();
-        if (!empty($old)) {
+        if (!empty($old) && !empty($address)) {
             $address->setId($old->getId());
         }
-        $address->setEmail($this->getCustomerEmail());
-        $this->addAddress($address->setAddressType('billing'));
+
+        if (!empty($address)) {
+            $address->setEmail($this->getCustomerEmail());
+            $this->addAddress($address->setAddressType('billing'));
+        }
         return $this;
     }
 
@@ -867,21 +870,24 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address)
+    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getShippingAddress();
-        if (!empty($old)) {
+        if (!empty($old) && !empty($address)) {
             $address->setId($old->getId());
         }
-        $address->setEmail($this->getCustomerEmail());
-        $this->addAddress($address->setAddressType('shipping'));
+
+        if (!empty($address)) {
+            $address->setEmail($this->getCustomerEmail());
+            $this->addAddress($address->setAddressType('shipping'));
+        }
         return $this;
     }
 
     /**
      * Retrieve order billing address
      *
-     * @return \Magento\Sales\Model\Order\Address|false
+     * @return \Magento\Sales\Model\Order\Address|null
      */
     public function getBillingAddress()
     {
@@ -890,13 +896,13 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
                 return $address;
             }
         }
-        return false;
+        return null;
     }
 
     /**
      * Retrieve order shipping address
      *
-     * @return \Magento\Sales\Model\Order\Address|false
+     * @return \Magento\Sales\Model\Order\Address|null
      */
     public function getShippingAddress()
     {
@@ -905,7 +911,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
                 return $address;
             }
         }
-        return false;
+        return null;
     }
 
     /**

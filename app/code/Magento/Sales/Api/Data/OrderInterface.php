@@ -2631,7 +2631,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress);
+    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
 
     /**
      * Sets the shipping address, if any, for the order.
@@ -2639,7 +2639,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress);
+    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
 
     /**
      * Sets the payments for the order.
