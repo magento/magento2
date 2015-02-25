@@ -34,7 +34,7 @@ class SelectShippingMethodForOrderStep implements TestStepInterface
      * @param OrderCreateIndex $orderCreateIndex
      * @param array $shipping
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, array $shipping)
+    public function __construct(OrderCreateIndex $orderCreateIndex, array $shipping = null)
     {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->shipping = $shipping;
@@ -47,7 +47,7 @@ class SelectShippingMethodForOrderStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->shipping['shipping_service'] != '-') {
+        if ($this->shipping['shipping_service'] != null) {
             $this->orderCreateIndex->getCreateBlock()->selectShippingMethod($this->shipping);
         }
 

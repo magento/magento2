@@ -6,14 +6,14 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Fill Sales Data.
+ * Fill order account information.
  */
-class FillEmailAddressStep implements TestStepInterface
+class FillAccountInformationStep implements TestStepInterface
 {
     /**
      * Sales order create index page.
@@ -23,31 +23,30 @@ class FillEmailAddressStep implements TestStepInterface
     protected $orderCreateIndex;
 
     /**
-     * Email Address.
+     * Customer
      *
-     * @var string
+     * @var Customer
      */
-    protected $emailAddress;
-
+    protected $customer;
 
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, CustomerInjectable $customer)
+    public function __construct(OrderCreateIndex $orderCreateIndex, Customer $customer)
     {
         $this->orderCreateIndex = $orderCreateIndex;
-        $this->emailAddress = $customer->getEmail();
+        $this->customer = $customer;
     }
 
     /**
-     * Fill Account Data.
+     * Fill Order Account Data.
      *
      * @return void
      */
     public function run()
     {
-        $this->orderCreateIndex->getCreateBlock()->fillEmail($this->emailAddress);
+        $this->orderCreateIndex->getCreateBlock()->getAccountBlock()->fill($this->customer);
     }
 }

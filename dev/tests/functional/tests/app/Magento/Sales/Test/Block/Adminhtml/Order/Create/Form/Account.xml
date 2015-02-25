@@ -6,15 +6,11 @@
  */
 -->
 <mapping strict="0">
+    <wrapper>order[account]</wrapper>
     <fields>
         <group>
-            <selector>[name="order[account][group_id]"]</selector>>
-            <strategy>css selector</strategy>
-            <input></input>>
+            <input>select</input>>
         </group>
-        <email>
-            <selector>[name="order[account][email]"]</selector>>
-            <strategy>css selector</strategy>
-        </email>
+        <email />
     </fields>
 </mapping>

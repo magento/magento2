@@ -10,9 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class BillingAddress
  * Adminhtml sales order billing address block
- *
  */
 class Address extends Form
 {

@@ -44,7 +44,7 @@ class SetupConfigurationStep implements TestStepInterface
      * @param string $configData
      * @param bool $rollback
      */
-    public function __construct(FixtureFactory $fixtureFactory, $configData, $rollback = false)
+    public function __construct(FixtureFactory $fixtureFactory, $configData = null, $rollback = false)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->configData = $configData;
@@ -58,7 +58,7 @@ class SetupConfigurationStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->configData === '-') {
+        if ($this->configData === null) {
             return [];
         }
         $prefix = ($this->rollback == false) ? '' : '_rollback';

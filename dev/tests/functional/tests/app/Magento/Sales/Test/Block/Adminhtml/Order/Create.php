@@ -258,7 +258,7 @@ class Create extends Block
      * @param string $saveAddress
      * @return void
      */
-    public function fillAddresses(FixtureInterface $address, $saveAddress)
+    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No')
     {
         $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
         $this->getTemplateBlock()->waitLoader();
@@ -311,17 +311,5 @@ class Create extends Block
     public function addSelectedProductsToOrder()
     {
         $this->_rootElement->find($this->addSelectedProducts)->click();
-    }
-
-
-    /**
-     * Fill addresses based on present data in customer and order fixtures
-     *
-     * @param string $emailAddress
-     * @return void
-     */
-    public function fillEmail($emailAddress)
-    {
-        $this->getAccountBlock()->fillEmailAddress($emailAddress);
     }
 }

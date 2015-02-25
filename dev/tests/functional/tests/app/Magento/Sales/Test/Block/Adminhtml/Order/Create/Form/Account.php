@@ -10,9 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Account
  * Adminhtml sales order account information block
- *
  */
 class Account extends Form
 {
@@ -22,15 +20,4 @@ class Account extends Form
      * @var string
      */
     protected $email = '#email';
-
-    /**
-     * Fill in email address
-     *
-     * @param string $emailAddress
-     * @return void
-     */
-    public function fillEmailAddress($emailAddress)
-    {
-        $this->_rootElement->find($this->email, Locator::SELECTOR_CSS, 'input')->setValue($emailAddress);
-    }
 }

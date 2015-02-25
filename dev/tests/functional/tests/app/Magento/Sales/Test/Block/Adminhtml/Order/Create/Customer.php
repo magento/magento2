@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Magento\Customer\Test\Fixture\CustomerInjectable as CustomerFixture;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 
 /**
  * Customer selection grid

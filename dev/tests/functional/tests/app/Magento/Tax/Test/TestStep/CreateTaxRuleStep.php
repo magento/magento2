@@ -35,7 +35,7 @@ class CreateTaxRuleStep implements TestStepInterface
      * @param FixtureFactory $fixtureFactory
      * @param string $taxRule
      */
-    public function __construct(FixtureFactory $fixtureFactory, $taxRule)
+    public function __construct(FixtureFactory $fixtureFactory, $taxRule = null)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->taxRule = $taxRule;
@@ -49,7 +49,7 @@ class CreateTaxRuleStep implements TestStepInterface
     public function run()
     {
         $result['taxRule'] = null;
-        if ($this->taxRule != '-') {
+        if ($this->taxRule != null) {
             $taxRule = $this->fixtureFactory->createByCode(
                 'taxRule',
                 ['dataSet' => $this->taxRule]
