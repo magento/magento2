@@ -51,10 +51,8 @@ class InstallUpgradeTest extends \PHPUnit_Framework_TestCase
                     'Invalid directory. Please convert data/sql scripts to a class within module\'s Setup folder'
                 );
             },
-            $this->convertArray(Files::init()->getFiles(
-                    [BP . '/app/code/*/*/sql', BP . '/app/code/*/*/data'],
-                    '*.php'
-                )
+            $this->convertArray(
+                Files::init()->getFiles([BP . '/app/code/*/*/sql', BP . '/app/code/*/*/data'], '*.php')
             )
         );
     }
