@@ -49,7 +49,7 @@ class CreateTaxRuleStep implements TestStepInterface
     public function run()
     {
         $result['taxRule'] = null;
-        if ($this->taxRule != null) {
+        if ($this->taxRule !== null) {
             $taxRule = $this->fixtureFactory->createByCode(
                 'taxRule',
                 ['dataSet' => $this->taxRule]

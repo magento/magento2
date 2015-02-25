@@ -47,7 +47,7 @@ class SelectShippingMethodForOrderStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->shipping['shipping_service'] != null) {
+        if ($this->shipping['shipping_service'] !== null) {
             $this->orderCreateIndex->getCreateBlock()->selectShippingMethod($this->shipping);
         }
 

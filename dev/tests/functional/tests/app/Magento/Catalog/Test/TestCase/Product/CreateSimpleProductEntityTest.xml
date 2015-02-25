@@ -9,6 +9,7 @@
   <testCase name="CreateSimpleProductEntityTest">
     <variation name="CreateSimpleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -42,6 +43,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -75,6 +77,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with special price and custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -108,6 +111,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with special price and custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -141,6 +145,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with group price and custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -174,6 +179,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with group price and custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -207,6 +213,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with tier price and custom options(percent price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -240,6 +247,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with tier price and custom options(fixed price)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -273,6 +281,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product without custom options</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -305,6 +314,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product that is in stock</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -335,6 +345,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product that is out stock</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -365,6 +376,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation12" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product that visible only in search</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -395,6 +407,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation13" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create simple product and check search by sku</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -429,6 +442,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation14" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create simple product and check visibility in category</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -463,6 +477,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation15" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with tax class and group price</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -498,6 +513,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation16" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with tax class and check absent special price</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -533,6 +549,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation17" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product without tax class and tier price</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -568,6 +585,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation18" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product wit suite of custom options</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -603,6 +621,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation19" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with cross-sell products</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -635,6 +654,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation20" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with up-sell products</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -667,6 +687,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation21" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Create product with related products</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -700,6 +721,7 @@
     <variation name="CreateSimpleProductEntityTestVariation22" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12423: Can't Add Out of Stock Products to Shopping Cart</data>
       <data name="configData" xsi:type="string">display_out_of_stock</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -731,6 +753,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation23" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-13345: Create Simple Product with Creating New Category (Required Fields Only)</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
       <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
       <data name="product/data/url_key" xsi:type="string">simple%isolation%</data>
@@ -762,6 +785,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation24" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12514: Create Simple Product and Assigning It to Category</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -794,6 +818,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation25" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12703: Create Simple Product with Custom Options and Assign it to the Category</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
@@ -828,6 +853,7 @@
     </variation>
     <variation name="CreateSimpleProductEntityTestVariation26" firstConstraint="assertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12914: Create Simple Product with Advanced Inventory and Assign It to the Category</data>
+      <data name="configData" xsi:type="string">-</data>
       <data name="product/data/category_ids/new_category" xsi:type="string">-</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>

@@ -23,7 +23,7 @@ class FillAccountInformationStep implements TestStepInterface
     protected $orderCreateIndex;
 
     /**
-     * Customer
+     * Customer fixtrure
      *
      * @var Customer
      */
