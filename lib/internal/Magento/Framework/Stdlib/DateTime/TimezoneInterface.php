@@ -11,22 +11,6 @@ namespace Magento\Framework\Stdlib\DateTime;
 interface TimezoneInterface
 {
     /**
-     * Default timezone
-     */
-    const DEFAULT_TIMEZONE = 'UTC';
-
-    /**
-     * Date and time format codes
-     */
-    const FORMAT_TYPE_FULL = 'full';
-
-    const FORMAT_TYPE_LONG = 'long';
-
-    const FORMAT_TYPE_MEDIUM = 'medium';
-
-    const FORMAT_TYPE_SHORT = 'short';
-
-    /**
      * Return path to default timezone
      *
      * @return string
@@ -43,10 +27,10 @@ interface TimezoneInterface
     /**
      * Retrieve ISO date format
      *
-     * @param   string $type
+     * @param   int $type
      * @return  string
      */
-    public function getDateFormat($type = null);
+    public function getDateFormat($type = \IntlDateFormatter::SHORT);
 
     /**
      * Retrieve short date format with 4-digit year
@@ -72,38 +56,37 @@ interface TimezoneInterface
     public function getDateTimeFormat($type);
 
     /**
-     * Create \Magento\Framework\Stdlib\DateTime\DateInterface object for current locale
+     * Create \DateTime object for current locale
      *
      * @param mixed              $date
      * @param string             $part
      * @param string $locale
      * @param bool               $useTimezone
-     * @return \Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return \DateTime
      */
     public function date($date = null, $part = null, $locale = null, $useTimezone = true);
 
     /**
-     * Create \Magento\Framework\Stdlib\DateTime\DateInterface object with date converted to scope timezone and scope Locale
+     * Create \DateTime object with date converted to scope timezone and scope Locale
      *
      * @param   mixed $scope Information about scope
-     * @param   string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in UTC
+     * @param   string|integer|\DateTime|array|null $date date in UTC
      * @param   boolean $includeTime flag for including time to date
-     * @return  \Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return  \DateTime
      */
     public function scopeDate($scope = null, $date = null, $includeTime = false);
 
     /**
-     * Create \Magento\Framework\Stdlib\DateTime\DateInterface object with date converted from scope's timezone
+     * Create \DateTime object with date converted from scope's timezone
      * to UTC time zone. Date can be passed in format of scope's locale
      * or in format which was passed as parameter.
      *
      * @param mixed $scope Information about scope
-     * @param string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array|null $date date in scope's timezone
+     * @param string|integer|\DateTime|array|null $date date in scope's timezone
      * @param boolean $includeTime flag for including time to date
-     * @param null|string $format
-     * @return \Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return \DateTime
      */
-    public function utcDate($scope, $date, $includeTime = false, $format = null);
+    public function utcDate($scope, $date, $includeTime = false);
 
     /**
      * Get scope timestamp
@@ -117,28 +100,28 @@ interface TimezoneInterface
     /**
      * Format date using current locale options and time zone.
      *
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface|null $date
+     * @param \DateTime|null $date
      * @param string $format
      * @param bool $showTime
      * @return string
      */
     public function formatDate(
         $date = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $format = \IntlDateFormatter::SHORT,
         $showTime = false
     );
 
     /**
      * Format time using current locale options
      *
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface|null $time
+     * @param \DateTime|null $time
      * @param string $format
      * @param bool $showDate
      * @return string
      */
     public function formatTime(
         $time = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $format = \IntlDateFormatter::SHORT,
         $showDate = false
     );
 
@@ -158,4 +141,20 @@ interface TimezoneInterface
      * @return bool
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
+
+    /**
+     * @param \DateTimeInterface $date
+     * @param int $dateType
+     * @param int $timeType
+     * @param null $locale
+     * @param null $timezone
+     * @return mixed
+     */
+    public function formatDateTime(
+        \DateTimeInterface $date,
+        $dateType = \IntlDateFormatter::SHORT,
+        $timeType = \IntlDateFormatter::SHORT,
+        $locale = null,
+        $timezone = null
+    );
 }

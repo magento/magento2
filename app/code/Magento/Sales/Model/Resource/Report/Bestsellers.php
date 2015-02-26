@@ -89,7 +89,6 @@ class Bestsellers extends AbstractReport
         $from = $this->_dateToUtc($from);
         $to = $this->_dateToUtc($to);
 
-        $this->_checkDates($from, $to);
         $adapter = $this->_getWriteAdapter();
         //$this->_getWriteAdapter()->beginTransaction();
 

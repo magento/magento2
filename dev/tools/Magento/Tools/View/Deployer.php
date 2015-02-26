@@ -121,7 +121,7 @@ class Deployer
             $this->count++;
         }
         $this->logger->logMessage("\nSuccessful: {$this->count} files modified\n---\n");
-        $version = $this->dateTime->toTimestamp(true);
+        $version = (new \DateTime())->getTimestamp();
         $this->logger->logMessage("New version of deployed files: {$version}");
         if (!$this->isDryRun) {
             $this->versionStorage->save($version);

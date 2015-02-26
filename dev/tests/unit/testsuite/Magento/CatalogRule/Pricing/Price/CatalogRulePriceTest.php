@@ -175,7 +175,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsiteId')
             ->will($this->returnValue($coreWebsiteId));
         $this->dataTimeMock->expects($this->once())
-            ->method('scopeTimeStamp')
+            ->method('scopeDate')
             ->with($this->equalTo($coreStoreId))
             ->will($this->returnValue($dateTime));
         $this->customerSessionMock->expects($this->once())

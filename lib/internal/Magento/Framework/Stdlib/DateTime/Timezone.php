@@ -14,10 +14,10 @@ class Timezone implements TimezoneInterface
      * @var array
      */
     protected $_allowedFormats = [
-        TimezoneInterface::FORMAT_TYPE_FULL,
-        TimezoneInterface::FORMAT_TYPE_LONG,
-        TimezoneInterface::FORMAT_TYPE_MEDIUM,
-        TimezoneInterface::FORMAT_TYPE_SHORT,
+        \IntlDateFormatter::FULL,
+        \IntlDateFormatter::LONG,
+        \IntlDateFormatter::MEDIUM,
+        \IntlDateFormatter::SHORT,
     ];
 
     /**
@@ -36,11 +36,6 @@ class Timezone implements TimezoneInterface
     protected $_dateTime;
 
     /**
-     * @var DateFactory
-     */
-    protected $_dateFactory;
-
-    /**
      * @var string
      */
     protected $_defaultTimezonePath;
@@ -54,7 +49,6 @@ class Timezone implements TimezoneInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param DateFactory $dateFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
@@ -63,7 +57,6 @@ class Timezone implements TimezoneInterface
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        DateFactory $dateFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $scopeType,
         $defaultTimezonePath
@@ -71,7 +64,6 @@ class Timezone implements TimezoneInterface
         $this->_scopeResolver = $scopeResolver;
         $this->_localeResolver = $localeResolver;
         $this->_dateTime = $dateTime;
-        $this->_dateFactory = $dateFactory;
         $this->_defaultTimezonePath = $defaultTimezonePath;
         $this->_scopeConfig = $scopeConfig;
         $this->_scopeType = $scopeType;
@@ -90,7 +82,7 @@ class Timezone implements TimezoneInterface
      */
     public function getDefaultTimezone()
     {
-        return TimezoneInterface::DEFAULT_TIMEZONE;
+        return 'UTC';
     }
 
     /**
@@ -104,13 +96,13 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function getDateFormat($type = null)
+    public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
-        $formatIndex = array_search($type, $this->_allowedFormats) + 4;
-        return (new \ResourceBundle(
-            $this->_localeResolver->getLocale(),
-            'ICUDATA'
-        ))['calendar']['generic']['DateTimePatterns'][$formatIndex];
+        return (new \IntlDateFormatter(
+            $this->_localeResolver->getLocaleCode(),
+            $type,
+            \IntlDateFormatter::NONE
+        ))->getPattern();
     }
 
     /**
@@ -120,21 +112,21 @@ class Timezone implements TimezoneInterface
     {
         return preg_replace(
             '/(?<!y)yy(?!y)/',
-            'yyyy',
-            $this->getDateFormat('short')
+            'Y',
+            $this->getDateFormat()
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getTimeFormat($type = null)
+    public function getTimeFormat($type = \IntlDateFormatter::SHORT)
     {
-        $formatIndex = array_search($type, $this->_allowedFormats);
-        return (new \ResourceBundle(
-            $this->_localeResolver->getLocale(),
-            'ICUDATA'
-        ))['calendar']['generic']['DateTimePatterns'][$formatIndex];
+        return (new \IntlDateFormatter(
+            $this->_localeResolver->getLocaleCode(),
+            \IntlDateFormatter::NONE,
+            $type
+        ))->getPattern();
     }
 
     /**
@@ -150,23 +142,25 @@ class Timezone implements TimezoneInterface
      */
     public function date($date = null, $part = null, $locale = null, $useTimezone = true)
     {
-        if (is_null($locale)) {
-            $locale = $this->_localeResolver->getLocale();
-        }
+        $locale = $locale ? $locale : $this->_localeResolver->getLocale()->toString();
+        $timezone = $useTimezone
+            ? $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType)
+            : 'UTC';
 
         if (empty($date)) {
-            // $date may be false, but \Magento\Framework\Stdlib\DateTime\DateInterface uses strict compare
-            $date = null;
+            return new \DateTime('now', new \DateTimeZone($timezone));
+        } elseif ($date instanceof \DateTime) {
+            return $date->setTimezone(new \DateTimeZone($timezone));
+        } elseif (!is_numeric($date)) {
+            $formatter = new \IntlDateFormatter(
+                $locale,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                $timezone
+            );
+            $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
-        $date = $this->_dateFactory->create(['date' => $date, 'part' => $part, 'locale' => $locale]);
-        if ($useTimezone) {
-            $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType);
-            if ($timezone) {
-                $date->setTimezone($timezone);
-            }
-        }
-
-        return $date;
+        return new \DateTime('@' . $date, new \DateTimeZone($timezone));
     }
 
     /**
@@ -175,12 +169,9 @@ class Timezone implements TimezoneInterface
     public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $date = $this->_dateFactory->create(
-            ['date' => $date, 'part' => null, 'locale' => $this->_localeResolver->getLocale()]
-        );
-        $date->setTimezone($timezone);
+        $date = new \DateTime(is_numeric($date) ? '@' . $date : $date, new \DateTimeZone($timezone));
         if (!$includeTime) {
-            $date->setHour(0)->setMinute(0)->setSecond(0);
+            $date->setTime(0, 0, 0);
         }
         return $date;
     }
@@ -188,44 +179,33 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function formatDate($date = null, $format = TimezoneInterface::FORMAT_TYPE_SHORT, $showTime = false)
+    public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
-        if (!in_array($format, $this->_allowedFormats, true)) {
-            return $date;
-        }
-        if (!$date instanceof DateInterface && $date && !strtotime($date)) {
-            return '';
-        }
-        if (is_null($date)) {
-            $date = $this->date(gmdate('U'), null, null);
-        } elseif (!$date instanceof DateInterface) {
-            $date = $this->date(strtotime($date), null, null);
-        }
-
         if ($showTime) {
             $format = $this->getDateTimeFormat($format);
         } else {
             $format = $this->getDateFormat($format);
         }
 
-        return $date->toString($format);
+        if ($date instanceof \DateTime) {
+            return $date->format($format);
+        } else {
+            return (new \DateTime($date))->format($format);
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function formatTime($time = null, $format = TimezoneInterface::FORMAT_TYPE_SHORT, $showDate = false)
+    public function formatTime($time = null, $format = \IntlDateFormatter::SHORT, $showDate = false)
     {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $time;
         }
 
-        if (is_null($time)) {
-            $date = $this->date(time());
-        } elseif ($time instanceof DateInterface) {
-            $date = $time;
-        } else {
-            $date = $this->date(strtotime($time));
+        $date = $time;
+        if (!($time instanceof \DateTimeInterface)) {
+            $date = new \DateTime($time);
         }
 
         if ($showDate) {
@@ -234,17 +214,16 @@ class Timezone implements TimezoneInterface
             $format = $this->getTimeFormat($format);
         }
 
-        return $date->toString($format);
+        return $date->format($format);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function utcDate($scope, $date, $includeTime = false, $format = null)
+    public function utcDate($scope, $date, $includeTime = false)
     {
         $dateObj = $this->scopeDate($scope, $date, $includeTime);
-        $dateObj->set($date, $format);
-        $dateObj->setTimezone(TimezoneInterface::DEFAULT_TIMEZONE);
+        $dateObj->setTimezone(new \DateTimeZone('UTC'));
         return $dateObj;
     }
 
@@ -254,11 +233,7 @@ class Timezone implements TimezoneInterface
     public function scopeTimeStamp($scope = null)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        $currentTimezone = @date_default_timezone_get();
-        @date_default_timezone_set($timezone);
-        $date = date('Y-m-d H:i:s');
-        @date_default_timezone_set($currentTimezone);
-        return strtotime($date);
+        return (new \DateTime('now', new \DateTimeZone($timezone)))->getTimestamp();
     }
 
     /**
@@ -285,5 +260,29 @@ class Timezone implements TimezoneInterface
             $result = true;
         }
         return $result;
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     * @param int $dateType
+     * @param int $timeType
+     * @param null $locale
+     * @param null $timezone
+     * @return mixed
+     */
+    public function formatDateTime(
+        \DateTimeInterface $date,
+        $dateType = \IntlDateFormatter::SHORT,
+        $timeType = \IntlDateFormatter::SHORT,
+        $locale = null,
+        $timezone = null
+    ) {
+        $formatter = new \IntlDateFormatter(
+            $locale ?: $this->_localeResolver->getLocaleCode(),
+            $dateType,
+            $timeType,
+            $timezone ?: 'UTC'
+        );
+        return $formatter->format($date);
     }
 }

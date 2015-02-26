@@ -92,14 +92,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
-                $date = new \Magento\Framework\Stdlib\DateTime\Date(mktime(0, 0, 0, 1, 1, 2001));
-                $data['report_from'] = $date->toString($this->_localeDate->getDateFormat('short'));
+                $date = new \DateTime('@' . mktime(0, 0, 0, 1, 1, 2001));
+                $data['report_from'] = $date->format($this->_localeDate->getDateFormat());
             }
 
             if (!isset($data['report_to'])) {
                 // getting all reports from 2001 year
-                $date = new \Magento\Framework\Stdlib\DateTime\Date();
-                $data['report_to'] = $date->toString($this->_localeDate->getDateFormat('short'));
+                $date = new \DateTime();
+                $data['report_to'] = $date->format($this->_localeDate->getDateFormat());
             }
 
             $this->_setFilterValues($data);
@@ -121,11 +121,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                 try {
                     $from = $this->_localeDate->date(
                         $this->getFilter('report_from'),
-                        \Zend_Date::DATE_SHORT,
+                        null,
                         null,
                         false
                     );
-                    $to = $this->_localeDate->date($this->getFilter('report_to'), \Zend_Date::DATE_SHORT, null, false);
+                    $to = $this->_localeDate->date($this->getFilter('report_to'), null, null, false);
 
                     $collection->setInterval($from, $to);
                 } catch (\Exception $e) {
@@ -281,7 +281,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
     }
 
     /**

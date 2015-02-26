@@ -24,18 +24,12 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactory;
 
     protected function setUp()
     {
-        $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $this->collectionFactory = $this->getMock(
             'Magento\SalesRule\Model\Resource\Rule\CollectionFactory',
             ['create'],
@@ -48,7 +42,6 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
         $this->discounts = $this->objectManagerHelper->getObject(
             'Magento\SalesRule\Model\Rss\Discounts',
             [
-                'dateTime' => $this->dateTime,
                 'collectionFactory' => $this->collectionFactory
             ]
         );
@@ -68,7 +61,6 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dateTime->expects($this->once())->method('now');
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($ruleCollection));
         $ruleCollection->expects($this->once())->method('addWebsiteGroupDateFilter')->will($this->returnSelf());
         $ruleCollection->expects($this->once())->method('addFieldToFilter')->will($this->returnSelf());

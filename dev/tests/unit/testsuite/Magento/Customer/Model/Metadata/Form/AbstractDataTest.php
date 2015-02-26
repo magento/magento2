@@ -148,7 +148,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             )->method(
                 'getDateFormat'
             )->with(
-                $this->equalTo(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+                $this->equalTo(\IntlDateFormatter::SHORT)
             )->will(
                 $this->returnValue($output)
             );

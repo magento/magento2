@@ -28,9 +28,9 @@ class Full
     protected $separator = ' | ';
 
     /**
-     * Array of \Magento\Framework\Stdlib\DateTime\DateInterface objects per store
+     * Array of \DateTime objects per store
      *
-     * @var array
+     * @var \DateTime[]
      */
     protected $dates = [];
 
@@ -768,11 +768,11 @@ class Full
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
+            
+            $this->localeResolver->emulate($storeId);
 
-            $locale = $this->localeResolver->emulate($storeId);
-
-            $dateObj = new \Magento\Framework\Stdlib\DateTime\Date(null, null, $locale);
-            $dateObj->setTimezone($timezone);
+            $dateObj = new \DateTime();
+            $dateObj->setTimezone(new \DateTimeZone($timezone));
             $format = (new \ResourceBundle(
                 $this->localeResolver->getLocale(),
                 'ICUDATA'
@@ -784,9 +784,8 @@ class Full
 
         if (!$this->dateTime->isEmptyDate($date)) {
             list($dateObj, $format) = $this->dates[$storeId];
-            $dateObj->setDate($date, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-
-            return $dateObj->toString($format);
+            /** @var \DateTime $dateObj */
+            return $dateObj->format($format);
         }
 
         return null;

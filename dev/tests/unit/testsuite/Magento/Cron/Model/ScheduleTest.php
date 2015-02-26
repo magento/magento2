@@ -160,10 +160,6 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['date'])
             ->getMockForAbstractClass();
-        $dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
@@ -177,13 +173,11 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $model->setScheduledAt($scheduledAt);
         $model->setCronExprArr($cronExprArr);
         if ($scheduledAt && $cronExprArr) {
-            $timezoneMock->expects($this->once())->method('date')->willReturn($dateMock);
-            $date = getdate(is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt));
-            $dateMock->expects($this->at(0))->method('get')->with(\Zend_Date::MINUTE)->willReturn($date['minutes']);
-            $dateMock->expects($this->at(1))->method('get')->with(\Zend_Date::HOUR)->willReturn($date['hours']);
-            $dateMock->expects($this->at(2))->method('get')->with(\Zend_Date::DAY)->willReturn($date['mday']);
-            $dateMock->expects($this->at(3))->method('get')->with(\Zend_Date::MONTH)->willReturn($date['mon']);
-            $dateMock->expects($this->at(4))->method('get')->with(\Zend_Date::WEEKDAY)->willReturn($date['wday']);
+            $date = is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt);
+            $timezoneMock->expects($this->once())
+                ->method('date')
+                ->with($date)
+                ->willReturn((new \DateTime())->setTimestamp($date));
         }
 
         // 3. Run tested method

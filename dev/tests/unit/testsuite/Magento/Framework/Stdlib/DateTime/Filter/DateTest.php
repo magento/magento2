@@ -15,7 +15,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDateFormat'
         )->with(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \IntlDateFormatter::SHORT
         )->will(
             $this->returnValue('MM-dd-yyyy')
         );

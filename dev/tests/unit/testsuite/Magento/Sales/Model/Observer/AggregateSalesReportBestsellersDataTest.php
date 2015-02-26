@@ -69,26 +69,21 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit_Framework_TestCas
     /**
      * Set up aggregate
      *
-     * @return \Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return \DateTime
      */
     protected function setupAggregate()
     {
-        $date = $this->getMock('Magento\Framework\Stdlib\DateTime\Date', ['emulate', 'revert'], [], '', false);
         $this->localeResolverMock->expects($this->once())
             ->method('emulate')
             ->with(0);
         $this->localeResolverMock->expects($this->once())
             ->method('revert');
-        $dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dateMock->expects($this->once())
-            ->method('subHour')
-            ->with(25)
-            ->will($this->returnValue($date));
+
+        $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($dateMock));
+            ->will($this->returnValue($date));
+
         return $date;
     }
 }

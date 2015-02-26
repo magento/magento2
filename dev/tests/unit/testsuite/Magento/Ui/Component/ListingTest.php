@@ -152,7 +152,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
         $this->listingView->setData('meta', $meta);
         $this->localeDate->expects($this->any())
             ->method('getDateTimeFormat')
-            ->with('medium')
+            ->with(\IntlDateFormatter::MEDIUM)
             ->willReturn('format_type');
         $options = $this->getMock('Magento\Cms\Ui\DataProvider\Page\Options\PageLayout', [], [], '', false);
         $this->optionsFactory->expects($this->any())

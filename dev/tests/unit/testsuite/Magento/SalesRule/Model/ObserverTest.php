@@ -249,20 +249,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAggregateSalesReportCouponsData()
     {
-        $dateMock = $this->getMock('Magento\Framework\Stdlib\DateTime\DateInterface', [], [], '', false);
+        $data = new \DateTime();
         $this->localeResolver->expects($this->once())
             ->method('emulate')
             ->with(0);
         $this->localeDate->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($dateMock));
-        $dateMock->expects($this->once())
-            ->method('subHour')
-            ->with(25)
-            ->will($this->returnSelf());
+            ->will($this->returnValue($data));
         $this->reportRule->expects($this->once())
             ->method('aggregate')
-            ->with($dateMock);
+            ->with($data);
         $this->localeResolver->expects($this->once())
             ->method('revert');
 

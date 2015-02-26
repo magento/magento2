@@ -181,7 +181,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
         $ruleModel->expects($this->once())->method('getName')->will($this->returnValue($ruleData['name']));
         $this->rssModel->expects($this->any())->method('getDiscountCollection')
             ->will($this->returnValue([$ruleModel]));
-        $this->timezoneInterface->expects($this->any())->method('formatDate')->will($this->returnValue('12/12/14'));
+        $this->timezoneInterface->expects($this->any())->method('formatDateTime')->will($this->returnValue('12/12/14'));
 
         $data = $this->block->getRssData();
 

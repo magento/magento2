@@ -953,8 +953,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         } else {
             $value = $object->getData($attribute->getAttributeCode());
             if ($attribute->getBackend()->getType() == 'datetime') {
-                $date = new \Magento\Framework\Stdlib\DateTime\Date($value, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
-                $value = $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+                $value = (new \DateTime($value))->format('Y-m-d H:i:s');
             }
             $bind = [
                 'attribute_id' => $attribute->getId(),
