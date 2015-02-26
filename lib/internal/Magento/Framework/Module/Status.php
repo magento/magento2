@@ -12,6 +12,8 @@ use Magento\Framework\App\State\Cleanup;
 
 /**
  * A service for controlling module status
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Status
 {
