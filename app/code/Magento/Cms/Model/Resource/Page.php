@@ -87,7 +87,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -103,11 +103,11 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (!$this->isValidPageIdentifier($object)) {
-            throw new \Magento\Framework\Model\Exception(__('The page URL key contains capital letters or disallowed symbols.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The page URL key contains capital letters or disallowed symbols.'));
         }
 
         if ($this->isNumericPageIdentifier($object)) {
-            throw new \Magento\Framework\Model\Exception(__('The page URL key cannot be made of only numbers.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The page URL key cannot be made of only numbers.'));
         }
 
         if ($object->isObjectNew() && !$object->hasCreationTime()) {

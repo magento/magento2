@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 /**
  * Catalog composite product configuration controller

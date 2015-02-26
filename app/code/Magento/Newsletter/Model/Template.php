@@ -140,7 +140,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Validate Newsletter template
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate()
     {
@@ -168,7 +168,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
                 }
             }
 
-            throw new \Magento\Framework\Model\Exception(join("\n", $errorMessages));
+            throw new \Magento\Framework\Exception\LocalizedException(join("\n", $errorMessages));
         }
     }
 

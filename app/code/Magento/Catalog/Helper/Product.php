@@ -467,7 +467,7 @@ class Product extends \Magento\Framework\Url\Helper
                 'catalog_controller_product_init_after',
                 ['product' => $product, 'controller_action' => $controller]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_logger->critical($e);
             return false;
         }

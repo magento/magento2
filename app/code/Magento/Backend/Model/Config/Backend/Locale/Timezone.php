@@ -9,18 +9,18 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Locale;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 class Timezone extends \Magento\Framework\App\Config\Value
 {
     /**
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
         if (!in_array($this->getValue(), \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC))) {
-            throw new Exception(__('Please correct the timezone.'));
+            throw new LocalizedException(__('Please correct the timezone.'));
         }
         return $this;
     }

@@ -236,12 +236,12 @@ abstract class AbstractEntity
      * Inner source object getter.
      *
      * @return AbstractSource
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Model\Exception(__('Please specify a source.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a source.'));
         }
         return $this->_source;
     }
@@ -539,12 +539,12 @@ abstract class AbstractEntity
      * Source object getter.
      *
      * @return AbstractSource
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Model\Exception(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
         }
         return $this->_source;
     }
@@ -696,14 +696,14 @@ abstract class AbstractEntity
      * Validate data.
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateData()
     {
         if (!$this->_dataValidated) {
             // do all permanent columns exist?
             if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Cannot find required columns: %1', implode(', ', $absentColumns))
                 );
             }
@@ -724,12 +724,12 @@ abstract class AbstractEntity
             }
 
             if ($emptyHeaderColumns) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
                 );
             }
             if ($invalidColumns) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
                 );
             }

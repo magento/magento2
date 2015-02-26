@@ -66,7 +66,7 @@ class Locale extends \Magento\Framework\App\Config\Value
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave()
     {
@@ -115,7 +115,7 @@ class Locale extends \Magento\Framework\App\Config\Value
             }
         }
         if ($exceptions) {
-            throw new \Magento\Framework\Model\Exception(join("\n", $exceptions));
+            throw new \Magento\Framework\Exception\LocalizedException(join("\n", $exceptions));
         }
 
         return $this;
