@@ -27,9 +27,6 @@
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
-            <exclude>
-                <directory suffix=".php">../../../app/code/Magento/*/Setup</directory>
-            </exclude>
         </whitelist>
     </filter>
     <!-- PHP INI settings and constants definition -->
