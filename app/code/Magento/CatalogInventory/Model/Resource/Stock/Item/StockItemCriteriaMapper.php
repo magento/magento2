@@ -137,13 +137,13 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function mapQtyFilter($comparisonMethod, $qty)
     {
         $methods = ['<' => 'lt', '>' => 'gt', '=' => 'eq', '<=' => 'lteq', '>=' => 'gteq', '<>' => 'neq'];
         if (!isset($methods[$comparisonMethod])) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('%1 is not a correct comparison method.', $comparisonMethod)
             );
         }

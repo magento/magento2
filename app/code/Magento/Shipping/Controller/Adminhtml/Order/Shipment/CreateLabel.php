@@ -61,7 +61,7 @@ class CreateLabel extends \Magento\Backend\App\Action
             $shipment->save();
             $this->messageManager->addSuccess(__('You created the shipping label.'));
             $response->setOk(true);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
