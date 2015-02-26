@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\App\ErrorHandler;
 
 class InstallerFactory
 {
@@ -25,6 +26,9 @@ class InstallerFactory
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
+        // For Setup Wizard we are using our customized error handler
+        $handler = new ErrorHandler();
+        set_error_handler([$handler, 'handler']);
     }
 
     /**
