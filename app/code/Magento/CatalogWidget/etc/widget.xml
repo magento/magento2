@@ -16,7 +16,7 @@
                 <label translate="true">Title</label>
             </parameter>
             <parameter name="show_pager" xsi:type="select" visible="true"
-                       source_model="Magento\Backend\Model\Config\Source\Yesno">
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
                 <label translate="true">Display Page Control</label>
             </parameter>
             <parameter name="products_per_page" xsi:type="text" required="true" visible="true">

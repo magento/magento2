@@ -60,12 +60,14 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      *
      * @param int|null $id
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute($id = null)
     {
         if (!isset($id) || empty($id)) {
-            throw new \Magento\Framework\Model\Exception(__('Could not rebuild index for undefined product'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Could not rebuild index for undefined product')
+            );
         }
         $ids = [$id];
         foreach ($this->_storeManager->getStores() as $store) {

@@ -6,7 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
@@ -60,7 +60,7 @@ class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $invoice->getOrder()
             )->save();
             $this->messageManager->addSuccess(__('The invoice has been captured.'));
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Invoice capturing error'));

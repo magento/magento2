@@ -129,7 +129,7 @@ class Transaction extends Entity implements TransactionResourceInterface
      * Also serialize additional information, if any
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
@@ -142,7 +142,7 @@ class Transaction extends Entity implements TransactionResourceInterface
 
         if ($parentTxnId) {
             if (!$txnId || !$orderId || !$paymentId) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('We don\'t have enough information to save the parent transaction ID.')
                 );
             }

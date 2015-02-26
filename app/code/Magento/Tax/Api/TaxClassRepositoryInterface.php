@@ -33,7 +33,7 @@ interface TaxClassRepositoryInterface
      * @param \Magento\Tax\Api\Data\TaxClassInterface $taxClass
      * @return string id for the newly created Tax class
      * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(\Magento\Tax\Api\Data\TaxClassInterface $taxClass);
 

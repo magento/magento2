@@ -204,7 +204,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider blockNotExistsDataProvider
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateBlockNotExists($name)
     {
@@ -354,7 +354,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAddBlockInvalidType()
     {

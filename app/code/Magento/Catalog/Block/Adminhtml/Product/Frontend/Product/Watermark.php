@@ -22,7 +22,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     protected $_elementFactory;
 
     /**
-     * @var \Magento\Backend\Block\System\Config\Form\Field
+     * @var \Magento\Config\Block\System\Config\Form\Field
      */
     protected $_formField;
 
@@ -39,7 +39,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition
-     * @param \Magento\Backend\Block\System\Config\Form\Field $formField
+     * @param \Magento\Config\Block\System\Config\Form\Field $formField
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $imageTypes
      * @param array $data
@@ -47,7 +47,7 @@ class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Catalog\Model\Config\Source\Watermark\Position $watermarkPosition,
-        \Magento\Backend\Block\System\Config\Form\Field $formField,
+        \Magento\Config\Block\System\Config\Form\Field $formField,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
         array $imageTypes = [],
         array $data = []

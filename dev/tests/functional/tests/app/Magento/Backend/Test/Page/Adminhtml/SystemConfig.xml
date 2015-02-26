@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="SystemConfig" area="Adminhtml" mca="admin/system_config" module="Magento_Backend">
+  <page name="SystemConfig" area="Adminhtml" mca="admin/system_config" module="Magento_Config">
     <block name="pageActions" class="Magento\Backend\Test\Block\System\Config\PageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="form" class="Magento\Backend\Test\Block\System\Config\Form" locator="#config-edit-form" strategy="css selector"/>
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>

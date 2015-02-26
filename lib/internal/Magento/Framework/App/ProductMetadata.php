@@ -12,6 +12,7 @@ use Magento\Framework\AppInterface;
 class ProductMetadata implements ProductMetadataInterface
 {
     const EDITION_NAME  = 'Community';
+    const PRODUCT_NAME  = 'Magento';
 
     /**
      * Get Product version
@@ -31,5 +32,15 @@ class ProductMetadata implements ProductMetadataInterface
     public function getEdition()
     {
         return self::EDITION_NAME;
+    }
+
+    /**
+     * Get Product name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return self::PRODUCT_NAME;
     }
 }
