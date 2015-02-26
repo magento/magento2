@@ -7,6 +7,8 @@ namespace Magento\Reports\Model\Resource\Quote;
 
 /**
  * Factory class for @see \Magento\Reports\Model\Resource\Quote\Collection
+ *
+ * @codeCoverageIgnore
  */
 class CollectionFactory implements \Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface
 {
