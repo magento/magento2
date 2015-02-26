@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Config\Model\Config\Structure\SearchInterface" type="Magento\Config\Model\Config\Structure" />
+    <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
+    <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Config\Model\Resource\Config" />
+    <type name="Magento\Config\Controller\Adminhtml\System\Config\Save">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Element\Iterator\Group" shared="false" />
+    <type name="Magento\Config\Model\Config\Structure\Element\Group\Proxy" shared="false" />
+
+    <type name="Magento\Config\Model\Config\Structure\Element\Dependency\Mapper" shared="false">
+        <arguments>
+            <argument name="fieldLocator" xsi:type="object">Magento\Config\Model\Config\Structure\Search\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Data">
+        <arguments>
+            <argument name="cacheId" xsi:type="string">backend_system_configuration_structure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Element\Tab" shared="false">
+        <arguments>
+            <argument name="childrenIterator" xsi:type="object">Magento\Config\Model\Config\Structure\Element\Iterator\Section</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Element\Section" shared="false">
+        <arguments>
+            <argument name="childrenIterator" xsi:type="object">Magento\Config\Model\Config\Structure\Element\Iterator\Group</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Element\Iterator\Field" shared="false">
+        <arguments>
+            <argument name="groupFlyweight" xsi:type="object">Magento\Config\Model\Config\Structure\Element\Group\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Element\Group" shared="false">
+        <arguments>
+            <argument name="childrenIterator" xsi:type="object">Magento\Config\Model\Config\Structure\Element\Iterator\Field</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\Value">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\Config\Model\Resource\Config\Data</argument>
+            <argument name="resourceCollection" xsi:type="object">Magento\Config\Model\Resource\Config\Data\Collection\Proxy</argument>
+        </arguments>
+    </type>
+</config>

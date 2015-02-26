@@ -15,6 +15,6 @@ namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles;
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class LogoUploader extends \Magento\Backend\Model\Config\Backend\Image\Logo
+class LogoUploader extends \Magento\Config\Model\Config\Backend\Image\Logo
 {
 }

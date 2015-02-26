@@ -37,13 +37,13 @@ class Selection extends \Magento\Backend\Block\Widget
     protected $_priceType;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_yesno;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
+     * @param \Magento\Config\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Registry $registry
@@ -51,7 +51,7 @@ class Selection extends \Magento\Backend\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Config\Source\Yesno $yesno,
+        \Magento\Config\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Registry $registry,
