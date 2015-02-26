@@ -81,11 +81,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 [
                     'label' => __('Used Currently For'),
                     'container_id' => 'used_currently_for',
-                    'after_element_html' => '<script>' .
+                    'after_element_html' => '<script>require(["prototype"], function () {' .
                     (!$this->getEmailTemplate()->getSystemConfigPathsWhereUsedCurrently() ? '$(\'' .
                     'used_currently_for' .
                     '\').hide(); ' : '') .
-                    '</script>'
+                    '});</script>'
                 ]
             );
         }
@@ -97,11 +97,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 [
                     'label' => __('Used as Default For'),
                     'container_id' => 'used_default_for',
-                    'after_element_html' => '<script>' .
+                    'after_element_html' => '<script>require(["prototype"], function () {' .
                     (!(bool)$this->getEmailTemplate()->getOrigTemplateCode() ? '$(\'' .
                     'used_default_for' .
                     '\').hide(); ' : '') .
-                    '</script>'
+                    '});</script>'
                 ]
             );
         }
