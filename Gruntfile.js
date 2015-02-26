@@ -33,6 +33,9 @@ module.exports = function (grunt) {
             grunt.log.subhead('I\'m default task and at the moment I\'m empty, sorry :/');
         },
 
+        /**
+         * Production preparation task.
+         */
         prod: function (component) {
             if (component === 'setup') {
                 grunt.task.run([
