@@ -15,7 +15,7 @@ class File
      *
      * @var string
      */
-    protected $_eventPrefix = 'core_file_storage_file';
+    protected $_eventPrefix = 'media_storage_file_storage_file';
 
     /**
      * Store media base directory path

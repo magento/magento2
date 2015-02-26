@@ -41,7 +41,7 @@ class Storage extends AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'core_file_storage';
+    protected $_eventPrefix = 'media_storage_file_storage';
 
     /**
      * Core file storage

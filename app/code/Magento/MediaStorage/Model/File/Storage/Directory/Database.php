@@ -18,7 +18,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @var string
      */
-    protected $_eventPrefix = 'core_file_storage_directory_database';
+    protected $_eventPrefix = 'media_storage_file_storage_directory_database';
 
     /**
      * Collect errors during sync process

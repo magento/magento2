@@ -32,7 +32,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('core_file_storage', 'file_id');
+        $this->_init('media_storage_file_storage', 'file_id');
     }
 
     /**
@@ -48,7 +48,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
             return $this;
         }
 
-        $dirStorageTable = $this->getTable('core_directory_storage');
+        $dirStorageTable = $this->getTable('media_storage_directory_storage');
         // For foreign key
 
         $ddlTable = $adapter->newTable(

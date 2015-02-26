@@ -17,7 +17,7 @@ class Database extends \Magento\MediaStorage\Model\Resource\File\Storage\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('core_directory_storage', 'directory_id');
+        $this->_init('media_storage_directory_storage', 'directory_id');
     }
 
     /**
