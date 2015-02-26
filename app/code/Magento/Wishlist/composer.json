@@ -6,7 +6,6 @@
         "magento/module-store": "0.42.0-beta9",
         "magento/module-customer": "0.42.0-beta9",
         "magento/module-catalog": "0.42.0-beta9",
-        "magento/module-core": "0.42.0-beta9",
         "magento/module-checkout": "0.42.0-beta9",
         "magento/module-theme": "0.42.0-beta9",
         "magento/module-catalog-inventory": "0.42.0-beta9",
