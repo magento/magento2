@@ -6,7 +6,14 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="configData" module="Magento_Core" type="flat" entity_type="core_config_data" collection="Magento\Core\Model\Resource\Config\Data\Collection" repository_class="Magento\Core\Test\Repository\ConfigData" handler_interface="Magento\Core\Test\Handler\ConfigData\ConfigDataInterface" class="Magento\Core\Test\Fixture\ConfigData">
+  <fixture name="configData" 
+           module="Magento_Core" 
+           type="flat" 
+           entity_type="core_config_data" 
+           collection="Magento\Core\Model\Resource\Config\Data\Collection" 
+           repository_class="Magento\Core\Test\Repository\ConfigData" 
+           handler_interface="Magento\Core\Test\Handler\ConfigData\ConfigDataInterface" 
+           class="Magento\Core\Test\Fixture\ConfigData">
     <field name="section"/>
     <field name="config_id" is_required="1">
       <default_value xsi:type="null"/>

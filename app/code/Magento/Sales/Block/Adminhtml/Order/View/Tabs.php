@@ -39,7 +39,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Retrieve available order
      *
      * @return \Magento\Sales\Model\Order
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getOrder()
     {
@@ -52,7 +52,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         if ($this->_coreRegistry->registry('order')) {
             return $this->_coreRegistry->registry('order');
         }
-        throw new \Magento\Framework\Model\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Framework\Exception\LocalizedException(__('We cannot get the order instance.'));
     }
 
     /**

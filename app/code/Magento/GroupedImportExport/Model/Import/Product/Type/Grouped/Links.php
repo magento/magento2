@@ -106,7 +106,7 @@ class Links
 
     /**
      * @param array $productIds
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function deleteOldLinks($productIds)

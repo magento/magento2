@@ -1,10 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Onepage;
+
+use Magento\Framework\Exception\PaymentException;
 
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
 {
@@ -55,14 +56,14 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $redirectUrl = $this->getOnepage()->getCheckout()->getRedirectUrl();
             $result['success'] = true;
             $result['error'] = false;
-        } catch (\Magento\Payment\Model\Info\Exception $e) {
+        } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
                 $result['error_messages'] = $message;
             }
             $result['goto_section'] = 'payment';
             $result['update_section'] = ['name' => 'payment-method', 'html' => $this->_getPaymentMethodsHtml()];
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_objectManager->get('Magento\Checkout\Helper\Data')
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());

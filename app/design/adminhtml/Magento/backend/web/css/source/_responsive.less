@@ -16,7 +16,7 @@
 //  Media width mixin used to group styles output based on media queries
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
 }
 
 //
@@ -25,20 +25,20 @@
 
 & when (@media-target = 'desktop'),
 (@media-target = 'all') {
-    @media all and (max-width: (@screen-l - 1)) {
-        .media-width('max', @screen-l);
+    @media all and (max-width: (@screen__l - 1)) {
+        .media-width('max', @screen__l);
     }
 
-    @media all and (min-width: @screen-m) {
-        .media-width('min', @screen-m);
+    @media all and (min-width: @screen__m) {
+        .media-width('min', @screen__m);
     }
 
-    @media all and (min-width: @screen-l) {
-        .media-width('min', @screen-l);
+    @media all and (min-width: @screen__l) {
+        .media-width('min', @screen__l);
     }
 
-    @media all and (min-width: @screen-xl) {
-        .media-width('min', @screen-xl);
+    @media all and (min-width: @screen__xl) {
+        .media-width('min', @screen__xl);
     }
 }
 
@@ -48,19 +48,19 @@
 
 & when (@media-target = 'mobile'),
 (@media-target = 'all') {
-    @media all and (min-width: @screen-s) {
-        .media-width('min', @screen-s);
+    @media all and (min-width: @screen__s) {
+        .media-width('min', @screen__s);
     }
 
-    @media all and (max-width: (@screen-m - 1)) {
-        .media-width('max', @screen-m);
+    @media all and (max-width: (@screen__m - 1)) {
+        .media-width('max', @screen__m);
     }
 
-    @media all and (max-width: (@screen-s - 1)) {
-        .media-width('max', @screen-s);
+    @media all and (max-width: (@screen__s - 1)) {
+        .media-width('max', @screen__s);
     }
 
-    @media all and (max-width: (@screen-xs - 1)) {
-        .media-width('max', @screen-xs);
+    @media all and (max-width: (@screen__xs - 1)) {
+        .media-width('max', @screen__xs);
     }
 }

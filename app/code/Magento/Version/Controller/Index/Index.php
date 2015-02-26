@@ -15,8 +15,6 @@ use Magento\Framework\App\ProductMetadataInterface;
  */
 class Index extends Action
 {
-    const PRODUCT_NAME = "Magento";
-
     /**
      * @var ProductMetadataInterface
      */
@@ -40,7 +38,7 @@ class Index extends Action
     public function execute()
     {
         $this->getResponse()->setBody(
-            self::PRODUCT_NAME . '/' .
+            $this->productMetadata->getName() . '/' .
             $this->productMetadata->getVersion() . ' (' .
             $this->productMetadata->getEdition() . ')'
         );

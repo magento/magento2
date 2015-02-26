@@ -39,13 +39,15 @@ class Factory
      *
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @return \Magento\Tax\Model\TaxClass\Type\TypeInterface
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create(\Magento\Tax\Model\ClassModel $taxClass)
     {
         $taxClassType = $taxClass->getClassType();
         if (!array_key_exists($taxClassType, $this->_types)) {
-            throw new \Magento\Framework\Model\Exception(sprintf('Invalid type of tax class "%s"', $taxClassType));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Invalid type of tax class "%1"', $taxClassType)
+            );
         }
         return $this->_objectManager->create(
             $this->_types[$taxClassType],

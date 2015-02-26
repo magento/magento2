@@ -111,7 +111,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->flag->expects($this->any())->method('isExpired')->will($this->returnValue(false));
         $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepository->expects($this->once())->method('getById')->will($this->returnValue($product));
-        $this->itemFactory->expects($this->once())->method('create')->will($this->throwException(new $exception));
+        $this->itemFactory->expects($this->once())
+            ->method('create')
+            ->willThrowException(new $exception('message'));
         $this->massOperations->setFlag($this->flag);
         $this->massOperations->addProducts($products, 1);
     }
@@ -125,7 +127,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             ['\Magento\Framework\Exception\NoSuchEntityException'],
             ['\Zend_Gdata_App_Exception'],
             ['\Zend_Db_Statement_Exception'],
-            ['\Magento\Framework\Model\Exception'],
+            ['\Magento\Framework\Exception\LocalizedException'],
             ['\Exception']
         ];
     }

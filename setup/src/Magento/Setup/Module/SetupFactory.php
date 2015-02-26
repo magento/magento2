@@ -63,6 +63,11 @@ class SetupFactory
         );
     }
 
+    /**
+     * Gets the resource.
+     *
+     * @return Resource
+     */
     private function getResource()
     {
         $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(

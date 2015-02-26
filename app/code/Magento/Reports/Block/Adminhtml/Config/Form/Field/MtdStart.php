@@ -12,7 +12,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class MtdStart extends \Magento\Backend\Block\System\Config\Form\Field
+class MtdStart extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @param AbstractElement $element

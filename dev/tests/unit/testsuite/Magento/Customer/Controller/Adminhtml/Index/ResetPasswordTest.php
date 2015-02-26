@@ -324,7 +324,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Model\Exception();
+        $exception = new \Magento\Framework\Validator\ValidatorException();
         $error = new \Magento\Framework\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
@@ -339,7 +339,9 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Verify error message is set
-        $this->messageManager->expects($this->once())->method('addMessage')->with($this->equalTo($error));
+        $this->messageManager->expects($this->once())
+            ->method('addMessage')
+            ->with($error);
 
         $this->_testedObject->execute();
     }
@@ -349,40 +351,26 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $warningText = 'Warning';
         $customerId = 1;
 
-        $this->_request->expects(
-            $this->once()
-        )->method(
-            'getParam'
-        )->with(
-            $this->equalTo('customer_id'),
-            $this->equalTo(0)
-        )->will(
-            $this->returnValue($customerId)
-        );
+        $this->_request->expects($this->once())
+            ->method('getParam')
+            ->with('customer_id', 0)
+            ->willReturn($customerId);
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Model\Exception($warningText);
+        $exception = new \Magento\Framework\Validator\ValidatorException($warningText);
+
         $error = new \Magento\Framework\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);
 
-        $this->_customerRepositoryMock->expects(
-            $this->once()
-        )->method(
-            'getById'
-        )->with(
-            $customerId
-        )->will(
-            $this->throwException($exception)
-        );
+        $this->_customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willThrowException($exception);
 
         // Verify Warning is converted to an Error and message text is set to exception text
-        $this->messageManager->expects(
-            $this->once()
-        )->method(
-            'addMessage'
-        )->with(
-            $this->equalTo(new \Magento\Framework\Message\Error($warningText))
-        );
+        $this->messageManager->expects($this->once())
+            ->method('addMessage')
+            ->with(new \Magento\Framework\Message\Error($warningText));
 
         $this->_testedObject->execute();
     }

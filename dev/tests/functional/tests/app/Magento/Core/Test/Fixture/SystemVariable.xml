@@ -6,11 +6,16 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="systemVariable" module="Magento_Core" type="composite" collection="Magento\Core\Model\Resource\Variable\Collection" handler_interface="Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface" class="Magento\Core\Test\Fixture\SystemVariable">
+  <fixture name="systemVariable" 
+           module="Magento_Core" 
+           type="composite" 
+           collection="Magento\Core\Model\Resource\Variable\Collection" 
+           handler_interface="Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface" 
+           class="Magento\Core\Test\Fixture\SystemVariable">
     <dataset name="default">
         <field name="code" xsi:type="string">variableCode%isolation%</field>
         <field name="name" xsi:type="string">variableName%isolation%</field>
-        <field name="html_value" xsi:type="string">&lt;p&gt;html_value&lt;/p&gt;</field>
+        <field name="html_value" xsi:type="string">&lt;p>html_value&lt;/p></field>
         <field name="plain_value" xsi:type="string">plain_value</field>
     </dataset>
     <field name="variable_id" is_required="">
