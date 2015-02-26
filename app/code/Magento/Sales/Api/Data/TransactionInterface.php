@@ -209,7 +209,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @param string $key
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setAdditionalInformation($key, $value);
 }
