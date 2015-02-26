@@ -11,9 +11,9 @@ return [
     // Blocks with abstract constructor arguments
     'Magento\Email\Block\Adminhtml\Template',
     'Magento\Email\Block\Adminhtml\Template\Edit',
-    'Magento\Backend\Block\System\Config\Edit',
-    'Magento\Backend\Block\System\Config\Form',
-    'Magento\Backend\Block\System\Config\Tabs',
+    'Magento\Config\Block\System\Config\Edit',
+    'Magento\Config\Block\System\Config\Form',
+    'Magento\Config\Block\System\Config\Tabs',
     'Magento\Review\Block\Form',
     // Fails because of dependence on registry
     'Magento\Reminder\Block\Adminhtml\Reminder\Edit\Tab\Customers',
