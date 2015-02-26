@@ -38,7 +38,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         $isNew = $this->getRequest()->getParam('is_new');
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
@@ -70,7 +70,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
                 $status->save();
                 $this->messageManager->addSuccess(__('You have saved the order status.'));
                 return $resultRedirect->setPath('sales/*/');
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(

@@ -29,7 +29,7 @@ angular.module('create-admin-account', ['ngStorage'])
                 $scope.admin.passwordStatus.label = 'Weak';
             } else if (p.length > 6) {
                 $scope.admin.passwordStatus.class = 'to-short';
-                $scope.admin.passwordStatus.label = 'To Short';
+                $scope.admin.passwordStatus.label = 'Too Short';
             } else {
                 $scope.admin.passwordStatus.class = 'none';
                 $scope.admin.passwordStatus.label = 'None';

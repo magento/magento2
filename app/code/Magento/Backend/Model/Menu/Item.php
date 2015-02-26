@@ -425,7 +425,7 @@ class Item
     protected function _isConfigDependenciesAvailable()
     {
         if ($this->_dependsOnConfig) {
-            return $this->_scopeConfig->isSetFlag((string)$this->_dependsOnConfig, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+            return $this->_scopeConfig->isSetFlag((string)$this->_dependsOnConfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         }
         return true;
     }

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
@@ -59,7 +59,7 @@ class DeleteTaxRuleEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'default']);
+        $customer = $fixtureFactory->createByCode('customer', ['dataSet' => 'default']);
         $customer->persist();
 
         return ['customer' => $customer];
@@ -83,14 +83,14 @@ class DeleteTaxRuleEntityTest extends Injectable
      * Delete Tax Rule Entity test
      *
      * @param TaxRule $taxRule
-     * @param AddressInjectable $address
+     * @param Address $address
      * @param array $shipping
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testDeleteTaxRule(
         TaxRule $taxRule,
-        AddressInjectable $address,
+        Address $address,
         array $shipping
     ) {
         // Precondition

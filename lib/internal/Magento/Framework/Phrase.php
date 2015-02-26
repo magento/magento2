@@ -7,9 +7,10 @@
  */
 namespace Magento\Framework;
 
+use Zend\Stdlib\JsonSerializable;
 use Magento\Framework\Phrase\RendererInterface;
 
-class Phrase
+class Phrase implements JsonSerializable
 {
     /**
      * Default phrase renderer. Allows stacking renderers that "don't know about each other"
@@ -81,6 +82,16 @@ class Phrase
      * @return string
      */
     public function __toString()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @return string
+     */
+    public function jsonSerialize()
     {
         return $this->render();
     }

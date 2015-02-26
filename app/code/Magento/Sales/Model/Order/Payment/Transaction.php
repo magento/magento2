@@ -235,14 +235,14 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @param string $parentTxnId
      * @param string $txnId
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setParentTxnId($parentTxnId, $txnId = null)
     {
         $this->_verifyTxnId($parentTxnId);
         if (empty($txnId)) {
             if ('' == $this->getTxnId()) {
-                throw new \Magento\Framework\Model\Exception(__('The parent transaction ID must have a transaction ID.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The parent transaction ID must have a transaction ID.'));
             }
         } else {
             $this->setTxnId($txnId);
@@ -438,7 +438,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
                 return false;
             }
             return true;
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // jam all logical exceptions, fallback to false
         }
         return false;
@@ -514,12 +514,12 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @param string $key
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setAdditionalInformation($key, $value)
     {
         if (is_object($value)) {
-            throw new \Magento\Framework\Model\Exception(__('Payment transactions disallow storing objects.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Payment transactions disallow storing objects.'));
         }
         $info = $this->_getData('additional_information');
         if (!$info) {
@@ -571,7 +571,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      *
      * @param bool $shouldSave
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -581,7 +581,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
             $this->_verifyThisTransactionExists();
         }
         if (1 == $this->getIsClosed() && $this->_isFailsafe) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('The transaction "%1" (%2) is already closed.', $this->getTxnId(), $this->getTxnType())
             );
         }
@@ -668,7 +668,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      *
      * @param \Magento\Sales\Model\Order|null|boolean $order
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setOrder($order = null)
     {
@@ -683,7 +683,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         } elseif (!$this->getId() || $this->getOrderId() == $order->getId()) {
             $this->_order = $order;
         } else {
-            throw new \Magento\Framework\Model\Exception(__('Set order for existing transactions not allowed'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Set order for existing transactions not allowed'));
         }
 
         return $this;
@@ -732,7 +732,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * Load child transactions
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -747,7 +747,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         $payment = $this->_verifyPaymentObject(true);
         $paymentId = $payment ? $payment->getId() : $this->_getData('payment_id');
         if (!$paymentId) {
-            throw new \Magento\Framework\Model\Exception(__('At minimum, you need to set a payment ID.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('At minimum, you need to set a payment ID.'));
         }
 
         $this->setOrder(true);
@@ -845,7 +845,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      *
      * @param string $txnType
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _verifyTxnType($txnType = null)
     {
@@ -861,7 +861,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
             case self::TYPE_REFUND:
                 break;
             default:
-                throw new \Magento\Framework\Model\Exception(__('We found an unsupported transaction type "%1".', $txnType));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We found an unsupported transaction type "%1".', $txnType));
         }
     }
 
@@ -871,13 +871,13 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      *
      * @param bool $dryRun
      * @return \Magento\Sales\Model\Order\Payment|null|false
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _verifyPaymentObject($dryRun = false)
     {
         if (!$this->_paymentObject || !$this->getOrderId()) {
             if (!$dryRun) {
-                throw new \Magento\Framework\Model\Exception(__('Please set a proper payment object.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please set a proper payment object.'));
             }
         }
         return $this->_paymentObject;
@@ -888,12 +888,12 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      *
      * @param string $txnId
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            throw new \Magento\Framework\Model\Exception(__('The Transaction ID field cannot be empty.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The Transaction ID field cannot be empty.'));
         }
     }
 
@@ -902,12 +902,12 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * TODO for more restriction we can check for data consistency
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _verifyThisTransactionExists()
     {
         if (!$this->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('You can\'t do this without a transaction object.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('You can\'t do this without a transaction object.'));
         }
         $this->_verifyTxnType();
     }

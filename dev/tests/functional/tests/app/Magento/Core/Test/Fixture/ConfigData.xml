@@ -11,7 +11,7 @@
     <module>Magento_Core</module>
     <type>flat</type>
     <entity_type>core_config_data</entity_type>
-    <collection>Magento\Core\Model\Resource\Config\Data\Collection</collection>
+    <collection>Magento\Config\Model\Resource\Config\Data\Collection</collection>
     <repository_class>Magento\Core\Test\Repository\ConfigData</repository_class>
     <handler_interface>Magento\Core\Test\Handler\ConfigData\ConfigDataInterface</handler_interface>
     <fields>

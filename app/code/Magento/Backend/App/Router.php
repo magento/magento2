@@ -8,7 +8,7 @@
  */
 namespace Magento\Backend\App;
 
-class Router extends \Magento\Core\App\Router\Base
+class Router extends \Magento\Framework\App\Router\Base
 {
     /**
      * @var \Magento\Backend\App\ConfigInterface
@@ -53,11 +53,9 @@ class Router extends \Magento\Core\App\Router\Base
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
+     * @param \Magento\Framework\App\Router\PathConfigInterface $pathConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      *
@@ -70,11 +68,9 @@ class Router extends \Magento\Core\App\Router\Base
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
+        \Magento\Framework\App\Router\PathConfigInterface $pathConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Backend\App\ConfigInterface $backendConfig
     ) {
@@ -85,11 +81,9 @@ class Router extends \Magento\Core\App\Router\Base
             $responseFactory,
             $routeConfig,
             $url,
-            $storeManager,
-            $scopeConfig,
-            $urlSecurityInfo,
             $routerId,
-            $nameBuilder
+            $nameBuilder,
+            $pathConfig
         );
         $this->_coreConfig = $coreConfig;
         $this->_backendConfig = $backendConfig;

@@ -29,7 +29,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\Catalog\Model\Resource\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
@@ -95,7 +95,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->cacheManager));
 
         $this->registry = $this->getMock('Magento\Framework\Registry');
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
         $this->categoryTreeFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Category\TreeFactory',
@@ -162,7 +162,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
      * @expectedExceptionMessage Sorry, but we can't move the category because we can't find the new parent category you selected.
      * @codingStandardsIgnoreEnd
@@ -188,7 +188,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
      * @expectedExceptionMessage Sorry, but we can't move the category because we can't find the new category you selected.
      * @codingStandardsIgnoreEnd
@@ -214,7 +214,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
      * @expectedExceptionMessage We can't perform this category move operation because the parent category matches the child category.
      * @codingStandardsIgnoreEnd

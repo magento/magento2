@@ -203,7 +203,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -343,7 +343,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param QuoteValidator $quoteValidator
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
@@ -381,7 +381,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Quote\Model\QuoteValidator $quoteValidator,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -1394,7 +1394,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param   \Magento\Quote\Model\Quote\Item $item
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addItem(\Magento\Quote\Model\Quote\Item $item)
     {
@@ -1414,7 +1414,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param null|float|\Magento\Framework\Object $request
      * @param null|string $processMode
      * @return \Magento\Quote\Model\Quote\Item|string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -1430,7 +1430,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $request = $this->objectFactory->create(['qty' => $request]);
         }
         if (!$request instanceof \Magento\Framework\Object) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
         }
@@ -1490,7 +1490,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             }
         }
         if (!empty($errors)) {
-            throw new \Magento\Framework\Model\Exception(implode("\n", $errors));
+            throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
         }
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
@@ -1556,7 +1556,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Object $buyRequest
      * @param null|array|\Magento\Framework\Object $params
      * @return \Magento\Quote\Model\Quote\Item
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1565,7 +1565,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $item = $this->getItemById($itemId);
         if (!$item) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('This is the wrong quote item id to update configuration.')
             );
         }
@@ -1587,7 +1587,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $resultItem = $this->addProduct($product, $buyRequest);
 
         if (is_string($resultItem)) {
-            throw new \Magento\Framework\Model\Exception($resultItem);
+            throw new \Magento\Framework\Exception\LocalizedException($resultItem);
         }
 
         if ($resultItem->getParentItem()) {
@@ -2168,7 +2168,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $storeId = $this->getStoreId();
         $minOrderActive = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$minOrderActive) {
@@ -2176,17 +2176,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
         $minOrderMulti = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $minAmount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxInclude = $this->_scopeConfig->getValue(
             'sales/minimum_order/tax_including',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
 

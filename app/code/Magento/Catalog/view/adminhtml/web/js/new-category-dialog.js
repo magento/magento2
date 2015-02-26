@@ -5,16 +5,16 @@
 /*jshint browser:true jquery:true*/
 /*global FORM_KEY*/
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template",
-    "mage/translate",
-    "mage/backend/tree-suggest",
-    "mage/backend/validation"
-], function($){
+    'jquery',
+    'jquery/ui',
+    'mage/translate',
+    'mage/backend/tree-suggest',
+    'mage/backend/validation'
+], function ($) {
     'use strict';
+
     var clearParentCategory = function () {
-        $('#new_category_parent').find('option').each(function(){
+        $('#new_category_parent').find('option').each(function () {
             $('#new_category_parent-suggest').treeSuggest('removeOption', null, this);
         });
     };
@@ -34,7 +34,7 @@ define([
                     $('#new_category_name').focus();
                 });
 
-            $.validator.addMethod('validate-parent-category', function() {
+            $.validator.addMethod('validate-parent-category', function () {
                 return $('#new_category_parent').val() || $('#new_category_parent-suggest').val() === '';
             }, $.mage.__('Choose existing category.'));
             var newCategoryForm = $('#new_category_form');
@@ -60,7 +60,7 @@ define([
                 modal: true,
                 multiselect: true,
                 resizable: false,
-                open: function() {
+                open: function () {
                     // fix for suggest field - overlapping dialog z-index
                     $('#new_category_parent-suggest').css('z-index', $.ui.dialog.maxZ + 1);
                     var enteredName = $('#category_ids-suggest').val();
@@ -70,7 +70,7 @@ define([
                     }
                     $('#new_category_messages').html('');
                 },
-                close: function() {
+                close: function () {
                     $('#new_category_name, #new_category_parent-suggest').val('');
                     var validationOptions = newCategoryForm.validation('option');
                     validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
@@ -82,7 +82,7 @@ define([
                     text: $.mage.__('Create Category'),
                     'class': 'action-create primary',
                     'data-action': 'save',
-                    click: function(event) {
+                    click: function (event) {
                         if (!newCategoryForm.valid()) {
                             return;
                         }
@@ -121,17 +121,17 @@ define([
                                         $('#new_category_messages').html(data.messages);
                                     }
                                 }
-                            )
+                        )
                             .complete(
                                 function () {
                                     thisButton.prop('disabled', false);
                                 }
-                            );
+                        );
                     }
                 }]
             });
         }
     });
-    
+
     return $.mage.newCategoryDialog;
 });

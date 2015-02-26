@@ -22,7 +22,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -44,13 +44,13 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Construct
      *
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
@@ -140,7 +140,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function validate($object)
@@ -151,7 +151,9 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
-            throw new \Magento\Framework\Model\Exception(__('Please enter a number 0 or greater in this field.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please enter a number 0 or greater in this field.')
+            );
         }
 
         return true;

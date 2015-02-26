@@ -81,7 +81,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $filteredData = $metadataForm->extractData($request, $scope);
 
-        $object = $this->_objectFactory->create(['data' => $request->getPost()]);
+        $object = $this->_objectFactory->create(['data' => $request->getPostValue()]);
         $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
             $filteredData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
@@ -178,7 +178,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $returnToEdit = false;
         $customerId = (int)$this->getRequest()->getParam('id');
-        $originalRequestData = $this->getRequest()->getPost();
+        $originalRequestData = $this->getRequest()->getPostValue();
         if ($originalRequestData) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules
@@ -245,12 +245,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->messageManager->addSuccess(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             } catch (\Magento\Framework\Validator\ValidatorException $exception) {
-                $this->_addSessionErrorMessages($exception->getMessages());
-                $this->_getSession()->setCustomerData($originalRequestData);
-                $returnToEdit = true;
-            } catch (\Magento\Framework\Model\Exception $exception) {
-                $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
-                if (!count($messages)) {
+                $messages = $exception->getMessages();
+                if (empty($messages)) {
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);

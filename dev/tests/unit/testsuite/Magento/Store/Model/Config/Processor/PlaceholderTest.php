@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model\Config\Processor;
 
+use Magento\Store\Model\Store;
+
 class PlaceholderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,8 +32,8 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Store\Model\Config\Processor\Placeholder(
             $this->_requestMock,
             [
-                'unsecureBaseUrl' => \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL,
-                'secureBaseUrl' => \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL
+                'unsecureBaseUrl' => Store::XML_PATH_UNSECURE_BASE_URL,
+                'secureBaseUrl' => Store::XML_PATH_SECURE_BASE_URL
             ],
             \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
         );

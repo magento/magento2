@@ -482,7 +482,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('message', $result, 'Error message was expected to be set');
         $this->assertStringStartsWith(
             'There is already a registered customer using this email address',
-            $result['message'],
+            (string)$result['message'],
             'Validation error is invalid.'
         );
     }

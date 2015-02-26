@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Status
@@ -16,14 +16,14 @@ use Magento\Framework\Model\Exception;
 class Status extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -31,7 +31,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -75,15 +75,15 @@ class Status extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $state
      * @return void
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateBeforeUnassign($state)
     {
         if ($this->getResource()->checkIsStateLast($state)) {
-            throw new Exception(__('The last status can\'t be unassigned from its current state.'));
+            throw new LocalizedException(__('The last status can\'t be unassigned from its current state.'));
         }
         if ($this->getResource()->checkIsStatusUsed($this->getStatus())) {
-            throw new Exception(__('Status can\'t be unassigned, because it is used by existing order(s).'));
+            throw new LocalizedException(__('Status can\'t be unassigned, because it is used by existing order(s).'));
         }
     }
 
@@ -127,7 +127,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
      * Get status label by store
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getStoreLabel($store = null)
     {

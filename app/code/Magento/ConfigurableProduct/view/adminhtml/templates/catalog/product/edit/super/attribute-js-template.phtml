@@ -8,23 +8,23 @@
 
 /* @var $block \Magento\Framework\View\Element\Template */
 ?>
-<script data-template-for="configurable-attribute" type="text/x-jquery-tmpl">
-    <div class="entry-edit" data-role="configurable-attribute" data-attribute="${JSON.stringify(attribute)}">
-        <input name="attributes[]" id="configurable_attribute_${attribute.id}"
-            value="${attribute.id}" type="hidden">
+<script data-template-for="configurable-attribute" type="text/x-magento-template">
+    <div class="entry-edit" data-role="configurable-attribute" data-attribute="<%= JSON.stringify(data.attribute) %>">
+        <input name="attributes[]" id="configurable_attribute_<%= data.attribute.id %>"
+            value="<%= data.attribute.id %>" type="hidden">
         <input value="new" type="hidden"
-            name="product[configurable_attributes_data][${attribute.id}]][id]"/>
-        <input value="${attribute.id}" type="hidden"
-            name="product[configurable_attributes_data][${attribute.id}][attribute_id]"/>
+            name="product[configurable_attributes_data][<%= data.attribute.id %>]][id]"/>
+        <input value="<%= data.attribute.id %>" type="hidden"
+            name="product[configurable_attributes_data][<%= data.attribute.id %>][attribute_id]"/>
         <input value="" type="hidden"
-            name="product[configurable_attributes_data][${attribute.id}][position]"/>
-        <input value="${attribute.code}" type="hidden"
-            name="product[configurable_attributes_data][${attribute.id}][code]"/>
+            name="product[configurable_attributes_data][<%= data.attribute.id %>][position]"/>
+        <input value="<%= data.attribute.code %>" type="hidden"
+            name="product[configurable_attributes_data][<%= data.attribute.id %>][code]"/>
 
-        <div class="fieldset-wrapper collapsable-wrapper" id="${attribute.id}-wrapper">
+        <div class="fieldset-wrapper collapsable-wrapper" id="<%= data.attribute.id %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="title" data-toggle="collapse" data-target="#${attribute.id}-content">
-                    <span>${attribute.label}</span>
+                <strong class="title" data-toggle="collapse" data-target="#<%= data.attribute.id %>-content">
+                    <span><%= data.attribute.label %></span>
                 </strong>
                 <div class="actions">
                     <button type="button" title="<?php echo __('Delete Variations Group')?>" class="action-delete">
@@ -33,23 +33,23 @@
                 </div>
                 <div class="draggable-handle" title="<?php echo __('Sort Variations')?>"></div>
             </div>
-            <div class="fieldset-wrapper-content collapse" id="${attribute.id}-content" data-attribute-id="${attribute.id}">
+            <div class="fieldset-wrapper-content collapse" id="<%= data.attribute.id %>-content" data-attribute-id="<%= data.attribute.id %>">
                 <fieldset class="fieldset">
                     <div class="field field-variation">
                         <label class="label"><span><?php echo __('Variation Label'); ?></span></label>
                         <div class="control">
-                            <input type="text" value="${attribute.label}"
-                                   name="product[configurable_attributes_data][${attribute.id}][label]"
-                                   data-store-label="${attribute.label}"
+                            <input type="text" value="<%= data.attribute.label %>"
+                                   name="product[configurable_attributes_data][<%= data.attribute.id %>][label]"
+                                   data-store-label="<%= data.attribute.label %>"
                                    class="store-label required-entry"/>
                         </div>
                         <div class="field-service">
-                            <label for="attribute-${attribute.id}" class="use-default">
+                            <label for="attribute-<%= data.attribute.id %>" class="use-default">
                                 <input value="1"
                                        type="checkbox"
                                        class="use-default-control"
-                                       name="product[configurable_attributes_data][${attribute.id}][use_default]"
-                                       id="attribute-${attribute.id}"/>
+                                       name="product[configurable_attributes_data][<%= data.attribute.id %>][use_default]"
+                                       id="attribute-<%= data.attribute.id %>"/>
                                 <span class="use-default-label"><?php echo __('Use Default')?></span>
                             </label>
                         </div>
@@ -66,13 +66,13 @@
                                     </tr>
                                 </thead>
                                 <tbody data-role="options">
-                                {{each(index, option) attribute.options}}
+                                <% _.each(data.attribute.options, function(option) { %>
                                 <tr data-role="option-container">
-                                    <td class="col-name" data-column="name">${option.label}</td>
+                                    <td class="col-name" data-column="name"><%= option.label %></td>
                                     <td class="col-change-price" data-column="change-price">
                                         <input type="hidden"
-                                               name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][value_index]"
-                                               value="${option.value}"/>
+                                               name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= option.value %>][value_index]"
+                                               value="<%= option.value %>"/>
 
                                         <div class="field field-change-pricing">
                                             <div class="control">
@@ -80,13 +80,13 @@
                                                     <div class="field field-pricing-value">
                                                         <div class="control">
                                                             <input type="text" class="pricing-value validate-number"
-                                                                   name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][pricing_value]"
+                                                                   name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= option.value %>][pricing_value]"
                                                                    value=""/>
                                                         </div>
                                                     </div>
                                                     <div class="field field-pricing-measure">
                                                         <div class="actions dropdown actions-select">
-                                                            <input name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][is_percent]" type="hidden" value="0"/>
+                                                            <input name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= option.value %>][is_percent]" type="hidden" value="0"/>
                                                             <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                                                 <span><?php echo $block->getBaseCurrency()->getSymbol() ?></span>
                                                             </button>
@@ -103,10 +103,10 @@
                                     <td class="col-include" data-column="include">
                                         <div class="field choice">
                                             <input type="hidden"
-                                                   name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][include]"
+                                                   name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= option.value %>][include]"
                                                    value="0"/>
                                             <input type="checkbox" class="include"
-                                                   name="product[configurable_attributes_data][${attribute.id}][values][${option.value}][include]"
+                                                   name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= option.value %>][include]"
                                                    value="1" checked="checked"/>
                                         </div>
                                     </td>
@@ -117,7 +117,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                {{/each}}
+                                <% }); %>
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -132,12 +132,12 @@
         </div>
     </div>
 </script>
-<script data-template-for="new-option" type="text/x-jquery-tmpl">
+<script data-template-for="new-option" type="text/x-magento-template">
     <tr data-role="option-container">
         <td class="col-name" data-column="name">
             <div class="field">
                 <div class="control">
-                    <input name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][label]"
+                    <input name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= data.option.id %>][label]"
                            class="required-entry" type="text"
                            placeholder="<?php echo __('begin typing to add value'); ?>" />
                 </div>
@@ -150,12 +150,12 @@
                         <div class="field field-pricing-value">
                             <div class="control">
                                 <input type="text" class="pricing-value validate-number"
-                                       name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][pricing_value]" />
+                                       name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= data.option.id %>][pricing_value]" />
                             </div>
                         </div>
                         <div class="field field-pricing-measure">
                             <div class="actions dropdown actions-select">
-                                <input type="hidden" value="0" name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][is_percent]"/>
+                                <input type="hidden" value="0" name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= data.option.id %>][is_percent]"/>
                                 <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
                                     <span><?php echo $block->getBaseCurrency()->getSymbol() ?></span>
                                 </button>
@@ -172,10 +172,10 @@
         <td class="col-include" data-column="include">
             <div class="field choice">
                 <input type="hidden"
-                       name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][include]"
+                       name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= data.option.id %>][include]"
                        value="0"/>
                 <input type="checkbox" class="include"
-                       name="product[configurable_attributes_data][${attribute.id}][values][${option.id}][include]"
+                       name="product[configurable_attributes_data][<%= data.attribute.id %>][values][<%= data.option.id %>][include]"
                        value="1" checked="checked"/>
             </div>
         </td>

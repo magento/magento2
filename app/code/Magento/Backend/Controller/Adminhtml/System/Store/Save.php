@@ -17,7 +17,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
         $redirectResult = $this->resultRedirectFactory->create();
-        if ($this->getRequest()->isPost() && ($postData = $this->getRequest()->getPost())) {
+        if ($this->getRequest()->isPost() && ($postData = $this->getRequest()->getPostValue())) {
             if (empty($postData['store_type']) || empty($postData['store_action'])) {
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
@@ -90,7 +90,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                 }
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_getSession()->setPostData($postData);
             } catch (\Exception $e) {

@@ -28,7 +28,7 @@
                     <argument name="edition" translate="true" xsi:type="string">Community Edition</argument>
                 </arguments>
             </block>
-            <block class="Magento\Backend\Block\GlobalSearch" as="search" after="logo" acl="Magento_Adminhtml::global_search"/>
+            <block class="Magento\Backend\Block\GlobalSearch" as="search" after="logo" acl="Magento_Backend::global_search"/>
             <block class="Magento\Backend\Block\Page\Header" name="user" after="-">
                 <arguments>
                     <argument name="show_part" xsi:type="string">user</argument>

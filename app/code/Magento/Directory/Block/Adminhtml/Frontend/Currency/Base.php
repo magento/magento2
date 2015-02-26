@@ -9,7 +9,7 @@
  */
 namespace Magento\Directory\Block\Adminhtml\Frontend\Currency;
 
-class Base extends \Magento\Backend\Block\System\Config\Form\Field
+class Base extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
@@ -20,7 +20,7 @@ class Base extends \Magento\Backend\Block\System\Config\Form\Field
         if ($this->getRequest()->getParam('website') != '') {
             $priceScope = $this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             if ($priceScope == \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL) {
                 return '';

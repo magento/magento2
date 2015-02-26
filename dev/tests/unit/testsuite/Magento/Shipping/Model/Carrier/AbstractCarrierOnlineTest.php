@@ -59,7 +59,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Shipping\Model\Shipping::composePackagesForCarrier
+     * covers \Magento\Shipping\Model\Shipping::composePackagesForCarrier
      */
     public function testComposePackages()
     {

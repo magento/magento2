@@ -92,7 +92,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -107,7 +107,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,7 +117,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -376,7 +376,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * Retrieve status name
      *
      * @param string $statusId
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public static function getStatusName($statusId)
     {

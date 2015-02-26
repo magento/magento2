@@ -87,7 +87,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Return confirmation message for delete action
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getConfirmMessageDelete()
     {
@@ -151,7 +151,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get js tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTitle()
     {

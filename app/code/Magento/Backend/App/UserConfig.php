@@ -7,7 +7,7 @@
  */
 namespace Magento\Backend\App;
 
-use Magento\Backend\Model\Config\Factory;
+use Magento\Config\Model\Config\Factory;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Console\Response;
 use Magento\Framework\AppInterface;

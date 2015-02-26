@@ -74,7 +74,7 @@ class Currencysymbol
     protected $_cacheTypeList;
 
     /**
-     * @var \Magento\Backend\Model\Config\Factory
+     * @var \Magento\Config\Model\Config\Factory
      */
     protected $_configFactory;
 
@@ -84,7 +84,7 @@ class Currencysymbol
     protected $_systemStore;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -108,9 +108,9 @@ class Currencysymbol
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig
-     * @param \Magento\Backend\Model\Config\Factory $configFactory
+     * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -118,9 +118,9 @@ class Currencysymbol
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig,
-        \Magento\Backend\Model\Config\Factory $configFactory,
+        \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Framework\Event\ManagerInterface $eventManager
@@ -154,7 +154,7 @@ class Currencysymbol
             self::ALLOWED_CURRENCIES_CONFIG_SEPARATOR,
             $this->_scopeConfig->getValue(
                 self::XML_PATH_ALLOWED_CURRENCIES,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
         );
@@ -181,7 +181,7 @@ class Currencysymbol
                     }
                     $storeSymbols = $this->_scopeConfig->getValue(
                         self::XML_PATH_ALLOWED_CURRENCIES,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         $store
                     );
                     $allowedCurrencies = array_merge(
@@ -314,7 +314,7 @@ class Currencysymbol
         $result = [];
         $configData = (string)$this->_scopeConfig->getValue(
             $configPath,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($configData) {

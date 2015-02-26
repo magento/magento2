@@ -13,7 +13,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Shipping extends AbstractTotal
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -28,13 +28,13 @@ class Shipping extends AbstractTotal
     protected $priceCurrency;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\Config $taxConfig,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
@@ -48,7 +48,7 @@ class Shipping extends AbstractTotal
     /**
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -98,7 +98,7 @@ class Shipping extends AbstractTotal
                 }
             } else {
                 $baseAllowedAmount = $order->getBaseCurrency()->format($baseAllowedAmount, null, false);
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Maximum shipping amount allowed to refund is: %1', $baseAllowedAmount)
                 );
             }

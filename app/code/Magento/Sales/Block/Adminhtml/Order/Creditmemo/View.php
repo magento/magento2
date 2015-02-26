@@ -125,7 +125,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve text for header
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

@@ -25,7 +25,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param TableBuilder $tableBuilder
@@ -35,7 +35,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,
         TableBuilder $tableBuilder,
@@ -60,12 +60,14 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      *
      * @param int|null $id
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute($id = null)
     {
         if (!isset($id) || empty($id)) {
-            throw new \Magento\Framework\Model\Exception(__('Could not rebuild index for undefined product'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Could not rebuild index for undefined product')
+            );
         }
         $ids = [$id];
         foreach ($this->_storeManager->getStores() as $store) {

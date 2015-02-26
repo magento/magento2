@@ -1,46 +1,18 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="admin/url_rewrite/edit" module="Magento_UrlRewrite">
-    <blocks>
-        <treeBlock>
-            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Tree</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </treeBlock>
-        <formBlock>
-            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </formBlock>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages .messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <pageMainActions>
-            <class>Magento\Backend\Test\Block\FormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </pageMainActions>
-        <productGridBlock>
-            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Product\Grid</class>
-            <locator>[id="productGrid"]</locator>
-            <strategy>css selector</strategy>
-        </productGridBlock>
-        <urlRewriteTypeSelectorBlock>
-            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Selector</class>
-            <locator>[data-container-for="entity-type-selector"]</locator>
-            <strategy>css selector</strategy>
-        </urlRewriteTypeSelectorBlock>
-        <cmsGridBlock>
-            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Cms\Page\Grid</class>
-            <locator>#cmsPageGrid</locator>
-            <strategy>css selector</strategy>
-        </cmsGridBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="UrlRewriteEdit" area="Adminhtml" mca="admin/url_rewrite/edit" module="Magento_UrlRewrite">
+    <block name="treeBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Tree" locator="[id='page:main-container']" strategy="css selector"/>
+    <block name="formBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm" locator="[id='page:main-container']" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+    <block name="pageMainActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="productGridBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Product\Grid" locator="[id='productGrid']" strategy="css selector"/>
+    <block name="urlRewriteTypeSelectorBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Selector" locator="[data-container-for='entity-type-selector']" strategy="css selector"/>
+    <block name="cmsGridBlock" class="Magento\UrlRewrite\Test\Block\Adminhtml\Cms\Page\Grid" locator="#cmsPageGrid" strategy="css selector"/>
+  </page>
+</config>

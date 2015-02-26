@@ -6,6 +6,9 @@
 
 namespace Magento\Store\App\Action\Plugin;
 
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class ContextPlugin
  */
@@ -27,7 +30,7 @@ class Context
     protected $httpRequest;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -35,13 +38,13 @@ class Context
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\App\Request\Http $httpRequest
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\App\Request\Http $httpRequest,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
@@ -63,13 +66,13 @@ class Context
     ) {
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
         $this->httpContext->setValue(
-            \Magento\Core\Helper\Data::CONTEXT_CURRENCY,
+            HttpContext::CONTEXT_CURRENCY,
             $this->session->getCurrencyCode(),
             $defaultStore->getDefaultCurrency()->getCode()
         );
 
         $this->httpContext->setValue(
-            \Magento\Core\Helper\Data::CONTEXT_STORE,
+            StoreManagerInterface::CONTEXT_STORE,
             $this->httpRequest->getParam(
                 '___store',
                 $defaultStore->getStoreCodeFromCookie()

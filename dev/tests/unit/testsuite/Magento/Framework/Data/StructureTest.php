@@ -499,8 +499,8 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Structure::addToParentGroup
-     * @covers \Magento\Framework\Data\Structure::getGroupChildNames
+     * covers \Magento\Framework\Data\Structure::addToParentGroup
+     * covers \Magento\Framework\Data\Structure::getGroupChildNames
      */
     public function testGroups()
     {

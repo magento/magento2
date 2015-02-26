@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="carriers">
             <group id="dhl" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>DHL</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled for Checkout</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Gateway URL</label>
@@ -22,11 +22,11 @@
                 </field>
                 <field id="id" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Access ID</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="password" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Password</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="account" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Account Number</label>
@@ -51,7 +51,7 @@
                 <field id="divide_order_weight" translate="label comment" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Divide Order Weight</label>
                     <comment>This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="unit_of_measure" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Weight Unit</label>
@@ -119,7 +119,7 @@
                 </field>
                 <field id="free_shipping_enable" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Free Shipping Amount Threshold</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="1220" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Free Shipping Amount Threshold</label>
@@ -138,14 +138,14 @@
                 <field id="showmethod" translate="label" type="select" sortOrder="1940" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Method if Not Applicable</label>
                     <frontend_class>shipping-skip-hide</frontend_class>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="1950" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>

@@ -38,7 +38,7 @@ class CustomTest extends \Magento\ImportExport\Model\Source\Import\AbstractBehav
     /**
      * Test toArray method
      *
-     * @covers \Magento\ImportExport\Model\Source\Import\Behavior\Custom::toArray
+     * covers \Magento\ImportExport\Model\Source\Import\Behavior\Custom::toArray
      */
     public function testToArray()
     {
@@ -50,7 +50,7 @@ class CustomTest extends \Magento\ImportExport\Model\Source\Import\AbstractBehav
     /**
      * Test behavior group code
      *
-     * @covers \Magento\ImportExport\Model\Source\Import\Behavior\Custom::getCode
+     * covers \Magento\ImportExport\Model\Source\Import\Behavior\Custom::getCode
      */
     public function testGetCode()
     {

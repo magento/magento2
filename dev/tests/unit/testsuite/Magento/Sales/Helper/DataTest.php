@@ -14,7 +14,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\App\Config\ScopeConfigInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
@@ -28,16 +28,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
             ->disableOriginalConstructor()
             ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
 
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
-            ->setMethods(['isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +52,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->helper = new \Magento\Sales\Helper\Data(
             $contextMock,
-            $this->scopeConfigMock,
             $storeManagerMock,
             $appStateMock,
             $pricingCurrencyMock
@@ -198,7 +198,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 $flagName,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
             ->will($this->returnValue($returnValue));

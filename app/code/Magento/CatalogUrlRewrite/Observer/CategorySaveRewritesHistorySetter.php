@@ -18,7 +18,7 @@ class CategorySaveRewritesHistorySetter
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
-        $data = $observer->getEvent()->getRequest()->getPost();
+        $data = $observer->getEvent()->getRequest()->getPostValue();
 
         /**
          * Create Permanent Redirect for old URL key

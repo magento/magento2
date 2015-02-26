@@ -48,7 +48,7 @@ class Validator
                 'class' => 'Zend_Validate_NotEmpty',
                 'break' => true,
                 'options' => [],
-                'message' => __('Field title can\'t be empty'),
+                'message' => (string)new \Magento\Framework\Phrase('Field title can\'t be empty'),
             ],
         ];
 
@@ -69,7 +69,7 @@ class Validator
                 'class' => 'Zend_Validate_NotEmpty',
                 'break' => true,
                 'options' => [],
-                'message' => __('Theme type can\'t be empty'),
+                'message' => (string)new \Magento\Framework\Phrase('Theme type can\'t be empty'),
             ],
             [
                 'name' => 'available',
@@ -82,7 +82,7 @@ class Validator
                         \Magento\Framework\View\Design\ThemeInterface::TYPE_STAGING,
                     ],
                 ],
-                'message' => __('Theme type is invalid')
+                'message' => (string)new \Magento\Framework\Phrase('Theme type is invalid')
             ],
         ];
 

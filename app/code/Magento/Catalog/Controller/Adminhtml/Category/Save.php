@@ -85,7 +85,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
@@ -93,7 +93,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
-                            'Magento\Framework\Store\StoreManagerInterface'
+                            'Magento\Store\Model\StoreManagerInterface'
                         )->getStore(
                             $storeId
                         )->getRootCategoryId();
@@ -149,16 +149,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
                             $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
-                            throw new \Magento\Framework\Model\Exception(__('Attribute "%1" is required.', $attribute));
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('Attribute "%1" is required.', $attribute)
+                            );
                         } else {
-                            throw new \Magento\Framework\Model\Exception($error);
+                            throw new \Magento\Framework\Exception\LocalizedException($error);
                         }
                     }
                 }
 
                 $category->unsetData('use_post_data_config');
                 if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Framework\Model\Exception(__('Unable to save the category'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save the category'));
                 }
 
                 $category->save();

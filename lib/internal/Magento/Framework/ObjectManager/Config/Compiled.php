@@ -19,11 +19,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     /**
      * @var array
      */
-    private $nonShared;
-
-    /**
-     * @var array
-     */
     private $virtualTypes;
 
     /**
@@ -37,7 +32,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     public function __construct($data)
     {
         $this->arguments = $data['arguments'];
-        $this->nonShared = $data['nonShared'];
         $this->virtualTypes = $data['instanceTypes'];
         $this->preferences = $data['preferences'];
     }
@@ -48,6 +42,8 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param RelationsInterface $relations
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setRelations(RelationsInterface $relations)
     {
@@ -59,6 +55,8 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param ConfigCacheInterface $cache
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCache(ConfigCacheInterface $cache)
     {
@@ -78,7 +76,7 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
             }
             return $this->arguments[$type];
         } else {
-            return ['Magento\Framework\ObjectManagerInterface'];
+            return [['_i_' => 'Magento\Framework\ObjectManagerInterface']];
         }
     }
 
@@ -87,10 +85,11 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isShared($type)
     {
-        return !isset($this->nonShared[$type]);
+        return true;
     }
 
     /**
@@ -131,7 +130,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     public function extend(array $configuration)
     {
         $this->arguments = $configuration['arguments'];
-        $this->nonShared = $configuration['nonShared'];
         $this->virtualTypes = $configuration['instanceTypes'];
         $this->preferences = $configuration['preferences'];
     }

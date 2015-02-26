@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,7 @@
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Framework\Exception\IntegrationException;
 
 class EditTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 {
@@ -71,7 +71,7 @@ class EditTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
                 $this->returnValue(['name' => 'nonExistentInt'])
             );
 
-        $invalidIdException = new \Magento\Integration\Exception($exceptionMessage);
+        $invalidIdException = new IntegrationException($exceptionMessage);
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(

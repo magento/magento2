@@ -45,17 +45,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_captcha = [];
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_config;
-
-    /**
      * @var Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -66,20 +61,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory
     ) {
         $this->_storeManager = $storeManager;
-        $this->_config = $config;
         $this->_filesystem = $filesystem;
         $this->_factory = $factory;
         parent::__construct($context);
@@ -115,9 +107,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfig($key, $store = null)
     {
-        return $this->_config->getValue(
+        return $this->scopeConfig->getValue(
             'customer/captcha/' . $key,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -132,7 +124,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFonts()
     {
-        $fontsConfig = $this->_config->getValue(\Magento\Captcha\Helper\Data::XML_PATH_CAPTCHA_FONTS, 'default');
+        $fontsConfig = $this->scopeConfig->getValue(\Magento\Captcha\Helper\Data::XML_PATH_CAPTCHA_FONTS, 'default');
         $fonts = [];
         if ($fontsConfig) {
             $libDir = $this->_filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL);

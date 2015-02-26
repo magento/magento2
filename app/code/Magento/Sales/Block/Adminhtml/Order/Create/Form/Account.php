@@ -90,7 +90,7 @@ class Account extends AbstractForm
     /**
      * Return header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

@@ -76,7 +76,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     /**
      * Returns page header
      *
-     * @return bool|string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeader()
     {
@@ -129,7 +129,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     /**
      * Returns inheritance text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getInheritText()
     {

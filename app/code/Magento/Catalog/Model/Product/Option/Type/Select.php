@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog product option select type
@@ -53,7 +53,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
-     * @throws Exception
+     * @throws LocalizedException
      */
     public function validateUserValue($values)
     {
@@ -64,13 +64,13 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         if (empty($value) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            throw new Exception(__('Please specify the product\'s required option(s).'));
+            throw new LocalizedException(__('Please specify the product\'s required option(s).'));
         }
         if (!$this->_isSingleSelection()) {
             $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId())->load();
             if ($valuesCollection->count() != count($value)) {
                 $this->setIsValid(false);
-                throw new Exception(__('Please specify the product\'s required option(s).'));
+                throw new LocalizedException(__('Please specify the product\'s required option(s).'));
             }
         }
         return $this;
@@ -118,7 +118,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Return currently unavailable product configuration message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getWrongConfigurationMessage()
     {

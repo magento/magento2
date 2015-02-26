@@ -119,12 +119,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         try {
             $this->groupResourceModel->save($groupModel);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             /**
              * Would like a better way to determine this error condition but
              *  difficult to do without imposing more database calls
              */
-            if ($e->getMessage() === __('Customer Group already exists.')) {
+            if ($e->getMessage() == (string)__('Customer Group already exists.')) {
                 throw new InvalidTransitionException('Customer Group already exists.');
             }
             throw $e;

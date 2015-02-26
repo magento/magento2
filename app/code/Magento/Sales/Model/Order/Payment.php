@@ -89,7 +89,7 @@ class Payment extends Info implements OrderPaymentInterface
     protected $_transactionCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -108,7 +108,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -125,7 +125,7 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -357,7 +357,7 @@ class Payment extends Info implements OrderPaymentInterface
      * TODO: eliminate logic duplication with registerCaptureNotification()
      *
      * @param null|Invoice $invoice
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function capture($invoice)
@@ -434,7 +434,7 @@ class Payment extends Info implements OrderPaymentInterface
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
         }
-        throw new \Magento\Framework\Model\Exception(
+        throw new \Magento\Framework\Exception\LocalizedException(
             __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
         );
     }
@@ -648,7 +648,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Creditmemo $creditmemo
      * @return $this
      * @throws \Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -687,11 +687,12 @@ class Payment extends Info implements OrderPaymentInterface
                         $creditmemo,
                         $this
                     );
-                } catch (\Magento\Framework\Model\Exception $e) {
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if (!$captureTxn) {
-                        $e->setMessage(
-                            ' ' . __('If the invoice was created offline, try creating an offline credit memo.'),
-                            true
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('If the invoice was created offline, try creating an offline credit memo.'),
+                            [],
+                            $e
                         );
                     }
                     throw $e;

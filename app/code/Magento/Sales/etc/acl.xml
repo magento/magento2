@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
     <acl>
         <resources>
-            <resource id="Magento_Adminhtml::admin">
+            <resource id="Magento_Backend::admin">
                 <resource id="Magento_Sales::sales" title="Sales" sortOrder="20">
                     <resource id="Magento_Sales::sales_operation" title="Operations" sortOrder="10">
                         <resource id="Magento_Sales::sales_order"  title="Orders" sortOrder="10">
@@ -38,10 +38,10 @@
                         </resource>
                     </resource>
                 </resource>
-                <resource id="Magento_Adminhtml::stores">
-                    <resource id="Magento_Adminhtml::stores_settings">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Sales::order_statuses"  title="Order Status" sortOrder="40" />
-                        <resource id="Magento_Adminhtml::config">
+                        <resource id="Magento_Config::config">
                             <resource id="Magento_Sales::config_sales" title="Sales Section" sortOrder="60" />
                             <resource id="Magento_Sales::sales_email" title="Sales Emails Section" sortOrder="65" />
                             <resource id="Magento_Sales::sales_pdf" title="PDF Print-outs" sortOrder="66" />

@@ -9,7 +9,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
@@ -95,7 +95,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_calculatorFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -125,7 +125,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Creditmemo\CommentFactory $commentFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
@@ -145,7 +145,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
@@ -417,7 +417,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     /**
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function refund()
     {
@@ -432,7 +432,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         if ($baseOrderRefund > $this->priceCurrency->round($this->getOrder()->getBaseTotalPaid())) {
             $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid() - $this->getOrder()->getBaseTotalRefunded();
 
-            throw new Exception(
+            throw new LocalizedException(
                 __(
                     'The most money available to refund is %1.',
                     $this->getOrder()->formatBasePrice($baseAvailableRefund)
@@ -534,12 +534,12 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Apply to order, order items etc.
      *
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
         if ($this->getId()) {
-            throw new Exception(__('We cannot register an existing credit memo.'));
+            throw new LocalizedException(__('We cannot register an existing credit memo.'));
         }
 
         foreach ($this->getAllItems() as $item) {
@@ -604,7 +604,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Retrieve Creditmemo state name by state identifier
      *
      * @param   int $stateId
-     * @return  string
+     * @return \Magento\Framework\Phrase
      */
     public function getStateName($stateId = null)
     {

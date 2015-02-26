@@ -80,17 +80,17 @@ class Items extends \Magento\Backend\App\Action
      * Get store object, basing on request
      *
      * @return \Magento\Store\Model\Store
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _getStore()
     {
         $store = $this->_objectManager->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             (int)$this->getRequest()->getParam('store', 0)
         );
         if (!$store || 0 == $store->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('Unable to select a Store View'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Unable to select a Store View'));
         }
         return $store;
     }

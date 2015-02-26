@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $universalFactory->expects($this->any())->method('create')->will($this->returnValue($entity));
         $store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $fetchStrategy = $this->getMock(
             '\Magento\Framework\Data\Collection\Db\FetchStrategy\Query',

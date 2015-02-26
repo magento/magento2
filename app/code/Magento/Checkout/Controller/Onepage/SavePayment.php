@@ -23,20 +23,15 @@ class SavePayment extends \Magento\Checkout\Controller\Onepage
      *
      * Sets either redirect or a JSON response
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        if ($this->_expireAjax()) {
-            return;
+        if (!$this->getRequest()->isPost() || $this->_expireAjax()) {
+            return $this->_ajaxRedirectResponse();
         }
         try {
-            if (!$this->getRequest()->isPost()) {
-                $this->_ajaxRedirectResponse();
-                return;
-            }
-
             $data = $this->getRequest()->getPost('payment', []);
             $result = $this->getOnepage()->savePayment($data);
 
@@ -55,14 +50,13 @@ class SavePayment extends \Magento\Checkout\Controller\Onepage
                 $result['fields'] = $e->getFields();
             }
             $result['error'] = $e->getMessage();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result['error'] = $e->getMessage();
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $result['error'] = __('Unable to set Payment Method');
         }
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-        );
+
+        return $this->resultJsonFactory->create()->setData($result);
     }
 }

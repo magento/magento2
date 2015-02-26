@@ -158,7 +158,7 @@ class Item extends AbstractExtensibleModel implements InvoiceItemInterface
      *
      * @param float $qty
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
@@ -176,7 +176,7 @@ class Item extends AbstractExtensibleModel implements InvoiceItemInterface
         if ($qty <= $qtyToInvoice || $this->getOrderItem()->isDummy()) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid quantity to invoice item "%1".', $this->getName())
             );
         }

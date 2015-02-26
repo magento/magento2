@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\Resource;
 
 use Magento\Framework\Data\AbstractSearchResult;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\SearchResultProcessorFactory;
 use Magento\Framework\Data\SearchResultProcessor;
 use Magento\Framework\DB\QueryInterface;
@@ -20,7 +20,7 @@ use Magento\Framework\Data\SearchResultIteratorFactory;
 class AbstractCollection extends AbstractSearchResult
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -46,7 +46,7 @@ class AbstractCollection extends AbstractSearchResult
      * @param EntityFactoryInterface $entityFactory
      * @param ManagerInterface $eventManager
      * @param SearchResultIteratorFactory $resultIteratorFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param SearchResultProcessorFactory $searchResultProcessorFactory
      */
     public function __construct(

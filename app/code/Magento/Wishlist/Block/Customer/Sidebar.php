@@ -18,7 +18,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\
     /**
      * Retrieve block title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTitle()
     {

@@ -5,8 +5,13 @@
  */
 namespace Magento\Framework\View\Layout\Generator;
 
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\View\Layout;
 
+/**
+ * Class Block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Block implements Layout\GeneratorInterface
 {
     /**
@@ -35,23 +40,37 @@ class Block implements Layout\GeneratorInterface
     protected $logger;
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\App\ScopeResolverInterface
+     */
+    protected $scopeResolver;
+
+    /**
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
         \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver
     ) {
         $this->blockFactory = $blockFactory;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->eventManager = $eventManager;
         $this->logger = $logger;
+        $this->scopeConfig = $scopeConfig;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -100,8 +119,12 @@ class Block implements Layout\GeneratorInterface
         // Run all actions after layout initialization
         foreach ($blockActions as $elementName => $actions) {
             foreach ($actions as $action) {
-                list($methodName, $actionArguments) = $action;
-                $this->generateAction($blocks[$elementName], $methodName, $actionArguments);
+                list($methodName, $actionArguments, $configPath, $scopeType) = $action;
+                if (empty($configPath)
+                    || $this->scopeConfig->isSetFlag($configPath, $scopeType, $this->scopeResolver->getScope())
+                ) {
+                    $this->generateAction($blocks[$elementName], $methodName, $actionArguments);
+                }
             }
         }
         return $this;
@@ -164,7 +187,7 @@ class Block implements Layout\GeneratorInterface
      *
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @param array $arguments
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function getBlockInstance($block, array $arguments = [])
@@ -177,7 +200,9 @@ class Block implements Layout\GeneratorInterface
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Invalid block type: %1', [$block])
+            );
         }
         return $block;
     }
@@ -209,6 +234,10 @@ class Block implements Layout\GeneratorInterface
     {
         $result = [];
         foreach ($arguments as $argumentName => $argumentData) {
+            if (!isset($argumentData[Dom::TYPE_ATTRIBUTE])) {
+                $result[$argumentName] = $argumentData;
+                continue;
+            }
             $result[$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
         }
         return $result;

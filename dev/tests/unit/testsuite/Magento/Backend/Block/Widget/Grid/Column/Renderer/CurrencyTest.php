@@ -49,7 +49,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->_localeMock = $this->getMock('Magento\Framework\Locale\CurrencyInterface');
         $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
 
@@ -109,7 +109,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency::render
+     * covers \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency::render
      */
     public function testRenderWithDefaultCurrency()
     {

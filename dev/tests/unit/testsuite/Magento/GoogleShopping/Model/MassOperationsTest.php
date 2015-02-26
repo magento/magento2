@@ -28,7 +28,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Notification\NotifierInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $notificationInterface;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterface;
 
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -58,7 +58,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
-        $this->storeManagerInterface = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->googleShoppingHelper = $this->getMock('Magento\GoogleShopping\Helper\Data', [], [], '', false);
         $this->googleShoppingCategoryHelper = $this->getMock('Magento\GoogleShopping\Helper\Category');
@@ -111,7 +111,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->flag->expects($this->any())->method('isExpired')->will($this->returnValue(false));
         $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepository->expects($this->once())->method('getById')->will($this->returnValue($product));
-        $this->itemFactory->expects($this->once())->method('create')->will($this->throwException(new $exception));
+        $this->itemFactory->expects($this->once())
+            ->method('create')
+            ->willThrowException(new $exception('message'));
         $this->massOperations->setFlag($this->flag);
         $this->massOperations->addProducts($products, 1);
     }
@@ -125,7 +127,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             ['\Magento\Framework\Exception\NoSuchEntityException'],
             ['\Zend_Gdata_App_Exception'],
             ['\Zend_Db_Statement_Exception'],
-            ['\Magento\Framework\Model\Exception'],
+            ['\Magento\Framework\Exception\LocalizedException'],
             ['\Exception']
         ];
     }

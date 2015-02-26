@@ -1,0 +1,65 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+//
+//  Grid
+//  ---------------------------------------------
+
+//  Number of columns in the grid.
+
+@grid-columns: 12;
+@grid-gutter-width: 0;
+
+//
+//  Grid system
+//  _____________________________________________
+
+//
+//  Row
+//  ---------------------------------------------
+
+//  Rows contain and clear the floats of your columns.
+
+.row {
+    .make-row();
+}
+
+//
+//  Columns
+//  ---------------------------------------------
+
+//  Common styles for small and large grid columns
+
+.make-grid-columns();
+
+//  Extra small grid
+//  Columns, offsets, pushes, and pulls for extra small devices like smartphones.
+
+.make-grid(xs);
+
+//  Small grid
+//  Columns, offsets, pushes, and pulls for the small device range, from phones to tablets.
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .make-grid(m);
+}
+
+//  Medium grid
+//  Columns, offsets, pushes, and pulls for the desktop device range.
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .make-grid(l);
+}
+
+//  Large grid
+//  Columns, offsets, pushes, and pulls for the large desktop device range.
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+    .make-grid(xl);
+}

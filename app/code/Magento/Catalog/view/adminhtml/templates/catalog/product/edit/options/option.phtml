@@ -9,49 +9,49 @@
 ?>
 <?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */ ?>
 <?php echo $block->getTemplatesHtml() ?>
-<script id="custom-option-base-template" type="text/x-jquery-tmpl">
-    <div class="fieldset-wrapper collapsable-wrapper opened" id="option_${id}">
+<script id="custom-option-base-template" type="text/x-magento-template">
+    <div class="fieldset-wrapper collapsable-wrapper opened" id="option_<%= data.id %>">
         <div class="fieldset-wrapper-title">
-            <strong class="title" data-toggle="collapse" data-target="#${id}-content">
-                <span id="option_${id}_header_title">${title}</span>
+            <strong class="title" data-toggle="collapse" data-target="#<%= data.id %>-content">
+                <span id="option_<%= data.id %>_header_title"><%= data.title %></span>
             </strong>
             <div class="actions">
-                <button type="button" title="<?php echo __('Delete Custom Option'); ?>" class="action-delete" id="<?php echo $block->getFieldId() ?>_${id}_delete">
+                <button type="button" title="<?php echo __('Delete Custom Option'); ?>" class="action-delete" id="<?php echo $block->getFieldId() ?>_<%= data.id %>_delete">
                     <span><?php echo __('Delete Custom Option'); ?></span>
                 </button>
             </div>
-            <div id="<?php echo $block->getFieldId() ?>_${id}_move" data-role="draggable-handle" class="draggable-handle"
+            <div id="<?php echo $block->getFieldId() ?>_<%= data.id %>_move" data-role="draggable-handle" class="draggable-handle"
                  title="<?php echo __('Sort Custom Options'); ?>"></div>
         </div>
-        <div class="fieldset-wrapper-content in collapse" id="${id}-content">
+        <div class="fieldset-wrapper-content in collapse" id="<%= data.id %>-content">
             <fieldset class="fieldset">
-                <fieldset class="fieldset-alt" id="<?php echo $block->getFieldId() ?>_${id}">
-                    <input id="<?php echo $block->getFieldId() ?>_${id}_is_delete" name="<?php echo $block->getFieldName() ?>[${id}][is_delete]" type="hidden" value=""/>
-                    <input id="<?php echo $block->getFieldId() ?>_${id}_previous_type" name="<?php echo $block->getFieldName() ?>[${id}][previous_type]" type="hidden" value="${type}"/>
-                    <input id="<?php echo $block->getFieldId() ?>_${id}_previous_group" name="<?php echo $block->getFieldName() ?>[${id}][previous_group]" type="hidden" value=""/>
-                    <input id="<?php echo $block->getFieldId() ?>_${id}_id" name="<?php echo $block->getFieldName() ?>[${id}][id]" type="hidden" value="${id}"/>
-                    <input id="<?php echo $block->getFieldId() ?>_${id}_option_id" name="<?php echo $block->getFieldName() ?>[${id}][option_id]" type="hidden" value="${option_id}"/>
-                    <input name="<?php echo $block->getFieldName() ?>[${id}][sort_order]" type="hidden" value="${sort_order}"/>
+                <fieldset class="fieldset-alt" id="<?php echo $block->getFieldId() ?>_<%= data.id %>">
+                    <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_is_delete" name="<?php echo $block->getFieldName() ?>[<%= data.id %>][is_delete]" type="hidden" value=""/>
+                    <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_previous_type" name="<?php echo $block->getFieldName() ?>[<%= data.id %>][previous_type]" type="hidden" value="<%= data.type %>"/>
+                    <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_previous_group" name="<?php echo $block->getFieldName() ?>[<%= data.id %>][previous_group]" type="hidden" value=""/>
+                    <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_id" name="<?php echo $block->getFieldName() ?>[<%= data.id %>][id]" type="hidden" value="<%= data.id %>"/>
+                    <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_option_id" name="<?php echo $block->getFieldName() ?>[<%= data.id %>][option_id]" type="hidden" value="<%= data.option_id %>"/>
+                    <input name="<?php echo $block->getFieldName() ?>[<%= data.id %>][sort_order]" type="hidden" value="<%= data.sort_order %>"/>
 
                     <div class="field field-option-title required">
-                        <label class="label" for="<?php echo $block->getFieldId() ?>_${id}_title">
+                        <label class="label" for="<?php echo $block->getFieldId() ?>_<%= data.id %>_title">
                             <?php echo __('Option Title') ?>
                         </label>
                         <div class="control">
-                            <input id="<?php echo $block->getFieldId() ?>_${id}_title"
-                                   name="<?php echo $block->getFieldName() ?>[${id}][title]"
+                            <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_title"
+                                   name="<?php echo $block->getFieldName() ?>[<%= data.id %>][title]"
                                    class="required-entry input-text"
                                    type="text"
-                                   value="${title}"
-                                   data-store-label="${title}"
-                                   {{if typeof(scopeTitleDisabled) != 'undefined' && scopeTitleDisabled != null}} disabled="disabled" {{/if}}
+                                   value="<%= data.title %>"
+                                   data-store-label="<%= data.title %>"
+                                   <% if (typeof data.scopeTitleDisabled != 'undefined' && data.scopeTitleDisabled != null) { %> disabled="disabled" <% } %>
                                    >
-                            {{html checkboxScopeTitle}}
+                            <%= data.checkboxScopeTitle %>
                         </div>
                     </div>
 
                     <div class="field field-option-input-type required">
-                        <label class="label" for="<?php echo $block->getFieldId() ?>_${id}_title">
+                        <label class="label" for="<?php echo $block->getFieldId() ?>_<%= data.id %>_title">
                             <?php echo __('Input Type') ?>
                         </label>
                         <div class="control opt-type">
@@ -61,7 +61,7 @@
 
                     <div class="field field-option-req">
                         <div class="control">
-                            <input id="<?php echo $block->getFieldId() ?>_${id}_required" class="is-required" type="checkbox" checked="checked"/>
+                            <input id="<?php echo $block->getFieldId() ?>_<%= data.id %>_required" class="is-required" type="checkbox" checked="checked"/>
                             <label for="field-option-req">
                                 <?php echo __('Required')?>
                             </label>

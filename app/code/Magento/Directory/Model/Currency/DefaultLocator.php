@@ -17,17 +17,17 @@ class DefaultLocator
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_configuration = $configuration;
         $this->_storeManager = $storeManager;

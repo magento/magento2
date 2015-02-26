@@ -131,7 +131,7 @@ class Http extends File
         $urlProp = $this->parseUrl($this->getScheme() . $path);
 
         if (false === $urlProp) {
-            throw new FilesystemException(__('Please correct the download URL.'));
+            throw new FilesystemException((string)new \Magento\Framework\Phrase('Please correct the download URL.'));
         }
 
         $hostname = $urlProp['host'];
@@ -236,7 +236,10 @@ class Http extends File
         $result = @fsockopen($hostname, $port, $errorNumber, $errorMessage);
         if ($result === false) {
             throw new FilesystemException(
-                __('Something went wrong connecting to the host. Error#%1 - %2.', $errorNumber, $errorMessage)
+                (string)new \Magento\Framework\Phrase(
+                    'Something went wrong connecting to the host. Error#%1 - %2.',
+                    [$errorNumber, $errorMessage]
+                )
             );
         }
         return $result;

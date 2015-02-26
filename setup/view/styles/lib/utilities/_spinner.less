@@ -1,0 +1,86 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+._spinner-keyframes() {
+    @-moz-keyframes @spinner__keyframe-name {
+        0% {
+            background-color: @spinner__first-color;
+        }
+        100% {
+            background-color: @spinner__second-color;
+        }
+    }
+    @-webkit-keyframes @spinner__keyframe-name {
+        0% {
+            background-color: @spinner__first-color;
+        }
+        100% {
+            background-color: @spinner__second-color;
+        }
+    }
+    @-ms-keyframes @spinner__keyframe-name {
+        0% {
+            background-color: @spinner__first-color;
+        }
+        100% {
+            background-color: @spinner__second-color;
+        }
+    }
+    @keyframes @spinner__keyframe-name {
+        0% {
+            background-color: @spinner__first-color;
+        }
+        100% {
+            background-color: @spinner__second-color;
+        }
+    }
+}
+
+._spinner-loop(
+    @_spinner-spin-count: @spinner__spin-count,
+    @_spinner-rotate: @spinner__rotate,
+    @_spinner-delay: @spinner__delay
+) when (@_spinner-spin-count > 0) {
+    ._spinner-loop(
+        (@_spinner-spin-count - 1),
+        (@_spinner-rotate - @spinner__rotate-step),
+        (@_spinner-delay - @spinner__animation-step)
+    );
+    > span {
+        &:nth-child(@{_spinner-spin-count}) {
+            -webkit-animation-delay: @_spinner-delay;
+               -moz-animation-delay: @_spinner-delay;
+                -ms-animation-delay: @_spinner-delay;
+                    animation-delay: @_spinner-delay;
+            -webkit-transform: ~'rotate(@{_spinner-rotate}deg)';
+               -moz-transform: ~'rotate(@{_spinner-rotate}deg)';
+                -ms-transform: ~'rotate(@{_spinner-rotate}deg)';
+                    transform: ~'rotate(@{_spinner-rotate}deg)';
+        }
+    }
+}
+
+._spinner_transform() {
+    -webkit-animation-direction: @spinner__animation-direction;
+       -moz-animation-direction: @spinner__animation-direction;
+        -ms-animation-direction: @spinner__animation-direction;
+            animation-direction: @spinner__animation-direction;
+    -webkit-animation-duration: @spinner__animation-duration;
+       -moz-animation-duration: @spinner__animation-duration;
+        -ms-animation-duration: @spinner__animation-duration;
+            animation-duration: @spinner__animation-duration;
+    -webkit-animation-iteration-count: @spinner__animation-iteration-count;
+       -moz-animation-iteration-count: @spinner__animation-iteration-count;
+        -ms-animation-iteration-count: @spinner__animation-iteration-count;
+            animation-iteration-count: @spinner__animation-iteration-count;
+    -webkit-animation-name: @spinner__keyframe-name;
+       -moz-animation-name: @spinner__keyframe-name;
+        -ms-animation-name: @spinner__keyframe-name;
+            animation-name: @spinner__keyframe-name;
+    -webkit-transform: @spinner__animation-transform;
+       -moz-transform: @spinner__animation-transform;
+        -ms-transform: @spinner__animation-transform;
+            transform: @spinner__animation-transform;
+}

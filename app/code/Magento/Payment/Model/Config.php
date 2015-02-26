@@ -6,7 +6,7 @@
 namespace Magento\Payment\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Payment configuration model

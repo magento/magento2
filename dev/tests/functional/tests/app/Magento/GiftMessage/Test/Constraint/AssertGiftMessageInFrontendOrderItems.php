@@ -6,11 +6,11 @@
 
 namespace Magento\GiftMessage\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\OrderView;
+use Magento\Sales\Test\Page\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -27,9 +27,9 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
      * Assert that message from dataSet is displayed for each items on order(s) view page on frontend
      *
      * @param GiftMessage $giftMessage
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param OrderHistory $orderHistory
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param CustomerAccountLogout $customerAccountLogout
      * @param string $orderId
      * @param array $products
@@ -37,9 +37,9 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
      */
     public function processAssert(
         GiftMessage $giftMessage,
-        CustomerInjectable $customer,
+        Customer $customer,
         OrderHistory $orderHistory,
-        OrderView $orderView,
+        SalesOrderView $salesOrderView,
         CustomerAccountLogout $customerAccountLogout,
         $orderId,
         $products = []
@@ -68,7 +68,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
             }
             \PHPUnit_Framework_Assert::assertEquals(
                 $expectedData,
-                $orderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
+                $salesOrderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
                 'Wrong gift message is displayed on "' . $product->getName() . '" item.'
             );
         }

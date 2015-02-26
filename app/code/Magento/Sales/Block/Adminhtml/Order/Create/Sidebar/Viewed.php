@@ -47,7 +47,7 @@ class Viewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstrac
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

@@ -142,7 +142,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Invoice\Item
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
@@ -158,7 +158,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
         if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Framework\Model\Exception(__('We found an invalid qty to ship for item "%1".', $this->getName()));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid qty to ship for item "%1".', $this->getName()));
         }
         return $this;
     }

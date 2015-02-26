@@ -36,7 +36,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -108,7 +108,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Wishlist\Collection')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMock();
         $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
@@ -184,7 +184,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
      * @param int|\Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemId
      * @param \Magento\Framework\Object $buyRequest
      * @param null|array|\Magento\Framework\Object $param
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @dataProvider updateItemDataProvider
      */

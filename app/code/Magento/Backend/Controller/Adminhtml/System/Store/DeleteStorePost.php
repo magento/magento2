@@ -39,7 +39,7 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 
             $this->messageManager->addSuccess(__('The store view has been deleted.'));
             return $redirectResult->setPath('adminhtml/*/');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Unable to delete store view. Please, try again later.'));

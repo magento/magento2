@@ -40,7 +40,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     protected $_eventObject = 'track';
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -56,7 +56,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -70,7 +70,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
