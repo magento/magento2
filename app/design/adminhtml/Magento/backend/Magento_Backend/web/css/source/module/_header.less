@@ -33,7 +33,9 @@
 @user-menu__hover__background-color: @color-blue-clear-sky;
 @user-menu__active__background-color: darken(@color-blue-clear-sky, 5%);
 
-//
+//  Page Main Actions
+@page-main-actions__background-color: @color-white-fog;
+@page-main-actions__border-color: @color-lighter-gray2;
 
 .page-header {
     padding: @page-header__indent-vertical @page-header__indent-horizontal;
@@ -221,3 +223,41 @@
     float: right;
 }
 
+//
+//  Page main actions
+//  ---------------------------------------------
+
+.page-main-actions {
+    .extend__clearfix();
+    background:@page-main-actions__background-color ;
+    border-top: 1px solid @page-main-actions__border-color;
+    border-bottom: 1px solid @page-main-actions__border-color;
+    padding: 1.5rem;
+    margin: 0 0 2rem;
+
+    .store-switcher {
+        display: inline-block;
+        .label {
+            margin-right: .5rem;
+        }
+        > .actions {
+            display: inline-block;
+            position: relative;
+
+            .dropdown-menu {
+                &:extend(.admin-user-menu all);
+            }
+
+            &.active {
+                .dropdown-menu {
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+        }
+        .tooltip {
+            display: inline-block;
+            margin-left: .5rem;
+        }
+    }
+}

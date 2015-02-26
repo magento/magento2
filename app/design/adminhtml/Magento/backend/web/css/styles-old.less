@@ -638,15 +638,18 @@ input[type="checkbox"] {
         cursor: pointer;
         display: inline-block;
         &:before {
-            background: url('../images/choice_bkg.png') no-repeat -100% -100% #fff;
+            background: none;
             border-radius: 2px;
             border: 1px solid #adadad;
-            content: '';
+            color: transparent;
+            content: '\e62d';
             float: left;
+            font:  0/14px 'Admin Icons';
             height: 14px;
             line-height: 14px;
             margin: 1px 10px 0 0;
             text-align: center;
+            transition: border-color .1s ease-in, color .1s ease-in, font-size .1s ease-in;
             vertical-align: top;
             width: 14px;
         }
@@ -667,12 +670,15 @@ input[type="checkbox"] {
 }
 input[type="radio"] + label:before {
     border-radius: 8px;
+    content: '\e637';
 }
 input[type="radio"]:checked + label:before {
-    background-position: -26px -1px;
+    color: #514943;
+    font-size: 10px;
 }
 input[type="checkbox"]:checked + label:before {
-    background-position: -1px -1px;
+    color: #514943;
+    font-size: 10px;
 }
 
 
@@ -720,6 +726,9 @@ option.placeholder {
 
 .form-inline .control {
     width: 100%;
+    .control-inner-wrap {
+        padding-top: 7px;
+    }
 }
 
 .form-inline .label {
@@ -2735,6 +2744,7 @@ address {
     border-radius: 0;
     border: none;
     float: none;
+    font-size: 14px;
     height: auto;
     line-height: normal;
     margin: 0;
@@ -4080,6 +4090,7 @@ tr.dynamic-grid input.input-text {
     > input[type="radio"] + label:before,
     > input[type="checkbox"] + label:before {
         left: 36%;
+        position: absolute;
     }
 }
 
