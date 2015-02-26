@@ -1,40 +1,16 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\ObjectManager\Config;
+namespace Magento\Framework\ObjectManager\Environment;
 
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
-class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
+class ConfigTesting implements ConfigInterface
 {
-    /**
-     * @var array
-     */
-    private $arguments;
-
-    /**
-     * @var array
-     */
-    private $virtualTypes;
-
-    /**
-     * @var array
-     */
-    private $preferences;
-
-    /**
-     * @param array $data
-     */
-    public function __construct($data)
-    {
-        $this->arguments = $data['arguments'];
-        $this->virtualTypes = $data['instanceTypes'];
-        $this->preferences = $data['preferences'];
-    }
 
     /**
      * Set class relations
@@ -47,6 +23,7 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function setRelations(RelationsInterface $relations)
     {
+        return;
     }
 
     /**
@@ -55,11 +32,11 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      * @param ConfigCacheInterface $cache
      *
      * @return void
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCache(ConfigCacheInterface $cache)
     {
+        return;
     }
 
     /**
@@ -67,17 +44,11 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $type
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getArguments($type)
     {
-        if (isset($this->arguments[$type])) {
-            if (is_string($this->arguments[$type])) {
-                $this->arguments[$type] = unserialize($this->arguments[$type]);
-            }
-            return $this->arguments[$type];
-        } else {
-            return [['_i_' => 'Magento\Framework\ObjectManagerInterface']];
-        }
+        return [];
     }
 
     /**
@@ -100,9 +71,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getInstanceType($instanceName)
     {
-        if (isset($this->virtualTypes[$instanceName])) {
-            return $this->virtualTypes[$instanceName];
-        }
         return $instanceName;
     }
 
@@ -115,10 +83,17 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getPreference($type)
     {
-        if (isset($this->preferences[$type])) {
-            return $this->preferences[$type];
-        }
         return $type;
+    }
+
+    /**
+     * Returns list of virtual types
+     *
+     * @return array
+     */
+    public function getVirtualTypes()
+    {
+        return [];
     }
 
     /**
@@ -126,22 +101,11 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param array $configuration
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function extend(array $configuration)
     {
-        $this->arguments = $configuration['arguments'];
-        $this->virtualTypes = $configuration['instanceTypes'];
-        $this->preferences = $configuration['preferences'];
-    }
-
-    /**
-     * Retrieve all virtual types
-     *
-     * @return string
-     */
-    public function getVirtualTypes()
-    {
-        return $this->virtualTypes;
+        return;
     }
 
     /**
@@ -151,6 +115,30 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getPreferences()
     {
-        return $this->preferences;
+        return [];
+    }
+
+    /**
+     * Set Interception config
+     *
+     * @param \Magento\Framework\Interception\ConfigInterface $interceptionConfig
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig)
+    {
+        return;
+    }
+
+    /**
+     * Retrieve instance type without interception processing
+     *
+     * @param string $instanceName
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getOriginalInstanceType($instanceName)
+    {
+        return '';
     }
 }

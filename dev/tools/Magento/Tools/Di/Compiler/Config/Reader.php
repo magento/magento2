@@ -13,6 +13,11 @@ use Magento\Tools\Di\Code\Reader\Type;
 use Magento\Tools\Di\Compiler\ArgumentsResolverFactory;
 use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
 
+/**
+ * Class Reader
+ * @package Magento\Tools\Di\Compiler\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Reader
 {
     /**
@@ -82,16 +87,8 @@ class Reader
         
         $this->fillThirdPartyInterfaces($areaConfig, $definitionsCollection);
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
-        foreach ($config['arguments'] as $key => $value) {
-            if ($value !== null) {
-                $config['arguments'][$key] = serialize($value);
-            }
-        }
 
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
-            if (!$areaConfig->isShared($instanceName)) {
-                $config['nonShared'][$instanceName] = true;
-            }
             $preference = $areaConfig->getPreference($instanceName);
             if ($instanceName !== $preference) {
                 $config['preferences'][$instanceName] = $preference;
@@ -149,7 +146,6 @@ class Reader
      *
      * @param ConfigInterface $config
      * @param DefinitionsCollection $definitionsCollection
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
      * @return void
      */
@@ -157,7 +153,7 @@ class Reader
     {
         $definedInstances = $definitionsCollection->getInstancesNamesList();
 
-        foreach ($config->getPreferences() as $interface => $preference) {
+        foreach (array_keys($config->getPreferences()) as $interface) {
             if (in_array($interface, $definedInstances)) {
                 continue;
             }
