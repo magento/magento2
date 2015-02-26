@@ -14,7 +14,7 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Backend\Block\System\Config\Form\Field\Import
+     * @var \Magento\Config\Block\System\Config\Form\Field\Import
      */
     protected $_object;
 
