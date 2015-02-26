@@ -12,7 +12,7 @@ namespace Magento\Framework\Stdlib;
 class DateTime
 {
     /**#@+
-     * Date format, used as default. Compatible with \Zend_Date
+     * Date format, used as default. Compatible with \DateTime
      */
     const DATETIME_INTERNAL_FORMAT = 'yyyy-MM-dd HH:mm:ss';
 

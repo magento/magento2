@@ -25,8 +25,8 @@ class Refunded extends AbstractReport
     /**
      * Aggregate Refunded data
      *
-     * @param string|int|\Zend_Date|array|null $from
-     * @param string|int|\Zend_Date|array|null $to
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
      * @return $this
      */
     public function aggregate($from = null, $to = null)

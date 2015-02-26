@@ -99,7 +99,7 @@ class Timezone implements TimezoneInterface
     public function getDateFormat($type = \IntlDateFormatter::SHORT)
     {
         return (new \IntlDateFormatter(
-            $this->_localeResolver->getLocaleCode(),
+            $this->_localeResolver->getLocale(),
             $type,
             \IntlDateFormatter::NONE
         ))->getPattern();
@@ -123,7 +123,7 @@ class Timezone implements TimezoneInterface
     public function getTimeFormat($type = \IntlDateFormatter::SHORT)
     {
         return (new \IntlDateFormatter(
-            $this->_localeResolver->getLocaleCode(),
+            $this->_localeResolver->getLocale(),
             \IntlDateFormatter::NONE,
             $type
         ))->getPattern();
@@ -278,7 +278,7 @@ class Timezone implements TimezoneInterface
         $timezone = null
     ) {
         $formatter = new \IntlDateFormatter(
-            $locale ?: $this->_localeResolver->getLocaleCode(),
+            $locale ?: $this->_localeResolver->getLocale(),
             $dateType,
             $timeType,
             $timezone ?: 'UTC'
