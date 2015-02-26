@@ -65,12 +65,10 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->any())->method('getFrontend')->will($this->returnValue($frontendCache));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $locale = $objectManager->getObject(
-            'Magento\Framework\Locale',
-            ['locale' => \Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE]
-        );
         $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
-        $localeResolver->expects($this->any())->method('getLocale')->will($this->returnValue($locale));
+        $localeResolver->expects($this->any())
+            ->method('getLocale')
+            ->willReturn(\Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE);
         $timezone = $objectManager->getObject(
             'Magento\Framework\Stdlib\DateTime\Timezone',
             ['localeResolver' => $localeResolver]

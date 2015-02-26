@@ -290,7 +290,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         if (is_null($this->_getSession()->getLocale())) {
-            $this->_getSession()->setLocale($this->_localeResolver->getLocaleCode());
+            $this->_getSession()->setLocale($this->_localeResolver->getLocale());
         }
 
         return $this;

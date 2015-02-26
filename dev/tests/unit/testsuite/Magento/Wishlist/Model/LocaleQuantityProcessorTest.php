@@ -42,7 +42,7 @@ class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
         $localCode = 'en_US';
 
         $this->resolver->expects($this->once())
-            ->method('getLocaleCode')
+            ->method('getLocale')
             ->willReturn($localCode);
 
         $this->filter->expects($this->once())

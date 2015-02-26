@@ -154,7 +154,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
                 'name' => $backupData->getName(),
                 'date_object' => new \Magento\Framework\Stdlib\DateTime\Date(
                     (int)$backupData->getTime(),
-                    $this->_localeResolver->getLocaleCode()
+                    $this->_localeResolver->getLocale()
                 ),
             ]
         );

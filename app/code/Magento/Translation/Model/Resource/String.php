@@ -179,7 +179,7 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function deleteTranslate($string, $locale = null, $storeId = null)
     {
         if (is_null($locale)) {
-            $locale = $this->_localeResolver->getLocaleCode();
+            $locale = $this->_localeResolver->getLocale();
         }
 
         $where = ['locale = ?' => $locale, 'string = ?' => $string];
@@ -210,7 +210,7 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $table = $this->getMainTable();
 
         if (is_null($locale)) {
-            $locale = $this->_localeResolver->getLocaleCode();
+            $locale = $this->_localeResolver->getLocale();
         }
 
         if (is_null($storeId)) {

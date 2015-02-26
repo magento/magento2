@@ -76,7 +76,7 @@ interface TimezoneInterface
      *
      * @param mixed              $date
      * @param string             $part
-     * @param string|Zend_Locale $locale
+     * @param string $locale
      * @param bool               $useTimezone
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */

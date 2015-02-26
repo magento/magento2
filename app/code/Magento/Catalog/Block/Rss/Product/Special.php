@@ -192,7 +192,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
                             [
                                 'date' => $item->getSpecialToDate(),
                                 'part' => \Magento\Framework\Stdlib\DateTime\Date::ISO_8601,
-                                'locale' => $this->localeResolver->getLocaleCode()
+                                'locale' => $this->localeResolver->getLocale()
                             ]
                         ),
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM

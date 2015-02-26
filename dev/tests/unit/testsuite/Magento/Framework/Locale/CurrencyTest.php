@@ -185,7 +185,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $this->mockLocaleResolver
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(5))
             ->method('getLocale');
 
         $retrievedCurrencyObject = $this->testCurrencyObject

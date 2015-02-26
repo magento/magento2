@@ -83,8 +83,9 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      */
     public function getPriceFormat()
     {
-        $format = \Zend_Locale_Data::getContent($this->_localeResolver->getLocaleCode(), 'currencynumber');
-        $symbols = \Zend_Locale_Data::getList($this->_localeResolver->getLocaleCode(), 'symbols');
+        $numberElements = (new \ResourceBundle($this->_localeResolver->getLocale(), 'ICUDATA'))['NumberElements'];
+        $format = $numberElements['latn']['patterns']['currencyFormat'];
+        $symbols = $numberElements['latn']['symbols'];
 
         $pos = strpos($format, ';');
         if ($pos !== false) {

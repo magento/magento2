@@ -86,12 +86,4 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     {
         return $this->_frontend->getBackend();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLowLevelFrontend()
-    {
-        return $this->_frontend->getLowLevelFrontend();
-    }
 }

@@ -35,15 +35,18 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
         if (!$format) {
             if (is_null(self::$_format)) {
                 try {
-                    $localeCode = $this->_localeResolver->getLocaleCode();
-                    $localeData = new \Zend_Locale_Data();
+                    $formats = (new \ResourceBundle(
+                        $this->_localeResolver->getLocale(),
+                        'ICUDATA'
+                    ))['calendar']['gregorian']['availableFormats'];
+
                     switch ($this->getColumn()->getPeriodType()) {
                         case 'month':
-                            self::$_format = $localeData->getContent($localeCode, 'dateitem', 'yM');
+                            self::$_format = $formats['yM'];
                             break;
 
                         case 'year':
-                            self::$_format = $localeData->getContent($localeCode, 'dateitem', 'y');
+                            self::$_format = $formats['y'];
                             break;
 
                         default:

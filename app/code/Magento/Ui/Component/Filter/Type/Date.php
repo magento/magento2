@@ -6,7 +6,6 @@
 namespace Magento\Ui\Component\Filter\Type;
 
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\LocaleInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
 use Magento\Framework\View\Element\UiComponent\ConfigFactory;
@@ -117,7 +116,7 @@ class Date extends FilterAbstract
                 $value['to'] = $this->convertDate(strtotime($value['to']), $locale);
             }
             $value['datetime'] = true;
-            $value['locale'] = $locale->toString();
+            $value['locale'] = $this->localeResolver->getLocale();
         } else {
             $value = null;
         }
@@ -129,10 +128,10 @@ class Date extends FilterAbstract
      * Convert given date to default (UTC) timezone
      *
      * @param int $date
-     * @param LocaleInterface $locale
+     * @param string $locale
      * @return \Magento\Framework\Stdlib\DateTime\Date|null
      */
-    protected function convertDate($date, LocaleInterface $locale)
+    protected function convertDate($date, $locale)
     {
         try {
             $dateObj = $this->localeDate->date(null, null, $locale, false);

@@ -140,7 +140,7 @@ class Full
     /**
      * @var \Magento\Framework\Search\Request\Config
      */
-    private $searchRequestConfig;
+    protected $searchRequestConfig;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -768,16 +768,18 @@ class Full
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-            $locale = $this->scopeConfig->getValue(
-                $this->localeResolver->getDefaultLocalePath(),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $locale = new \Zend_Locale($locale);
+
+            $locale = $this->localeResolver->emulate($storeId);
 
             $dateObj = new \Magento\Framework\Stdlib\DateTime\Date(null, null, $locale);
             $dateObj->setTimezone($timezone);
-            $this->dates[$storeId] = [$dateObj, $locale->getTranslation(null, 'date', $locale)];
+            $format = (new \ResourceBundle(
+                $this->localeResolver->getLocale(),
+                'ICUDATA'
+            ))['calendar']['gregorian']['availableFormats']['yMMMd'];
+            $this->dates[$storeId] = [$dateObj, $format];
+
+            $this->localeResolver->revert();
         }
 
         if (!$this->dateTime->isEmptyDate($date)) {

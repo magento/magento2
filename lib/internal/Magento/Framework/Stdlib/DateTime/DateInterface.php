@@ -84,7 +84,7 @@ interface DateInterface
      *
      * @param  string              $format  OPTIONAL Rule for formatting output. If null the default date format is used
      * @param  string              $type    OPTIONAL Type for the format string which overrides the standard setting
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return string
      */
     public function toString($format = null, $type = null, $locale = null);
@@ -119,7 +119,7 @@ interface DateInterface
      * For a complete list of supported datepart values look into the docu
      *
      * @param  string              $part    OPTIONAL Part of the date to return, if null the timestamp is returned
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return string  date or datepart
      */
     public function get($part = null, $locale = null);
@@ -141,7 +141,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to set
      * @param  string                          $part    OPTIONAL Part of the date to set, if null the timestamp is set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return $this Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -158,7 +158,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to add
      * @param  string                          $part    OPTIONAL Part of the date to add, if null the timestamp is added
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return $this Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -173,7 +173,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to subtract
      * @param  string                          $part    OPTIONAL Part of the date to sub, if null the timestamp is subtracted
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return $this Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -185,7 +185,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to compare with the date object
      * @param  string                          $part    OPTIONAL Part of the date to compare, if null the timestamp is subtracted
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -202,7 +202,7 @@ interface DateInterface
      * 01-01-1970 HOUR:00:00 (so $this contains a timestamp equal to a timestamp of 0 plus HOUR).
      *
      * @param  string              $part    Part of the date to compare, if null the timestamp is subtracted
-     * @param  string|\Zend_Locale  $locale  OPTIONAL New object's locale.  No adjustments to timezone are made.
+     * @param  string  $locale  OPTIONAL New object's locale.  No adjustments to timezone are made.
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface New clone with requested part
      */
     public function copyPart($part, $locale = null);
@@ -222,7 +222,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to equal with
      * @param  string                          $part    OPTIONAL Part of the date to compare, if null the timestamp is used
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return boolean
      * @throws \Zend_Date_Exception
      */
@@ -235,7 +235,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to compare with
      * @param  string                          $part    OPTIONAL Part of the date to compare, if null the timestamp is used
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return boolean
      * @throws \Zend_Date_Exception
      */
@@ -249,7 +249,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date or datepart to compare with
      * @param  string                          $part    OPTIONAL Part of the date to compare, if null the timestamp is used
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return boolean
      * @throws \Zend_Date_Exception
      */
@@ -260,7 +260,7 @@ interface DateInterface
      * For example:
      * 15.May.2000 10:11:23 will return a dateobject equal to 01.Jan.1970 10:11:23
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getTime($locale = null);
@@ -273,7 +273,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $time    Time to set
      * @param  string                          $format  OPTIONAL Timeformat for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -287,7 +287,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $time    Time to add
      * @param  string                          $format  OPTIONAL Timeformat for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -301,7 +301,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $time    Time to sub
      * @param  string                          $format  OPTIONAL Timeformat for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid inteface
      * @throws \Zend_Date_Exception
      */
@@ -315,7 +315,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $time    Time to compare
      * @param  string                          $format  OPTIONAL Timeformat for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -324,7 +324,7 @@ interface DateInterface
     /**
      * Returns a clone of $this, with the time part set to 00:00:00.
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getDate($locale = null);
@@ -337,7 +337,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date to set
      * @param  string                          $format  OPTIONAL Date format for parsing
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -351,7 +351,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date to add
      * @param  string                          $format  OPTIONAL Date format for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -366,7 +366,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date to sub
      * @param  string                          $format  OPTIONAL Date format for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -381,7 +381,7 @@ interface DateInterface
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Date to compare
      * @param  string                          $format  OPTIONAL Date format for parsing input
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -393,7 +393,7 @@ interface DateInterface
      * (ISO 8601 defines several formats) use toString() instead.
      * This function does not return the ISO date as object. Use copy() instead.
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return string
      */
     public function getIso($locale = null);
@@ -405,7 +405,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    ISO Date to set
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -418,7 +418,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    ISO Date to add
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -431,7 +431,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    ISO Date to sub
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -444,7 +444,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    ISO Date to sub
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -454,7 +454,7 @@ interface DateInterface
      * Returns a RFC 822 compilant datestring from the date object.
      * This function does not return the RFC date as object. Use copy() instead.
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return string
      */
     public function getArpa($locale = null);
@@ -466,7 +466,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    RFC 822 to set
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -480,7 +480,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    RFC 822 Date to add
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -494,7 +494,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    RFC 822 Date to sub
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -508,7 +508,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    RFC 822 Date to sub
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -592,7 +592,7 @@ interface DateInterface
     /**
      * Returns the actual date as new date object
      *
-     * @param  string|\Zend_Locale        $locale  OPTIONAL Locale for parsing input
+     * @param  string        $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public static function now($locale = null);
@@ -601,7 +601,7 @@ interface DateInterface
      * Returns only the year from the date object as new object.
      * For example: 10.May.2000 10:30:00 -> 01.Jan.2000 00:00:00
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getYear($locale = null);
@@ -615,7 +615,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Year to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -630,7 +630,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Year to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -645,7 +645,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $date    Year to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -657,7 +657,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $year    Year to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -667,7 +667,7 @@ interface DateInterface
      * Returns only the month from the date object as new object.
      * For example: 10.May.2000 10:30:00 -> 01.May.1970 00:00:00
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Zend_Date
      */
     public function getMonth($locale = null);
@@ -681,7 +681,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Month to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -696,7 +696,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Month to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -711,7 +711,7 @@ interface DateInterface
      * Returned is the new date object
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Month to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -723,7 +723,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Month to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -733,7 +733,7 @@ interface DateInterface
      * Returns the day as new date object
      * Example: 20.May.1986 -> 20.Jan.1970 00:00:00
      *
-     * @param $locale  string|\Zend_Locale  OPTIONAL Locale for parsing input
+     * @param $locale  string  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getDay($locale = null);
@@ -748,7 +748,7 @@ interface DateInterface
      * Example: setDay('Montag', 'de_AT'); will set the monday of this week as day.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Day to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -762,7 +762,7 @@ interface DateInterface
      * set locale.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Day to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -776,7 +776,7 @@ interface DateInterface
      * set locale.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Day to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -788,7 +788,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $day     Day to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -799,7 +799,7 @@ interface DateInterface
      * Weekday is always from 1-7
      * Example: 09-Jan-2007 -> 2 = Tuesday -> 02-Jan-1970 (when 02.01.1970 is also Tuesday)
      *
-     * @param $locale  string|\Zend_Locale  OPTIONAL Locale for parsing input
+     * @param $locale  string  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getWeekday($locale = null);
@@ -812,7 +812,7 @@ interface DateInterface
      * Example: setWeekday(3); will set the wednesday of this week as day.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Weekday to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -828,7 +828,7 @@ interface DateInterface
      * wednesday.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Weekday to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -844,7 +844,7 @@ interface DateInterface
      * wednesday.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $month   Weekday to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -856,7 +856,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $weekday  Weekday to compare
-     * @param  string|\Zend_Locale              $locale   OPTIONAL Locale for parsing input
+     * @param  string              $locale   OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -866,7 +866,7 @@ interface DateInterface
      * Returns the day of year as new date object
      * Example: 02.Feb.1986 10:00:00 -> 02.Feb.1970 00:00:00
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getDayOfYear($locale = null);
@@ -878,7 +878,7 @@ interface DateInterface
      * Example: 04.May.2004 -> setDayOfYear(10) -> 10.Jan.2004
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $day     Day of Year to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -891,7 +891,7 @@ interface DateInterface
      * Example: addDayOfYear(10); will add 10 days to the existing date object.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $day     Day of Year to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -904,7 +904,7 @@ interface DateInterface
      * Example: subDayOfYear(10); will subtract 10 days from the existing date object.
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $day     Day of Year to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -916,7 +916,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $day     Day of Year to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -926,7 +926,7 @@ interface DateInterface
      * Returns the hour as new date object
      * Example: 02.Feb.1986 10:30:25 -> 01.Jan.1970 10:00:00
      *
-     * @param $locale  string|\Zend_Locale  OPTIONAL Locale for parsing input
+     * @param $locale  string  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getHour($locale = null);
@@ -938,7 +938,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> setHour(7); -> 04.May.1993 07:07:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $hour    Hour to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -951,7 +951,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> addHour(12); -> 05.May.1993 01:07:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $hour    Hour to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -964,7 +964,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> subHour(6); -> 05.May.1993 07:07:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $hour    Hour to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -976,7 +976,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $hour    Hour to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -986,7 +986,7 @@ interface DateInterface
      * Returns the minute as new date object
      * Example: 02.Feb.1986 10:30:25 -> 01.Jan.1970 00:30:00
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getMinute($locale = null);
@@ -998,7 +998,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> setMinute(29); -> 04.May.1993 13:29:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $minute  Minute to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1011,7 +1011,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> addMinute(65); -> 04.May.1993 13:12:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $minute  Minute to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1024,7 +1024,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> subMinute(9); -> 04.May.1993 12:58:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $minute  Minute to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1036,7 +1036,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $minute  Hour to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -1046,7 +1046,7 @@ interface DateInterface
      * Returns the second as new date object
      * Example: 02.Feb.1986 10:30:25 -> 01.Jan.1970 00:00:25
      *
-     * @param  string|\Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @param  string  $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getSecond($locale = null);
@@ -1058,7 +1058,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> setSecond(100); -> 04.May.1993 13:08:40
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface $second Second to set
-     * @param  string|\Zend_Locale             $locale (Optional) Locale for parsing input
+     * @param  string             $locale (Optional) Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1071,7 +1071,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> addSecond(65); -> 04.May.1993 13:08:30
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface $second Second to add
-     * @param  string|\Zend_Locale             $locale (Optional) Locale for parsing input
+     * @param  string             $locale (Optional) Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1084,7 +1084,7 @@ interface DateInterface
      * Example: 04.May.1993 13:07:25 -> subSecond(10); -> 04.May.1993 13:07:15
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface $second Second to sub
-     * @param  string|\Zend_Locale             $locale (Optional) Locale for parsing input
+     * @param  string             $locale (Optional) Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1096,7 +1096,7 @@ interface DateInterface
      * Returns if equal, earlier or later
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface $second Second to compare
-     * @param  string|\Zend_Locale             $locale (Optional) Locale for parsing input
+     * @param  string             $locale (Optional) Locale for parsing input
      * @return integer  0 = equal, 1 = later, -1 = earlier
      * @throws \Zend_Date_Exception
      */
@@ -1167,7 +1167,7 @@ interface DateInterface
      * Returns the week as new date object using monday as beginning of the week
      * Example: 12.Jan.2007 -> 08.Jan.1970 00:00:00
      *
-     * @param $locale  string|\Zend_Locale  OPTIONAL Locale for parsing input
+     * @param $locale  string  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface
      */
     public function getWeek($locale = null);
@@ -1178,7 +1178,7 @@ interface DateInterface
      * Example: 09.Jan.2007 13:07:25 -> setWeek(1); -> 02.Jan.2007 13:07:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $week    Week to set
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1190,7 +1190,7 @@ interface DateInterface
      * Example: 09.Jan.2007 13:07:25 -> addWeek(1); -> 16.Jan.2007 13:07:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $week    Week to add
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface  Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1202,7 +1202,7 @@ interface DateInterface
      * Example: 09.Jan.2007 13:07:25 -> subWeek(1); -> 02.Jan.2007 13:07:25
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $week    Week to sub
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return \Magento\Framework\Stdlib\DateTime\DateInterface Provides fluid interface
      * @throws \Zend_Date_Exception
      */
@@ -1215,7 +1215,7 @@ interface DateInterface
      * Example: 09.Jan.2007 13:07:25 -> compareWeek(2); -> 0
      *
      * @param  string|integer|array|\Magento\Framework\Stdlib\DateTime\DateInterface  $week    Week to compare
-     * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @param  string              $locale  OPTIONAL Locale for parsing input
      * @return integer 0 = equal, 1 = later, -1 = earlier
      */
     public function compareWeek($week, $locale = null);
@@ -1227,7 +1227,7 @@ interface DateInterface
      * Example: 'de_XX' will be set to 'de' because 'de_XX' does not exist
      * 'xx_YY' will be set to 'root' because 'xx' does not exist
      *
-     * @param  string|\Zend_Locale $locale (Optional) Locale for parsing input
+     * @param  string $locale (Optional) Locale for parsing input
      * @throws \Zend_Date_Exception When the given locale does not exist
      * @return $this Provides fluent interface
      */
@@ -1249,7 +1249,7 @@ interface DateInterface
      *
      * @param  string|array|\Magento\Framework\Stdlib\DateTime\DateInterface $date   Date to parse for correctness
      * @param  string                 $format (Optional) Format for parsing the date string
-     * @param  string|\Zend_Locale     $locale (Optional) Locale for parsing date parts
+     * @param  string     $locale (Optional) Locale for parsing date parts
      * @return boolean                True when all date parts are correct
      */
     public static function isDate($date, $format = null, $locale = null);

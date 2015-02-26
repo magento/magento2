@@ -245,22 +245,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $hasDefaultValue = (string)$defaultValue != '';
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
-            if (!\Zend_Locale_Format::isNumber(
-                $defaultValue,
-                ['locale' => $this->_localeResolver->getLocaleCode()]
-            )
-            ) {
+            $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
+            $defaultValue = $numberFormatter->parse($defaultValue);
+            if ($defaultValue === false) {
                 throw new Exception(__('Invalid default decimal value'));
             }
-
-            try {
-                $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_localeResolver->getLocaleCode()]
-                );
-                $this->setDefaultValue($filter->filter($defaultValue));
-            } catch (\Exception $e) {
-                throw new Exception(__('Invalid default decimal value'));
-            }
+            $this->setDefaultValue($defaultValue);
         }
 
         if ($this->getBackendType() == 'datetime') {

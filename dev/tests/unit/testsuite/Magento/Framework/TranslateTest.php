@@ -222,13 +222,13 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLocale()
     {
-        $this->locale->expects($this->once())->method('getLocaleCode')->will($this->returnValue('en_US'));
+        $this->locale->expects($this->once())->method('getLocale')->will($this->returnValue('en_US'));
         $this->assertEquals('en_US', $this->translate->getLocale());
 
-        $this->locale->expects($this->never())->method('getLocaleCode');
+        $this->locale->expects($this->never())->method('getLocale');
         $this->assertEquals('en_US', $this->translate->getLocale());
 
-        $this->locale->expects($this->never())->method('getLocaleCode');
+        $this->locale->expects($this->never())->method('getLocale');
         $this->translate->setLocale('en_GB');
         $this->assertEquals('en_GB', $this->translate->getLocale());
     }
@@ -236,7 +236,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     public function testSetLocale()
     {
         $this->translate->setLocale('en_GB');
-        $this->locale->expects($this->never())->method('getLocaleCode');
+        $this->locale->expects($this->never())->method('getLocale');
         $this->assertEquals('en_GB', $this->translate->getLocale());
     }
 
@@ -268,7 +268,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
      */
     protected function expectsSetConfig($themeId, $localeCode = 'en_US')
     {
-        $this->locale->expects($this->any())->method('getLocaleCode')->will($this->returnValue($localeCode));
+        $this->locale->expects($this->any())->method('getLocale')->will($this->returnValue($localeCode));
         $scope = new \Magento\Framework\Object(['code' => 'frontendCode', 'id' => 1]);
         $scopeAdmin = new \Magento\Framework\Object(['code' => 'adminCode', 'id' => 0]);
         $this->scopeResolver->expects($this->any())

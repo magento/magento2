@@ -106,7 +106,11 @@ class Timezone implements TimezoneInterface
      */
     public function getDateFormat($type = null)
     {
-        return $this->_getTranslation($type, 'date');
+        $formatIndex = array_search($type, $this->_allowedFormats) + 4;
+        return (new \ResourceBundle(
+            $this->_localeResolver->getLocale(),
+            'ICUDATA'
+        ))['calendar']['generic']['DateTimePatterns'][$formatIndex];
     }
 
     /**
@@ -117,7 +121,7 @@ class Timezone implements TimezoneInterface
         return preg_replace(
             '/(?<!y)yy(?!y)/',
             'yyyy',
-            $this->_getTranslation(TimezoneInterface::FORMAT_TYPE_SHORT, 'date')
+            $this->getDateFormat('short')
         );
     }
 
@@ -126,7 +130,11 @@ class Timezone implements TimezoneInterface
      */
     public function getTimeFormat($type = null)
     {
-        return $this->_getTranslation($type, 'time');
+        $formatIndex = array_search($type, $this->_allowedFormats);
+        return (new \ResourceBundle(
+            $this->_localeResolver->getLocale(),
+            'ICUDATA'
+        ))['calendar']['generic']['DateTimePatterns'][$formatIndex];
     }
 
     /**
@@ -277,18 +285,5 @@ class Timezone implements TimezoneInterface
             $result = true;
         }
         return $result;
-    }
-
-    /**
-     * Returns a localized information string, supported are several types of information.
-     * For detailed information about the types look into the documentation
-     *
-     * @param string $value Name to get detailed information about
-     * @param string $path (Optional) Type of information to return
-     * @return string|false The wished information in the given language
-     */
-    protected function _getTranslation($value = null, $path = null)
-    {
-        return $this->_localeResolver->getLocale()->getTranslation($value, $path, $this->_localeResolver->getLocale());
     }
 }

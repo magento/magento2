@@ -76,7 +76,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _initSelect()
     {
         parent::_initSelect();
-        $locale = $this->_localeResolver->getLocaleCode();
+        $locale = $this->_localeResolver->getLocale();
 
         $this->addBindParam(':region_locale', $locale);
         $this->getSelect()->joinLeft(

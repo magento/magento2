@@ -14,11 +14,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     protected $listsModel;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $mockScopeResolver;
-
-    /**
      * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ConfigInterface
      */
     protected $mockConfig;
@@ -30,96 +25,29 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockScopeResolver = $this->getMockBuilder('\Magento\Framework\App\ScopeResolverInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->mockConfig = $this->getMockBuilder('\Magento\Framework\Locale\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockLocaleResolver = $this->getMockBuilder('\Magento\Framework\Locale\ResolverInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $locale = "some_locale";
-        $this->mockLocaleResolver->expects($this->atLeastOnce())
-            ->method('setLocale')
-            ->with($locale);
-
-        $this->listsModel = new \Magento\Framework\Locale\Lists(
-            $this->mockScopeResolver,
-            $this->mockConfig,
-            $this->mockLocaleResolver,
-            $locale
-        );
-    }
-
-    public function testGetCountryTranslationList()
-    {
-        $locale = new \Magento\Framework\Locale('en');
-
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
-            ->will($this->returnValue($locale));
+            ->will($this->returnValue('en_US'));
 
-        // clearly english results
-        $expectedResults = [
-            'AD' => 'Andorra',
-            'ZZ' => 'Unknown Region',
-            'VC' => 'St. Vincent & Grenadines',
-            'PM' => 'Saint Pierre and Miquelon',
-        ];
-
-        $countryTranslationList = $this->listsModel->getCountryTranslationList();
-        foreach ($expectedResults as $key => $value) {
-            $this->assertArrayHasKey($key, $countryTranslationList);
-            $this->assertEquals($value, $countryTranslationList[$key]);
-        }
+        $this->listsModel = new \Magento\Framework\Locale\Lists(
+            $this->mockConfig,
+            $this->mockLocaleResolver
+        );
     }
 
     public function testGetCountryTranslation()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->once())
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $this->assertFalse($this->listsModel->getCountryTranslation(null));
-    }
-
-    public function testGetTranslationList()
-    {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $path = 'territory';
-        $value = 2;
-
-        // clearly english results
-        $expectedResults = [
-            'AD' => 'Andorra',
-            'ZZ' => 'Unknown Region',
-            'VC' => 'St. Vincent & Grenadines',
-            'PM' => 'Saint Pierre and Miquelon',
-        ];
-
-        $countryTranslationList = $this->listsModel->getTranslationList($path, $value);
-        foreach ($expectedResults as $key => $value) {
-            $this->assertArrayHasKey($key, $countryTranslationList);
-            $this->assertEquals($value, $countryTranslationList[$key]);
-        }
+        $this->assertNull($this->listsModel->getCountryTranslation(null));
     }
 
     public function testGetOptionAllCurrencies()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
         // clearly English results
         $expectedResults = [
             ['value' => 'BAM', 'label' => 'Bosnia-Herzegovina Convertible Mark'],
@@ -136,12 +64,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionCurrencies()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
         $allowedCurrencies = ['USD', 'GBP', 'EUR'];
 
         $this->mockConfig->expects($this->once())
@@ -159,12 +81,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionCountries()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->once())
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
         // clearly English results
         $expectedResults = [
             ['value' => 'AG', 'label' => 'Antigua and Barbuda'],
@@ -182,12 +98,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionsWeekdays()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
         $expectedArray = [
             ['label' => 'Sunday', 'value' => 'Sun'],
             ['label' => 'Monday', 'value' => 'Mon'],
@@ -203,14 +113,10 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionTimezones()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
         $expectedResults = [
-            ['value' => 'Australia/Darwin', 'label' => 'AUS Central Standard Time (Australia/Darwin)'],
+            ['value' => 'Australia/Darwin', 'label' => 'Australian Central Standard Time (Australia/Darwin)'],
+            ['value' => 'America/Los_Angeles', 'label' => 'Pacific Standard Time (America/Los_Angeles)'],
+            ['value' => 'Europe/Kiev', 'label' => 'Eastern European Standard Time (Europe/Kiev)'],
             ['value' => 'Asia/Jerusalem', 'label' => 'Israel Standard Time (Asia/Jerusalem)'],
             ['value' => 'Asia/Yakutsk', 'label' => 'Yakutsk Standard Time (Asia/Yakutsk)'],
         ];
@@ -232,8 +138,9 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                ['value' => 'az_AZ', 'label' => 'Azerbaijani (Azerbaijan)'],
+                ['value' => 'az_Latn_AZ', 'label' => 'Azerbaijani (Azerbaijan)'],
                 ['value' => 'en_US', 'label' => 'English (United States)'],
+                ['value' => 'uk_UA', 'label' => 'Ukrainian (Ukraine)'],
             ],
             $this->listsModel->getOptionLocales()
         );
@@ -245,29 +152,22 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                ['value' => 'az_AZ', 'label' => 'Azərbaycan (Azərbaycan) / Azerbaijani (Azerbaijan)'],
+                ['value' => 'az_Latn_AZ', 'label' => 'Azərbaycan (Azərbaycan) / Azerbaijani (Azerbaijan)'],
                 ['value' => 'en_US', 'label' => 'English (United States) / English (United States)'],
+                ['value' => 'uk_UA', 'label' => 'українська (Україна) / Ukrainian (Ukraine)'],
             ],
             $this->listsModel->getTranslatedOptionLocales()
         );
     }
 
     /**
-     * @return \Magento\Framework\LocaleInterface
+     * Setup for option locales
      */
     protected function setupForOptionLocales()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->any())
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $allowedLocales = ['en_US', 'az_AZ'];
+        $allowedLocales = ['en_US', 'az_Latn_AZ', 'uk_UA'];
         $this->mockConfig->expects($this->once())
             ->method('getAllowedLocales')
             ->will($this->returnValue($allowedLocales));
-
-        return $locale;
     }
 }

@@ -5,12 +5,10 @@
  */
 
 /** @var $this \Magento\Dhl\Model\Resource\Setup */
-$days = $this->getLocaleLists()->getTranslationList('days');
-
-$days = array_keys($days['format']['wide']);
-foreach ($days as $key => $value) {
-    $days[$key] = ucfirst($value);
-}
+$days = (new \ResourceBundle(
+    $this->getLocaleResolver()->getLocale(),
+    'ICUDATA'
+))['calendar']['gregorian']['dayNames']['format']['abbreviated'];
 
 $select = $this->getConnection()->select()->from(
     $this->getTable('core_config_data'),
@@ -21,7 +19,12 @@ $select = $this->getConnection()->select()->from(
 );
 
 foreach ($this->getConnection()->fetchAll($select) as $configRow) {
-    $row = ['value' => implode(',', array_intersect_key($days, array_flip(explode(',', $configRow['value']))))];
+    $row = [
+        'value' => implode(
+            ',',
+            array_intersect_key(iterator_to_array($days), array_flip(explode(',', $configRow['value'])))
+        )
+    ];
     $this->getConnection()->update(
         $this->getTable('core_config_data'),
         $row,

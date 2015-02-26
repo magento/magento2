@@ -71,7 +71,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_addressFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfigMock;
 
@@ -117,8 +117,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $data = [
             'context' => $context,
-            'locale' => $this->getMock('Magento\Framework\Locale', [], [], '', false),
-            'dateModel' => $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false),
         ];
         $this->_coreHelper = $objectManager->getObject('Magento\Core\Helper\Data', $data);
         $this->_string = new \Magento\Framework\Stdlib\String();
