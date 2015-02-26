@@ -144,4 +144,72 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return \Magento\Sales\Api\Data\TransactionInterface[] Array of child transactions.
      */
     public function getChildTransactions();
+
+    /**
+     * Sets the parent ID for the transaction.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the order ID for the transaction.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderId($id);
+
+    /**
+     * Sets the payment ID for the transaction.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setPaymentId($id);
+
+    /**
+     * Sets the transaction business ID for the transaction.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setTxnId($id);
+
+    /**
+     * Sets the parent transaction business ID for the transaction.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setParentTxnId($id);
+
+    /**
+     * Sets the transaction type for the transaction.
+     *
+     * @param string $txnType
+     * @return $this
+     */
+    public function setTxnType($txnType);
+
+    /**
+     * Sets the value of the is-closed flag for the transaction.
+     *
+     * @param int $isClosed
+     * @return $this
+     */
+    public function setIsClosed($isClosed);
+
+    /**
+     * Additional information setter
+     * Updates data inside the 'additional_information' array
+     * Doesn't allow to set arrays
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function setAdditionalInformation($key, $value);
 }

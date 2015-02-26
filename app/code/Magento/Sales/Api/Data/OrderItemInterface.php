@@ -1053,4 +1053,748 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return \Magento\Sales\Api\Data\OrderItemInterface|null Parent item
      */
     public function getParentItem();
+
+    /**
+     * Sets the updated-at timestamp for the order item.
+     *
+     * @param string $timestamp
+     * @return $this
+     */
+    public function setUpdatedAt($timestamp);
+
+    /**
+     * Sets the item ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setItemId($id);
+
+    /**
+     * Sets the order ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderId($id);
+
+    /**
+     * Sets the parent item ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentItemId($id);
+
+    /**
+     * Sets the quote item ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setQuoteItemId($id);
+
+    /**
+     * Sets the store ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setStoreId($id);
+
+    /**
+     * Sets the product ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setProductId($id);
+
+    /**
+     * Sets the product type for the order item.
+     *
+     * @param string $productType
+     * @return $this
+     */
+    public function setProductType($productType);
+
+    /**
+     * Sets the product options for the order item.
+     *
+     * @param string[] $productOptions
+     * @return $this
+     */
+    public function setProductOptions(array $productOptions = null);
+
+    /**
+     * Sets the weight for the order item.
+     *
+     * @param float $weight
+     * @return $this
+     */
+    public function setWeight($weight);
+
+    /**
+     * Sets the is-virtual flag value for the order item.
+     *
+     * @param int $isVirtual
+     * @return $this
+     */
+    public function setIsVirtual($isVirtual);
+
+    /**
+     * Sets the SKU for the order item.
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
+
+    /**
+     * Sets the name for the order item.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
+     * Sets the description for the order item.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description);
+
+    /**
+     * Sets the applied rule IDs for the order item.
+     *
+     * @param string $appliedRuleIds
+     * @return $this
+     */
+    public function setAppliedRuleIds($appliedRuleIds);
+
+    /**
+     * Sets the additional data for the order item.
+     *
+     * @param string $additionalData
+     * @return $this
+     */
+    public function setAdditionalData($additionalData);
+
+    /**
+     * Sets the is-quantity-decimal flag value for the order item.
+     *
+     * @param int $isQtyDecimal
+     * @return $this
+     */
+    public function setIsQtyDecimal($isQtyDecimal);
+
+    /**
+     * Sets the no discount flag value for the order item.
+     *
+     * @param int $noDiscount
+     * @return $this
+     */
+    public function setNoDiscount($noDiscount);
+
+    /**
+     * Sets the quantity backordered for the order item.
+     *
+     * @param float $qtyBackordered
+     * @return $this
+     */
+    public function setQtyBackordered($qtyBackordered);
+
+    /**
+     * Sets the quantity canceled for the order item.
+     *
+     * @param float $qtyCanceled
+     * @return $this
+     */
+    public function setQtyCanceled($qtyCanceled);
+
+    /**
+     * Sets the quantity invoiced for the order item.
+     *
+     * @param float $qtyInvoiced
+     * @return $this
+     */
+    public function setQtyInvoiced($qtyInvoiced);
+
+    /**
+     * Sets the quantity ordered for the order item.
+     *
+     * @param float $qtyOrdered
+     * @return $this
+     */
+    public function setQtyOrdered($qtyOrdered);
+
+    /**
+     * Sets the quantity refunded for the order item.
+     *
+     * @param float $qtyRefunded
+     * @return $this
+     */
+    public function setQtyRefunded($qtyRefunded);
+
+    /**
+     * Sets the quantity shipped for the order item.
+     *
+     * @param float $qtyShipped
+     * @return $this
+     */
+    public function setQtyShipped($qtyShipped);
+
+    /**
+     * Sets the base cost for the order item.
+     *
+     * @param float $baseCost
+     * @return $this
+     */
+    public function setBaseCost($baseCost);
+
+    /**
+     * Sets the price for the order item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price);
+
+    /**
+     * Sets the base price for the order item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setBasePrice($price);
+
+    /**
+     * Sets the original price for the order item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setOriginalPrice($price);
+
+    /**
+     * Sets the base original price for the order item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setBaseOriginalPrice($price);
+
+    /**
+     * Sets the tax percent for the order item.
+     *
+     * @param float $taxPercent
+     * @return $this
+     */
+    public function setTaxPercent($taxPercent);
+
+    /**
+     * Sets the tax amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setTaxAmount($amount);
+
+    /**
+     * Sets the base tax amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseTaxAmount($amount);
+
+    /**
+     * Sets the tax invoiced for the order item.
+     *
+     * @param float $taxInvoiced
+     * @return $this
+     */
+    public function setTaxInvoiced($taxInvoiced);
+
+    /**
+     * Sets the base tax invoiced for the order item.
+     *
+     * @param float $baseTaxInvoiced
+     * @return $this
+     */
+    public function setBaseTaxInvoiced($baseTaxInvoiced);
+
+    /**
+     * Sets the discount percent for the order item.
+     *
+     * @param float $discountPercent
+     * @return $this
+     */
+    public function setDiscountPercent($discountPercent);
+
+    /**
+     * Sets the discount amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setDiscountAmount($amount);
+
+    /**
+     * Sets the base discount amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseDiscountAmount($amount);
+
+    /**
+     * Sets the discount invoiced for the order item.
+     *
+     * @param float $discountInvoiced
+     * @return $this
+     */
+    public function setDiscountInvoiced($discountInvoiced);
+
+    /**
+     * Sets the base discount invoiced for the order item.
+     *
+     * @param float $baseDiscountInvoiced
+     * @return $this
+     */
+    public function setBaseDiscountInvoiced($baseDiscountInvoiced);
+
+    /**
+     * Sets the amount refunded for the order item.
+     *
+     * @param float $amountRefunded
+     * @return $this
+     */
+    public function setAmountRefunded($amountRefunded);
+
+    /**
+     * Sets the base amount refunded for the order item.
+     *
+     * @param float $baseAmountRefunded
+     * @return $this
+     */
+    public function setBaseAmountRefunded($baseAmountRefunded);
+
+    /**
+     * Sets the row total for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setRowTotal($amount);
+
+    /**
+     * Sets the base row total for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseRowTotal($amount);
+
+    /**
+     * Sets the row invoiced for the order item.
+     *
+     * @param float $rowInvoiced
+     * @return $this
+     */
+    public function setRowInvoiced($rowInvoiced);
+
+    /**
+     * Sets the base row invoiced for the order item.
+     *
+     * @param float $baseRowInvoiced
+     * @return $this
+     */
+    public function setBaseRowInvoiced($baseRowInvoiced);
+
+    /**
+     * Sets the row weight for the order item.
+     *
+     * @param float $rowWeight
+     * @return $this
+     */
+    public function setRowWeight($rowWeight);
+
+    /**
+     * Sets the base tax before discount for the order item.
+     *
+     * @param float $baseTaxBeforeDiscount
+     * @return $this
+     */
+    public function setBaseTaxBeforeDiscount($baseTaxBeforeDiscount);
+
+    /**
+     * Sets the tax before discount for the order item.
+     *
+     * @param float $taxBeforeDiscount
+     * @return $this
+     */
+    public function setTaxBeforeDiscount($taxBeforeDiscount);
+
+    /**
+     * Sets the external order item ID for the order item.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setExtOrderItemId($id);
+
+    /**
+     * Sets the locked DO invoice flag value for the order item.
+     *
+     * @param int $flag
+     * @return $this
+     */
+    public function setLockedDoInvoice($flag);
+
+    /**
+     * Sets the locked DO ship flag value for the order item.
+     *
+     * @param int $flag
+     * @return $this
+     */
+    public function setLockedDoShip($flag);
+
+    /**
+     * Sets the price including tax for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setPriceInclTax($amount);
+
+    /**
+     * Sets the base price including tax for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBasePriceInclTax($amount);
+
+    /**
+     * Sets the row total including tax for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setRowTotalInclTax($amount);
+
+    /**
+     * Sets the base row total including tax for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseRowTotalInclTax($amount);
+
+    /**
+     * Sets the hidden tax amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setHiddenTaxAmount($amount);
+
+    /**
+     * Sets the base hidden tax amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseHiddenTaxAmount($amount);
+
+    /**
+     * Sets the hidden tax invoiced for the order item.
+     *
+     * @param float $hiddenTaxInvoiced
+     * @return $this
+     */
+    public function setHiddenTaxInvoiced($hiddenTaxInvoiced);
+
+    /**
+     * Sets the base hidden tax invoiced for the order item.
+     *
+     * @param float $baseHiddenTaxInvoiced
+     * @return $this
+     */
+    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced);
+
+    /**
+     * Sets the hidden tax refunded for the order item.
+     *
+     * @param float $hiddenTaxRefunded
+     * @return $this
+     */
+    public function setHiddenTaxRefunded($hiddenTaxRefunded);
+
+    /**
+     * Sets the base hidden tax refunded for the order item.
+     *
+     * @param float $baseHiddenTaxRefunded
+     * @return $this
+     */
+    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded);
+
+    /**
+     * Sets the tax canceled for the order item.
+     *
+     * @param float $taxCanceled
+     * @return $this
+     */
+    public function setTaxCanceled($taxCanceled);
+
+    /**
+     * Sets the hidden tax canceled for the order item.
+     *
+     * @param float $hiddenTaxCanceled
+     * @return $this
+     */
+    public function setHiddenTaxCanceled($hiddenTaxCanceled);
+
+    /**
+     * Sets the tax refunded for the order item.
+     *
+     * @param float $taxRefunded
+     * @return $this
+     */
+    public function setTaxRefunded($taxRefunded);
+
+    /**
+     * Sets the base tax refunded for the order item.
+     *
+     * @param float $baseTaxRefunded
+     * @return $this
+     */
+    public function setBaseTaxRefunded($baseTaxRefunded);
+
+    /**
+     * Sets the discount refunded for the order item.
+     *
+     * @param float $discountRefunded
+     * @return $this
+     */
+    public function setDiscountRefunded($discountRefunded);
+
+    /**
+     * Sets the base discount refunded for the order item.
+     *
+     * @param float $baseDiscountRefunded
+     * @return $this
+     */
+    public function setBaseDiscountRefunded($baseDiscountRefunded);
+
+    /**
+     * Sets the GW ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setGwId($id);
+
+    /**
+     * Sets the GW base price for the order item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setGwBasePrice($price);
+
+    /**
+     * Sets the GW price for the order item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setGwPrice($price);
+
+    /**
+     * Sets the GW base tax amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setGwBaseTaxAmount($amount);
+
+    /**
+     * Sets the GW tax amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setGwTaxAmount($amount);
+
+    /**
+     * Sets the GW base price invoiced for the order item.
+     *
+     * @param float $gwBasePriceInvoiced
+     * @return $this
+     */
+    public function setGwBasePriceInvoiced($gwBasePriceInvoiced);
+
+    /**
+     * Sets the GW price invoiced for the order item.
+     *
+     * @param float $gwPriceInvoiced
+     * @return $this
+     */
+    public function setGwPriceInvoiced($gwPriceInvoiced);
+
+    /**
+     * Sets the GW base tax amount invoiced for the order item.
+     *
+     * @param float $gwBaseTaxAmountInvoiced
+     * @return $this
+     */
+    public function setGwBaseTaxAmountInvoiced($gwBaseTaxAmountInvoiced);
+
+    /**
+     * Sets the GW tax amount invoiced for the order item.
+     *
+     * @param float $gwTaxAmountInvoiced
+     * @return $this
+     */
+    public function setGwTaxAmountInvoiced($gwTaxAmountInvoiced);
+
+    /**
+     * Sets the GW base price refunded for the order item.
+     *
+     * @param float $gwBasePriceRefunded
+     * @return $this
+     */
+    public function setGwBasePriceRefunded($gwBasePriceRefunded);
+
+    /**
+     * Sets the GW price refunded for the order item.
+     *
+     * @param float $gwPriceRefunded
+     * @return $this
+     */
+    public function setGwPriceRefunded($gwPriceRefunded);
+
+    /**
+     * Sets the GW base tax amount refunded for the order item.
+     *
+     * @param float $gwBaseTaxAmountRefunded
+     * @return $this
+     */
+    public function setGwBaseTaxAmountRefunded($gwBaseTaxAmountRefunded);
+
+    /**
+     * Sets the GW tax amount refunded for the order item.
+     *
+     * @param float $gwTaxAmountRefunded
+     * @return $this
+     */
+    public function setGwTaxAmountRefunded($gwTaxAmountRefunded);
+
+    /**
+     * Sets the free-shipping flag value for the order item.
+     *
+     * @param int $freeShipping
+     * @return $this
+     */
+    public function setFreeShipping($freeShipping);
+
+    /**
+     * Sets the quantity returned for the order item.
+     *
+     * @param float $qtyReturned
+     * @return $this
+     */
+    public function setQtyReturned($qtyReturned);
+
+    /**
+     * Sets the event ID for the order item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setEventId($id);
+
+    /**
+     * Sets the base WEEE tax applied amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseWeeeTaxAppliedAmount($amount);
+
+    /**
+     * Sets the base WEEE tax applied row amount for the order item.
+     *
+     * @param float $amnt
+     * @return $this
+     */
+    public function setBaseWeeeTaxAppliedRowAmnt($amnt);
+
+    /**
+     * Sets the WEEE tax applied amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setWeeeTaxAppliedAmount($amount);
+
+    /**
+     * Sets the WEEE tax applied row amount for the order item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setWeeeTaxAppliedRowAmount($amount);
+
+    /**
+     * Sets the WEEE tax applied for the order item.
+     *
+     * @param string $weeeTaxApplied
+     * @return $this
+     */
+    public function setWeeeTaxApplied($weeeTaxApplied);
+
+    /**
+     * Sets the WEEE tax disposition for the order item.
+     *
+     * @param float $weeeTaxDisposition
+     * @return $this
+     */
+    public function setWeeeTaxDisposition($weeeTaxDisposition);
+
+    /**
+     * Sets the WEEE tax row disposition for the order item.
+     *
+     * @param float $weeeTaxRowDisposition
+     * @return $this
+     */
+    public function setWeeeTaxRowDisposition($weeeTaxRowDisposition);
+
+    /**
+     * Sets the base WEEE tax disposition for the order item.
+     *
+     * @param float $baseWeeeTaxDisposition
+     * @return $this
+     */
+    public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition);
+
+    /**
+     * Sets the base WEEE tax row disposition for the order item.
+     *
+     * @param float $baseWeeeTaxRowDisposition
+     * @return $this
+     */
+    public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition);
+
+    /**
+     * Sets the parent item
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $parentItem
+     * @return $this
+     */
+    public function setParentItem($parentItem);
 }
