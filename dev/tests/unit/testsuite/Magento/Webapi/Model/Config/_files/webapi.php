@@ -6,27 +6,30 @@
 return [
     'services' => [
         'Magento\Customer\Api\CustomerRepositoryInterface' => [
-            'getById' => [
-                'resources' => [
-                    'Magento_Customer::customer_self',
-                    'Magento_Customer::read',
+            'methods' => [
+                'getById' => [
+                    'resources' => [
+                        'Magento_Customer::customer_self',
+                        'Magento_Customer::read',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
-            ],
-            'save' => [
-                'resources' => [
-                    'Magento_Customer::customer_self',
-                    'Magento_Customer::manage'
+                'save' => [
+                    'resources' => [
+                        'Magento_Customer::customer_self',
+                        'Magento_Customer::manage'
+                    ],
+                    'secure' => true,
                 ],
-                'secure' => true,
-            ],
-            'deleteById' => [
-                'resources' => [
-                    'Magento_Customer::manage',
-                    'Magento_Customer::delete',
+                'deleteById' => [
+                    'resources' => [
+                        'Magento_Customer::manage',
+                        'Magento_Customer::delete',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
             ],
+            'version' => 'V1',
         ],
     ],
     'routes' => [

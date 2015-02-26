@@ -28,8 +28,8 @@ class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
         $webapiConfig = $objectManager->get('Magento\Webapi\Model\Config');
         $serviceNames = [];
 
-        foreach (array_keys($webapiConfig->getServices()['services']) as $serviceClassName) {
-            $newServiceName = $soapConfig->getServiceName($serviceClassName);
+        foreach ($webapiConfig->getServices()['services'] as $serviceClassName => $serviceData) {
+            $newServiceName = $soapConfig->getServiceName($serviceClassName, $serviceData['version']);
             $this->assertFalse(in_array($newServiceName, $serviceNames));
             $serviceNames[] = $newServiceName;
         }

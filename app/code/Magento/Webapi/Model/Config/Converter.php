@@ -26,6 +26,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_DATA_PARAMETERS = 'parameters';
     const KEY_SOURCE = 'source';
     const KEY_METHOD = 'method';
+    const KEY_METHODS = 'methods';
+    const KEY_VERSION = 'version';
     /**#@-*/
 
     /**
@@ -33,6 +35,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function convert($source)
     {
@@ -62,14 +65,16 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 // For SOAP
                 $resourcePermissionSet[] = $ref;
             }
-            if (!isset($result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES])) {
-                $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES]
+            if (!isset(
+                $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES]
+            )) {
+                $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES]
                     = $resourcePermissionSet;
             } else {
-                $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES] =
+                $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] =
                     array_unique(
                         array_merge(
-                            $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES],
+                            $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES],
                             $resourcePermissionSet
                         )
                     );
@@ -115,10 +120,19 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 self::KEY_DATA_PARAMETERS => $data,
             ];
             $serviceSecure = false;
-            if (isset($result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_SECURE])) {
-                $serviceSecure = $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_SECURE];
+            if (
+                isset($result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_SECURE])
+            ) {
+                $serviceSecure =
+                    $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_SECURE];
             }
-            $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_SECURE] = $serviceSecure || $secure;
+            $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_SECURE] =
+                $serviceSecure || $secure;
+            // get version -- assumes the version is the first item in the URL after the first '/'
+            $version = substr($url, 1, strpos($url, '/', 1)-1);
+            if (!isset($result[self::KEY_SERVICES][$serviceClass][self::KEY_VERSION])) {
+                $result[self::KEY_SERVICES][$serviceClass][self::KEY_VERSION] = $version;
+            }
         }
         return $result;
     }

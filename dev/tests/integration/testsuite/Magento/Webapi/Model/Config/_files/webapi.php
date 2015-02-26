@@ -6,48 +6,54 @@
 return [
     'services' => [
         'Magento\TestModule1\Service\V1\AllSoapAndRestInterface' => [
-            'item' => [
-                'resources' => [
-                    'Magento_Test1::resource1',
+            'methods' => [
+                'item' => [
+                    'resources' => [
+                        'Magento_Test1::resource1',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
-            ],
-            'create' => [
-                'resources' => [
-                    'Magento_Test1::resource1',
+                'create' => [
+                    'resources' => [
+                        'Magento_Test1::resource1',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
             ],
+            'version' => 'V1',
         ],
         'Magento\TestModule1\Service\V2\AllSoapAndRestInterface' => [
-            'item' => [
-                'resources' => [
-                    'Magento_Test1::resource1',
-                    'Magento_Test1::resource2',
+            'methods' => [
+                'item' => [
+                    'resources' => [
+                        'Magento_Test1::resource1',
+                        'Magento_Test1::resource2',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
-            ],
-            'create' => [
-                'resources' => [
-                    'Magento_Test1::resource1',
-                    'Magento_Test1::resource2',
+                'create' => [
+                    'resources' => [
+                        'Magento_Test1::resource1',
+                        'Magento_Test1::resource2',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
-            ],
-            'delete' => [
-                'resources' => [
-                    'Magento_Test1::resource1',
-                    'Magento_Test1::resource2',
+                'delete' => [
+                    'resources' => [
+                        'Magento_Test1::resource1',
+                        'Magento_Test1::resource2',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
-            ],
-            'update' => [
-                'resources' => [
-                    'Magento_Test1::resource1',
-                    'Magento_Test1::resource2',
+                'update' => [
+                    'resources' => [
+                        'Magento_Test1::resource1',
+                        'Magento_Test1::resource2',
+                    ],
+                    'secure' => false,
                 ],
-                'secure' => false,
             ],
+            'version' => 'V2',
         ],
     ],
     'routes' => [
