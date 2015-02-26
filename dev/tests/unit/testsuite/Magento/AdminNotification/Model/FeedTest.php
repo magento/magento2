@@ -8,6 +8,9 @@ namespace Magento\AdminNotification\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FeedTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\AdminNotification\Model\Feed */
