@@ -42,8 +42,7 @@ class Plugin
         Manager $eventManager,
         ProductFactory $productFactory,
         Data $jsonHelper
-    )
-    {
+    ) {
         $this->eventManager = $eventManager;
         $this->productFactory = $productFactory;
         $this->jsonHelper = $jsonHelper;

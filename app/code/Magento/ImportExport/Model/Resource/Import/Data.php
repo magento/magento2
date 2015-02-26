@@ -29,12 +29,10 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param array $arguments
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        array $arguments = []
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
         parent::__construct($resource);
         $this->jsonHelper = $jsonHelper;

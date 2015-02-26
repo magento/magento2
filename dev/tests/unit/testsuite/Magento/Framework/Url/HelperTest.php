@@ -60,7 +60,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrentUrl')
             ->will($this->returnValue($encodingUrl));
         $encodedUrl = 'encodedUrl';
-        $encodedUrl = 'encodedUrl';
         $urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -168,7 +167,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      * Get helper instance
      *
      * @param array $arguments
-     * @return Url
+     * @return \Magento\Framework\Url\Helper
      */
     private function getHelper($arguments)
     {
