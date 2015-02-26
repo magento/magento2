@@ -20,7 +20,7 @@ class Bundle
      */
     protected $assets = [];
 
-    /** @var Config  */
+    /** @var  Bundle\Config */
     protected $bundleConfig;
 
     /**
