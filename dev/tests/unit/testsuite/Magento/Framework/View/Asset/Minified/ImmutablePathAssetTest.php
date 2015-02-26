@@ -29,7 +29,27 @@ class ImmutablePathAssetTest extends AbstractAssetTestCase
 
     public function testImmutableFilePath()
     {
-        $this->prepareAttemptToMinifyMock(false);
+        $this->asset->expects($this->atLeastOnce())->method('getPath')->will($this->returnValue('test/admin.js'));
+        $this->asset->expects($this->atLeastOnce())->method('getFilePath')->will($this->returnValue('test/admin.js'));
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->will($this->returnValue('/foo/bar/test/admin.js'));
+        if (true) {
+            $this->rootDir->expects($this->once())
+                ->method('getRelativePath')
+                ->with('/foo/bar/test/admin.min.js')
+                ->will($this->returnValue('test/admin.min.js'));
+            $this->rootDir->expects($this->once())
+                ->method('isExist')
+                ->with('test/admin.min.js')
+                ->will($this->returnValue(false));
+        }
+        $this->baseUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
+        $this->staticViewDir
+            ->expects($this->exactly(2-intval(true)))
+            ->method('isExist')
+            ->will($this->returnValue(false));
+
         $this->asset->method('getContext')->willReturn($this->baseUrl);
         $this->asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
         $this->adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));

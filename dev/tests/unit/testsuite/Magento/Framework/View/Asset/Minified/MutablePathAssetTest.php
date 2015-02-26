@@ -17,11 +17,11 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         parent::setUp();
 
         $this->_model = new MutablePathAsset(
-            $this->_asset,
-            $this->_logger,
-            $this->_filesystem,
-            $this->_baseUrl,
-            $this->_adapter
+            $this->asset,
+            $this->logger,
+            $this->filesystem,
+            $this->baseUrl,
+            $this->adapter
         );
     }
 
@@ -33,7 +33,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
     public function testInMemoryDecorator($method, $expected)
     {
         $this->prepareRequestedAsMinifiedMock();
-        $this->_adapter->expects($this->never())->method('minify');
+        $this->adapter->expects($this->never())->method('minify');
         $this->assertSame($expected, $this->_model->$method());
         $this->assertSame($expected, $this->_model->$method()); // invoke second time to test in-memory caching
     }
@@ -45,11 +45,11 @@ class MutablePathAssetTest extends AbstractAssetTestCase
      */
     private function prepareRequestedAsMinifiedMock()
     {
-        $this->_asset->expects($this->any())->method('getPath')->will($this->returnValue('test/admin.min.js'));
-        $this->_asset->expects($this->once())->method('getSourceFile')->will($this->returnValue('source_file'));
-        $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
-        $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
-        $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
+        $this->asset->expects($this->any())->method('getPath')->will($this->returnValue('test/admin.min.js'));
+        $this->asset->expects($this->once())->method('getSourceFile')->will($this->returnValue('source_file'));
+        $this->asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
+        $this->asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
+        $this->asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
     }
 
     /**
@@ -73,7 +73,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
      */
     public function testAssetDecorator($method, $expected)
     {
-        $this->_asset->expects($this->exactly(2))->method($method)->will($this->returnValue($expected));
+        $this->asset->expects($this->exactly(2))->method($method)->will($this->returnValue($expected));
         $this->assertSame($expected, $this->_model->$method());
         $this->assertSame($expected, $this->_model->$method()); // 2 times to ensure asset is invoked every time
     }
@@ -92,8 +92,8 @@ class MutablePathAssetTest extends AbstractAssetTestCase
     public function testGetContent()
     {
         $this->prepareRequestedAsMinifiedMock();
-        $this->_adapter->expects($this->never())->method('minify');
-        $this->_staticViewDir->expects($this->exactly(2))
+        $this->adapter->expects($this->never())->method('minify');
+        $this->staticViewDir->expects($this->exactly(2))
             ->method('readFile')
             ->with('test/admin.min.js')
             ->will($this->returnValue('content'));
@@ -103,53 +103,53 @@ class MutablePathAssetTest extends AbstractAssetTestCase
 
     public function testHasPreminifiedFile()
     {
-        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.js'));
-        $this->_asset->expects($this->atLeastOnce())
+        $this->asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.js'));
+        $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
             ->will($this->returnValue('/foo/bar/test/admin.js'));
-        $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
-        $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
-        $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
-        $this->_rootDir->expects($this->once())
+        $this->asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
+        $this->asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
+        $this->asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
+        $this->rootDir->expects($this->once())
             ->method('getRelativePath')
             ->with('/foo/bar/test/admin.min.js')
             ->will($this->returnValue('test/admin.min.js'));
-        $this->_rootDir->expects($this->once())
+        $this->rootDir->expects($this->once())
             ->method('isExist')
             ->with('test/admin.min.js')
             ->will($this->returnValue(true));
-        $this->_adapter->expects($this->never())->method('minify');
+        $this->adapter->expects($this->never())->method('minify');
         $this->assertEquals('test/admin.min.js', $this->_model->getPath());
     }
 
     public function testMinify()
     {
-        $this->prepareAttemptToMinifyMock(false);
-        $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
-        $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
-        $this->_staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
+        $this->prepareAttemptToMinifyMock(false, true, true, 0);
+        $this->asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
+        $this->adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
+        $this->staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
         $this->assertStringMatchesFormat('%s_admin.min.js', $this->_model->getFilePath());
     }
 
     public function testMinificationFailed()
     {
         $this->prepareAttemptToMinifyMock(false, true, false);
-        $this->_asset->expects($this->exactly(2))->method('getContent')->will($this->returnValue('content'));
+        $this->asset->expects($this->exactly(2))->method('getContent')->will($this->returnValue('content'));
         $e = new \Exception('test');
-        $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->throwException($e));
-        $this->_logger->expects($this->once())->method('critical');
-        $this->_staticViewDir->expects($this->once())->method('writeFile');
-        $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
-        $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
-        $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
+        $this->adapter->expects($this->once())->method('minify')->with('content')->will($this->throwException($e));
+        $this->logger->expects($this->once())->method('critical');
+        $this->staticViewDir->expects($this->once())->method('writeFile');
+        $this->asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
+        $this->asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
+        $this->asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
         $this->assertEquals('test/admin.js', $this->_model->getPath());
     }
 
     public function testShouldNotMinifyCozExists()
     {
-        $this->prepareAttemptToMinifyMock(true);
+        $this->prepareAttemptToMinifyMock(true, 0);
         // IS_EXISTS is assumed by default, so nothing to mock here
-        $this->_adapter->expects($this->never())->method('minify');
+        $this->adapter->expects($this->never())->method('minify');
         $this->assertStringMatchesFormat('%s_admin.min.js', $this->_model->getFilePath());
     }
 
@@ -163,40 +163,40 @@ class MutablePathAssetTest extends AbstractAssetTestCase
     {
         $this->prepareAttemptToMinifyMock(true, false);
         $model = new MutablePathAsset(
-            $this->_asset,
-            $this->_logger,
-            $this->_filesystem,
-            $this->_baseUrl,
-            $this->_adapter,
+            $this->asset,
+            $this->logger,
+            $this->filesystem,
+            $this->baseUrl,
+            $this->adapter,
             AbstractAsset::MTIME
         );
-        $this->_rootDir->expects($this->any())
+        $this->rootDir->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnValueMap([
                 ['/foo/bar/test/admin.min.js', 'test/admin.min.js'],
                 ['/foo/bar/test/admin.js', 'test/admin.js'],
             ]));
-        $this->_rootDir->expects($this->once())
+        $this->rootDir->expects($this->once())
             ->method('isExist')
             ->with('test/admin.min.js')
             ->will($this->returnValue(false));
-        $this->_rootDir->expects($this->once())
+        $this->rootDir->expects($this->once())
             ->method('stat')
             ->with('test/admin.js')
             ->will($this->returnValue(['mtime' => $mtimeOrig]));
-        $this->_staticViewDir->expects($this->once())
+        $this->staticViewDir->expects($this->once())
             ->method('stat')
             ->with($this->anything())
             ->will($this->returnValue(['mtime' => $mtimeMinified]));
         if ($isMinifyExpected) {
-            $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
-            $this->_adapter->expects($this->once())
+            $this->asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
+            $this->adapter->expects($this->once())
                 ->method('minify')
                 ->with('content')
                 ->will($this->returnValue('mini'));
-            $this->_staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
+            $this->staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
         } else {
-            $this->_adapter->expects($this->never())->method('minify');
+            $this->adapter->expects($this->never())->method('minify');
         }
         $this->assertStringMatchesFormat('%s_admin.min.js', $model->getFilePath());
     }
