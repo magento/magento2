@@ -747,6 +747,7 @@
       <data name="product/data/up_sell_products/presets" xsi:type="string">-</data>
       <data name="product/data/related_products/presets" xsi:type="string">-</data>
       <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33615</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
