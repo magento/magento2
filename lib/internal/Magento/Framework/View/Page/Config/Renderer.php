@@ -384,7 +384,7 @@ class Renderer
             foreach ($assets as $asset) {
                 /** @var $asset \Magento\Framework\View\Asset\File */
                 // todo will be fixed in MAGETWO-33631
-                if ($this->appMode != \Magento\Framework\App\State::MODE_PRODUCTION) {
+                if ($this->appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     if ($asset instanceof \Magento\Framework\View\Asset\File &&
                         $asset->getSourceUrl() != $asset->getUrl()
                     ) {
