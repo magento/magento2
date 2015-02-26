@@ -11,7 +11,6 @@ var config = {
         "jquery/jstree/jquery.hotkeys": ["jquery"],
         "jquery/hover-intent": ["jquery"],
         "mage/adminhtml/backup": ["prototype"],
-        "mage/adminhtml/varienLoader": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
