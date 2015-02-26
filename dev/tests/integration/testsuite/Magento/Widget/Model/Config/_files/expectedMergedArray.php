@@ -24,7 +24,7 @@ return [
                 'description' => 'All products - recently added products, New products - products marked as new',
             ],
             'show_pager' => [
-                'source_model' => "Magento\Backend\Model\Config\Source\Yesno",
+                'source_model' => "Magento\Config\Model\Config\Source\Yesno",
                 'type' => 'select',
                 'visible' => '1',
                 'label' => 'Display Page Control',

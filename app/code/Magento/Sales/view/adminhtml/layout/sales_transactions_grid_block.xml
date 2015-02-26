@@ -99,7 +99,7 @@
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="index" xsi:type="string">is_closed</argument>
                             <argument name="id" xsi:type="string">is_closed</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Backend\Model\Config\Source\Yesno"/>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Yesno"/>
                             <argument name="header_css_class" xsi:type="string">col-closed</argument>
                             <argument name="column_css_class" xsi:type="string">col-closed</argument>
                         </arguments>
