@@ -20,12 +20,20 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false),
             ],
             [
+            'Magento\Framework\App\DeploymentConfig\Reader',
+                $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false),
+            ],
+            [
                 'Magento\Framework\App\DeploymentConfig',
                 $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false),
             ],
             [
                 'Magento\Setup\Module\Setup',
                 $this->getMock('Magento\Setup\Module\Setup', [], [], '', false),
+            ],
+            [
+                'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
+                $this->getMock('Magento\Framework\Module\ModuleList\DeploymentConfigFactory', [], [], '', false),
             ],
             [
                 'Magento\Framework\Module\ModuleList',

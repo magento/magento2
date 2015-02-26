@@ -13,12 +13,14 @@ use Magento\Framework\App\DeploymentConfig\InstallConfig;
 use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 use Magento\Framework\App\DeploymentConfig\SessionConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\DeploymentConfig;
+use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
@@ -102,11 +104,25 @@ class Installer
     private $deploymentConfigWriter;
 
     /**
+     * Deployment configuration reader
+     *
+     * @var Writer
+     */
+    private $deploymentConfigReader;
+
+    /**
      * Module list
      *
      * @var ModuleListInterface
      */
     private $moduleList;
+
+    /**
+     * Factory for module deployment config
+     *
+     * @var DeploymentConfigFactory
+     */
+    private $deploymentConfigFactory;
 
     /**
      * Module list loader
@@ -210,7 +226,9 @@ class Installer
      *
      * @param FilePermissions $filePermissions
      * @param Writer $deploymentConfigWriter
+     * @param Reader $deploymentConfigReader
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param DeploymentConfigFactory $deploymentConfigFactory
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
      * @param DirectoryList $directoryList
@@ -229,7 +247,9 @@ class Installer
     public function __construct(
         FilePermissions $filePermissions,
         Writer $deploymentConfigWriter,
+        Reader $deploymentConfigReader,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        DeploymentConfigFactory $deploymentConfigFactory,
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
         DirectoryList $directoryList,
@@ -245,6 +265,8 @@ class Installer
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
+        $this->deploymentConfigReader = $deploymentConfigReader;
+        $this->deploymentConfigFactory = $deploymentConfigFactory;
         $this->moduleList = $moduleList;
         $this->moduleLoader = $moduleLoader;
         $this->directoryList = $directoryList;
@@ -335,7 +357,7 @@ class Installer
             $key = array_search($module, $toEnable);
             $result[$module] = false !== $key;
         }
-        return new DeploymentConfig($result);
+        return $this->deploymentConfigFactory->create($result);
     }
 
     /**
@@ -783,6 +805,27 @@ class Installer
         );
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
+    }
+
+    /**
+     * Updates modules in deployment configuration
+     *
+     * @return void
+     */
+    public function updateModulesInDeploymentConfig()
+    {
+        $allModules = array_keys($this->moduleLoader->load());
+        $currentModules = $this->deploymentConfigReader->load()['modules'] ;
+        $result = [];
+        foreach ($allModules as $module) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
+                $result[$module] = 0;
+            } else {
+                $result[$module] = 1;
+            }
+        }
+        $segment = $this->deploymentConfigFactory->create($result);
+        $this->deploymentConfigWriter->update($segment);
     }
 
     /**

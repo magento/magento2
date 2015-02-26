@@ -165,6 +165,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $this->installer->expects($this->once())->method('installSchema');
         $this->installer->expects($this->once())->method('installDataFixtures');
+        $this->installer->expects($this->once())->method('updateModulesInDeploymentConfig');
         $this->controller->updateAction();
     }
 
