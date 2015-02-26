@@ -73,15 +73,13 @@ class CreateSimpleProductEntityTest extends Injectable
     ) {
         $this->configData = $configData;
 
-        // Preconditions.
-        if ($this->configData !== null) {
-            $this->objectManager->create(
-                'Magento\Core\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $this->configData]
-            )->run();
-        }
+        // Preconditions
+        $this->objectManager->create(
+            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            ['configData' => $this->configData]
+        )->run();
 
-        // Steps.
+        // Steps
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('simple');
         $newProductPage->getProductForm()->fill($product, null, $category);
@@ -97,11 +95,9 @@ class CreateSimpleProductEntityTest extends Injectable
      */
     public function tearDown()
     {
-        if ($this->configData !== null) {
-            $this->objectManager->create(
-                'Magento\Core\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $this->configData, 'rollback' => true]
-            )->run();
-        }
+        $this->objectManager->create(
+            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            ['configData' => $this->configData, 'rollback' => true]
+        )->run();
     }
 }
