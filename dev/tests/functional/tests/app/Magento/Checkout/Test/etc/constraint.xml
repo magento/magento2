@@ -22,4 +22,6 @@
     <constraint name="assertProductIsNotEditable" module="Magento_Checkout" severity="low"/>
     <constraint name="assertProductsAbsentInShoppingCart" module="Magento_Checkout" severity="low"/>
     <constraint name="assertProductOptionsAbsentInShoppingCart" module="Magento_Checkout" severity="low"/>
+    <constraint name="assertShippingInShoppingCart" module="Magento_Checkout" severity="low"/>
+    <constraint name="assertTaxInShoppingCart" module="Magento_Checkout" severity="low"/>
 </config>
