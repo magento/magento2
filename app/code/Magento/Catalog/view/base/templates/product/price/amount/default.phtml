@@ -21,7 +21,11 @@
         data-price-type="<?php echo $block->getPriceType(); ?>"
         class="price-wrapper <?php echo $block->getPriceWrapperCss(); ?>"
         <?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
-        <?php echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
+
+        <span id="p-i-<?php echo $block->getPriceId() ?>">
+            <?php echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
+        </span>
+
     </span>
     <?php if ($block->hasAdjustmentsHtml()): ?>
         <?php echo $block->getAdjustmentsHtml() ?>

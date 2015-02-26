@@ -58,13 +58,25 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                         <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
                     </a>
                     <div class="product details product-item-details">
-                        <?php $_productNameStripped = $block->stripTags($_product->getName(), null, true); ?>
+                        <?php
+                            $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                            $_productID = $_product->getId();
+                            $_productAriaDescribed = "p-i-l-" . $_productID . " " . "p-i-product-price-" . $_productID . " " . "p-i-" . $_productID . " " . "p-i-from-" . $_productID . " " . "minimal-price-" . $_productID;
+                        ?>
                         <strong class="product name product-item-name">
-                            <a class="product-item-link" href="<?php echo $_product->getProductUrl() ?>">
+                            <a class="product-item-link"
+                               href="<?php echo $_product->getProductUrl() ?>"
+                               aria-describedby="<?php echo $_productAriaDescribed;?>">
                                 <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
                             </a>
                         </strong>
+
                         <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
+
+                        <span id="p-i-l-<?php echo $_productID;?>" class="price-inner-label">
+                            <?php echo __('Price'); ?>
+                        </span>
+
                         <?php echo $block->getProductPrice($_product) ?>
 
                         <div class="product-item-inner">
