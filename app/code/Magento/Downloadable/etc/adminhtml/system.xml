@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="catalog">
             <group id="downloadable" translate="label" type="text" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -19,7 +19,7 @@
                 </field>
                 <field id="shareable" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shareable</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="samples_title" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Sample Title</label>
@@ -29,7 +29,7 @@
                 </field>
                 <field id="links_target_new_window" translate="label" type="select" sortOrder="600" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Open Links in New Window</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="content_disposition" translate="label" type="select" sortOrder="700" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Content-Disposition</label>
@@ -37,7 +37,7 @@
                 </field>
                 <field id="disable_guest_checkout" translate="label comment" type="select" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Disable Guest Checkout if Cart Contains Downloadable Items</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Guest checkout will only work with shareable.</comment>
                 </field>
             </group>

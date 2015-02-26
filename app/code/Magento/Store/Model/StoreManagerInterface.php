@@ -9,6 +9,11 @@ namespace Magento\Store\Model;
 interface StoreManagerInterface
 {
     /**
+     * Store cache context
+     */
+    const CONTEXT_STORE = 'store';
+
+    /**
      * Allow or disallow single store mode
      *
      * @param bool $value
@@ -52,7 +57,7 @@ interface StoreManagerInterface
      *
      * @param null|bool|int|string|\Magento\Store\Model\Website $websiteId
      * @return \Magento\Store\Model\Website
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getWebsite($websiteId = null);
 

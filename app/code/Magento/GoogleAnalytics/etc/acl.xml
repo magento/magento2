@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Backend::config">
+                        <resource id="Magento_Config::config">
                             <resource id="Magento_GoogleAnalytics::google" title="Google API" />
                         </resource>
                     </resource>

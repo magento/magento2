@@ -28,7 +28,7 @@ class CommandFactory
      *
      * @param string $commandName
      * @param array $data
-     * @return \Magento\Backend\Model\Config
+     * @return \Magento\Config\Model\Config
      */
     public function create($commandName, array $data = [])
     {

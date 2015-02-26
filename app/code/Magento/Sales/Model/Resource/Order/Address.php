@@ -89,7 +89,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -104,7 +104,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         }
         $warnings = $this->_validator->validate($object);
         if (!empty($warnings)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __("Cannot save address") . ":\n" . implode("\n", $warnings)
             );
         }
