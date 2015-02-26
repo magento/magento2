@@ -418,7 +418,7 @@ return [
     ['getConnectionTypeInstance', 'Magento\Framework\App\Resource'],
     ['getContainers', 'Magento\Core\Model\Layout\Update', 'Magento\Framework\View\Model\Layout\Merge'],
     ['getCurrentUrl', 'Magento\Core\Helper\Url', 'Magento\Framework\Url'],
-    ['getHomeUrl', 'Magento\Framework\Url\Helper'],
+    ['getHomeUrl', 'Magento\Core\Helper\Url'],
     ['getCustomerData', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Account'],
     ['getDataForSave', 'Magento\Wishlist\Model\Item'],
     ['getDataMaxSize'],
