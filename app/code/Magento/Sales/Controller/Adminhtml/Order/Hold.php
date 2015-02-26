@@ -20,7 +20,7 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
             try {
                 $order->hold()->save();
                 $this->messageManager->addSuccess(__('You put the order on hold.'));
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('You have not put the order on hold.'));

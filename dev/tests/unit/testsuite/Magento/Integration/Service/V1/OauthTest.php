@@ -133,7 +133,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Integration\Exception
+     * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Consumer with ID '1' does not exist.
      */
     public function testDeleteException()

@@ -1,10 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App\Action\Plugin;
+
+use Magento\Framework\Exception\AuthenticationException;
 
 class Authentication
 {
@@ -167,7 +168,7 @@ class Authentication
 
         try {
             $this->_auth->login($username, $password);
-        } catch (\Magento\Backend\Model\Auth\Exception $e) {
+        } catch (AuthenticationException $e) {
             if (!$request->getParam('messageSent')) {
                 $this->messageManager->addError($e->getMessage());
                 $request->setParam('messageSent', true);

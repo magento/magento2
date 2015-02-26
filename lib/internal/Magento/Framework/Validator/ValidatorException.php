@@ -7,12 +7,15 @@
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * Exception to be thrown when an validation data is failed
+ */
 class ValidatorException extends \Magento\Framework\Exception\InputException
 {
     /**
      * @var array
      */
-    protected $_messages;
+    protected $messages = [];
 
     /**
      * Constructor
@@ -29,29 +32,50 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
         array $messages = []
     ) {
         if (!empty($messages)) {
-            $this->_messages = $messages;
             $message = '';
-            foreach ($this->_messages as $propertyMessages) {
+            foreach ($messages as $propertyMessages) {
                 foreach ($propertyMessages as $propertyMessage) {
                     if ($message) {
                         $message .= PHP_EOL;
                     }
                     $message .= $propertyMessage;
+                    $this->addMessage(new \Magento\Framework\Message\Error($propertyMessage));
                 }
             }
-        } else {
-            $this->_messages = [$message];
         }
         parent::__construct($message, $params, $cause);
     }
 
     /**
-     * Get validation error messages
+     * Setter for message
      *
+     * @param \Magento\Framework\Message\AbstractMessage $message
+     * @return $this
+     */
+    public function addMessage(\Magento\Framework\Message\AbstractMessage $message)
+    {
+        if (!isset($this->messages[$message->getType()])) {
+            $this->messages[$message->getType()] = [];
+        }
+        $this->messages[$message->getType()][] = $message;
+        return $this;
+    }
+
+    /**
+     * Getter for messages by type or all
+     *
+     * @param string $type
      * @return array
      */
-    public function getMessages()
+    public function getMessages($type = '')
     {
-        return $this->_messages;
+        if ('' == $type) {
+            $allMessages = [];
+            foreach ($this->messages as $messages) {
+                $allMessages = array_merge($allMessages, $messages);
+            }
+            return $allMessages;
+        }
+        return isset($this->messages[$type]) ? $this->messages[$type] : [];
     }
 }

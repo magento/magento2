@@ -36,13 +36,13 @@ class QuoteValidator
      *
      * @param Quote $quote
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateBeforeSubmit(QuoteEntity $quote)
     {
         if (!$quote->isVirtual()) {
             if ($quote->getShippingAddress()->validate() !== true) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Please check the shipping address information. %1',
                         implode(' ', $quote->getShippingAddress()->validate())
@@ -52,11 +52,11 @@ class QuoteValidator
             $method = $quote->getShippingAddress()->getShippingMethod();
             $rate = $quote->getShippingAddress()->getShippingRateByCode($method);
             if (!$quote->isVirtual() && (!$method || !$rate)) {
-                throw new \Magento\Framework\Model\Exception(__('Please specify a shipping method.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a shipping method.'));
             }
         }
         if ($quote->getBillingAddress()->validate() !== true) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Please check the billing address information. %1',
                     implode(' ', $quote->getBillingAddress()->validate())
@@ -64,7 +64,7 @@ class QuoteValidator
             );
         }
         if (!$quote->getPayment()->getMethod()) {
-            throw new \Magento\Framework\Model\Exception(__('Please select a valid payment method.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a valid payment method.'));
         }
         return $this;
     }

@@ -134,7 +134,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      *
      * @param string $entityType
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
     protected function _getAssociatedEntityInfo($entityType)
@@ -143,9 +143,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
             return $this->_associatedEntitiesMap[$entityType];
         }
 
-        throw new \Magento\Framework\Model\Exception(
-            __('There is no information about associated entity type "%1".', $entityType),
-            0
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __('There is no information about associated entity type "%1".', $entityType)
         );
     }
 }
