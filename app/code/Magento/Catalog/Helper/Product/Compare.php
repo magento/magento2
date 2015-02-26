@@ -90,9 +90,9 @@ class Compare extends \Magento\Framework\Url\Helper
     protected $_wishlistHelper;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Data\PostHelper
      */
-    protected $_coreHelper;
+    protected $postHelper;
 
     /** @var \Magento\Store\Model\StoreManagerInterface */
     private $_storeManager;
@@ -107,7 +107,7 @@ class Compare extends \Magento\Framework\Url\Helper
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Framework\Data\PostHelper $coreHelper
+     * @param \Magento\Framework\Data\PostHelper $postHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,7 +120,7 @@ class Compare extends \Magento\Framework\Url\Helper
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Framework\Data\PostHelper $coreHelper
+        \Magento\Framework\Data\PostHelper $postHelper
     ) {
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -129,7 +129,7 @@ class Compare extends \Magento\Framework\Url\Helper
         $this->_catalogSession = $catalogSession;
         $this->_formKey = $formKey;
         $this->_wishlistHelper = $wishlistHelper;
-        $this->_coreHelper = $coreHelper;
+        $this->postHelper = $postHelper;
         $this->_storeManager = $storeManager;
         parent::__construct($context);
     }
@@ -162,7 +162,7 @@ class Compare extends \Magento\Framework\Url\Helper
      */
     public function getPostDataParams($product)
     {
-        return $this->_coreHelper->getPostData($this->getAddUrl(), ['product' => $product->getId()]);
+        return $this->postHelper->getPostData($this->getAddUrl(), ['product' => $product->getId()]);
     }
 
     /**
@@ -232,7 +232,7 @@ class Compare extends \Magento\Framework\Url\Helper
             \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $listCleanUrl,
             'product' => $product->getId()
         ];
-        return $this->_coreHelper->getPostData($this->getRemoveUrl(), $data);
+        return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
     }
 
     /**
@@ -256,7 +256,7 @@ class Compare extends \Magento\Framework\Url\Helper
         $params = [
             \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
         ];
-        return $this->_coreHelper->getPostData($this->getClearListUrl(), $params);
+        return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }
 
     /**
