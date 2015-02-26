@@ -856,7 +856,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems($items);
 
     /**
      * Sets the comments, if any, for the invoice.
