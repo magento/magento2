@@ -169,7 +169,7 @@ class Save extends AbstractConfig
             $configModel->save();
 
             $this->messageManager->addSuccess(__('You saved the configuration.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
                 $this->messageManager->addError($message);

@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Framework\Exception\PaymentException;
+
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
@@ -53,14 +55,14 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
             } else {
                 $resultRedirect->setPath('sales/order/index');
             }
-        } catch (\Magento\Payment\Model\Info\Exception $e) {
+        } catch (PaymentException $e) {
             $this->_getOrderCreateModel()->saveQuote();
             $message = $e->getMessage();
             if (!empty($message)) {
                 $this->messageManager->addError($message);
             }
             $resultRedirect->setPath('sales/*/');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
                 $this->messageManager->addError($message);

@@ -6,7 +6,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -34,7 +34,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
                 $this->_cacheState->persist();
                 $this->messageManager->addSuccess(__("%1 cache type(s) enabled.", $updatedTypes));
             }
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
