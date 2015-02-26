@@ -24,7 +24,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     protected $_menuConfig;
 
     /**
-     * @var \Magento\Backend\Model\Config\Structure
+     * @var \Magento\Config\Model\Config\Structure
      */
     protected $_configStructure;
 
@@ -65,7 +65,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
-     * @param \Magento\Backend\Model\Config\Structure $configStructure
+     * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
@@ -79,7 +79,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\Model\Menu\Config $menuConfig,
-        \Magento\Backend\Model\Config\Structure $configStructure,
+        \Magento\Config\Model\Config\Structure $configStructure,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Backend\Block\Widget\Button\ButtonList $buttonList,
@@ -423,7 +423,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
             $item = $menu->get('Magento_Backend::stores');
             // create prefix path parts
             $prefixParts[] = ['title' => __($item->getTitle())];
-            $item = $menu->get('Magento_Backend::system_config');
+            $item = $menu->get('Magento_Config::system_config');
             $prefixParts[] = [
                 'title' => __($item->getTitle()),
                 'url' => $this->getUrl('adminhtml/system_config/'),
