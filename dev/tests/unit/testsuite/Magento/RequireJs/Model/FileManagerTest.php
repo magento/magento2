@@ -40,34 +40,40 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $assetRepo;
+
     protected function setUp()
     {
         $this->config = $this->getMock('\Magento\Framework\RequireJs\Config', [], [], '', false);
         $this->fileSystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $this->appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
-        $assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->object = new FileManager($this->config, $this->fileSystem, $this->appState, $assetRepo);
+        $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->object = new FileManager($this->config, $this->fileSystem, $this->appState, $this->assetRepo);
         $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-        $this->fileSystem->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->dir));
-        $this->config->expects($this->once())
-            ->method('getConfigFileRelativePath')
-            ->will($this->returnValue('requirejs/file.js'));
         $this->asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $assetRepo->expects($this->once())
-            ->method('createArbitrary')
-            ->with('requirejs/file.js', '')
-            ->will($this->returnValue($this->asset));
     }
 
     /**
      * @param bool $exists
      * @dataProvider createRequireJsAssetDataProvider
      */
-    public function testCreateRequireJsAsset($exists)
+    public function testCreateRequireJsConfigAsset($exists)
     {
+        $this->config->expects($this->once())
+            ->method('getConfigFileRelativePath')
+            ->will($this->returnValue('requirejs/file.js'));
+        $this->fileSystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::STATIC_VIEW)
+            ->will($this->returnValue($this->dir));
+        $this->assetRepo->expects($this->once())
+            ->method('createArbitrary')
+            ->with('requirejs/file.js', '')
+            ->will($this->returnValue($this->asset));
+
         $this->appState->expects($this->once())->method('getMode')->will($this->returnValue('anything'));
         $this->dir->expects($this->once())
             ->method('isExist')
@@ -81,7 +87,7 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             $this->config->expects($this->once())->method('getConfig')->will($this->returnValue($data));
             $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         }
-        $this->assertSame($this->asset, $this->object->createRequireJsAsset());
+        $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
     }
 
     /**
@@ -94,6 +100,18 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateRequireJsAssetDevMode()
     {
+        $this->config->expects($this->once())
+            ->method('getConfigFileRelativePath')
+            ->will($this->returnValue('requirejs/file.js'));
+        $this->fileSystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::STATIC_VIEW)
+            ->will($this->returnValue($this->dir));
+        $this->assetRepo->expects($this->once())
+            ->method('createArbitrary')
+            ->with('requirejs/file.js', '')
+            ->will($this->returnValue($this->asset));
+
         $this->appState->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
@@ -101,6 +119,75 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
         $data = 'requirejs config data';
         $this->config->expects($this->once())->method('getConfig')->will($this->returnValue($data));
         $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
-        $this->assertSame($this->asset, $this->object->createRequireJsAsset());
+        $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
+    }
+
+    public function testCreateBundleJsPool()
+    {
+        unset($this->config);
+        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
+        $assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $config = $this->getMock('\Magento\Framework\RequireJs\Config', [], [], '', false);
+
+        $config
+            ->expects($this->never())
+            ->method('getConfigFileRelativePath')
+            ->willReturn(null);
+
+        $context
+            ->expects($this->once())
+            ->method('getPath')
+            ->willReturn('path/to/bundle/dir');
+
+        $dirRead
+            ->expects($this->once())
+            ->method('read')
+            ->with('path/to/bundle/dir/js/bundle')
+            ->willReturn(['bundle1.js', 'bundle2.js']);
+
+        $dirRead
+            ->expects($this->at(1))
+            ->method('getRelativePath')
+            ->with('bundle1.js')
+            ->willReturn('path/to/bundle1.js');
+        $dirRead
+            ->expects($this->at(2))
+            ->method('getRelativePath')
+            ->with('bundle2.js')
+            ->willReturn('path/to/bundle2.js');
+
+        $assetRepo
+            ->expects($this->at(1))
+            ->method('createArbitrary')
+            ->with('path/to/bundle1.js')
+            ->willReturn($this->asset);
+        $assetRepo
+            ->expects($this->at(2))
+            ->method('createArbitrary')
+            ->with('path/to/bundle2.js')
+            ->willReturn($this->asset);
+        $assetRepo
+            ->expects($this->once())
+            ->method('getStaticViewFileContext')
+            ->willReturn($context);
+
+        $this->appState
+            ->expects($this->once())
+            ->method('getMode')
+            ->willReturn('production');
+
+        $this->fileSystem
+            ->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with('static')
+            ->willReturn($dirRead);
+
+        $object = new FileManager($config, $this->fileSystem, $this->appState, $assetRepo);
+
+        $result = $object->createBundleJsPool();
+
+        $this->assertArrayHasKey('0', $result);
+        $this->assertArrayHasKey('1', $result);
     }
 }

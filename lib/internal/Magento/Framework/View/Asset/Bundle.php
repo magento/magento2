@@ -162,7 +162,7 @@ class Bundle
             foreach ($types as $parts) {
                 /** @var LocalInterface $firstAsset */
                 $firstAsset = reset(reset($parts)['assets']);
-                $amountParts = isset($types[Manager::ASSET_TYPE_JS]) ? count($types[Manager::ASSET_TYPE_JS]) : '';
+                $amountParts = isset($types[Manager::ASSET_TYPE_JS]) ? count($types[Manager::ASSET_TYPE_JS]) : 0;
                 $amountParts += isset($types[Manager::ASSET_TYPE_HTML]) ? count($types[Manager::ASSET_TYPE_HTML]) : 0;
                 if ($firstAsset) {
                     $bundlePath = $firstAsset->getContext()->getPath() . Manager::BUNDLE_PATH;

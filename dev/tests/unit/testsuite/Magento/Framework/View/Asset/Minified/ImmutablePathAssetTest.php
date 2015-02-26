@@ -12,29 +12,29 @@ class ImmutablePathAssetTest extends AbstractAssetTestCase
     /**
      * @var ImmutablePathAsset
      */
-    protected $_model;
+    protected $model;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->_model = new ImmutablePathAsset(
-            $this->_asset,
-            $this->_logger,
-            $this->_filesystem,
-            $this->_baseUrl,
-            $this->_adapter
+        $this->model = new ImmutablePathAsset(
+            $this->asset,
+            $this->logger,
+            $this->filesystem,
+            $this->baseUrl,
+            $this->adapter
         );
     }
 
     public function testImmutableFilePath()
     {
         $this->prepareAttemptToMinifyMock(false);
-        $this->_asset->method('getContext')->willReturn($this->_baseUrl);
-        $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
-        $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
-        $this->_staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
-        $this->assertEquals('test/admin.js', $this->_model->getFilePath());
-        $this->assertEquals('http://example.com/test/admin.js', $this->_model->getUrl());
+        $this->asset->method('getContext')->willReturn($this->baseUrl);
+        $this->asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
+        $this->adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
+        $this->staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
+        $this->assertEquals('test/admin.js', $this->model->getFilePath());
+        $this->assertEquals('http://example.com/test/admin.js', $this->model->getUrl());
     }
 }
