@@ -7,11 +7,10 @@ var config = {
     "waitSeconds": 0,
     "shim": {
         "jquery/jquery-migrate": ["jquery"],
-        "jquery/jquery.hashchange": ["jquery"],
+        "jquery/jquery.hashchange": ["jquery", "jquery/jquery-migrate"],
         "jquery/jstree/jquery.hotkeys": ["jquery"],
         "jquery/hover-intent": ["jquery"],
         "mage/adminhtml/backup": ["prototype"],
-        "mage/adminhtml/tools": ["prototype"],
         "mage/adminhtml/varienLoader": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
@@ -47,6 +46,6 @@ var config = {
     ]
 };
 
-require(['jquery'], function(){
-    jQuery.noConflict();
+require(['jquery'], function ($) {
+    $.noConflict();
 });
