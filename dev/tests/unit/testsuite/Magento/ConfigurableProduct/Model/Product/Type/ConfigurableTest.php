@@ -179,7 +179,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'productCollectionFactory' => $this->_productCollectionFactory,
                 'attributeCollectionFactory' => $this->_attributeCollectionFactory,
                 'eventManager' => $eventManager,
-                'coreData' => $this->jsonHelperMock,
+                'jsonHelper' => $this->jsonHelperMock,
                 'fileStorageDb' => $fileStorageDbMock,
                 'filesystem' => $filesystem,
                 'coreRegistry' => $coreRegistry,
