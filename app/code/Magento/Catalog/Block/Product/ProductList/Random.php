@@ -28,7 +28,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param \Magento\Framework\Data\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
@@ -36,7 +36,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Core\Helper\PostData $postDataHelper,
+        \Magento\Framework\Data\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
