@@ -32,25 +32,30 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $converter;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
     protected function setUp()
     {
         $this->orderAddressFactoryMock = $this->getMock(
             'Magento\Sales\Api\Data\OrderAddressInterfaceFactory',
-            ['populateWithArray', 'create'],
+            ['create'],
             [],
             '',
             false
         );
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
-        $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderInterface', [], [], '', false);
-        $dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderAddressInterface', [], [], '', false);
+        $this->dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Quote\Address\ToOrderAddress',
             [
                 'orderAddressFactory' => $this->orderAddressFactoryMock,
                 'objectCopyService' => $this->objectCopyMock,
-                'dataObjectHelper' => $dataObjectHelper
+                'dataObjectHelper' => $this->dataObjectHelper
             ]
         );
     }
@@ -68,8 +73,8 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
             'to_order_address',
             $object
         )->willReturn($orderData);
-        $this->orderAddressFactoryMock->expects($this->never())->method('populateWithArray')
-            ->with(['test' => 'beer'])
+        $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
+            ->with($this->orderInterfaceMock, ['test' => 'beer'], '\Magento\Sales\Api\Data\OrderAddressInterface')
             ->willReturnSelf();
         $this->orderAddressFactoryMock->expects($this->once())
             ->method('create')

@@ -59,13 +59,13 @@ class ToOrderAddress
             $object
         );
 
-        $order = $this->orderAddressFactory->create();
+        $orderAddress = $this->orderAddressFactory->create();
         $this->dataObjectHelper->populateWithArray(
-            $order,
+            $orderAddress,
             array_merge($orderAddressData, $data),
             '\Magento\Sales\Api\Data\OrderAddressInterface'
         );
 
-        return $order;
+        return $orderAddress;
     }
 }

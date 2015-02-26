@@ -37,6 +37,11 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventManagerMock;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
     protected function setUp()
     {
         $this->orderDataFactoryMock = $this->getMock(
@@ -57,7 +62,7 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
             ['setStoreId', 'setQuoteId']
         );
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Quote\Address\ToOrder',
@@ -65,7 +70,7 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
                 'orderFactory' => $this->orderDataFactoryMock,
                 'objectCopyService' => $this->objectCopyMock,
                 'eventManager' => $this->eventManagerMock,
-                'dataObjectHelper' => $dataObjectHelper
+                'dataObjectHelper' => $this->dataObjectHelper
             ]
         );
     }
@@ -87,8 +92,8 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
             'to_order',
             $object
         )->willReturn($orderData);
-        $this->orderDataFactoryMock->expects($this->never())->method('populateWithArray')
-            ->with(['test' => 'beer'])
+        $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
+            ->with($this->orderInterfaceMock, ['test' => 'beer'], '\Magento\Sales\Api\Data\OrderInterface')
             ->willReturnSelf();
         $this->orderInterfaceMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->orderInterfaceMock->expects($this->once())->method('setQuoteId')->with($quoteId)->willReturnSelf();
