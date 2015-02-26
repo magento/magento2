@@ -17,7 +17,6 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
  *
  * @method Product setHasError(bool $value)
  * @method null|bool getHasError()
- * @method Product setTypeId(string $typeId)
  * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
@@ -187,9 +186,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Stock item factory
      *
-     * @var \Magento\CatalogInventory\Api\Data\StockItemDataBuilder
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
      */
-    protected $_stockItemBuilder;
+    protected $_stockItemFactory;
 
     /**
      * Item option factory
@@ -239,6 +238,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $imageCacheFactory;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataService
@@ -247,7 +251,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Url $url
      * @param Product\Link $productLink
      * @param Product\Configuration\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder
+     * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param Product\Option $catalogProductOption
      * @param Product\Visibility $catalogProductVisibility
      * @param Product\Attribute\Source\Status $catalogProductStatus
@@ -265,6 +269,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -278,7 +283,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Product\Url $url,
         Product\Link $productLink,
         \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory $itemOptionFactory,
-        \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder,
+        \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
@@ -296,10 +301,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
-        $this->_stockItemBuilder = $stockItemBuilder;
+        $this->_stockItemFactory = $stockItemFactory;
         $this->_optionInstance = $catalogProductOption;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogProductStatus = $catalogProductStatus;
@@ -317,6 +323,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
             $registry,
@@ -346,8 +353,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getStoreId()
     {
-        if ($this->hasData('store_id')) {
-            return $this->getData('store_id');
+        if ($this->hasData(self::STORE_ID)) {
+            return $this->getData(self::STORE_ID);
         }
         return $this->_storeManager->getStore()->getId();
     }
@@ -397,7 +404,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getName()
     {
-        return $this->_getData('name');
+        return $this->_getData(self::NAME);
     }
     //@codeCoverageIgnoreEnd
 
@@ -408,10 +415,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getPrice()
     {
-        if ($this->_calculatePrice || !$this->getData('price')) {
+        if ($this->_calculatePrice || !$this->getData(self::PRICE)) {
             return $this->getPriceModel()->getPrice($this);
         } else {
-            return $this->getData('price');
+            return $this->getData(self::PRICE);
         }
     }
 
@@ -424,7 +431,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getVisibility()
     {
-        return $this->_getData('visibility');
+        return $this->_getData(self::VISIBILITY);
     }
 
     /**
@@ -434,7 +441,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getAttributeSetId()
     {
-        return $this->_getData('attribute_set_id');
+        return $this->_getData(self::ATTRIBUTE_SET_ID);
     }
 
     /**
@@ -444,7 +451,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCreatedAt()
     {
-        return $this->_getData('created_at');
+        return $this->_getData(self::CREATED_AT);
     }
 
     /**
@@ -454,7 +461,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getUpdatedAt()
     {
-        return $this->_getData('updated_at');
+        return $this->_getData(self::UPDATED_AT);
     }
 
     /**
@@ -475,7 +482,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getTypeId()
     {
-        return $this->_getData('type_id');
+        return $this->_getData(self::TYPE_ID);
     }
     //@codeCoverageIgnoreEnd
 
@@ -486,10 +493,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getStatus()
     {
-        if (is_null($this->_getData('status'))) {
-            $this->setData('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        if (is_null($this->_getData(self::STATUS))) {
+            $this->setData(self::STATUS, \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         }
-        return $this->_getData('status');
+        return $this->_getData(self::STATUS);
     }
 
     /**
@@ -1561,7 +1568,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if (isset($data['stock_item'])) {
             if ($this->moduleManager->isEnabled('Magento_CatalogInventory')) {
-                $stockItem = $this->_stockItemBuilder->populateWithArray($data['stock_item'])->create();
+                $stockItem = $this->_stockItemFactory->create();
+                $this->dataObjectHelper->populateWithArray(
+                    $stockItem,
+                    $data['stock_item'],
+                    '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+                );
                 $stockItem->setProduct($this);
                 $this->setStockItem($stockItem);
             }
@@ -2076,4 +2088,127 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $dataArray;
     }
+
+    //@codeCoverageIgnoreEnd
+    /**
+     * Set product sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::SKU, $sku);
+    }
+
+    /**
+     * Set product name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
+    }
+
+    /**
+     * Set product store id
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId)
+    {
+        return $this->setData(self::STORE_ID, $storeId);
+    }
+
+    /**
+     * Set product attribute set id
+     *
+     * @param int $attributeSetId
+     * @return $this
+     */
+    public function setAttributeSetId($attributeSetId)
+    {
+        return $this->setData(self::ATTRIBUTE_SET_ID, $attributeSetId);
+    }
+
+    /**
+     * Set product price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::PRICE, $price);
+    }
+
+    /**
+     * Set product status
+     *
+     * @param int $status
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(self::STATUS, $status);
+    }
+
+    /**
+     * Set product visibility
+     *
+     * @param int $visibility
+     * @return $this
+     */
+    public function setVisibility($visibility)
+    {
+        return $this->setData(self::VISIBILITY, $visibility);
+    }
+
+    /**
+     * Set product created date
+     *
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(self::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Set product updated date
+     *
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData(self::UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * Set product weight
+     *
+     * @param float $weight
+     * @return $this
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(self::WEIGHT, $weight);
+    }
+
+    /**
+     * Set product type id
+     *
+     * @param string $typeId
+     * @return $this
+     */
+    public function setTypeId($typeId)
+    {
+        return $this->setData(self::TYPE_ID, $typeId);
+    }
+    //@codeCoverageIgnoreEnd
 }

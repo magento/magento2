@@ -72,4 +72,59 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->getData(self::FILE);
     }
+
+    /**
+     * Set gallery entry alternative text
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(self::LABEL, $label);
+    }
+
+    /**
+     * Set gallery entry position (sort order)
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::POSITION, $position);
+    }
+
+    /**
+     * Set whether gallery entry is hidden from product page
+     *
+     * @param bool $isDisabled
+     * @return $this
+     */
+    public function setIsDisabled($isDisabled)
+    {
+        return $this->setData(self::DISABLED, $isDisabled);
+    }
+
+    /**
+     * Set gallery entry image types (thumbnail, image, small_image etc)
+     *
+     * @param string[] $types
+     * @return $this
+     */
+    public function setTypes(array $types = null)
+    {
+        return $this->setData(self::TYPES, $types);
+    }
+
+    /**
+     * Set file path
+     *
+     * @param string $file
+     * @return $this
+     */
+    public function setFile($file)
+    {
+        return $this->setData(self::FILE, $file);
+    }
 }
