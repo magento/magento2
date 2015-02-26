@@ -68,15 +68,10 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
-        $this->_integrationSvcMock->expects(
-            $this->any()
-        )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException($exceptionMessage))
-            );
+        $this->_integrationSvcMock->expects($this->any())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)));
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');

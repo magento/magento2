@@ -240,8 +240,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with(10)
             ->willReturn($originTaxClass);
 
-        $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new LocalizedException("Something went wrong"));
+        $this->taxClassResourceMock->expects($this->once())
+            ->method('save')
+            ->with($taxClass)
+            ->willThrowException(new LocalizedException(__('Something went wrong')));
         $this->model->save($taxClass);
     }
 
@@ -265,7 +267,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with(10)
             ->willReturn($originTaxClass);
 
-        $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
+        $this->taxClassResourceMock->expects($this->once())
+            ->method('save')
+            ->with($taxClass)
             ->willThrowException(new LocalizedException(__('Class name and class type')));
         $this->model->save($taxClass);
     }

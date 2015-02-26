@@ -72,7 +72,9 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $object->getDateTo()
         )
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Start date cannot be greater than end date.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Start date cannot be greater than end date.')
+            );
         }
 
         $check = $this->_checkIntersection(
@@ -85,8 +87,8 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($check) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Your design change for the specified store intersects with another one, please specify another
-                    date range.'
+                    'Your design change for the specified store intersects with another one, please specify another'
+                    . ' date range.'
                 )
             );
         }

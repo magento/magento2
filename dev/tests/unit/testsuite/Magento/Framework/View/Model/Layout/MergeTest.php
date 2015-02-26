@@ -321,12 +321,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer_account' => [
                 'name' => 'customer_account',
-                'label' => __('Customer My Account (All Pages)'),
+                'label' => new \Magento\Framework\Phrase('Customer My Account (All Pages)'),
                 'design_abstraction' => 'custom',
             ],
             'page_empty' => [
                 'name' => 'page_empty',
-                'label' => __('All Empty Layout Pages'),
+                'label' => new \Magento\Framework\Phrase('All Empty Layout Pages'),
                 'design_abstraction' => 'page_layout',
             ],
         ];

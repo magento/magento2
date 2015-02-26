@@ -220,7 +220,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     public function getIdFieldName()
     {
         if (empty($this->_idFieldName)) {
-            throw new LocalizedException((string)new \Magento\Framework\Phrase('Empty identifier field name'));
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty identifier field name'));
         }
         return $this->_idFieldName;
     }
@@ -235,7 +235,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     public function getMainTable()
     {
         if (empty($this->_mainTable)) {
-            throw new LocalizedException((string)new \Magento\Framework\Phrase('Empty main table name'));
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty main table name'));
         }
         return $this->getTable($this->_mainTable);
     }

@@ -1270,7 +1270,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->at(0))
             ->method('getOptions')
-            ->willThrowException(new LocalizedException($exceptedResult));
+            ->willThrowException(new LocalizedException(__($exceptedResult)));
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals($exceptedResult, $result);

@@ -257,7 +257,7 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
         $invoiceId = 2;
 
         $message = 'model exception';
-        $e = new \Magento\Framework\Exception\LocalizedException($message);
+        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
 
         $this->requestMock->expects($this->once())
             ->method('getParam')

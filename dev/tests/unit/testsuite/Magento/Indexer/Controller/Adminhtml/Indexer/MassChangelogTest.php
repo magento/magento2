@@ -247,23 +247,23 @@ class MassChangelogTest extends \PHPUnit_Framework_TestCase
         return [
             'set1' => [
                 'idexers' => 1,
-                "exception" => null,
-                "expectsValues" => [0, 0, 0]
+                'exception' => null,
+                'expectsValues' => [0, 0, 0]
             ],
             'set2' => [
                 'idexers' => [1],
-                "exception" => null,
-                "expectsException" => [1, 0, 0]
+                'exception' => null,
+                'expectsException' => [1, 0, 0]
             ],
             'set3' => [
                 'idexers' => [1],
-                "exception" => new \Magento\Framework\Exception\LocalizedException(__('')),
-                "expectsException" => [0, 0, 1]
+                'exception' => new \Magento\Framework\Exception\LocalizedException(__('')),
+                'expectsException' => [0, 0, 1]
             ],
             'set4' => [
                 'idexers' => [1],
-                "exception" => new \Exception(),
-                "expectsException" => [0, 1, 0]
+                'exception' => new \Exception(),
+                'expectsException' => [0, 1, 0]
             ]
         ];
     }

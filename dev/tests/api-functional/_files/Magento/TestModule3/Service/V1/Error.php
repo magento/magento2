@@ -50,19 +50,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function serviceException()
     {
-        throw new LocalizedException('Generic service exception %param', ['param' => 3456]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parameterizedServiceException($parameters)
-    {
-        $details = [];
-        foreach ($parameters as $parameter) {
-            $details[$parameter->getName()] = $parameter->getValue();
-        }
-        throw new LocalizedException('Parameterized service exception', $details);
+        throw new LocalizedException(__('Generic service exception %1', 3456));
     }
 
     /**

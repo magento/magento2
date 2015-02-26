@@ -61,7 +61,7 @@ class Exceptions extends ArraySerialized
             foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __("Exception does not contain field '{$fieldName}'")
+                        __('Exception does not contain field \'%1\'', $fieldName)
                     );
                 }
             }
