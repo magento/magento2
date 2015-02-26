@@ -24,7 +24,7 @@ class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->messageManager->addSuccess(__('The rule has been deleted.'));
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(

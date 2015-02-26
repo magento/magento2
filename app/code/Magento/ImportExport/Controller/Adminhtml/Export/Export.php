@@ -46,7 +46,7 @@ class Export extends \Magento\ImportExport\Controller\Adminhtml\Export
                     DirectoryList::VAR_DIR,
                     $model->getContentType()
                 );
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);

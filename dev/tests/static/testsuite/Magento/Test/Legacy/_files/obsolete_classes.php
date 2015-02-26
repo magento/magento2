@@ -120,56 +120,56 @@ return [
     ['Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid_Renderer_Giftmessage'],
     ['Mage_Adminhtml_Block_Sales_Order_Status_Grid'],
     ['Mage_Adminhtml_Block_Sitemap_Grid'],
-    ['Mage_Adminhtml_Block_System_Config_Edit', 'Magento\Backend\Block\System\Config\Edit'],
-    ['Mage_Adminhtml_Block_System_Config_Form', 'Magento\Backend\Block\System\Config\Form'],
-    ['Mage_Adminhtml_Block_System_Config_Tabs', 'Magento\Backend\Block\System\Config\Tabs'],
+    ['Mage_Adminhtml_Block_System_Config_Edit', 'Magento\Config\Block\System\Config\Edit'],
+    ['Mage_Adminhtml_Block_System_Config_Form', 'Magento\Config\Block\System\Config\Form'],
+    ['Mage_Adminhtml_Block_System_Config_Tabs', 'Magento\Config\Block\System\Config\Tabs'],
     [
         'Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize',
-        'Magento\Backend\Block\System\Config\System\Storage\Media\Synchronize'
+        'Magento\Config\Block\System\Config\System\Storage\Media\Synchronize'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput',
-        'Magento\Backend\Block\System\Config\Form\Fieldset\Modules\DisableOutput'
+        'Magento\Config\Block\System\Config\Form\Fieldset\Modules\DisableOutput'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Regexceptions',
-        'Magento\Backend\Block\System\Config\Form\Field\Regexceptions'
+        'Magento\Config\Block\System\Config\Form\Field\Regexceptions'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Notification',
-        'Magento\Backend\Block\System\Config\Form\Field\Notification'
+        'Magento\Config\Block\System\Config\Form\Field\Notification'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Heading',
-        'Magento\Backend\Block\System\Config\Form\Field\Heading'
+        'Magento\Config\Block\System\Config\Form\Field\Heading'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Datetime',
-        'Magento\Backend\Block\System\Config\Form\Field\Datetime'
+        'Magento\Config\Block\System\Config\Form\Field\Datetime'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract',
-        'Magento\Backend\Block\System\Config\Form\Field\Array\AbstractArray'
+        'Magento\Config\Block\System\Config\Form\Field\Array\AbstractArray'
     ],
-    ['Mage_Adminhtml_Block_System_Config_Form_Fieldset', 'Magento\Backend\Block\System\Config\Form\Fieldset'],
-    ['Mage_Adminhtml_Block_System_Config_Form_Field', 'Magento\Backend\Block\System\Config\Form\Field'],
+    ['Mage_Adminhtml_Block_System_Config_Form_Fieldset', 'Magento\Config\Block\System\Config\Form\Fieldset'],
+    ['Mage_Adminhtml_Block_System_Config_Form_Field', 'Magento\Config\Block\System\Config\Form\Field'],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Import',
-        'Magento\Backend\Block\System\Config\Form\Field\Import'
+        'Magento\Config\Block\System\Config\Form\Field\Import'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Image',
-        'Magento\Backend\Block\System\Config\Form\Field\Image'
+        'Magento\Config\Block\System\Config\Form\Field\Image'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Export',
-        'Magento\Backend\Block\System\Config\Form\Field\Export'
+        'Magento\Config\Block\System\Config\Form\Field\Export'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Select_Allowspecific',
-        'Magento\Backend\Block\System\Config\Form\Field\Select\Allowspecific'
+        'Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific'
     ],
-    ['Mage_Adminhtml_Block_System_Config_Form_Field_File', 'Magento\Backend\Block\System\Config\Form\Field\File'],
+    ['Mage_Adminhtml_Block_System_Config_Form_Field_File', 'Magento\Config\Block\System\Config\Form\Field\File'],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatproduct',
         'Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatproduct'
@@ -182,8 +182,8 @@ return [
         'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Order_Statuses',
         'Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order\Statuses'
     ],
-    ['Mage_Adminhtml_Block_System_Config_Dwstree', 'Magento\Backend\Block\System\Config\Dwstree'],
-    ['Mage_Adminhtml_Block_System_Config_Switcher', 'Magento\Backend\Block\System\Config\Switcher'],
+    ['Mage_Adminhtml_Block_System_Config_Dwstree', 'Magento\Config\Block\System\Config\Dwstree'],
+    ['Mage_Adminhtml_Block_System_Config_Switcher', 'Magento\Config\Block\System\Config\Switcher'],
     ['Mage_Adminhtml_Block_System_Design_Grid'],
     ['Magento\Adminhtml\Block\System\Email\Template', 'Magento\Email\Block\Adminhtml\Template'],
     ['Magento\Adminhtml\Block\System\Email\Template\Edit', 'Magento\Email\Block\Adminhtml\Template\Edit'],
@@ -227,46 +227,46 @@ return [
     ['Mage_Adminhtml_Block_Urlrewrite_Grid'],
     ['Magento\Adminhtml\Controller\System\Email\Template', 'Magento\Email\Controller\Adminhtml\Template'],
     ['Mage_Adminhtml_Helper_Rss'],
-    ['Mage_Adminhtml_Model_Config', 'Magento\Backend\Model\Config\Structure'],
-    ['Mage_Adminhtml_Model_Config_Data', 'Magento\Backend\Model\Config'],
+    ['Mage_Adminhtml_Model_Config', 'Magento\Config\Model\Config\Structure'],
+    ['Mage_Adminhtml_Model_Config_Data', 'Magento\Config\Model\Config'],
     ['Magento\Adminhtml\Model\Email\Template', 'Magento\Email\Model\Adminhtml\Template'],
     ['Mage_Adminhtml_Model_Extension'],
     ['Mage_Adminhtml_Model_System_Config_Source_Shipping_Allowedmethods'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Password_Link_Expirationperiod',
-        'Magento\Backend\Model\Config\Backend\Admin\Password\Link\Expirationperiod'
+        'Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Custom',
-        'Magento\Backend\Model\Config\Backend\Admin\Custom'
+        'Magento\Config\Model\Config\Backend\Admin\Custom'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Custompath',
-        'Magento\Backend\Model\Config\Backend\Admin\Custompath'
+        'Magento\Config\Model\Config\Backend\Admin\Custompath'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer',
-        'Magento\Backend\Model\Config\Backend\Admin\Observer'
+        'Magento\Config\Model\Config\Backend\Admin\Observer'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots',
-        'Magento\Backend\Model\Config\Backend\Admin\Robots'
+        'Magento\Config\Model\Config\Backend\Admin\Robots'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustom',
-        'Magento\Backend\Model\Config\Backend\Admin\Usecustom'
+        'Magento\Config\Model\Config\Backend\Admin\Usecustom'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustompath',
-        'Magento\Backend\Model\Config\Backend\Admin\Custompath'
+        'Magento\Config\Model\Config\Backend\Admin\Custompath'
     ],
     [
         'Magento\Backend\Model\Config\Backend\Admin\Usecustompath',
-        'Magento\Backend\Model\Config\Backend\Admin\Custompath'
+        'Magento\Config\Model\Config\Backend\Admin\Custompath'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Admin_Usesecretkey',
-        'Magento\Backend\Model\Config\Backend\Admin\Usesecretkey'
+        'Magento\Config\Model\Config\Backend\Admin\Usesecretkey'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Catalog_Inventory_Managestock',
@@ -278,23 +278,23 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Currency_Abstract',
-        'Magento\Backend\Model\Config\Backend\Currency\AbstractCurrency'
+        'Magento\Config\Model\Config\Backend\Currency\AbstractCurrency'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Currency_Allow',
-        'Magento\Backend\Model\Config\Backend\Currency\Allow'
+        'Magento\Config\Model\Config\Backend\Currency\Allow'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Currency_Base',
-        'Magento\Backend\Model\Config\Backend\Currency\Base'
+        'Magento\Config\Model\Config\Backend\Currency\Base'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Currency_Cron',
-        'Magento\Backend\Model\Config\Backend\Currency\Cron'
+        'Magento\Config\Model\Config\Backend\Currency\Cron'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Currency_Default',
-        'Magento\Backend\Model\Config\Backend\Currency\DefaultCurrency'
+        'Magento\Config\Model\Config\Backend\Currency\DefaultCurrency'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Customer_Address_Street',
@@ -314,31 +314,31 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Design_Exception',
-        'Magento\Backend\Model\Config\Backend\Design\Exception'
+        'Magento\Config\Model\Config\Backend\Design\Exception'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Email_Address',
-        'Magento\Backend\Model\Config\Backend\Email\Address'
+        'Magento\Config\Model\Config\Backend\Email\Address'
     ],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Email_Logo', 'Magento\Backend\Model\Config\Backend\Email\Logo'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Email_Logo', 'Magento\Config\Model\Config\Backend\Email\Logo'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Email_Sender',
-        'Magento\Backend\Model\Config\Backend\Email\Sender'
+        'Magento\Config\Model\Config\Backend\Email\Sender'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Image_Adapter',
-        'Magento\Backend\Model\Config\Backend\Image\Adapter'
+        'Magento\Config\Model\Config\Backend\Image\Adapter'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Image_Favicon',
-        'Magento\Backend\Model\Config\Backend\Image\Favicon'
+        'Magento\Config\Model\Config\Backend\Image\Favicon'
     ],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Image_Pdf', 'Magento\Backend\Model\Config\Backend\Image\Pdf'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Image_Pdf', 'Magento\Config\Model\Config\Backend\Image\Pdf'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Locale_Timezone',
-        'Magento\Backend\Model\Config\Backend\Locale\Timezone'
+        'Magento\Config\Model\Config\Backend\Locale\Timezone'
     ],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Log_Cron', 'Magento\Backend\Model\Config\Backend\Log\Cron'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Log_Cron', 'Magento\Config\Model\Config\Backend\Log\Cron'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Price_Scope'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Product_Alert_Cron',
@@ -349,7 +349,7 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Serialized_Array',
-        'Magento\Backend\Model\Config\Backend\Serialized\Array'
+        'Magento\Config\Model\Config\Backend\Serialized\Array'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Shipping_Tablerate',
@@ -358,28 +358,28 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron', 'Magento\Cron\Model\Config\Backend\Sitemap'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database',
-        'Magento\Backend\Model\Config\Backend\Storage\Media\Database'
+        'Magento\Config\Model\Config\Backend\Storage\Media\Database'
     ],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Backend\Model\Config\Backend\Baseurl'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Backend\Model\Config\Backend\Cache'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Config\Model\Config\Backend\Baseurl'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Config\Model\Config\Backend\Cache'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Category', 'Magento\Catalog\Model\Config\Backend\Category'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Cookie', 'Magento\Cookie\Model\Config\Backend\Cookie'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Datashare', 'Magento\Backend\Model\Config\Backend\Datashare'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Encrypted', 'Magento\Backend\Model\Config\Backend\Encrypted'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_File', 'Magento\Backend\Model\Config\Backend\File'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Filename', 'Magento\Backend\Model\Config\Backend\Filename'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Image', 'Magento\Backend\Model\Config\Backend\Image'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Locale', 'Magento\Backend\Model\Config\Backend\Locale'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Secure', 'Magento\Backend\Model\Config\Backend\Secure'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Serialized', 'Magento\Backend\Model\Config\Backend\Serialized'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Datashare', 'Magento\Config\Model\Config\Backend\Datashare'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Encrypted', 'Magento\Config\Model\Config\Backend\Encrypted'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_File', 'Magento\Config\Model\Config\Backend\File'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Filename', 'Magento\Config\Model\Config\Backend\Filename'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Image', 'Magento\Config\Model\Config\Backend\Image'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Locale', 'Magento\Config\Model\Config\Backend\Locale'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Secure', 'Magento\Config\Model\Config\Backend\Secure'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Serialized', 'Magento\Config\Model\Config\Backend\Serialized'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Sitemap', 'Magento\Sitemap\Model\Config\Backend\Priority'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Store', 'Magento\Backend\Model\Config\Backend\Store'],
-    ['Mage_Adminhtml_Model_System_Config_Backend_Translate', 'Magento\Backend\Model\Config\Backend\Translate'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Store', 'Magento\Config\Model\Config\Backend\Store'],
+    ['Mage_Adminhtml_Model_System_Config_Backend_Translate', 'Magento\Config\Model\Config\Backend\Translate'],
     [
         'Mage_Adminhtml_Model_System_Config_Clone_Media_Image',
         'Magento\Catalog\Model\Config\CatalogClone\Media\Image'
     ],
-    ['Mage_Adminhtml_Model_System_Config_Source_Admin_Page', 'Magento\Backend\Model\Config\Source\Admin\Page'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Admin_Page', 'Magento\Config\Model\Config\Source\Admin\Page'],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Catalog_Search_Type',
         'Magento\CatalogSearch\Model\Config\Source\Search\Type'
@@ -416,7 +416,7 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Source_Cron_Frequency', 'Magento\Cron\Model\Config\Source\Frequency'],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Currency_Service',
-        'Magento\Backend\Model\Config\Source\Currency'
+        'Magento\Config\Model\Config\Source\Currency'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Customer_Address_Type',
@@ -427,55 +427,55 @@ return [
         'Magento\Customer\Model\Config\Source\Group\Multiselect'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Customer_Group', 'Magento\Customer\Model\Config\Source\Group'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Date_Short', 'Magento\Backend\Model\Config\Source\Date\Short'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Date_Short', 'Magento\Config\Model\Config\Source\Date\Short'],
     ['Mage_Adminhtml_Model_System_Config_Source_Design_Package'],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Design_Robots',
-        'Magento\Backend\Model\Config\Source\Design\Robots'
+        'Magento\Config\Model\Config\Source\Design\Robots'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Dev_Dbautoup',
-        'Magento\Backend\Model\Config\Source\Dev\Dbautoup'
+        'Magento\Config\Model\Config\Source\Dev\Dbautoup'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Email_Identity',
-        'Magento\Backend\Model\Config\Source\Email\Identity'
+        'Magento\Config\Model\Config\Source\Email\Identity'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Email_Method',
-        'Magento\Backend\Model\Config\Source\Email\Method'
+        'Magento\Config\Model\Config\Source\Email\Method'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Email_Smtpauth',
-        'Magento\Backend\Model\Config\Source\Email\Smtpauth'
+        'Magento\Config\Model\Config\Source\Email\Smtpauth'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Email_Template',
-        'Magento\Backend\Model\Config\Source\Email\Template'
+        'Magento\Config\Model\Config\Source\Email\Template'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Image_Adapter',
-        'Magento\Backend\Model\Config\Source\Image\Adapter'
+        'Magento\Config\Model\Config\Source\Image\Adapter'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Locale_Country',
-        'Magento\Backend\Model\Config\Source\Locale\Country'
+        'Magento\Config\Model\Config\Source\Locale\Country'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Locale_Currency_All',
-        'Magento\Backend\Model\Config\Source\Locale\Currency\All'
+        'Magento\Config\Model\Config\Source\Locale\Currency\All'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Locale_Currency',
-        'Magento\Backend\Model\Config\Source\Locale\Currency'
+        'Magento\Config\Model\Config\Source\Locale\Currency'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Locale_Timezone',
-        'Magento\Backend\Model\Config\Source\Locale\Timezone'
+        'Magento\Config\Model\Config\Source\Locale\Timezone'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Locale_Weekdays',
-        'Magento\Backend\Model\Config\Source\Locale\Weekdays'
+        'Magento\Config\Model\Config\Source\Locale\Weekdays'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Notification_Frequency',
@@ -523,7 +523,7 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Reports_Scope',
-        'Magento\Backend\Model\Config\Source\Reports\Scope'
+        'Magento\Config\Model\Config\Source\Reports\Scope'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Shipping_Allmethods',
@@ -547,11 +547,11 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
-        'Magento\Backend\Model\Config\Source\Storage\Media\Database'
+        'Magento\Config\Model\Config\Source\Storage\Media\Database'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage',
-        'Magento\Backend\Model\Config\Source\Storage\Media\Storage'
+        'Magento\Config\Model\Config\Source\Storage\Media\Storage'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Apply_On', 'Magento\Tax\Model\Config\Source\Apply\On'],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Basedon', 'Magento\Tax\Model\Config\Source\Basedon'],
@@ -562,37 +562,37 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Web_Protocol',
-        'Magento\Backend\Model\Config\Source\Web\Protocol'
+        'Magento\Config\Model\Config\Source\Web\Protocol'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Web_Redirect',
-        'Magento\Backend\Model\Config\Source\Web\Redirect'
+        'Magento\Config\Model\Config\Source\Web\Redirect'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Allregion', 'Magento\Directory\Model\Config\Source\Allregion'],
     ['Mage_Adminhtml_Model_System_Config_Source_Category', 'Magento\Catalog\Model\Config\Source\Category'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Checktype', 'Magento\Backend\Model\Config\Source\Checktype'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Checktype', 'Magento\Config\Model\Config\Source\Checktype'],
     ['Mage_Adminhtml_Model_System_Config_Source_Country', 'Magento\Directory\Model\Config\Source\Country'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Currency', 'Magento\Backend\Model\Config\Source\Currency'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Currency', 'Magento\Config\Model\Config\Source\Currency'],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Enabledisable',
-        'Magento\Backend\Model\Config\Source\Enabledisable'
+        'Magento\Config\Model\Config\Source\Enabledisable'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Frequency', 'Magento\Sitemap\Model\Config\Source\Frequency'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Locale', 'Magento\Backend\Model\Config\Source\Locale'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Nooptreq', 'Magento\Backend\Model\Config\Source\Nooptreq'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Store', 'Magento\Backend\Model\Config\Source\Store'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Website', 'Magento\Backend\Model\Config\Source\Website'],
-    ['Mage_Adminhtml_Model_System_Config_Source_Yesno', 'Magento\Backend\Model\Config\Source\Yesno'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Locale', 'Magento\Config\Model\Config\Source\Locale'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Nooptreq', 'Magento\Config\Model\Config\Source\Nooptreq'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Store', 'Magento\Config\Model\Config\Source\Store'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Website', 'Magento\Config\Model\Config\Source\Website'],
+    ['Mage_Adminhtml_Model_System_Config_Source_Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Yesnocustom',
-        'Magento\Backend\Model\Config\Source\Yesnocustom'
+        'Magento\Config\Model\Config\Source\Yesnocustom'
     ],
     ['Mage_Adminhtml_Model_System_Store', 'Magento\Store\Model\System\Store'],
     ['Mage_Adminhtml_Model_Url', 'Magento\Backend\Model\UrlInterface'],
     ['Mage_Adminhtml_Rss_CatalogController'],
     ['Mage_Adminhtml_Rss_OrderController'],
     ['Mage_Adminhtml_SystemController', 'Magento\Backend\Controller\Adminhtml\System'],
-    ['Mage_Adminhtml_System_ConfigController', 'Magento\Backend\Controller\Adminhtml\System\Config'],
+    ['Mage_Adminhtml_System_ConfigController', 'Magento\Config\Controller\Adminhtml\System\Config'],
     [
         'Magento\Backend\Model\Config\Source\Currency\Service',
         'Magento\Directory\Model\Currency\Import\Source\Service'
@@ -600,6 +600,8 @@ return [
     ['Mage_Backend_Model_Menu_Config_Menu'],
     ['Mage_Backend_Model_Menu_Director_Dom'],
     ['Mage_Backend_Model_Menu_Factory', 'Mage_Backend_Model_MenuFactory'],
+    ['Magento\Backend\Model\Auth\Exception', 'Magento\Framework\Exception\AuthenticationException'],
+    ['Magento\Backend\Model\Auth\Plugin\Exception', 'Magento\Framework\Exception\Plugin\AuthenticationException'],
     ['Mage_Bundle_Product_EditController', 'Mage_Bundle_Controller_Adminhtml_Bundle_Selection'],
     ['Mage_Bundle_SelectionController', 'Mage_Bundle_Controller_Adminhtml_Bundle_Selection'],
     ['Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatproduct'],
@@ -753,6 +755,15 @@ return [
         'Magento\Catalog\Model\Product\Type\Configurable\Price',
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price'
     ],
+    ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
+    ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
+    [
+        'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
+        'Magento\Framework\Exception\File\LargeSizeException'
+    ],
+    ['Magento\Catalog\Model\Product\Option\Type\File\NotImageException'],
+    ['Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException'],
+    ['Magento\Catalog\Model\Product\Option\Type\File\RunValidationException'],
     [
         'Magento\Checkout\Block\Cart\Item\Renderer\Configurable',
         'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable'
@@ -782,7 +793,7 @@ return [
     ['Mage_Core_Model_Design_Source_Apply'],
     ['Mage_Core_Model_Language'],
     ['Magento\Core\Model\Flag', 'Magento\Framework\Flag'],
-    ['Magento\Core\Exception', 'Magento\Framework\Model\Exception'],
+    ['Magento\Framework\Model\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Core\Model\AbstractModel', 'Magento\Framework\Model\AbstractModel'],
     ['Magento\Core\Model\Email\Info', 'Magento\Framework\Mail\MessageInterface'],
     ['Magento\Core\Model\Email\Sender', 'Magento\Framework\Mail\Template\TransportBuilder'],
@@ -839,9 +850,11 @@ return [
         'Mage_Customer_Model_Resource_Address_Attribute_Backend_Street',
         'Mage_Eav_Model_Entity_Attribute_Backend_Default'
     ],
+    ['Magento\Customer\Exception'],
     ['Mage_DesignEditor_Block_Page_Html_Head_Vde'],
     ['Mage_DesignEditor_Block_Page_Html_Head'],
     ['Mage_Directory_Model_Resource_Currency_Collection'],
+    ['Magento\Directory\Exception'],
     ['Mage_Downloadable_FileController', 'Magento\Downloadable\Controller\Adminhtml\Downloadable\File'],
     ['Mage_Downloadable_Product_EditController', 'Magento\Backend\Controller\Catalog\Product'],
     ['Mage_Eav_Model_Convert_Adapter_Entity'],
@@ -859,6 +872,7 @@ return [
     ['Mage_ImportExport_Model_Import_Adapter_Abstract', 'Mage_ImportExport_Model_Import_SourceAbstract'],
     ['Mage_ImportExport_Model_Import_Adapter_Csv', 'Mage_ImportExport_Model_Import_Source_Csv'],
     ['Mage_Install_Model_Installer_Env'],
+    ['Magento\Integration\Exception', 'Magento\Framework\Exception\IntegrationException'],
     ['Mage_Ogone_Model_Api_Debug'],
     ['Mage_Ogone_Model_Resource_Api_Debug'],
     ['Mage_Page_Block_Html_Toplinks'],
@@ -1263,6 +1277,7 @@ return [
     ['Magento\Core\Model\Resource\HelperPool'],
     ['Magento\Core\Model\Resource\Transaction', 'Magento\Framework\DB\Transaction'],
     ['Magento\Catalog\Model\Resource\Helper\Mysql4', 'Magento\Catalog\Model\Resource\Helper'],
+    ['Magento\Cron\Exception', 'Magento\Framework\Exception\CronException'],
     ['Magento\Eav\Model\Resource\Helper\Mysql4', 'Magento\Eav\Model\Resource\Helper'],
     [
         'Magento\Eav\Model\Entity\Attribute\Backend\Array',
@@ -1278,6 +1293,7 @@ return [
     ['Magento\Payment\Block\Info\Ccsave', 'Magento\OfflinePayments\Block\Info\Ccsave'],
     ['Magento\Payment\Block\Info\Checkmo', 'Magento\OfflinePayments\Block\Info\Checkmo'],
     ['Magento\Payment\Block\Info\Purchaseorder', 'Magento\OfflinePayments\Block\Info\Purchaseorder'],
+    ['Magento\Payment\Model\Info\Exception', 'Magento\Framework\Exception\PaymentException'],
     ['Magento\Payment\Model\Method\Banktransfer', 'Magento\OfflinePayments\Model\Banktransfer'],
     ['Magento\Payment\Model\Method\Cashondelivery', 'Magento\OfflinePayments\Model\Cashondelivery'],
     ['Magento\Payment\Model\Method\Ccsave', 'Magento\OfflinePayments\Model\Ccsave'],
@@ -1434,6 +1450,7 @@ return [
     ['Magento\Core\Model\TemplateEngine\Factory', 'Magento\Framework\View\TemplateEngineFactory'],
     ['Magento\Core\Model\TemplateEngine\Php', 'Magento\Framework\View\TemplateEngine\Php'],
     ['Magento\Core\Model\TemplateEngine\Pool', 'Magento\Framework\View\TemplateEnginePool'],
+    ['Magento\Core\Model\Resource\Config', 'Magento\Config\Model\Resource\Config'],
     ['Magento\Media\Model\File\Image'],
     ['Magento\Media\Model\Image'],
     ['Magento\Media\Helper\Data'],
@@ -1516,11 +1533,15 @@ return [
     ['Magento\Adminhtml\Controller\System\Backup', 'Magento\Backend\Controller\Adminhtml\System\Backup'],
     [
         'Magento\Adminhtml\Controller\System\Config\System\Storage',
-        'Magento\Backend\Controller\Adminhtml\System\Config\System\Storage'
+        'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
+    ],
+    [
+        'Magento\Backend\Controller\System\Config\System\Storage',
+        'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
     ],
     ['Magento\Adminhtml\Controller\System\Design', 'Magento\Backend\Controller\Adminhtml\System\Design'],
     ['Magento\Adminhtml\Controller\System\Store', 'Magento\Backend\Controller\Adminhtml\System\Store'],
-    ['Magento\Adminhtml\Controller\System\Variable', 'Magento\Backend\Controller\Adminhtml\System\Variable'],
+    ['Magento\Adminhtml\Controller\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
     ['Magento\Adminhtml\Block\System\Account\Edit\Form', 'Magento\Backend\Block\System\Account\Edit\Form'],
     ['Magento\Adminhtml\Block\System\Account\Edit', 'Magento\Backend\Block\System\Account\Edit'],
     ['Magento\Adminhtml\Block\System\Cache\Edit', 'Magento\Backend\Block\System\Cache\Edit'],
@@ -1567,9 +1588,11 @@ return [
         'Magento\Backend\Block\System\Store\Grid\Render\Website'
     ],
     ['Magento\Adminhtml\Block\System\Store\Store', 'Magento\Backend\Block\System\Store\Store'],
-    ['Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Backend\Block\System\Variable\Edit\Form'],
-    ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Backend\Block\System\Variable\Edit'],
-    ['Magento\Adminhtml\Block\System\Variable', 'Magento\Backend\Block\System\Variable'],
+    ['Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Variable\Block\System\Variable\Edit\Form'],
+    ['Magento\Backend\Block\System\Variable\Edit\Form', 'Magento\Variable\Block\System\Variable\Edit\Form'],
+    ['Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Variable\Block\System\Variable\Edit'],
+    ['Magento\Backend\Block\System\Variable\Edit', 'Magento\Variable\Block\System\Variable\Edit'],
+    ['Magento\Adminhtml\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     [
         'Magento\Adminhtml\Block\Checkout\Agreement\Edit\Form',
         'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit\Form'
@@ -1584,6 +1607,7 @@ return [
     ],
     ['Magento\Adminhtml\Block\Checkout\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Adminhtml\Controller\Checkout\Agreement', 'Magento\Checkout\Controller\Adminhtml\Agreement'],
+    ['Magento\Backend\Block\System\Variable', 'Magento\Variable\Block\System\Variable'],
     ['Magento\Core\Model\View\PublicFilesManagerInterface', 'Magento\Framework\View\Asset\SourceFileInterface'],
     ['Magento\Core\Model\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'],
     ['Magento\Framework\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'],
@@ -1622,6 +1646,14 @@ return [
     ['Magento\Backend\Controller\AbstractAction', 'Magento\Backend\App\AbstractAction'],
     ['Magento\Backend\Controller\Context', 'Magento\Backend\App\Action\Context'],
     ['Magento\Backend\Controller\Adminhtml\Action', 'Magento\Backend\App\Action'],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\AbstractConfig',
+        'Magento\Config\Controller\Adminhtml\System\AbstractConfig'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\ConfigSectionChecker',
+        'Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker'
+    ],
     ['Magento\Backend\Block\System\Shipping\Ups', 'Magento\Ups\Block\Backend\System\CarrierConfig'],
     ['Magento\Core\Block\Text', 'Magento\Framework\View\Element\Text'],
     ['Magento\Core\Block\Text\ListText', 'Magento\Framework\View\Element\Text\ListText'],
@@ -1747,6 +1779,35 @@ return [
     ['Magento\Adminhtml\Block\Report\Wishlist\Grid', 'Magento\Reports\Block\Adminhtml\Wishlist\Grid'],
     ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
+    ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Delete',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Delete'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Edit',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Edit'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Index',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Index'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\NewAction',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\NewAction'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Save',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Save'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\Validate',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\Validate'
+    ],
+    [
+        'Magento\Backend\Controller\Adminhtml\System\Variable\WysiwygPlugin',
+        'Magento\Variable\Controller\Adminhtml\System\Variable\WysiwygPlugin'
+    ],
     ['Magento\Core\Model\Cookie', 'Magento\Framework\Stdlib\Cookie'],
     ['Magento\Core\Model\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Core\Block\Template\Context', 'Magento\Framework\View\Element\Template\Context'],
@@ -2229,7 +2290,10 @@ return [
     ['Magento\Core\Model\Resource\Website\Grid\Collection', 'Magento\Store\Model\Resource\Website\Grid\Collection'],
     ['Magento\Core\Model\ScopeInterface', 'Magento\Store\Model\ScopeInterface'],
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
-    ['Magento\Store\Model\Exception', 'Magento\Framework\Model\Exception, Magento\Framework\App\InitException'],
+    [
+        'Magento\Store\Model\Exception',
+        'Magento\Framework\Exception\LocalizedException, Magento\Framework\App\InitException'
+    ],
     ['Magento\Core\Model\Store\Group', 'Magento\Store\Model\Group'],
     ['Magento\Core\Model\Store\Group\Factory', 'Magento\Store\Model\GroupFactory'],
     ['Magento\Core\Model\Store\Storage\Db', 'Magento\Store\Model\Storage\Db'],
@@ -2289,6 +2353,10 @@ return [
     ['Magento\Core\Model\App\Area', 'Magento\Framework\App\Area'],
     ['Magento\Core\Model\App\Area\DesignExceptions', 'Magento\Framework\View\DesignExceptions'],
     ['Magento\Core\App\Action\FormKeyValidator', 'Magento\Framework\Data\Form\FormKey\Validator'],
+    ['Magento\Core\Model\Resource\Variable', 'Magento\Variable\Model\Resource\Variable'],
+    ['Magento\Core\Model\Resource\Variable\Collection', 'Magento\Variable\Model\Resource\Variable\Collection'],
+    ['Magento\Core\Model\Variable', 'Magento\Variable\Model\Variable'],
+    ['Magento\Core\Model\Variable\Config', 'Magento\Variable\Model\Variable\Config'],
     ['Magento\Checkout\Block\Adminhtml\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'],
     ['Magento\Checkout\Block\Adminhtml\Agreement\Edit', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit'],
     [
@@ -2894,6 +2962,7 @@ return [
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Weee\Model\Total\Quote\Nominal\Weee'],
+    ['Magento\Tax\Exception'],
     ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax'],
     ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal'],
     ['Magento\SalesRule\Model\Quote\Nominal\Discount'],
@@ -2917,6 +2986,7 @@ return [
     ['Magento\Backend\Model\Config\Backend\Cookie\Domain', 'Magento\Cookie\Model\Config\Backend\Domain'],
     ['Magento\Backend\Model\Config\Backend\Cookie\Lifetime', 'Magento\Cookie\Model\Config\Backend\Lifetime'],
     ['Magento\Backend\Model\Config\Backend\Cookie\Path', 'Magento\Cookie\Model\Config\Backend\Path'],
+    ['Magento\Backend\Model\Config', 'Magento\Config\Model\Config'],
     ['Magento\Core\Block\RequireCookie', 'Magento\Cookie\Block\RequireCookie'],
     ['Magento\Core\Controller\Index\NoCookies', 'Magento\Cookie\Controller\Index\NoCookies'],
     ['Magento\Core\Model\Asset\Config', 'Magento\Framework\View\Asset\Config'],

@@ -1,0 +1,258 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Messages
+//  _____________________________________________
+
+.message(@_message-type: info) {
+    @_message-background: "message-@{_message-type}__background";
+    @_message-border-color: "message-@{_message-type}__border-color";
+    @_message-color: "message-@{_message-type}__color";
+    @_message-link-color: "message-@{_message-type}-link__color";
+    @_message-link-color-hover: "message-@{_message-type}-link__color-hover";
+    @_message-link-color-active: "message-@{_message-type}-link__color-active";
+    @_message-icon-top: "message-@{_message-type}-icon__top";
+    @_message-icon-right: "message-@{_message-type}-icon__right";
+    @_message-icon-bottom: "message-@{_message-type}-icon__bottom";
+    @_message-icon-left: "message-@{_message-type}-icon__left";
+    ._message();
+    ._message-style(
+        @_message-color: @@_message-color,
+        @_message-background: @@_message-background,
+        @_message-link-color: @@_message-link-color,
+        @_message-link-color-hover: @@_message-link-color-hover,
+        @_message-link-color-active: @@_message-link-color-active,
+        @_message-border-color: @@_message-border-color
+    );
+}
+
+._message(
+    @_message-padding: @message__padding,
+    @_message-margin: @message__margin,
+    @_message-border-radius: @message__border-radius
+) {
+    display: block;
+    .css(margin, @_message-margin);
+    .css(padding, @_message-padding);
+    .css(border-radius, @_message-border-radius);
+    .typography(
+        @_color: @message__color,
+        @_font-size: @message__font-size,
+        @_font-family: @message__font-family,
+        @_font-weight: @message__font-weight,
+        @_font-style: @message__font-style,
+        @_line-height: @message__line-height
+    );
+    ._message-border(@message__border-width, @message__border-style);
+}
+
+._message-style(
+    @_message-background: @message-info__background,
+    @_message-color: @message-info__color,
+    @_message-link-color: @message-info-link__color,
+    @_message-link-color-hover: @message-info-link__color-hover,
+    @_message-link-color-active: @message-info-link__color-active,
+    @_message-border-color: @message-info__border-color
+) {
+    .css(background, @_message-background);
+    .css(border-color, @_message-border-color);
+    .css(color, @_message-color);
+    a {
+        .css(color, @_message-link-color);
+        &:hover {
+            .css(color, @_message-link-color-hover);
+        }
+        &:active {
+            .css(color, @_message-link-color-active);
+        }
+    }
+}
+
+._message-border(
+    @_message-border-width: @message__border-width,
+    @_message-border-style: @message__border-style
+) when not (@_message-border-width = 0)
+and not (@_message-border-width = false)
+and not (@_message-border-style = false) {
+    .css(border, @_message-border-width @_message-border-style);
+}
+
+//  Messages with lateral icon
+.message-icon-lateral(@_message-type: info, @_message-position: right) {
+    .message(@_message-type);
+    @_message-icon-position: @_message-position;
+    @_message-icon: "message-@{_message-type}-icon";
+    @_message-icon-color: "message-@{_message-type}-icon__color-lateral";
+    @_message-icon-background: "message-@{_message-type}-icon__background";
+    @_message-icon-top: "message-@{_message-type}-icon__top";
+    @_message-icon-right: "message-@{_message-type}-icon__right";
+    @_message-icon-bottom: "message-@{_message-type}-icon__bottom";
+    @_message-icon-left: "message-@{_message-type}-icon__left";
+    ._message-icon-lateral(
+        @_message-icon-position,
+        @@_message-icon,
+        @@_message-icon-color,
+        @@_message-icon-background,
+        @@_message-icon-top,
+        @@_message-icon-left,
+        @@_message-icon-bottom,
+        @@_message-icon-right
+    );
+}
+
+//  Messages with inner icon
+.message-icon-inner(@_message-type: info) {
+    .message(@_message-type);
+    @_message-icon: "message-@{_message-type}-icon";
+    @_message-icon-color: "message-@{_message-type}-icon__color-inner";
+    @_message-icon-background: "message-@{_message-type}-icon__background";
+    @_message-icon-top: "message-@{_message-type}-icon__top";
+    @_message-icon-right: "message-@{_message-type}-icon__right";
+    @_message-icon-bottom: "message-@{_message-type}-icon__bottom";
+    @_message-icon-left: "message-@{_message-type}-icon__left";
+    ._message-icon-inner(
+        @@_message-icon,
+        @@_message-icon-color,
+        @@_message-icon-background,
+        @@_message-icon-top,
+        @@_message-icon-left,
+        @@_message-icon-bottom,
+        @@_message-icon-right
+    );
+}
+
+//  Private mixins
+._message-icon-lateral(
+    @_message-icon-position,
+    @_message-icon,
+    @_message-icon-color,
+    @_message-icon-background,
+    @_message-icon-top,
+    @_message-icon-left,
+    @_message-icon-bottom,
+    @_message-icon-right
+) {
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        .css(width, @message-icon__lateral-width);
+        text-align: center;
+        top: 0;
+        height: 100%;
+        display: block;
+        padding: 0;
+        .css(background, @_message-icon-background);
+    }
+    > *:first-child:before {
+        content: '';
+        position: absolute;
+        overflow: hidden;
+        top: 50%;
+        .css(margin-top, -@message-icon__lateral-arrow-size);
+    }
+    > *:first-child:after {
+        ._icon-font(
+            @_icon-font-content: @_message-icon,
+            @_icon-font: @icon-font,
+            @_icon-font-size: @message-icon__font-size,
+            @_icon-font-line-height: @message-icon__font-line-height,
+            @_icon-font-color: @_message-icon-color,
+            @_icon-font-margin: -@message-icon__font-size/2 0 0,
+            @_icon-font-vertical-align: @icon-font__vertical-align
+        );
+        position: absolute;
+        .css(top, @_message-icon-top);
+        .css(right, @_message-icon-right);
+        .css(bottom, @_message-icon-bottom);
+        .css(left, @_message-icon-left);
+        text-align: center;
+        .css(width, @message-icon__lateral-width);
+    }
+    ._message-icon-lateral-position(
+        @_message-icon-position,
+        @_message-icon-background
+    );
+}
+
+._message-icon-lateral-position(
+    @_message-icon-position,
+    @_message-icon-background
+) when (@_message-icon-position = right) {
+    .css(padding-right, @message-icon__lateral-width + @indent__s);
+    &:before {
+        right: 0;
+        ._message-icon-lateral-border-radius(@_message-icon-position);
+    }
+    > *:first-child:before {
+        .arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
+        .css(right, @message-icon__lateral-width);
+    }
+    > *:first-child:after {
+        right: 0;
+    }
+}
+
+._message-icon-lateral-position(
+    @_message-icon-position,
+    @_message-icon-background
+) when (@_message-icon-position = left) {
+    .css(padding-left, @message-icon__lateral-width + @indent__s);
+    &:before {
+        left: 0;
+        ._message-icon-lateral-border-radius(@_message-icon-position);
+    }
+    > *:first-child:before {
+        .arrow(right, @message-icon__lateral-arrow-size, @_message-icon-background);
+        .css(left, @message-icon__lateral-width);
+    }
+    > *:first-child:after {
+        left: 0;
+    }
+}
+
+._message-icon-lateral-border-radius(
+    @_message-icon-position
+) when (@_message-icon-position = left) and not (@message__border-radius = false) and not (@message__border-width = false) {
+    border-radius: (@message__border-radius - @message__border-width) 0 0 (@message__border-radius - @message__border-width);
+}
+
+._message-icon-lateral-border-radius(
+    @_message-icon-position
+) when (@_message-icon-position = right) and not (@message__border-radius = false) and not (@message__border-width = false) {
+    border-radius: 0 (@message__border-radius - @message__border-width) (@message__border-radius - @message__border-width) 0;
+}
+
+._message-icon-inner(
+    @_message-icon,
+    @_message-icon-color,
+    @_message-icon-background,
+    @_message-icon-top,
+    @_message-icon-left,
+    @_message-icon-bottom,
+    @_message-icon-right
+) {
+    position: relative;
+    .css(padding-left, @message-icon__inner-padding-left);
+    > *:first-child:before {
+        ._icon-font(
+            @_icon-font-content: @_message-icon,
+            @_icon-font: @icon-font,
+            @_icon-font-size: @message-icon__font-size,
+            @_icon-font-line-height: @message-icon__font-line-height,
+            @_icon-font-color: @_message-icon-color,
+            @_icon-font-margin: -@message-icon__font-size/2 0 0,
+            @_icon-font-vertical-align: @icon-font__vertical-align
+        );
+        position: absolute;
+        .css(top, @_message-icon-top);
+        .css(right, @_message-icon-right);
+        .css(bottom, @_message-icon-bottom);
+        .css(left, @_message-icon-left);
+        text-align: center;
+        .css(width, @message-icon__inner-padding-left);
+    }
+}

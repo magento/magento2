@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="rss" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>RSS Feeds</label>
@@ -15,7 +15,7 @@
                 <label>Rss Config</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable RSS</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                     <backend_model>Magento\Rss\Model\System\Config\Backend\Links</backend_model>
                 </field>
             </group>

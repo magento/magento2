@@ -57,7 +57,7 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $request = $this->getRequest();
         try {
             $this->_initSession()->_processData();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

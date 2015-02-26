@@ -1,10 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
+
+use Magento\Framework\Exception\AuthenticationException;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
@@ -65,9 +66,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         $isCurrentUserPasswordValid = !empty($currentUserPassword) && is_string($currentUserPassword);
         try {
             if (!($isCurrentUserPasswordValid && $user->verifyIdentity($currentUserPassword))) {
-                throw new \Magento\Backend\Model\Auth\Exception(
-                    __('You have entered an invalid password for current user.')
-                );
+                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
             if ($password !== '') {
                 $user->setPassword($password);
@@ -79,11 +78,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->sendPasswordResetNotificationEmail();
             }
             $this->messageManager->addSuccess(__('The account has been saved.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Validator\ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {
                 $this->messageManager->addError($e->getMessage());
             }
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while saving account.'));
         }
