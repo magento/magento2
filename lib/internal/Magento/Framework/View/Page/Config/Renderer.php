@@ -383,8 +383,11 @@ class Renderer
         try {
             foreach ($assets as $asset) {
                 /** @var $asset \Magento\Framework\View\Asset\File */
-                if ($this->appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    if ($asset->getSourceUrl() != $asset->getUrl()) {
+                // todo will be fixed in MAGETWO-33631
+                if ($this->appMode != \Magento\Framework\App\State::MODE_PRODUCTION) {
+                    if ($asset instanceof \Magento\Framework\View\Asset\File &&
+                        $asset->getSourceUrl() != $asset->getUrl()
+                    ) {
                         $attributes = $this->addDefaultAttributes('less', []);
                         $groupTemplate = $this->getAssetTemplate('less', $attributes);
                         $result .= sprintf($groupTemplate, $asset->getUrl());
