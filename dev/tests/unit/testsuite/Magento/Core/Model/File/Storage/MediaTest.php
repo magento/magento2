@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\File\Storage;
+namespace Magento\MediaStorage\Model\File\Storage;
 
 /**
  * Class MediaTest
@@ -11,17 +11,17 @@ namespace Magento\Core\Model\File\Storage;
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\File\Storage\File
+     * @var \Magento\MediaStorage\Model\File\Storage\File
      */
     protected $_model;
 
     /**
-     * @var \Magento\Core\Helper\File\Media
+     * @var \Magento\MediaStorage\Helper\File\Media
      */
     protected $_loggerMock;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_storageHelperMock;
 
@@ -31,7 +31,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected $_mediaHelperMock;
 
     /**
-     * @var \Magento\Core\Model\Resource\File\Storage\File
+     * @var \Magento\MediaStorage\Model\Resource\File\Storage\File
      */
     protected $_fileUtilityMock;
 
@@ -39,22 +39,22 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     {
         $this->_loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->_storageHelperMock = $this->getMock(
-            'Magento\Core\Helper\File\Storage\Database',
+            'Magento\MediaStorage\Helper\File\Storage\Database',
             [],
             [],
             '',
             false
         );
-        $this->_mediaHelperMock = $this->getMock('Magento\Core\Helper\File\Media', [], [], '', false);
+        $this->_mediaHelperMock = $this->getMock('Magento\MediaStorage\Helper\File\Media', [], [], '', false);
         $this->_fileUtilityMock = $this->getMock(
-            'Magento\Core\Model\Resource\File\Storage\File',
+            'Magento\MediaStorage\Model\Resource\File\Storage\File',
             [],
             [],
             '',
             false
         );
 
-        $this->_model = new \Magento\Core\Model\File\Storage\File(
+        $this->_model = new \Magento\MediaStorage\Model\File\Storage\File(
             $this->_loggerMock,
             $this->_storageHelperMock,
             $this->_mediaHelperMock,

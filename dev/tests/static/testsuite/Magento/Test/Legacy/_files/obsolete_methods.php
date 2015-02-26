@@ -1066,7 +1066,7 @@ return [
     [
         'getProtectedFileExtensions',
         '\Magento\Core\Helper\Data',
-        '\Magento\Core\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
+        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
     ],
     ['getStoreId', '\Magento\Core\Helper\Data'],
     ['getExactDivision', '\Magento\Core\Helper\Data', '\Magento\Framework\Math\Division::getExactDivision'],

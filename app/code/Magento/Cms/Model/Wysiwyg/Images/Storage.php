@@ -55,7 +55,7 @@ class Storage extends \Magento\Framework\Object
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDb = null;
 
@@ -94,21 +94,21 @@ class Storage extends \Magento\Framework\Object
     /**
      * Directory database factory
      *
-     * @var \Magento\Core\Model\File\Storage\Directory\DatabaseFactory
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory
      */
     protected $_directoryDatabaseFactory;
 
     /**
      * Storage database factory
      *
-     * @var \Magento\Core\Model\File\Storage\DatabaseFactory
+     * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
      */
     protected $_storageDatabaseFactory;
 
     /**
      * Storage file factory
      *
-     * @var \Magento\Core\Model\File\Storage\FileFactory
+     * @var \Magento\MediaStorage\Model\File\Storage\FileFactory
      */
     protected $_storageFileFactory;
 
@@ -122,7 +122,7 @@ class Storage extends \Magento\Framework\Object
     /**
      * Uploader factory
      *
-     * @var \Magento\Core\Model\File\UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
@@ -132,15 +132,15 @@ class Storage extends \Magento\Framework\Object
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory
-     * @param \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory
-     * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
-     * @param \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryDatabaseFactory
-     * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\MediaStorage\Model\File\Storage\FileFactory $storageFileFactory
+     * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
+     * @param \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryDatabaseFactory
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param array $resizeParameters
      * @param array $extensions
      * @param array $dirs
@@ -152,15 +152,15 @@ class Storage extends \Magento\Framework\Object
         \Magento\Backend\Model\Session $session,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Cms\Helper\Wysiwyg\Images $cmsWysiwygImages,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory $storageCollectionFactory,
-        \Magento\Core\Model\File\Storage\FileFactory $storageFileFactory,
-        \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
-        \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryDatabaseFactory,
-        \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\MediaStorage\Model\File\Storage\FileFactory $storageFileFactory,
+        \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
+        \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryDatabaseFactory,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         array $resizeParameters = [],
         array $extensions = [],
         array $dirs = [],
@@ -195,7 +195,7 @@ class Storage extends \Magento\Framework\Object
     public function getDirsCollection($path)
     {
         if ($this->_coreFileStorageDb->checkDbUsage()) {
-            /** @var \Magento\Core\Model\File\Storage\Directory\Database $subDirectories */
+            /** @var \Magento\MediaStorage\Model\File\Storage\Directory\Database $subDirectories */
             $subDirectories = $this->_directoryDatabaseFactory->create();
             $subDirectories->getSubdirectories($path);
             foreach ($subDirectories as $directory) {
@@ -261,7 +261,7 @@ class Storage extends \Magento\Framework\Object
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             $files = $this->_storageDatabaseFactory->create()->getDirectoryFiles($path);
 
-            /** @var \Magento\Core\Model\File\Storage\File $fileStorageModel */
+            /** @var \Magento\MediaStorage\Model\File\Storage\File $fileStorageModel */
             $fileStorageModel = $this->_storageFileFactory->create();
             foreach ($files as $file) {
                 $fileStorageModel->saveFile($file);
@@ -451,7 +451,7 @@ class Storage extends \Magento\Framework\Object
      */
     public function uploadFile($targetPath, $type = null)
     {
-        /** @var \Magento\Core\Model\File\Uploader $uploader */
+        /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => 'image']);
         $allowed = $this->getAllowedExtensions($type);
         if ($allowed) {

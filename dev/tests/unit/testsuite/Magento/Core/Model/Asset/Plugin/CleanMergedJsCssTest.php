@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests Magento\Core\Model\Asset\Plugin\CleanMergedJsCss
+ * Tests Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,14 +8,14 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Asset\Plugin;
+namespace Magento\MediaStorage\Model\Asset\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Helper\File\Storage\Database
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\MediaStorage\Helper\File\Storage\Database
      */
     private $databaseMock;
 
@@ -30,7 +30,7 @@ class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
     private $hasBeenCalled = false;
 
     /**
-     * @var \Magento\Core\Model\Asset\Plugin\CleanMergedJsCss
+     * @var \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
      */
     private $model;
 
@@ -38,8 +38,8 @@ class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
     {
         parent::setUp();
         $this->filesystemMock = $this->basicMock('\Magento\Framework\Filesystem');
-        $this->databaseMock = $this->basicMock('\Magento\Core\Helper\File\Storage\Database');
-        $this->model = $this->objectManager->getObject('Magento\Core\Model\Asset\Plugin\CleanMergedJsCss',
+        $this->databaseMock = $this->basicMock('\Magento\MediaStorage\Helper\File\Storage\Database');
+        $this->model = $this->objectManager->getObject('Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss',
             [
                 'database' => $this->databaseMock,
                 'filesystem' => $this->filesystemMock,

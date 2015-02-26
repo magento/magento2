@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\File\Storage;
+namespace Magento\MediaStorage\Model\Resource\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -13,12 +13,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource\File\Storage\File
+     * @var \Magento\MediaStorage\Model\Resource\File\Storage\File
      */
     protected $storageFile;
 
     /**
-     * @var \Magento\Core\Helper\File\Media|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Media|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
 
@@ -53,7 +53,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->storageFile = new \Magento\Core\Model\Resource\File\Storage\File(
+        $this->storageFile = new \Magento\MediaStorage\Model\Resource\File\Storage\File(
             $this->filesystemMock,
             $this->loggerMock
         );

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Helper\File;
+namespace Magento\MediaStorage\Helper\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -42,7 +42,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->method('date')
             ->will($this->returnValue(self::UPDATE_TIME));
         $this->helper = $this->objectManager->getObject(
-            'Magento\Core\Helper\File\Media',
+            'Magento\MediaStorage\Helper\File\Media',
             ['filesystem' => $filesystemMock, 'date' => $dateMock]
         );
     }

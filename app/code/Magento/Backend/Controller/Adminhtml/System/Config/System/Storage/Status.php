@@ -40,19 +40,19 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
             $state = $flag->getState();
 
             switch ($state) {
-                case \Magento\Core\Model\File\Storage\Flag::STATE_INACTIVE:
+                case \Magento\MediaStorage\Model\File\Storage\Flag::STATE_INACTIVE:
                     $flagData = $flag->getFlagData();
                     if (is_array($flagData)) {
                         if (isset($flagData['destination']) && !empty($flagData['destination'])) {
                             $result['destination'] = $flagData['destination'];
                         }
                     }
-                    $state = \Magento\Core\Model\File\Storage\Flag::STATE_INACTIVE;
+                    $state = \Magento\MediaStorage\Model\File\Storage\Flag::STATE_INACTIVE;
                     break;
-                case \Magento\Core\Model\File\Storage\Flag::STATE_RUNNING:
+                case \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING:
                     if (!$flag->getLastUpdate() || time() <= strtotime(
                         $flag->getLastUpdate()
-                    ) + \Magento\Core\Model\File\Storage\Flag::FLAG_TTL
+                    ) + \Magento\MediaStorage\Model\File\Storage\Flag::FLAG_TTL
                     ) {
                         $flagData = $flag->getFlagData();
                         if (is_array(
@@ -88,15 +88,15 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
                                 )
                             );
 
-                            $state = \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED;
+                            $state = \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED;
                             $flagData['has_errors'] = true;
                             $flagData['timeout_reached'] = true;
                             $flag->setState($state)->setFlagData($flagData)->save();
                         }
                     }
                     // fall-through intentional
-                case \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED:
-                case \Magento\Core\Model\File\Storage\Flag::STATE_NOTIFIED:
+                case \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED:
+                case \Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED:
                     $flagData = $flag->getFlagData();
                     if (!isset($flagData['has_errors'])) {
                         $flagData['has_errors'] = false;
@@ -104,11 +104,11 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
                     $result['has_errors'] = $flagData['has_errors'];
                     break;
                 default:
-                    $state = \Magento\Core\Model\File\Storage\Flag::STATE_INACTIVE;
+                    $state = \Magento\MediaStorage\Model\File\Storage\Flag::STATE_INACTIVE;
                     break;
             }
         } else {
-            $state = \Magento\Core\Model\File\Storage\Flag::STATE_INACTIVE;
+            $state = \Magento\MediaStorage\Model\File\Storage\Flag::STATE_INACTIVE;
         }
         $result['state'] = $state;
         /** @var \Magento\Framework\Controller\Result\JSON $resultJson */

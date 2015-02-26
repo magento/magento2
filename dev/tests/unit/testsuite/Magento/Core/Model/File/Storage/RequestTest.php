@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\File\Storage;
+namespace Magento\MediaStorage\Model\File\Storage;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\File\Storage\Request
+     * @var \Magento\MediaStorage\Model\File\Storage\Request
      */
     protected $_model;
 
@@ -32,7 +32,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $path = '..PathInfo';
         $this->_requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $this->_requestMock->expects($this->once())->method('getPathInfo')->will($this->returnValue($path));
-        $this->_model = new \Magento\Core\Model\File\Storage\Request($this->_workingDir, $this->_requestMock);
+        $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_workingDir, $this->_requestMock);
     }
 
     protected function tearDown()

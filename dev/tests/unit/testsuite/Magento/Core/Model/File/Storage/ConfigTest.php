@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\File\Storage;
+namespace Magento\MediaStorage\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $config = [];
-        $fileStorageMock = $this->getMock('Magento\Core\Model\File\Storage', [], [], '', false);
+        $fileStorageMock = $this->getMock('Magento\MediaStorage\Model\File\Storage', [], [], '', false);
         $fileStorageMock->expects($this->once())->method('getScriptConfig')->will($this->returnValue($config));
 
         $file = $this->getMock(
@@ -54,7 +54,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($directory)
         );
-        $model = new \Magento\Core\Model\File\Storage\Config($fileStorageMock, $filesystem, 'cacheFile');
+        $model = new \Magento\MediaStorage\Model\File\Storage\Config($fileStorageMock, $filesystem, 'cacheFile');
         $model->save();
     }
 }

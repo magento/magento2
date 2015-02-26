@@ -26,7 +26,7 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
         }
 
         try {
-            $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', ['fileId' => $type]);
+            $uploader = $this->_objectManager->create('Magento\MediaStorage\Model\File\Uploader', ['fileId' => $type]);
 
             $result = $this->_fileHelper->uploadFromTmp($tmpPath, $uploader);
 
@@ -42,7 +42,7 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
 
             if (isset($result['file'])) {
                 $relativePath = rtrim($tmpPath, '/') . '/' . ltrim($result['file'], '/');
-                $this->_objectManager->get('Magento\Core\Helper\File\Storage\Database')->saveFile($relativePath);
+                $this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage\Database')->saveFile($relativePath);
             }
 
             $result['cookie'] = [

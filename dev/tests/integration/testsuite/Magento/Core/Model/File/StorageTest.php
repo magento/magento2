@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\File;
+namespace Magento\MediaStorage\Model\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * test for \Magento\Core\Model\File\Storage::getScriptConfig()
+     * test for \Magento\MediaStorage\Model\File\Storage::getScriptConfig()
      *
      * @magentoConfigFixture current_store system/media_storage_configuration/configuration_update_time 1000
      */
     public function testGetScriptConfig()
     {
         $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\File\Storage'
+            'Magento\MediaStorage\Model\File\Storage'
         )->getScriptConfig();
         $this->assertInternalType('array', $config);
         $this->assertArrayHasKey('media_directory', $config);

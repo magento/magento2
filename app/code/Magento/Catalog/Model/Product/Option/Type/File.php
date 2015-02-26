@@ -35,7 +35,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -74,7 +74,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param File\ValidatorInfo $validatorInfo
      * @param File\ValidatorFile $validatorFile
      * @param array $data
@@ -84,7 +84,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo $validatorInfo,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,

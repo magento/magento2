@@ -50,22 +50,22 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_storageCollectionFactoryMock;
 
     /**
-     * @var \Magento\Core\Model\File\Storage\FileFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\FileFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storageFileFactoryMock;
 
     /**
-     * @var \Magento\Core\Model\File\Storage\DatabaseFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storageDatabaseFactoryMock;
 
     /**
-     * @var \Magento\Core\Model\File\Storage\Directory\DatabaseFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_directoryDatabaseFactoryMock;
 
     /**
-     * @var \Magento\Core\Model\File\UploaderFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_uploaderFactoryMock;
 
@@ -171,27 +171,27 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_storageFileFactoryMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\FileFactory',
+            'Magento\MediaStorage\Model\File\Storage\FileFactory',
             [],
             [],
             '',
             false
         );
         $this->_storageDatabaseFactoryMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\DatabaseFactory',
+            'Magento\MediaStorage\Model\File\Storage\DatabaseFactory',
             [],
             [],
             '',
             false
         );
         $this->_directoryDatabaseFactoryMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\Directory\DatabaseFactory',
+            'Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory',
             [],
             [],
             '',
             false
         );
-        $this->_uploaderFactoryMock = $this->getMock('Magento\Core\Model\File\UploaderFactory', [], [], '', false);
+        $this->_uploaderFactoryMock = $this->getMock('Magento\MediaStorage\Model\File\UploaderFactory', [], [], '', false);
         $this->_sessionMock = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
         $this->_backendUrlMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 
@@ -203,7 +203,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
                 'backendUrl' => $this->_backendUrlMock,
                 'cmsWysiwygImages' => $this->_imageHelperMock,
                 'coreFileStorageDb' => $this->getMock(
-                    'Magento\Core\Helper\File\Storage\Database',
+                    'Magento\MediaStorage\Helper\File\Storage\Database',
                     [],
                     [],
                     '',

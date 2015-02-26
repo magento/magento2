@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\App\Media
+     * @var \Magento\MediaStorage\App\Media
      */
     protected $_model;
 
@@ -61,13 +61,13 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Core\Model\File\Storage\Request', [], [], '', false);
+        $this->_requestMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Request', [], [], '', false);
         $this->_closure = function () {
             return true;
         };
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_configMock = $this->getMock('Magento\Core\Model\File\Storage\Config', [], [], '', false);
-        $this->_sync = $this->getMock('Magento\Core\Model\File\Storage\Synchronization', [], [], '', false);
+        $this->_configMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Config', [], [], '', false);
+        $this->_sync = $this->getMock('Magento\MediaStorage\Model\File\Storage\Synchronization', [], [], '', false);
 
         $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->directoryReadMock = $this->getMock(
@@ -88,13 +88,13 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->directoryReadMock)
         );
 
-        $this->_responseMock = $this->getMock('Magento\Core\Model\File\Storage\Response', [], [], '', false);
+        $this->_responseMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Response', [], [], '', false);
 
         $map = [
-            ['Magento\Core\Model\File\Storage\Request', $this->_requestMock],
-            ['Magento\Core\Model\File\Storage\Synchronization', $this->_sync],
+            ['Magento\MediaStorage\Model\File\Storage\Request', $this->_requestMock],
+            ['Magento\MediaStorage\Model\File\Storage\Synchronization', $this->_sync],
         ];
-        $this->_model = new \Magento\Core\App\Media(
+        $this->_model = new \Magento\MediaStorage\App\Media(
             $this->_objectManagerMock,
             $this->_requestMock,
             $this->_responseMock,
@@ -119,7 +119,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessRequestCreatesConfigFileMediaDirectoryIsNotProvided()
     {
-        $this->_model = new \Magento\Core\App\Media(
+        $this->_model = new \Magento\MediaStorage\App\Media(
             $this->_objectManagerMock,
             $this->_requestMock,
             $this->_responseMock,
@@ -135,7 +135,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Core\Model\File\Storage\Config'
+            'Magento\MediaStorage\Model\File\Storage\Config'
         )->will(
             $this->returnValue($this->_configMock)
         );
@@ -152,7 +152,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->_closure = function () {
             return false;
         };
-        $this->_model = new \Magento\Core\App\Media(
+        $this->_model = new \Magento\MediaStorage\App\Media(
             $this->_objectManagerMock,
             $this->_requestMock,
             $this->_responseMock,
@@ -169,7 +169,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Core\Model\File\Storage\Config'
+            'Magento\MediaStorage\Model\File\Storage\Config'
         )->will(
             $this->returnValue($this->_configMock)
         );

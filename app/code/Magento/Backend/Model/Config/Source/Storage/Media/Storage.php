@@ -20,10 +20,10 @@ class Storage implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             [
-                'value' => \Magento\Core\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM,
+                'value' => \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM,
                 'label' => __('File System'),
             ],
-            ['value' => \Magento\Core\Model\File\Storage::STORAGE_MEDIA_DATABASE, 'label' => __('Database')]
+            ['value' => \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_DATABASE, 'label' => __('Database')]
         ];
     }
 }

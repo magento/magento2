@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\File\Storage;
+namespace Magento\MediaStorage\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -19,14 +19,14 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $filePath = realpath(__DIR__ . '/_files/');
 
         $storageFactoryMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\DatabaseFactory',
+            'Magento\MediaStorage\Model\File\Storage\DatabaseFactory',
             ['create', '_wakeup'],
             [],
             '',
             false
         );
         $storageMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\Database',
+            'Magento\MediaStorage\Model\File\Storage\Database',
             ['getContent', 'getId', 'loadByFilename', '__wakeup'],
             [],
             '',

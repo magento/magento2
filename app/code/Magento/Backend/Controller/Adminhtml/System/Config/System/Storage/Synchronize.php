@@ -25,16 +25,16 @@ class Synchronize extends \Magento\Backend\Controller\Adminhtml\System\Config\Sy
 
         $flag = $this->_getSyncFlag();
         if ($flag &&
-            $flag->getState() == \Magento\Core\Model\File\Storage\Flag::STATE_RUNNING &&
+            $flag->getState() == \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING &&
             $flag->getLastUpdate() &&
             time() <= strtotime(
                 $flag->getLastUpdate()
-            ) + \Magento\Core\Model\File\Storage\Flag::FLAG_TTL
+            ) + \Magento\MediaStorage\Model\File\Storage\Flag::FLAG_TTL
         ) {
             return;
         }
 
-        $flag->setState(\Magento\Core\Model\File\Storage\Flag::STATE_RUNNING)->setFlagData([])->save();
+        $flag->setState(\Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING)->setFlagData([])->save();
 
         $storage = ['type' => $requestStorage];
         if (isset($requestConnection) && !empty($requestConnection)) {
@@ -48,6 +48,6 @@ class Synchronize extends \Magento\Backend\Controller\Adminhtml\System\Config\Sy
             $flag->passError($e);
         }
 
-        $flag->setState(\Magento\Core\Model\File\Storage\Flag::STATE_FINISHED)->save();
+        $flag->setState(\Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED)->save();
     }
 }

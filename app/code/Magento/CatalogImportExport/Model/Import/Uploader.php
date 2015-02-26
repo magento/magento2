@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Uploader extends \Magento\Core\Model\File\Uploader
+class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
     /**
      * @var string
@@ -42,23 +42,23 @@ class Uploader extends \Magento\Core\Model\File\Uploader
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_validator;
 
     /**
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
-     * @param \Magento\Core\Helper\File\Storage $coreFileStorage
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
+     * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
-     * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $validator
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
      * @param \Magento\Framework\Filesystem $filesystem
      * @param string $filePath
      */
     public function __construct(
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
-        \Magento\Core\Helper\File\Storage $coreFileStorage,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
+        \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
-        \Magento\Core\Model\File\Validator\NotProtectedExtension $validator,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
         \Magento\Framework\Filesystem $filesystem,
         $filePath = null
     ) {

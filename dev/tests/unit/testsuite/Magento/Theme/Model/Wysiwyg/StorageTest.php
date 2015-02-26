@@ -168,7 +168,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function _prepareUploader()
     {
-        $uploader = $this->getMock('Magento\Core\Model\File\Uploader', [], [], '', false);
+        $uploader = $this->getMock('Magento\MediaStorage\Model\File\Uploader', [], [], '', false);
 
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($uploader));
 
