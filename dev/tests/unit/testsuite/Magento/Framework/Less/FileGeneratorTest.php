@@ -79,7 +79,7 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
         $expectedPath = '/var/view_preprocessed/less/some/file.less';
 
         $asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $asset->expects($this->once())
+        $asset->expects($this->exactly(2))
             ->method('getPath')
             ->will($this->returnValue('some/file.css'));
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($asset, $originalContent, 'less');

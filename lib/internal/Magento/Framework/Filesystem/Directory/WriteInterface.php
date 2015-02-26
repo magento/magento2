@@ -48,6 +48,17 @@ interface WriteInterface extends ReadInterface
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null);
 
     /**
+     * Creates symlink on a file and places it to destination
+     *
+     * @param string $path
+     * @param string $destination
+     * @param WriteInterface $targetDirectory [optional]
+     * @return bool
+     * @throws \Magento\Framework\Filesystem\FilesystemException
+     */
+    public function createSymlink($path, $destination, WriteInterface $targetDirectory = null);
+
+    /**
      * Change permissions of given path
      *
      * @param string $path

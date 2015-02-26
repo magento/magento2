@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="newsletter" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Newsletter</label>
@@ -15,35 +15,35 @@
                 <label>Subscription Options</label>
                 <field id="allow_guest_subscribe" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Guest Subscription</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="confirm" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Need to Confirm</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="confirm_email_identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Confirmation Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="confirm_email_template" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Confirmation Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="success_email_identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Success Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="success_email_template" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Success Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="un_email_identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Unsubscription Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="un_email_template" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Unsubscription Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
             </group>
         </section>
