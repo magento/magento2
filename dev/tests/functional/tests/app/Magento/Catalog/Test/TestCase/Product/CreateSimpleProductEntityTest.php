@@ -33,6 +33,13 @@ class CreateSimpleProductEntityTest extends Injectable
     /* end tags */
 
     /**
+     * Configuration setting.
+     *
+     * @var string
+     */
+    protected $configData;
+
+    /**
      * Prepare data.
      *
      * @param Category $category
@@ -54,25 +61,27 @@ class CreateSimpleProductEntityTest extends Injectable
      * @param Category $category
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
+     * @param string $configData
      * @return array
      */
     public function testCreate(
         CatalogProductSimple $product,
         Category $category,
         CatalogProductIndex $productGrid,
-        CatalogProductNew $newProductPage
+        CatalogProductNew $newProductPage,
+        $configData = null
     ) {
+        $this->configData = $configData;
 
-        // Preconditions
-        if (isset($this->currentVariation['arguments']['configData'])) {
-            $setConfigStep = $this->objectManager->create(
+        // Preconditions.
+        if ($this->configData !== null) {
+            $this->objectManager->create(
                 'Magento\Core\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $this->currentVariation['arguments']['configData']]
-            );
-            $setConfigStep->run();
+                ['configData' => $this->configData]
+            )->run();
         }
 
-        // Steps
+        // Steps.
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('simple');
         $newProductPage->getProductForm()->fill($product, null, $category);
@@ -88,12 +97,11 @@ class CreateSimpleProductEntityTest extends Injectable
      */
     public function tearDown()
     {
-        if (isset($this->currentVariation['arguments']['configData'])) {
-            $setConfigStep = $this->objectManager->create(
+        if ($this->configData !== null) {
+            $this->objectManager->create(
                 'Magento\Core\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $this->currentVariation['arguments']['configData'], 'rollback' => true]
-            );
-            $setConfigStep->run();
+                ['configData' => $this->configData, 'rollback' => true]
+            )->run();
         }
     }
 }

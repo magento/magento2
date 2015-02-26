@@ -10,26 +10,26 @@ use Magento\Backend\Test\Block\Widget\Grid;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 
 /**
- * Customer selection grid
+ * Customer selection grid.
  */
 class Customer extends Grid
 {
     /**
-     * Selector for 'Create New Customer' button
+     * Selector for 'Create New Customer' button.
      *
      * @var string
      */
     protected $createNewCustomer = '.actions button';
 
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = 'td[data-column=email]';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -40,7 +40,7 @@ class Customer extends Grid
     ];
 
     /**
-     * Select customer if it is present in fixture or click create new customer button
+     * Select customer if it is present in fixture or click create new customer button.
      *
      * @param CustomerFixture $customer
      * @return void

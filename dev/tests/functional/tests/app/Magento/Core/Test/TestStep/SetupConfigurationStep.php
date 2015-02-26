@@ -11,33 +11,33 @@ use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class SetupConfigurationStep
- * Setup configuration using handler
+ * Setup configuration using handler.
  */
 class SetupConfigurationStep implements TestStepInterface
 {
     /**
-     * Factory for Fixtures
+     * Factory for Fixtures.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Configuration data
+     * Configuration data.
      *
      * @var string
      */
     protected $configData;
 
     /**
-     * Rollback
+     * Rollback.
      *
      * @var bool
      */
     protected $rollback;
 
     /**
-     * Preparing step properties
+     * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
@@ -52,7 +52,7 @@ class SetupConfigurationStep implements TestStepInterface
     }
 
     /**
-     * Set config
+     * Set config.
      *
      * @return array
      */

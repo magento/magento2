@@ -10,26 +10,26 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Adminhtml sales order billing address block
+ * Adminhtml sales order billing address block.
  */
 class Address extends Form
 {
     /**
-     * Selector for existing customer addresses dropdown
+     * Selector for existing customer addresses dropdown.
      *
      * @var string
      */
     protected $existingAddressSelector = '#order-billing_address_customer_address_id';
 
     /**
-     * 'Save in address book' checkbox
+     * 'Save in address book' checkbox.
      *
      * @var string
      */
     protected $saveInAddressBook = '#order-billing_address_save_in_address_book';
 
     /**
-     * Get existing customer addresses
+     * Get existing customer addresses.
      *
      * @return array
      */
@@ -39,7 +39,7 @@ class Address extends Form
     }
 
     /**
-     * Check the 'Save in address book' checkbox in billing address
+     * Check the 'Save in address book' checkbox in billing address.
      *
      * @param string $saveAddress
      * @return void

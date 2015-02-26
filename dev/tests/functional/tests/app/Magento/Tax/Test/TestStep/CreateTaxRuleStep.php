@@ -10,26 +10,26 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Creating tax rule
+ * Creating tax rule.
  */
 class CreateTaxRuleStep implements TestStepInterface
 {
     /**
-     * Tax Rule
+     * Tax Rule.
      *
      * @var string
      */
     protected $taxRule;
 
     /**
-     * Factory for Fixture
+     * Factory for Fixture.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Preparing step properties
+     * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
@@ -42,7 +42,7 @@ class CreateTaxRuleStep implements TestStepInterface
     }
 
     /**
-     * Create tax rule
+     * Create tax rule.
      *
      * @return array
      */

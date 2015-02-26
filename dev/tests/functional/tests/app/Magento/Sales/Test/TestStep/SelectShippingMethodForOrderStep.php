@@ -10,20 +10,20 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class SelectShippingMethodForOrderStep
+ * Class SelectShippingMethodForOrderStep.
  * Select Shipping data
  */
 class SelectShippingMethodForOrderStep implements TestStepInterface
 {
     /**
-     * Sales order create index page
+     * Sales order create index page.
      *
      * @var OrderCreateIndex
      */
     protected $orderCreateIndex;
 
     /**
-     * Shipping
+     * Shipping.
      *
      * @var array
      */
@@ -41,7 +41,7 @@ class SelectShippingMethodForOrderStep implements TestStepInterface
     }
 
     /**
-     * Fill Shipping Data
+     * Fill Shipping Data.
      *
      * @return array
      */
