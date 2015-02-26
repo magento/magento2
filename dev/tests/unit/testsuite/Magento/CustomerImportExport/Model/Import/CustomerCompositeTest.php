@@ -66,7 +66,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_addressFactory;
 
     /**
-     * @var \Magento\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfigMock;
 
@@ -102,7 +102,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $translateInline = $this->getMock('\Magento\Framework\Translate\InlineInterface', [], [], '', false);
         $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
 
@@ -110,11 +109,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\Helper\Context', ['getTranslateInline'], [], '', false);
         $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
 
-        $data = [
-            'context' => $context,
-            'locale' => $this->getMock('Magento\Framework\Locale', [], [], '', false),
-            'dateModel' => $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false),
-        ];
         $this->_string = new \Magento\Framework\Stdlib\String();
 
         $this->_importFactory = $this->getMock(
