@@ -174,7 +174,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                         __('Attribute "%1" is required.', $attribute)
                     );
                 } else {
-                    throw new \Magento\Framework\Exception\LocalizedException($error);
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
             }
         }

@@ -249,7 +249,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     public function &getFile()
     {
         if (!$this->exists()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__("The backup file does not exist."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
         return $this->varDirectory->read($this->_getFilePath());
@@ -264,7 +264,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     public function deleteFile()
     {
         if (!$this->exists()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__("The backup file does not exist."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
         $this->varDirectory->delete($this->_getFilePath());

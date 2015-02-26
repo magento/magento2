@@ -153,7 +153,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new \Magento\Framework\Exception\LocalizedException($error);
+                            throw new \Magento\Framework\Exception\LocalizedException(__($error));
                         }
                     }
                 }

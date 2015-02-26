@@ -115,7 +115,7 @@ class Locale extends \Magento\Framework\App\Config\Value
             }
         }
         if ($exceptions) {
-            throw new \Magento\Framework\Exception\LocalizedException(join("\n", $exceptions));
+            throw new \Magento\Framework\Exception\LocalizedException(__(join("\n", $exceptions)));
         }
 
         return $this;
