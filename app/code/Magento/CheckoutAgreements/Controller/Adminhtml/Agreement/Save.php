@@ -30,7 +30,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
                     $this->_redirect('checkout/*/');
                     return;
                 }
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));

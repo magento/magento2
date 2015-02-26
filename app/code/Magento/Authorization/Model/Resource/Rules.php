@@ -73,7 +73,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Authorization\Model\Rules $rule
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
@@ -115,7 +115,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $adapter->commit();
             $this->_aclCache->clean();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $adapter->rollBack();
             throw $e;
         } catch (\Exception $e) {

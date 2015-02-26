@@ -8,7 +8,7 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Backend\App\Action;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
-use Magento\Integration\Exception as IntegrationException;
+use Magento\Framework\Exception\IntegrationException;
 
 class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
 {

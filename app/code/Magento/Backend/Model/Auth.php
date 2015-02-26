@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
+
 /**
  * Backend Auth model
  */
@@ -73,7 +76,7 @@ class Auth
      *
      * @param \Magento\Backend\Model\Auth\StorageInterface $storage
      * @return $this
-     * @throw \Magento\Backend\Model\Auth\Exception if $storage is not correct
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function setAuthStorage($storage)
     {
@@ -134,7 +137,7 @@ class Auth
      * @param string $username
      * @param string $password
      * @return void
-     * @throws \Exception|\Magento\Backend\Model\Auth\Plugin\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function login($username, $password)
     {
@@ -158,13 +161,13 @@ class Auth
             if (!$this->getAuthStorage()->getUser()) {
                 self::throwException(__('Please correct the user name or password.'));
             }
-        } catch (\Magento\Backend\Model\Auth\Plugin\Exception $e) {
+        } catch (PluginAuthenticationException $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
             );
             throw $e;
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
@@ -197,16 +200,15 @@ class Auth
      * Throws specific Backend Authentication \Exception
      *
      * @param string $msg
-     * @param string $code
      * @return void
-     * @throws \Magento\Backend\Model\Auth\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      * @static
      */
-    public static function throwException($msg = null, $code = null)
+    public static function throwException($msg = null)
     {
         if (is_null($msg)) {
             $msg = __('Authentication error occurred.');
         }
-        throw new \Magento\Backend\Model\Auth\Exception($msg, $code);
+        throw new AuthenticationException($msg);
     }
 }

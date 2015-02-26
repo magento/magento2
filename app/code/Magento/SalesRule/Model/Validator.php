@@ -488,12 +488,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $key
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRuleItemTotalsInfo($key)
     {
         if (empty($this->_rulesItemTotals[$key])) {
-            throw new \Magento\Framework\Model\Exception(__('Item totals are not set for the rule.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Item totals are not set for the rule.'));
         }
 
         return $this->_rulesItemTotals[$key];
