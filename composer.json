@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta8",
+    "version": "0.42.0-beta9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -71,6 +71,7 @@
         "magento/module-checkout-agreements": "self.version",
         "magento/module-cms": "self.version",
         "magento/module-cms-url-rewrite": "self.version",
+        "magento/module-config": "self.version",
         "magento/module-configurable-import-export": "self.version",
         "magento/module-configurable-product": "self.version",
         "magento/module-contact": "self.version",
@@ -131,6 +132,7 @@
         "magento/module-url-rewrite": "self.version",
         "magento/module-user": "self.version",
         "magento/module-usps": "self.version",
+        "magento/module-variable": "self.version",
         "magento/module-version": "self.version",
         "magento/module-webapi": "self.version",
         "magento/module-weee": "self.version",

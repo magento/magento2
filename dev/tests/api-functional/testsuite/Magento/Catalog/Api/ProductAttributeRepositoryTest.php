@@ -98,7 +98,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         } catch (\SoapFault $e) {
             //Expects soap exception
         } catch (\Exception $e) {
-            $this->assertEquals(HTTPExceptionCodes::HTTP_INTERNAL_ERROR, $e->getCode());
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
 

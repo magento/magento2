@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +10,7 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Framework\Exception\IntegrationException;
 
 class DeleteTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 {
@@ -194,7 +194,7 @@ class DeleteTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTe
         // Use real translate model
         $this->_translateModelMock = null;
         $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
-        $invalidIdException = new \Magento\Integration\Exception($exceptionMessage);
+        $invalidIdException = new IntegrationException($exceptionMessage);
         $this->_integrationSvcMock->expects(
             $this->once()
         )->method(

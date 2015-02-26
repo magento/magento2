@@ -7,8 +7,8 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var _       = require('underscore'),
-        path    = require('path');
+    var _ = require('underscore'),
+        path = require('path');
 
     require('./dev/tools/grunt/tasks/mage-minify')(grunt);
     require('time-grunt')(grunt);
@@ -33,15 +33,20 @@ module.exports = function (grunt) {
             grunt.log.subhead('I\'m default task and at the moment I\'m empty, sorry :/');
         },
 
+        /**
+         * Production preparation task.
+         */
         prod: function (component) {
             if (component === 'setup') {
                 grunt.task.run([
                     'less:' + component,
                     'autoprefixer:' + component,
                     'cssmin:' + component,
-                    'concat:' + component
+                    'usebanner:' + component
                 ]);
-            } else if (typeof component === 'undefined') {
+            }
+
+            if (typeof component === 'undefined') {
                 grunt.log.subhead('Tip: Please make sure that u specify prod subtask. By default prod task do nothing');
             }
         },
@@ -86,6 +91,12 @@ module.exports = function (grunt) {
 
         'legacy-build': [
             'mage-minify:legacy'
+        ],
+
+        'documentation-banners': [
+            'usebanner:documentationCss',
+            'usebanner:documentationLess',
+            'usebanner:documentationHtml'
         ]
     }, function (task, name) {
         grunt.registerTask(name, task);

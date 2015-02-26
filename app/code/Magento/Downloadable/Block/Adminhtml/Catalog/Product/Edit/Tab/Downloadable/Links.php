@@ -64,7 +64,7 @@ class Links extends \Magento\Backend\Block\Template
     protected $_link;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_sourceModel;
 
@@ -84,7 +84,7 @@ class Links extends \Magento\Backend\Block\Template
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\Config\Source\Yesno $sourceModel
+     * @param \Magento\Config\Model\Config\Source\Yesno $sourceModel
      * @param \Magento\Downloadable\Model\Link $link
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Backend\Model\UrlFactory $urlFactory
@@ -97,7 +97,7 @@ class Links extends \Magento\Backend\Block\Template
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\Config\Source\Yesno $sourceModel,
+        \Magento\Config\Model\Config\Source\Yesno $sourceModel,
         \Magento\Downloadable\Model\Link $link,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Backend\Model\UrlFactory $urlFactory,

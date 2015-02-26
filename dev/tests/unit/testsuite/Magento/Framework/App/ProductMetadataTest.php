@@ -34,4 +34,10 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
         $productEdition = $this->productMetadata->getEdition();
         $this->assertNotEmpty($productEdition, 'Empty product edition');
     }
+
+    public function testGetName()
+    {
+        $productName = $this->productMetadata->getName();
+        $this->assertNotEmpty($productName, 'Empty product name');
+    }
 }
