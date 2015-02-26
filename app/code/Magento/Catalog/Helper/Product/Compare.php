@@ -107,7 +107,7 @@ class Compare extends \Magento\Framework\Url\Helper
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Core\Helper\PostData $coreHelper
+     * @param \Magento\Framework\Data\PostHelper $coreHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,7 +120,7 @@ class Compare extends \Magento\Framework\Url\Helper
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Core\Helper\PostData $coreHelper
+        \Magento\Framework\Data\PostHelper $coreHelper
     ) {
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;

@@ -37,7 +37,8 @@ if ($product->isSaleable()) {
     $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
         $product,
         ['_query' => [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->helper('Magento\Core\Helper\PostData')->getEncodedUrl(
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                $this->helper('Magento\Framework\Data\PostHelper')->getEncodedUrl(
                     $addToCartUrlGenerator->getAddToCartUrl($product)
                 ),
         ]]

@@ -54,7 +54,7 @@ class PostDataTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrentUrl')
             ->will($this->returnValue($url . 'for_uenc'));
 
-        $model = new \Magento\Core\Helper\PostData($contextMock);
+        $model = new \Magento\Framework\Data\PostHelper($contextMock);
 
         $actual = $model->getPostData($url, $product);
         $this->assertEquals($expected, $actual);

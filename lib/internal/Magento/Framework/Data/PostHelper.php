@@ -7,9 +7,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Helper;
+namespace Magento\Framework\Data;
 
-class PostData extends \Magento\Framework\App\Helper\AbstractHelper
+class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * get data for post by javascript in format acceptable to $.mage.dataPost widget
