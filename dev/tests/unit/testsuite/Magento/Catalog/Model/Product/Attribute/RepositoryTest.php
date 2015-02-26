@@ -81,7 +81,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 [
                     'populate',
                     'setAttributeId',
-                    '__wakeup'
+                    '__wakeup',
                 ],
                 [],
                 '',
@@ -93,6 +93,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->eavAttributeRepositoryMock =
             $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock->expects($this->any())->method('getEntityType')
+            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->validatorFactoryMock = $this->getMock(
             'Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory',
             [],
@@ -112,7 +114,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'getItems',
                     'getSearchCriteria',
                     'getTotalCount',
-                    '__wakeup'
+                    '__wakeup',
                 ],
                 [],
                 '',
@@ -189,9 +191,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
-            ->with(
-                \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID
-            )
+            ->with(4)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())

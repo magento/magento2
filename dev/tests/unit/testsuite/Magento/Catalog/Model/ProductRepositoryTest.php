@@ -61,6 +61,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $searchResultsBuilderMock;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eavConfigMock;
+
+    /**
      * @var array data to create product
      */
     protected $productData = [
@@ -114,6 +119,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock->expects($this->any())->method('getEntityType')
+            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->objectManager = new ObjectManager($this);
 
         $this->model = $this->objectManager->getObject(
@@ -126,7 +134,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'metadataServiceInterface' => $this->metadataServiceMock,
-                'searchResultsBuilder' => $this->searchResultsBuilderMock
+                'searchResultsBuilder' => $this->searchResultsBuilderMock,
+                'eavConfig' => $this->eavConfigMock,
             ]
         );
     }
@@ -392,7 +401,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->filterBuilderMock->expects($this->once())->method('setValue')
-            ->with(\Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+            ->with(4)
             ->willReturn($this->filterBuilderMock);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('addFilter')->with([$filterMock])
             ->willReturn($searchCriteriaBuilderMock);
@@ -455,44 +464,44 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'identifier' => 'test-sku',
                 'editMode' => false,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 25,
                 'editMode' => false,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 25,
                 'editMode' => true,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 'test-sku',
                 'editMode' => true,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 25,
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => $anyObject,
             ],
             [
                 'identifier' => 'test-sku',
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => $anyObject,
             ],
             [
                 'identifier' => 25,
                 'editMode' => false,
-                'storeId' => $anyObject
+                'storeId' => $anyObject,
             ],
             [
 
                 'identifier' => 'test-sku',
                 'editMode' => false,
-                'storeId' => $anyObject
-            ]
+                'storeId' => $anyObject,
+            ],
         ];
     }
 }
