@@ -35,7 +35,7 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $arguments = []
     ) {
-        parent::__construct($resource, $jsonHelper, $arguments);
+        parent::__construct($resource, $jsonHelper);
 
         if (isset($arguments['entity_type'])) {
             $this->_entityType = $arguments['entity_type'];
