@@ -308,7 +308,7 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Get customer id
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerId();
 
