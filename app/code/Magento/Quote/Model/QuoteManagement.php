@@ -247,7 +247,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param array $orderData
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|void
      * @throws \Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function submit(QuoteEntity $quote, $orderData = [])
     {
@@ -292,7 +292,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param array $orderData
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object
      * @throws \Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {

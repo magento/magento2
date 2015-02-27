@@ -212,8 +212,8 @@ class SetupUtil
      */
     protected function setConfig($configData)
     {
-        /** @var \Magento\Core\Model\Resource\Config $config */
-        $config = $this->objectManager->get('Magento\Core\Model\Resource\Config');
+        /** @var \Magento\Config\Model\Resource\Config $config */
+        $config = $this->objectManager->get('Magento\Config\Model\Resource\Config');
         foreach ($configData as $path => $value) {
             if ($path == Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS) {
                 $value = $this->productTaxClasses[$value];

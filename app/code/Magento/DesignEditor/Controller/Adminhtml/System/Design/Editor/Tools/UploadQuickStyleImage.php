@@ -6,7 +6,7 @@
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 class UploadQuickStyleImage extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools
 {

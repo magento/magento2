@@ -6,6 +6,9 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -200,7 +203,11 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
                 ->method('get')->with('Magento\Indexer\Model\IndexerRegistry')
                 ->will($this->returnValue($this->indexReg));
             $indexerInterface = $this->getMockForAbstractClass(
-                'Magento\Indexer\Model\IndexerInterface', ['setScheduled'], '', false);
+                'Magento\Indexer\Model\IndexerInterface',
+                ['setScheduled'],
+                '',
+                false
+            );
             $this->indexReg->expects($this->any())
                 ->method('get')->with(1)
                 ->will($this->returnValue($indexerInterface));
@@ -249,7 +256,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
             ],
             'set3' => [
                 'idexers' => [1],
-                "exception" => new \Magento\Framework\Model\Exception(),
+                "exception" => new \Magento\Framework\Exception\LocalizedException(__('')),
                 "expectsException" => [0, 0, 1]
             ],
             'set4' => [
