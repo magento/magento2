@@ -857,7 +857,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @param string[] $productOptions
      * @return $this
      */
-    public function setProductOptions($productOptions);
+    public function setProductOptions(array $productOptions = null);
 
     /**
      * Gets the product type for the order item.
@@ -1068,7 +1068,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @param \Magento\Sales\Api\Data\OrderItemInterface $parentItem
      * @return $this
      */
-    public function setParentItem($parentItem);
+    public function setParentItem(\Magento\Sales\Api\Data\OrderItemInterface $parentItem);
 
     /**
      * Sets the updated-at timestamp for the order item.
