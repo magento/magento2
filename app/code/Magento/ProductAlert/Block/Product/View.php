@@ -23,7 +23,7 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\Data\PostHelper
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $coreHelper;
 
@@ -31,14 +31,14 @@ class View extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\ProductAlert\Helper\Data $helper
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\PostHelper $coreHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $coreHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\ProductAlert\Helper\Data $helper,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\PostHelper $coreHelper,
+        \Magento\Framework\Data\Helper\PostHelper $coreHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);

@@ -32,7 +32,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Data\PostHelper $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
@@ -45,7 +45,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Data\PostHelper $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,

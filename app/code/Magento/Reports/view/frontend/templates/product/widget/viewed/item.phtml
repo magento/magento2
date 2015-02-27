@@ -51,7 +51,7 @@ $rating = 'short';
                                     <span><?php echo __('Add to Cart') ?></span>
                                 </button>
                             <?php else: ?>
-                                <?php $postDataHelper = $this->helper('Magento\Framework\Data\PostHelper');
+                                <?php $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($item), ['product' => $item->getEntityId()])
                                 ?>
                                 <button class="action tocart"

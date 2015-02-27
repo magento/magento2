@@ -113,7 +113,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Data\PostHelper
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
 
@@ -124,7 +124,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param ToolbarModel $toolbarModel
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
-     * @param \Magento\Framework\Data\PostHelper $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
@@ -134,7 +134,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         ToolbarModel $toolbarModel,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Catalog\Helper\Product\ProductList $productListHelper,
-        \Magento\Framework\Data\PostHelper $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = []
     ) {
         $this->_catalogSession = $catalogSession;

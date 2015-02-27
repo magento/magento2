@@ -21,7 +21,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->postHelper = $this->getMock(
-            'Magento\Framework\Data\PostHelper',
+            'Magento\Framework\Data\Helper\PostHelper',
             [],
             [],
             '',

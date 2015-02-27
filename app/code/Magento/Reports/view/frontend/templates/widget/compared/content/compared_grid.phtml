@@ -76,7 +76,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                                         </button>
                                                     <?php else: ?>
                                                         <?php
-                                                            $postDataHelper = $this->helper('Magento\Framework\Data\PostHelper');
+                                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                                             $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                         ?>
                                                         <button class="action tocart primary"

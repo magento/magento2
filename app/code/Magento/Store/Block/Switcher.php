@@ -20,7 +20,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
     protected $_storeInUrl;
 
     /**
-     * @var \Magento\Framework\Data\PostHelper
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
 
@@ -28,12 +28,12 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Constructs
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Data\PostHelper $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Data\PostHelper $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = []
     ) {
         $this->_postDataHelper = $postDataHelper;

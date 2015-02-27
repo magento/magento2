@@ -17,7 +17,7 @@ class Currency extends \Magento\Framework\View\Element\Template
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Framework\Data\PostHelper
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
 
@@ -29,14 +29,14 @@ class Currency extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Data\PostHelper $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Data\PostHelper $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = []
     ) {

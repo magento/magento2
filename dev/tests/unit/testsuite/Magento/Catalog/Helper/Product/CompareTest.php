@@ -27,7 +27,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Data\PostHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Helper\PostHelper | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $postDataHelper;
 
@@ -69,7 +69,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlEncoder')
             ->will($this->returnValue($this->urlEncoder));
         $this->postDataHelper = $this->getMock(
-            'Magento\Framework\Data\PostHelper',
+            'Magento\Framework\Data\Helper\PostHelper',
             ['getPostData'],
             [],
             '',

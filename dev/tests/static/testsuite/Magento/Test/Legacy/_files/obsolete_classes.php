@@ -1384,7 +1384,7 @@ return [
     ['Magento\Core\Helper\Http'],
     ['Magento\Core\Helper\Theme', 'Magento\Theme\Helper\Theme'],
     ['Magento\Core\Helper\Url', 'Magento\Framework\Url\Helper'],
-    ['Magento\Core\Helper\PostData', 'Magento\Framework\Data\PostHelper'],
+    ['Magento\Core\Helper\PostData', 'Magento\Framework\Data\Helper\PostHelper'],
     ['Magento\Core\Model\Theme', 'Magento\Theme\Model\Theme'],
     ['Magento\Core\Model\Theme\Collection', 'Magento\Theme\Model\Theme\Collection'],
     ['Magento\Core\Model\Theme\Data', 'Magento\Theme\Model\Theme\Data'],

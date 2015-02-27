@@ -23,7 +23,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
     protected $layerMock;
 
     /**
-     * @var \Magento\Framework\Data\PostHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $postDataHelperMock;
 
@@ -56,7 +56,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->method($this->anything())
             ->will($this->returnValue($this->layerMock));
         $this->postDataHelperMock = $this->getMock(
-            'Magento\Framework\Data\PostHelper',
+            'Magento\Framework\Data\Helper\PostHelper',
             [],
             [],
             '',
