@@ -5,6 +5,8 @@
  */
 namespace Magento\MediaStorage\Model\File\Storage\Directory;
 
+use Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database;
+
 /**
  * Class DatabaseTest
  */
@@ -51,7 +53,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\Resource\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var Database |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceDirectoryDatabaseMock;
 

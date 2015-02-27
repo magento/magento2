@@ -398,6 +398,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue
      * @param array $productOptionValues Values for product option
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {

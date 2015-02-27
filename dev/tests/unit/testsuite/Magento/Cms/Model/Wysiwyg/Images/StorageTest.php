@@ -191,7 +191,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_uploaderFactoryMock = $this->getMock('Magento\MediaStorage\Model\File\UploaderFactory', [], [], '', false);
+        $this->_uploaderFactoryMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\UploaderFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_sessionMock = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
         $this->_backendUrlMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 

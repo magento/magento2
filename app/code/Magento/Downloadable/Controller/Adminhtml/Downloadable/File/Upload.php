@@ -42,7 +42,8 @@ class Upload extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Fil
 
             if (isset($result['file'])) {
                 $relativePath = rtrim($tmpPath, '/') . '/' . ltrim($result['file'], '/');
-                $this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage\Database')->saveFile($relativePath);
+                $this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage\Database')
+                    ->saveFile($relativePath);
             }
 
             $result['cookie'] = [

@@ -41,7 +41,10 @@ class Upload extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $uploader = $this->_objectManager->create('Magento\MediaStorage\Model\File\Uploader', ['fileId' => 'image']);
+            $uploader = $this->_objectManager->create(
+                'Magento\MediaStorage\Model\File\Uploader',
+                ['fileId' => 'image']
+            );
             $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
             /** @var \Magento\Framework\Image\Adapter\AdapterInterface $imageAdapter */
             $imageAdapter = $this->_objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
