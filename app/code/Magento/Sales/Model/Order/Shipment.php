@@ -540,6 +540,14 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setPackages(array $packages = null)
+    {
+        return $this->setData(ShipmentInterface::PACKAGES, $packages);
+    }
+
+    /**
      * Returns items
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemInterface[]
@@ -784,14 +792,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function setUpdatedAt($timestamp)
     {
         return $this->setData(ShipmentInterface::UPDATED_AT, $timestamp);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPackages(array $packages = null)
-    {
-        return $this->setData(ShipmentInterface::PACKAGES, $packages);
     }
     //@codeCoverageIgnoreEnd
 }

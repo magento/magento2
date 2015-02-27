@@ -1954,6 +1954,14 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setItems($items)
+    {
+        return $this->setData(ApiOrderInterface::ITEMS, $items);
+    }
+
+    /**
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface[]
      */
     public function getPayments()
@@ -1968,6 +1976,14 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setPayments(array $payments = null)
+    {
+        return $this->setData(ApiOrderInterface::PAYMENTS, $payments);
+    }
+
+    /**
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[]
      */
     public function getAddresses()
@@ -1979,6 +1995,14 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             );
         }
         return $this->getData(ApiOrderInterface::ADDRESSES);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAddresses(array $addresses = null)
+    {
+        return $this->setData(ApiOrderInterface::ADDRESSES, $addresses);
     }
 
     /**
@@ -3285,6 +3309,14 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         return $this->getData(ApiOrderInterface::STATUS_HISTORIES);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatusHistories(array $statusHistories = null)
+    {
+        return $this->setData(ApiOrderInterface::STATUS_HISTORIES, $statusHistories);
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
@@ -4332,38 +4364,6 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     public function setBaseShippingInclTax($amount)
     {
         return $this->setData(ApiOrderInterface::BASE_SHIPPING_INCL_TAX, $amount);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setItems(array $items = null)
-    {
-        return $this->setData(ApiOrderInterface::ITEMS, $items);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPayments(array $payments = null)
-    {
-        return $this->setData(ApiOrderInterface::PAYMENTS, $payments);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAddresses(array $addresses = null)
-    {
-        return $this->setData(ApiOrderInterface::ADDRESSES, $addresses);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setStatusHistories(array $statusHistories = null)
-    {
-        return $this->setData(ApiOrderInterface::STATUS_HISTORIES, $statusHistories);
     }
     //@codeCoverageIgnoreEnd
 }

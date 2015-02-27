@@ -516,11 +516,27 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getItems();
 
     /**
+     * Sets the items in the invoice.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets the comments, if any, for the invoice.
      *
      * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]|null Array of any invoice comments. Otherwise, null.
      */
     public function getComments();
+
+    /**
+     * Sets the comments, if any, for the invoice.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments($comments);
 
     /**
      * Sets the updated-at timestamp for the invoice.
@@ -849,20 +865,4 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setDiscountDescription($description);
-
-    /**
-     * Sets the items in the invoice.
-     *
-     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
-     * @return $this
-     */
-    public function setItems($items);
-
-    /**
-     * Sets the comments, if any, for the invoice.
-     *
-     * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[] $comments
-     * @return $this
-     */
-    public function setComments(array $comments = null);
 }

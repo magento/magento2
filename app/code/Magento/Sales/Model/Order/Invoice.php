@@ -804,6 +804,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setItems($items)
+    {
+        return $this->setData(InvoiceInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns base_currency_code
      *
      * @return string
@@ -1224,6 +1232,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * {@inheritdoc}
      */
+    public function setComments($comments)
+    {
+        return $this->setData(InvoiceInterface::COMMENTS, $comments);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setUpdatedAt($timestamp)
     {
         return $this->setData(InvoiceInterface::UPDATED_AT, $timestamp);
@@ -1547,22 +1563,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function setDiscountDescription($description)
     {
         return $this->setData(InvoiceInterface::DISCOUNT_DESCRIPTION, $description);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setItems($items)
-    {
-        return $this->setData(InvoiceInterface::ITEMS, $items);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setComments(array $comments = null)
-    {
-        return $this->setData(InvoiceInterface::COMMENTS, $comments);
     }
     //@codeCoverageIgnoreEnd
 }

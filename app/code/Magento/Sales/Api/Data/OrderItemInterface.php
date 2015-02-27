@@ -852,6 +852,14 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getProductOptions();
 
     /**
+     * Sets the product options for the order item.
+     *
+     * @param string[] $productOptions
+     * @return $this
+     */
+    public function setProductOptions($productOptions);
+
+    /**
      * Gets the product type for the order item.
      *
      * @return string Product type.
@@ -1055,6 +1063,14 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getParentItem();
 
     /**
+     * Sets the parent item
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $parentItem
+     * @return $this
+     */
+    public function setParentItem($parentItem);
+
+    /**
      * Sets the updated-at timestamp for the order item.
      *
      * @param string $timestamp
@@ -1117,14 +1133,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setProductType($productType);
-
-    /**
-     * Sets the product options for the order item.
-     *
-     * @param string[] $productOptions
-     * @return $this
-     */
-    public function setProductOptions(array $productOptions = null);
 
     /**
      * Sets the weight for the order item.
@@ -1789,12 +1797,4 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition);
-
-    /**
-     * Sets the parent item
-     *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $parentItem
-     * @return $this
-     */
-    public function setParentItem($parentItem);
 }
