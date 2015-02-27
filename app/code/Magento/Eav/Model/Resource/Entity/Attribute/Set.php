@@ -13,6 +13,11 @@ namespace Magento\Eav\Model\Resource\Entity\Attribute;
 class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
+     * EAV cache ids
+     */
+    const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
+
+    /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory
      */
     protected $_attrGroupFactory;
@@ -23,18 +28,34 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $eavConfig;
 
     /**
+     * @var \Magento\Framework\App\CacheInterface
+     */
+    protected $_cache;
+
+    /**
+     * @var \Magento\Framework\App\Cache\StateInterface
+     */
+    protected $_cacheState;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Framework\App\Cache\StateInterface $cacheState
     ) {
         parent::__construct($resource);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
+        $this->_cache = $cache;
+        $this->_cacheState = $cacheState;
     }
 
     /**
@@ -138,11 +159,22 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSetInfo(array $attributeIds, $setId = null)
     {
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
         $adapter = $this->_getReadAdapter();
         $setInfo = [];
-        $attributeToSetInfo = [];
+        $setInfoData = [];
 
-        if (count($attributeIds) > 0) {
+        if (
+            $this->_cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)
+            && ($cache = $this->_cache->load($cacheKey))
+        ) {
+            $setInfoData = unserialize($cache);
+            foreach ($attributeIds as $attributeId) {
+                $setInfo[$attributeId] = isset(
+                    $setInfoData[$attributeId]
+                ) ? $setInfoData[$attributeId] : [];
+            }
+        } else {
             $select = $adapter->select()->from(
                 ['entity' => $this->getTable('eav_entity_attribute')],
                 ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
@@ -150,9 +182,6 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ['attribute_group' => $this->getTable('eav_attribute_group')],
                 'entity.attribute_group_id = attribute_group.attribute_group_id',
                 ['group_sort_order' => 'sort_order']
-            )->where(
-                'entity.attribute_id IN (?)',
-                $attributeIds
             );
             $bind = [];
             if (is_numeric($setId)) {
@@ -167,14 +196,25 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     'group_sort' => $row['group_sort_order'],
                     'sort' => $row['sort_order'],
                 ];
-                $attributeToSetInfo[$row['attribute_id']][$row['attribute_set_id']] = $data;
+                $setInfoData[$row['attribute_id']][$row['attribute_set_id']] = $data;
             }
-        }
 
-        foreach ($attributeIds as $atttibuteId) {
-            $setInfo[$atttibuteId] = isset(
-                $attributeToSetInfo[$atttibuteId]
-            ) ? $attributeToSetInfo[$atttibuteId] : [];
+            if ($this->_cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)) {
+                $this->_cache->save(
+                    serialize($setInfoData),
+                    $cacheKey,
+                    [
+                        \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    ]
+                );
+            }
+
+            foreach ($attributeIds as $attributeId) {
+                $setInfo[$attributeId] = isset(
+                    $setInfoData[$attributeId]
+                ) ? $setInfoData[$attributeId] : [];
+            }
         }
 
         return $setInfo;
