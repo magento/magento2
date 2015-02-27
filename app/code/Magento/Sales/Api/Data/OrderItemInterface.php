@@ -1068,7 +1068,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @param \Magento\Sales\Api\Data\OrderItemInterface $parentItem
      * @return $this
      */
-    public function setParentItem(\Magento\Sales\Api\Data\OrderItemInterface $parentItem);
+    public function setParentItem($parentItem);
 
     /**
      * Sets the updated-at timestamp for the order item.

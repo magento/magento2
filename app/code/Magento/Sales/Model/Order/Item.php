@@ -150,10 +150,10 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     /**
      * Set parent item
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @param Item $item
      * @return $this
      */
-    public function setParentItem(\Magento\Sales\Api\Data\OrderItemInterface $item)
+    public function setParentItem($item)
     {
         if ($item) {
             $this->setData(OrderItemInterface::PARENT_ITEM, $item);
