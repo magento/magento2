@@ -70,13 +70,6 @@ class Config
     protected $_isCacheEnabled = null;
 
     /**
-     * Array of attributes objects used in collections
-     *
-     * @var array
-     */
-    protected $_collectionAttributes = [];
-
-    /**
      * @var \Magento\Framework\App\CacheInterface
      */
     protected $_cache;
@@ -306,7 +299,7 @@ class Config
     /**
      * Get entity type object by entity type code/identifier
      *
-     * @param int|string $code
+     * @param int|string|Type $code
      * @return Type
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -430,6 +423,7 @@ class Config
         if (!$attribute) {
             // TODO: refactor wrong method usage in: addAttributeToSelect, joinAttribute
             $entityType = $this->getEntityType($entityType);
+            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             $attribute = $this->_universalFactory->create($entityType->getAttributeModel());
             $attribute->setAttributeCode($code);
             $entity = $entityType->getEntity();
@@ -511,10 +505,10 @@ class Config
     }
 
     /**
-     * Get attribute object for colection usage
+     * Get attribute object for collection usage
      *
      * @param   mixed $entityType
-     * @param   string $attribute
+     * @param   int|string $attribute
      * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|null
      */
     public function getCollectionAttribute($entityType, $attribute)
@@ -536,54 +530,6 @@ class Config
         }
 
         return $this->getAttribute($entityType, $attribute);
-    }
-
-    /**
-     * Prepare attributes for usage in EAV collection
-     *
-     * @param   mixed $entityType
-     * @param   array $attributes
-     * @return $this
-     */
-    public function loadCollectionAttributes($entityType, $attributes)
-    {
-        $entityType = $this->getEntityType($entityType);
-        $entityTypeCode = $entityType->getEntityTypeCode();
-
-        if (!isset($this->_collectionAttributes[$entityTypeCode])) {
-            $this->_collectionAttributes[$entityTypeCode] = [];
-        }
-        $loadedAttributes = array_keys($this->_collectionAttributes[$entityTypeCode]);
-        $attributes = array_diff($attributes, $loadedAttributes);
-
-        foreach ($attributes as $k => $attribute) {
-            if (is_numeric($attribute)) {
-                $attribute = $this->_getAttributeReference($attribute, $entityTypeCode);
-            }
-            $attributeKey = $this->_getAttributeKey($entityTypeCode, $attribute);
-            if ($this->_load($attributeKey)) {
-                unset($attributes[$k]);
-            }
-        }
-
-        if (empty($attributes)) {
-            return $this;
-        }
-        $attributeCollection = $entityType->getEntityAttributeCollection();
-        $attributesInfo = $this->_universalFactory->create(
-            $attributeCollection
-        )->useLoadDataFields()->setEntityTypeFilter(
-            $entityType
-        )->setCodeFilter(
-            $attributes
-        )->getData();
-
-        foreach ($attributesInfo as $attributeData) {
-            $attribute = $this->_createAttribute($entityType, $attributeData);
-            $this->_collectionAttributes[$entityTypeCode][$attribute->getAttributeCode()] = $attribute;
-        }
-
-        return $this;
     }
 
     /**

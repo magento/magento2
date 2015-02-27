@@ -454,7 +454,6 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     public function addAttributeToSelect($attribute, $joinType = false)
     {
         if (is_array($attribute)) {
-            $this->_eavConfig->loadCollectionAttributes($this->getEntity()->getType(), $attribute);
             foreach ($attribute as $a) {
                 $this->addAttributeToSelect($a, $joinType);
             }
