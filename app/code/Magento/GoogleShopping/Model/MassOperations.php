@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleShopping\Model;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 use Magento\GoogleShopping\Model\Resource\Item\Collection as ItemCollection;
 
 /**

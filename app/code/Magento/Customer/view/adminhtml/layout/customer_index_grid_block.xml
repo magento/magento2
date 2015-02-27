@@ -115,7 +115,7 @@
                             <argument name="header" xsi:type="string" translate="true">Country</argument>
                             <argument name="index" xsi:type="string">billing_country_id</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Backend\Model\Config\Source\Locale\Country"/>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Locale\Country"/>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_region">
@@ -138,7 +138,7 @@
                             <argument name="column_css_class" xsi:type="string">col-store</argument>
                             <argument name="header_css_class" xsi:type="string">col-store</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Backend\Model\Config\Source\Website\AdminOptionHash"/>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Website\AdminOptionHash"/>
                             <argument name="index" xsi:type="string">website_id</argument>
                         </arguments>
                     </block>

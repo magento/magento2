@@ -59,7 +59,7 @@ class Post extends \Magento\Review\Controller\Adminhtml\Product
                 }
 
                 return;
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('An error occurred while saving review.'));

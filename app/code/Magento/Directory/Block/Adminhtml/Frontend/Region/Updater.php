@@ -7,7 +7,7 @@ namespace Magento\Directory\Block\Adminhtml\Frontend\Region;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-class Updater extends \Magento\Backend\Block\System\Config\Form\Field
+class Updater extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var \Magento\Directory\Helper\Data

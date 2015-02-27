@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Customer password attribute backend
@@ -39,7 +39,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      *
      * @param \Magento\Framework\Object $object
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave($object)
     {
@@ -48,7 +48,9 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         $length = $this->string->strlen($password);
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
-                throw new Exception(__('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH));
+                throw new LocalizedException(
+                    __('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH)
+                );
             }
 
             if ($this->string->substr(
@@ -61,7 +63,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                 1
             ) == ' '
             ) {
-                throw new Exception(__('The password can not begin or end with a space.'));
+                throw new LocalizedException(__('The password can not begin or end with a space.'));
             }
 
             $object->setPasswordHash($object->hashPassword($password));

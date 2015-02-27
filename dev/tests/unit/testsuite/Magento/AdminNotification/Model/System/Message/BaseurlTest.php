@@ -66,7 +66,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_dataCollectionMock = $this->getMock(
-            'Magento\Core\Model\Resource\Config\Data\Collection',
+            'Magento\Config\Model\Resource\Config\Data\Collection',
             [],
             [],
             '',

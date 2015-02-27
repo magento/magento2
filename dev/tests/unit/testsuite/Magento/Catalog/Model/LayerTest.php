@@ -293,7 +293,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please correct the category.
      */
     public function testSetNewCurrentCategoryIfCategoryIsNotFound()
@@ -305,7 +305,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Must be category model instance or its id.
      */
     public function testSetCurrentCategoryInstanceOfException()
@@ -314,7 +314,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please correct the category.
      */
     public function testSetCurrentCategoryNotFoundException()
