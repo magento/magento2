@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="sitemap" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>XML Sitemap</label>
@@ -55,7 +55,7 @@
                 <label>Generation Settings</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="error_email" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Error Email Recipient</label>
@@ -63,11 +63,11 @@
                 </field>
                 <field id="error_email_identity" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Error Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="error_email_template" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Error Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="frequency" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Frequency</label>
@@ -92,7 +92,7 @@
                 <label>Search Engine Submission Settings</label>
                 <field id="submission_robots" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Submission to Robots.txt</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>

@@ -682,7 +682,7 @@ return [
     ['CONTEXT_AUTH', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_AUTH'],
     ['CONTEXT_CURRENCY', 'Magento\Customer\Helper\Data', 'Magento\Framework\App\Http\Context::CONTEXT_CURRENCY'],
     ['CONTEXT_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_GROUP'],
-    ['CONTEXT_STORE', 'Magento\Customer\Helper\Data', 'Magento\Framework\App\Http\Context::CONTEXT_STORE'],
+    ['CONTEXT_STORE', 'Magento\Customer\Helper\Data', 'Magento\Store\Model\StoreManagerInterface::CONTEXT_STORE'],
     ['DEBUG_CONNECT', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_CONNECT'],
     ['DEBUG_TRANSACTION', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_TRANSACTION'],
     ['DEBUG_QUERY', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_QUERY'],

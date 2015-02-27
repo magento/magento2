@@ -13,11 +13,6 @@ namespace Magento\Tax\Model\Resource;
 class TaxClass extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * Unique tax class and tax type title. Also used for error message text on save.
-     */
-    const UNIQUE_TAX_CLASS_MSG = 'Class name and class type';
-
-    /**
      * Resource initialization
      *
      * @return void
@@ -37,9 +32,7 @@ class TaxClass extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_uniqueFields = [
             [
                 'field' => ['class_type', 'class_name'],
-                'title' => __(
-                    self::UNIQUE_TAX_CLASS_MSG
-                ),
+                'title' => __('Class name and class type'),
             ],
         ];
         return $this;

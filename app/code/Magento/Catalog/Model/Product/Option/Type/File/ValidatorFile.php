@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -88,9 +89,12 @@ class ValidatorFile extends Validator
      * @param \Magento\Framework\Object $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_File_Transfer_Exception
+     * @throws \Magento\Framework\Validator\ValidatorException
+     * @throws \Magento\Catalog\Model\Product\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate($processingParams, $option)
     {
@@ -99,22 +103,24 @@ class ValidatorFile extends Validator
         try {
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
-                throw new RunValidationException();
+                throw new \Magento\Framework\Validator\ValidatorException(
+                    __('Validation failed. Required options were not filled or file was not uploaded.')
+                );
             }
 
             $fileInfo = $upload->getFileInfo($file)[$file];
             $fileInfo['title'] = $fileInfo['name'];
-        } catch (RunValidationException $r) {
-            throw $r;
+        } catch (\Magento\Framework\Validator\ValidatorException $e) {
+            throw $e;
         } catch (\Exception $e) {
             // when file exceeds the upload_max_filesize, $_FILES is empty
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
-                throw new LargeSizeException(
+                throw new \Magento\Framework\Exception\File\LargeSizeException(
                     __("The file you uploaded is larger than %1 Megabytes allowed by server", $value)
                 );
             } else {
-                throw new OptionRequiredException();
+                throw new ProductException(__('Option required.'));
             }
         }
 
@@ -182,10 +188,12 @@ class ValidatorFile extends Validator
             $errors = $this->getValidatorErrors($upload->getErrors(), $fileInfo, $option);
 
             if (count($errors) > 0) {
-                throw new Exception(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\File\ValidatorException(implode("\n", $errors));
             }
         } else {
-            throw new Exception(__('Please specify the product\'s required option(s).'));
+            throw new \Magento\Framework\Exception\File\ValidatorException(
+                __('Please specify the product\'s required option(s).')
+            );
         }
         return $userValue;
     }

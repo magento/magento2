@@ -115,7 +115,7 @@ class Store extends Action
                 ->setPath($filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->getAbsolutePath('backups'));
             $backupDb->createBackup($backup);
             $this->messageManager->addSuccess(__('The database was backed up.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             return false;
         } catch (\Exception $e) {

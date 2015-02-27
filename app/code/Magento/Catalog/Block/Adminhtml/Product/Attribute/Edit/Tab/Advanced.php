@@ -14,7 +14,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Eav\Helper\Data;
 
 class Advanced extends Generic

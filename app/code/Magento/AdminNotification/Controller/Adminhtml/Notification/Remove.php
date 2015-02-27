@@ -24,7 +24,7 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
             try {
                 $model->setIsRemove(1)->save();
                 $this->messageManager->addSuccess(__('The message has been removed.'));
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));

@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Module\DbVersionInfo;
 use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 
 class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
@@ -83,16 +84,15 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
 
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
-        $objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
 
         $this->controller = new ConsoleController(
             $this->consoleLogger,
             $this->options,
             $installerFactory,
             $this->maintenanceMode,
-            $objectManagerFactory,
-            $objectManagerFactory
+            $objectManagerProvider
         );
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $response);
@@ -166,6 +166,80 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->installer->expects($this->once())->method('installSchema');
         $this->installer->expects($this->once())->method('installDataFixtures');
         $this->controller->updateAction();
+    }
+
+    /**
+     * @param array $outdated
+     * @param array $expected
+     *
+     * @dataProvider dbStatusActionDataProvider
+     */
+    public function testDbStatusAction(array $outdated, array $expected)
+    {
+        $dbVersionInfo = $this->getMock('\Magento\Framework\Module\DbVersionInfo', [], [], '', false);
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with('Magento\Framework\Module\DbVersionInfo')
+            ->will($this->returnValue($dbVersionInfo));
+        $dbVersionInfo->expects($this->once())
+            ->method('getDbVersionErrors')
+            ->will($this->returnValue($outdated));
+        foreach ($expected as $at => $message) {
+            $this->consoleLogger->expects($this->at($at))
+                ->method('log')
+                ->with($this->matches($message));
+        }
+        $this->controller->dbStatusAction();
+    }
+
+    /**
+     * @return array
+     */
+    public function dbStatusActionDataProvider()
+    {
+        return [
+            'one outdated module' => [
+                [[
+                    DbVersionInfo::KEY_MODULE => 'Module_One',
+                    DbVersionInfo::KEY_TYPE => 'schema',
+                    DbVersionInfo::KEY_CURRENT => '1.0.0',
+                    DbVersionInfo::KEY_REQUIRED => '1.0.1',
+                ]],
+                [
+                    1 => '%wModule_One%wschema:%w1.0.0%w->%w1.0.1%w',
+                    2 => 'Run the "Update" command to update your DB schema and data'
+                ],
+            ],
+            'no outdated modules' => [
+                [],
+                [0 => 'All modules are up to date'],
+            ],
+            'one newer module' => [
+                [[
+                    DbVersionInfo::KEY_MODULE => 'Module_One',
+                    DbVersionInfo::KEY_TYPE => 'schema',
+                    DbVersionInfo::KEY_CURRENT => '1.0.1',
+                    DbVersionInfo::KEY_REQUIRED => '1.0.0',
+                ]],
+                [
+                    1 => '%wModule_One%wschema:%w1.0.1%w->%w1.0.0%w',
+                    2 => 'Some modules use code versions newer or older than the database. ' .
+                        'First update the module code, then run the "Update" command.'
+                ],
+            ],
+            'one none module' => [
+                [[
+                    DbVersionInfo::KEY_MODULE => 'Module_One',
+                    DbVersionInfo::KEY_TYPE => 'schema',
+                    DbVersionInfo::KEY_CURRENT => 'none',
+                    DbVersionInfo::KEY_REQUIRED => '1.0.0',
+                ]],
+                [
+                    1 => '%wModule_One%wschema:%wnone%w->%w1.0.0%w',
+                    2 => 'Run the "Update" command to update your DB schema and data'
+                ],
+            ]
+        ];
     }
 
     public function testInstallUserConfigAction()
