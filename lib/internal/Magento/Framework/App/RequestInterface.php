@@ -49,6 +49,22 @@ interface RequestInterface
     public function getParam($key, $defaultValue = null);
 
     /**
+     * Set params from key value array
+     *
+     * @param array $params
+     * @return $this
+     */
+    public function setParams(array $params);
+
+    /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getParams();
+
+
+    /**
      * Retrieve cookie value
      *
      * @param string|null $name
