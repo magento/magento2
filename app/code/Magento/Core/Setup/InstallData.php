@@ -21,7 +21,6 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $installer = $setup->createMigrationSetup();
         $setup->startSetup();
 
         /**
