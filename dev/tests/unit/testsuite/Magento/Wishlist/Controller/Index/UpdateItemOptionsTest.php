@@ -6,6 +6,9 @@
 
 namespace Magento\Wishlist\Controller\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -366,7 +369,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist_update_item', ['wishlist' => $wishlist, 'product' => $product, 'item' => $item])
             ->willReturn(true);
 
-        $exception = $this->getMock('Magento\Framework\Model\Exception', [], [], '', false);
+        $exception = $this->getMock('\Magento\Framework\Exception\LocalizedException', [], [], '', false);
         $this->messageManager
             ->expects($this->once())
             ->method('addSuccess')

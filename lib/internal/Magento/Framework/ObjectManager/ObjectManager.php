@@ -34,13 +34,13 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     /**
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
-     * @param array $sharedInstances
+     * @param array &$sharedInstances
      */
-    public function __construct(FactoryInterface $factory, ConfigInterface $config, array $sharedInstances = [])
+    public function __construct(FactoryInterface $factory, ConfigInterface $config, &$sharedInstances = [])
     {
         $this->_config = $config;
         $this->_factory = $factory;
-        $this->_sharedInstances = $sharedInstances;
+        $this->_sharedInstances = &$sharedInstances;
         $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
     }
 
@@ -53,6 +53,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      */
     public function create($type, array $arguments = [])
     {
+        $type = ltrim($type, '\\');
         return $this->_factory->create($this->_config->getPreference($type), $arguments);
     }
 
@@ -64,6 +65,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      */
     public function get($type)
     {
+        $type = ltrim($type, '\\');
         $type = $this->_config->getPreference($type);
         if (!isset($this->_sharedInstances[$type])) {
             $this->_sharedInstances[$type] = $this->_factory->create($type);

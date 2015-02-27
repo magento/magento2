@@ -62,14 +62,14 @@ class History extends Entity implements OrderStatusHistoryResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_beforeSave($object);
         $warnings = $this->validator->validate($object);
         if (!empty($warnings)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Cannot save comment') . ":\n" . implode("\n", $warnings)
             );
         }

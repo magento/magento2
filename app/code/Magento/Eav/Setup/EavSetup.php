@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Exception as EavException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -246,7 +247,7 @@ class EavSetup
      *
      * @param int|string $entityTypeId
      * @return int
-     * @throws \Magento\Eav\Exception
+     * @throws EavException
      */
     public function getEntityTypeId($entityTypeId)
     {
@@ -254,7 +255,7 @@ class EavSetup
             $entityTypeId = $this->getEntityType($entityTypeId, 'entity_type_id');
         }
         if (!is_numeric($entityTypeId)) {
-            throw new \Magento\Eav\Exception(__('Wrong entity ID'));
+            throw new EavException(__('Wrong entity ID'));
         }
 
         return $entityTypeId;
@@ -380,7 +381,7 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $setId
      * @return int
-     * @throws \Magento\Eav\Exception
+     * @throws EavException
      */
     public function getAttributeSetId($entityTypeId, $setId)
     {
@@ -388,7 +389,7 @@ class EavSetup
             $setId = $this->getAttributeSet($entityTypeId, $setId, 'attribute_set_id');
         }
         if (!is_numeric($setId)) {
-            throw new \Magento\Eav\Exception(__('Wrong attribute set ID'));
+            throw new EavException(__('Wrong attribute set ID'));
         }
 
         return $setId;
@@ -597,7 +598,7 @@ class EavSetup
      * @param int|string $setId
      * @param int|string $groupId
      * @return $this
-     * @throws \Magento\Eav\Exception
+     * @throws EavException
      */
     public function getAttributeGroupId($entityTypeId, $setId, $groupId)
     {
@@ -610,7 +611,7 @@ class EavSetup
         }
 
         if (!is_numeric($groupId)) {
-            throw new \Magento\Eav\Exception(__('Wrong attribute group ID'));
+            throw new EavException(__('Wrong attribute group ID'));
         }
         return $groupId;
     }
@@ -712,7 +713,7 @@ class EavSetup
      *
      * @param  array $data
      * @return true
-     * @throws \Magento\Eav\Exception
+     * @throws EavException
      */
     private function _validateAttributeData($data)
     {
@@ -726,7 +727,7 @@ class EavSetup
                 ['max' => $attributeCodeMaxLength]
             )
         ) {
-            throw new \Magento\Eav\Exception(
+            throw new EavException(
                 __('Maximum length of attribute code must be less than %1 symbols', $attributeCodeMaxLength)
             );
         }
@@ -806,7 +807,7 @@ class EavSetup
      *
      * @param array $option
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAttributeOption($option)
@@ -841,7 +842,9 @@ class EavSetup
 
                 // Default value
                 if (!isset($values[0])) {
-                    throw new \Magento\Framework\Model\Exception(__('Default option value is not defined'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Default option value is not defined')
+                    );
                 }
                 $condition = ['option_id =?' => $intOptionId];
                 $this->setup->getConnection()->delete($optionValueTable, $condition);

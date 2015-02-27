@@ -131,7 +131,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param array $rates
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveRates($rates)
     {
@@ -151,7 +151,7 @@ class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $adapter->insertOnDuplicate($this->_currencyRateTable, $data, ['rate']);
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the rates received'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the rates received'));
         }
     }
 

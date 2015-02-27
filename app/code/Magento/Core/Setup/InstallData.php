@@ -23,16 +23,7 @@ class InstallData implements InstallDataInterface
     {
         $installer = $setup->createMigrationSetup();
         $setup->startSetup();
-        
-        $installer->appendClassAliasReplace(
-            'core_config_data',
-            'value',
-            Migration::ENTITY_TYPE_MODEL,
-            Migration::FIELD_CONTENT_TYPE_PLAIN,
-            ['config_id']
-        );
-        $installer->doUpdateClassAliases();
-        
+
         /**
          * Delete rows by condition from authorization_rule
          */

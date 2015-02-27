@@ -156,7 +156,7 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @param \Magento\Newsletter\Model\Queue $queue
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function received(\Magento\Newsletter\Model\Subscriber $subscriber, \Magento\Newsletter\Model\Queue $queue)
     {
@@ -171,7 +171,7 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_write->commit();
         } catch (\Exception $e) {
             $this->_write->rollBack();
-            throw new \Magento\Framework\Model\Exception(__('We cannot mark as received subscriber.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot mark as received subscriber.'));
         }
         return $this;
     }
