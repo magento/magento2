@@ -2747,7 +2747,9 @@ tr.dynamic-grid input.input-text {
 }
 
 .widget-layout-updates .fieldset-wrapper-title label {
-    padding: 10px 0 0;
+    &:not(.mage-error) {
+        padding: 10px 0 0;
+    }
 }
 
 .widget-layout-updates .fieldset-wrapper-title select {

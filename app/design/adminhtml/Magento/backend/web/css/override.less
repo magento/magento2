@@ -1235,19 +1235,19 @@ table.table tbody tr:last-child td {
   color: #333333;
   font-size: 1.4rem;
   margin: 0 0 1px;
-  padding: 1.8rem 4rem 1.8rem 5rem;
+  padding: 1.8rem 4rem 1.8rem 5.5rem;
   position: relative;
   text-shadow: none;
 }
 .message:before {
   background: none;
   border: 0;
+  color: #007bdb;
+  content: '\e637';
   font-family: 'Admin Icons';
   font-size: 1.9rem;
   font-style: normal;
   font-weight: 400;
-  color: #007bdb;
-  content: '\e637';
   height: auto;
   left: 1.9rem;
   line-height: inherit;
@@ -1276,7 +1276,11 @@ table.table tbody tr:last-child td {
 .message.error:before {
   color: #e22626;
   content: '\e632';
+  font-size: 1.5rem;
+  left: 2.2rem;
+  margin-top: -0.9rem;
 }
+.message-success:before,
 .message.success:before {
   color: #79a22e;
   content: '\e62d';
@@ -1589,6 +1593,8 @@ table.table th.required:after {
 .abs-clearfix:after,
 .tabs-horiz:before,
 .tabs-horiz:after,
+.message-system-inner:before,
+.message-system-inner:after,
 .page-header-action:before,
 .page-header-action:after,
 .page-main-actions:before,
@@ -1602,6 +1608,7 @@ table.table th.required:after {
 }
 .abs-clearfix:after,
 .tabs-horiz:after,
+.message-system-inner:after,
 .page-header-action:after,
 .page-main-actions:after,
 .dashboard-totals-list:after,
@@ -2164,6 +2171,43 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .ie9 .spinner > span {
   display: none;
+}
+.message-system-inner {
+  background: #fffbbb;
+  margin: 0 3rem 2rem 3rem;
+}
+.message-system-inner .message-system-list {
+  float: left;
+  width: 75%;
+}
+.message-system-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.message-system-short {
+  overflow: hidden;
+  text-align: right;
+}
+.message-system-short .message-system-short-label {
+  display: inline-block;
+  padding: 1.8rem .3rem 1.8rem 1rem;
+}
+.message-system-short .message {
+  display: inline-block;
+  padding: 1.8rem 2rem 1.8rem 3.3rem;
+}
+.message-system-short .message:before {
+  left: .3rem;
+}
+.message-system-short .message.error {
+  background: #fffbbb;
+}
+.message-system-short .message.error:before {
+  color: #eb5202;
+  content: '\e623';
+  margin-top: -1.3rem;
+  font-size: 1.9rem;
 }
 .menu-wrapper {
   height: 100%;

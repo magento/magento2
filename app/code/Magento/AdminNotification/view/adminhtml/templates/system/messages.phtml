@@ -14,18 +14,30 @@
     <div class="message-system-inner">
         <?php if ($lastCritical): ?>
             <ul class="message-system-list">
-                <li class="error"><!--  warning  -->
+                <li class="message message-warning">
                     <?php echo $lastCritical->getText();?>
                 </li>
             </ul>
         <?php endif; ?>
         <div class="message-system-short">
-            System Messages:
+            <span class="message-system-short-label">
+                <?php echo __('System Messages:')?>
+            </span>
+
             <?php if ($block->getCriticalCount()): ?>
-                <span class="error"><a href="#" title="<?php echo $block->escapeHtml(__('Critical System Messages'));?>"><?php echo $block->getCriticalCount();?></a></span>
+                <div class="message error">
+                    <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Critical System Messages'));?>">
+                        <?php echo $block->getCriticalCount();?>
+                    </a>
+                </div>
             <?php endif;?>
+
             <?php if ($block->getMajorCount()): ?>
-               <span class="warning"><a href="#" title="<?php echo $block->escapeHtml(__('Major System Messages'));?>"><?php echo $block->getMajorCount();?></a></span>
+               <div class="message warning">
+                   <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Major System Messages'));?>">
+                       <?php echo $block->getMajorCount();?>
+                   </a>
+               </div>
             <?php endif;?>
         </div>
         <div id="message-system-all" title="<?php echo $block->escapeHtml(__('System messages'));?>" data-mage-init='<?php echo $block->escapeHtml($block->getSystemMessageDialogJson());?>'></div>
