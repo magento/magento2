@@ -61,7 +61,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * string format used from input fields (all date input fields need apply locale settings)
      * int value can be declared in code (this meen whot we use valid date)
      *
-     * @param string|int $date
+     * @param string|int|\DateTime $date
      * @return string
      */
     public function formatDate($date)
@@ -70,10 +70,10 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             return null;
         }
         // unix timestamp given - simply instantiate date object
-        if (preg_match('/^[0-9]+$/', $date)) {
+        if (is_scalar($date) && preg_match('/^[0-9]+$/', $date)) {
             $date = new \DateTime('@' . $date);
             // international format
-        } else {
+        } elseif (!($date instanceof \DateTime)) {
             $date = new \DateTime($date);
             // parse this date in current locale, do not apply GMT offset
         }
