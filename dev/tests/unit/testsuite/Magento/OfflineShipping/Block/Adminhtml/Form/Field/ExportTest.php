@@ -8,7 +8,7 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
 class ExportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Backend\Block\System\Config\Form\Field\Export
+     * @var \Magento\Config\Block\System\Config\Form\Field\Export
      */
     protected $_object;
 
