@@ -14,6 +14,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codeCoverageIgnore
  */
 class EavSetup
 {

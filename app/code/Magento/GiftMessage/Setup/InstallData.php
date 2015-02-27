@@ -13,6 +13,9 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Quote\Setup\QuoteSetupFactory;
 use Magento\Sales\Setup\SalesSetupFactory;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InstallData implements InstallDataInterface
 {
     /**

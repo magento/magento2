@@ -13,6 +13,9 @@ use Magento\Cms\Model\PageFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
     /**

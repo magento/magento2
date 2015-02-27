@@ -14,6 +14,9 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CustomerSetup extends EavSetup
 {
     /**

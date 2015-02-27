@@ -13,6 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Class InstallData
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @codeCoverageIgnore
  */
 class InstallData implements InstallDataInterface
 {

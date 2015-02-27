@@ -7,6 +7,8 @@ namespace Magento\Authorization\Setup;
 
 /**
  * Resource Setup Model
+ *
+ * @codeCoverageIgnore
  */
 class AuthorizationFactory
 {

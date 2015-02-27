@@ -12,6 +12,9 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InstallData implements InstallDataInterface
 {
     /**

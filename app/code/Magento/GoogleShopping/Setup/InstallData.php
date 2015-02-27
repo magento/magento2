@@ -12,6 +12,9 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\GoogleShopping\Model\ConfigFactory;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InstallData implements InstallDataInterface
 {
     /**

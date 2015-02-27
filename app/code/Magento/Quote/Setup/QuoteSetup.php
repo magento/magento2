@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 /**
  * Setup Model of Quote Module
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @codeCoverageIgnore
  */
 class QuoteSetup extends EavSetup
 {
