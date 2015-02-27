@@ -7,6 +7,7 @@
         "magento/module-search": "0.42.0-beta9",
         "magento/module-backend": "0.42.0-beta9",
         "magento/module-core": "0.42.0-beta9",
+        "magento/module-config": "0.42.0-beta9",
         "magento/module-store": "0.42.0-beta9",
         "magento/module-catalog": "0.42.0-beta9",
         "magento/magento-composer-installer": "*"
