@@ -62,7 +62,8 @@ class View extends \Magento\Catalog\Controller\Product
      */
     protected function noProductRedirect()
     {
-        if (isset($_GET['store']) && !$this->getResponse()->isRedirect()) {
+        $store = $this->getRequest()->getQuery('store');
+        if (isset($store) && !$this->getResponse()->isRedirect()) {
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('');
         } elseif (!$this->getResponse()->isRedirect()) {
@@ -92,6 +93,14 @@ class View extends \Magento\Catalog\Controller\Product
             if ($specifyOptions) {
                 $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
                 $this->messageManager->addNotice($notice);
+            }
+            if ($this->getRequest()->isAjax()) {
+                $this->getResponse()->representJson(
+                    $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode([
+                        'backUrl' => $this->_redirect->getRedirectUrl()
+                    ])
+                );
+                return;
             }
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setRefererOrBaseUrl();

@@ -187,8 +187,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Tools\Migration\Acl\Generator::parseNode
-     * @covers \Magento\Tools\Migration\Acl\Generator::generateId
+     * covers \Magento\Tools\Migration\Acl\Generator::parseNode
+     * covers \Magento\Tools\Migration\Acl\Generator::generateId
      */
     public function testParseNode()
     {
@@ -233,8 +233,8 @@ TEMPLATE;
     }
 
     /**
-     * @covers \Magento\Tools\Migration\Acl\Generator::updateAclResourceIds()
-     * @covers \Magento\Tools\Migration\Acl\Generator::updateChildAclNodes() (removing of xpath attribute)
+     * covers \Magento\Tools\Migration\Acl\Generator::updateAclResourceIds()
+     * covers \Magento\Tools\Migration\Acl\Generator::updateChildAclNodes() (removing of xpath attribute)
      */
     public function testUpdateAclResourceIds()
     {

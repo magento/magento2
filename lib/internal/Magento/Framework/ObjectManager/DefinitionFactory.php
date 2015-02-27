@@ -19,6 +19,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator;
 use Magento\Framework\ObjectManager\Code\Generator\Converter as ConverterGenerator;
+use Magento\Framework\ObjectManager\Definition\Compiled\Binary;
+use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
 
@@ -61,8 +63,8 @@ class DefinitionFactory
      * @var array
      */
     protected $_definitionClasses = [
-        'igbinary' => 'Magento\Framework\ObjectManager\Definition\Compiled\Binary',
-        'serialized' => 'Magento\Framework\ObjectManager\Definition\Compiled\Serialized',
+        Binary::MODE_NAME => '\Magento\Framework\ObjectManager\Definition\Compiled\Binary',
+        Serialized::MODE_NAME => '\Magento\Framework\ObjectManager\Definition\Compiled\Serialized',
     ];
 
     /**
@@ -83,17 +85,10 @@ class DefinitionFactory
      * Create class definitions
      *
      * @param mixed $definitions
-     * @param bool $useCompiled
      * @return Runtime
      */
-    public function createClassDefinition($definitions, $useCompiled = true)
+    public function createClassDefinition($definitions = false)
     {
-        if (!$definitions && $useCompiled) {
-            $path = $this->_definitionDir . '/definitions.php';
-            if ($this->_filesystemDriver->isReadable($path)) {
-                $definitions = $this->_filesystemDriver->fileGetContents($path);
-            }
-        }
         if ($definitions) {
             if (is_string($definitions)) {
                 $definitions = $this->_unpack($definitions);
@@ -172,7 +167,7 @@ class DefinitionFactory
      */
     protected function _unpack($definitions)
     {
-        $extractor = $this->_definitionFormat == 'igbinary' ? 'igbinary_unserialize' : 'unserialize';
+        $extractor = $this->_definitionFormat == Binary::MODE_NAME ? 'igbinary_unserialize' : 'unserialize';
         return $extractor($definitions);
     }
 }

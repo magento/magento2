@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter\Price;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Range
 {

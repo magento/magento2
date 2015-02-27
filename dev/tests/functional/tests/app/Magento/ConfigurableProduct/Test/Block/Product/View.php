@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Test\Block\Product;
 
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -39,48 +38,26 @@ class View extends \Magento\Catalog\Test\Block\Product\View
      */
     public function fillOptions(FixtureInterface $product)
     {
-        if ($product instanceof InjectableFixture) {
-            /** @var ConfigurableProductInjectable $product */
-            $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
-            $checkoutData = $product->getCheckoutData();
+        /** @var ConfigurableProduct $product */
+        $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
+        $checkoutData = $product->getCheckoutData();
 
-            // Prepare attribute data
-            foreach ($attributesData as $attributeKey => $attribute) {
-                $attributesData[$attributeKey] = [
-                    'type' => $attribute['frontend_input'],
-                    'title' => $attribute['label'],
-                    'options' => [],
+        // Prepare attribute data
+        foreach ($attributesData as $attributeKey => $attribute) {
+            $attributesData[$attributeKey] = [
+                'type' => $attribute['frontend_input'],
+                'title' => $attribute['label'],
+                'options' => [],
+            ];
+
+            foreach ($attribute['options'] as $optionKey => $option) {
+                $attributesData[$attributeKey]['options'][$optionKey] = [
+                    'title' => $option['label'],
                 ];
-
-                foreach ($attribute['options'] as $optionKey => $option) {
-                    $attributesData[$attributeKey]['options'][$optionKey] = [
-                        'title' => $option['label'],
-                    ];
-                }
-                $attributesData[$attributeKey]['options'] = array_values($attributesData[$attributeKey]['options']);
             }
-            $attributesData = array_values($attributesData);
-        } else {
-            // TODO: Removed after refactoring(removed) old product fixture.
-            /** @var ConfigurableProduct $product */
-            $attributesData = $product->getConfigurableAttributes();
-            $checkoutData = $product->getCheckoutData();
-
-            // Prepare attributes data
-            foreach ($attributesData as $attributeKey => $attribute) {
-                $attributesData[$attributeKey] = [
-                    'type' => 'dropdown',
-                    'title' => $attribute['label']['value'],
-                ];
-
-                unset($attribute['label']);
-                foreach ($attribute as $optionKey => $option) {
-                    $attributesData[$attributeKey]['options'][$optionKey] = [
-                        'title' => $option['option_label']['value'],
-                    ];
-                }
-            }
+            $attributesData[$attributeKey]['options'] = array_values($attributesData[$attributeKey]['options']);
         }
+        $attributesData = array_values($attributesData);
 
         $configurableCheckoutData = isset($checkoutData['options']['configurable_options'])
             ? $checkoutData['options']['configurable_options']

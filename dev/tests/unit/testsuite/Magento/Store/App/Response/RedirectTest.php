@@ -55,10 +55,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
                 'getActionName',
                 'setActionName',
                 'getParam',
-                'getCookie'
+                'getCookie',
+                'isSecure',
             ]
         );
-        $this->_storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->_urlCoderMock = $this->getMock(
             '\Magento\Framework\Encryption\UrlCoder',
             [],

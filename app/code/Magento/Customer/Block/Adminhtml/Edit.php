@@ -152,7 +152,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Retrieve the header text, either the name of an existing customer or 'New Customer'.
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getHeaderText()
     {

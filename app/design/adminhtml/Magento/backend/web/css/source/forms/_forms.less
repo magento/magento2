@@ -11,6 +11,22 @@
 //  Variables
 //  ---------------------------------------------
 
+//  Form element
+
+@form-el__color: @color-very-dark-gray-black;
+@form-el__border-radius: 0;
+@form-el__indent-top: .6rem;
+@form-el__padding-bottom: .35em;
+@form-el__padding-side: .55em;
+@form-el__padding-top: .35em;
+
+@form-el__border-color: @color-gray68;
+@form-el__color: @color-very-dark-gray-black;
+@form-el__hover__border-color: darken(@form-el__border-color, 10%);
+@form-el__focus__border-color: @color-pure-blue;
+
+//  Form field
+
 @field-control__border-color: @color-gray68;
 @field-control__color: @color-very-dark-gray-black;
 @field-control__bg-color: @color-white;
@@ -137,10 +153,10 @@ fieldset.field [class^='fields-group-'] .field .control {
     > input {
         width: 100%;
     }
-    > input[type="button"],
-    > input[type="radio"],
-    > input[type="checkbox"],
-    > input[type="file"]{
+    > input[type='button'],
+    > input[type='radio'],
+    > input[type='checkbox'],
+    > input[type='file'] {
         width: auto;
     }
     > input.hasDatepicker {
@@ -211,11 +227,12 @@ fieldset.field [class^='fields-group-'] .field .control {
     }
     &-content {
         @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
-        .css(box-shadow, @_shadow);
+
         background: @field-tooltip-content__bg-color;
         border: 1px solid @field-tooltip-content__border-color;
         border-radius: 1px;
         bottom: 42px;
+        .css(box-shadow, @_shadow);
         display: none;
         padding: 15px 25px;
         position: absolute;
@@ -461,7 +478,6 @@ fieldset.field [class^='fields-group-'] .field .control {
     .control-range {
         & > .form__field:nth-child(2) {
             &:before {
-                content: ':';
                 content: '\2014';
                 display: inline-block;
                 float: left;
@@ -519,7 +535,6 @@ fieldset.field [class^='fields-group-'] .field .control {
             cursor: pointer;
         }
         .label:before {
-            .url('images/choice_bkg.png', 'Magento_Ui');
             background: url('@{url}') no-repeat -100% -100%;
             border: 1px solid @field-control__border-color;
             border-radius: 2px;
@@ -528,6 +543,7 @@ fieldset.field [class^='fields-group-'] .field .control {
             left: 0;
             position: absolute;
             top: 10px;
+            .url('images/choice_bkg.png', 'Magento_Ui');
             width: 14px;
             z-index: 1;
         }
@@ -689,7 +705,6 @@ fieldset.form__field {
 .control-text + .ui-datepicker-trigger {
     .button-reset();
     display: inline-block;
-    margin-left: -40px;
     .icon-font(
     @icon-calendar,
     @_icon-font-size: 38px,
@@ -698,6 +713,7 @@ fieldset.form__field {
     @_icon-font-position: after,
     @_icon-font-color: @field-date-icon__color
     );
+    margin-left: -40px;
     img {
         display: none;
     }

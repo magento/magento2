@@ -22,6 +22,11 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $sessionName;
 
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
     protected function setUp()
     {
         $this->sessionName = 'frontEndSession';
@@ -34,11 +39,13 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
         $this->_sidResolver = $objectManager->get('Magento\Framework\Session\SidResolverInterface');
 
+        $this->request = $objectManager->get('Magento\Framework\App\RequestInterface');
+
         /** @var \Magento\Framework\Session\SessionManager _model */
         $this->_model = $objectManager->create(
             'Magento\Framework\Session\SessionManager',
             [
-                $objectManager->get('Magento\Framework\App\Request\Http'),
+                $this->request,
                 $this->_sidResolver,
                 $objectManager->get('Magento\Framework\Session\Config\ConfigInterface'),
                 $objectManager->get('Magento\Framework\Session\SaveHandlerInterface'),
@@ -112,20 +119,20 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
     public function testSetSessionIdFromParam()
     {
         $this->assertNotEquals('test_id', $this->_model->getSessionId());
-        $_GET[$this->_sidResolver->getSessionIdQueryParam($this->_model)] = 'test-id';
+        $this->request->getQuery()->set($this->_sidResolver->getSessionIdQueryParam($this->_model), 'test-id');
         $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
 
         $this->assertEquals('test-id', $this->_model->getSessionId());
 
         /* Use not valid identifier */
-        $_GET[$this->_sidResolver->getSessionIdQueryParam($this->_model)] = 'test_id';
+        $this->request->getQuery()->set($this->_sidResolver->getSessionIdQueryParam($this->_model), 'test_id');
         $this->_model->setSessionId($this->_sidResolver->getSid($this->_model));
         $this->assertEquals('test-id', $this->_model->getSessionId());
     }
 
     public function testGetSessionIdForHost()
     {
-        $_SERVER['HTTP_HOST'] = 'localhost';
+        $this->request->getServer()->set('HTTP_HOST', 'localhost');
         $this->_model->start();
         $this->assertEmpty($this->_model->getSessionIdForHost('localhost'));
         $this->assertNotEmpty($this->_model->getSessionIdForHost('test'));
@@ -134,7 +141,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValidForHost()
     {
-        $_SERVER['HTTP_HOST'] = 'localhost';
+        $this->request->getServer()->set('HTTP_HOST', 'localhost');
         $this->_model->start();
 
         $reflection = new \ReflectionMethod($this->_model, '_addHost');

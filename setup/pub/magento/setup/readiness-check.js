@@ -32,6 +32,11 @@ angular.module('readiness-check', [])
             processed: false,
             expanded: false
         };
+        $scope.rawpost = {
+            visible: false,
+            processed: false,
+            expanded: false
+        };
         $scope.extensions = {
             visible: false,
             processed: false,
@@ -54,6 +59,19 @@ angular.module('readiness-check', [])
                     $scope.version.processed = true;
                     angular.extend($scope.version, data);
                     $scope.updateOnProcessed($scope.version.responseType);
+                    $scope.stopProgress();
+                }
+            },
+            'php-rawpost': {
+                url:'index.php/environment/php-rawpost',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.rawpost.visible = true;
+                },
+                process: function(data) {
+                    $scope.rawpost.processed = true;
+                    angular.extend($scope.rawpost, data);
+                    $scope.updateOnProcessed($scope.rawpost.responseType);
                     $scope.stopProgress();
                 }
             },

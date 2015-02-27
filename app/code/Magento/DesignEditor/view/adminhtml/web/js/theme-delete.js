@@ -8,7 +8,6 @@ define([
     "jquery/ui",
     "loadingPopup",
     "mage/translate",
-    "jquery/template",
     "Magento_DesignEditor/js/dialog"
 ], function($){
 

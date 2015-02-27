@@ -45,7 +45,7 @@ class Conditions extends Generic implements TabInterface
     /**
      * Prepare content for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -55,7 +55,7 @@ class Conditions extends Generic implements TabInterface
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

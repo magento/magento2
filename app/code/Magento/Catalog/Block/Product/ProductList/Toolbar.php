@@ -650,12 +650,12 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             )->setFrameLength(
                 $this->_scopeConfig->getValue(
                     'design/pagination/pagination_frame',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->setJump(
                 $this->_scopeConfig->getValue(
                     'design/pagination/pagination_frame_skip',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )->setLimit(
                 $this->getLimit()

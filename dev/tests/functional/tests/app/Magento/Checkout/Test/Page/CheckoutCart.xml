@@ -1,51 +1,19 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="checkout/cart/index" module="Magento_Checkout">
-    <blocks>
-        <cartBlock>
-            <class>Magento\Checkout\Test\Block\Cart</class>
-            <locator>//div[contains(@class, "column main")]</locator>
-            <strategy>xpath</strategy>
-        </cartBlock>
-        <cartEmptyBlock>
-            <class>Magento\Checkout\Test\Block\Cart\CartEmpty</class>
-            <locator>.cart-empty</locator>
-            <strategy>css selector</strategy>
-        </cartEmptyBlock>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>.messages .messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <shippingBlock>
-            <class>Magento\Checkout\Test\Block\Cart\Shipping</class>
-            <locator>.block.shipping</locator>
-            <strategy>css selector</strategy>
-        </shippingBlock>
-        <totalsBlock>
-            <class>Magento\Checkout\Test\Block\Cart\Totals</class>
-            <locator>#shopping-cart-totals-table</locator>
-            <strategy>css selector</strategy>
-        </totalsBlock>
-        <crosssellBlock>
-            <class>Magento\Catalog\Test\Block\Product\ProductList\Crosssell</class>
-            <locator>//div[contains(@class, "block")][contains(@class, "crosssell")]</locator>
-            <strategy>xpath</strategy>
-        </crosssellBlock>
-        <discountCodesBlock>
-            <class>Magento\Checkout\Test\Block\Cart\DiscountCodes</class>
-            <locator>.block.discount</locator>
-            <strategy>css selector</strategy>
-        </discountCodesBlock>
-        <proceedToCheckoutBlock>
-            <class>Magento\Checkout\Test\Block\Onepage\Link</class>
-            <locator>ul.checkout-methods-items button.primary.checkout</locator>
-            <strategy>css selector</strategy>
-        </proceedToCheckoutBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CheckoutCart" mca="checkout/cart/index" module="Magento_Checkout">
+    <block name="cartBlock" class="Magento\Checkout\Test\Block\Cart" locator="//div[contains(@class, 'column main')]" strategy="xpath"/>
+    <block name="cartEmptyBlock" class="Magento\Checkout\Test\Block\Cart\CartEmpty" locator=".cart-empty" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator=".messages .messages" strategy="css selector"/>
+    <block name="shippingBlock" class="Magento\Checkout\Test\Block\Cart\Shipping" locator=".block.shipping" strategy="css selector"/>
+    <block name="totalsBlock" class="Magento\Checkout\Test\Block\Cart\Totals" locator="#shopping-cart-totals-table" strategy="css selector"/>
+    <block name="crosssellBlock" class="Magento\Catalog\Test\Block\Product\ProductList\Crosssell" locator="//div[contains(@class, 'block')][contains(@class, 'crosssell')]" strategy="xpath"/>
+    <block name="discountCodesBlock" class="Magento\Checkout\Test\Block\Cart\DiscountCodes" locator=".block.discount" strategy="css selector"/>
+    <block name="proceedToCheckoutBlock" class="Magento\Checkout\Test\Block\Onepage\Link" locator="ul.checkout-methods-items button.primary.checkout" strategy="css selector"/>
+  </page>
+</config>

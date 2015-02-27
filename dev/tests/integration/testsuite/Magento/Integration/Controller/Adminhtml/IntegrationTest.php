@@ -64,7 +64,7 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         $integrationName = $this->_integration->getName();
         $this->getRequest()->setParam('id', $integrationId);
         $url = 'http://magento.ll/endpoint_url';
-        $this->getRequest()->setPost(
+        $this->getRequest()->setPostValue(
             [
                 'name' => $integrationName,
                 'email' => 'test@magento.com',
@@ -84,7 +84,7 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
     {
         $url = 'http://magento.ll/endpoint_url';
         $integrationName = md5(rand());
-        $this->getRequest()->setPost(
+        $this->getRequest()->setPostValue(
             [
                 'name' => $integrationName,
                 'email' => 'test@magento.com',

@@ -123,7 +123,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
     /**
      * Return Delete CheckBox Label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDeleteCheckboxLabel()
     {

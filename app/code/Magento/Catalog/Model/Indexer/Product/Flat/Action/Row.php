@@ -25,7 +25,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param TableBuilder $tableBuilder
@@ -35,7 +35,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
         \Magento\Catalog\Model\Product\Type $productType,
         TableBuilder $tableBuilder,

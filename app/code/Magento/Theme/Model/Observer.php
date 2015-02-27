@@ -23,7 +23,7 @@ class Observer
     protected $themeImageFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\Layout\Update\Collection
+     * @var \Magento\Widget\Model\Resource\Layout\Update\Collection
      */
     protected $updateCollection;
 
@@ -66,7 +66,7 @@ class Observer
      * Initialize dependencies.
      *
      * @param \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory
-     * @param \Magento\Core\Model\Resource\Layout\Update\Collection $updateCollection
+     * @param \Magento\Widget\Model\Resource\Layout\Update\Collection $updateCollection
      * @param \Magento\Theme\Model\Config\Customization $themeConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventDispatcher
      * @param \Magento\Framework\View\DesignInterface $design
@@ -77,7 +77,7 @@ class Observer
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\ImageFactory $themeImageFactory,
-        \Magento\Core\Model\Resource\Layout\Update\Collection $updateCollection,
+        \Magento\Widget\Model\Resource\Layout\Update\Collection $updateCollection,
         \Magento\Theme\Model\Config\Customization $themeConfig,
         \Magento\Framework\Event\ManagerInterface $eventDispatcher,
         \Magento\Framework\View\DesignInterface $design,

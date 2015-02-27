@@ -44,11 +44,11 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider methodsDataProvider
      *
-     * @covers \Magento\Framework\HTTP\Header::getHttpHost
-     * @covers \Magento\Framework\HTTP\Header::getHttpUserAgent
-     * @covers \Magento\Framework\HTTP\Header::getHttpAcceptLanguage
-     * @covers \Magento\Framework\HTTP\Header::getHttpAcceptCharset
-     * @covers \Magento\Framework\HTTP\Header::getHttpReferer
+     * covers \Magento\Framework\HTTP\Header::getHttpHost
+     * covers \Magento\Framework\HTTP\Header::getHttpUserAgent
+     * covers \Magento\Framework\HTTP\Header::getHttpAcceptLanguage
+     * covers \Magento\Framework\HTTP\Header::getHttpAcceptCharset
+     * covers \Magento\Framework\HTTP\Header::getHttpReferer
      */
     public function testHttpMethods($method, $clean, $expectedValue)
     {

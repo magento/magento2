@@ -34,7 +34,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
 
     /**
      * @param \Magento\Framework\Object $row
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function render(\Magento\Framework\Object $row)
     {
@@ -43,7 +43,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
 
     /**
      * @param string $status
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public static function getStatus($status)
     {

@@ -6,7 +6,7 @@
 namespace Magento\PageCache\Block;
 
 /**
- * @covers \Magento\PageCache\Block\Javascript
+ * covers \Magento\PageCache\Block\Javascript
  */
 class JavascriptTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +92,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\PageCache\Block\Javascript::getScriptOptions
+     * covers \Magento\PageCache\Block\Javascript::getScriptOptions
      * @param bool $isSecure
      * @param string $url
      * @param string $expectedResult

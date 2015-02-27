@@ -75,7 +75,7 @@ class Cart extends \Magento\Backend\App\Action
             $this->_quote = $this->quoteRepository->create();
         }
         $this->_quote->setWebsite(
-            $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getWebsite($websiteId)
+            $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)
         );
 
         $this->_quoteItem = $this->_quote->getItemById($quoteItemId);

@@ -10,7 +10,7 @@ use Magento\Framework;
 
 /**
  * Class BuilderTest
- * @covers \Magento\Framework\View\Page\Builder
+ * covers \Magento\Framework\View\Page\Builder
  */
 class BuilderTest extends \Magento\Framework\View\Layout\BuilderTest
 {

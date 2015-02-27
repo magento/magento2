@@ -17,11 +17,6 @@ use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 class Source
 {
     /**
-     * A suffix for temporary materialization directory where pre-processed files will be written (if necessary)
-     */
-    const TMP_MATERIALIZATION_DIR = 'view_preprocessed';
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
@@ -149,7 +144,7 @@ class Source
         $chain->assertValid();
         if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;
-            $path = self::TMP_MATERIALIZATION_DIR . '/source/' . $asset->getPath();
+            $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $asset->getPath();
             $this->varDir->writeFile($path, $chain->getContent());
         }
         $result = [$dirCode, $path];

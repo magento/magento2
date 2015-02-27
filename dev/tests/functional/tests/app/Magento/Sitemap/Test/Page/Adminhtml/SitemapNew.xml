@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="sitemap/new/index" module="Magento_Sitemap">
-    <blocks>
-        <sitemapForm>
-            <class>Magento\Backend\Test\Block\Widget\Form</class>
-            <locator>#add_sitemap_form</locator>
-            <strategy>css selector</strategy>
-        </sitemapForm>
-        <sitemapPageActions>
-            <class>Magento\Sitemap\Test\Block\Adminhtml\SitemapPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </sitemapPageActions>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="SitemapNew" area="Adminhtml" mca="sitemap/new/index" module="Magento_Sitemap">
+    <block name="sitemapForm" class="Magento\Backend\Test\Block\Widget\Form" locator="#add_sitemap_form" strategy="css selector"/>
+    <block name="sitemapPageActions" class="Magento\Sitemap\Test\Block\Adminhtml\SitemapPageActions" locator=".page-main-actions" strategy="css selector"/>
+  </page>
+</config>

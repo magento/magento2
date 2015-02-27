@@ -5,6 +5,8 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
+use Magento\Framework\HTTP\PhpEnvironment\Request as HttpRequest;
+
 class Request
 {
     /**
@@ -23,11 +25,11 @@ class Request
 
     /**
      * @param string $workingDir
-     * @param \Zend_Controller_Request_Http $request
+     * @param HttpRequest $request
      */
-    public function __construct($workingDir, \Zend_Controller_Request_Http $request = null)
+    public function __construct($workingDir, HttpRequest $request = null)
     {
-        $request = $request ?: new \Zend_Controller_Request_Http();
+        $request = $request ?: new HttpRequest();
         $this->_pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
         $this->_filePath = $workingDir . '/' . $this->_pathInfo;
     }

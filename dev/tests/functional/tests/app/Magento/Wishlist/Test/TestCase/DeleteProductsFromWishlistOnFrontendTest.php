@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Test Flow:
@@ -35,12 +35,12 @@ class DeleteProductsFromWishlistOnFrontendTest extends AbstractWishlistTest
     /**
      * Delete products form default wish list
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $products
      * @param string $removedProductsIndex [optional]
      * @return array
      */
-    public function test(CustomerInjectable $customer, $products, $removedProductsIndex = null)
+    public function test(Customer $customer, $products, $removedProductsIndex = null)
     {
         // Preconditions
         $customer->persist();

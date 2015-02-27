@@ -16,21 +16,13 @@ class WebapiBuilderFactory extends \Magento\Framework\Serialization\DataBuilderF
     }
 
     /**
-     * Returns a builder for a given class name.
+     * Creates builder object
      *
-     * @param string $className
+     * @param $builderClassName
      * @return \Magento\Framework\Api\BuilderInterface Builder Instance
      */
-    public function getDataBuilder($className)
+    protected function createObject($builderClassName)
     {
-        $interfaceSuffix = 'Interface';
-        if (substr($className, -strlen($interfaceSuffix)) === $interfaceSuffix) {
-            /** If class name ends with Interface, replace it with Data suffix */
-            $builderClassName = substr($className, 0, -strlen($interfaceSuffix)) . 'Data';
-        } else {
-            $builderClassName = $className;
-        }
-        $builderClassName .= 'Builder';
         return $this->objectManager->getObject($builderClassName);
     }
 }

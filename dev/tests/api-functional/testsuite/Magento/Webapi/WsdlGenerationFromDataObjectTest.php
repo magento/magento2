@@ -27,7 +27,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     protected function setUp()
     {
         $this->_markTestAsSoapOnly("WSDL generation tests are intended to be executed for SOAP adapter only.");
-        $this->_storeCode = Bootstrap::getObjectManager()->get('Magento\Framework\Store\StoreManagerInterface')
+        $this->_storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
             ->getStore()->getCode();
         $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
         parent::setUp();

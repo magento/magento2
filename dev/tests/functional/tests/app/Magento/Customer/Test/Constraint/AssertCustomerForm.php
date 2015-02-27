@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -37,19 +37,19 @@ class AssertCustomerForm extends AbstractConstraint
     /**
      * Assert that displayed customer data on edit page(backend) equals passed from fixture
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexEdit $pageCustomerIndexEdit
-     * @param AddressInjectable $address [optional]
-     * @param CustomerInjectable $initialCustomer [optional]
+     * @param Address $address[optional]
+     * @param Customer $initialCustomer [optional]
      * @return void
      */
     public function processAssert(
-        CustomerInjectable $customer,
+        Customer $customer,
         CustomerIndex $pageCustomerIndex,
         CustomerIndexEdit $pageCustomerIndexEdit,
-        AddressInjectable $address = null,
-        CustomerInjectable $initialCustomer = null
+        Address $address = null,
+        Customer $initialCustomer = null
     ) {
         $data = [];
         $filter = [];

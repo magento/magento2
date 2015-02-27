@@ -17,7 +17,7 @@ class Image extends \Magento\Customer\Block\Adminhtml\Form\Element\File
     /**
      * Return Delete CheckBox Label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDeleteCheckboxLabel()
     {

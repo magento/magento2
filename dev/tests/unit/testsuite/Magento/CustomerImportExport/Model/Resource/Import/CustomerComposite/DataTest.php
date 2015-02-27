@@ -82,9 +82,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data::getNextBunch
-     * @covers \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data::_prepareRow
-     * @covers \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data::_prepareAddressRowData
+     * covers \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data::getNextBunch
+     * covers \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data::_prepareRow
+     * covers \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data::_prepareAddressRowData
      *
      * @dataProvider getNextBunchDataProvider
      * @param string $entityType

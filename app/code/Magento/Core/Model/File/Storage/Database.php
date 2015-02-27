@@ -116,7 +116,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
     /**
      * Return storage name
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getStorageName()
     {

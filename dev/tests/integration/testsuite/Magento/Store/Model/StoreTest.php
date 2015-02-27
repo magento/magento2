@@ -10,6 +10,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Zend\Stdlib\Parameters;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
@@ -120,7 +121,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->model->getWebsite());
         $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getWebsite();
         $this->model->setWebsite($website);
         $actualResult = $this->model->getWebsite();
@@ -157,14 +158,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_USE_REWRITES,
             $useRewrites,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
             $useStoreCode,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         $actual = $this->model->getBaseUrl($type);
@@ -244,14 +245,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_USE_REWRITES,
             false,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
             \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
             $useStoreCode,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         // emulate custom entry point
@@ -438,13 +439,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Store\Model\Store $model */
         $model = $objectManager->create('Magento\Store\Model\Store');
 
-        $server = $_SERVER;
-        foreach ($serverValues as $key => $value) {
-            $_SERVER[$key] = $value;
-        }
+        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $request->setServer(new Parameters(array_merge($_SERVER, $serverValues)));
 
         $this->assertEquals($expected, $model->isCurrentlySecure());
-        $_SERVER = $server;
     }
 
     public function isCurrentlySecureDataProvider()

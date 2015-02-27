@@ -11,6 +11,8 @@
 return [
     '/lib/web/jquery.js',
     '/lib/web/jquery/jquery-migrate.js',
+    '/lib/web/underscore.js',
+    '/lib/web/mage/template.js',
     '/lib/web/jquery/jquery-ui-1.9.2.js',
     '/dev/tests/js/framework/requirejs-util.js',
     '/lib/web/jquery/jquery.cookie.js',

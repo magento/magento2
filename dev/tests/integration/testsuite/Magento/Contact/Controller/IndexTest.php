@@ -18,7 +18,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'email' => 'user@example.com',
             'hideit' => '',
         ];
-        $this->getRequest()->setPost($params);
+        $this->getRequest()->setPostValue($params);
 
         $this->dispatch('contact/index/post');
         $this->assertSessionMessages(

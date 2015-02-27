@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class ResourceProvider
 {

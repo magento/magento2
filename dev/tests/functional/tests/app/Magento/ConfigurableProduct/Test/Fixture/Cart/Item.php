@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Fixture\Cart;
 
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -28,7 +28,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
     {
         parent::__construct($product);
 
-        /** @var ConfigurableProductInjectable $product */
+        /** @var ConfigurableProduct $product */
         $checkoutData = $product->getCheckoutData();
         $cartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
         $attributesData = $product->getConfigurableAttributesData()['attributes_data'];

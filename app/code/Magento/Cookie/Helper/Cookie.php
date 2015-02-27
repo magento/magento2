@@ -36,26 +36,18 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_website;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context);
-        $this->_scopeConfig = $scopeConfig;
         $this->_currentStore = isset($data['current_store']) ? $data['current_store'] : $storeManager->getStore();
 
         if (!$this->_currentStore instanceof \Magento\Store\Model\Store) {
@@ -77,9 +69,9 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     public function isUserNotAllowSaveCookie()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
         ) && empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
     }
@@ -115,9 +107,9 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCookieRestrictionLifetime()
     {
-        return (int)$this->_scopeConfig->getValue(
+        return (int)$this->scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION_LIFETIME,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
         );
     }
