@@ -7,7 +7,7 @@
 namespace Magento\Framework\Module\ModuleList;
 
 /**
- * Deployment configuration segment for modules
+ * Factory for Deployment configuration segment for modules
  */
 class DeploymentConfigFactory
 {

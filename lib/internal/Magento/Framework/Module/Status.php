@@ -60,7 +60,7 @@ class Status
     private $conflictChecker;
 
     /**
-     * factory to create module deployment config object
+     * Factory to create module deployment config object
      *
      * @var DeploymentConfigFactory
      */

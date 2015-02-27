@@ -9,14 +9,16 @@ namespace Magento\Framework\Module\ModuleList;
 class DeploymentConfigFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento\Framework\Module\ModuleList\DeploymentConfigFactory
+     * @var DeploymentConfigFactory
      */
     protected $object;
 
     public function testCreate()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->object = $helper->getObject('Magento\Framework\Module\ModuleList\DeploymentConfigFactory');
-        $this->object->create(['Module_One' => 0, 'Module_Two' =>1]);
+        $this->object = new DeploymentConfigFactory();
+        $this->assertInstanceOf(
+            'Magento\Framework\Module\ModuleList\DeploymentConfig',
+            $this->object->create(['Module_One' => 0, 'Module_Two' =>1])
+        );
     }
 }

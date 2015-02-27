@@ -48,6 +48,21 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $moduleList;
 
     /**
+     * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $moduleLoader;
+
+    /**
+     * @var \Magento\Framework\Module\ModuleList\DeploymentConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigFactory;
+
+    /**
+     * @var \Magento\Framework\Module\ModuleList\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $directoryList;
@@ -128,6 +143,21 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->moduleList->expects($this->any())->method('getNames')->willReturn(
             ['Foo_One', 'Bar_Two']
         );
+        $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $this->deploymentConfigFactory = $this->getMock(
+            'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->deploymentConfig = $this->getMock(
+            'Magento\Framework\Module\ModuleList\DeploymentConfig',
+            [],
+            [],
+            '',
+            false
+        );
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
@@ -146,16 +176,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      *
      * @param \PHPUnit_Framework_MockObject_MockObject|bool $connectionFactory
      * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerProvider
-     * @param \PHPUnit_Framework_MockObject_MockObject|bool $moduleLoader
-     * @param \PHPUnit_Framework_MockObject_MockObject|bool $deploymentConfigFactory
      * @return Installer
      */
-    private function createObject(
-        $connectionFactory = false,
-        $objectManagerProvider = false,
-        $moduleLoader = false,
-        $deploymentConfigFactory = false
-    ) {
+    private function createObject($connectionFactory = false, $objectManagerProvider = false) {
         if (!$connectionFactory) {
             $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
             $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
@@ -164,42 +187,15 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
             $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
         }
-        if (!$moduleLoader) {
-            $moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-            $allModules = [
-                'Foo_One' => [],
-                'Bar_Two' => [],
-            ];
-            $moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
-        }
-        if (!$deploymentConfigFactory) {
-            $deploymentConfigFactory = $this->getMock(
-                'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
-                [],
-                [],
-                '',
-                false
-            );
-            $modules = ['Foo_One' => 1, 'Bar_Two' => 1 ];
-            $deploymentConfig = $this->getMock(
-                'Magento\Framework\Module\ModuleList\DeploymentConfig',
-                [],
-                [],
-                '',
-                false
-            );
-            $deploymentConfig->expects($this->any())->method('getData')->willReturn($modules);
-            $deploymentConfigFactory->expects($this->any())->method('create')->with($modules)
-                ->willReturn($deploymentConfig);
-        }
+
         return new Installer(
             $this->filePermissions,
             $this->configWriter,
             $this->configReader,
             $this->config,
-            $deploymentConfigFactory,
+            $this->deploymentConfigFactory,
             $this->moduleList,
-            $moduleLoader,
+            $this->moduleLoader,
             $this->directoryList,
             $this->adminFactory,
             $this->logger,
@@ -227,7 +223,12 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             [DbConfig::CONFIG_KEY, self::$dbConfig],
             [EncryptConfig::CONFIG_KEY, [EncryptConfig::KEY_ENCRYPTION_KEY => 'encryption_key']]
         ]));
-
+        $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+        $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
+        $modules = ['Foo_One' => 1, 'Bar_Two' => 1 ];
+        $this->deploymentConfig->expects($this->any())->method('getData')->willReturn($modules);
+        $this->deploymentConfigFactory->expects($this->any())->method('create')->with($modules)
+            ->willReturn($this->deploymentConfig);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
         $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
         $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
@@ -311,40 +312,29 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['message' => [$expectedMessage]], $this->object->getInstallInfo());
     }
 
-    public function testUpdateModulesInDeploymentConfig()
+    public function testUpdateModulesSequence()
     {
-        $moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $allModules = [
             'Foo_One' => [],
             'Bar_Two' => [],
             'New_Module' => [],
         ];
-        $moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
-        $deploymentConfigFactory = $this->getMock(
-            'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
-            [],
-            [],
-            '',
-            false
-        );
         $expectedModules = [
             'Bar_Two' => 0,
             'Foo_One' => 1,
             'New_Module' => 1
         ];
-        $deploymentConfig = $this->getMock('Magento\Framework\Module\ModuleList\DeploymentConfig', [], [], '', false);
 
-        $deploymentConfigFactory->expects($this->any())->method('create')->with($expectedModules)
-            ->willReturn($deploymentConfig);
+        $this->deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
+            ->willReturn($this->deploymentConfig);
 
-        $newObject = $this->createObject(false, false, $moduleLoader, $deploymentConfigFactory);
+        $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
-        $deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
-            ->willReturn($deploymentConfig);
-        $this->configWriter->expects($this->once())->method('update')->with($deploymentConfig);
-        $newObject->updateModulesInDeploymentConfig();
+        $this->configWriter->expects($this->once())->method('update')->with($this->deploymentConfig);
+        $newObject->updateModulesSequence();
     }
 
     public function testUninstall()

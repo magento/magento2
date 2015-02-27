@@ -812,10 +812,11 @@ class Installer
      *
      * @return void
      */
-    public function updateModulesInDeploymentConfig()
+    public function updateModulesSequence()
     {
         $allModules = array_keys($this->moduleLoader->load());
-        $currentModules = $this->deploymentConfigReader->load()['modules'] ;
+        $deploymentConfig = $this->deploymentConfigReader->load();
+        $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
         $result = [];
         foreach ($allModules as $module) {
             if (isset($currentModules[$module]) && !$currentModules[$module]) {
