@@ -142,7 +142,7 @@ class Timezone implements TimezoneInterface
      */
     public function date($date = null, $part = null, $locale = null, $useTimezone = true)
     {
-        $locale = $locale ? $locale : $this->_localeResolver->getLocale()->toString();
+        $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
             ? $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType)
             : 'UTC';
