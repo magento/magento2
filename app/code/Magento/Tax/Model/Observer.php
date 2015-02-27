@@ -161,7 +161,6 @@ class Observer
                         'real_base_amount' => $rates['base_amount'],
                     ];
                 } else {
-                    $percentDelta = $rates['percent'];
                     $percentSum = 0;
                     foreach ($rates['rates'] as $rate) {
                         $real_amount = $rates['amount'] * $rate['percent'] / $rates['percent'];
