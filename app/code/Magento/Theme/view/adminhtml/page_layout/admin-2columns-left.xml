@@ -22,7 +22,7 @@
 
                 <container name="page.content" as="page_content" htmlTag="main" htmlId="anchor-content" htmlClass="page-content">
                     <container name="main.top" as="main-top" label="main-top"/>
-                    <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages" htmlClass="messages">
+                    <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages" htmlClass="messages admin__scope">
                         <container name="page.messages" as="page.messages"/>
                     </container>
                     <container name="page.main.actions" as="page_main_actions" htmlTag="div" htmlClass="page-main-actions"/>

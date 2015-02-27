@@ -14,9 +14,9 @@
 ?>
 <?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
-        <div class="message message-noscript">
-            <div class="message-inner">
-                <div class="message-content">
+        <div class="messages-wrap admin__scope">
+            <div class="messages">
+                <div class="message message-warning message-noscript">
                     <strong><?php echo __('JavaScript may be disabled in your browser.'); ?></strong>
                     <?php echo __('To use this website you must first enable JavaScript in your browser.'); ?>
                 </div>
@@ -25,9 +25,9 @@
     </noscript>
 <?php endif; ?>
 <?php if ($block->displayDemoNotice()): ?>
-    <div class="message message-demo-mode">
-        <div class="message-inner">
-            <div class="message-content">
+    <div class="messages-wrap admin__scope">
+        <div class="messages">
+            <div class="message message-warning message-demo-mode">
                 <?php echo __('This is only a demo store. You can browse and place orders, but nothing will be processed.') ?>
             </div>
         </div>

@@ -7,76 +7,98 @@
 //  Variables
 //  _____________________________________________
 
-//  Colors
-@alert__background-color: @color-lazy-sunny;
+@alert__font-size: 1.4rem;
+@alert__font-style: @font-style__base;
+@alert__font-weight: @font-weight__regular;
 @alert__color: @color-gray20;
-
-//  Sizes
-@alert__font-size: 1.9rem;
-
-//  States
-@alert-icon__info__color: @color-blue-pure;
-@alert-icon__error__color: @color-phoenix;
-@alert-icon__success__color: @color-green-apple;
+@alert__background-color: @color-lazy-sun;
+@alert__error__background-color: @color-pink;
 
 //
-//  Messages (Global)
+//  Alert Icons
 //  ---------------------------------------------
 
-//  ToDo UI: Not existing component yet.
-//.messages {
-//    margin: 20px 0;
-//    > .message:last-child {
-//        margin-bottom: 0;
-//    }
-//}
+@alert-icon__font-name: @icons-admin__font-name;
+@alert-icon__font-size: 1.9rem;
+
+@alert-icon__notice__content: @icon-enable__content;
+@alert-icon__notice__color: @color-blue-pure;
+
+@alert-icon__warning__content: @icon-warning__content;
+@alert-icon__warning__color: @color-phoenix;
+
+@alert-icon__success__content: @icon-check-mage__content;
+@alert-icon__success__color: @color-green-apple;
+
+@alert-icon__error__content: @icon-error__content;
+@alert-icon__error__color: @color-tomato-brick;
+
 //
-//.message {
-//    background: @alert__background-color;
-//    color: @alert__color;
-//    margin-bottom: 3.5rem;
-//    padding: 1.8rem 4rem 1.8rem 1.9rem;
-//    position: relative;
-//    text-shadow: none;
-//
-//    &:before {
-//        background: none;
-//        border: 0;
-//        font-family: @icons-admin__font-name;
-//        font-size: @alert__font-size;
-//        font-style: @font-style__base;
-//        font-weight: @font-weight__regular;
-//        height: auto;
-//        left: 1.9rem;
-//        line-height: inherit;
-//        margin-top: -1.3rem;
-//        position: absolute;
-//        speak: none;
-//        text-shadow: none;
-//        top: 50%;
-//        width: auto;
-//    }
-//    &-info,
-//    &.info {
-//        padding-left: 5rem;
-//        &:before {
-//            color: @alert-icon__info__color;
-//            //content: @icon-info;
-//        }
-//    }
-//    &-error,
-//    &.error {
-//        padding-left: 5rem;
-//        &:before {
-//            color: @alert-icon__error__color;
-//            //content: @icon-error;
-//        }
-//    }
-//    &.success {
-//        padding-left: 5rem;
-//        &:before {
-//            color: @alert-icon__success__color;
-//            //content: @icon-check-mage;
-//        }
-//    }
-//}
+//  Message
+//  ---------------------------------------------
+
+.message {
+    background: @alert__background-color;
+    border: none;
+    border-radius: 0;
+    color: @alert__color;
+    font-size: @alert__font-size;
+    margin: 0 0 1px;
+    padding: 1.8rem 4rem 1.8rem 5rem;
+    position: relative;
+    text-shadow: none;
+
+    &:before {
+        background: none;
+        border: 0;
+        font-family: @alert-icon__font-name;
+        font-size: @alert-icon__font-size;
+        font-style: @alert__font-style;
+        font-weight: @alert__font-weight;
+        color: @alert-icon__notice__color;
+        content: @alert-icon__notice__content;
+        height: auto;
+        left: 1.9rem;
+        line-height: inherit;
+        margin-top: -1.3rem;
+        position: absolute;
+        speak: none;
+        text-shadow: none;
+        top: 50%;
+        width: auto;
+    }
+    &-notice,
+    &.notice {
+        &:before {
+            color: @alert-icon__notice__color;
+            content: @alert-icon__notice__content;
+        }
+    }
+    &-warning,
+    &.warning {
+        &:before {
+            color: @alert-icon__warning__color;
+            content: @alert-icon__warning__content;
+        }
+    }
+    &-error,
+    &.error {
+        background: @alert__error__background-color;
+        &:before {
+            color: @alert-icon__error__color;
+            content: @alert-icon__error__content;
+        }
+    }
+    &.success {
+        &:before {
+            color: @alert-icon__success__color;
+            content: @alert-icon__success__content;
+        }
+    }
+    &.no-icon {
+        padding-left: 1.9rem;
+        &:before {
+            display: none;
+        }
+    }
+}

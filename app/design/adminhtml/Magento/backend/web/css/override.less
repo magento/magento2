@@ -912,7 +912,7 @@ option:empty {
 }
 .admin__field-tooltip-content {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-  background: #fff8d6;
+  background: #fffbbb;
   border-radius: 1px;
   border: 1px solid #afadac;
   bottom: 42px;
@@ -937,13 +937,13 @@ option:empty {
   z-index: 3;
 }
 .admin__field-tooltip-content:after {
-  border-top-color: #fff8d6;
+  border-top-color: #fffbbb;
   margin-top: -1px;
   z-index: 4;
 }
-.action {
+.action-button {
   background: #e3e3e3;
-  border: 1px solid transparent;
+  border: 1px solid #adadad;
   color: #514943;
   display: inline-block;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -953,17 +953,17 @@ option:empty {
   text-align: center;
   vertical-align: middle;
 }
-.action:hover {
+.action-button:hover {
   background-color: #dbdbdb;
   color: #514943;
   box-shadow: 0 0 0 1px #008bdb;
   text-decoration: none;
 }
-.action:active {
+.action-button:active {
   background-color: #d6d6d6;
 }
-.action[disabled],
-.action.disabled {
+.action-button[disabled],
+.action-button.disabled {
   cursor: default;
   opacity: 0.7;
   pointer-events: none;
@@ -984,6 +984,7 @@ option:empty {
 }
 .action-primary {
   background-color: #eb5202;
+  border-color: #eb5202;
   color: #ffffff;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
@@ -1021,15 +1022,6 @@ option:empty {
 .action-reset:hover,
 .action-reset:active {
   background-color: transparent;
-}
-.action-tertiary {
-  border-color: #adadad;
-  color: #333333;
-}
-.action-tertiary:hover,
-.action-tertiary:active {
-  background-color: #cacaca;
-  border-color: #8f8f8f;
 }
 .actions-split {
   display: inline-block;
@@ -1236,6 +1228,65 @@ table.table tbody td:first-child input[type='checkbox'] {
 table.table tbody tr:last-child td {
   border-bottom-color: transparent;
 }
+.message {
+  background: #fffbbb;
+  border: none;
+  border-radius: 0;
+  color: #333333;
+  font-size: 1.4rem;
+  margin: 0 0 1px;
+  padding: 1.8rem 4rem 1.8rem 5rem;
+  position: relative;
+  text-shadow: none;
+}
+.message:before {
+  background: none;
+  border: 0;
+  font-family: 'Admin Icons';
+  font-size: 1.9rem;
+  font-style: normal;
+  font-weight: 400;
+  color: #007bdb;
+  content: '\e637';
+  height: auto;
+  left: 1.9rem;
+  line-height: inherit;
+  margin-top: -1.3rem;
+  position: absolute;
+  speak: none;
+  text-shadow: none;
+  top: 50%;
+  width: auto;
+}
+.message-notice:before,
+.message.notice:before {
+  color: #007bdb;
+  content: '\e637';
+}
+.message-warning:before,
+.message.warning:before {
+  color: #eb5202;
+  content: '\e623';
+}
+.message-error,
+.message.error {
+  background: #ffcccc;
+}
+.message-error:before,
+.message.error:before {
+  color: #e22626;
+  content: '\e632';
+}
+.message.success:before {
+  color: #79a22e;
+  content: '\e62d';
+}
+.message.no-icon {
+  padding-left: 1.9rem;
+}
+.message.no-icon:before {
+  display: none;
+}
 .row {
   margin-left: 0;
   margin-right: 0;
@@ -1428,10 +1479,10 @@ table.table tbody tr:last-child td {
   font-weight: normal;
   speak: none;
 }
-.abs-action,
+.abs-action-button,
 button {
   background: #e3e3e3;
-  border: 1px solid transparent;
+  border: 1px solid #adadad;
   color: #514943;
   display: inline-block;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -1441,19 +1492,19 @@ button {
   text-align: center;
   vertical-align: middle;
 }
-.abs-action:hover,
+.abs-action-button:hover,
 button:hover {
   background-color: #dbdbdb;
   color: #514943;
   box-shadow: 0 0 0 1px #008bdb;
   text-decoration: none;
 }
-.abs-action:active,
+.abs-action-button:active,
 button:active {
   background-color: #d6d6d6;
 }
-.abs-action[disabled],
-.abs-action.disabled,
+.abs-action-button[disabled],
+.abs-action-button.disabled,
 button[disabled],
 button.disabled {
   cursor: default;
@@ -1463,6 +1514,7 @@ button.disabled {
 .abs-action-primary,
 button.primary {
   background-color: #eb5202;
+  border-color: #eb5202;
   color: #ffffff;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
@@ -1500,21 +1552,9 @@ button.secondary:active {
 button.secondary:active {
   background-color: #35302c;
 }
-.abs-action-tertiary,
-button.tertiary {
-  border-color: #adadad;
-  color: #333333;
-}
-.abs-action-tertiary:hover,
-.abs-action-tertiary:active,
-button.tertiary:hover,
-button.tertiary:active {
-  background-color: #cacaca;
-  border-color: #8f8f8f;
-}
 .abs-action-big {
-  padding: 0.7em 1.45em;
   font-size: 1.6rem;
+  padding: 0.7em 1.45em;
 }
 .abs-btn-reset,
 .admin__menu .submenu-close {
@@ -1622,6 +1662,9 @@ body {
 .page-content {
   padding-left: 3rem;
   padding-right: 3rem;
+}
+.messages {
+  margin: 2rem 0;
 }
 .admin__control-text.hasDatepicker {
   width: 15rem;
