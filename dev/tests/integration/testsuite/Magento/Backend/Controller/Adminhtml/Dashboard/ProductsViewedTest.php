@@ -8,7 +8,6 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
 class ProductsViewedTest extends \Magento\Backend\Utility\Controller
 {
-
     public function testExecute()
     {
         $this->dispatch('backend/admin/dashboard/productsViewed/');
