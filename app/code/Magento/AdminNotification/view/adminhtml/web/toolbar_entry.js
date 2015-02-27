@@ -11,7 +11,7 @@ define([
 
     // Mark notification as read via AJAX call
     var markNotificationAsRead = function(notificationId) {
-        var requestUrl = $('.notifications-summary .dropdown-menu').attr('data-mark-as-read-url');
+        var requestUrl = $('.notifications-wrapper .dropdown-menu').attr('data-mark-as-read-url');
         $.ajax({
             url: requestUrl,
             type: 'POST',
@@ -22,25 +22,25 @@ define([
             showLoader: false
         });
     };
-    var notificationCount = $('.notifications-summary').attr('data-notification-count');
+    var notificationCount = $('.notifications-wrapper').attr('data-notification-count');
     // Remove notification from the list
     var removeNotificationFromList = function(notificationEntry) {
         notificationEntry.remove();
         notificationCount--;
-        $('.notifications-summary').attr('data-notification-count', notificationCount);
+        $('.notifications-wrapper').attr('data-notification-count', notificationCount);
 
         if (notificationCount == 0) {
             // Change appearance of the bubble and its behavior when the last notification is removed
-            $('.notifications-summary .dropdown-menu').remove();
-            var notificationIcon = $('.notifications-summary .notifications-icon');
+            $('.notifications-wrapper .dropdown-menu').remove();
+            var notificationIcon = $('.notifications-wrapper .notifications-icon');
             notificationIcon.removeAttr('data-toggle');
             notificationIcon.off('click.dropdown');
-            $('.notifications-action .counter').text('');
-            $('.notifications-action .counter').hide();
+            $('.notifications-action .notifications-counter').text('');
+            $('.notifications-action .notifications-counter').hide();
         } else {
-            $('.notifications-action .counter').text(notificationCount);
+            $('.notifications-action .notifications-counter').text(notificationCount);
             // Modify caption of the 'See All' link
-            var actionElement = $('.notifications-summary .dropdown-menu .last .action-more');
+            var actionElement = $('.notifications-wrapper .dropdown-menu .last .action-more');
             actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
         }
     };
@@ -82,9 +82,9 @@ define([
     };
 
     // Show notification description when corresponding item is clicked
-    $('.notifications-summary .dropdown-menu .notifications-entry').on('click.showNotification', function(event) {
+    $('.notifications-wrapper .dropdown-menu .notifications-entry').on('click.showNotification', function(event) {
         // hide notification dropdown
-        $('.notifications-summary .notifications-icon').trigger('click.dropdown');
+        $('.notifications-wrapper .notifications-icon').trigger('click.dropdown');
         showNotificationDetails($(this));
         event.stopPropagation();
     });
@@ -100,9 +100,9 @@ define([
 
     // Hide notifications bubble
     if (notificationCount == 0) {
-        $('.notifications-action .counter').hide();
+        $('.notifications-action .notifications-counter').hide();
     } else {
-        $('.notifications-action .counter').show();
+        $('.notifications-action .notifications-counter').show();
     }
     
 });

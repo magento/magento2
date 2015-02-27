@@ -48,7 +48,6 @@ audio:not([controls]) {
   display: none;
   height: 0;
 }
-[hidden],
 template {
   display: none;
 }
@@ -1473,8 +1472,10 @@ table.table tbody tr:last-child td {
 .abs-icon,
 .admin__menu .level-0 > a:before,
 .admin__menu .submenu-close:before,
-.page-title-breadcrumb:after,
 .admin-user-account:before,
+.page-title-breadcrumb:after,
+.notifications-action:before,
+.search-global-label:before,
 .copyright .link-copyright:before {
   -webkit-font-smoothing: antialiased;
   font-family: 'Admin Icons';
@@ -1595,8 +1596,8 @@ table.table th.required:after {
 .tabs-horiz:after,
 .message-system-inner:before,
 .message-system-inner:after,
-.page-header-action:before,
-.page-header-action:after,
+.page-header-actions:before,
+.page-header-actions:after,
 .page-main-actions:before,
 .page-main-actions:after,
 .dashboard-totals-list:before,
@@ -1609,7 +1610,7 @@ table.table th.required:after {
 .abs-clearfix:after,
 .tabs-horiz:after,
 .message-system-inner:after,
-.page-header-action:after,
+.page-header-actions:after,
 .page-main-actions:after,
 .dashboard-totals-list:after,
 .dashboard-store-stats .ui-tabs:after {
@@ -2206,8 +2207,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .message-system-short .message.error:before {
   color: #eb5202;
   content: '\e623';
-  margin-top: -1.3rem;
   font-size: 1.9rem;
+  margin-top: -1.3rem;
 }
 .menu-wrapper {
   height: 100%;
@@ -2438,38 +2439,11 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   top: 0;
   z-index: 500;
 }
-.page-header {
-  padding: 1.5rem 3rem;
-}
-.page-header-hgroup {
-  padding-right: 1.5rem;
-}
-.page-title-wrapper {
-  margin-top: 1.7rem;
-}
-.page-title {
-  font-size: 2.8rem;
-  color: #41362f;
-}
-.page-title-breadcrumbs {
-  min-height: 1.7rem;
-  font-size: 1.2rem;
-}
-.page-title-breadcrumbs + .page-title-wrapper {
-  margin-top: 0;
-}
-.page-title-breadcrumb:hover {
-  text-decoration: none;
-}
-.page-title-breadcrumb:after {
-  content: '\e62a';
-  font-size: .75em;
-  margin-left: .5em;
-}
 .admin-user {
   position: relative;
   float: right;
-  margin-left: 1rem;
+  line-height: 1;
+  margin-left: 1px;
 }
 .admin-user.active .admin-user-account {
   border-color: #007bdb;
@@ -2493,24 +2467,10 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   opacity: 1;
 }
 .admin-user-account {
-  display: inline-block;
-  position: relative;
-  padding: 0.7rem 2.8rem 0.8rem 4rem;
-  color: #41362f;
+  padding: 1.1rem 2.8rem 1rem 4rem;
   font-size: 1.3rem;
-  border: 1px solid transparent;
-  border-bottom: none;
   letter-spacing: .05em;
-  transition: border-color 0.15s ease;
   z-index: 400;
-  background-color: #ffffff;
-}
-.admin-user-account:hover {
-  text-decoration: none;
-  color: #060504;
-}
-.admin-user-account:hover:before {
-  color: #060504;
 }
 .admin-user-account:hover:after {
   border-color: #060504 transparent transparent transparent;
@@ -2540,6 +2500,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .page-main-actions .store-switcher > .actions .dropdown-menu {
   visibility: hidden;
   position: absolute;
+  line-height: 1.4;
   top: 100%;
   right: 0;
   margin-top: -1px;
@@ -2581,11 +2542,168 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   bottom: -1px;
   background-color: #c7effd;
 }
-.search-global {
-  float: right;
+.page-header {
+  padding: 1.5rem 3rem;
 }
-.notifications-summary {
+.page-header-hgroup {
+  padding-right: 1.5rem;
+}
+.page-title-wrapper {
+  margin-top: 1.7rem;
+}
+.page-title {
+  font-size: 2.8rem;
+  color: #41362f;
+}
+.page-title-breadcrumbs {
+  min-height: 1.7rem;
+  font-size: 1.2rem;
+}
+.page-title-breadcrumbs + .page-title-wrapper {
+  margin-top: 0;
+}
+.page-title-breadcrumb:hover {
+  text-decoration: none;
+}
+.page-title-breadcrumb:after {
+  content: '\e62a';
+  font-size: .75em;
+  margin-left: .5em;
+}
+.page-header-actions {
+  padding-top: 1.1rem;
+}
+.abs-page-header-action,
+.admin-user-account,
+.notifications-action {
+  display: inline-block;
+  position: relative;
+  height: 3.4rem;
+  color: #41362f;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: border-color 0.15s ease;
+  background-color: #ffffff;
+}
+.abs-page-header-action:hover,
+.admin-user-account:hover,
+.notifications-action:hover {
+  text-decoration: none;
+  color: #060504;
+}
+.notifications-wrapper {
+  position: relative;
   float: right;
+  line-height: 1;
+  margin-left: 1px;
+}
+.notifications-action {
+  padding: 0.8rem 2rem 0.7rem;
+  z-index: 200;
+}
+.notifications-action:before {
+  content: '\e607';
+  font-size: 1.9rem;
+}
+.search-global {
+  position: relative;
+  float: right;
+  z-index: 300;
+}
+.search-global-field {
+  min-width: 4.8rem;
+}
+.search-global-field._active .search-global-input {
+  width: 25rem;
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.5);
+  border-color: #007bdb;
+}
+.search-global-field .autocomplete-results {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.search-global-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.8rem 1.3rem;
+  z-index: 300;
+  cursor: pointer;
+}
+.search-global-label:active {
+  transform: scale(0.9);
+}
+.search-global-label:hover:before {
+  color: #060504;
+}
+.search-global-label:before {
+  content: '\e60c';
+  font-size: 2rem;
+}
+.search-global-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4.8rem;
+  height: 3.4rem;
+  padding: 0.8rem 4rem 0.6rem 1em;
+  font-size: 1.4rem;
+  transition: all .1s linear, width .3s linear;
+  border: 1px solid transparent;
+}
+.search-global-action {
+  display: none;
+}
+.mage-suggest-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin: 1px -1px 0 -1px;
+  border: 1px solid #cac2b5;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 990;
+}
+.mage-suggest-dropdown ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mage-suggest-dropdown li {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0;
+}
+.mage-suggest-dropdown li a {
+  display: block;
+}
+.mage-suggest-dropdown li a.ui-state-focus {
+  background: #f5f5f5;
+}
+.mage-suggest-dropdown li a,
+.mage-suggest-dropdown .jstree li a:hover,
+.mage-suggest-dropdown .jstree .jstree-hovered,
+.mage-suggest-dropdown .jstree .jstree-clicked {
+  padding: 6px 12px 5px;
+  text-decoration: none;
+  color: #333;
+}
+.mage-suggest-dropdown .jstree li a:hover,
+.mage-suggest-dropdown .jstree .jstree-hovered,
+.mage-suggest-dropdown .jstree .jstree-clicked {
+  border: none;
+}
+.mage-suggest-dropdown .jstree li {
+  border-bottom: 0;
+}
+.mage-suggest-dropdown .jstree li a {
+  display: inline-block;
+}
+.mage-suggest-dropdown .jstree .mage-suggest-selected > a {
+  color: #000;
+  background: #F1FFEB;
 }
 .page-main-actions {
   background: #f8f8f8;

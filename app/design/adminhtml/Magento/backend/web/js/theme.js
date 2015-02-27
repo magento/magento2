@@ -147,7 +147,7 @@ define('globalSearch', [
     $.widget('mage.globalSearch', {
         options: {
             field: '.search-global-field',
-            fieldActiveClass: 'active',
+            fieldActiveClass: '_active',
             input: '#search-global'
         },
 

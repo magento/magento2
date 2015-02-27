@@ -33,8 +33,8 @@
         <move element="header" destination="header.wrapper.scope" />
         <move element="page.title" before="-" destination="header.inner.left" />
         <move element="user" before="-" destination="header.inner.right" />
-        <move element="global.search" destination="header.inner.right" />
-        <move element="notification.messages" after="global.search" destination="header.inner.right" />
+        <move element="notification.messages" after="user" destination="header.inner.right" />
+        <move element="global.search" after="notification.messages" destination="header.inner.right" />
 
     </body>
 </page>
