@@ -12,14 +12,14 @@ namespace Magento\Quote\Model\Cart;
 class ShippingMethodConverter
 {
     /**
-     * Shipping method builder.
+     * Shipping method data factory.
      *
      * @var \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory
      */
     protected $shippingMethodDataFactory;
 
     /**
-     * Constructs a shipping method builder object.
+     * Constructs a shipping method converter object.
      *
      * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory Shipping method factory.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager interface.

@@ -45,8 +45,8 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory Shipping method builder.
-     * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method builder converter.
+     * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory Shipping method factory.
+     * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method converter.
      */
     public function __construct(
         QuoteRepository $quoteRepository,

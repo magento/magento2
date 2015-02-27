@@ -19,7 +19,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $builderMock;
+    protected $shippingMethodDataFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,16 +49,16 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->builderMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ShippingMethodDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->shippingMethodDataFactoryMock = $this->getMock(
+            '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->currencyMock = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
-        $this->shippingMethodMock = $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
+        $this->shippingMethodMock = $this->getMock('\Magento\Quote\Model\Cart\ShippingMethod',
             [
                 'create',
                 'setCarrierCode',
@@ -89,7 +89,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Cart\ShippingMethodConverter',
             [
-                'shippingMethodDataFactory' => $this->shippingMethodMock,
+                'shippingMethodDataFactory' => $this->shippingMethodDataFactoryMock,
                 'storeManager' => $this->storeManagerMock,
             ]
         );
@@ -111,9 +111,11 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
             ->method('getCarrierTitle')->will($this->returnValue('CARRIER_TITLE'));
         $this->rateModelMock->expects($this->once())
             ->method('getMethodTitle')->will($this->returnValue('METHOD_TITLE'));
-        $this->shippingMethodMock->expects($this->once())
+        $this->shippingMethodDataFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->shippingMethodMock));
+
+
         $this->shippingMethodMock->expects($this->once())
             ->method('setCarrierCode')
             ->with('CARRIER_CODE')
