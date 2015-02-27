@@ -8,7 +8,7 @@ namespace Magento\PageCache\Block\System\Config\Form\Field;
 /**
  * Class Export
  */
-class Export extends \Magento\Backend\Block\System\Config\Form\Field
+class Export extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * Retrieve element HTML markup

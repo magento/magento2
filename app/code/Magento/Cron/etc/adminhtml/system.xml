@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="system">
             <group id="cron" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -33,7 +33,7 @@
                     </field>
                     <field id="use_separate_process" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Use Separate Process</label>
-                        <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
             </group>

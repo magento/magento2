@@ -38,7 +38,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
             } else {
                 $resultRedirect->setPath('sales/order/');
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (\Exception $e) {

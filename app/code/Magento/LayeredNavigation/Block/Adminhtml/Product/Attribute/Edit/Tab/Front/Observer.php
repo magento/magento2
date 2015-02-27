@@ -7,13 +7,13 @@
  */
 namespace Magento\LayeredNavigation\Block\Adminhtml\Product\Attribute\Edit\Tab\Front;
 
-use Magento\Backend\Model\Config\Source;
+use Magento\Config\Model\Config\Source;
 use Magento\Framework\Module\Manager;
 
 class Observer
 {
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $optionList;
 

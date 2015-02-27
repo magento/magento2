@@ -14,7 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Exception;
+use Magento\Eav\Exception as EavException;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 
@@ -334,12 +334,12 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Retrieve current entity config
      *
      * @return Type
-     * @throws \Magento\Framework\Model\Exception
+     * @throws EavException
      */
     public function getEntityType()
     {
         if (empty($this->_type)) {
-            throw new \Magento\Eav\Exception(__('Entity is not initialized'));
+            throw new EavException(__('Entity is not initialized'));
         }
         return $this->_type;
     }
@@ -372,7 +372,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param array|string|null $attributes
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws EavException
      */
     public function unsetAttributes($attributes = null)
     {
@@ -387,7 +387,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         }
 
         if (!is_array($attributes)) {
-            throw new \Magento\Eav\Exception(__('Unknown parameter'));
+            throw new EavException(__('Unknown parameter'));
         }
 
         foreach ($attributes as $attrCode) {

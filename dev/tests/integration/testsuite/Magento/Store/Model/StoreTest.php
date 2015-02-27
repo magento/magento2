@@ -49,7 +49,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'configCacheType' => $objectManager->get('Magento\Framework\App\Cache\Type\Config'),
             'url' => $objectManager->get('Magento\Framework\Url'),
             'request' => $objectManager->get('Magento\Framework\App\RequestInterface'),
-            'configDataResource' => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
+            'configDataResource' => $objectManager->get('Magento\Config\Model\Resource\Config\Data'),
             'filesystem' => $objectManager->get('Magento\Framework\Filesystem'),
             'config' => $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface'),
             'storeManager' => $objectManager->get('Magento\Store\Model\StoreManager'),
@@ -352,7 +352,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveValidation($badStoreData)
     {

@@ -75,10 +75,12 @@ class ReaderPool implements ReaderInterface
      */
     protected function prepareReader($readers)
     {
-        /** @var $reader Layout\ReaderInterface */
-        foreach ($readers as $readerClass) {
-            $reader = $this->readerFactory->create($readerClass);
-            $this->addReader($reader);
+        if (empty($this->nodeReaders)) {
+            /** @var $reader Layout\ReaderInterface */
+            foreach ($readers as $readerClass) {
+                $reader = $this->readerFactory->create($readerClass);
+                $this->addReader($reader);
+            }
         }
     }
 

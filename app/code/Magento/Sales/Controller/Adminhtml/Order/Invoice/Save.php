@@ -7,13 +7,16 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -138,7 +141,7 @@ class Save extends \Magento\Backend\App\Action
                 ->prepareInvoice($invoiceItems);
 
             if (!$invoice) {
-                throw new Exception(__('We can\'t save the invoice.'));
+                throw new LocalizedException(__('We can\'t save the invoice.'));
             }
 
             if (!$invoice->getTotalQty()) {
@@ -217,7 +220,7 @@ class Save extends \Magento\Backend\App\Action
             }
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice.'));

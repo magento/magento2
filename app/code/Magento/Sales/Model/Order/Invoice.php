@@ -620,13 +620,13 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * Apply to order, order items etc.
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function register()
     {
         if ($this->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot register an existing invoice'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot register an existing invoice'));
         }
 
         foreach ($this->getAllItems() as $item) {

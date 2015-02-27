@@ -241,7 +241,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set expectations in case of \Magento\Framework\Model\Exception for saveAction method
+     * Set expectations in case of \Magento\Framework\Exception\LocalizedException for saveAction method
      *
      * @param array $data
      * @param string $errorMessage
