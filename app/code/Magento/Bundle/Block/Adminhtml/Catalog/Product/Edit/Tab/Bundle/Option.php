@@ -41,20 +41,20 @@ class Option extends \Magento\Backend\Block\Widget
     protected $_optionTypes;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_yesno;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
+     * @param \Magento\Config\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Type $optionTypes
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Config\Source\Yesno $yesno,
+        \Magento\Config\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Type $optionTypes,
         \Magento\Framework\Registry $registry,
         array $data = []

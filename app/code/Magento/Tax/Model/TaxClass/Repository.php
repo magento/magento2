@@ -14,7 +14,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException as ModelException;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModelRegistry;
@@ -103,7 +103,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         try {
             $this->taxClassResource->save($taxClass);
         } catch (ModelException $e) {
-            if (strpos($e->getMessage(), \Magento\Tax\Model\Resource\TaxClass::UNIQUE_TAX_CLASS_MSG) !== false) {
+            if (strpos($e->getMessage(), (string)__('Class name and class type')) !== false) {
                 throw new InputException(
                     'A class with the same name already exists for ClassType %classType.',
                     ['classType' => $taxClass->getClassType()]

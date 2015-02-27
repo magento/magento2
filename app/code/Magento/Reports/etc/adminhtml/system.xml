@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="catalog">
             <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Recently Viewed/Compared Products</label>
                 <field id="scope" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show for Current</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Reports\Scope</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Reports\Scope</source_model>
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 </field>
                 <field id="viewed_count" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

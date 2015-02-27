@@ -88,6 +88,7 @@ class View extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -142,7 +143,7 @@ class View extends \Magento\Framework\App\Action\Action
                 'catalog_controller_category_init_after',
                 ['category' => $category, 'controller_action' => $this]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return false;
         }

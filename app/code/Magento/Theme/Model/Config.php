@@ -108,7 +108,7 @@ class Config
      *
      * @param string $scope
      * @param string $configPath
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return \Magento\Config\Model\Resource\Config\Data\Collection
      */
     protected function _getAssignedScopesCollection($scope, $configPath)
     {

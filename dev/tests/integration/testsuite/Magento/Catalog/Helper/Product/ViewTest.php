@@ -120,7 +120,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
      */
     public function testPrepareAndRenderWrongController()
@@ -132,7 +132,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testPrepareAndRenderWrongProduct()
     {
