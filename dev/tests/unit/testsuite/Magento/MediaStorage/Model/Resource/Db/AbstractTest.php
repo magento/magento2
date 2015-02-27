@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\Framework\Model\Resource\Db\AbstractDb.
  */
-namespace Magento\Core\Model\Resource\Db;
+namespace Magento\MediaStorage\Model\Resource\Db;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
