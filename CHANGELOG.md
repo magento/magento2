@@ -22,6 +22,8 @@
     * Fixed fatal error on page which contain a widget with a condition based on "Category"
 * GitHub requests
     * [#899](https://github.com/magento/magento2/issues/899) -- When accessing any category - error report generated
+    * [#986](https://github.com/magento/magento2/pull/986) -- Make it possible to exclude classes (directories) for compilation
+    * [#1054](https://github.com/magento/magento2/pull/1054) -- Fix typo in MAGE_MODE
 
 0.42.0-beta9
 =============
