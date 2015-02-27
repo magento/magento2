@@ -9,8 +9,22 @@
  */
 namespace Magento\Framework\Data\Helper;
 
+use Magento\Framework\App\Helper\Context;
+
 class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**
+     * @var \Magento\Framework\Url\Helper
+     */
+    private $urlHelper;
+
+    public function __construct(
+        Context $context,
+        \Magento\Framework\Url\Helper $urlHelper
+    ) {
+        $this->urlHelper = $urlHelper;
+    }
+
     /**
      * get data for post by javascript in format acceptable to $.mage.dataPost widget
      *
@@ -21,22 +35,8 @@ class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
     public function getPostData($url, array $data = [])
     {
         if (!isset($data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED])) {
-            $data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED] = $this->getEncodedUrl();
+            $data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl();
         }
         return json_encode(['action' => $url, 'data' => $data]);
-    }
-
-    /**
-     * Get current encoded url
-     *
-     * @param string|null $url
-     * @return string
-     */
-    public function getEncodedUrl($url = null)
-    {
-        if (!$url) {
-            $url = $this->_urlBuilder->getCurrentUrl();
-        }
-        return $this->urlEncoder->encode($url);
     }
 }
