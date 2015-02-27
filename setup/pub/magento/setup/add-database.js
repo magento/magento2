@@ -19,7 +19,7 @@ angular.module('add-database', ['ngStorage'])
         }
 
         $scope.testConnection = function () {
-            $http.post('index.php/database-check', $scope.db, data)
+            $http.post('index.php/database-check', $scope.db)
                 .success(function (data) {
                     $scope.testConnection.result = data;
                     if ($scope.testConnection.result.success) {
