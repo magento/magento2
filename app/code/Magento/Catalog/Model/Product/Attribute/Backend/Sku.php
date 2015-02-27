@@ -57,7 +57,7 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                (string)__('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
+                __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)
             );
         }
         return true;
