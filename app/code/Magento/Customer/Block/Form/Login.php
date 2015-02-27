@@ -37,7 +37,7 @@ class Login extends \Magento\Framework\View\Element\Template
     /**
      * Core url
      *
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $coreUrl;
 
@@ -54,7 +54,7 @@ class Login extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Framework\Url\Helper $coreUrl
+     * @param \Magento\Framework\Url\Helper\Data $coreUrl
      * @param array $data
      */
     public function __construct(
@@ -63,7 +63,7 @@ class Login extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Framework\Url\Helper $coreUrl,
+        \Magento\Framework\Url\Helper\Data $coreUrl,
         array $data = []
     ) {
         $this->registration = $registration;

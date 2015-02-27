@@ -13,18 +13,18 @@ namespace Magento\AdminNotification\Block\Grid\Renderer;
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $_urlHelper;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Framework\Url\Helper $urlHelper
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Url\Helper $urlHelper,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         array $data = []
     ) {
         $this->_urlHelper = $urlHelper;

@@ -9,14 +9,13 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Url\Helper;
 use Magento\Store\Model\Store;
 
 /**
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Framework\Url\Helper
+class Product extends \Magento\Framework\Url\Helper\Data
 {
     const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
 

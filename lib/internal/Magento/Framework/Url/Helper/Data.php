@@ -9,9 +9,9 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Url;
+namespace Magento\Framework\Url\Helper;
 
-class Helper extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Retrieve current url in base64 encoding

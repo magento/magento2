@@ -7,14 +7,14 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Checkout\Helper;
-use Magento\Framework\Url\Helper;
+use Magento\Framework\Url\Helper\Data;
 
 /**
  * Shopping cart helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Cart extends \Magento\Framework\Url\Helper
+class Cart extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Path to controller to delete item from cart

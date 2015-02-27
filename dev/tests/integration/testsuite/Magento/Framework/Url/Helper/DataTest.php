@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Url;
+namespace Magento\Framework\Url\Helper;
 
-class HelperTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $_helper = null;
 
@@ -17,7 +17,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST'] = 'example.com';
         $_SERVER['REQUEST_URI'] = '/fancy_uri';
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Url\Helper'
+            'Magento\Framework\Url\Helper\Data'
         );
     }
 

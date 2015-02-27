@@ -28,7 +28,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $checkoutData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\Helper
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\Helper\Data
      */
     protected $coreUrl;
 
@@ -45,7 +45,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ['isContextCheckout']
         )->getMock();
         $this->coreUrl = $this->getMockBuilder(
-            'Magento\Framework\Url\Helper'
+            'Magento\Framework\Url\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
             ['addRequestParam']
         )->getMock();

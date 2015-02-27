@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Url;
+namespace Magento\Framework\Url\Helper;
 
-class HelperTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -40,8 +40,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'urlEncoder' => $urlEncoder,
             ]
         );
-        /** @var \Magento\Framework\Url\Helper $helper */
-        $helper = new Helper($context);
+        /** @var \Magento\Framework\Url\Helper\Data $helper */
+        $helper = new \Magento\Framework\Url\Helper\Data($context);
         $this->assertEquals($encodedUrl, $helper->getCurrentBase64Url());
     }
 
@@ -74,8 +74,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var \Magento\Framework\Url\Helper $helper */
-        $helper = new Helper($context);
+        /** @var \Magento\Framework\Url\Helper\Data $helper */
+        $helper = new \Magento\Framework\Url\Helper\Data($context);
         $this->assertEquals($encodedUrl, $helper->getEncodedUrl($url));
     }
 
@@ -167,10 +167,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      * Get helper instance
      *
      * @param array $arguments
-     * @return \Magento\Framework\Url\Helper
+     * @return \Magento\Framework\Url\Helper\Data
      */
     private function getHelper($arguments)
     {
-        return $this->objectManager->getObject('Magento\Framework\Url\Helper', $arguments);
+        return $this->objectManager->getObject('Magento\Framework\Url\Helper\Data', $arguments);
     }
 }

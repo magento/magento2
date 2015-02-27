@@ -12,7 +12,7 @@ use Magento\Store\Model\Store;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Framework\Url\Helper
+class Data extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Current product instance (override registry one)
