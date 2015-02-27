@@ -5,6 +5,9 @@
  */
 namespace Magento\PageCache\Model\Observer;
 
+/**
+ * An observer to invalidate full page cache when the content given is changed
+ */
 class InvalidateCacheIfChanged
 {
     /**
