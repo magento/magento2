@@ -38,7 +38,7 @@ class InvalidateCacheIfChanged
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
+        if ($this->config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
             if ($object instanceof \Magento\Framework\Object\IdentityInterface) {
                 if ($object->getIdentities()) {
