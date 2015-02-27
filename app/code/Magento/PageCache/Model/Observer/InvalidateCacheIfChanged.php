@@ -34,6 +34,7 @@ class InvalidateCacheIfChanged
     /**
      * Invalidate full page cache if content is changed
      *
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
