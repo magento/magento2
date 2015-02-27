@@ -74,5 +74,6 @@ return [
     ['Magento\Catalog\Service'],
     ['Magento\CheckoutAgreements\Service'],
     ['Magento\Checkout\Service'],
-    ['Magento\GiftMessage\Service']
+    ['Magento\GiftMessage\Service'],
+    ['Magento\Framework\Test\Utility', 'Magento\Framework\Utility']
 ];

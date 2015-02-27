@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Utility;
+namespace Magento\Framework\Utility;
 
 class AggregateInvokerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Utility\AggregateInvoker
+     * @var \Magento\Framework\Utility\AggregateInvoker
      */
     protected $_invoker;
 

@@ -73,7 +73,7 @@ class StaticProperties
         }
         return false;
     }
-    
+
 
     /**
      * Restore static variables (after running controller test case)
@@ -97,7 +97,7 @@ class StaticProperties
      */
     public static function backupStaticVariables()
     {
-        $classFiles = \Magento\Framework\Test\Utility\Files::init()->getClassFiles(true, true, false, true, false);
+        $classFiles = \Magento\Framework\Utility\Files::init()->getClassFiles(true, true, false, true, false);
         $namespacePattern = '/namespace [a-zA-Z0-9\\\\]+;/';
         $classPattern = '/\nclass [a-zA-Z0-9_]+/';
         foreach ($classFiles as $classFile) {

@@ -32,7 +32,7 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $invalidFiles = [];
 
-        $files = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('crontab.xml');
+        $files = \Magento\Framework\Utility\Files::init()->getConfigFiles('crontab.xml');
         $mergedConfig = new \Magento\Framework\Config\Dom(
             '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></config>',
             $this->_idAttributes
