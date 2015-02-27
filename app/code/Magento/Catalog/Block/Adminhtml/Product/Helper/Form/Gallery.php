@@ -20,7 +20,7 @@ use Magento\Eav\Model\Entity\Attribute;
 class Gallery extends AbstractElement
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -34,7 +34,7 @@ class Gallery extends AbstractElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -42,7 +42,7 @@ class Gallery extends AbstractElement
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = []
     ) {
         $this->_layout = $layout;

@@ -15,23 +15,23 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    protected $scopeConfig;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Developer\Helper\Data
      */
-    protected $_helper;
+    protected $devHelper;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Developer\Helper\Data $helper
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Core\Helper\Data $helper
+        \Magento\Developer\Helper\Data $helper
     ) {
-        $this->_scopeConfig = $scopeConfig;
-        $this->_helper = $helper;
+        $this->scopeConfig = $scopeConfig;
+        $this->devHelper = $helper;
     }
 
     /**
@@ -39,9 +39,9 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      */
     public function isActive($scope = null)
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             'dev/translate_inline/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $scope
         );
     }
@@ -51,6 +51,6 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
      */
     public function isDevAllowed($scope = null)
     {
-        return $this->_helper->isDevAllowed($scope);
+        return $this->devHelper->isDevAllowed($scope);
     }
 }

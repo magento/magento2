@@ -27,7 +27,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -64,7 +64,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResponseInterface $response
      */
     public function __construct(
@@ -72,7 +72,7 @@ class Router implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\UrlInterface $url,
         \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResponseInterface $response
     ) {
         $this->actionFactory = $actionFactory;

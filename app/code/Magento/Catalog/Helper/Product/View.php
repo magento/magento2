@@ -12,14 +12,10 @@ use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * Catalog category helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    // List of exceptions throwable during prepareAndRender() method
-    public $ERR_NO_PRODUCT_LOADED = 1;
-
-    public $ERR_BAD_CONTROLLER_INTERFACE = 2;
-
     /**
      * List of catalog product session message groups
      *
@@ -184,7 +180,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $productId
      * @param \Magento\Framework\App\Action\Action $controller
      * @param null|\Magento\Framework\Object $params
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Catalog\Helper\Product\View
      */
     public function prepareAndRender(ResultPage $resultPage, $productId, $controller, $params = null)
@@ -198,7 +195,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Standard algorithm to prepare and render product view page
         $product = $productHelper->initProduct($productId, $controller, $params);
         if (!$product) {
-            throw new \Magento\Framework\Model\Exception(__('Product is not loaded'), $this->ERR_NO_PRODUCT_LOADED);
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Product is not loaded'));
         }
 
         $buyRequest = $params->getBuyRequest();
@@ -219,9 +216,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         if ($controller instanceof \Magento\Catalog\Controller\Product\View\ViewInterface) {
             $resultPage->getLayout()->initMessages($this->messageGroups);
         } else {
-            throw new \Magento\Framework\Model\Exception(
-                __('Bad controller interface for showing product'),
-                $this->ERR_BAD_CONTROLLER_INTERFACE
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Bad controller interface for showing product')
             );
         }
         return $this;

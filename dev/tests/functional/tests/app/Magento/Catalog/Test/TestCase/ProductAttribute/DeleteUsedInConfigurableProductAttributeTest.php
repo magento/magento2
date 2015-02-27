@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -68,10 +68,10 @@ class DeleteUsedInConfigurableProductAttributeTest extends Injectable
     /**
      * Run Delete used in configurable product attribute test
      *
-     * @param ConfigurableProductInjectable $product
+     * @param ConfigurableProduct $product
      * @return array
      */
-    public function test(ConfigurableProductInjectable $product)
+    public function test(ConfigurableProduct $product)
     {
         // Precondition
         $product->persist();

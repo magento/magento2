@@ -444,7 +444,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
 
         $route = array_shift($routePieces);
         if ('*' === $route) {
-            $route = $this->_getRequest()->getRequestedRouteName();
+            $route = $this->_getRequest()->getRouteName();
         }
         $this->_setRouteName($route);
 
@@ -452,7 +452,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         if (!empty($routePieces)) {
             $controller = array_shift($routePieces);
             if ('*' === $controller) {
-                $controller = $this->_getRequest()->getRequestedControllerName();
+                $controller = $this->_getRequest()->getControllerName();
             }
         }
         $this->_setControllerName($controller);
@@ -461,7 +461,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         if (!empty($routePieces)) {
             $action = array_shift($routePieces);
             if ('*' === $action) {
-                $action = $this->_getRequest()->getRequestedActionName();
+                $action = $this->_getRequest()->getActionName();
             }
         }
         $this->_setActionName($action);

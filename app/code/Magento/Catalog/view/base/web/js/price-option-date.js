@@ -3,63 +3,62 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
-    "Magento_Catalog/js/price-utils",
-    "jquery/ui"
-], function($,utils){
-    "use strict";
+    'jquery',
+    'priceUtils',
+    'priceOptions',
+    'jquery/ui'
+], function ($, utils) {
+    'use strict';
 
     var globalOptions = {
         fromSelector: 'form',
         dropdownsSelector: '[data-role=calendar-dropdown]'
     };
 
-
-    $.widget('mage.priceOptionDate',{
+    $.widget('mage.priceOptionDate', {
         options: globalOptions,
-        _create: initOptionDate
+
+        /**
+         * Function-initializer of priceOptionDate widget
+         * @private
+         */
+        _create: function initOptionDate() {
+            var field = this.element,
+                form = field.closest(this.options.fromSelector),
+                dropdowns = $(this.options.dropdownsSelector, field),
+                optionHandler = {},
+                dateOptionId;
+
+            if (dropdowns.length) {
+                dateOptionId = this.options.dropdownsSelector + dropdowns.attr('name');
+
+                optionHandler.optionHandlers = {};
+                optionHandler.optionHandlers[dateOptionId] = onCalendarDropdownChange(dropdowns);
+
+                form.priceOptions(optionHandler);
+
+                dropdowns.data('role', dateOptionId);
+                dropdowns.on('change', onDateChange.bind(this, dropdowns));
+            }
+        }
     });
 
     return $.mage.priceOptionDate;
-
-    /**
-     * Function-initializer of priceOptionDate widget
-     */
-    function initOptionDate() {
-        /*jshint validthis: true */
-        var field = this.element;
-        var form = field.closest(this.options.fromSelector);
-        var dropdowns = $(this.options.dropdownsSelector, field);
-        var optionHandler = {};
-        var dateOptionId;
-
-        if(dropdowns.length) {
-            dateOptionId = this.options.dropdownsSelector + dropdowns.attr('name');
-            optionHandler.optionHandlers = {};
-            optionHandler.optionHandlers[dateOptionId] = onCalendarDropdownChange(dropdowns);
-
-            dropdowns.data('role', dateOptionId);
-
-            form.priceOptions(optionHandler);
-            dropdowns.on('change', onDateChange.bind(this, dropdowns));
-        }
-    }
 
     /**
      * Custom handler for Date-with-Dropdowns option type.
      * @param  {jQuery} siblings
      * @return {Function} function that return object { optionHash : optionAdditionalPrice }
      */
-    function onCalendarDropdownChange (siblings) {
-        return function(element, optionConfig, form) {
-            var changes = {};
-            var optionId = utils.findOptionId(event.target);
-            var overhead = optionConfig[optionId].prices;
-            var isNeedToUpdate = true;
-            var optionHash = 'price-option-calendar-' + optionId;
+    function onCalendarDropdownChange(siblings) {
+        return function (element, optionConfig, form) {
+            var changes = {},
+                optionId = utils.findOptionId(element),
+                overhead = optionConfig[optionId].prices,
+                isNeedToUpdate = true,
+                optionHash = 'price-option-calendar-' + optionId;
 
-
-            siblings.each(function(index, el){
+            siblings.each(function (index, el) {
                 isNeedToUpdate = isNeedToUpdate && !!$(el).val();
             });
 
@@ -78,39 +77,40 @@ define([
     function onDateChange(dropdowns) {
         var daysNodes,
             curMonth, curYear, expectedDays,
-            options, needed;
-        var month = dropdowns.filter('[data-calendar-role=month]');
-        var year = dropdowns.filter('[data-calendar-role=year]');
+            options, needed,
+            month = dropdowns.filter('[data-calendar-role=month]'),
+            year = dropdowns.filter('[data-calendar-role=year]');
 
-        if(month.length && year.length) {
+        if (month.length && year.length) {
             daysNodes = dropdowns.filter('[data-calendar-role=day]').find('option');
 
             curMonth = month.val() || '01';
             curYear = year.val() || '2000';
             expectedDays = getDaysInMonth(curMonth, curYear);
 
-            if(daysNodes.length - 1 > expectedDays) { // remove unnecessary option nodes
-                daysNodes.each(function(i,e){
-                    if(e.value > expectedDays) {
-                        e.remove();
+            if (daysNodes.length - 1 > expectedDays) { // remove unnecessary option nodes
+                daysNodes.each(function (i, e) {
+                    if (e.value > expectedDays) {
+                        $(e).remove();
                     }
                 });
-            } else if(daysNodes.length - 1 < expectedDays) { // add missing option nodes
+            } else if (daysNodes.length - 1 < expectedDays) { // add missing option nodes
                 options = [];
-                needed = expectedDays - daysNodes.length + 1 ;
-                while(needed--) {
+                needed = expectedDays - daysNodes.length + 1;
+
+                while (needed--) {
                     options.push('<option value="' + (expectedDays - needed) + '">' + (expectedDays - needed) + '</option>');
                 }
-                $(options.join('')).insertAfter( daysNodes.last() );
+                $(options.join('')).insertAfter(daysNodes.last());
             }
         }
     }
 
     /**
      * Returns number of days for special month and year
-     * @param {number} month
-     * @param {number} year
-     * @return {number}
+     * @param  {Number} month
+     * @param  {Number} year
+     * @return {Number}
      */
     function getDaysInMonth(month, year) {
         return new Date(year, month, 0).getDate();

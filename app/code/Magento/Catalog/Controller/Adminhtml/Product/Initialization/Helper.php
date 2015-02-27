@@ -13,7 +13,7 @@ class Helper
     protected $request;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -34,14 +34,14 @@ class Helper
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper

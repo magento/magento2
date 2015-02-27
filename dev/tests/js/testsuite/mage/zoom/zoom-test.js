@@ -5,22 +5,22 @@
 ZoomTest = TestCase('ZoomTest');
 ZoomTest.prototype.setUp = function() {
     /*:DOC +=
-     <script data-template="zoom-display" type="text/x-jQuery-tmpl">
+     <script data-template="zoom-display" type="text/x-magento-template">
         <div data-role="zoom-container">
             <div data-role="zoom-inner"></div>
         </div>
      </script>
-     <script data-template="zoom-enlarged-image" type="text/x-jQuery-tmpl">
-        <img data-role="enlarged-image" src="${img}" />
+     <script data-template="zoom-enlarged-image" type="text/x-magento-template">
+        <img data-role="enlarged-image" src="<%= data.img %>" />
      </script>
-     <script data-template="zoom-track" type="text/z-jQuery-tmpl">
+     <script data-template="zoom-track" type="text/x-magento-template">
         <div data-role="zoom-track"></div>
      </script>
-     <script data-template="zoom-lens" type="text/z-jQuery-tmpl">
+     <script data-template="zoom-lens" type="text/x-magento-template">
         <div data-role="zoom-lens"></div>
      </script>
-     <script data-template="notice" type="text/x-jQuery-tmpl">
-        <p class="notice" data-role="notice">${text}</p>
+     <script data-template="notice" type="text/x-magento-template">
+        <p class="notice" data-role="notice"><%= data.text %></p>
      </script>
      <div data-role="zoom-test">
         <img />
@@ -128,57 +128,7 @@ ZoomTest.prototype.testToggleNotice = function() {
     zoomInstance._toggleNotice();
     assertEquals(zoomInstance.notice.text(), zoomInstance.noticeOriginal);
 };
-ZoomTest.prototype.testRenderControl = function() {
-    var zoomInstance = this.zoomCreate(),
-        tmpl = jsunit.stub(jQuery, 'tmpl', null, true);
 
-    zoomInstance.display.remove();
-    zoomInstance.track.remove();
-    zoomInstance.lens.remove();
-    zoomInstance.notice.remove();
-
-    tmpl.returnValue = jQuery('<p />');
-    zoomInstance.largeImageSrc = 'image.large.jpg';
-    var display = zoomInstance._renderControl('display');
-    assertTrue(tmpl.callCount === 1);
-    assertTrue(tmpl.lastCallArgs[0].is(zoomInstance.options.controls.display.template));
-    assertEquals(tmpl.lastCallArgs[1], {img: zoomInstance.largeImageSrc});
-    assertNotUndefined(zoomInstance.display);
-    assertNotUndefined(zoomInstance.display.length > 0);
-    assertTrue(zoomInstance.display.is(display));
-    assertTrue(display.width() == zoomInstance.options.controls.display.width);
-    assertTrue(display.height() == zoomInstance.options.controls.display.height);
-
-    tmpl.reset();
-    tmpl.returnValue = jQuery('<p />');
-    var notice = zoomInstance._renderControl('notice');
-    assertTrue(tmpl.callCount === 1);
-    assertTrue(tmpl.lastCallArgs[0].is(zoomInstance.options.controls.notice.template));
-    assertEquals(tmpl.lastCallArgs[1], {text: zoomInstance.options.controls.notice.text || ''});
-    assertNotUndefined(zoomInstance.notice);
-    assertNotUndefined(zoomInstance.notice.length > 0);
-    assertTrue(zoomInstance.notice.is(notice));
-
-    tmpl.reset();
-    tmpl.returnValue = jQuery('<p />');
-    var track = zoomInstance._renderControl('track');
-    assertTrue(tmpl.callCount === 1);
-    assertTrue(tmpl.lastCallArgs[0].is(zoomInstance.options.controls.track.template));
-    assertNotUndefined(zoomInstance.track);
-    assertNotUndefined(zoomInstance.track.length > 0);
-    assertTrue(zoomInstance.track.is(track));
-
-    tmpl.reset();
-    tmpl.returnValue = jQuery('<p />');
-    var lens = zoomInstance._renderControl('lens');
-    assertTrue(tmpl.callCount === 1);
-    assertTrue(tmpl.lastCallArgs[0].is(zoomInstance.options.controls.lens.template));
-    assertNotUndefined(zoomInstance.lens);
-    assertNotUndefined(zoomInstance.lens.length > 0);
-    assertTrue(zoomInstance.lens.is(lens));
-
-    tmpl.restore();
-};
 ZoomTest.prototype.testRefresh = function() {
     var zoomInstance = this.zoomCreate(),
         _refreshControl = jsunit.stub(zoomInstance, '_refreshControl');

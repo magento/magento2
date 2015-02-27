@@ -42,12 +42,15 @@ class ConflictChecker
      * Check if enabling module will conflict any modules
      *
      * @param string[] $moduleNames
+     * @param string[] $currentlyEnabledModules
+     *
      * @return array
      */
-    public function checkConflictsWhenEnableModules($moduleNames)
+    public function checkConflictsWhenEnableModules($moduleNames, $currentlyEnabledModules = null)
     {
+        $masterList = isset($currentlyEnabledModules) ? $currentlyEnabledModules: $this->list->getNames();
         // union of currently enabled modules and to-be-enabled modules
-        $enabledModules = array_unique(array_merge($this->list->getNames(), $moduleNames));
+        $enabledModules = array_unique(array_merge($masterList, $moduleNames));
         $conflictsAll = [];
         foreach ($moduleNames as $moduleName) {
             $conflicts = [];

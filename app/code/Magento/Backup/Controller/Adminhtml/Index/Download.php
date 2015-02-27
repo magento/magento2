@@ -11,10 +11,51 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Download extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Backup\Factory $backupFactory
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
+     * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Backup\Factory $backupFactory,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Backup\Model\BackupFactory $backupModelFactory,
+        \Magento\Framework\App\MaintenanceMode $maintenanceMode,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $backupFactory,
+            $fileFactory,
+            $backupModelFactory,
+            $maintenanceMode
+        );
+        $this->resultRawFactory = $resultRawFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Download backup action
      *
      * @return void|\Magento\Backend\App\Action
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -25,12 +66,15 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
         );
 
         if (!$backup->getTime() || !$backup->exists()) {
-            return $this->_redirect('backup/*');
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('backup/*');
+            return $resultRedirect;
         }
 
         $fileName = $this->_objectManager->get('Magento\Backup\Helper\Data')->generateBackupDownloadName($backup);
 
-        $response = $this->_fileFactory->create(
+        $this->_fileFactory->create(
             $fileName,
             null,
             DirectoryList::VAR_DIR,
@@ -38,9 +82,9 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
             $backup->getSize()
         );
 
-        $response->sendHeaders();
-
-        $backup->output();
-        exit;
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setContents($backup->output());
+        return $resultRaw;
     }
 }

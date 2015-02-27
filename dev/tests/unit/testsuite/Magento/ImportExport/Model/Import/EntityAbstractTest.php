@@ -83,7 +83,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method _prepareRowForDb()
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::_prepareRowForDb
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::_prepareRowForDb
      */
     public function testPrepareRowForDb()
     {
@@ -212,7 +212,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method getBehavior() with $rowData argument = null
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::getBehavior
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::getBehavior
      */
     public function testGetBehaviorWithoutRowData()
     {
@@ -376,7 +376,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method getBehavior() with $rowData argument = null
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::getBehavior
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::getBehavior
      *
      * @dataProvider dataProviderForTestGetBehaviorWithRowData
      * @param $inputBehavior
@@ -525,8 +525,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataPermanentAttributes()
     {
@@ -544,8 +544,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataEmptyColumnName()
     {
@@ -556,8 +556,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataColumnNameWithWhitespaces()
     {
@@ -568,8 +568,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataAttributeNames()
     {

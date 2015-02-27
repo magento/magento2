@@ -91,7 +91,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_service = new \Magento\Integration\Service\V1\Oauth(
-            $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false),
+            $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->getMock('Magento\Integration\Helper\Oauth\Data', [], [], '', false),
@@ -133,7 +133,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Integration\Exception
+     * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Consumer with ID '1' does not exist.
      */
     public function testDeleteException()

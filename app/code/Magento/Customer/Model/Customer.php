@@ -14,6 +14,9 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\EmailNotConfirmedException;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Customer model
@@ -60,17 +63,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
     const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID = 'customer/create_account/generate_human_friendly_id';
-
-    /**
-     * Codes of exceptions related to customer model
-     */
-    const EXCEPTION_EMAIL_NOT_CONFIRMED = 1;
-
-    const EXCEPTION_INVALID_EMAIL_OR_PASSWORD = 2;
-
-    const EXCEPTION_EMAIL_EXISTS = 3;
-
-    const EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN = 4;
 
     const SUBSCRIBED_YES = 'yes';
 
@@ -133,7 +125,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_isReadonly = false;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -212,7 +204,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Resource\Customer $resource
@@ -236,7 +228,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Resource\Customer $resource,
@@ -367,22 +359,20 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param  string $login
      * @param  string $password
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated Use \Magento\Customer\Api\AccountManagementInterface::authenticate
      */
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw new \Magento\Framework\Model\Exception(
-                __('This account is not confirmed.'),
-                self::EXCEPTION_EMAIL_NOT_CONFIRMED
+            throw new EmailNotConfirmedException(
+                __('This account is not confirmed.')
             );
         }
         if (!$this->validatePassword($password)) {
-            throw new \Magento\Framework\Model\Exception(
-                __('Invalid login or password.'),
-                self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
+            throw new InvalidEmailOrPasswordException(
+                __('Invalid login or password.')
             );
         }
         $this->_eventManager->dispatch(
@@ -777,14 +767,14 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param string $backUrl
      * @param string $storeId
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {
@@ -816,7 +806,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
 
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_IS_CONFIRM,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -861,13 +851,13 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_scopeConfig->getValue($template, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
         )->setFrom(
-            $this->_scopeConfig->getValue($sender, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
         )->addTo(
             $this->getEmail(),
             $this->getName()
@@ -910,7 +900,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
             $storeId = $this->getStoreId() ? $this->getStoreId() : $this->_storeManager->getStore()->getId();
             $groupId = $this->_scopeConfig->getValue(
                 GroupManagement::XML_PATH_DEFAULT_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $this->setData('group_id', $groupId);
@@ -1258,14 +1248,13 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @param string $passwordLinkToken
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new \Magento\Framework\Model\Exception(
-                __('Invalid password reset token.'),
-                self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
+            throw new AuthenticationException(
+                __('Invalid password reset token.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);

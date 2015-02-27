@@ -5,31 +5,31 @@
 GalleryTest = TestCase('GalleryTest');
 GalleryTest.prototype.setUp = function() {
     /*:DOC +=
-     <script data-template="gallery-wrapper" type="text/x-jQuery-tmpl">
+     <script data-template="gallery-wrapper" type="text/x-magento-template">
         <div data-role="gallery-base-image-container"></div>
         <div data-role="gallery-notice-container"></div>
         <div data-role="gallery-thumbs-container"><div>
         <div data-role="gallery-buttons-container"></div>
      </script>
-     <script data-template="gallery-buttons" type="text/x-jQuery-tmpl">
+     <script data-template="gallery-buttons" type="text/x-magento-template">
         <a data-role="gallery-prev" href="#"></a>
         <a data-role="gallery-next" href="#"></a>
      </script>
-     <script data-template="gallery-base-image" type="text/x-jQuery-tmpl">
-        <img data-role="zoom-image" {{if !fullSizeMode}}data-large="${large}"
-            src="${medium}"{{else}}src="${large}"{{/if}} alt="${title}"/>
+     <script data-template="gallery-base-image" type="text/x-magento-template">
+        <img data-role="zoom-image" <% if (!data.fullSizeMode) { %>data-large="<%= data.large %>"
+            src="<%= data.medium %>"<% } else { %>src="<%= data.large %>"<% } %> alt="<%= data.title %>"/>
      </script>
-     <script data-template="gallery-thumbs" type="text/x-jQuery-tmpl">
+     <script data-template="gallery-thumbs" type="text/x-magento-template">
          <div>
-         {{each(index, img) images}}
-            <a title="${img.title}" data-index="${index}" data-role="gallery-thumb" href="#">
-                <img alt="${img.title}" src="${img.small}" itemprop="image">
+         <% _.each(data.images, function(img, index){ %>
+            <a title="<%= img.title %>" data-index="<%= index %>" data-role="gallery-thumb" href="#">
+                <img alt="<%= img.title %>" src="<%= img.small %>" itemprop="image">
             </a>
-         {{/each}}
+         <% }); %>
          <div>
      </script>
-     <script data-template="notice" type="text/x-jQuery-tmpl">
-        <p class="notice" data-role="notice">${text}</p>
+     <script data-template="notice" type="text/x-magento-template">
+        <p class="notice" data-role="notice"><%= data.text %></p>
      </script>
      <div data-role="media-gallery-test"></div>
     */

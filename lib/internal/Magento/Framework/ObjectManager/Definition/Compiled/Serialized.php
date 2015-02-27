@@ -10,6 +10,11 @@ namespace Magento\Framework\ObjectManager\Definition\Compiled;
 class Serialized extends \Magento\Framework\ObjectManager\Definition\Compiled
 {
     /**
+     * Mode name
+     */
+    const MODE_NAME  = 'serialized';
+
+    /**
      * Unpack signature
      *
      * @param string $signature

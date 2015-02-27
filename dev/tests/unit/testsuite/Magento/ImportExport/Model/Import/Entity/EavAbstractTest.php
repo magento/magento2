@@ -49,7 +49,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -143,7 +143,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test entity type id getter
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEav::getEntityTypeId
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEav::getEntityTypeId
      */
     public function testGetEntityTypeId()
     {

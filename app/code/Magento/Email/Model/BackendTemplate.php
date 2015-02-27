@@ -13,7 +13,7 @@ namespace Magento\Email\Model;
 class BackendTemplate extends Template
 {
     /**
-     * @var \Magento\Backend\Model\Config\Structure
+     * @var \Magento\Config\Model\Config\Structure
      */
     private $_structure;
 
@@ -22,14 +22,14 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
-     * @param \Magento\Backend\Model\Config\Structure $structure
+     * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -39,14 +39,14 @@ class BackendTemplate extends Template
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Backend\Model\Config\Structure $structure,
+        \Magento\Config\Model\Config\Structure $structure,
         array $data = []
     ) {
         parent::__construct(
@@ -121,7 +121,7 @@ class BackendTemplate extends Template
 
         $templatePaths = $this->_structure->getFieldPathsByAttribute(
             'source_model',
-            'Magento\Backend\Model\Config\Source\Email\Template'
+            'Magento\Config\Model\Config\Source\Email\Template'
         );
 
         if (!count($templatePaths)) {

@@ -65,12 +65,12 @@ class Filter extends \Magento\Framework\Filter\Template
      * Core store config
      * Variable factory
      *
-     * @var \Magento\Core\Model\VariableFactory
+     * @var \Magento\Variable\Model\VariableFactory
      */
     protected $_variableFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -116,8 +116,8 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Variable\Model\VariableFactory $coreVariableFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
@@ -132,8 +132,8 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Core\Model\VariableFactory $coreVariableFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Variable\Model\VariableFactory $coreVariableFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
@@ -568,7 +568,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
@@ -592,8 +592,8 @@ class Filter extends \Magento\Framework\Filter\Template
                 $params['code']
             );
             $mode = $this->_plainTemplateMode
-                ? \Magento\Core\Model\Variable::TYPE_TEXT
-                : \Magento\Core\Model\Variable::TYPE_HTML;
+                ? \Magento\Variable\Model\Variable::TYPE_TEXT
+                : \Magento\Variable\Model\Variable::TYPE_HTML;
             $value = $variable->getValue($mode);
             if ($value) {
                 $customVarValue = $value;

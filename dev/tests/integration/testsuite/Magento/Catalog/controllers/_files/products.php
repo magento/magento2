@@ -28,7 +28,7 @@ $productOne->setId(
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$obectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_1'
 )->setName(
@@ -69,7 +69,7 @@ $productTwo->setId(
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$obectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_2'
 )->setName(

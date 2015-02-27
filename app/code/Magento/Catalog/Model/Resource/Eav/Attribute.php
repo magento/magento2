@@ -103,7 +103,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
@@ -127,7 +127,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
@@ -179,7 +179,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Processing object before save data
      *
      * @return \Magento\Framework\Model\AbstractModel
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
@@ -192,8 +192,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             if ($this->_data['is_global'] != $this->_origData['is_global']) {
                 try {
                     $this->attrLockValidator->validate($this);
-                } catch (\Magento\Framework\Model\Exception $exception) {
-                    throw new \Magento\Framework\Model\Exception(__('Do not change the scope. ' . $exception->getMessage()));
+                } catch (\Magento\Framework\Exception\LocalizedException $exception) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Do not change the scope. ' . $exception->getMessage()));
                 }
             }
         }
@@ -269,7 +269,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * Register indexing event before delete catalog eav attribute
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {

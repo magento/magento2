@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page mca="multishipping/checkout/billing" module="Magento_Multishipping">
-    <blocks>
-        <billingBlock>
-            <class>Magento\Multishipping\Test\Block\Checkout\Billing</class>
-            <locator>#multishipping-billing-form</locator>
-            <strategy>css selector</strategy>
-        </billingBlock>
-    </blocks>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="MultishippingCheckoutBilling" mca="multishipping/checkout/billing" module="Magento_Multishipping">
+        <block name="billingBlock" class="Magento\Multishipping\Test\Block\Checkout\Billing" locator="#multishipping-billing-form" strategy="css selector"/>
+    </page>
+</config>

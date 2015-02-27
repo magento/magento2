@@ -67,14 +67,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             try {
                 $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
-                    throw new \Magento\Framework\Model\Exception(__('Unable to save product'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save product'));
                 }
 
                 $originalSku = $product->getSku();
@@ -114,7 +114,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
                 $redirectBack = $productId ? true : 'new';

@@ -38,7 +38,7 @@ class Url extends \Magento\Framework\Object
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -55,7 +55,7 @@ class Url extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
@@ -65,7 +65,7 @@ class Url extends \Magento\Framework\Object
      */
     public function __construct(
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Framework\Filter\FilterManager $filter,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,

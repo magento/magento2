@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\String as StdlibString;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class QueryFactory implements QueryFactoryInterface
 {
@@ -52,13 +52,12 @@ class QueryFactory implements QueryFactoryInterface
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
-        StdlibString $string,
-        ScopeConfigInterface $scopeConfig
+        StdlibString $string
     ) {
         $this->request = $context->getRequest();
         $this->objectManager = $objectManager;
         $this->string = $string;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $context->getScopeConfig();
     }
 
     /**

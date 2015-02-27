@@ -45,7 +45,7 @@ abstract class AbstractGroupPrice extends Price
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -53,7 +53,7 @@ abstract class AbstractGroupPrice extends Price
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
@@ -134,7 +134,7 @@ abstract class AbstractGroupPrice extends Price
      * Validate group price data
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Phrase|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -161,7 +161,7 @@ abstract class AbstractGroupPrice extends Price
                 )
             );
             if (isset($duplicates[$compare])) {
-                throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($this->_getDuplicateErrorMessage());
             }
 
             if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $priceRow['price']) || $priceRow['price'] < 0) {
@@ -209,7 +209,7 @@ abstract class AbstractGroupPrice extends Price
             $websiteCurrency = $rates[$priceRow['website_id']]['code'];
 
             if ($baseCurrency == $websiteCurrency && isset($duplicates[$globalCompare])) {
-                throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
+                throw new \Magento\Framework\Exception\LocalizedException($this->_getDuplicateErrorMessage());
             }
         }
 

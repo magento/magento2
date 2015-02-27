@@ -21,38 +21,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_allowedHashKeys = ['ship_id', 'order_id', 'track_id'];
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_coreData = $coreData;
-        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         parent::__construct($context);
     }

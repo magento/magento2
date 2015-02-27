@@ -219,6 +219,10 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
 
         $filesUtil->expects($this->any())
+            ->method('getPhtmlFiles')
+            ->will($this->returnValue([]));
+
+        $filesUtil->expects($this->any())
             ->method('getStaticPreProcessingFiles')
             ->will($this->returnValue(
                 [

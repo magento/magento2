@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\DeploymentConfigMapper;
 use Magento\Setup\Model\Installer;
@@ -18,6 +19,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Install controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Install extends AbstractActionController
 {
     /**
@@ -80,13 +86,11 @@ class Install extends AbstractActionController
             $this->installer->install($data);
             $json->setVariable(
                 'key',
-                $this->installer->getInstallInfo()[
-                    \Magento\Framework\App\DeploymentConfig\EncryptConfig::KEY_ENCRYPTION_KEY
-                ]
+                $this->installer->getInstallInfo()[EncryptConfig::KEY_ENCRYPTION_KEY]
             );
             $json->setVariable('success', true);
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->log->logError($e);
             $json->setVariable('success', false);
         }
@@ -117,6 +121,8 @@ class Install extends AbstractActionController
      * Maps data from request to format of deployment config model
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function importDeploymentConfigForm()
     {
@@ -133,6 +139,10 @@ class Install extends AbstractActionController
             ? $source['config']['address']['admin'] : '';
         $result[DeploymentConfigMapper::KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
             ? $source['config']['encrypt']['key'] : '';
+        $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
+            ? implode(',', $source['store']['selectedModules']) : '';
+        $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])
+            ? implode(',', array_diff($source['store']['allModules'], $source['store']['selectedModules'])) : '';
         return $result;
     }
 
@@ -140,6 +150,8 @@ class Install extends AbstractActionController
      * Maps data from request to format of user config model
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function importUserConfigForm()
     {

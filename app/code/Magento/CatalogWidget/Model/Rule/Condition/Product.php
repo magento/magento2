@@ -28,7 +28,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -41,7 +41,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -54,7 +54,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->storeManager = $storeManager;
@@ -204,7 +204,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getMappedSqlField()
     {
         $result = '';
-        if ($this->getAttributeObject()->isStatic()) {
+        if ($this->getAttribute() == 'category_ids') {
+            $result = parent::getMappedSqlField();
+        } elseif ($this->getAttributeObject()->isStatic()) {
             $result = $this->getAttributeObject()->getAttributeCode();
         } elseif ($this->getAttributeObject()->isScopeGlobal()) {
             if (isset($this->joinedAttributes[$this->getAttribute()])) {

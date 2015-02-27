@@ -13,16 +13,16 @@
 @field-label_required--color: #EB5202;
 @field-note--color: #303030;
 @field-control--color: #303030;
-@field-control--bg-color: #fff;
-@field-control_disabled--bg-color: #E9E9E9;
+@field-control--background-color: #fff;
+@field-control_disabled--background-color: #E9E9E9;
 @field-control-addon--color: #858585;
 @field-date-icon--color: #514943;
 @field-tooltip-icon--color: #fff;
-@field-tooltip-icon--bg-color: #514943;
-@field-tooltip-content--bg-color: #fff8d7;
+@field-tooltip-icon--background-color: #514943;
+@field-tooltip-content--background-color: #fff8d7;
 @field-tooltip-content--border-color: #adadad;
 @field-error--color: #555;
-@field-error--bg-color: #FFF8D6;
+@field-error--background-color: #FFF8D6;
 @field-error--border-color: #E22626;
 
 
@@ -72,7 +72,7 @@
             width: 22px;
             text-align: center;
             color: @field-tooltip-icon--color;
-            background-color: @field-tooltip-icon--bg-color;
+            background-color: @field-tooltip-icon--background-color;
         }
         span {
             .visually-hidden();
@@ -87,7 +87,7 @@
         position: absolute;
         z-index: 1;
         width: 320px;
-        background: @field-tooltip-content--bg-color;
+        background: @field-tooltip-content--background-color;
         padding: 15px 25px;
         right: -66px;
         border: 1px solid @field-tooltip-content--border-color;
@@ -106,7 +106,7 @@
             z-index: 3;
         }
         &:after {
-            border-top-color: @field-tooltip-content--bg-color;
+            border-top-color: @field-tooltip-content--background-color;
             margin-top: -1px;
             z-index: 4;
         }
@@ -127,7 +127,7 @@
        display: block;
        margin: 2px 0 0;
        padding: 6px 10px 10px;
-       background: @field-error--bg-color;
+       background: @field-error--background-color;
        color: @field-error--color;
        font-size: 12px;
        font-weight: 500;
@@ -171,7 +171,7 @@
         color: @field-label-disabled--color;
     }
     &.field .control [class*="control-"][disabled] {
-        background-color: @field-control_disabled--bg-color;
+        background-color: @field-control_disabled--background-color;
         opacity: .5;
         color: @field-control--color;
         border-color: @field-control--border-color;
@@ -284,7 +284,7 @@
             border-radius: 1px;
             padding: 0 10px;
             color: @field-control--color;
-            background-color: @field-control--bg-color;
+            background-color: @field-control--background-color;
             font-weight: 500;
             font-size: 15px;
             min-width: 11em;
@@ -505,7 +505,7 @@
                 }
                 &[disabled] + label:before {
                     opacity: .5;
-                    background: @field-control_disabled--bg-color;
+                    background: @field-control_disabled--background-color;
                 }
             }
         }

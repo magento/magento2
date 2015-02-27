@@ -109,7 +109,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
      * Validate tax class can be deleted
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {

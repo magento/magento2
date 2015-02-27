@@ -10,7 +10,7 @@
 <?php if ($detailedInfoGroup = $block->getGroupChildNames('detailed_info', 'getChildHtml')):?>
     <div class="product info detailed">
         <?php $layout = $block->getLayout(); ?>
-        <div role="tablist" class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
+        <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                     $html = $layout->renderElement($name);
@@ -20,10 +20,20 @@
                     $alias = $layout->getElementAlias($name);
                     $label = $block->getChildData($alias, 'title');
                 ?>
-                <div class="data item title" data-role="collapsible">
-                    <a role="tab" class="data switch" data-toggle="switch" id="tab-label-<?php echo $alias;?>" href="#<?php echo $alias; ?>"><?php echo $label; ?></a>
+                <div class="data item title"
+                     aria-labeledby="tab-label-<?php echo $alias;?>-title"
+                     data-role="collapsible" id="tab-label-<?php echo $alias;?>">
+                    <a class="data switch"
+                       tabindex="-1"
+                       data-toggle="switch"
+                       href="#<?php echo $alias; ?>"
+                       id="tab-label-<?php echo $alias;?>-title">
+                        <?php echo $label; ?>
+                    </a>
                 </div>
-                <div role="tabpanel" aria-labelledby="tab-label-<?php echo $alias;?>" class="data item content" id="<?php echo $alias; ?>" data-role="content"><?php echo $html; ?></div>
+                <div class="data item content" id="<?php echo $alias; ?>" data-role="content">
+                    <?php echo $html; ?>
+                </div>
             <?php endforeach;?>
         </div>
     </div>

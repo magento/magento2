@@ -12,7 +12,7 @@ namespace Magento\DesignEditor\Model\Editor\QuickStyles\Renderer;
 class BackgroundImageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
+     * covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
      * @dataProvider backgroundImageData
      */
     public function testToCss($expectedResult, $data)
@@ -30,7 +30,7 @@ class BackgroundImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
+     * covers \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage::toCss
      * @dataProvider backgroundImageDataClearDefault
      */
     public function testToCssClearDefault($expectedResult, $data)

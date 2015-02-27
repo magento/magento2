@@ -7,7 +7,7 @@
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
-use Magento\Integration\Exception as IntegrationException;
+use Magento\Framework\Exception\IntegrationException;
 
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
@@ -53,7 +53,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                 }
             }
             /** @var array $data */
-            $data = $this->getRequest()->getPost();
+            $data = $this->getRequest()->getPostValue();
             if (!empty($data)) {
                 if (!isset($data['resource'])) {
                     $integrationData['resource'] = [];
@@ -89,7 +89,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
             $this->_redirectOnSaveError();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {

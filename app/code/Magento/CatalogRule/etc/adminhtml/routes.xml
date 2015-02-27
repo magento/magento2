@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd">
     <router id="admin">
         <route id="catalog_rule" frontName="catalog_rule">
-            <module name="Magento_CatalogRule" before="Magento_Adminhtml" />
+            <module name="Magento_CatalogRule" before="Magento_Backend" />
         </route>
     </router>
 </config>

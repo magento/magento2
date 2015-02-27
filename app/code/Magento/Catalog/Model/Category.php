@@ -178,7 +178,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Resource\Category\Tree $categoryTreeResource
      * @param Resource\Category\TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
@@ -201,7 +201,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTreeResource,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
@@ -305,7 +305,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param  int $parentId new parent category id
      * @param  null|int $afterCategoryId category id after which we have put current category
      * @return $this
-     * @throws \Magento\Framework\Model\Exception|\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function move($parentId, $afterCategoryId)
     {
@@ -316,22 +316,22 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         try {
             $parent = $this->categoryRepository->get($parentId, $this->getStoreId());
         } catch (NoSuchEntityException $e) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Sorry, but we can\'t move the category because we can\'t find the new parent category you'
                     . ' selected.'
                 ),
-                0,
+                [],
                 $e
             );
         }
 
         if (!$this->getId()) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Sorry, but we can\'t move the category because we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'We can\'t perform this category move operation because the parent category matches the child'
                     . 'category.'
@@ -814,13 +814,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Before delete process
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function beforeDelete()
     {
         if ($this->getResource()->isForbiddenToDelete($this->getId())) {
-            throw new \Magento\Framework\Model\Exception("Can't delete root category.");
+            throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t delete root category.'));
         }
         return parent::beforeDelete();
     }

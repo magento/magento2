@@ -21,7 +21,7 @@
                 <label>New products</label>
             </option>
         </parameter>
-        <parameter name="show_pager" type="select" visible="true" source_model="Magento\Backend\Model\Config\Source\Yesno"
+        <parameter name="show_pager" type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno"
                    translate="label" >
             <label>Display Page Control</label>
         </parameter>

@@ -9,6 +9,7 @@ namespace Magento\Tools\View;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\View\Asset\Publisher;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -35,7 +36,7 @@ class Deployer
     /** @var \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
 
-    /** @var \Magento\Framework\App\View\Asset\Publisher */
+    /** @var Publisher */
     private $assetPublisher;
 
     /** @var bool */
@@ -46,6 +47,9 @@ class Deployer
 
     /** @var int */
     private $errorCount;
+
+    /** @var \Magento\Framework\View\Template\Html\MinifierInterface */
+    private $htmlMinifier;
 
     /** @var \Magento\Framework\View\Asset\MinifyService */
     protected $minifyService;
@@ -109,6 +113,14 @@ class Deployer
                 }
             }
         }
+        $this->logger->logMessage("=== Minify templates ===");
+        $this->count = 0;
+        foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
+            $this->htmlMinifier->minify($template);
+            $this->logger->logDebug($template . " minified\n", '.');
+            $this->count++;
+        }
+        $this->logger->logMessage("\nSuccessful: {$this->count} files modified\n---\n");
         $version = $this->dateTime->toTimestamp(true);
         $this->logger->logMessage("New version of deployed files: {$version}");
         if (!$this->isDryRun) {
@@ -170,7 +182,10 @@ class Deployer
         $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
         $objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
-        $this->assetPublisher = $objectManager->get('Magento\Framework\App\View\Asset\Publisher');
+
+        $this->assetPublisher = $objectManager->create('Magento\Framework\App\View\Asset\Publisher');
+        $this->htmlMinifier = $objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
+
     }
 
     /**

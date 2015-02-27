@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\Constraint;
 use Magento\Catalog\Test\Constraint\AssertPriceOnProductPageInterface;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -35,7 +35,7 @@ abstract class AbstractAssertPriceOnGroupedProductPage extends AbstractConstrain
     /**
      * Verify product price on grouped product view page
      *
-     * @param GroupedProductInjectable $product
+     * @param GroupedProduct $product
      * @param CatalogProductView $catalogProductView
      * @param AssertPriceOnProductPageInterface $object
      * @param BrowserInterface $browser
@@ -43,7 +43,7 @@ abstract class AbstractAssertPriceOnGroupedProductPage extends AbstractConstrain
      * @return bool|string
      */
     protected function processAssertPrice(
-        GroupedProductInjectable $product,
+        GroupedProduct $product,
         CatalogProductView $catalogProductView,
         AssertPriceOnProductPageInterface $object,
         BrowserInterface $browser,

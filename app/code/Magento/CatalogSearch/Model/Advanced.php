@@ -16,9 +16,8 @@ use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
-use Magento\Framework\Model\Exception;
 use Magento\Framework\Registry;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
@@ -83,7 +82,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -118,7 +117,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param Config $catalogConfig
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ResourceProvider $resourceProvider
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -156,7 +155,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @param   array $values
      * @return  $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -210,7 +209,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->_registry->register('advanced_search_conditions', $allConditions);
             $this->getProductCollection()->addFieldsToFilter($allConditions);
         } elseif (!$hasConditions) {
-            throw new Exception(__('Please specify at least one search term.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify at least one search term.'));
         }
 
         return $this;
