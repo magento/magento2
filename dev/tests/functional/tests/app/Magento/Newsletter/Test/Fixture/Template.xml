@@ -14,34 +14,34 @@
         <field name="sender_email" xsi:type="string">SenderName%isolation%@example.com</field>
         <field name="text" xsi:type="string">Some text %isolation%</field>
     </dataset>
-    <field name="template_id" is_required="1">
+    <field name="id" is_required="1">
       <default_value xsi:type="null"/>
     </field>
-    <field name="template_code" is_required="">
+    <field name="code" is_required="">
       <default_value xsi:type="string">TemplateName%isolation%</default_value>
     </field>
-    <field name="template_text" is_required="">
+    <field name="text" is_required="">
       <default_value xsi:type="string">Some text %isolation%</default_value>
     </field>
-    <field name="template_text_preprocessed" is_required="">
+    <field name="text_preprocessed" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="template_styles" is_required="">
+    <field name="styles" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="template_type" is_required="">
+    <field name="type" is_required="">
       <default_value xsi:type="null"/>
     </field>
-    <field name="template_subject" is_required="">
+    <field name="subject" is_required="">
       <default_value xsi:type="string">TemplateSubject%isolation%</default_value>
     </field>
-    <field name="template_sender_name" is_required="">
+    <field name="sender_name" is_required="">
       <default_value xsi:type="string">SenderName%isolation%</default_value>
     </field>
-    <field name="template_sender_email" is_required="">
+    <field name="sender_email" is_required="">
       <default_value xsi:type="string">SenderName%isolation%@example.com</default_value>
     </field>
-    <field name="template_actual" is_required="">
+    <field name="actual" is_required="">
       <default_value xsi:type="string">1</default_value>
     </field>
     <field name="added_at" is_required="">
