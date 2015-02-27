@@ -106,6 +106,7 @@ define([
                     within: 'body',
                     of: trigger
                 },
+                shadowHinter: 'popup popup-pointer',
                 triggerTarget: trigger.parent()
             };
             options = _.extend(options, this.options.dialog);
