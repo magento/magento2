@@ -10,7 +10,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 {
     public function testXmlFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $filename

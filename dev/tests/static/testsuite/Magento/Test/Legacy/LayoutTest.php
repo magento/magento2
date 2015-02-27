@@ -85,7 +85,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testLayoutFile()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $layoutFile
@@ -149,7 +149,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     ' is not supposed to be used in layout anymore.'
                 );
             },
-            \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\Utility\Files::init()->getLayoutFiles()
         );
     }
 
@@ -201,7 +201,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testActionNodeMethods()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $layoutFile
@@ -219,7 +219,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\Utility\Files::init()->getLayoutFiles()
         );
     }
 

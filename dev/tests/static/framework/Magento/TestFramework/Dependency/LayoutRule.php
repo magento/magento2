@@ -90,7 +90,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->_mapLayoutHandles = $mapLayoutHandles;
-        $this->_namespaces = implode('|', \Magento\Framework\Test\Utility\Files::init()->getNamespaces());
+        $this->_namespaces = implode('|', \Magento\Framework\Utility\Files::init()->getNamespaces());
     }
 
     /**

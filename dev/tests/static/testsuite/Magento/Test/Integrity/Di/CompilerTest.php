@@ -65,7 +65,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
-        $basePath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $basePath = \Magento\Framework\Utility\Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
@@ -130,8 +130,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             if (!isset($parameters['parameters']) || empty($parameters['parameters'])) {
                 continue;
             }
-            if (\Magento\Framework\Test\Utility\Classes::isVirtual($instanceName)) {
-                $instanceName = \Magento\Framework\Test\Utility\Classes::resolveVirtualType($instanceName);
+            if (\Magento\Framework\Utility\Classes::isVirtual($instanceName)) {
+                $instanceName = \Magento\Framework\Utility\Classes::resolveVirtualType($instanceName);
             }
 
             if (!$this->_classExistsAsReal($instanceName)) {
@@ -186,13 +186,13 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _phpClassesDataProvider()
     {
-        $basePath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $basePath = \Magento\Framework\Utility\Files::init()->getPathToSource();
 
         $libPath = 'lib\\internal';
         $appPath = 'app\\code';
         $generationPathPath = str_replace('/', '\\', str_replace($basePath . '/', '', $this->_generationDir));
 
-        $files = \Magento\Framework\Test\Utility\Files::init()->getClassFiles(
+        $files = \Magento\Framework\Utility\Files::init()->getClassFiles(
             true,
             false,
             false,
@@ -259,7 +259,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $parent = $class->getParentClass();
         $file = false;
         if ($parent) {
-            $basePath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+            $basePath = \Magento\Framework\Utility\Files::init()->getPathToSource();
             $file = str_replace('\\', DIRECTORY_SEPARATOR, $parent->getFileName());
             $basePath = str_replace('\\', DIRECTORY_SEPARATOR, $basePath);
             $file = str_replace($basePath . DIRECTORY_SEPARATOR, '', $file);
@@ -298,12 +298,12 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfigurationOfInstanceParameters()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $this->_validateFile($file);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getDiConfigs(true)
+            \Magento\Framework\Utility\Files::init()->getDiConfigs(true)
         );
     }
 
@@ -332,7 +332,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
         spl_autoload_register([$generationAutoloader, 'load']);
 
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
         $invoker(
             function ($className) {
                 $this->_validateClass($className);
@@ -347,7 +347,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPluginInterfaces()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
         $invoker(
             function ($plugin, $type) {
                 $this->validatePlugins($plugin, $type);
@@ -365,8 +365,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     protected function validatePlugins($plugin, $type)
     {
         try {
-            $module = \Magento\Framework\Test\Utility\Classes::getClassModuleName($type);
-            if (\Magento\Framework\Test\Utility\Files::init()->isModuleExists($module)) {
+            $module = \Magento\Framework\Utility\Classes::getClassModuleName($type);
+            if (\Magento\Framework\Utility\Files::init()->isModuleExists($module)) {
                 $this->pluginValidator->validate($plugin, $type);
             }
         } catch (\Magento\Framework\Interception\Code\ValidatorException $exception) {
@@ -381,7 +381,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected function pluginDataProvider()
     {
-        $files = \Magento\Framework\Test\Utility\Files::init()->getDiConfigs();
+        $files = \Magento\Framework\Utility\Files::init()->getDiConfigs();
         $plugins = [];
         foreach ($files as $file) {
             $dom = new \DOMDocument();
@@ -391,10 +391,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             foreach ($pluginList as $node) {
                 /** @var $node \DOMNode */
                 $type = $node->parentNode->attributes->getNamedItem('name')->nodeValue;
-                $type = \Magento\Framework\Test\Utility\Classes::resolveVirtualType($type);
+                $type = \Magento\Framework\Utility\Classes::resolveVirtualType($type);
                 if ($node->attributes->getNamedItem('type')) {
                     $plugin = $node->attributes->getNamedItem('type')->nodeValue;
-                    $plugin = \Magento\Framework\Test\Utility\Classes::resolveVirtualType($plugin);
+                    $plugin = \Magento\Framework\Utility\Classes::resolveVirtualType($plugin);
                     $plugins[] = ['plugin' => $plugin, 'intercepted type' => $type];
                 }
             }

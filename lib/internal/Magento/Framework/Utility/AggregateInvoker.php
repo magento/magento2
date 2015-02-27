@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Utility;
+namespace Magento\Framework\Utility;
 
 /**
  * Runs given callback across given array of data and collects all PhpUnit assertion results.
