@@ -562,11 +562,27 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getItems();
 
     /**
+     * Sets credit memo items.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets credit memo comments.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
      */
     public function getComments();
+
+    /**
+     * Sets credit memo comments.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments($comments);
 
     /**
      * Sets the credit memo store ID.
@@ -911,20 +927,4 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return $this
      */
     public function setDiscountDescription($description);
-
-    /**
-     * Sets credit memo items.
-     *
-     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface[] $items
-     * @return $this
-     */
-    public function setItems(array $items = null);
-
-    /**
-     * Sets credit memo comments.
-     *
-     * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface[] $comments
-     * @return $this
-     */
-    public function setComments(array $comments = null);
 }

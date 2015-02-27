@@ -799,6 +799,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setItems($items)
+    {
+        return $this->setData(CreditmemoInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns adjustment
      *
      * @return float
@@ -1264,6 +1272,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         return $this->getData(CreditmemoInterface::COMMENTS);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setComments($comments)
+    {
+        return $this->setData(CreditmemoInterface::COMMENTS, $comments);
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
@@ -1583,22 +1599,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function setDiscountDescription($description)
     {
         return $this->setData(CreditmemoInterface::DISCOUNT_DESCRIPTION, $description);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setItems(array $items = null)
-    {
-        return $this->setData(CreditmemoInterface::ITEMS, $items);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setComments(array $comments = null)
-    {
-        return $this->setData(CreditmemoInterface::COMMENTS, $comments);
     }
     //@codeCoverageIgnoreEnd
 }

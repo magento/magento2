@@ -146,6 +146,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getPackages();
 
     /**
+     * Sets any packages for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
+     * @return $this
+     */
+    public function setPackages(array $packages = null);
+
+    /**
      * Gets the shipment status.
      *
      * @return int Shipment status.
@@ -310,12 +318,4 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setUpdatedAt($timestamp);
-
-    /**
-     * Sets any packages for the shipment.
-     *
-     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
-     * @return $this
-     */
-    public function setPackages(array $packages = null);
 }

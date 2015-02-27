@@ -1527,11 +1527,27 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getItems();
 
     /**
+     * Sets items for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets the billing address, if any, for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderAddressInterface|null Billing address. Otherwise, null.
      */
     public function getBillingAddress();
+
+    /**
+     * Sets the billing address, if any, for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
+     * @return $this
+     */
+    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
 
     /**
      * Gets the shipping address, if any, for the order.
@@ -1541,11 +1557,27 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getShippingAddress();
 
     /**
+     * Sets the shipping address, if any, for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @return $this
+     */
+    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
+
+    /**
      * Gets the payments for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface[] Array of payments.
      */
     public function getPayments();
+
+    /**
+     * Sets the payments for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface[] $payments
+     * @return $this
+     */
+    public function setPayments(array $payments = null);
 
     /**
      * Gets addresses for the order.
@@ -1555,11 +1587,27 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getAddresses();
 
     /**
+     * Sets addresses for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface[] $addresses
+     * @return $this
+     */
+    public function setAddresses(array $addresses = null);
+
+    /**
      * Gets status histories for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] Array of status histories.
      */
     public function getStatusHistories();
+
+    /**
+     * Sets status histories for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] $statusHistories
+     * @return $this
+     */
+    public function setStatusHistories(array $statusHistories = null);
 
     /**
      * Sets the state for the order.
@@ -2616,52 +2664,4 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setBaseShippingInclTax($amount);
-
-    /**
-     * Sets items for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface[] $items
-     * @return $this
-     */
-    public function setItems(array $items = null);
-
-    /**
-     * Sets the billing address, if any, for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
-     * @return $this
-     */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
-
-    /**
-     * Sets the shipping address, if any, for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
-     * @return $this
-     */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
-
-    /**
-     * Sets the payments for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderPaymentInterface[] $payments
-     * @return $this
-     */
-    public function setPayments(array $payments = null);
-
-    /**
-     * Sets addresses for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface[] $addresses
-     * @return $this
-     */
-    public function setAddresses(array $addresses = null);
-
-    /**
-     * Sets status histories for the order.
-     *
-     * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] $statusHistories
-     * @return $this
-     */
-    public function setStatusHistories(array $statusHistories = null);
 }

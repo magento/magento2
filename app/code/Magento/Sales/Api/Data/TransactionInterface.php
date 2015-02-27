@@ -204,7 +204,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Additional information setter
      * Updates data inside the 'additional_information' array
-     * Doesn't allow to set arrays
+     * Does not allow setting of arrays
      *
      * @param string $key
      * @param mixed $value
