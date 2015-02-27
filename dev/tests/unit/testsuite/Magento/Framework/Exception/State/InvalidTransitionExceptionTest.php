@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Exception\State;
 
+use Magento\Framework\Phrase;
+
 class InvalidTransitionExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
@@ -18,7 +20,7 @@ class InvalidTransitionExceptionTest extends \PHPUnit_Framework_TestCase
             'parameter2',
         ];
         $cause = new \Exception();
-        $stateException = new InvalidTransitionException($message, $params, $cause);
+        $stateException = new InvalidTransitionException(new Phrase($message, $params), $cause);
         $this->assertInstanceOf($instanceClass, $stateException);
     }
 }

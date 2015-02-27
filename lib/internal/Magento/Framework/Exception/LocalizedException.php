@@ -13,16 +13,18 @@ use Magento\Framework\Phrase\Renderer\Placeholder;
 class LocalizedException extends \Exception
 {
     /**
-     * @var \Magento\Framework\Phrase\Renderer\Placeholder
-     */
-    private static $renderer;
-
-    /**
      * @var \Magento\Framework\Phrase
      */
-    private $phrase;
+    protected $phrase;
 
     /**
+     * @var string
+     */
+    protected $logMessage;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      */
@@ -43,7 +45,7 @@ class LocalizedException extends \Exception
     }
 
     /**
-     * Returns the array of parameters in the message
+     * Get parameters, corresponding to placeholders in raw exception message
      *
      * @return array
      */
@@ -59,9 +61,10 @@ class LocalizedException extends \Exception
      */
     public function getLogMessage()
     {
-        if (!self::$renderer) {
-            self::$renderer = new Placeholder();
+        if (is_null($this->logMessage)) {
+            $renderer = new Placeholder();
+            $this->logMessage = $renderer->render([$this->getRawMessage()], $this->getParameters());
         }
-        return self::$renderer->render([$this->getRawMessage()], $this->getParameters());
+        return $this->logMessage;
     }
 }

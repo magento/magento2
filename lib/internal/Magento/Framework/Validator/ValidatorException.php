@@ -7,10 +7,15 @@
  */
 namespace Magento\Framework\Validator;
 
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Message\Error;
+
 /**
  * Exception to be thrown when an validation data is failed
  */
-class ValidatorException extends \Magento\Framework\Exception\InputException
+class ValidatorException extends InputException
 {
     /**
      * @var array
@@ -20,14 +25,12 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
     /**
      * Constructor
      *
-     * @param string $message
-     * @param [] $params
+     * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      * @param array $messages Validation error messages
      */
     public function __construct(
-        $message = self::DEFAULT_MESSAGE,
-        $params = [],
+        Phrase $phrase = null,
         \Exception $cause = null,
         array $messages = []
     ) {
@@ -39,11 +42,11 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
                         $message .= PHP_EOL;
                     }
                     $message .= $propertyMessage;
-                    $this->addMessage(new \Magento\Framework\Message\Error($propertyMessage));
+                    $this->addMessage(new Error($propertyMessage));
                 }
             }
         }
-        parent::__construct($message, $params, $cause);
+        parent::__construct($phrase, $cause);
     }
 
     /**
@@ -52,7 +55,7 @@ class ValidatorException extends \Magento\Framework\Exception\InputException
      * @param \Magento\Framework\Message\AbstractMessage $message
      * @return $this
      */
-    public function addMessage(\Magento\Framework\Message\AbstractMessage $message)
+    public function addMessage(AbstractMessage $message)
     {
         if (!isset($this->messages[$message->getType()])) {
             $this->messages[$message->getType()] = [];

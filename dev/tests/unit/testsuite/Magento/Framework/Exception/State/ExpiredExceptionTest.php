@@ -7,11 +7,8 @@
  */
 namespace Magento\Framework\Exception\State;
 
-/**
- * Class ExpiredException
- *
- * @package Magento\Framework\Exception\State
- */
+use Magento\Framework\Phrase;
+
 class ExpiredExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
@@ -23,7 +20,7 @@ class ExpiredExceptionTest extends \PHPUnit_Framework_TestCase
             'parameter2',
         ];
         $cause = new \Exception();
-        $stateException = new ExpiredException($message, $params, $cause);
+        $stateException = new ExpiredException(new Phrase($message, $params), $cause);
         $this->assertInstanceOf($instanceClass, $stateException);
     }
 }
