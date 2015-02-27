@@ -505,34 +505,6 @@ class Config
     }
 
     /**
-     * Get attribute object for collection usage
-     *
-     * @param   mixed $entityType
-     * @param   int|string $attribute
-     * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|null
-     */
-    public function getCollectionAttribute($entityType, $attribute)
-    {
-        $entityType = $this->getEntityType($entityType);
-        $entityTypeCode = $entityType->getEntityTypeCode();
-
-        if (is_numeric($attribute)) {
-            $attribute = $this->_getAttributeReference($attribute, $entityTypeCode);
-            if (!$attribute) {
-                return null;
-            }
-        }
-
-        $attributeKey = $this->_getAttributeKey($entityTypeCode, $attribute);
-        $attributeObject = $this->_load($attributeKey);
-        if ($attributeObject) {
-            return $attributeObject;
-        }
-
-        return $this->getAttribute($entityType, $attribute);
-    }
-
-    /**
      * Create attribute from attribute data array
      *
      * @param string $entityType
