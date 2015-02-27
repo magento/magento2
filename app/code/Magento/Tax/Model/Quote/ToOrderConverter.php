@@ -39,12 +39,12 @@ class ToOrderConverter
     {
         /** @var \Magento\Sales\Model\Order $order */
         $taxes = $this->quoteAddress->getAppliedTaxes();
+        $customAttributes = $order->getCustomAttributes();
         if (is_array($taxes)) {
             if (is_array($order->getAppliedTaxes())) {
                 $taxes = array_merge($order->getAppliedTaxes(), $taxes);
             }
-            $order->setAppliedTaxes($taxes);
-            $order->setConvertingFromQuote(true);
+            $customAttributes = array_merge($customAttributes, ['applied_taxes' => $taxes], ['converting_from_quote' => true]);
         }
 
         $itemAppliedTaxes = $this->quoteAddress->getItemsAppliedTaxes();
@@ -52,8 +52,9 @@ class ToOrderConverter
             if (is_array($order->getItemAppliedTaxes())) {
                 $itemAppliedTaxes = array_merge($order->getItemAppliedTaxes(), $itemAppliedTaxes);
             }
-            $order->setItemAppliedTaxes($itemAppliedTaxes);
+            $customAttributes = array_merge($customAttributes, ['item_applied_taxes' => $itemAppliedTaxes]);
         }
+        $order->setData('custom_attributes', $customAttributes);
         return $order;
     }
 }

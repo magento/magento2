@@ -42,5 +42,27 @@
                 <aspect name="to_cm_item" />
             </field>
         </fieldset>
+        <fieldset id="quote_convert_address">
+            <field name="subtotal_incl_tax">
+                <aspect name="to_order" />
+            </field>
+            <field name="base_subtotal_incl_tax">
+                <aspect name="to_order" />
+            </field>
+        </fieldset>
+        <fieldset id="quote_convert_item">
+            <field name="price_incl_tax">
+                <aspect name="to_order_item" />
+            </field>
+            <field name="base_price_incl_tax">
+                <aspect name="to_order_item" />
+            </field>
+            <field name="row_total_incl_tax">
+                <aspect name="to_order_item" />
+            </field>
+            <field name="base_row_total_incl_tax">
+                <aspect name="to_order_item" />
+            </field>
+        </fieldset>
     </scope>
 </config>
