@@ -47,6 +47,11 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     protected $scopeResolverMock;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
      * @var GeneratorPool
      */
     protected $model;
@@ -83,10 +88,13 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+
         $this->model = new GeneratorPool(
             $this->helperMock,
             $this->scopeConfigMock,
             $this->scopeResolverMock,
+            $this->loggerMock,
             $this->getGeneratorsMocks()
         );
     }
