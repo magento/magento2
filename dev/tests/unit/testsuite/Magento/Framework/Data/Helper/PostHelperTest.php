@@ -28,7 +28,7 @@ class PostHelperTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $urlHelper = $this->getMockBuilder('Magento\Framework\Url\Helper')
+        $urlHelper = $this->getMockBuilder('Magento\Framework\Url\Helper\Data')
             ->disableOriginalConstructor()->getMock();
         $urlHelper->expects($this->once())
             ->method('getEncodedUrl')

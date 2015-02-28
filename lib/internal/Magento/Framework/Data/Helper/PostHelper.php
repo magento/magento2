@@ -10,17 +10,18 @@
 namespace Magento\Framework\Data\Helper;
 
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var UrlHelper
      */
     private $urlHelper;
 
     public function __construct(
         Context $context,
-        \Magento\Framework\Url\Helper $urlHelper
+        UrlHelper $urlHelper
     ) {
         $this->urlHelper = $urlHelper;
     }
