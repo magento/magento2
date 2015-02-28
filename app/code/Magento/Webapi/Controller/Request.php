@@ -19,11 +19,6 @@ class Request extends HttpRequest implements RequestInterface
     protected $_consumerId = 0;
 
     /**
-     * @var CookieReaderInterface
-     */
-    protected $_cookieReader;
-
-    /**
      * Modify pathInfo: strip down the front name and query parameters.
      *
      * @param AreaList $areaList
@@ -32,13 +27,12 @@ class Request extends HttpRequest implements RequestInterface
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
+        CookieReaderInterface $cookieReader,
         AreaList $areaList,
         ScopeInterface $configScope,
-        CookieReaderInterface $cookieReader,
         $uri = null
     ) {
-        parent::__construct($uri);
-        $this->_cookieReader = $cookieReader;
+        parent::__construct($cookieReader, $uri);
 
         $pathInfo = $this->getRequestUri();
         /** Remove base url and area from path */
@@ -47,17 +41,5 @@ class Request extends HttpRequest implements RequestInterface
         /** Remove GET parameters from path */
         $pathInfo = preg_replace('#\?.*#', '', $pathInfo);
         $this->setPathInfo($pathInfo);
-    }
-
-    /**
-     * Retrieve a value from a cookie.
-     *
-     * @param string|null $name
-     * @param string|null $default The default value to return if no value could be found for the given $name.
-     * @return string|null
-     */
-    public function getCookie($name = null, $default = null)
-    {
-        return $this->_cookieReader->getCookie($name, $default);
     }
 }
