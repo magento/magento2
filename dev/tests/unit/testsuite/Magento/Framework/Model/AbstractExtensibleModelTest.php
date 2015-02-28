@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Model;
 
+use Magento\Framework\Api\AttributeValue;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
@@ -206,15 +207,14 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
      */
     protected function addCustomAttributesToModel($attributesAsArray, $model)
     {
-        $objectManager = new ObjectManagerHelper($this);
-        /** @var \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder */
-        $attributeValueBuilder = $objectManager->getObject('Magento\Framework\Api\AttributeDataBuilder');
         $addedAttributes = [];
         foreach ($attributesAsArray as $attributeCode => $attributeValue) {
-            $addedAttributes[$attributeCode] = $attributeValueBuilder
-                ->setAttributeCode($attributeCode)
-                ->setValue($attributeValue)
-                ->create();
+            $addedAttributes[$attributeCode] = new AttributeValue(
+                [
+                    AttributeValue::ATTRIBUTE_CODE => $attributeCode,
+                    AttributeValue::VALUE => $attributeValue,
+                ]
+            );
         }
         $model->setData(
             array_merge(

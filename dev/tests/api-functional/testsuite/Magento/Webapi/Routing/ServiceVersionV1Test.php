@@ -30,8 +30,8 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
      */
     protected $_soapService = 'testModule1AllSoapAndRest';
 
-    /** @var \Magento\Framework\Api\AttributeDataBuilder */
-    protected $valueBuilder;
+    /** @var \Magento\Framework\Api\AttributeValueFactory */
+    protected $valueFactory;
 
     /** @var ItemBuilder */
     protected $itemBuilder;
@@ -42,8 +42,8 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
         $this->_soapService = 'testModule1AllSoapAndRestV1';
         $this->_restResourcePath = "/{$this->_version}/testmodule1/";
 
-        $this->valueBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\AttributeDataBuilder'
+        $this->valueFactory = Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Api\AttributeValueFactory'
         );
 
         $this->itemBuilder = Bootstrap::getObjectManager()->create(
@@ -91,18 +91,15 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
             ],
         ];
 
-        $attributeValue1 = $this->valueBuilder
+        $attributeValue1 = $this->valueFactory->create()
             ->setAttributeCode(ItemBuilder::CUSTOM_ATTRIBUTE_1)
-            ->setValue('12345')
-            ->create();
-        $attributeValue2 = $this->valueBuilder
+            ->setValue('12345');
+        $attributeValue2 = $this->valueFactory->create()
             ->setAttributeCode(ItemBuilder::CUSTOM_ATTRIBUTE_2)
-            ->setValue(12345)
-            ->create();
-        $attributeValue3 = $this->valueBuilder
+            ->setValue(12345);
+        $attributeValue3 = $this->valueFactory->create()
             ->setAttributeCode(ItemBuilder::CUSTOM_ATTRIBUTE_3)
-            ->setValue(true)
-            ->create();
+            ->setValue(true);
 
         $item = $this->itemBuilder
             ->setItemId(1)
