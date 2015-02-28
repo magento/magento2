@@ -2077,8 +2077,6 @@ return [
     ['setAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['bindLocale', 'Magento\Backend\Model\Observer'],
     ['getLocaleLists', 'Magento\Dhl\Model\Resource\Setup', 'getLocaleResolver'],
-    ['getLowLevelFrontend', 'Magento\Framework\Cache\Frontend\Decorator\Bare'],
-    ['getLowLevelFrontend', 'Magento\Framework\Cache\FrontendInterface'],
     ['getTranslationList', 'Magento\Framework\Locale\Lists', '\ResourceBundle'],
     ['getCountryTranslationList', 'Magento\Framework\Locale\Lists', '\ResourceBundle'],
     ['getTranslationList', 'Magento\Framework\Locale\ListsInterface', '\ResourceBundle'],

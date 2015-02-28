@@ -75,6 +75,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:test',
+                    'frontend_type' => 'Magento\Framework\Cache\Frontend\Adapter\Zend',
                     'backend_type' => 'BlackHole'
                 ],
                 111,
@@ -88,6 +89,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:load',
+                    'frontend_type' => 'Magento\Framework\Cache\Frontend\Adapter\Zend',
                     'backend_type' => 'BlackHole'
                 ],
                 '111'
@@ -101,6 +103,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:save',
+                    'frontend_type' => 'Magento\Framework\Cache\Frontend\Adapter\Zend',
                     'backend_type' => 'BlackHole'
                 ],
                 true
@@ -114,6 +117,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:remove',
+                    'frontend_type' => 'Magento\Framework\Cache\Frontend\Adapter\Zend',
                     'backend_type' => 'BlackHole'
                 ],
                 true
@@ -127,6 +131,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:clean',
+                    'frontend_type' => 'Magento\Framework\Cache\Frontend\Adapter\Zend',
                     'backend_type' => 'BlackHole'
                 ],
                 true

@@ -35,6 +35,7 @@ class BareTest extends \PHPUnit_Framework_TestCase
             ['remove', ['record_id'], true],
             ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true],
             ['getBackend', [], $this->getMock('Zend_Cache_Backend')],
+            ['getLowLevelFrontend', [], $this->getMock('Zend_Cache_Core')],
         ];
     }
 }

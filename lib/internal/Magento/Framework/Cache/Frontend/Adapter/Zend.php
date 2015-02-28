@@ -88,6 +88,14 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getLowLevelFrontend()
+    {
+        return $this->_frontend;
+    }
+
+    /**
      * Retrieve single unified identifier
      *
      * @param string $identifier

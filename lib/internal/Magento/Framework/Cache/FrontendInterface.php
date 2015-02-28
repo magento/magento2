@@ -61,4 +61,11 @@ interface FrontendInterface
      * @return \Zend_Cache_Backend_Interface
      */
     public function getBackend();
+
+    /**
+     * Retrieve frontend instance compatible with Zend Locale Data setCache() to be used as a workaround
+     *
+     * @return \Zend_Cache_Core
+     */
+    public function getLowLevelFrontend();
 }

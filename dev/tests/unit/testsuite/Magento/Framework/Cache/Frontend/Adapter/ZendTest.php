@@ -102,4 +102,11 @@ class ZendTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+    public function testGetLowLevelFrontend()
+    {
+        $frontendMock = $this->getMock('Zend_Cache_Core');
+        $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendMock);
+        $this->assertSame($frontendMock, $object->getLowLevelFrontend());
+    }
 }
