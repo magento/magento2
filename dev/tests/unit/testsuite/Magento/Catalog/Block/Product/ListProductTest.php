@@ -42,6 +42,11 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $typeInstanceMock;
 
+    /**
+     * @var \Magento\Framework\Url\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -84,13 +89,17 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->urlHelperMock = $this->getMockBuilder('Magento\Framework\Url\Helper\Data')
+            ->disableOriginalConstructor()->getMock();
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Product\ListProduct',
             [
                 'registry' => $this->registryMock,
                 'layerResolver' => $layerResolver,
                 'cartHelper' => $this->cartHelperMock,
-                'postDataHelper' => $this->postDataHelperMock
+                'postDataHelper' => $this->postDataHelperMock,
+                'urlHelper' => $this->urlHelperMock,
             ]
         );
     }
@@ -152,7 +161,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('getTypeInstance')
             ->will($this->returnValue($this->typeInstanceMock));
-        $this->postDataHelperMock->expects($this->once())
+        $this->urlHelperMock->expects($this->once())
             ->method('getEncodedUrl')
             ->with($this->equalTo($url))
             ->will($this->returnValue($uenc));
