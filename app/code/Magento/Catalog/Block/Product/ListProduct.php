@@ -46,7 +46,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $_postDataHelper;
 
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $urlHelper;
 
@@ -67,7 +67,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Url\Helper $urlHelper,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
