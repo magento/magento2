@@ -2075,7 +2075,6 @@ return [
     ['getFiles', 'Magento\Framework\App\Request\Http'],
     ['getAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['setAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
-    ['getParam', 'Magento\Framework\App\RequestInterface'],
     ['bindLocale', 'Magento\Backend\Model\Observer'],
     ['getLocaleLists', 'Magento\Dhl\Model\Resource\Setup', 'getLocaleResolver'],
     ['getLowLevelFrontend', 'Magento\Framework\Cache\Frontend\Decorator\Bare'],
