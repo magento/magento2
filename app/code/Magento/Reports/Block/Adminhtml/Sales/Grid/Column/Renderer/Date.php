@@ -96,7 +96,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
                         $this->_localeDate->date(
                             $data,
                             null,
-                            null,
                             false
                         ),
                         $format
@@ -110,7 +109,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
                     : \IntlDateFormatter::formatObject(
                         $this->_localeDate->date(
                             $data,
-                            null,
                             null,
                             false
                         ),

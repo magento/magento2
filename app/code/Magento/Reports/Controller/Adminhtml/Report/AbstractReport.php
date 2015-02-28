@@ -124,12 +124,14 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
-            $updatedAt = $this->_objectManager->get(
-                'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
-            )->scopeDate(
-                0,
-                $flag->getLastUpdate(),
-                true
+            $updatedAt =  \IntlDateFormatter::formatObject(
+                $this->_objectManager->get(
+                    'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
+                )->scopeDate(
+                    0,
+                    $flag->getLastUpdate(),
+                    true
+                )
             );
         }
 
@@ -140,7 +142,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
                 'click <a href="%3">here</a>.',
-                \IntlDateFormatter::formatObject($updatedAt),
+                $updatedAt,
                 $refreshStatsLink,
                 $directRefreshLink
             )

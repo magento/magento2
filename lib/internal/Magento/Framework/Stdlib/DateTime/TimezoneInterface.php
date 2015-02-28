@@ -59,12 +59,11 @@ interface TimezoneInterface
      * Create \DateTime object for current locale
      *
      * @param mixed              $date
-     * @param string             $part
      * @param string $locale
      * @param bool               $useTimezone
      * @return \DateTime
      */
-    public function date($date = null, $part = null, $locale = null, $useTimezone = true);
+    public function date($date = null, $locale = null, $useTimezone = true);
 
     /**
      * Create \DateTime object with date converted to scope timezone and scope Locale

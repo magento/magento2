@@ -1416,7 +1416,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $stockItemDo->setData($row);
                     $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                     if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                        $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
+                        $row['low_stock_date'] = $this->_localeDate->date(null, null, false)
                             ->format('Y-m-d H:i:s');
                     }
                     $row['stock_status_changed_auto'] =

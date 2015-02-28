@@ -134,7 +134,7 @@ class Date extends FilterAbstract
     protected function convertDate($date, $locale)
     {
         try {
-            $dateObj = $this->localeDate->date($date, null, $locale, false);
+            $dateObj = $this->localeDate->date($date, $locale, false);
             $dateObj->setTime(0, 0, 0);
             //convert store date to default date in UTC timezone without DST
             $dateObj->setTimezone(new \DateTimeZone('UTC'));

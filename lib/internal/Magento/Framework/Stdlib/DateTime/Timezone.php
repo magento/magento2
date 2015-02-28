@@ -140,7 +140,7 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function date($date = null, $part = null, $locale = null, $useTimezone = true)
+    public function date($date = null, $locale = null, $useTimezone = true)
     {
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
@@ -160,7 +160,7 @@ class Timezone implements TimezoneInterface
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
-        return new \DateTime('@' . $date, new \DateTimeZone($timezone));
+        return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
     }
 
     /**
