@@ -104,6 +104,16 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     }
 
     /**
+     * @param \Magento\Framework\Object[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null)
+    {
+        $this->data['items'] = $items;
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getTotalCount()
@@ -115,6 +125,16 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     }
 
     /**
+     * @param int $totalCount
+     * @return $this
+     */
+    public function setTotalCount($totalCount)
+    {
+        $this->data['total_count'] = $totalCount;
+        return $this;
+    }
+
+    /**
      * @return \Magento\Framework\Api\CriteriaInterface
      */
     public function getSearchCriteria()
@@ -123,6 +143,15 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
             $this->data['search_criteria'] = $this->query->getCriteria();
         }
         return $this->data['search_criteria'];
+    }
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return $this
+     */
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    {
+        return $this;
     }
 
     /**

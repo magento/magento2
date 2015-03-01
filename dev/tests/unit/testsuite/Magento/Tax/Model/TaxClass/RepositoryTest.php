@@ -18,7 +18,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultBuilder;
+    protected $searchResultFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchResultMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -43,11 +48,16 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->searchResultBuilder = $this->getMock(
-            '\Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder',
-            [
-                'setSearchCriteria', 'setTotalCount', 'setItems', 'create'
-            ],
+        $this->searchResultFactory = $this->getMock(
+            '\Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->searchResultMock = $this->getMock(
+            '\Magento\Tax\Api\Data\TaxClassSearchResultsInterface',
+            [],
             [],
             '',
             false
@@ -75,7 +85,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'classModelRegistry' => $this->classModelRegistryMock,
                 'taxClassResource' => $this->taxClassResourceMock,
-                'searchResultsBuilder' => $this->searchResultBuilder,
+                'searchResultsFactory' => $this->searchResultFactory,
                 'taxClassCollectionFactory' => $this->taxClassCollectionFactory
             ]
         );
@@ -170,18 +180,17 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteria->expects($this->once())->method('getPageSize')->willReturn(20);
         $searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn(0);
 
-        $result = $this->getMock('\Magento\Tax\Api\Data\TaxRateSearchResultsInterface');
         $collection->expects($this->any())->method('getSize')->willReturn(2);
         $collection->expects($this->any())->method('setItems')->with([$taxClassOne, $taxClassTwo]);
         $collection->expects($this->once())->method('setCurPage')->with(0);
         $collection->expects($this->once())->method('setPageSize')->with(20);
 
-        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
-        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with(2);
-        $this->searchResultBuilder->expects($this->once())->method('create')->willReturn($result);
+        $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
+        $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(2);
+        $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
         $this->taxClassCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
 
-        $this->assertEquals($result, $this->model->getList($searchCriteria));
+        $this->assertEquals($this->searchResultMock, $this->model->getList($searchCriteria));
     }
 
     public function testSave()

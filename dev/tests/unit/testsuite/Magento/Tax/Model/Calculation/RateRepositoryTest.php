@@ -30,7 +30,12 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $searchResultBuilder;
+    private $searchResultFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchResultMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -68,9 +73,16 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->searchResultBuilder = $this->getMock(
-            'Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder',
-            ['setItems', 'setSearchCriteria', 'setTotalCount', 'create'],
+        $this->searchResultFactory = $this->getMock(
+            'Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->searchResultMock = $this->getMock(
+            'Magento\Tax\Api\Data\TaxRuleSearchResultsInterface',
+            [],
             [],
             '',
             false
@@ -106,7 +118,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = new RateRepository(
             $this->rateConverterMock,
             $this->rateRegistryMock,
-            $this->searchResultBuilder,
+            $this->searchResultFactory,
             $this->rateFactoryMock,
             $this->countryFactoryMock,
             $this->regionFactoryMock,
@@ -235,12 +247,12 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));
         $rateMock->expects($this->any())->method('getCollection')->will($this->returnValue($collectionMock));
 
-        $this->searchResultBuilder->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
-        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with(count($items))
+        $this->searchResultMock->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
+        $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(count($items))
             ->willReturnSelf();
-        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
+        $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
-        $this->searchResultBuilder->expects($this->once())->method('create');
+        $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
 
         $this->model->getList($searchCriteriaMock);
     }
@@ -381,12 +393,12 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
 
 
-        $this->searchResultBuilder->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
-        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with(count($items))
+        $this->searchResultMock->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
+        $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(count($items))
             ->willReturnSelf();
-        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
+        $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
-        $this->searchResultBuilder->expects($this->once())->method('create');
+        $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
 
         $this->model->getList($searchCriteriaMock);
     }

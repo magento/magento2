@@ -38,7 +38,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $resultBuilderMock;
+    private $resultFactoryMock;
 
     protected function setUp()
     {
@@ -64,9 +64,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', ['getEntityType'], [], '', false);
-        $this->resultBuilderMock = $this->getMock(
-            '\Magento\Eav\Api\Data\AttributeSetSearchResultsDataBuilder',
-            ['setSearchCriteria', 'setItems', 'setTotalCount', 'create', '__wakeup'],
+        $this->resultFactoryMock = $this->getMock(
+            '\Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -76,7 +76,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->setFactoryMock,
             $this->collectionFactoryMock,
             $this->eavConfigMock,
-            $this->resultBuilderMock
+            $this->resultFactoryMock
         );
     }
 
@@ -214,18 +214,18 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$attributeSetMock]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(1);
 
-        $this->resultBuilderMock->expects($this->once())
+        $resultMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetSearchResultsInterface', [], [], '', false);
+        $resultMock->expects($this->once())
             ->method('setSearchCriteria')
             ->with($searchCriteriaMock)
             ->willReturnSelf();
-        $this->resultBuilderMock->expects($this->once())
+        $resultMock->expects($this->once())
             ->method('setItems')
             ->with([$attributeSetMock])
             ->willReturnSelf();
-        $this->resultBuilderMock->expects($this->once())->method('setTotalCount')->with(1)->willReturnSelf();
+        $resultMock->expects($this->once())->method('setTotalCount')->with(1)->willReturnSelf();
 
-        $resultMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetSearchResultsInterface', [], [], '', false);
-        $this->resultBuilderMock->expects($this->once())->method('create')->willReturn($resultMock);
+        $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($resultMock);
 
         $this->model->getList($searchCriteriaMock);
     }

@@ -14,4 +14,12 @@ interface ProductAttributeSearchResultsInterface extends \Magento\Framework\Api\
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */
     public function getItems();
+
+    /**
+     * Set attributes list.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

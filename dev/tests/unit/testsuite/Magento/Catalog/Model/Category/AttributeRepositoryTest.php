@@ -58,6 +58,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                     'getItems',
                     'getSearchCriteria',
                     'getTotalCount',
+                    'setItems',
+                    'setSearchCriteria',
+                    'setTotalCount',
                     '__wakeup'
                 ],
                 [],
