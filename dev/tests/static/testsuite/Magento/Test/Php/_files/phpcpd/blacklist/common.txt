@@ -130,6 +130,10 @@ Magento/Shipping/Model
 Magento/Ui
 Magento/Sales/Service/V1
 Magento/Sales/Api
+Magento/Eav/Api/Data
+Magento/Customer/Api/Data
+Magento/Quote/Api/Data
+Magento/Catalog/Api/Data
 Magento/Sales/Spi
 Magento/Shipping/Controller/Adminhtml/Order/Shipment
 vendor
