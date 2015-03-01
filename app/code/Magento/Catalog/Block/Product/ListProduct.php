@@ -60,6 +60,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
      */
     public function __construct(

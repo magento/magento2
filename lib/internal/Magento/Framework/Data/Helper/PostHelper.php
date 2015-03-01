@@ -19,10 +19,15 @@ class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private $urlHelper;
 
+    /**
+     * @param Context $context
+     * @param UrlHelper $urlHelper
+     */
     public function __construct(
         Context $context,
         UrlHelper $urlHelper
     ) {
+        parent::__construct($context);
         $this->urlHelper = $urlHelper;
     }
 

@@ -28,6 +28,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param CollectionFactory $productCollectionFactory
      * @param array $data
      */
@@ -36,6 +37,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
@@ -45,6 +47,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
             $postDataHelper,
             $layerResolver,
             $categoryRepository,
+            $urlHelper,
             $data
         );
     }
