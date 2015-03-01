@@ -453,7 +453,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * @param array $options
      * @return $this
      */
-    public function setProductOptions($options)
+    public function setProductOptions(array $options = null)
     {
         $this->setData('product_options', $options);
         return $this;

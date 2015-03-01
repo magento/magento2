@@ -857,7 +857,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @param string[] $productOptions
      * @return $this
      */
-    public function setProductOptions($productOptions);
+    public function setProductOptions(array $productOptions = null);
 
     /**
      * Gets the product type for the order item.
