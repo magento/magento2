@@ -7,7 +7,6 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Checkout\Helper;
-use Magento\Framework\Url\Helper\Data;
 
 /**
  * Shopping cart helper
