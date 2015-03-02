@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="confPathToMapFile" xsi:type="string">app/etc/aliases_to_classes_map.json</argument>
@@ -27,11 +26,5 @@
     </type>
     <type name="Magento\Framework\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
-    </type>
-    <type name="Magento\Framework\App\Config\Value">
-        <arguments>
-            <argument name="resource" xsi:type="object">Magento\Core\Model\Resource\Config\Data</argument>
-            <argument name="resourceCollection" xsi:type="object">Magento\Core\Model\Resource\Config\Data\Collection\Proxy</argument>
-        </arguments>
     </type>
 </config>
