@@ -33,7 +33,7 @@ lib/internal/Magento/Framework/Search
 lib/internal/Magento/Framework/Serialization
 lib/internal/Magento/Framework/Simplexml
 lib/internal/Magento/Framework/System
-lib/internal/Magento/Framework/Test
+lib/internal/Magento/Framework/Utility
 lib/internal/Magento/Framework/Url
 lib/internal/Magento/Framework/Xml
 lib/internal/Magento/Framework
