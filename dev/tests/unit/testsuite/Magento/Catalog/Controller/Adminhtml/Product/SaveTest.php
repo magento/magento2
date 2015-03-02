@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Phrase;
 
 class SaveTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
 {
@@ -101,17 +102,22 @@ class SaveTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
     }
 
     /**
-     * @dataProvider exceptionTypeDataProvider
      * @param string $exceptionType
+     * @param \Magento\Framework\Phrase|string $exceptionMessage
+     * @dataProvider exceptionTypeDataProvider
      */
-    public function testExecuteSetsProductDataToSessionAndRedirectsToNewActionOnError($exceptionType)
-    {
+    public function testExecuteSetsProductDataToSessionAndRedirectsToNewActionOnError(
+        $exceptionType,
+        $exceptionMessage
+    ) {
         $productData = ['product' => ['name' => 'test-name']];
 
         $this->request->expects($this->any())->method('getPostValue')->willReturn($productData);
         $this->initializationHelper->expects($this->any())->method('initialize')
             ->willReturn($this->product);
-        $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType('message'));
+        $this->product->expects($this->any())
+            ->method('getSku')
+            ->willThrowException(new $exceptionType($exceptionMessage));
 
         $this->session->expects($this->once())->method('setProductData')->with($productData);
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');
@@ -124,6 +130,9 @@ class SaveTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
      */
     public function exceptionTypeDataProvider()
     {
-        return [['Magento\Framework\Exception\LocalizedException'], ['Exception']];
+        return [
+            ['Magento\Framework\Exception\LocalizedException', new Phrase('message')],
+            ['Exception', 'message']
+        ];
     }
 }
