@@ -52,8 +52,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
 
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+
         $this->model = new \Magento\Quote\Model\Resource\Quote(
-            $this->resourceMock,
+            $contextMock,
             $this->configMock
         );
     }
