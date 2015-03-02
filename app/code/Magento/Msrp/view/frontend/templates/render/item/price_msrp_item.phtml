@@ -29,7 +29,7 @@
 <div class="price-box msrp">
     <?php if ($_product->getMsrp()): ?>
         <?php $_msrpPrice = $pricingHelper->currency($_product->getMsrp(), true, false) ?>
-        <span class="old-price" ><?php echo $_msrpPrice ?></span>
+        <span class="old-price"><?php echo $_msrpPrice ?></span>
     <?php endif; ?>
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
         <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
@@ -46,7 +46,7 @@
                                          "cartForm": "#wishlist-view-form"}}'><?php echo __('Click for price') ?>
         </a>
     <?php else: ?>
-        <span class="msrp message">
+        <span class="msrp-message">
             <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
         </span>
     <?php endif; ?>

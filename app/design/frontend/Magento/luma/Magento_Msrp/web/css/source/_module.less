@@ -1,0 +1,70 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//    Common
+//--------------------------------------
+
+& when (@media-common = true) {
+
+.map-popup-wrapper.popup {
+    .action.close {
+        .css(top, @popup-button-close__position-top + @indent__s);
+    }
+}
+
+.map-popup {
+    .popup(
+        @_popup-margin-top: @indent__s,
+        @_popup-margin-left: false,
+        @_popup-content-margin: false,
+        @_popup-position-bottom: false,
+        @_popup-position-right: false,
+        @_popup-position: absolute
+    );
+    .map-info-price {
+        &:extend(.abs-add-clearfix all);
+        margin: 0 0 @indent__base;
+        .price-box {
+            margin: 0 0 @indent__base;
+            .label {
+                &:after {
+                    content: ": ";
+                }
+            }
+        }
+    }
+    .action.primary {
+        margin-right: @indent__s;
+    }
+    .map-msrp {
+        margin-bottom: @indent__s;
+    }
+    .actual-price {
+        font-size: @font-size__l;
+        margin: 3px 0 15px;
+    }
+    .popup-header {
+        display: none;
+    }
+}
+
+.product-info-price {
+    .map-show-info {
+        display: inline-block;
+        margin-right: @indent__xs;
+    }
+}
+
+}
+
+//
+//    Mobile
+//--------------------------------------
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .map-popup {
+        max-width: 100%; 
+    }
+}

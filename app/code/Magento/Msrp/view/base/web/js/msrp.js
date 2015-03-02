@@ -98,7 +98,7 @@ define([
                 dialogContentClass: 'active',
                 closeOnMouseLeave: false,
                 autoPosition: true,
-                'dialogClass': 'popup map-popup',
+                'dialogClass': 'popup map-popup-wrapper',
                 position: {
                     my: 'left top',
                     collision: 'fit none',

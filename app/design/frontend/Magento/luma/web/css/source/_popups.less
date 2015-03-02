@@ -3,6 +3,8 @@
 //  * See COPYING.txt for license details.
 //  */
 
+@popup-marker__size: 7px;
+
 //
 //    Common
 //--------------------------------------
@@ -11,32 +13,31 @@
 
 // Popup working with dropdown dialog
 .ui-dialog.popup {
-  width: 420px;
-  .action.close {
-    position: @popup-button-close__position;
-    ._popup-button-close-icon(
-      @popup-button-close__icon,
-      @popup-icon-font__content,
-      @popup-icon-font,
-      @popup-icon-font__size,
-      @popup-icon-font__line-height,
-      @popup-icon-font__color,
-      @popup-icon-font__color-hover,
-      @popup-icon-font__color-active,
-      @popup-icon-font__margin,
-      @popup-icon-font__vertical-align,
-      @popup-icon-font__position,
-      @popup-icon-font__text-hide
-    );
-    ._popup-button-close-reset(
-      @popup-button-close__reset
-    );
-    .css(top, @popup-button-close__position-top + 15px);
-    .css(right, @popup-button-close__position-right);
-    .css(bottom, @popup-button-close__position-bottom);
-    .css(left, @popup-button-close__position-left);
-    z-index: 1001;
-  }
+    .action.close {
+        .css(position, @popup-button-close__position);
+        .css(top, @popup-button-close__position-top);
+        .css(right, @popup-button-close__position-right);
+        .css(bottom, @popup-button-close__position-bottom);
+        .css(left, @popup-button-close__position-left);
+        z-index: 1001;
+        ._popup-button-close-icon(
+            @popup-button-close__icon,
+            @popup-icon-font__content,
+            @popup-icon-font,
+            @popup-icon-font__size,
+            @popup-icon-font__line-height,
+            @popup-icon-font__color,
+            @popup-icon-font__color-hover,
+            @popup-icon-font__color-active,
+            @popup-icon-font__margin,
+            @popup-icon-font__vertical-align,
+            @popup-icon-font__position,
+            @popup-icon-font__text-hide
+        );
+        ._popup-button-close-reset(
+            @popup-button-close__reset
+        );
+    }
 }
 
 .popup {
@@ -46,6 +47,19 @@
             font-weight: @font-weight__regular;
         }
     }
+}
+
+.popup-pointer {
+    .pointer(
+        @_size: @popup-marker__size,
+        @_background-color: @popup__background,
+        @_border-color: @popup__border-color,
+        @_position__vertical__value: 2px,
+        @_position__horizontal__value: 2px
+    );
+    position: absolute;
+    top: -@popup-marker__size * 2;
+    margin-left: -@popup-marker__size * 2;
 }
 
 }
@@ -65,5 +79,15 @@
                 margin-top: @actions-toolbar-actions-links-secondary__margin-top;
             }
         }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .ui-dialog.popup {
+        width: 420px;
     }
 }
