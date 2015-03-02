@@ -15,7 +15,7 @@ use Magento\Framework\Message\Error;
 /**
  * Exception to be thrown when an validation data is failed
  */
-class ValidatorException extends InputException
+class Exception extends InputException
 {
     /**
      * @var array

@@ -321,7 +321,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Validator\ValidatorException();
+        $exception = new \Magento\Framework\Validator\Exception();
         $error = new \Magento\Framework\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
@@ -354,7 +354,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerId);
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Validator\ValidatorException(__($warningText));
+        $exception = new \Magento\Framework\Validator\Exception(__($warningText));
 
         $error = new \Magento\Framework\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);

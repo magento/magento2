@@ -234,7 +234,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $this->setUserValue(null);
                     break;
             }
-        } catch (\Magento\Framework\Validator\ValidatorException $e) {
+        } catch (\Magento\Framework\Validator\Exception $e) {
             $this->setUserValue(null);
         } catch (\Magento\Framework\Exception\File\ValidatorException $e) {
             $this->setIsValid(false);

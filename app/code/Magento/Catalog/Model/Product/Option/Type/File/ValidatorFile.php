@@ -91,7 +91,7 @@ class ValidatorFile extends Validator
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_File_Transfer_Exception
-     * @throws \Magento\Framework\Validator\ValidatorException
+     * @throws \Magento\Framework\Validator\Exception
      * @throws \Magento\Catalog\Model\Product\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -103,14 +103,14 @@ class ValidatorFile extends Validator
         try {
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
-                throw new \Magento\Framework\Validator\ValidatorException(
+                throw new \Magento\Framework\Validator\Exception(
                     __('Validation failed. Required options were not filled or file was not uploaded.')
                 );
             }
 
             $fileInfo = $upload->getFileInfo($file)[$file];
             $fileInfo['title'] = $fileInfo['name'];
-        } catch (\Magento\Framework\Validator\ValidatorException $e) {
+        } catch (\Magento\Framework\Validator\Exception $e) {
             throw $e;
         } catch (\Exception $e) {
             // when file exceeds the upload_max_filesize, $_FILES is empty
