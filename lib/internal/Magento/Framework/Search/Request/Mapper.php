@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -107,7 +108,7 @@ class Mapper
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(
-                __('Cycle found. Query %1 already used in request hierarchy', [$queryName])
+                new Phrase('Cycle found. Query %1 already used in request hierarchy', [$queryName])
             );
         }
         $this->mappedQueries[] = $queryName;
@@ -176,7 +177,7 @@ class Mapper
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
-                __('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
+                new Phrase('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
             );
         }
         $this->mappedFilters[] = $filterName;
@@ -290,7 +291,7 @@ class Mapper
         $allElements = array_keys($elements);
         $notUsedElements = implode(', ', array_diff($allElements, $mappedElements));
         if (!empty($notUsedElements)) {
-            throw new StateException(__($errorMessage, [$notUsedElements]));
+            throw new StateException(new Phrase($errorMessage, [$notUsedElements]));
         }
     }
 
@@ -352,7 +353,8 @@ class Mapper
                     );
                     break;
                 default:
-                    throw new StateException(__('Invalid bucket type'));
+                    throw new StateException(new Phrase('Invalid bucket type'));
+                    break;
             }
             $buckets[] = $bucket;
         }

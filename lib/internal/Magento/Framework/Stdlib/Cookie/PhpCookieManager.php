@@ -127,11 +127,11 @@ class PhpCookieManager implements CookieManagerInterface
             $params['name'] = $name;
             if ($value == '') {
                 throw new FailureToSendException(
-                    __('Unable to delete the cookie with cookieName = %name', $params)
+                    new Phrase('Unable to delete the cookie with cookieName = %name', $params)
                 );
             } else {
                 throw new FailureToSendException(
-                    __('Unable to send the cookie with cookieName = %name', $params)
+                    new Phrase('Unable to send the cookie with cookieName = %name', $params)
                 );
             }
         }
@@ -181,13 +181,13 @@ class PhpCookieManager implements CookieManagerInterface
 
         if ($numCookies > PhpCookieManager::MAX_NUM_COOKIES) {
             throw new CookieSizeLimitReachedException(
-                __('Unable to send the cookie. Maximum number of cookies would be exceeded.')
+                new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.')
             );
         }
 
         if ($sizeOfCookie > PhpCookieManager::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
-                __(
+                new Phrase(
                     'Unable to send the cookie. Size of \'%name\' is %size bytes.',
                     [
                         'name' => $name,

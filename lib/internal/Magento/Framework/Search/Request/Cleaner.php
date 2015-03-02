@@ -7,6 +7,7 @@ namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
+use Magento\Framework\Phrase;
 
 class Cleaner
 {
@@ -74,7 +75,7 @@ class Cleaner
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(
-                __('Cycle found. Query %1 already used in request hierarchy', [$queryName])
+                new Phrase('Cycle found. Query %1 already used in request hierarchy', [$queryName])
             );
         }
         $this->mappedQueries[] = $queryName;
@@ -142,7 +143,7 @@ class Cleaner
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
-                __('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
+                new Phrase('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
             );
         }
         $this->mappedFilters[] = $filterName;

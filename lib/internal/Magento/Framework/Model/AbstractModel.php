@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Model;
 
+use Magento\Framework\Phrase;
+
 /**
  * Abstract model class
  *
@@ -454,7 +456,9 @@ abstract class AbstractModel extends \Magento\Framework\Object
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
             $errors = $validator->getMessages();
-            $exception = new \Magento\Framework\Validator\ValidatorException(__(implode(PHP_EOL, $errors)));
+            $exception = new \Magento\Framework\Validator\ValidatorException(
+                new Phrase(implode(PHP_EOL, $errors))
+            );
             foreach ($errors as $errorMessage) {
                 $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
             }
