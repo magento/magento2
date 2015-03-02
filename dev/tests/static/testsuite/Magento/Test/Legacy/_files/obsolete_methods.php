@@ -1534,7 +1534,7 @@ return [
         'Magento\Framework\Stdlib\DateTime\TimezoneInterface',
         'Magento\Framework\Stdlib\DateTime\TimezoneInterface::scopeDate'
     ],
-    ['utcDate', 'Magento\Core\Model\Locale', 'Magento\Framework\Stdlib\DateTime\Timezone'],
+    ['utcDate', 'Magento\Core\Model\Locale'],
     ['storeTimeStamp', 'Magento\Core\Model\Locale', 'Magento\Framework\Stdlib\DateTime\Timezone::scopeTimeStamp'],
     ['formatDate', 'Magento\Core\Model\Locale', 'Magento\Framework\Stdlib\DateTime\Timezone'],
     ['getTranslation', 'Magento\Core\Model\Locale', 'Magento\Framework\Stdlib\DateTime\Timezone::_getTranslation'],
@@ -2086,6 +2086,10 @@ return [
     ['setLocaleCode', 'Magento\Framework\Locale\Resolver', 'setLocale'],
     ['getLocaleCode', 'Magento\Framework\Locale\Resolver', 'getLocale'],
     ['_getTranslation', 'Magento\Framework\Stdlib\DateTime\Timezone', '\ResourceBundle'],
+    ['formatTime', 'Magento\Framework\Stdlib\DateTime\TimezoneInterface', 'formatDateTime'],
+    ['utcDate', 'Magento\Framework\Stdlib\DateTime\TimezoneInterface'],
+    ['formatTime', 'Magento\Framework\Stdlib\DateTime\Timezone', 'formatDateTime'],
+    ['utcDate', 'Magento\Framework\Stdlib\DateTime\Timezone'],
     ['getLocaleCode', 'Magento\Framework\View\Asset\File\FallbackContext', 'getLocale'],
     ['getLocaleCode', 'Magento\Paypal\Model\Api\AbstractApi', 'getLocale'],
 ];

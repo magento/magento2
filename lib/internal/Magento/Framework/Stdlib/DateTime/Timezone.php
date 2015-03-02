@@ -197,43 +197,10 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function formatTime($time = null, $format = \IntlDateFormatter::SHORT, $showDate = false)
-    {
-        if (!in_array($format, $this->_allowedFormats, true)) {
-            return $time;
-        }
-
-        $date = $time;
-        if (!($time instanceof \DateTimeInterface)) {
-            $date = new \DateTime($time);
-        }
-
-        if ($showDate) {
-            $format = $this->getDateTimeFormat($format);
-        } else {
-            $format = $this->getTimeFormat($format);
-        }
-
-        return $date->format($format);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function utcDate($scope, $date, $includeTime = false)
-    {
-        $dateObj = $this->scopeDate($scope, $date, $includeTime);
-        $dateObj->setTimezone(new \DateTimeZone('UTC'));
-        return $dateObj;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function scopeTimeStamp($scope = null)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        return (new \DateTime('now', new \DateTimeZone($timezone)))->getTimestamp();
+        return (new \DateTime('now', new \DateTimeZone($timezone ?: 'UTC')))->getTimestamp();
     }
 
     /**

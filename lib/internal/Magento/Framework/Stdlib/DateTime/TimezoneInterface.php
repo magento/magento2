@@ -76,18 +76,6 @@ interface TimezoneInterface
     public function scopeDate($scope = null, $date = null, $includeTime = false);
 
     /**
-     * Create \DateTime object with date converted from scope's timezone
-     * to UTC time zone. Date can be passed in format of scope's locale
-     * or in format which was passed as parameter.
-     *
-     * @param mixed $scope Information about scope
-     * @param string|integer|\DateTime|array|null $date date in scope's timezone
-     * @param boolean $includeTime flag for including time to date
-     * @return \DateTime
-     */
-    public function utcDate($scope, $date, $includeTime = false);
-
-    /**
      * Get scope timestamp
      * Timestamp will be built with scope timezone settings
      *
@@ -108,20 +96,6 @@ interface TimezoneInterface
         $date = null,
         $format = \IntlDateFormatter::SHORT,
         $showTime = false
-    );
-
-    /**
-     * Format time using current locale options
-     *
-     * @param \DateTime|null $time
-     * @param string $format
-     * @param bool $showDate
-     * @return string
-     */
-    public function formatTime(
-        $time = null,
-        $format = \IntlDateFormatter::SHORT,
-        $showDate = false
     );
 
     /**
