@@ -64,7 +64,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getFilePath')
             ->willReturn('/path/to/require/require.js');
 
-        $this->fileManager->expects($this->once())->method('createRequireJsAsset')->will($this->returnValue($asset));
         $this->fileManager
             ->expects($this->once())
             ->method('createRequireJsConfigAsset')
@@ -83,30 +82,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $assetCollection = $this->getMockBuilder('Magento\Framework\View\Asset\GroupedCollection')
             ->disableOriginalConstructor()
             ->getMock();
-        $assetCollection->expects($this->atLeastOnce())
-            ->method('add');
         $this->pageConfig->expects($this->atLeastOnce())
             ->method('getAssetCollection')
             ->willReturn($assetCollection);
 
         $propertyGroup = $this->getMock('Magento\Framework\View\Asset\PropertyGroup', [], [], '', false);
-        $propertyGroup
-            ->expects($this->once())
-            ->method('getProperty')
-            ->with('content_type')
-            ->willReturn('js');
-        $propertyGroup
-            ->expects($this->once())
-            ->method('getAll')
-            ->willReturn([]);
-        $propertyGroup
-            ->expects($this->once())
-            ->method('removeAll')
-            ->willReturn(true);
+
         $assetCollection
             ->expects($this->once())
-            ->method('getGroups')
-            ->willReturn([$propertyGroup]);
+            ->method('getGroupByContentType')
+            ->willReturn($propertyGroup);
+
+        $propertyGroup
+            ->expects($this->atLeastOnce())
+            ->method('addAfter')
+            ->willReturn(true);
 
         $object = new Config($this->context, $this->config, $this->fileManager, $this->pageConfig, $this->bundleConfig);
         $object->setLayout($layout);
