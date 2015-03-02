@@ -10,6 +10,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
+use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Stdlib\DateTime;
 
 /**
@@ -375,6 +377,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $masterAttributeCode = 'sku';
 
     /**
+     * @var ObjectRelationProcessor
+     */
+    protected $objectRelationProcessor;
+
+    /**
+     * @var TransactionManagerInterface
+     */
+    protected $transactionManager;
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
@@ -440,6 +452,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
         Product\Validator $validator,
+        ObjectRelationProcessor $objectRelationProcessor,
+        TransactionManagerInterface $transactionManager,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -464,6 +478,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->skuProcessor = $skuProcessor;
         $this->categoryProcessor = $categoryProcessor;
         $this->validator = $validator;
+        $this->objectRelationProcessor = $objectRelationProcessor;
+        $this->transactionManager = $transactionManager;
         parent::__construct($coreData, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
             $data['option_entity']
@@ -505,6 +521,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Delete products.
      *
      * @return $this
+     * @throws \Exception
      */
     protected function _deleteProducts()
     {
@@ -519,12 +536,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
             if ($idToDelete) {
-                $this->_connection->query(
-                    $this->_connection->quoteInto(
-                        "DELETE FROM `{$productEntityTable}` WHERE `entity_id` IN (?)",
-                        $idToDelete
-                    )
-                );
+                $this->transactionManager->start($this->_connection);
+                try {
+                    $this->objectRelationProcessor->delete(
+                        $this->transactionManager,
+                        $this->_connection,
+                        $productEntityTable,
+                        $this->_connection->quoteInto('entity_id IN (?)', $idToDelete),
+                        ['entity_id' => $idToDelete]
+                    );
+                    $this->transactionManager->commit();
+                } catch (\Exception $e) {
+                    $this->transactionManager->rollBack();
+                    throw $e;
+                }
             }
         }
         return $this;

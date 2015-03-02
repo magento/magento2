@@ -21,7 +21,7 @@ class Order extends AbstractReport
     protected $_updateDatFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -29,18 +29,28 @@ class Order extends AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory
      * @param \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory,
-        \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
+        \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
+        parent::__construct(
+            $context,
+            $logger,
+            $localeDate,
+            $reportsFlagFactory,
+            $dateTime,
+            $timezoneValidator,
+            $resourcePrefix
+        );
         $this->_createDatFactory = $createDatFactory;
         $this->_updateDatFactory = $updateDatFactory;
     }
