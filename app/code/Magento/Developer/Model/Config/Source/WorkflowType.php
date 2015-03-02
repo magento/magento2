@@ -15,6 +15,10 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class WorkflowType implements ArrayInterface
 {
+    /**
+     * Constant for
+     */
+    const CONFIG_NAME_PATH = 'dev/front_end_development_workflow/type';
 
     /**
      * Constant for server side compilation workflow

@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+use Magento\Developer\Model\Config\Source\WorkflowType;
+
 /**
  * Class ChainTest
  *
@@ -124,7 +126,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
             'origContent',
             'origType',
             $origPath,
-            \Magento\Framework\App\State::MODE_DEVELOPER
+            WorkflowType::CLIENT_SIDE_COMPILATION
         );
 
         $this->assertSame($this->object->getTargetAssetPath(), $origPath);

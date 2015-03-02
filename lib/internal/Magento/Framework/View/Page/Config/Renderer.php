@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\View\Page\Config;
 
+use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Page\Config;
 
@@ -57,14 +58,14 @@ class Renderer
     protected $urlBuilder;
 
     /**
-     * @var string
-     */
-    private $appMode;
-
-    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     private $assetRepo;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\View\Page\Config $pageConfig
@@ -75,7 +76,7 @@ class Renderer
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param string $appMode
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Config $pageConfig,
@@ -86,7 +87,7 @@ class Renderer
         \Magento\Framework\Stdlib\String $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMinifyService = $assetMinifyService;
@@ -96,7 +97,7 @@ class Renderer
         $this->string = $string;
         $this->logger = $logger;
         $this->assetRepo = $assetRepo;
-        $this->appMode = $appMode;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -384,16 +385,14 @@ class Renderer
             foreach ($assets as $asset) {
                 /** @var $asset \Magento\Framework\View\Asset\File */
                 // todo will be fixed in MAGETWO-33631
-                if ($this->appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    if ($asset instanceof \Magento\Framework\View\Asset\File &&
-                        $asset->getSourceUrl() != $asset->getUrl()
-                    ) {
-                        $attributes = $this->addDefaultAttributes('less', []);
-                        $groupTemplate = $this->getAssetTemplate('less', $attributes);
-                        $result .= sprintf($groupTemplate, $asset->getUrl());
-                    } else {
-                        $result .= sprintf($template, $asset->getUrl());
-                    }
+                if (WorkflowType::CLIENT_SIDE_COMPILATION == $this->getFrontEndDeveloperWorkflowType()
+                    && $asset instanceof \Magento\Framework\View\Asset\File
+                    && $asset->getSourceUrl() != $asset->getUrl()
+                ) {
+                    $attributes = $this->addDefaultAttributes('less', []);
+                    $groupTemplate = $this->getAssetTemplate('less', $attributes);
+                    $result .= sprintf($groupTemplate, $asset->getUrl());
+
                 } else {
                     $result .= sprintf($template, $asset->getUrl());
                 }
@@ -414,7 +413,7 @@ class Renderer
      */
     private function renderLessJsScripts($resultGroups)
     {
-        if (\Magento\Framework\App\State::MODE_DEVELOPER == $this->appMode) {
+        if (WorkflowType::CLIENT_SIDE_COMPILATION == $this->getFrontEndDeveloperWorkflowType()) {
             // less js have to be injected before any *.js in developer mode
             $lessJsConfigAsset = $this->assetRepo->createAsset('less/config.less.js');
             $resultGroups['js'] .= sprintf('<script src="%s"></script>' . "\n", $lessJsConfigAsset->getUrl()) ;
@@ -423,5 +422,13 @@ class Renderer
         }
 
         return $resultGroups;
+    }
+
+    /**
+     * @return string
+     */
+    private function getFrontEndDeveloperWorkflowType()
+    {
+        return $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
     }
 }
