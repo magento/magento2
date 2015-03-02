@@ -16,7 +16,6 @@ use Magento\Checkout\Test\Constraint\AssertTaxInShoppingCart;
 use Magento\Checkout\Test\Constraint\AssertShippingInShoppingCart;
 
 /**
- * Class AssertEstimateShippingAndTax
  * Assert that grand total is equal to expected.
  * Assert that subtotal total in the shopping cart is equals to expected total from data set.
  * Assert that tax amount is equal to expected.
@@ -105,7 +104,7 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
