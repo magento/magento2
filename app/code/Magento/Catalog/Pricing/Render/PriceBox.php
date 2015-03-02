@@ -59,13 +59,11 @@ class PriceBox extends PriceBoxRender
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
-     * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
-     * @param array $options Additional options used during encoding
      * @return string
      */
-    public function jsonEncode($valueToEncode, $cycleCheck = false, $options = [])
+    public function jsonEncode($valueToEncode)
     {
-        return $this->jsonHelper->jsonEncode($valueToEncode, $cycleCheck, $options);
+        return $this->jsonHelper->jsonEncode($valueToEncode);
     }
 
     /**

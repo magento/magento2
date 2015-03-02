@@ -39,13 +39,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
-     * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
-     * @param array $options Additional options used during encoding
      * @return string
      */
-    public function jsonEncode($valueToEncode, $cycleCheck = false, $options = [])
+    public function jsonEncode($valueToEncode)
     {
-        return $this->jsonEncoder->encode($valueToEncode, $cycleCheck, $options);
+        return $this->jsonEncoder->encode($valueToEncode);
     }
 
     /**
@@ -53,11 +51,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * encoded in the JSON format
      *
      * @param string $encodedValue
-     * @param int $objectDecodeType
      * @return mixed
      */
-    public function jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
+    public function jsonDecode($encodedValue)
     {
-        return $this->jsonDecoder->decode($encodedValue, $objectDecodeType);
+        return $this->jsonDecoder->decode($encodedValue);
     }
 }
