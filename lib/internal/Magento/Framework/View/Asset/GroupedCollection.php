@@ -117,8 +117,7 @@ class GroupedCollection extends Collection
     public function getGroupByContentType($contentType)
     {
         foreach ($this->groups as $group) {
-            if ($group->getProperty(self::PROPERTY_CONTENT_TYPE) == $contentType
-            ) {
+            if ($group->getProperty(self::PROPERTY_CONTENT_TYPE) == $contentType) {
                 return $group;
             }
         }
