@@ -3,100 +3,51 @@
 //  * See COPYING.txt for license details.
 //  */
 
-
 //
 //  Variables
 //  _____________________________________________
 
-@field-control--border-color: #adadad;
-@field-control_focus--border-color: #007BDB;
-@field-scope--color: #808080;
-@field-label--color: #007BDB;
-@field-divider--color: #ccc;
-@field-label--color: #303030;
-@field-label-disabled--color: #999;
-@field-label_required--color: #EB5202;
-@field-note--color: #303030;
-@field-control--color: #303030;
-@field-control--bg-color: #fff;
-@field-control_disabled--bg-color: #E9E9E9;
-@field-control-addon--color: #858585;
-@field-date-icon--color: #514943;
-@field-error--color: #555;
-@field-error--bg-color: #FFF8D6;
-@field-error--border-color: #E22626;
+@field-scope__color: @color-dark-gray;
+@field-divider__background-color: #ccc;
+@field-label__color: @color-very-dark-gray-black;
+@field-label__disabled__color: #999;
+@field-label__required__color: @color-phoenix;
+@field-note__color: @color-very-dark-gray-black;
 
-
-
-@field-error__color: @color-very-dark-gray2;
-@field-error__backroundg-color: @color-lazy-sun;
-@field-error__border-color: @color-tomato-brick;
+@field-error-message__background-color: @color-lazy-sun;
+@field-error-message__color: @color-very-dark-gray2;
+@field-error-message__border-color: @color-apricot;
+@field-error-control__border-color: @color-tomato-brick;
 
 //
 //  Form Fields
 //  _____________________________________________
 
-.mix-grid-width(@_columns-min, @_total:12) {
-    @_gutter: 30px;
-    @_part: @_columns-min/@_total;
-    float: left;
-    width: ~'calc( (100%) * @{_part} - @{_gutter} )';
-    margin-left: @_gutter;
-}
-
-.col-2-left-layout {
-    margin-top: 50px;
-    margin-left: -30px;
-    width: auto;
-    .clearfix();
-    .main-col {
-        .mix-grid-width(9);
-        float: right;
-    }
-    .side-col {
-        .mix-grid-width(3);
-    }
-}
-.admin__fieldset-wrapper-title {
-    padding: 14px 0 16px;
-    margin-bottom: 30px;
-    strong {
-        &:extend(h2);
-    }
-}
-
-//
-//  Form Fields
-//  _____________________________________________
-
-.admin__block {
-    width: 100%;
-    border: 1px solid black;
-}
 .admin__fieldset {
-    margin: 0;
-    padding: 0;
     border: 0;
+    margin: 0;
     min-width: 0;
+    padding: 0;
+
     > .admin__field {
         border: 0;
-        padding: 0;
         margin: 0;
-        .clearfix(); // @todo !abstract
-        margin-left: -30px;
+        padding: 0;
+        #mix-grid .row();
 
         > .admin__field-control {
-            .mix-grid-width(4,9);
+            #mix-grid .column(4,9);
         }
+
         > .admin__field-label {
-            .mix-grid-width(3,9);
+            #mix-grid .column(3,9);
         }
     }
 }
 
 .admin__field-label {
+    color: @field-label__color;
     margin: 0;
-    color: @field-label--color;
     text-align: right;
 
     & + br {
@@ -107,56 +58,61 @@
         font-family: 'Open Sans', arial, sans-serif;
         font-size: 14px;
         font-weight: @font-weight__semibold;
-        padding-top: 0;
         line-height: 3.2rem;
+        padding-top: 0;
         white-space: nowrap;
+
         &:before {
-            content: ".";
-            visibility: hidden;
-            width: 0;
+            content: '.';
             margin-left: -7px;
             overflow: hidden;
+            visibility: hidden;
+            width: 0;
         }
+
         span {
-            white-space: normal;
             display: inline-block;
-            vertical-align: middle;
             line-height: 1.2;
+            vertical-align: middle;
+            white-space: normal;
         }
     }
 
     ._required > & {
         span:after {
-            content: "*";
-            color: @field-label_required--color;
+            color: @field-label__required__color;
+            content: '*';
             display: inline;
-            font-weight: 500;
             font-size: 16px;
+            font-weight: 500;
+            margin-left: 10px;
             margin-top: 2px;
             position: absolute;
             z-index: 1;
-            margin-left: 10px;
         }
     }
 
     ._disabled > & {
-        color: @field-label-disabled--color;
+        color: @field-label__disabled__color;
     }
 }
 
 
 .admin__field {
-
     margin-bottom: 0;
+
     & + & {
         margin-top: 15px;
     }
+
     &:not(.admin__field-option) ~ .admin__field-option {
         margin-top: 5px;
     }
+
     &.admin__field-option ~ .admin__field-option {
         margin-top: 9px;
     }
+
     & ~ .admin__field-option:last-child {
         margin-bottom: 8px;
     }
@@ -172,41 +128,47 @@
 
     &[data-config-scope] {
         &:before {
-            .mix-grid-width(2);
-            position: absolute;
-            right: 0;
-            display: inline-block;
+            #mix-grid .return_length(7,9);
+            color: @field-scope__color;
             content: attr(data-config-scope);
-            float: right;
-            color: @field-scope--color;
+            display: inline-block;
+            position: absolute;
+            left: @_length;
+            margin-left: 2 * @temp_gutter;
+
+            & {
+                #mix-grid .return_length(2,9);
+                width: @_length;
+            }
         }
         .admin__field-control &:nth-child(n+2):before {
-            content: "";
+            content: '';
         }
     }
 
     &._error {
-        .admin__field-control [class*="admin__addon-"]:before,
-        .admin__field-control > [class*="admin__control-"] {
-            border-color: @field-error--border-color;
+        .admin__field-control [class*='admin__addon-']:before,
+        .admin__field-control > [class*='admin__control-'] {
+            border-color: @field-error-control__border-color;
         }
     }
 }
 
 .admin__field-error {
-    background: @field-error--bg-color;
-    border: 1px solid @field-error--border-color;
+    background: @field-error-message__background-color;
+    border: 1px solid @field-error-message__border-color;
     box-sizing: border-box;
-    color: @field-error--color;
+    color: @field-error-message__color;
     display: block;
-    font-size: 12px;
-    font-weight: 500;
-    margin: 2px 0 0;
-    padding: 6px 10px 10px;
+    line-height: @line-height__s;
+    font-size: @font-size__s;
+    font-weight: @font-weight__regular;
+    margin: .2rem 0 0;
+    padding: .8rem 1rem .9rem;
 }
 
 .admin__field-note {
-    color: @field-note--color;
+    color: @field-note__color;
     font-size: 12px;
     margin: 10px 0 0;
     padding: 0;
@@ -219,10 +181,12 @@
 }
 
 .admin__field-option {
+    padding-top: 8px;
+
     .admin__field-label {
         text-align: left;
     }
-    padding-top: 8px;
+
     .admin__field-control > & {
         &:nth-child(1):nth-last-child(2),
         &:nth-child(2):nth-last-child(1) {
@@ -233,13 +197,12 @@
                 margin-top: 0;
             }
             & + .admin__field-option:before {
-                background: @field-divider--color;
-                content: "";
+                background: @field-divider__background-color;
+                content: '';
                 display: inline-block;
                 height: 20px;
-                left: -20px;
+                margin-left: -20px;
                 position: absolute;
-                top: 8px;
                 width: 1px;
             }
         }
@@ -254,7 +217,7 @@
     }
 }
 
-[class*="admin__control-grouped"] {
+[class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
     table-layout: fixed;
@@ -276,12 +239,12 @@
     }
 }
 
-[class*="admin__control-grouped"],
+[class*='admin__control-grouped'],
 .admin__control-fields {
     & > .admin__field:first-child {
         position: static;
         & > .admin__field-label {
-            .mix-grid-width(3);
+            #mix-grid .column(3, 9);
             cursor: pointer;
             left: 0;
             opacity: 0;
@@ -290,56 +253,3 @@
         }
     }
 }
-
-// @todo Move to other place:
-.address-item-edit-content {
-    padding: 15px 30px;
-    .admin__field > .admin__field-control,
-    .admin__field > .admin__field-label {
-        float: none;
-        width: auto;
-        text-align: left;
-    }
-    .admin__field > .admin__field-control {
-        float: none;
-        width: auto;
-    }
-    .admin__field-label {
-        float: none;
-        margin-top: -16px;
-        width: auto;
-    }
-    ._required .admin__field-label span {
-        padding-left: 15px;
-        &:after {
-            left: 0;
-            margin-left: 30px;
-        }
-    }
-}
-.address-list {
-    float: left;
-    list-style-type: none;
-    margin:0;
-    padding: 0;
-    width: 360px;
-    .address-list-item {
-        margin-bottom: 30px;
-    }
-    .action-delete {
-        background-color: transparent;
-        padding: 0;
-        &:hover {
-            border: 0;
-            box-shadow: 0;
-        }
-    }
-}
-.address-item-edit {
-    margin-left: 359px;
-    .admin__legend {
-        display: none;
-    }
-}
-
-

@@ -665,6 +665,12 @@ module.exports = function (grunt) {
         'jasmine:frontend-unit'
     ]);
 
+    grunt.registerTask('backend', [
+        'less:backend',
+        'replace:example',
+        'less:override'
+    ]);
+
     grunt.registerTask('integration', [
         'jasmine:lib-integration',
         'jasmine:backend-integration',

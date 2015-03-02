@@ -9,18 +9,18 @@
 
 @import (reference) '_extends';
 
-@field-control__font-size: 1.4rem;
-@field-control__height: 3.3rem;
+@field-control__background-color: @color-white;
 @field-control__border-color: @color-gray68;
 @field-control__color: @color-very-dark-gray-black;
-@field-control__background-color: @color-white;
+@field-control__font-size: 1.4rem;
+@field-control__height: 3.3rem;
 @field-control-addon__color: @color-gray52;
 
 //  States
-@field-control__focus__border-color: @color-blue-pure;
 @field-control__disabled__background-color: @color-lighter-gray;
-@field-label__required__color: @color-phoenix;
+@field-control__focus__border-color: @color-blue-pure;
 @field-label__disabled__color: @color-gray60;
+@field-label__required__color: @color-phoenix;
 
 //
 //  Basic controls
@@ -38,6 +38,7 @@
     font-weight: @font-weight__regular;
     height: @field-control__height;
     max-width: 100%;
+    min-width: 10rem;
     padding: 0 1rem;
     transition: border-color .1s ease-in;
 }
@@ -51,11 +52,12 @@
     border-color: @field-control__border-color;
     color: @field-control__color;
     opacity: .5;
+    cursor: not-allowed;
 }
 
 .admin__control-text {
     .extend__form-control-styles();
-    line-height: normal;
+    line-height: @field-control__height;
     width: 100%;
 }
 
@@ -102,24 +104,48 @@
 option:empty {
     display: none;
 }
-
+.admin__control-file-wrapper {
+    display: inline-block;
+    padding: .5rem 1rem;
+    position: relative;
+    z-index: 1;
+}
+.admin__control-file-label:before {
+    &:extend(.__form-control-styles);
+    content:'';
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+    .admin__control-file:active + &,
+    .admin__control-file:focus + & {
+        &:extend(.__form-control-styles:focus);
+    }
+    .admin__control-file[disabled] + & {
+        &:extend(.__form-control-styles[disabled]);
+    }
+}
 .admin__control-file {
+    position: relative;
+    z-index: 1;
     background: transparent;
     border: 0;
+    width: auto;
 }
 
-.admin__control-textarea,
 .admin__control-multiselect {
     .extend__form-control-styles();
-    height: ~"calc(6 * 1.2em + 1.4rem)";
-    line-height: 1.2;
+    height: auto;
     padding: .6rem 1rem;
-    width: 100%;
 }
 
 .admin__control-textarea {
+    .extend__form-control-styles();
+    height: 8.48rem;
     line-height: 1.18;
     padding-top: .8rem;
+    width: 100%;
 }
 
 .admin__control-radio,
@@ -178,6 +204,7 @@ option:empty {
 .admin__control-checkbox:checked + label:before {
     color: @color-brownie;
     font-size: 1.1rem;
+    line-height: 1.5rem;
 }
 
 .admin__control-addon {
@@ -199,6 +226,7 @@ option:empty {
     [class*="admin__control-"] {
         .css(appearence,none);
         .vendor-prefix-flex-grow(1);
+        box-shadow: none;
         background-color: transparent;
         border-color: transparent;
         order: 1;
@@ -248,7 +276,7 @@ option:empty {
         font-weight: @font-weight__regular;
         height: @field-control__height;
         line-height: @field-control__height;
-        padding: 0 .3rem;
+        padding: 0;
     }
     &-suffix {
         order: 3;
@@ -262,22 +290,27 @@ option:empty {
 }
 .ie9 .admin__control-addon {
     &:after {
+        clear: both;
         content: '';
         display: block;
         height: 0;
         overflow: hidden;
-        clear: both;
     }
 }
 .ie9 .admin__addon {
+    min-width: auto;
+    overflow: hidden;
+    text-align: right;
+    white-space: nowrap;
+    width: auto;
     [class*="admin__control-"] {
-        display: table-cell;
+        display: inline;
     }
     &-prefix {
         float: left;
     }
     &-suffix {
-        display: table-cell;
+        float: right;
     }
 }
 
