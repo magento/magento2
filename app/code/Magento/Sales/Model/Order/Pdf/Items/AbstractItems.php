@@ -154,13 +154,13 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve order object
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
     {
         if (null === $this->_order) {
-            throw new \Magento\Framework\Model\Exception(__('The order object is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The order object is not specified.'));
         }
         return $this->_order;
     }
@@ -168,13 +168,13 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve source object
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
      */
     public function getSource()
     {
         if (null === $this->_source) {
-            throw new \Magento\Framework\Model\Exception(__('The source object is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The source object is not specified.'));
         }
         return $this->_source;
     }
@@ -182,13 +182,13 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve item object
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Object
      */
     public function getItem()
     {
         if (null === $this->_item) {
-            throw new \Magento\Framework\Model\Exception(__('An item object is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('An item object is not specified.'));
         }
         return $this->_item;
     }
@@ -196,13 +196,13 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Pdf model
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Sales\Model\Order\Pdf\AbstractPdf
      */
     public function getPdf()
     {
         if (null === $this->_pdf) {
-            throw new \Magento\Framework\Model\Exception(__('A PDF object is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('A PDF object is not specified.'));
         }
         return $this->_pdf;
     }
@@ -210,13 +210,13 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Pdf page object
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Zend_Pdf_Page
      */
     public function getPage()
     {
         if (null === $this->_pdfPage) {
-            throw new \Magento\Framework\Model\Exception(__('A PDF page object is not specified.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('A PDF page object is not specified.'));
         }
         return $this->_pdfPage;
     }

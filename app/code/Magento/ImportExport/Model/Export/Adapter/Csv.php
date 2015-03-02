@@ -84,7 +84,7 @@ class Csv extends \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
     public function setHeaderCols(array $headerColumns)
     {
         if (null !== $this->_headerCols) {
-            throw new \Magento\Framework\Model\Exception(__('Header column names already set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Header column names already set'));
         }
         if ($headerColumns) {
             foreach ($headerColumns as $columnName) {
