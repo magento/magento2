@@ -42,6 +42,12 @@ angular.module('web-configuration', ['ngStorage'])
             obj.expanded = !obj.expanded;
         }
 
+        $scope.fillBaseURL = function() {
+            if (angular.equals($scope.config.address.base_url, '')) {
+                $scope.config.address.base_url = $scope.config.address.auto_base_url;
+            }
+        }
+
         $scope.$watch('config.address.base_url', function() {
             if (angular.equals($scope.config.address.base_url, '')) {
                 $scope.config.address.actual_base_url = $scope.config.address.auto_base_url;
@@ -51,10 +57,20 @@ angular.module('web-configuration', ['ngStorage'])
         });
 
         $scope.$watch('config.encrypt.type', function() {
-            if(angular.equals($scope.config.encrypt.type, 'magento')){
+            if (angular.equals($scope.config.encrypt.type, 'magento')) {
                 $scope.config.encrypt.key = null;
             }
         });
+
+        $scope.$watch('config.address.base_url', function() {
+            if (angular.equals($scope.config.https.text, '') || angular.isUndefined($scope.config.https.text)) {
+                $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+            }
+        });
+
+        $scope.populateHttps = function() {
+            $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+        };
 
         $scope.showEncryptKey = function() {
             return angular.equals($scope.config.encrypt.type, 'user');
@@ -77,11 +93,6 @@ angular.module('web-configuration', ['ngStorage'])
                 }
             }
         };
-
-        $scope.populateHttps = function() {
-            $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
-        };
-
 
         // Listens on form validate event, dispatched by parent controller
         $scope.$on('validate-' + $state.current.id, function() {

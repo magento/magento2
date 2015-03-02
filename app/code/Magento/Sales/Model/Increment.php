@@ -47,7 +47,7 @@ class Increment
      * @param int $storeId
      * @return string
      * @throws \Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getNextValue($storeId)
     {

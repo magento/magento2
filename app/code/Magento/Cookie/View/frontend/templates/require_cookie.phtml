@@ -5,11 +5,10 @@
  */
 ?>
 <?php /** @var \Magento\Cookie\Block\RequireCookie $block */ ?>
-<script>
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-    $('body').mage('requireCookie', <?php echo $block->getScriptOptions(); ?>);
-});
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "requireCookie": <?php echo $block->getScriptOptions(); ?>
+        }
+    }
 </script>

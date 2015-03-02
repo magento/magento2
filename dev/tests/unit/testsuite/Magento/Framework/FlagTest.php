@@ -48,10 +48,15 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($adapter));
 
-        $resource = $this->getMockBuilder('Magento\Framework\Flag\Resource')
-            ->setMethods(['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'])
-            ->setConstructorArgs(['resource' => $appResource])
-            ->getMockForAbstractClass();
+        $dbContextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $dbContextMock->expects($this->once())->method('getResources')->willReturn($appResource);
+        $resource = $this->getMock(
+            '\Magento\Framework\Flag\Resource',
+            ['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'],
+            ['context' => $dbContextMock],
+            '',
+            true
+        );
         $resource->expects($this->any())
             ->method('addCommitCallback')
             ->will($this->returnSelf());
@@ -104,7 +109,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please define flag code.
      */
     public function testLoadSelfException()
@@ -122,7 +127,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please define flag code.
      */
     public function testBeforeSaveException()

@@ -22,13 +22,17 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, DateTime $dateTime)
-    {
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        DateTime $dateTime,
+        $resourcePrefix = null
+    ) {
         $this->dateTime = $dateTime;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
@@ -46,7 +50,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -72,7 +76,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $object->getDateTo()
         )
         ) {
-            throw new \Magento\Framework\Model\Exception(__('Start date cannot be greater than end date.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Start date cannot be greater than end date.'));
         }
 
         $check = $this->_checkIntersection(
@@ -83,7 +87,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         if ($check) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Your design change for the specified store intersects with another one, please specify another
                     date range.'

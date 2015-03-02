@@ -14,6 +14,9 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\EmailNotConfirmedException;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Customer model
@@ -60,17 +63,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
     const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID = 'customer/create_account/generate_human_friendly_id';
-
-    /**
-     * Codes of exceptions related to customer model
-     */
-    const EXCEPTION_EMAIL_NOT_CONFIRMED = 1;
-
-    const EXCEPTION_INVALID_EMAIL_OR_PASSWORD = 2;
-
-    const EXCEPTION_EMAIL_EXISTS = 3;
-
-    const EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN = 4;
 
     const SUBSCRIBED_YES = 'yes';
 
@@ -367,22 +359,20 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param  string $login
      * @param  string $password
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated Use \Magento\Customer\Api\AccountManagementInterface::authenticate
      */
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw new \Magento\Framework\Model\Exception(
-                __('This account is not confirmed.'),
-                self::EXCEPTION_EMAIL_NOT_CONFIRMED
+            throw new EmailNotConfirmedException(
+                __('This account is not confirmed.')
             );
         }
         if (!$this->validatePassword($password)) {
-            throw new \Magento\Framework\Model\Exception(
-                __('Invalid login or password.'),
-                self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
+            throw new InvalidEmailOrPasswordException(
+                __('Invalid login or password.')
             );
         }
         $this->_eventManager->dispatch(
@@ -777,14 +767,14 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param string $backUrl
      * @param string $storeId
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {
@@ -1258,14 +1248,13 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @param string $passwordLinkToken
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new \Magento\Framework\Model\Exception(
-                __('Invalid password reset token.'),
-                self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
+            throw new AuthenticationException(
+                __('Invalid password reset token.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);
