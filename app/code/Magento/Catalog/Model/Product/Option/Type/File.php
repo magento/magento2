@@ -6,7 +6,8 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Filesystem;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Exception as ProductException;
 
 /**
  * Catalog product option file type
@@ -179,7 +180,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
-     * @throws Exception
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateUserValue($values)
@@ -210,7 +211,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     ->validate($fileInfo, $option) ? $fileInfo : null;
                 $this->setUserValue($value);
                 return $this;
-            } catch (Exception $exception) {
+            } catch (LocalizedException $exception) {
                 $this->setIsValid(false);
                 throw $exception;
             }
@@ -221,28 +222,28 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $value = $this->validatorFile->setProduct($this->getProduct())
                 ->validate($this->_getProcessingParams(), $option);
             $this->setUserValue($value);
-        } catch (File\LargeSizeException $largeSizeException) {
+        } catch (\Magento\Framework\Exception\File\LargeSizeException $largeSizeException) {
             $this->setIsValid(false);
-            throw new Exception($largeSizeException->getMessage());
-        } catch (File\OptionRequiredException $e) {
+            throw new LocalizedException($largeSizeException->getMessage());
+        } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
-                    throw new Exception(__('Please specify the product\'s required option(s).'));
+                    throw new LocalizedException(__('Please specify the product\'s required option(s).'));
                     break;
                 default:
                     $this->setUserValue(null);
                     break;
             }
-        } catch (File\RunValidationException $e) {
+        } catch (\Magento\Framework\Validator\ValidatorException $e) {
             $this->setUserValue(null);
-        } catch (File\Exception $e) {
+        } catch (\Magento\Framework\Exception\File\ValidatorException $e) {
             $this->setIsValid(false);
-            throw new Exception($e->getMessage());
+            throw new LocalizedException($e->getMessage());
         } catch (\Exception $e) {
             if ($this->getSkipCheckRequiredOption()) {
                 $this->setUserValue(null);
             } else {
-                throw new Exception($e->getMessage());
+                throw new LocalizedException($e->getMessage());
             }
         }
         return $this;
@@ -321,7 +322,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string|array $optionValue Serialized string of option data or its data array
      * @return string
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getOptionHtml($optionValue)
     {
@@ -340,7 +341,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $sizes
             );
         } catch (\Exception $e) {
-            throw new Exception(__("The file options format is not valid."));
+            throw new LocalizedException(__("The file options format is not valid."));
         }
     }
 

@@ -53,7 +53,7 @@ class Options implements OptionsInterface
         $storeCollection = $this->systemStore->getStoreCollection();
 
         $currentOptions = [
-            __('All Store Views') => [
+            (string)__('All Store Views') => [
                 'label' => __('All Store Views'),
                 'value' => 0,
             ],

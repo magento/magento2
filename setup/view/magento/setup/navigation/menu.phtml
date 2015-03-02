@@ -3,20 +3,43 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<?php $expressions = []; foreach ($this->main as $item): ?>
+<?php $expressions = []; foreach ( $this->main as $item ): ?>
     <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')'; ?>
 <?php endforeach; ?>
-<div ng-class="{show: <?php echo implode('&&', $expressions); ?>}" class="col-lg-3 hide" id="menu" style="margin-top: 40px;">
-    <nav ng-controller="navigationController">
-        <div>
-            <ul class="nav nav-pills nav-stacked">
-                <?php foreach ($this->menu as $item): ?>
-                    <li id="<?php echo $item['id']; ?>" ng-class="{ active: $state.includes('<?php echo $item['id'] ?>') }">
-                        <a ng-class="{disabled: itemStatus(<?php echo $item['order']; ?>)}" ui-sref="<?php echo $item['id']; ?>" href="#/<?php echo $item['url']; ?>"><?php echo $item['title']; ?></a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </nav>
-</div>
+
+<header
+    class="header ng-cloak"
+    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>}"
+    >
+    <img class="logo" src="<?php echo $this->basePath() ?>/pub/images/magento-icon.svg" alt="Magento"/>
+    <h1 class="header-title">Magento Installation</h1>
+</header>
+
+<nav
+    ng-controller="navigationController"
+    ng-class="{'show' : <?php echo implode( '&&', $expressions ); ?>}"
+    id="menu"
+    class="nav ng-cloak"
+    >
+
+    <ul class="nav-bar">
+        <?php foreach ($this->menu as $item): ?>
+        <li ng-class="{ active: $state.includes('<?php echo $item['id'] ?>'), disabled: itemStatus(<?php echo $item['order']; ?>)}"
+            id="<?php echo $item['id']; ?>"
+            >
+            <a
+                ng-class=""
+                ui-sref="<?php echo $item['id']; ?>"
+                href="#/<?php echo $item['url']; ?>"
+                >
+                <?php echo nl2br( $item['title'] ); ?>
+            </a>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+
+</nav>

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <tab id="catalog" translate="label" sortOrder="200">
             <label>Catalog</label>
@@ -63,12 +63,12 @@
                 <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Category</label>
                     <backend_model>Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode</backend_model>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="flat_catalog_product" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Product</label>
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product Listing Sort by</label>
@@ -77,12 +77,12 @@
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow All Products per Page</label>
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Dynamic Media URLs in Products and Categories</label>
                     <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
             <group id="placeholder" translate="label" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -91,7 +91,7 @@
                 <clone_model>Magento\Catalog\Model\Config\CatalogClone\Media\Image</clone_model>
                 <field id="placeholder" type="image" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label></label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Image</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
                     <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/placeholder</upload_dir>
                     <base_url type="media" scope_info="1">catalog/product/placeholder</base_url>
                 </field>
@@ -103,11 +103,11 @@
                 </field>
                 <field id="category_canonical_tag" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Canonical Link Meta Tag For Categories</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="product_canonical_tag" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Canonical Link Meta Tag For Products</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
             <group id="price" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -130,7 +130,7 @@
                 <label><![CDATA[Date & Time Custom Options]]></label>
                 <field id="use_calendar" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use JavaScript Calendar</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="date_fields_order" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Date Fields Order</label>
@@ -161,7 +161,7 @@
                 </field>
                 <field id="image" translate="label" type="image" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Watermark</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Image</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
                     <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/watermark</upload_dir>
                     <base_url type="media" scope_info="1">catalog/product/watermark</base_url>
                     <comment>Allowed file types: jpeg, gif, png.</comment>
@@ -177,7 +177,7 @@
                 <field id="use_static_urls_in_catalog" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Static URLs for Media Content in WYSIWYG for Catalog</label>
                     <comment>This applies only to catalog products and categories. Media content will be inserted into the editor as a static URL. Media content is not updated if the system configuration base URL changes.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>
@@ -186,15 +186,15 @@
                 <label>Catalog</label>
                 <field id="new" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>New Products</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="special" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Special Products</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="category" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Top Level Category</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
         </section>

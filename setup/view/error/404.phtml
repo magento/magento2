@@ -3,111 +3,122 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<h1>A 404 error occurred</h1>
-<h2><?php echo $this->message ?></h2>
+<header class="header">
+    <img class="logo" src="<?php echo $this->basePath() ?>/pub/images/magento-icon.svg" alt="Magento"/>
+    <h1 class="header-title">A 404 error occurred</h1>
+</header>
 
-<?php if (isset($this->reason) && $this->reason): ?>
+<h2>Page not found</h2>
 
-<?php
-$reasonMessage = '';
-switch ($this->reason) {
-    case 'error-controller-cannot-dispatch':
-        $reasonMessage = 'The requested controller was unable to dispatch the request.';
-        break;
-    case 'error-controller-not-found':
-        $reasonMessage = 'The requested controller could not be mapped to an existing controller class.';
-        break;
-    case 'error-controller-invalid':
-        $reasonMessage = 'The requested controller was not dispatchable.';
-        break;
-    case 'error-router-no-match':
-        $reasonMessage = 'The requested URL could not be matched by routing.';
-        break;
-    default:
-        $reasonMessage = 'We cannot determine at this time why a 404 was generated.';
-        break;
-}
-?>
+<?php if ( isset( $this->reason ) && $this->reason ): ?>
 
-<p><?php echo $reasonMessage ?></p>
+    <?php
+    $reasonMessage = '';
+    switch ( $this->reason ) {
+        case 'error-controller-cannot-dispatch':
+            $reasonMessage = 'The requested controller was unable to dispatch the request.';
+            break;
+        case 'error-controller-not-found':
+            $reasonMessage = 'The requested controller could not be mapped to an existing controller class.';
+            break;
+        case 'error-controller-invalid':
+            $reasonMessage = 'The requested controller was not dispatchable.';
+            break;
+        case 'error-router-no-match':
+            $reasonMessage = 'The requested URL could not be matched by routing.';
+            break;
+        default:
+            $reasonMessage = 'We cannot determine at this time why a 404 was generated.';
+            break;
+    }
+    ?>
+
+    <p><?php echo $reasonMessage ?></p>
 
 <?php endif ?>
 
-<?php if (isset($this->controller) && $this->controller): ?>
+<?php if ( isset( $this->controller ) && $this->controller ): ?>
 
-<dl>
-    <dt>Controller:</dt>
-    <dd><?php echo $this->escapeHtml($this->controller) ?>
-<?php
-if (isset($this->controller_class)
-    && $this->controller_class
-    && $this->controller_class != $this->controller
-) {
-    echo '(' . sprintf('resolves to %s', $this->escapeHtml($this->controller_class)) . ')';
-}
-?>
-</dd>
-</dl>
+    <dl>
+        <dt>Controller:</dt>
+        <dd><?php echo $this->escapeHtml( $this->controller ) ?>
+            <?php
+            if ( isset( $this->controller_class )
+                 && $this->controller_class
+                 && $this->controller_class != $this->controller
+            ) {
+                echo '(' . sprintf( 'resolves to %s', $this->escapeHtml( $this->controller_class ) ) . ')';
+            }
+            ?>
+        </dd>
+    </dl>
 
 <?php endif ?>
 
-<?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
+<?php if ( isset( $this->display_exceptions ) && $this->display_exceptions ): ?>
 
-<?php if (isset($this->exception) && $this->exception instanceof Exception): ?>
-<hr/>
-<h2>Additional information:</h2>
-<h3><?php echo get_class($this->exception); ?></h3>
-<dl>
-    <dt>File:</dt>
-    <dd>
-        <pre class="prettyprint linenums"><?php echo $this->exception->getFile() ?>:<?php echo $this->exception->getLine() ?></pre>
-    </dd>
-    <dt>Message:</dt>
-    <dd>
-        <pre class="prettyprint linenums"><?php echo $this->exception->getMessage() ?></pre>
-    </dd>
-    <dt>Stack trace:</dt>
-    <dd>
-        <pre class="prettyprint linenums"><?php echo $this->exception->getTraceAsString() ?></pre>
-    </dd>
-</dl>
-<?php
-    $e = $this->exception->getPrevious();
-    if ($e) :
-?>
-<hr/>
-<h2>Previous exceptions:</h2>
-<ul class="unstyled">
-    <?php while ($e) : ?>
-    <li>
-        <h3><?php echo get_class($e); ?></h3>
+    <?php if ( isset( $this->exception ) && $this->exception instanceof Exception ): ?>
+        <hr/>
+        <h2>Additional information:</h2>
+        <h3><?php echo get_class( $this->exception ); ?></h3>
         <dl>
             <dt>File:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $e->getFile() ?>:<?php echo $e->getLine() ?></pre>
+                <pre class="prettyprint linenums"><?php echo $this->exception->getFile() ?>:<?php echo $this->exception->getLine() ?></pre>
             </dd>
+
             <dt>Message:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $e->getMessage() ?></pre>
+                <pre class="prettyprint linenums"><?php echo $this->exception->getMessage() ?></pre>
             </dd>
+
             <dt>Stack trace:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $e->getTraceAsString() ?></pre>
+                <pre class="prettyprint linenums"><?php echo $this->exception->getTraceAsString() ?></pre>
             </dd>
         </dl>
-    </li>
-    <?php
-        $e = $e->getPrevious();
-        endwhile;
-    ?>
-</ul>
-<?php endif; ?>
+        <?php
+        $e = $this->exception->getPrevious();
+        if ( $e ) :
+            ?>
+            <hr/>
+            <h2>Previous exceptions:</h2>
+            <ul class="unstyled">
+                <?php while ( $e ) : ?>
+                    <li>
+                        <h3><?php echo get_class( $e ); ?></h3>
+                        <dl>
+                            <dt>File:</dt>
+                            <dd>
+                                <pre class="prettyprint linenums"><?php echo $e->getFile() ?>:<?php echo $e->getLine() ?></pre>
+                            </dd>
 
-<?php else: ?>
+                            <dt>Message:</dt>
+                            <dd>
+                                <pre class="prettyprint linenums"><?php echo $e->getMessage() ?></pre>
+                            </dd>
 
-<h3>No Exception available</h3>
+                            <dt>Stack trace:</dt>
+                            <dd>
+                                <pre class="prettyprint linenums"><?php echo $e->getTraceAsString() ?></pre>
+                            </dd>
+                        </dl>
+                    </li>
+                    <?php
+                    $e = $e->getPrevious();
+                endwhile;
+                ?>
+            </ul>
+        <?php endif; ?>
 
-<?php endif ?>
+    <?php else: ?>
+
+        <p>No Exception available</p>
+
+    <?php endif ?>
 
 <?php endif ?>

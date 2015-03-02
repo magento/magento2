@@ -106,12 +106,12 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Retrieve active Product Type Id
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTypeId()
     {
         if (is_null($this->_typeId)) {
-            throw new \Magento\Framework\Model\Exception(__('Undefined product type'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Undefined product type'));
         }
         return $this->_typeId;
     }
@@ -148,7 +148,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

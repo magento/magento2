@@ -65,7 +65,7 @@ class Group extends Element
     /**
      * Retrieve disable auto group change checkbox label text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getDisableAutoGroupChangeCheckboxLabel()
     {

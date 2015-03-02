@@ -5,10 +5,10 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateExistingCustomerFrontendEntity">
-        <variation name="CreateExistingCustomerFrontendEntityVariation1">
-            <data name="constraint">assertCustomerFailRegisterMessage</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="CreateExistingCustomerFrontendEntity">
+    <variation name="CreateExistingCustomerFrontendEntityVariation1" firstConstraint="assertCustomerFailRegisterMessage" method="test">
+      <constraint name="assertCustomerFailRegisterMessage"/>
+    </variation>
+  </testCase>
 </config>

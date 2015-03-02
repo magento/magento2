@@ -6,7 +6,8 @@
 
 namespace Magento\Framework\Model\Resource\Db;
 
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Abstract resource model class
@@ -213,13 +214,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     /**
      * Get primary key field name
      *
-     * @throws ModelException
+     * @throws LocalizedException
      * @return string
      */
     public function getIdFieldName()
     {
         if (empty($this->_idFieldName)) {
-            throw new ModelException(__('Empty identifier field name'));
+            throw new LocalizedException((string)new \Magento\Framework\Phrase('Empty identifier field name'));
         }
         return $this->_idFieldName;
     }
@@ -228,13 +229,13 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * Returns main table name - extracted from "module/table" style and
      * validated by db adapter
      *
-     * @throws ModelException
+     * @throws LocalizedException
      * @return string
      */
     public function getMainTable()
     {
         if (empty($this->_mainTable)) {
-            throw new ModelException(__('Empty main table name'));
+            throw new LocalizedException((string)new \Magento\Framework\Phrase('Empty main table name'));
         }
         return $this->getTable($this->_mainTable);
     }
@@ -596,7 +597,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws ModelException
+     * @throws AlreadyExistsException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
@@ -635,11 +636,11 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
         if (!empty($existent)) {
             if (count($existent) == 1) {
-                $error = __('%1 already exists.', $existent[0]);
+                $error = (string)new \Magento\Framework\Phrase('%1 already exists.', [$existent[0]]);
             } else {
-                $error = __('%1 already exist.', implode(', ', $existent));
+                $error = (string)new \Magento\Framework\Phrase('%1 already exist.', [implode(', ', $existent)]);
             }
-            throw new ModelException($error, ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS);
+            throw new AlreadyExistsException($error);
         }
         return $this;
     }

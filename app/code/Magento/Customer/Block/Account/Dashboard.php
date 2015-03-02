@@ -166,7 +166,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve subscription text, either subscribed or not.
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSubscriptionText()
     {

@@ -36,7 +36,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Registry'),
                 $objectManager->get('Magento\Framework\Data\FormFactory'),
                 $objectManager->get('Magento\Eav\Helper\Data'),
-                $objectManager->get('Magento\Backend\Model\Config\Source\YesnoFactory'),
+                $objectManager->get('Magento\Config\Model\Config\Source\YesnoFactory'),
                 $objectManager->get('Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory'),
                 $objectManager->get('Magento\Eav\Model\Entity\Attribute\Config')
             ]

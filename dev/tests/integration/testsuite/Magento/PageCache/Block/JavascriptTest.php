@@ -16,16 +16,25 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
      */
     protected $javascript;
 
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
     protected function setUp()
     {
-        $this->javascript = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->request = $objectManager->get('Magento\Framework\App\RequestInterface');
+
+        $this->javascript = $objectManager->create(
             'Magento\PageCache\Block\Javascript'
         );
     }
 
     public function testGetScriptOptions()
     {
-        $_GET['getparameter'] = 1;
+        $this->request->getQuery()->set('getparameter', 1);
         $this->assertContains('?getparameter=1', $this->javascript->getScriptOptions());
     }
 }

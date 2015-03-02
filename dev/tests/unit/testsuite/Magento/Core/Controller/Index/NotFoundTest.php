@@ -18,8 +18,7 @@ class NotFoundTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $responseMock->expects($this->once())->method('setHeader')->with('HTTP/1.1', '404 Not Found');
-        $responseMock->expects($this->once())->method('setHttpResponseCode')->with(404);
+        $responseMock->expects($this->once())->method('setStatusHeader')->with(404, '1.1', 'Not Found');
         $responseMock->expects($this->once())->method('setBody')->with('Requested resource not found');
 
         $objectManager = new ObjectManager($this);

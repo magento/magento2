@@ -30,6 +30,13 @@ class GridPageAction extends ParentGridPageActions
     protected $productItem = '[data-ui-id=products-list-add-new-product-button-item-%productType%]';
 
     /**
+     * Product type list
+     *
+     * @var string
+     */
+    protected $typeList = '[data-ui-id=products-list-add-new-product-button-dropdown-menu]';
+
+    /**
      * Add product using split button
      *
      * @param string $productType
@@ -42,5 +49,19 @@ class GridPageAction extends ParentGridPageActions
             str_replace('%productType%', $productType, $this->productItem),
             Locator::SELECTOR_CSS
         )->click();
+    }
+
+    /**
+     * Get product list
+     *
+     * @return array
+     */
+    public function getTypeList()
+    {
+        $this->_rootElement->find($this->toggleButton, Locator::SELECTOR_CSS)->click();
+        return $this->_rootElement->find(
+            $this->typeList,
+            Locator::SELECTOR_CSS
+        )->getText();
     }
 }

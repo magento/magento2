@@ -5,11 +5,13 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteTaxRateEntityTest">
-        <variation name="DeleteTaxRateEntityTestVariation1">
-            <data name="taxRate/dataSet">default</data>
-            <data name="constraint">assertTaxRateSuccessDeleteMessage, assertTaxRateNotInGrid, assertTaxRateNotInTaxRule</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="DeleteTaxRateEntityTest">
+    <variation name="DeleteTaxRateEntityTestVariation1" firstConstraint="assertTaxRateSuccessDeleteMessage" method="test">
+      <data name="taxRate/dataSet" xsi:type="string">default</data>
+      <constraint name="assertTaxRateSuccessDeleteMessage" next="assertTaxRateNotInGrid"/>
+      <constraint name="assertTaxRateNotInGrid" next="assertTaxRateNotInTaxRule" prev="assertTaxRateSuccessDeleteMessage"/>
+      <constraint name="assertTaxRateNotInTaxRule" prev="assertTaxRateNotInGrid"/>
+    </variation>
+  </testCase>
 </config>

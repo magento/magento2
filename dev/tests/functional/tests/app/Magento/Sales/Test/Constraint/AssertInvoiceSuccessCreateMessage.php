@@ -6,11 +6,10 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertInvoiceSuccessCreateMessage
  * Assert success invoice create message is displayed on order view page
  */
 class AssertInvoiceSuccessCreateMessage extends AbstractConstraint
@@ -27,14 +26,14 @@ class AssertInvoiceSuccessCreateMessage extends AbstractConstraint
     /**
      * Assert that success message present after create invoice
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
-    public function processAssert(OrderView $orderView)
+    public function processAssert(SalesOrderView $salesOrderView)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_CREATE_MESSAGE,
-            $orderView->getMessagesBlock()->getSuccessMessages()
+            $salesOrderView->getMessagesBlock()->getSuccessMessages()
         );
     }
 

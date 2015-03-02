@@ -45,7 +45,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDuplicate()
     {
@@ -61,7 +61,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDuplicateWebsite()
     {
@@ -141,10 +141,10 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveEmpty()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->setCurrentStore(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore(
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             )

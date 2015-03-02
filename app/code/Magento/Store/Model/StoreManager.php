@@ -5,9 +5,7 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\Store\ScopeInterface;
-
-class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
+class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
      * Application run code
@@ -81,7 +79,7 @@ class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storage;
 
@@ -109,11 +107,11 @@ class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
     /**
      * Get storage instance
      *
-     * @return \Magento\Framework\Store\StoreManagerInterface
+     * @return \Magento\Store\Model\StoreManagerInterface
      */
     protected function _getStorage()
     {
-        if (!$this->_storage instanceof \Magento\Framework\Store\StoreManagerInterface) {
+        if (!$this->_storage instanceof \Magento\Store\Model\StoreManagerInterface) {
             $arguments = [
                 'isSingleStoreAllowed' => $this->_isSingleStoreAllowed,
                 'currentStore' => $this->_currentStore,
@@ -194,7 +192,7 @@ class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
      *
      * @param null|bool|int|string|Website $websiteId
      * @return Website
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getWebsite($websiteId = null)
     {
@@ -278,7 +276,7 @@ class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

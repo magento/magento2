@@ -7,6 +7,7 @@ namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Admin user model
@@ -120,7 +121,7 @@ class User extends AbstractModel implements StorageInterface
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -136,7 +137,7 @@ class User extends AbstractModel implements StorageInterface
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -151,7 +152,7 @@ class User extends AbstractModel implements StorageInterface
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -214,7 +215,7 @@ class User extends AbstractModel implements StorageInterface
         $this->_roleFactory = $objectManager->get('Magento\Authorization\Model\RoleFactory');
         $this->_encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
         $this->_transportBuilder = $objectManager->get('Magento\Framework\Mail\Template\TransportBuilder');
-        $this->_storeManager = $objectManager->get('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
     /**
@@ -538,9 +539,7 @@ class User extends AbstractModel implements StorageInterface
      * @param string $username
      * @param string $password
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
-     * @throws \Magento\Backend\Model\Auth\Exception
-     * @throws \Magento\Backend\Model\Auth\Plugin\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function authenticate($username, $password)
     {
@@ -562,7 +561,7 @@ class User extends AbstractModel implements StorageInterface
                 'admin_user_authenticate_after',
                 ['username' => $username, 'password' => $password, 'user' => $this, 'result' => $result]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->unsetData();
             throw $e;
         }
@@ -578,17 +577,17 @@ class User extends AbstractModel implements StorageInterface
      *
      * @param string $password
      * @return bool
-     * @throws \Magento\Backend\Model\Auth\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function verifyIdentity($password)
     {
         $result = false;
         if ($this->_encryptor->validateHash($password, $this->getPassword())) {
             if ($this->getIsActive() != '1') {
-                throw new \Magento\Backend\Model\Auth\Exception(__('This account is inactive.'));
+                throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new \Magento\Backend\Model\Auth\Exception(__('Access denied.'));
+                throw new AuthenticationException(__('Access denied.'));
             }
             $result = true;
         }
@@ -667,12 +666,12 @@ class User extends AbstractModel implements StorageInterface
      *
      * @param string $newToken
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
         $this->setRpTokenCreatedAt($this->dateTime->now());

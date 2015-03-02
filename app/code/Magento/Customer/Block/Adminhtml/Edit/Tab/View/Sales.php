@@ -98,7 +98,7 @@ class Sales extends \Magento\Backend\Block\Template
         $this->_currency = $this->_currencyFactory->create()->load(
             $this->_scopeConfig->getValue(
                 Currency::XML_PATH_CURRENCY_BASE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
 

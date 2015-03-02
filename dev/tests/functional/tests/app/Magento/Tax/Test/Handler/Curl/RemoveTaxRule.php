@@ -8,7 +8,6 @@ namespace Magento\Tax\Test\Handler\Curl;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -64,6 +63,7 @@ class RemoveTaxRule extends Curl
      * Recursively remove tax rules
      *
      * @param string $data
+     * @return mixed
      */
     protected function _removeTaxRules($data)
     {

@@ -59,7 +59,7 @@ class Currency extends \Magento\Backend\Block\Template
     /**
      * Get header
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeader()
     {

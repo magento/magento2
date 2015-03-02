@@ -26,7 +26,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             $this->_storeId
         )->getConfig(
@@ -37,7 +37,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/translate_inline/active',
             true,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }

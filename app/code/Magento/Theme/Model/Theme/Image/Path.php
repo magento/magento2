@@ -17,7 +17,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     /**
      * Default theme preview image
      */
-    const DEFAULT_PREVIEW_IMAGE = 'Magento_Core::theme/default_preview.jpg';
+    const DEFAULT_PREVIEW_IMAGE = 'Magento_Theme::theme/default_preview.jpg';
 
     /**
      * Media Directory
@@ -32,7 +32,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -41,12 +41,12 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->assetRepo = $assetRepo;

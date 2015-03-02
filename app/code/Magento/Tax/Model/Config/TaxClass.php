@@ -11,7 +11,7 @@ namespace Magento\Tax\Model\Config;
 class TaxClass extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Core\Model\Resource\Config
+     * @var \Magento\Config\Model\Resource\Config
      */
     protected $resourceConfig;
 
@@ -24,7 +24,7 @@ class TaxClass extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Core\Model\Resource\Config $resourceConfig
+     * @param \Magento\Config\Model\Resource\Config $resourceConfig
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -34,7 +34,7 @@ class TaxClass extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Core\Model\Resource\Config $resourceConfig,
+        \Magento\Config\Model\Resource\Config $resourceConfig,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -57,7 +57,7 @@ class TaxClass extends \Magento\Framework\App\Config\Value
         $attribute = $this->attributeFactory->create();
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
         if (!$attribute->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid attribute %1', $attributeCode));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid attribute %1', $attributeCode));
         }
         $attribute->setData("default_value", $this->getData('value'));
         $attribute->save();

@@ -3,35 +3,36 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
-<div class="text-center">
-    <h1>Magento</h1>
-    <br/>
-    <p><?php echo 'Version' . ' ' . $this->version; ?></p>
-    <br/>
-    <br/>
-    <br/>
-    <p>Welcome to Magento Admin, your online store headquarters.
-    Click 'Agree and Set Up Magento' or read <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html">Getting Started</a> to learn more.</p>
-    <br/>
-<?php
-/* not implemented yet
-    <br/>
-    <br/>
-    <label><?php echo $this->translate('Choose a language:'); ?></label>
-    <select ng-change="selectLanguage()" style="width: 250px; margin: 0 auto;" class="form-control" ng-model="modelLanguage" ng-init="modelLanguage='<?php echo $this->location ?>'">
-        <?php foreach ($this->languages as $code => $title): ?>
-            <option value="<?php echo $code; ?>"><?php echo $title; ?></option>
-        <?php endforeach; ?>
-    </select>
-    <br/>
-    <br/>
-*/
-?>
-    <br/>
-    <div>
+<section class="page-landing">
+    <img class="logo" src="<?php echo $this->basePath() ?>/pub/images/magento-logo.svg" alt="Magento"/>
+    <p class="text-version">
+        <?php echo 'Version' . ' ' . $this->version; ?>
+    </p>
+    <p class="text-welcome">
+        Welcome to Magento Admin, your online store headquarters.
+        <br>
+        Click 'Agree and Set Up Magento' or read <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html" target="_blank">Getting Started</a> to learn more.
+    </p>
+    <?php
+    /* not implemented yet
+        <label><?php echo $this->translate('Choose a language:'); ?></label>
+        <select ng-change="selectLanguage()" class="form-control" ng-model="modelLanguage" ng-init="modelLanguage='<?php echo $this->location ?>'">
+            <?php foreach ($this->languages as $code => $title): ?>
+                <option value="<?php echo $code; ?>"><?php echo $title; ?></option>
+            <?php endforeach; ?>
+        </select>
+    */
+    ?>
+    <p class="text-terms">
         <a href="" ng-click="previousState()">Terms & Agreement</a>
-    </div>
-    <br/>
-    <button type="button" class="btn-lg btn-primary" ng-click="nextState()">Agree and Set Up Magento</button>
-</div>
+    </p>
+    <button
+        type="button"
+        class="btn btn-large btn-prime btn-submit"
+        ng-click="nextState()"
+        >Agree and Setup Magento</button>
+</section>

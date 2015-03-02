@@ -14,7 +14,7 @@ class Assigned extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\Sele
     /**
      * Get list title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

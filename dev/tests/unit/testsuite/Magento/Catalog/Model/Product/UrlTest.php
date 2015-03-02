@@ -65,7 +65,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -101,9 +101,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getUrlDataProvider
-     * @covers Magento\Catalog\Model\Product\Url::getUrl
-     * @covers Magento\Catalog\Model\Product\Url::getUrlInStore
-     * @covers Magento\Catalog\Model\Product\Url::getProductUrl
+     * covers Magento\Catalog\Model\Product\Url::getUrl
+     * covers Magento\Catalog\Model\Product\Url::getUrlInStore
+     * covers Magento\Catalog\Model\Product\Url::getProductUrl
      *
      * @param $getUrlMethod
      * @param $routePath

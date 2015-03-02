@@ -130,7 +130,7 @@ class Observer
         foreach ($items as $item) {
             $flag = $this->_scopeConfig->isSetFlag(
                 'google/googleshopping/observed',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $item->getStoreId()
             );
             if (!$flag) {

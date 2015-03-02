@@ -19,7 +19,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\CheckoutAgreements\Model\Agreement::validateData
+     * covers \Magento\CheckoutAgreements\Model\Agreement::validateData
      *
      * @dataProvider validateDataDataProvider
      * @param \Magento\Framework\Object $inputData

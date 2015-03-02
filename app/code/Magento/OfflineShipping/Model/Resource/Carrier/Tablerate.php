@@ -95,7 +95,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -125,7 +125,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\App\Resource $resource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
@@ -135,7 +135,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\App\Resource $resource,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
@@ -241,7 +241,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Upload table rate file and import data from it
      *
      * @param \Magento\Framework\Object $object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
@@ -270,7 +270,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $headers = $stream->readCsv();
         if ($headers === false || count($headers) < 5) {
             $stream->close();
-            throw new \Magento\Framework\Model\Exception(__('Please correct Table Rates File Format.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct Table Rates File Format.'));
         }
 
         if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
@@ -316,15 +316,17 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
             $this->_saveImportData($importData);
             $stream->close();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $adapter->rollback();
             $stream->close();
-            throw new \Magento\Framework\Model\Exception($e->getMessage());
+            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
         } catch (\Exception $e) {
             $adapter->rollback();
             $stream->close();
             $this->_logger->critical($e);
-            throw new \Magento\Framework\Model\Exception(__('Something went wrong while importing table rates.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Something went wrong while importing table rates.')
+            );
         }
 
         $adapter->commit();
@@ -334,7 +336,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'We couldn\'t import this file because of these errors: %1',
                 implode(" \n", $this->_importErrors)
             );
-            throw new \Magento\Framework\Model\Exception($error);
+            throw new \Magento\Framework\Exception\LocalizedException($error);
         }
 
         return $this;

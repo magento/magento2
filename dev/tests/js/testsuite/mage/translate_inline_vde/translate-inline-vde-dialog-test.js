@@ -6,14 +6,16 @@ TranslateInlineDialogVdeTest = TestCase('TranslateInlineDialogVdeTest');
 
 TranslateInlineDialogVdeTest.prototype.testInit = function() {
     /*:DOC +=
-        <script id="translate-inline-dialog-form-template" type="text/x-jQuery-tmpl">
-            <form id="${id}" data-form="translate-inline-dialog-form">
-                {{each(i, item) items}}
-                <input id="perstore_${i}" name="translate[${i}][perstore]" type="hidden" value="0"/>
-                <input name="translate[${i}][original]" type="hidden" value="${item.scope}::${escape(item.original)}"/>
-                <textarea id="custom_${i}" name="translate[${i}][custom]" data-translate-input-index="${i}">${escape(item.translated)}</textarea>
-                {{/each}}
-            </form>
+        <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
+             <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+                 <% _.each(data.items, function(item, i) { %>
+                     <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
+                     <input name="translate[<%= i %>][original]" type="hidden" value="<%= data.escape(item.original) %>"/>
+                     <textarea id="custom_<%= i %>"
+                         name="translate[<%= i %>][custom]"
+                         data-translate-input-index="<%= i %>"><%= data.escape(item.translated) %></textarea>
+                 <% }) %>
+             </form>
         </script>
         <div id="translate-dialog" data-role="translate-dialog"></div>
     */
@@ -23,14 +25,16 @@ TranslateInlineDialogVdeTest.prototype.testInit = function() {
 };
 TranslateInlineDialogVdeTest.prototype.testWithTemplate = function() {
     /*:DOC +=
-        <script id="translate-inline-dialog-form-template" type="text/x-jQuery-tmpl">
-            <form id="${id}" data-form="translate-inline-dialog-form">
-                {{each(i, item) items}}
-                <input id="perstore_${i}" name="translate[${i}][perstore]" type="hidden" value="0"/>
-                <input name="translate[${i}][original]" type="hidden" value="${item.scope}::${escape(item.original)}"/>
-                <textarea id="custom_${i}" name="translate[${i}][custom]" data-translate-input-index="${i}">${escape(item.translated)}</textarea>
-                {{/each}}
-            </form>
+        <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
+             <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+                 <% _.each(data.items, function(item, i) { %>
+                    <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
+                    <input name="translate[<%= i %>][original]" type="hidden" value="<%= data.escape(item.original) %>"/>
+                    <textarea id="custom_<%= i %>"
+                        name="translate[<%= i %>][custom]"
+                        data-translate-input-index="<%= i %>"><%= data.escape(item.translated) %></textarea>
+                 <% }) %>
+             </form>
         </script>
         <div id="translate-dialog" data-role="translate-dialog"></div>
     */
@@ -41,14 +45,16 @@ TranslateInlineDialogVdeTest.prototype.testWithTemplate = function() {
 TranslateInlineDialogVdeTest.prototype.testOpenAndClose = function() {
     /*:DOC += 
         <div id="randomElement" data-translate=""></div>
-        <script id="translate-inline-dialog-form-template" type="text/x-jQuery-tmpl">
-            <form id="${id}" data-form="translate-inline-dialog-form">
-                {{each(i, item) items}}
-                <input id="perstore_${i}" name="translate[${i}][perstore]" type="hidden" value="0"/>
-                <input name="translate[${i}][original]" type="hidden" value="${item.scope}::${escape(item.original)}"/>
-                <textarea id="custom_${i}" name="translate[${i}][custom]" data-translate-input-index="${i}">${escape(item.translated)}</textarea>
-                {{/each}}
-            </form>
+        <script id="translate-inline-dialog-form-template" type="text/x-magento-template">
+             <form id="<%= data.id %>" data-form="translate-inline-dialog-form">
+                 <% _.each(data.items, function(item, i) { %>
+                     <input id="perstore_<%= i %>" name="translate[<%= i %>][perstore]" type="hidden" value="0"/>
+                     <input name="translate[<%= i %>][original]" type="hidden" value="<%= data.escape(item.original) %>"/>
+                     <textarea id="custom_<%= i %>"
+                         name="translate[<%= i %>][custom]"
+                         data-translate-input-index="<%= i %>"><%= data.escape(item.translated) %></textarea>
+                 <% }) %>
+             </form>
         </script>
         <div id="translate-dialog" data-role="translate-dialog"></div>
     */

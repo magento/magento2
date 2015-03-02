@@ -10,6 +10,11 @@ namespace Magento\Framework\ObjectManager\Definition\Compiled;
 class Binary extends \Magento\Framework\ObjectManager\Definition\Compiled
 {
     /**
+     * Mode name
+     */
+    const MODE_NAME  = 'igbinary';
+
+    /**
      * Unpack signature
      *
      * @param string $signature

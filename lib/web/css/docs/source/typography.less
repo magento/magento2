@@ -5,7 +5,7 @@
 
 //  # Typogrphy
 //
-//  Magento UI library provides mixins for typography styling. To configure typography, global variables from **variables.less** file are used.
+//  Magento UI library provides mixins for typography styling. To configure typography, global variables from **_variables.less** file are used.
 //
 //  To apply all Magento UI library typography, use the <code>.typography-all()</code> mixin. It accumulates all typography mixins and sets all typography for the theme. This mixin is included in the <code>.magento-reset()</code> mixin. So, if you use this reset, you don't have to call basic typography separately. Also, you don't have to apply this mixin to any class, just call it globally.
 //
@@ -75,17 +75,17 @@
 //            <th class="vars_section" colspan="3">Predefined font family and font colors</th>
 //        </tr>
 //        <tr>
-//            <th>@font-family-sans-serif</th>
+//            <th>@font-family__sans-serif</th>
 //            <td class="vars_value">'Helvetica Neue', Helvetica, Arial, sans-serif</td>
 //            <td>Sans-serif font family</td>
 //        </tr>
 //        <tr>
-//            <th>@font-family-serif</th>
+//            <th>@font-family__serif</th>
 //            <td class="vars_value">Georgia, 'Times New Roman', Times, serif</td>
 //            <td>Serif font family</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@font-family-monospace</th>
+//            <th nowrap="nowrap">@font-family__monospace</th>
 //            <td class="vars_value">Menlo, Monaco, Consolas, 'Courier New', monospace</td>
 //            <td>Monospace font family</td>
 //        </tr>
@@ -95,37 +95,37 @@
 //            <td>Path to custom font</td>
 //        </tr>
 //        <tr>
-//            <th>@color-primary</th>
+//            <th>@primary__color</th>
 //            <td class="vars_value">#555</td>
 //            <td>Primary color</td>
 //        </tr>
 //        <tr>
-//            <th>@color-primary-dark</th>
-//            <td class="vars_value">darken(@color-primary, 35%) // #000</td>
+//            <th>@primary__color__dark</th>
+//            <td class="vars_value">darken(@primary__color, 35%) // #000</td>
 //            <td>Dark primary color</td>
 //        </tr>
 //        <tr>
-//            <th>@color-primary-darker</th>
-//            <td class="vars_value">darken(@color-primary, 13.5%) // #111</td>
+//            <th>@primary__color__darker</th>
+//            <td class="vars_value">darken(@primary__color, 13.5%) // #111</td>
 //            <td>Darker primary color</td>
 //        </tr>
 //        <tr>
-//            <th>@color-primary-lighter</th>
-//            <td class="vars_value">lighten(@color-primary, 23%) // #7d7d7d</td>
+//            <th>@primary__color__lighter</th>
+//            <td class="vars_value">lighten(@primary__color, 23%) // #7d7d7d</td>
 //            <td>Lighter primary color</td>
 //        </tr>
 //        <tr>
-//            <th>@color-primary-light</th>
-//            <td class="vars_value">lighten(@color-primary, 45%) // #a6a6a6</td>
+//            <th>@primary__color__light</th>
+//            <td class="vars_value">lighten(@primary__color, 45%) // #a6a6a6</td>
 //            <td>Light primary color</td>
 //        </tr>
 //        <tr>
-//            <th>@border-color-base</th>
-//            <td class="vars_value">darken(@page-bg-color, 18%)</td>
+//            <th>@border-color__base</th>
+//            <td class="vars_value">darken(@page__background-color, 18%)</td>
 //            <td>Base border color</td>
 //        </tr>
 //        <tr>
-//            <th>@border-width-base</th>
+//            <th>@border-width__base</th>
 //            <td class="vars_value">1px</td>
 //            <td>Base border width</td>
 //        </tr>
@@ -133,180 +133,181 @@
 //            <th class="vars_section" colspan="3">Fonts settings</th>
 //        </tr>
 //        <tr>
-//            <th>@font-family-base</th>
-//            <td class="vars_value">@font-family-sans-serif</td>
+//            <th>@font-family__base</th>
+//            <td class="vars_value">@font-family__sans-serif</td>
 //            <td>Basic font family</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-root</th>
+//            <th>@root__font-size</th>
 //            <td class="vars_value">62.5%</td>
 //            <td>Setting font-size for HTML tag, use % units</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-base-ratio</th>
+//            <th>@font-size-ratio__base</th>
 //            <td class="vars_value">1.4</td>
 //            <td>Defines ratio between root font size and base font size</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-base</th>
-//            <td class="vars_value">unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px)</td>
+//            <th>@font-size__base</th>
+//            <td class="vars_value">unit((@root__font-size / 100) * 16 * @font-size-ratio__base, px)</td>
 //            <td>Base font size value in px</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-xl</th>
-//            <td class="vars_value">ceil(1.5 * @font-size-base) // 21</td>
+//            <th>@font-size__xl</th>
+//            <td class="vars_value">ceil(1.5 * @font-size__base) // 21</td>
 //            <td>Extra large font size</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-l</th>
-//            <td class="vars_value">ceil(1.25 * @font-size-base) // 18</td>
+//            <th>@font-size__l</th>
+//            <td class="vars_value">ceil(1.25 * @font-size__base) // 18</td>
 //            <td>Large font size</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-s</th>
-//            <td class="vars_value">ceil(.85 * @font-size-base) // 12</td>
+//            <th>@font-size__s</th>
+//            <td class="vars_value">ceil(.85 * @font-size__base) // 12</td>
 //            <td>Small font size</td>
 //        </tr>
 //        <tr>
-//            <th>@font-size-xs</th>
-//            <td class="vars_value">floor(.75 * @font-size-base) // 11</td>
+//            <th>@font-size__xs</th>
+//            <td class="vars_value">floor(.75 * @font-size__base) // 11</td>
 //            <td>Extra small font size</td>
 //        </tr>
 //        <tr>
-//            <th>@font-weight-base</th>
+//            <th>@font-weight__regular</th>
 //            <td class="vars_value">400</td>
 //            <td>Basic font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@font-weight-light</th>
+//            <th>@font-weight__light</th>
 //            <td class="vars_value">200</td>
 //            <td>Light font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@font-weight-semibold</th>
+//            <th>@font-weight__semibold</th>
 //            <td class="vars_value">600</td>
 //            <td>Semibold font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@font-weight-bold</th>
+//            <th>@font-weight__bold</th>
 //            <td class="vars_value">700</td>
 //            <td>Bold font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@font-style-base</th>
+//            <th>@font-style__base</th>
 //            <td class="vars_value">normal</td>
 //            <td>Font style</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@font-style-emphasis</th>
+//            <th nowrap="nowrap">@font-style__emphasis</th>
+//            <th nowrap="nowrap">@font-style__emphasis</th>
 //            <td class="vars_value">italic</td>
 //            <td>Emphasis font style</td>
 //        </tr>
 //        <tr>
-//            <th>@line-height-base</th>
+//            <th>@line-height__base</th>
 //            <td class="vars_value">1.428571429</td>
 //            <td>Base line height</td>
 //        </tr>
 //        <tr>
-//            <th>@line-height-computed</th>
-//            <td class="vars_value">floor(@font-size-base * @line-height-base)</td>
+//            <th>@line-height__computed</th>
+//            <td class="vars_value">floor(@font-size__base * @line-height__base)</td>
 //            <td>Computed line height depending on base font size</td>
 //        </tr>
 //        <tr>
-//            <th>@line-height-l</th>
+//            <th>@line-height__l</th>
 //            <td class="vars_value">1.5</td>
 //            <td>Large line height</td>
 //        </tr>
 //        <tr>
-//            <th>@line-height-s</th>
+//            <th>@line-height__s</th>
 //            <td class="vars_value">1.33</td>
 //            <td>Small line height</td>
 //        </tr>
 //        <tr>
-//            <th>@text-color</th>
-//            <td class="vars_value">@color-primary</td>
+//            <th>@text__color</th>
+//            <td class="vars_value">@primary__color</td>
 //            <td>Primary text color</td>
 //        </tr>
 //        <tr>
-//            <th>@text-color-intense</th>
-//            <td class="vars_value">@color-primary-darker</td>
+//            <th>@text__color__intense</th>
+//            <td class="vars_value">@primary__color__darker</td>
 //            <td>Darker text color</td>
 //        </tr>
 //        <tr>
-//            <th>@text-color-muted</th>
-//            <td class="vars_value">@color-primary-lighter</td>
+//            <th>@text__color__muted</th>
+//            <td class="vars_value">@primary__color__lighter</td>
 //            <td>Lighter text color</td>
 //        </tr>
 //        <tr>
-//            <th>@indent-base</th>
-//            <td class="vars_value">@line-height-computed // 20px</td>
+//            <th>@indent__base</th>
+//            <td class="vars_value">@line-height__computed // 20px</td>
 //            <td>Base text ident (20px)</td>
 //        </tr>
 //        <tr>
-//            <th>@indent-xl-base</th>
-//            <td class="vars_value">@line-height-computed * 2 // 40px</td>
+//            <th>@indent__xl</th>
+//            <td class="vars_value">@line-height__computed * 2 // 40px</td>
 //            <td>Extra large text ident (40px)</td>
 //        </tr>
 //        <tr>
-//            <th>@indent-l-base</th>
-//            <td class="vars_value">@line-height-computed * 1.5 // 30px</td>
+//            <th>@indent__l</th>
+//            <td class="vars_value">@line-height__computed * 1.5 // 30px</td>
 //            <td>Large text ident (30px)</td>
 //        </tr>
 //        <tr>
-//            <th>@indent-m-base</th>
-//            <td class="vars_value">@indent-base * 1.25 // 25px</td>
+//            <th>@indent__m</th>
+//            <td class="vars_value">@indent__base * 1.25 // 25px</td>
 //            <td>Extra large text ident (25px)</td>
 //        </tr>
 //        <tr>
-//            <th>@indent-s-base</th>
-//            <td class="vars_value">@line-height-computed / 2 //10px </td>
+//            <th>@indent__s</th>
+//            <td class="vars_value">@line-height__computed / 2 //10px </td>
 //            <td>Small text ident (10px)</td>
 //        </tr>
 //        <tr>
-//            <th>@indent-xs-base</th>
-//            <td class="vars_value">@line-height-computed / 4 // 5px</td>
+//            <th>@indent__xs</th>
+//            <td class="vars_value">@line-height__computed / 4 // 5px</td>
 //            <td>Extra small text ident (5px)</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Links</th>
 //        </tr>
 //        <tr>
-//            <th>@link-color</th>
+//            <th>@link__color</th>
 //            <td class="vars_value">#1979c3</td>
 //            <td>Links color</td>
 //        </tr>
 //        <tr>
-//            <th>@link-text-decoration</th>
+//            <th>@link__text-decoration</th>
 //            <td class="vars_value">none</td>
 //            <td>Links text decoration</td>
 //        </tr>
 //        <tr>
-//            <th>@link-color-visited</th>
+//            <th>@link__visited__color</th>
 //            <td class="vars_value">#800080</td>
 //            <td>Visited links color</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@link-text-decoration-visited</th>
+//            <th nowrap="nowrap">@link__visited__text-decoration</th>
 //            <td class="vars_value">none</td>
 //            <td>Visited links text decoration</td>
 //        </tr>
 //        <tr>
-//            <th>@link-color-hover</th>
+//            <th>@link__hover__color</th>
 //            <td class="vars_value">#006bb4</td>
 //            <td>Hovered links color</td>
 //        </tr>
 //        <tr>
-//            <th>@link-text-decoration-hover</th>
+//            <th>@link__hover__text-decoration</th>
 //            <td class="vars_value">underline</td>
 //            <td>Hovered links text decoration</td>
 //        </tr>
 //        <tr>
-//            <th>@link-color-active</th>
+//            <th>@link__active__color</th>
 //            <td class="vars_value">#ff5501</td>
 //            <td>Active links color</td>
 //        </tr>
 //        <tr>
-//            <th>@link-text-decoration-active</th>
+//            <th>@link__active__text-decoration</th>
 //            <td class="vars_value">underline</td>
 //            <td>Active links text decoration</td>
 //        </tr>
@@ -314,548 +315,548 @@
 //            <th class="vars_section" colspan="3">Lists</th>
 //        </tr>
 //        <tr>
-//            <th>@list-color-base</th>
+//            <th>@list__color__base</th>
 //            <td class="vars_value">false</td>
 //            <td>List text color</td>
 //        </tr>
 //        <tr>
-//            <th>@list-font-size-base</th>
-//            <td class="vars_value">@font-size-base</td>
+//            <th>@list__font-size__base</th>
+//            <td class="vars_value">@font-size__base</td>
 //            <td>List font size</td>
 //        </tr>
 //        <tr>
-//            <th>@list-margin-top</th>
+//            <th>@list__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>List margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@list-margin-bottom</th>
-//            <td class="vars_value">@indent-m-base</td>
+//            <th>@list__margin-bottom</th>
+//            <td class="vars_value">@indent__m</td>
 //            <td>List margin bottom</td>
 //        </tr>
 //        <tr>
-//            <th>@list-item-margin-top</th>
+//            <th>@list-item__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>List item margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@list-item-margin-bottom</th>
-//            <td class="vars_value">@indent-s-base</td>
+//            <th>@list-item__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
 //            <td>List item margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Definition list</th>
 //        </tr>
 //        <tr>
-//            <th>@dl-margin-top</th>
+//            <th>@dl__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>Definition list margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@dl-margin-bottom</th>
-//            <td class="vars_value">@indent-base</td>
+//            <th>@dl__margin-bottom</th>
+//            <td class="vars_value">@indent__base</td>
 //            <td>Definition list margin bottom</td>
 //        </tr>
 //        <tr>
-//            <th>@dt-margin-top</th>
+//            <th>@dt__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>Description term margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@dt-margin-bottom</th>
-//            <td class="vars_value">@indent-xs-base</td>
+//            <th>@dt__margin-bottom</th>
+//            <td class="vars_value">@indent__xs</td>
 //            <td>Description term margin bottom</td>
 //        </tr>
 //        <tr>
-//            <th>@dt-font-weight</th>
-//            <td class="vars_value">@font-weight-bold</td>
+//            <th>@dt__font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
 //            <td>Description term </td>
 //        </tr>
 //        <tr>
-//            <th>@dd-margin-top</th>
+//            <th>@dd__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>Description margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@dd-margin-bottom</th>
-//            <td class="vars_value">@indent-s-base</td>
+//            <th>@dd__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
 //            <td>Description margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Paragraphs</th>
 //        </tr>
 //        <tr>
-//            <th>@p-margin-top</th>
+//            <th>@p__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>Paragraph margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@p-margin-bottom</th>
-//            <td class="vars_value">@indent-s-base</td>
+//            <th>@p__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
 //            <td>Paragraph margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Headings</th>
 //        </tr>
 //        <tr>
-//            <th>@heading-font-family-base</th>
+//            <th>@heading__font-family__base</th>
 //            <td class="vars_value">false</td>
 //            <td>Heading base font family</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-font-style-base</th>
+//            <th>@heading__font-style__base</th>
 //            <td class="vars_value">false</td>
 //            <td>Heading base font style</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-font-weight-base</th>
-//            <td class="vars_value">@font-weight-light</td>
+//            <th>@heading__font-weight__base</th>
+//            <td class="vars_value">@font-weight__light</td>
 //            <td>Heading base font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-line-height-base</th>
+//            <th>@heading__line-height__base</th>
 //            <td class="vars_value">1.1</td>
 //            <td>Heading base line height</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-color-base</th>
+//            <th>@heading__color__base</th>
 //            <td class="vars_value">false</td>
 //            <td>Heading base color</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-margin-top-base</th>
-//            <td class="vars_value">@indent-base</td>
+//            <th>@heading__margin-top__base</th>
+//            <td class="vars_value">@indent__base</td>
 //            <td>Heading base margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-margin-bottom-base</th>
-//            <td class="vars_value">@indent-base</td>
+//            <th>@heading__margin-bottom__base</th>
+//            <td class="vars_value">@indent__base</td>
 //            <td>Heading base margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">H1</th>
 //        </tr>
 //        <tr>
-//            <th>@h1-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * 2.85)) // 40px</td>
+//            <th>@h1__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * 2.85)) // 40px</td>
 //            <td>H1 font size</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-font-color</th>
-//            <td class="vars_value">@heading-color-base</td>
+//            <th>@h1__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
 //            <td>H1 color</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-font-family</th>
-//            <td class="vars_value">@heading-font-family-base</td>
+//            <th>@h1__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
 //            <td>H1 font family</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-font-weight</th>
-//            <td class="vars_value">@heading-font-weight-base</td>
+//            <th>@h1__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
 //            <td>H1 font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-font-style</th>
-//            <td class="vars_value">@heading-font-style-base</td>
+//            <th>@h1__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
 //            <td>H1 font style</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-line-height</th>
-//            <td class="vars_value">@heading-line-height-base</td>
+//            <th>@h1__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
 //            <td>H1 line height</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-margin-top</th>
+//            <th>@h1__margin-top</th>
 //            <td class="vars_value">0</td>
 //            <td>H1 margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@h1-margin-bottom</th>
-//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <th>@h1__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
 //            <td>H1 margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">H2</th>
 //        </tr>
 //        <tr>
-//            <th>@h2-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * 1.85)) // 26px</td>
+//            <th>@h2__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * 1.85)) // 26px</td>
 //            <td>H2 font size</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-font-color</th>
-//            <td class="vars_value">@heading-color-base</td>
+//            <th>@h2__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
 //            <td>H2 color</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-font-family</th>
-//            <td class="vars_value">@heading-font-family-base</td>
+//            <th>@h2__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
 //            <td>H2 font family</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-font-weight</th>
-//            <td class="vars_value">@heading-font-weight-base</td>
+//            <th>@h2__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
 //            <td>H2 font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-font-style</th>
-//            <td class="vars_value">@heading-font-style-base</td>
+//            <th>@h2__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
 //            <td>H2 font style</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-line-height</th>
-//            <td class="vars_value">@heading-line-height-base</td>
+//            <th>@h2__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
 //            <td>H2 line height</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-margin-top</th>
-//            <td class="vars_value">@indent-m-base</td>
+//            <th>@h2__margin-top</th>
+//            <td class="vars_value">@indent__m</td>
 //            <td>H2 margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@h2-margin-bottom</th>
-//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <th>@h2__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
 //            <td>H2 margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">H3</th>
 //        </tr>
 //        <tr>
-//            <th>@h3-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * 1.28)) // 18px</td>
+//            <th>@h3__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * 1.28)) // 18px</td>
 //            <td>H3 font size</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-font-color</th>
-//            <td class="vars_value">@heading-color-base</td>
+//            <th>@h3__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
 //            <td>H3 color</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-font-family</th>
-//            <td class="vars_value">@heading-font-family-base</td>
+//            <th>@h3__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
 //            <td>H3 font family</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-font-weight</th>
-//            <td class="vars_value">@heading-font-weight-base</td>
+//            <th>@h3__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
 //            <td>H3 font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-font-style</th>
-//            <td class="vars_value">@heading-font-style-base</td>
+//            <th>@h3__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
 //            <td>H3 font style</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-line-height</th>
-//            <td class="vars_value">@heading-line-height-base</td>
+//            <th>@h3__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
 //            <td>H3 line height</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-margin-top</th>
-//            <td class="vars_value">@indent-base * .75</td>
+//            <th>@h3__margin-top</th>
+//            <td class="vars_value">@indent__base * .75</td>
 //            <td>H3 margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@h3-margin-bottom</th>
-//            <td class="vars_value">@indent-s-base</td>
+//            <th>@h3__margin-bottom</th>
+//            <td class="vars_value">@indent__s</td>
 //            <td>H3 margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">H4</th>
 //        </tr>
 //        <tr>
-//            <th>@h4-font-size</th>
-//            <td class="vars_value">@font-size-base // 14px</td>
+//            <th>@h4__font-size</th>
+//            <td class="vars_value">@font-size__base // 14px</td>
 //            <td>H4 font size</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-font-color</th>
-//            <td class="vars_value">@heading-color-base</td>
+//            <th>@h4__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
 //            <td>H4 color</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-font-family</th>
-//            <td class="vars_value">@heading-font-family-base</td>
+//            <th>@h4__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
 //            <td>H4 font family</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-font-weight</th>
-//            <td class="vars_value">@font-weight-bold</td>
+//            <th>@h4__font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
 //            <td>H4 font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-font-style</th>
-//            <td class="vars_value">@heading-font-style-base</td>
+//            <th>@h4__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
 //            <td>H4 font style</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-line-height</th>
-//            <td class="vars_value">@heading-line-height-base</td>
+//            <th>@h4__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
 //            <td>H4 line height</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-margin-top</th>
-//            <td class="vars_value">@heading-margin-top-base</td>
+//            <th>@h4__margin-top</th>
+//            <td class="vars_value">@heading__margin-top__base</td>
 //            <td>H4 margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@h4-margin-bottom</th>
-//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <th>@h4__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
 //            <td>H4 margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">H5</th>
 //        </tr>
 //        <tr>
-//            <th>@h5-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * .85)) // 12px</td>
+//            <th>@h5__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * .85)) // 12px</td>
 //            <td>H5 font size</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-font-color</th>
-//            <td class="vars_value">@heading-color-base</td>
+//            <th>@h5__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
 //            <td>H5 color</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-font-family</th>
-//            <td class="vars_value">@heading-font-family-base</td>
+//            <th>@h5__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
 //            <td>H5 font family</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-font-weight</th>
-//            <td class="vars_value">@font-weight-bold</td>
+//            <th>@h5__font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
 //            <td>H5 font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-font-style</th>
-//            <td class="vars_value">@heading-font-style-base</td>
+//            <th>@h5__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
 //            <td>H5 font style</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-line-height</th>
-//            <td class="vars_value">@heading-line-height-base</td>
+//            <th>@h5__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
 //            <td>H5 line height</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-margin-top</th>
-//            <td class="vars_value">@heading-margin-top-base</td>
+//            <th>@h5__margin-top</th>
+//            <td class="vars_value">@heading__margin-top__base</td>
 //            <td>H5 margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@h5-margin-bottom</th>
-//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <th>@h5__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
 //            <td>H5 margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">H6</th>
 //        </tr>
 //        <tr>
-//            <th>@h6-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * .7)) // 10px</td>
+//            <th>@h6__font-size</th>
+//            <td class="vars_value">ceil((@font-size__base * .7)) // 10px</td>
 //            <td>H6 font size</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-font-color</th>
-//            <td class="vars_value">@heading-color-base</td>
+//            <th>@h6__font-color</th>
+//            <td class="vars_value">@heading__color__base</td>
 //            <td>H6 color</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-font-family</th>
-//            <td class="vars_value">@heading-font-family-base</td>
+//            <th>@h6__font-family</th>
+//            <td class="vars_value">@heading__font-family__base</td>
 //            <td>H6 font family</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-font-weight</th>
-//            <td class="vars_value">@heading-font-weight-base</td>
+//            <th>@h6__font-weight</th>
+//            <td class="vars_value">@heading__font-weight__base</td>
 //            <td>H6 font weight</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-font-style</th>
-//            <td class="vars_value">@heading-font-style-base</td>
+//            <th>@h6__font-style</th>
+//            <td class="vars_value">@heading__font-style__base</td>
 //            <td>H6 font style</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-line-height</th>
-//            <td class="vars_value">@heading-line-height-base</td>
+//            <th>@h6__line-height</th>
+//            <td class="vars_value">@heading__line-height__base</td>
 //            <td>H6 line height</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-margin-top</th>
-//            <td class="vars_value">@heading-margin-top-base</td>
+//            <th>@h6__margin-top</th>
+//            <td class="vars_value">@heading__margin-top__base</td>
 //            <td>H6 margin top</td>
 //        </tr>
 //        <tr>
-//            <th>@h6-margin-bottom</th>
-//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <th>@h6__margin-bottom</th>
+//            <td class="vars_value">@heading__margin-bottom__base</td>
 //            <td>H6 margin bottom</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">&lt;small&gt; tags and tags with class .small placed in H1-H6 headings</th>
 //        </tr>
 //        <tr>
-//            <th>@heading-small-color</th>
-//            <td class="vars_value">@color-primary</td>
+//            <th>@heading__small-color</th>
+//            <td class="vars_value">@primary__color</td>
 //            <td>&lt;small&gt; and .small heading element color</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-small-line-height</th>
+//            <th>@heading__small-line-height</th>
 //            <td class="vars_value">1</td>
 //            <td>&lt;small&gt; and .small heading element line height</td>
 //        </tr>
 //        <tr>
-//            <th>@heading-small-size</th>
-//            <td class="vars_value">(@font-size-xs/@font-size-base) * 100%</td>
+//            <th>@heading__small-size</th>
+//            <td class="vars_value">(@font-size__xs/@font-size__base) * 100%</td>
 //            <td>&lt;small&gt; and .small heading element font size</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Focus</th>
 //        </tr>
 //        <tr>
-//            <th>@focus-box-shadow</th>
-//            <td class="vars_value">0 0 3px 1px @color-focus</td>
+//            <th>@focus__box-shadow</th>
+//            <td class="vars_value">0 0 3px 1px @focus__color</td>
 //            <td>Focused element highlight</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Code blocks</th>
 //        </tr>
 //        <tr>
-//            <th>@code-bg</th>
-//            <td class="vars_value">@panel-bg</td>
+//            <th>@code__background-color</th>
+//            <td class="vars_value">@panel__background-color</td>
 //            <td>Code block background</td>
 //        </tr>
 //        <tr>
-//            <th>@code-color</th>
-//            <td class="vars_value">@color-primary-darker</td>
+//            <th>@code__color</th>
+//            <td class="vars_value">@primary__color__darker</td>
 //            <td>Code text color</td>
 //        </tr>
 //        <tr>
-//            <th>@code-font-size</th>
-//            <td class="vars_value">@font-size-s</td>
+//            <th>@code__font-size</th>
+//            <td class="vars_value">@font-size__s</td>
 //            <td>Code font size</td>
 //        </tr>
 //        <tr>
-//            <th>@code-padding</th>
+//            <th>@code__padding</th>
 //            <td class="vars_value">2px 4px</td>
 //            <td>Code padding</td>
 //        </tr>
 //        <tr>
-//            <th>@pre-bg</th>
-//            <td class="vars_value">@color-primary-light</td>
+//            <th>@pre__background-color</th>
+//            <td class="vars_value">@primary__color__light</td>
 //            <td>Preformatted text background color</td>
 //        </tr>
 //        <tr>
-//            <th>@pre-border-color</th>
-//            <td class="vars_value">@border-color-base</td>
+//            <th>@pre__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
 //            <td>Preformatted text border color</td>
 //        </tr>
 //        <tr>
-//            <th>@pre-border-width</th>
-//            <td class="vars_value">@border-width-base</td>
+//            <th>@pre__border-width</th>
+//            <td class="vars_value">@border-width__base</td>
 //            <td>Preformatted text border width</td>
 //        </tr>
 //        <tr>
-//            <th>@pre-color</th>
-//            <td class="vars_value">@color-primary-darker</td>
+//            <th>@pre__color</th>
+//            <td class="vars_value">@primary__color__darker</td>
 //            <td>Preformatted text color</td>
 //        </tr>
 //        <tr>
-//            <th>@kbd-bg</th>
-//            <td class="vars_value">@panel-bg</td>
+//            <th>@kbd__background-color</th>
+//            <td class="vars_value">@panel__background-color</td>
 //            <td>Keyboard input background</td>
 //        </tr>
 //        <tr>
-//            <th>@kbd-color</th>
-//            <td class="vars_value">@color-primary-darker</td>
+//            <th>@kbd__color</th>
+//            <td class="vars_value">@primary__color__darker</td>
 //            <td>Keyboard input text color</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Blockquote</th>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-border-color</th>
-//            <td class="vars_value">@border-color-base</td>
+//            <th>@blockquote__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
 //            <td>Blockquote border color</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-border-width</th>
+//            <th>@blockquote__border-width</th>
 //            <td class="vars_value">0</td>
 //            <td>Blockquote border width</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-before-content</th>
+//            <th>@blockquote__content-before</th>
 //            <td class="vars_value">'\2014 \00A0'</td>
 //            <td>&quot;-&quot; and space symbols</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-font-size</th>
-//            <td class="vars_value">@font-size-base</td>
+//            <th>@blockquote__font-size</th>
+//            <td class="vars_value">@font-size__base</td>
 //            <td>Blockquote font size</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-font-style</th>
-//            <td class="vars_value">@font-style-emphasis</td>
+//            <th>@blockquote__font-style</th>
+//            <td class="vars_value">@font-style__emphasis</td>
 //            <td>Blockquote font style</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-margin</th>
-//            <td class="vars_value"> 0 0 @indent-base @indent-xl-base</td>
+//            <th>@blockquote__margin</th>
+//            <td class="vars_value"> 0 0 @indent__base @indent__xl</td>
 //            <td>Blockquote margin</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-padding</th>
+//            <th>@blockquote__padding</th>
 //            <td class="vars_value">0</td>
 //            <td>Blockquote padding</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-small-color</th>
-//            <td class="vars_value">@color-primary</td>
+//            <th>@blockquote-small__color</th>
+//            <td class="vars_value">@primary__color</td>
 //            <td>Blockquote &lt;small&gt; and .small text color</td>
 //        </tr>
 //        <tr>
-//            <th>@blockquote-small-font-size</th>
-//            <td class="vars_value">@font-size-xs</td>
+//            <th>@blockquote-small__font-size</th>
+//            <td class="vars_value">@font-size__xs</td>
 //            <td>Blockquote &lt;small&gt; and .small font size</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Cite</th>
 //        </tr>
 //        <tr>
-//            <th>@cite-font-style</th>
-//            <td class="vars_value">@font-style-base</td>
+//            <th>@cite__font-style</th>
+//            <td class="vars_value">@font-style__base</td>
 //            <td>Cite font style</td>
 //        </tr>
 //        <tr>
 //            <th colspan="3" class="vars_section">Other elements</th>
 //        </tr>
 //        <tr>
-//            <th>@hr-border-color</th>
-//            <td class="vars_value">@border-color-base</td>
+//            <th>@hr__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
 //            <td>HR border color</td>
 //        </tr>
 //        <tr>
-//            <th>@hr-border-style</th>
+//            <th>@hr__border-style</th>
 //            <td class="vars_value">solid</td>
 //            <td>HR border style</td>
 //        </tr>
 //        <tr>
-//            <th>@hr-border-width</th>
-//            <td class="vars_value">@border-width-base</td>
+//            <th>@hr__border-width</th>
+//            <td class="vars_value">@border-width__base</td>
 //            <td>HR border width</td>
 //        </tr>
 //        <tr>
-//            <th>@mark-color</th>
-//            <td class="vars_value">@color-primary-dark</td>
+//            <th>@mark__color</th>
+//            <td class="vars_value">@primary__color__dark</td>
 //            <td>&lt;mark&gt; color</td>
 //        </tr>
 //        <tr>
-//            <th>@mark-bg</th>
-//            <td class="vars_value">@panel-bg</td>
+//            <th>@mark__background-color</th>
+//            <td class="vars_value">@panel__background-color</td>
 //            <td>&lt;mark&gt; background</td>
 //        </tr>
 //        <tr>
-//            <th>@abbr-border-color</th>
-//            <td class="vars_value">@border-color-base</td>
+//            <th>@abbr__border-color</th>
+//            <td class="vars_value">@border-color__base</td>
 //            <td>&lt;abbr&gt; border color</td>
 //        </tr>
 //        <tr>
@@ -1030,7 +1031,7 @@
 //  ```
 
 .example-typography {
-    .typography(30, #fc0, @font-family-monospace, 500, 1.2, italic);
+    .typography(30, #fc0, @font-family__monospace, 500, 1.2, italic);
 }
 
 //  # Font style mixin variables
@@ -1044,37 +1045,37 @@
 //        </tr>
 //        <tr>
 //            <th>@_color</th>
-//            <td class="vars_value">@text-color</td>
+//            <td class="vars_value">@text__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-size</th>
-//            <td class="vars_value">@font-size-base</td>
+//            <td class="vars_value">@font-size__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-family</th>
-//            <td class="vars_value">@font-family-base</td>
+//            <td class="vars_value">@font-family__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-weight</th>
-//            <td class="vars_value">@font-weight-base</td>
+//            <td class="vars_value">@font-weight__regular</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-style</th>
-//            <td class="vars_value">@font-style-base</td>
+//            <td class="vars_value">@font-style__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_line-height</th>
-//            <td class="vars_value">@line-height-base</td>
+//            <td class="vars_value">@line-height__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Line height</td>
 //        </tr>
@@ -1254,7 +1255,7 @@
 //
 //  Magento UI library offers mixins to styles elements sets.
 //
-//  The <code>.typography-base()</code> mixin applyes basic styles from <code>variables.less</code> to the following elements:
+//  The <code>.typography__base()</code> mixin applyes basic styles from <code>_variables.less</code> to the following elements:
 //
 //  ```css
 //  html
@@ -1280,7 +1281,7 @@
 //  <p><dfn>Pellentesque</dfn> habitant <i>morbi</i> tristique <b>senectus</b> et netus et malesuada fames ac turpis egestas.</p>
 //  ```
 
-.typography-base();
+.typography__base();
 
 //  # Headings typography mixin
 //

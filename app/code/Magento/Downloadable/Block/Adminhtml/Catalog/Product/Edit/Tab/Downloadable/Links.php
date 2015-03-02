@@ -64,7 +64,7 @@ class Links extends \Magento\Backend\Block\Template
     protected $_link;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_sourceModel;
 
@@ -84,7 +84,7 @@ class Links extends \Magento\Backend\Block\Template
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\Config\Source\Yesno $sourceModel
+     * @param \Magento\Config\Model\Config\Source\Yesno $sourceModel
      * @param \Magento\Downloadable\Model\Link $link
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Backend\Model\UrlFactory $urlFactory
@@ -97,7 +97,7 @@ class Links extends \Magento\Backend\Block\Template
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\Config\Source\Yesno $sourceModel,
+        \Magento\Config\Model\Config\Source\Yesno $sourceModel,
         \Magento\Downloadable\Model\Link $link,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Backend\Model\UrlFactory $urlFactory,
@@ -209,7 +209,7 @@ class Links extends \Magento\Backend\Block\Template
             $this->getProduct()->getTypeId() ==
             'downloadable' ? $this->getProduct()->getLinksTitle() : $this->_scopeConfig->getValue(
                 \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
     }
 
@@ -234,7 +234,7 @@ class Links extends \Magento\Backend\Block\Template
     {
         $scope = (int)$this->_scopeConfig->getValue(
             \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE) {
             return true;
@@ -355,7 +355,7 @@ class Links extends \Magento\Backend\Block\Template
     {
         return $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link::XML_PATH_DEFAULT_DOWNLOADS_NUMBER,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

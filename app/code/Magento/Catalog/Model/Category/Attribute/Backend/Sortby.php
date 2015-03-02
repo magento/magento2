@@ -34,7 +34,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Framework\Object $object
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -54,7 +54,9 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new \Magento\Framework\Model\Exception(__('The value of attribute "%1" must be unique.', $label));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The value of attribute "%1" must be unique.', $label)
+                );
             }
         }
 
@@ -68,10 +70,10 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $attributeCode
             ) : $this->_scopeConfig->getValue(
                 "catalog/frontend/default_sort_by",
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             if (!in_array($data, $available) && !in_array('available_sort_by', $postDataConfig)) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Default Product Listing Sort by does not exist in Available Product Listing Sort By.')
                 );
             }

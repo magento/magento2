@@ -11,12 +11,18 @@
     <preference for="Magento\Framework\App\Action\Context" type="Magento\Backend\App\Action\Context" />
     <preference for="Magento\Framework\UrlInterface" type="Magento\Backend\Model\UrlInterface" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
-    <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
-    <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Backend\App\DefaultPath" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
-    <preference for="Magento\Framework\App\View" type="Magento\Backend\Model\View" />
+    <preference for="Magento\Framework\View\Layout\GeneratorPool" type="Magento\Backend\Model\View\Layout\GeneratorPool" />
+    <type name="Magento\Framework\View\Result\Page">
+        <arguments>
+            <argument name="layoutReaderPool" xsi:type="object">pageConfigRenderPool</argument>
+            <argument name="generatorPool" xsi:type="object">Magento\Backend\Model\View\Layout\GeneratorPool</argument>
+            <argument name="template" xsi:type="string">Magento_Theme::root.phtml</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\View\Layout\Reader\Block" type="Magento\Backend\Model\View\Layout\Reader\Block" />
     <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
     <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Backend\Model\Session\AdminConfig" />
     <type name="Magento\Backend\App\Action\Context">
@@ -29,8 +35,6 @@
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Tab" shared="false" />
-    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Section" shared="false" />
     <type name="Magento\Framework\View\Layout">
         <arguments>
             <argument name="area" xsi:type="string">adminhtml</argument>

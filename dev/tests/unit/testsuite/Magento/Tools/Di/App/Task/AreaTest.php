@@ -19,9 +19,9 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     private $areaListMock;
 
     /**
-     * @var ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $classesScannerMock;
+    private $areaInstancesNamesList;
 
     /**
      * @var Config\Reader | \PHPUnit_Framework_MockObject_MockObject
@@ -33,12 +33,17 @@ class AreaTest extends \PHPUnit_Framework_TestCase
      */
     private $configWriterMock;
 
+    /**
+     * @var \Magento\Tools\Di\Compiler\Config\ModificationChain | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configChain;
+
     protected function setUp()
     {
         $this->areaListMock = $this->getMockBuilder('Magento\Framework\App\AreaList')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->classesScannerMock = $this->getMockBuilder('Magento\Tools\Di\Code\Reader\ClassesScanner')
+        $this->areaInstancesNamesList = $this->getMockBuilder('\Magento\Tools\Di\Code\Reader\InstancesNamesList\Area')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configReaderMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\Reader')
@@ -47,15 +52,19 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->configWriterMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\WriterInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configChain = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\ModificationChain')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testDoOperationEmptyPath()
     {
         $areaOperation = new Area(
             $this->areaListMock,
-            $this->classesScannerMock,
+            $this->areaInstancesNamesList,
             $this->configReaderMock,
-            $this->configWriterMock
+            $this->configWriterMock,
+            $this->configChain
         );
 
         $this->assertNull($areaOperation->doOperation());
@@ -64,29 +73,29 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     public function testDoOperationGlobalArea()
     {
         $path = 'path/to/codebase/';
+        $arguments = ['class' => []];
         $generatedConfig = [
-            'arguments' => [],
-            'nonShared' => [],
+            'arguments' => $arguments,
             'preferences' => [],
             'instanceTypes' => []
         ];
-        $definitions = new DefinitionsCollection();
-        $definitions->addDefinition('class', []);
+
         $areaOperation = new Area(
             $this->areaListMock,
-            $this->classesScannerMock,
+            $this->areaInstancesNamesList,
             $this->configReaderMock,
             $this->configWriterMock,
+            $this->configChain,
             [$path]
         );
 
         $this->areaListMock->expects($this->once())
             ->method('getCodes')
             ->willReturn([]);
-        $this->classesScannerMock->expects($this->once())
+        $this->areaInstancesNamesList->expects($this->once())
             ->method('getList')
             ->with($path)
-            ->willReturn(['class' => []]);
+            ->willReturn($arguments);
         $this->configReaderMock->expects($this->once())
             ->method('generateCachePerScope')
             ->with(
@@ -94,6 +103,11 @@ class AreaTest extends \PHPUnit_Framework_TestCase
                 App\Area::AREA_GLOBAL
             )
             ->willReturn($generatedConfig);
+        $this->configChain->expects($this->once())
+            ->method('modify')
+            ->with($generatedConfig)
+            ->willReturn($generatedConfig);
+
         $this->configWriterMock->expects($this->once())
             ->method('write')
             ->with(

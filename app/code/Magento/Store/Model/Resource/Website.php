@@ -39,12 +39,12 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $object->getCode())) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore(_), the first character must be a letter'
                 )
@@ -79,7 +79,7 @@ class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $model)
     {
         $where = [
-            'scope = ?' => \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITES,
+            'scope = ?' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES,
             'scope_id = ?' => $model->getWebsiteId(),
         ];
 

@@ -9,17 +9,13 @@ namespace Magento\Reports\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for ProductsInCartReportEntity
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer
  * 2. Create product
@@ -72,10 +68,10 @@ class ProductsInCartReportEntity extends Injectable
     /**
      * Prepare data
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -106,14 +102,14 @@ class ProductsInCartReportEntity extends Injectable
     /**
      * Create products in cart report entity
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CatalogProductSimple $product
      * @param string $isGuest
      * @param BrowserInterface $browser
      * @return void
      */
     public function test(
-        CustomerInjectable $customer,
+        Customer $customer,
         CatalogProductSimple $product,
         $isGuest,
         BrowserInterface $browser

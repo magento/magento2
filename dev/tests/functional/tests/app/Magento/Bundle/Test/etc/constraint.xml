@@ -1,45 +1,24 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<constraint>
-    <assertBundleInCategory module="Magento_Bundle">
-        <severity>low</severity>
-        <require>
-            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
-            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <product class="Magento\Bundle\Test\Fixture\BundleProduct" />
-            <category class="Magento\Catalog\Test\Fixture\Category" />
-        </require>
-    </assertBundleInCategory>
-    <assertBundleItemsOnProductPage module="Magento_Bundle">
-        <severity>low</severity>
-    </assertBundleItemsOnProductPage>
-    <assertBundlePriceView module="Magento_Bundle">
-        <severity>low</severity>
-    </assertBundlePriceView>
-    <assertBundlePriceType module="Magento_Bundle">
-        <severity>low</severity>
-    </assertBundlePriceType>
-    <assertBundleProductForm module="Magento_Bundle">
-        <severity>low</severity>
-    </assertBundleProductForm>
-    <assertTierPriceOnBundleProductPage module="Magento_Bundle">
-        <severity>low</severity>
-    </assertTierPriceOnBundleProductPage>
-    <assertBundleProductPage module="Magento_Bundle">
-        <severity>low</severity>
-    </assertBundleProductPage>
-    <assertGroupedPriceOnBundleProductPage module="Magento_Bundle">
-        <severity>low</severity>
-    </assertGroupedPriceOnBundleProductPage>
-    <assertProductCustomOptionsOnBundleProductPage module="Magento_Bundle">
-        <severity>low</severity>
-    </assertProductCustomOptionsOnBundleProductPage>
-    <assertBundleProductInCustomerWishlistOnBackendGrid module="Magento_Bundle">
-        <severity>low</severity>
-    </assertBundleProductInCustomerWishlistOnBackendGrid>
-</constraint>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/global/constraints.xsd">
+    <constraint name="assertBundleInCategory" module="Magento_Bundle" severity="low">
+        <argument name="catalogCategoryView">Magento\Catalog\Test\Page\Category\CatalogCategoryView</argument>
+        <argument name="cmsIndex">Magento\Cms\Test\Page\CmsIndex</argument>
+        <argument name="product">Magento\Bundle\Test\Fixture\BundleProduct</argument>
+        <argument name="category">Magento\Catalog\Test\Fixture\Category</argument>
+    </constraint>
+    <constraint name="assertBundleItemsOnProductPage" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertBundlePriceView" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertBundlePriceType" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertBundleProductForm" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertTierPriceOnBundleProductPage" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertBundleProductPage" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertGroupedPriceOnBundleProductPage" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertProductCustomOptionsOnBundleProductPage" module="Magento_Bundle" severity="low"/>
+    <constraint name="assertBundleProductInCustomerWishlistOnBackendGrid" module="Magento_Bundle" severity="low"/>
+</config>

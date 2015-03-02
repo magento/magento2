@@ -5,7 +5,8 @@
  */
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Validator\ValidatorException;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * Customer entity resource model
@@ -92,8 +93,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Framework\Object $customer
      * @return $this
-     * @throws \Magento\Customer\Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Object $customer)
     {
@@ -101,7 +101,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new \Magento\Customer\Exception(__('Customer email is required'));
+            throw new ValidatorException(__('Customer email is required'));
         }
 
         $adapter = $this->_getWriteAdapter();
@@ -124,9 +124,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
         $result = $adapter->fetchOne($select, $bind);
         if ($result) {
-            throw new \Magento\Customer\Exception(
-                __('Customer with the same email already exists in associated website.'),
-                \Magento\Customer\Model\Customer::EXCEPTION_EMAIL_EXISTS
+            throw new AlreadyExistsException(
+                __('Customer with the same email already exists in associated website.')
             );
         }
 
@@ -151,15 +150,15 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Customer\Model\Customer $customer
      * @return void
-     * @throws \Magento\Framework\Validator\ValidatorException When validation failed
+     * @throws \Magento\Framework\Validator\ValidatorException
      */
     protected function _validate($customer)
     {
         $validator = $this->_validatorFactory->createValidator('customer', 'save');
 
         if (!$validator->isValid($customer)) {
-            throw new \Magento\Framework\Validator\ValidatorException(
-                InputException::DEFAULT_MESSAGE,
+            throw new ValidatorException(
+                ValidatorException::DEFAULT_MESSAGE,
                 [],
                 null,
                 $validator->getMessages()
@@ -252,7 +251,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Customer\Model\Customer $customer
      * @param string $email
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByEmail(\Magento\Customer\Model\Customer $customer, $email)
     {
@@ -267,7 +266,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Customer website ID must be specified when using the website scope')
                 );
             }
@@ -380,7 +379,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         if ($this->_scopeConfig->getValue(
             \Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             parent::setNewIncrementId($object);

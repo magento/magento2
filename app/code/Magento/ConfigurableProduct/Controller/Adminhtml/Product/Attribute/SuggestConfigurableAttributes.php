@@ -24,7 +24,7 @@ class SuggestConfigurableAttributes extends Action
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -32,13 +32,13 @@ class SuggestConfigurableAttributes extends Action
      * @param Action\Context $context
      * @param SuggestedAttributeList $attributeList
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         Action\Context $context,
         SuggestedAttributeList $attributeList,
         \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->attributeList = $attributeList;
         $this->coreHelper = $coreHelper;

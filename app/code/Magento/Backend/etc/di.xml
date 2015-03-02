@@ -9,8 +9,6 @@
     <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
-    <preference for="Magento\Backend\Model\Config\Structure\SearchInterface" type="Magento\Backend\Model\Config\Structure" />
-    <preference for="Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Backend\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface" type="Magento\User\Model\User" />
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Backend\Model\UrlInterface" type="Magento\Backend\Model\Url" />
@@ -30,11 +28,6 @@
     <type name="Magento\Backend\App\Router">
         <arguments>
             <argument name="routerId" xsi:type="string">admin</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Controller\Adminhtml\System\Config\Save">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">
@@ -79,7 +72,7 @@
             <argument name="scopeResolver" xsi:type="object">Magento\Backend\Model\Url\ScopeResolver</argument>
             <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
             <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
             <argument name="backendHelper" xsi:type="object">Magento\Backend\Helper\Data\Proxy</argument>
         </arguments>
     </type>
@@ -108,7 +101,7 @@
     </type>
     <type name="Magento\Framework\Acl\RootResource">
         <arguments>
-            <argument name="identifier" xsi:type="string">Magento_Adminhtml::all</argument>
+            <argument name="identifier" xsi:type="string">Magento_Backend::all</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
@@ -154,40 +147,6 @@
     <type name="Magento\Backend\Model\Session\Quote">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Quote\Storage</argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Group" shared="false" />
-    <type name="Magento\Backend\Model\Config\Structure\Element\Group\Proxy" shared="false" />
-
-    <type name="Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper" shared="false">
-        <arguments>
-            <argument name="fieldLocator" xsi:type="object">Magento\Backend\Model\Config\Structure\Search\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Config\Structure\Data">
-        <arguments>
-            <argument name="cacheId" xsi:type="string">backend_system_configuration_structure</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Config\Structure\Element\Tab" shared="false">
-        <arguments>
-            <argument name="childrenIterator" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Iterator\Section</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Config\Structure\Element\Section" shared="false">
-        <arguments>
-            <argument name="childrenIterator" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Iterator\Group</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Field" shared="false">
-        <arguments>
-            <argument name="groupFlyweight" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Group\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Config\Structure\Element\Group" shared="false">
-        <arguments>
-            <argument name="childrenIterator" xsi:type="object">Magento\Backend\Model\Config\Structure\Element\Iterator\Field</argument>
         </arguments>
     </type>
 </config>

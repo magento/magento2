@@ -8,8 +8,8 @@ namespace Magento\Customer\Test\TestCase;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Constraint\AssertCustomerInfoSuccessSavedMessage;
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountEdit;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
@@ -116,16 +116,16 @@ class UpdateCustomerFrontendEntityTest extends Injectable
     /**
      * Run Update Customer Entity test
      *
-     * @param CustomerInjectable $initialCustomer
-     * @param CustomerInjectable $customer
-     * @param AddressInjectable $address
+     * @param Customer $initialCustomer
+     * @param Customer $customer
+     * @param Address $address
      * @param AssertCustomerInfoSuccessSavedMessage $assertCustomerInfoSuccessSavedMessage
      * @return void
      */
     public function test(
-        CustomerInjectable $initialCustomer,
-        CustomerInjectable $customer,
-        AddressInjectable $address,
+        Customer $initialCustomer,
+        Customer $customer,
+        Address $address,
         AssertCustomerInfoSuccessSavedMessage $assertCustomerInfoSuccessSavedMessage
     ) {
         // Preconditions

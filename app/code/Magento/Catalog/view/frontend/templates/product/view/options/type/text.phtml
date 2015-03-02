@@ -15,7 +15,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 <div class="field<?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA) {
     echo ' textarea';
 } ?><?php echo $class ?>">
-    <label class="label">
+    <label class="label" for="options_<?php echo $_option->getId() ?>_text">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
         <?php echo $block->getFormatedPrice() ?>
     </label>
