@@ -5,7 +5,6 @@
  */
 namespace Magento\Tax\Model;
 
-use Magento\Framework\Model\Exception as ModelException;
 use Magento\Framework\Api\SearchCriteria as SearchCriteria;
 
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -118,6 +117,10 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param $exceptionObject
      * @param $exceptionName
      * @param $exceptionMessage
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
     {
@@ -137,15 +140,15 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                new \Magento\Framework\Model\Exception('Could not save'),
+                new \Magento\Framework\Exception\LocalizedException(__('Could not save')),
                 '\Magento\Framework\Exception\CouldNotSaveException',
                 'Could not save'
             ], [
-                new \Magento\Framework\Model\Exception('InputError', ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS),
-                '\Magento\Framework\Exception\InputException',
-                'InputError'
+                new \Magento\Framework\Exception\AlreadyExistsException(__('Entity already exists')),
+                '\Magento\Framework\Exception\AlreadyExistsException',
+                'Entity already exists'
             ], [
-                new \Magento\Framework\Exception\NoSuchEntityException('No such entity'),
+                new \Magento\Framework\Exception\NoSuchEntityException(__('No such entity')),
                 '\Magento\Framework\Exception\NoSuchEntityException',
                 'No such entity'
             ]

@@ -34,14 +34,14 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Catalog\Model\Layer\Filter\Attribute
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($className, array $data = [])
     {
         $filter = $this->_objectManager->create($className, $data);
 
         if (!$filter instanceof \Magento\Catalog\Model\Layer\Filter\AbstractFilter) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 $className . ' doesn\'t extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter'
             );
         }

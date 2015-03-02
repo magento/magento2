@@ -109,7 +109,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please define flag code.
      */
     public function testLoadSelfException()
@@ -127,7 +127,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please define flag code.
      */
     public function testBeforeSaveException()

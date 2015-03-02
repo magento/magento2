@@ -8,7 +8,7 @@
 
 namespace Magento\Review\Helper\Action;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Action pager helper for iterating over search results
@@ -135,12 +135,12 @@ class Pager extends \Magento\Framework\App\Helper\AbstractHelper
      * Get storage key
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getStorageKey()
     {
         if (!$this->_storageId) {
-            throw new Exception(__('Storage key was not set'));
+            throw new LocalizedException(__('Storage key was not set'));
         }
 
         return self::STORAGE_PREFIX . $this->_storageId;

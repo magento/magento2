@@ -22,4 +22,11 @@ interface ProductMetadataInterface
      * @return string
      */
     public function getEdition();
+
+    /**
+     * Get Product name
+     *
+     * @return string
+     */
+    public function getName();
 }

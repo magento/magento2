@@ -52,18 +52,25 @@ class Source
     private $themeList;
 
     /**
+     * @var string
+     */
+    private $appMode;
+
+    /**
      * @param PreProcessor\Cache $cache
      * @param \Magento\Framework\Filesystem $filesystem
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
+     * @param string $appMode
      */
     public function __construct(
         PreProcessor\Cache $cache,
         \Magento\Framework\Filesystem $filesystem,
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
-        \Magento\Framework\View\Design\Theme\ListInterface $themeList
+        \Magento\Framework\View\Design\Theme\ListInterface $themeList,
+        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
     ) {
         $this->cache = $cache;
         $this->filesystem = $filesystem;
@@ -72,6 +79,7 @@ class Source
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
         $this->themeList = $themeList;
+        $this->appMode = $appMode;
     }
 
     /**
@@ -134,7 +142,9 @@ class Source
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
             $asset,
             $this->rootDir->readFile($path),
-            $this->getContentType($path)
+            $this->getContentType($path),
+            $path,
+            $this->appMode
         );
         $preProcessors = $this->preProcessorPool
             ->getPreProcessors($chain->getOrigContentType(), $chain->getTargetContentType());
@@ -144,7 +154,7 @@ class Source
         $chain->assertValid();
         if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;
-            $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $asset->getPath();
+            $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
             $this->varDir->writeFile($path, $chain->getContent());
         }
         $result = [$dirCode, $path];
@@ -218,5 +228,19 @@ class Source
         $dir = $this->filesystem->getDirectoryRead($context->getBaseDirType());
         Simple::assertFilePathFormat($asset->getFilePath());
         return $dir->getAbsolutePath($asset->getPath());
+    }
+
+    /**
+     * @param \Magento\Framework\View\Asset\LocalInterface $asset
+     *
+     * @return bool|string
+     */
+    public function findRelativeSourceFilePath(LocalInterface $asset)
+    {
+        $sourceFile = $this->findSourceFile($asset);
+        if (!$sourceFile) {
+            return false;
+        }
+        return $this->rootDir->getRelativePath($sourceFile);
     }
 }

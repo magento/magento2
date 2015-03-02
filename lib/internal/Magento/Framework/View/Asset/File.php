@@ -70,6 +70,14 @@ class File implements MergeableInterface
     /**
      * {@inheritdoc}
      */
+    public function getSourceUrl()
+    {
+        return $this->context->getBaseUrl() . $this->getRelativeSourceFilePath();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getContentType()
     {
         return $this->contentType;
@@ -84,6 +92,22 @@ class File implements MergeableInterface
         $result = $this->join($result, $this->context->getPath());
         $result = $this->join($result, $this->module);
         $result = $this->join($result, $this->filePath);
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRelativeSourceFilePath()
+    {
+        $path = $this->filePath;
+        if (strpos($this->source->findRelativeSourceFilePath($this), 'less')) {
+            $path = str_replace('.css', '.less', $this->filePath);
+        }
+        $result = '';
+        $result = $this->join($result, $this->context->getPath());
+        $result = $this->join($result, $this->module);
+        $result = $this->join($result, $path);
         return $result;
     }
 

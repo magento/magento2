@@ -15,8 +15,6 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
-use Magento\Eav\Exception;
-
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
     /**
@@ -33,7 +31,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
      * Get next id
      *
      * @return string
-     * @throws Exception
+     * @throws \Magento\Eav\Exception
      */
     public function getNextId()
     {
