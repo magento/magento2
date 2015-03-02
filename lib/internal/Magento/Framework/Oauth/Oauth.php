@@ -283,7 +283,7 @@ class Oauth implements OauthInterface
         $exception = new OauthInputException();
         foreach ($requiredParams as $param) {
             if (!isset($protocolParams[$param])) {
-                $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD), ['fieldName' => $param]);
+                $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]));
             }
         }
         if ($exception->wasErrorAdded()) {
