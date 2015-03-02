@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Oauth;
 
+use Magento\Framework\Phrase;
+
 class Oauth implements OauthInterface
 {
     /**
@@ -277,7 +279,7 @@ class Oauth implements OauthInterface
         $exception = new OauthInputException();
         foreach ($requiredParams as $param) {
             if (!isset($protocolParams[$param])) {
-                $exception->addError(__(OauthInputException::REQUIRED_FIELD), ['fieldName' => $param]);
+                $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD), ['fieldName' => $param]);
             }
         }
         if ($exception->wasErrorAdded()) {
