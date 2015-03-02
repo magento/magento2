@@ -14,7 +14,7 @@
     <div class="message-system-inner">
         <?php if ($lastCritical): ?>
             <ul class="message-system-list">
-                <li class="message message-warning">
+                <li class="message message-warning error">
                     <?php echo $lastCritical->getText();?>
                 </li>
             </ul>
@@ -25,7 +25,7 @@
             </span>
 
             <?php if ($block->getCriticalCount()): ?>
-                <div class="message error">
+                <div class="message message-warning error">
                     <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Critical System Messages'));?>">
                         <?php echo $block->getCriticalCount();?>
                     </a>
@@ -33,7 +33,7 @@
             <?php endif;?>
 
             <?php if ($block->getMajorCount()): ?>
-               <div class="message warning">
+               <div class="message message-warning warning">
                    <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Major System Messages'));?>">
                        <?php echo $block->getMajorCount();?>
                    </a>

@@ -14,7 +14,7 @@
 ?>
 <?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
-        <div class="messages-wrap admin__scope">
+        <div class="admin__scope">
             <div class="messages">
                 <div class="message message-warning message-noscript">
                     <strong><?php echo __('JavaScript may be disabled in your browser.'); ?></strong>
@@ -25,7 +25,7 @@
     </noscript>
 <?php endif; ?>
 <?php if ($block->displayDemoNotice()): ?>
-    <div class="messages-wrap admin__scope">
+    <div class="admin__scope">
         <div class="messages">
             <div class="message message-warning message-demo-mode">
                 <?php echo __('This is only a demo store. You can browse and place orders, but nothing will be processed.') ?>

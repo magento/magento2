@@ -7,7 +7,7 @@
 //  Variables
 //  _____________________________________________
 
-@alert__font-size: 1.4rem;
+@alert__font-size: @font-size__base;
 @alert__font-style: @font-style__base;
 @alert__font-weight: @font-weight__regular;
 @alert__color: @color-gray20;
@@ -33,9 +33,14 @@
 @alert-icon__error__content: @icon-error__content;
 @alert-icon__error__color: @color-tomato-brick;
 @alert-icon__error__font-size: 1.5rem;
+
 //
-//  Message
+//  Messages
 //  ---------------------------------------------
+
+.messages {
+    margin: 2rem 0;
+}
 
 .message {
     background: @alert__background-color;
@@ -53,10 +58,8 @@
         border: 0;
         color: @alert-icon__notice__color;
         content: @alert-icon__notice__content;
-        font-family: @alert-icon__font-name;
-        font-size: @alert-icon__font-size;
+        font: @alert__font-weight @alert-icon__font-size @alert-icon__font-name;
         font-style: @alert__font-style;
-        font-weight: @alert__font-weight;
         height: auto;
         left: 1.9rem;
         line-height: inherit;
@@ -67,42 +70,42 @@
         top: 50%;
         width: auto;
     }
-    &-notice,
-    &.notice {
-        &:before {
-            color: @alert-icon__notice__color;
-            content: @alert-icon__notice__content;
-        }
-    }
-    &-warning,
-    &.warning {
-        &:before {
-            color: @alert-icon__warning__color;
-            content: @alert-icon__warning__content;
-        }
-    }
-    &-error,
-    &.error {
-        background: @alert__error__background-color;
-        &:before {
-            color: @alert-icon__error__color;
-            content: @alert-icon__error__content;
-            font-size: @alert-icon__error__font-size;
-            left: 2.2rem;
-            margin-top: -.9rem;
-        }
-    }
-    &-success,
-    &.success {
-        &:before {
-            color: @alert-icon__success__color;
-            content: @alert-icon__success__content;
-        }
-    }
     &.no-icon {
         padding-left: 1.9rem;
         &:before {
             display: none;
         }
+    }
+}
+
+.message-notice {
+    &:before {
+        color: @alert-icon__notice__color;
+        content: @alert-icon__notice__content;
+    }
+}
+
+.message-warning {
+    &:before {
+        color: @alert-icon__warning__color;
+        content: @alert-icon__warning__content;
+    }
+}
+
+.message-error {
+    background: @alert__error__background-color;
+    &:before {
+        color: @alert-icon__error__color;
+        content: @alert-icon__error__content;
+        font-size: @alert-icon__error__font-size;
+        left: 2.2rem;
+        margin-top: -.9rem;
+    }
+}
+
+.message-success {
+    &:before {
+        color: @alert-icon__success__color;
+        content: @alert-icon__success__content;
     }
 }
