@@ -83,22 +83,26 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     protected function checkClassCanBeDeleted()
     {
         if (!$this->getId()) {
-            throw new CouldNotDeleteException('This class no longer exists.');
+            throw new CouldNotDeleteException(__('This class no longer exists.'));
         }
 
         $typeModel = $this->_classFactory->create($this);
 
         if ($typeModel->getAssignedToRules()->getSize() > 0) {
             throw new CouldNotDeleteException(
-                'You cannot delete this tax class because it is used in Tax Rules.' .
-                ' You have to delete the rules it is used in first.'
+                __(
+                    'You cannot delete this tax class because it is used in Tax Rules.'
+                    . ' You have to delete the rules it is used in first.'
+                )
             );
         }
 
         if ($typeModel->isAssignedToObjects()) {
             throw new CouldNotDeleteException(
-                'You cannot delete this tax class because it is used in existing %object(s).',
-                ['object' => $typeModel->getObjectTypeName()]
+                __(
+                    'You cannot delete this tax class because it is used in existing %object(s).',
+                    ['object' => $typeModel->getObjectTypeName()]
+                )
             );
         }
 

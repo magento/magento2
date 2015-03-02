@@ -187,13 +187,13 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             /** @var $link \Magento\Downloadable\Model\Link */
             $link = $this->linkFactory->create()->load($linkId);
             if (!$link->getId()) {
-                throw new NoSuchEntityException('There is no downloadable link with provided ID.');
+                throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
             }
             if ($link->getProductId() != $product->getId()) {
-                throw new InputException('Provided downloadable link is not related to given product.');
+                throw new InputException(__('Provided downloadable link is not related to given product.'));
             }
             if (!$this->contentValidator->isValid($linkContent)) {
-                throw new InputException('Provided link information is invalid.');
+                throw new InputException(__('Provided link information is invalid.'));
             }
             if ($isGlobalScopeContent) {
                 $product->setStoreId(0);
@@ -201,7 +201,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             $title = $linkContent->getTitle();
             if (empty($title)) {
                 if ($isGlobalScopeContent) {
-                    throw new InputException('Link title cannot be empty.');
+                    throw new InputException(__('Link title cannot be empty.'));
                 }
                 // use title from GLOBAL scope
                 $link->setTitle(null);
@@ -222,18 +222,18 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         } else {
             $product = $this->productRepository->get($productSku, true);
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
-                throw new InputException('Product type of the product must be \'downloadable\'.');
+                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
             }
             if (!$this->contentValidator->isValid($linkContent)) {
-                throw new InputException('Provided link information is invalid.');
+                throw new InputException(__('Provided link information is invalid.'));
             }
 
             if (!in_array($linkContent->getLinkType(), ['url', 'file'])) {
-                throw new InputException('Invalid link type.');
+                throw new InputException(__('Invalid link type.'));
             }
             $title = $linkContent->getTitle();
             if (empty($title)) {
-                throw new InputException('Link title cannot be empty.');
+                throw new InputException(__('Link title cannot be empty.'));
             }
 
             $linkData = [
@@ -287,7 +287,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         /** @var $link \Magento\Downloadable\Model\Link */
         $link = $this->linkFactory->create()->load($linkId);
         if (!$link->getId()) {
-            throw new NoSuchEntityException('There is no downloadable link with provided ID.');
+            throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }
         $link->delete();
         return true;

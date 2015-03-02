@@ -93,7 +93,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $this->validateCategory($category);
             $this->categoryResource->save($category);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save category: %message', ['message' => $e->getMessage()], $e);
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save category: %message',
+                    ['message' => $e->getMessage()]
+                ),
+                $e
+            );
         }
         unset($this->instances[$category->getId()]);
         return $category;
@@ -129,10 +135,12 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $this->categoryResource->delete($category);
         } catch (\Exception $e) {
             throw new StateException(
-                'Cannot delete category with id %category_id',
-                [
-                    'category_id' => $category->getId()
-                ],
+                __(
+                    'Cannot delete category with id %category_id',
+                    [
+                        'category_id' => $category->getId()
+                    ]
+                ),
                 $e
             );
         }

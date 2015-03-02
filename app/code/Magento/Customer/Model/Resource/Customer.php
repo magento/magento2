@@ -158,8 +158,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
         if (!$validator->isValid($customer)) {
             throw new ValidatorException(
-                ValidatorException::DEFAULT_MESSAGE,
-                [],
+                null,
                 null,
                 $validator->getMessages()
             );

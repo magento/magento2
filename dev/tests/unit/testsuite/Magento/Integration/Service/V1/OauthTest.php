@@ -226,7 +226,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(
                 new \Magento\Framework\Oauth\Exception(
-                    'A token with consumer ID 0 does not exist'
+                    __('A token with consumer ID 0 does not exist')
                 )
             )
         );
@@ -279,7 +279,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             'load'
         )->will(
             $this->throwException(
-                new \Magento\Framework\Oauth\Exception('Unexpected error. Unable to load oAuth consumer account.')
+                new \Magento\Framework\Oauth\Exception(
+                    __('Unexpected error. Unable to load oAuth consumer account.')
+                )
             )
         );
         $this->_service->loadConsumer(self::VALUE_CONSUMER_ID);
@@ -315,7 +317,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             'load'
         )->will(
             $this->throwException(
-                new \Magento\Framework\Oauth\Exception('Unexpected error. Unable to load oAuth consumer account.')
+                new \Magento\Framework\Oauth\Exception(
+                    __('Unexpected error. Unable to load oAuth consumer account.')
+                )
             )
         );
         $this->_service->loadConsumerByKey(self::VALUE_CONSUMER_KEY);

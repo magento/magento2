@@ -74,17 +74,16 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
 
     public function testIsEnabledWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-            'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                    ['fieldName' => 'field', 'fieldValue' => 'value']
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
+                    )
                 )
-            )
-        );
+            );
         $this->assertSame(false, $this->_block->isEnabled());
     }
 
@@ -111,17 +110,16 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
 
     public function testIsRequiredWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-            'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                    ['fieldName' => 'field', 'fieldValue' => 'value']
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
+                    )
                 )
-            )
-        );
+            );
         $this->assertSame(false, $this->_block->isRequired());
     }
 }

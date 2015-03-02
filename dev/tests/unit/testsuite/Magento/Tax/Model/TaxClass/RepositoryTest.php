@@ -101,7 +101,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->taxClassResourceMock
             ->expects($this->once())
             ->method('delete')
-            ->willThrowException(new CouldNotDeleteException('Some Message'));
+            ->willThrowException(new CouldNotDeleteException(__('Some Message')));
         $this->model->delete($taxClass);
     }
 

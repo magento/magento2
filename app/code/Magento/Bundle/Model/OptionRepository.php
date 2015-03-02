@@ -95,7 +95,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         /** @var \Magento\Bundle\Model\Option $option */
         $option = $this->type->getOptionsCollection($product)->getItemById($optionId);
         if (!$option || !$option->getId()) {
-            throw new NoSuchEntityException('Requested option doesn\'t exist');
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
 
         $productLinks = $this->linkList->getItems($product, $optionId);
@@ -127,8 +127,10 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\StateException(
-                'Cannot delete option with id %option_id',
-                ['option_id' => $option->getOptionId()],
+                __(
+                    'Cannot delete option with id %option_id',
+                    ['option_id' => $option->getOptionId()]
+                ),
                 $exception
             );
         }
@@ -168,7 +170,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $existingOption = $optionCollection->getFirstItem();
 
             if (!$existingOption->getOptionId()) {
-                throw new NoSuchEntityException('Requested option doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
             }
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
@@ -191,7 +193,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         try {
             $this->optionResource->save($option);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save option', [], $e);
+            throw new CouldNotSaveException(__('Could not save option'), $e);
         }
 
         /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */

@@ -42,7 +42,12 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function resourceNotFoundException()
     {
-        throw new NoSuchEntityException('Resource with ID "%resource_id" not found.', ['resource_id' => 'resourceY']);
+        throw new NoSuchEntityException(
+            __(
+                'Resource with ID "%resource_id" not found.',
+                ['resource_id' => 'resourceY']
+            )
+        );
     }
 
     /**
@@ -58,9 +63,12 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function authorizationException()
     {
-        throw new AuthorizationException('Consumer is not authorized to access %resources', [
-            'resources'   => 'resourceN'
-        ]);
+        throw new AuthorizationException(
+            __(
+                'Consumer is not authorized to access %resources',
+                ['resources' => 'resourceN']
+            )
+        );
     }
 
     /**

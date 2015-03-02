@@ -636,9 +636,9 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
         if (!empty($existent)) {
             if (count($existent) == 1) {
-                $error = (string)new \Magento\Framework\Phrase('%1 already exists.', [$existent[0]]);
+                $error = new \Magento\Framework\Phrase('%1 already exists.', [$existent[0]]);
             } else {
-                $error = (string)new \Magento\Framework\Phrase('%1 already exist.', [implode(', ', $existent)]);
+                $error = new \Magento\Framework\Phrase('%1 already exist.', [implode(', ', $existent)]);
             }
             throw new AlreadyExistsException($error);
         }

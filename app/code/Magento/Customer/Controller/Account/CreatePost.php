@@ -293,7 +293,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
     protected function checkPasswordConfirmation($password, $confirmation)
     {
         if ($password != $confirmation) {
-            throw new InputException('Please make sure your passwords match.');
+            throw new InputException(__('Please make sure your passwords match.'));
         }
     }
 

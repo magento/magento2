@@ -71,7 +71,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException('Cannot save attribute');
+            throw new StateException(__('Cannot save attribute'));
         }
         return $attribute;
     }
@@ -141,8 +141,8 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
         $attribute = $this->eavConfig->getAttribute($entityTypeCode, $attributeCode);
         if (!$attribute || !$attribute->getAttributeId()) {
-            throw new NoSuchEntityException(sprintf(
-                'Attribute with attributeCode "%s" does not exist.',
+            throw new NoSuchEntityException(__(
+                'Attribute with attributeCode "%1" does not exist.',
                 $attributeCode
             ));
         }
@@ -157,7 +157,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->delete($attribute);
         } catch (\Exception $e) {
-            throw new StateException('Cannot delete attribute.');
+            throw new StateException(__('Cannot delete attribute.'));
         }
         return true;
     }
@@ -172,7 +172,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $this->eavResource->load($attribute, $attributeId);
 
         if (!$attribute->getAttributeId()) {
-            throw new NoSuchEntityException(sprintf('Attribute with id "%s" does not exist.', $attributeId));
+            throw new NoSuchEntityException(__('Attribute with id "%1" does not exist.', $attributeId));
         }
 
         $this->delete($attribute);

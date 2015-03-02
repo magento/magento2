@@ -189,7 +189,9 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->with($this->searchCriteriaMock)
             ->willReturn($searchResultMock);
 
-        $searchResultMock->expects($this->once())->method('getItems')->willThrowException(new NoSuchEntityException());
+        $searchResultMock->expects($this->once())
+            ->method('getItems')
+            ->willThrowException(new NoSuchEntityException());
         $this->assertEquals([], $this->block->getAddress());
     }
 }

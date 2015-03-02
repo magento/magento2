@@ -286,7 +286,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $route = $this->getCurrentRoute();
         if (!$this->isAllowed($route->getAclResources())) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
-            throw new AuthorizationException(AuthorizationException::NOT_AUTHORIZED, $params);
+            throw new AuthorizationException(
+                __(AuthorizationException::NOT_AUTHORIZED, $params)
+            );
         }
     }
 

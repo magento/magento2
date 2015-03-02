@@ -132,11 +132,11 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerException()
     {
-        $this->currentCustomer->expects(
-            $this->once()
-        )->method(
-                'getCustomer'
-            )->will($this->throwException(new NoSuchEntityException(
+        $this->currentCustomer->expects($this->once())
+            ->method('getCustomer')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'customerId', 'fieldValue' => 1]
                     )

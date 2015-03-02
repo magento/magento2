@@ -120,17 +120,16 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testShowPrefixWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-            'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                    ['fieldName' => 'field', 'fieldValue' => 'value']
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
+                    )
                 )
-            )
-        );
+            );
         $this->assertFalse($this->_block->showPrefix());
     }
 
@@ -140,17 +139,16 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testMethodWithNoSuchEntityException($method)
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-            'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                    ['fieldName' => 'field', 'fieldValue' => 'value']
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
+                    )
                 )
-            )
-        );
+            );
         $this->assertFalse($this->_block->{$method}());
     }
 
@@ -388,17 +386,16 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStoreLabelWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-            'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                    ['fieldName' => 'field', 'fieldValue' => 'value']
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
+                    )
                 )
-            )
-        );
+            );
         $this->assertSame('', (string)$this->_block->getStoreLabel('attributeCode'));
     }
 

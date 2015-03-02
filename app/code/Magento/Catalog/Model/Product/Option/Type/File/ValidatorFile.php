@@ -117,7 +117,7 @@ class ValidatorFile extends Validator
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
                 throw new \Magento\Framework\Exception\File\LargeSizeException(
-                    __("The file you uploaded is larger than %1 Megabytes allowed by server", $value)
+                    __('The file you uploaded is larger than %1 Megabytes allowed by server', $value)
                 );
             } else {
                 throw new ProductException(__('Option required.'));
@@ -189,7 +189,7 @@ class ValidatorFile extends Validator
             $errors = $this->getValidatorErrors($upload->getErrors(), $fileInfo, $option);
 
             if (count($errors) > 0) {
-                throw new \Magento\Framework\Exception\File\ValidatorException(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\File\ValidatorException(__(implode("\n", $errors)));
             }
         } else {
             throw new \Magento\Framework\Exception\File\ValidatorException(

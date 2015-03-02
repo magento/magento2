@@ -105,8 +105,10 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         ];
 
         $expectedException = new AuthorizationException(
-            AuthorizationException::NOT_AUTHORIZED,
-            ['resources' => 'Magento_TestModule3::resource1, Magento_TestModule3::resource2']
+            __(
+                AuthorizationException::NOT_AUTHORIZED,
+                ['resources' => 'Magento_TestModule3::resource1, Magento_TestModule3::resource2']
+            )
         );
 
         try {

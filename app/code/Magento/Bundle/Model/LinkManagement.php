@@ -108,7 +108,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     ) {
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException('Product with specified sku: "%1" is not a bundle product', [$product->getSku()]);
+            throw new InputException(
+                __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
+            );
         }
 
         $options = $this->optionCollection->create();
@@ -124,8 +126,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         if ($isNewOption) {
             throw new InputException(
-                'Product with specified sku: "%1" does not contain option: "%2"',
-                [$product->getSku(), $optionId]
+                __(
+                    'Product with specified sku: "%1" does not contain option: "%2"',
+                    [$product->getSku(), $optionId]
+                )
             );
         }
 
@@ -135,15 +139,17 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         /** @var \Magento\Catalog\Model\Product $linkProductModel */
         $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
         if ($linkProductModel->isComposite()) {
-            throw new InputException('Bundle product could not contain another composite product');
+            throw new InputException(__('Bundle product could not contain another composite product'));
         }
         if ($selections) {
             foreach ($selections as $selection) {
                 if ($selection['option_id'] == $optionId &&
                     $selection['product_id'] == $linkProductModel->getId()) {
                     throw new CouldNotSaveException(
-                        'Child with specified sku: "%1" already assigned to product: "%2"',
-                        [$linkedProduct->getSku(), $product->getSku()]
+                        __(
+                            'Child with specified sku: "%1" already assigned to product: "%2"',
+                            [$linkedProduct->getSku(), $product->getSku()]
+                        )
                     );
                 }
             }
@@ -164,7 +170,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         try {
             $selectionModel->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save child: "%1"', [$e->getMessage()], $e);
+            throw new CouldNotSaveException(__('Could not save child: "%1"', [$e->getMessage()]), $e);
         }
 
         return $selectionModel->getId();
@@ -200,7 +206,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         }
         if (empty($removeSelectionIds)) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                'Requested bundle option product doesn\'t exist'
+                __('Requested bundle option product doesn\'t exist')
             );
         }
         /* @var $resource \Magento\Bundle\Model\Resource\Bundle */

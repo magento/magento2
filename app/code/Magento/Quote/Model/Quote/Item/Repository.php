@@ -84,7 +84,9 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             if (isset($itemId)) {
                 $cartItem = $quote->getItemById($itemId);
                 if (!$cartItem) {
-                    throw new NoSuchEntityException("Cart $cartId doesn't contain item  $itemId");
+                    throw new NoSuchEntityException(
+                        __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
+                    );
                 }
                 $product = $this->productRepository->get($cartItem->getSku());
                 $cartItem->setData('qty', $qty);
@@ -97,7 +99,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             if ($e instanceof NoSuchEntityException) {
                 throw $e;
             }
-            throw new CouldNotSaveException('Could not save quote');
+            throw new CouldNotSaveException(__('Could not save quote'));
         }
         return $quote->getItemByProduct($product);
     }
@@ -117,13 +119,15 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $quote = $this->quoteRepository->getActive($cartId);
         $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {
-            throw new NoSuchEntityException("Cart $cartId doesn't contain item  $itemId");
+            throw new NoSuchEntityException(
+                __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
+            );
         }
         try {
             $quote->removeItem($itemId);
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not remove item from quote');
+            throw new CouldNotSaveException(__('Could not remove item from quote'));
         }
     }
 

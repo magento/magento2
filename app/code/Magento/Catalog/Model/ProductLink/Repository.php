@@ -70,7 +70,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         try {
             $product->save();
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException('Invalid data provided for linked products');
+            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
         return true;
     }
@@ -86,8 +86,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
         if (!isset($links[$linkedProduct->getId()])) {
             throw new NoSuchEntityException(
-                sprintf(
-                    'Product with SKU %s is not linked to product with SKU %s',
+                __(
+                    'Product with SKU %1 is not linked to product with SKU %2',
                     $entity->getLinkedProductSku(),
                     $entity->getProductSku()
                 )
@@ -100,7 +100,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         try {
             $product->save();
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException('Invalid data provided for linked products');
+            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
         return true;
     }
@@ -118,12 +118,14 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
             }
         }
         throw new NoSuchEntityException(
-            'Product %s doesn\'t have linked %s as %s',
-            [
-                $productSku,
-                $linkedProductSku,
-                $type
-            ]
+            __(
+                'Product %1 doesn\'t have linked %2 as %3',
+                [
+                    $productSku,
+                    $linkedProductSku,
+                    $type
+                ]
+            )
         );
     }
 }

@@ -85,7 +85,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
         try {
             $collection = $this->entityCollectionProvider->getCollection($product, $type);
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException('Unknown link type: ' . (string)$type);
+            throw new NoSuchEntityException(__('Unknown link type: %1', (string)$type));
         }
         foreach ($collection as $item) {
             $data = [
@@ -118,7 +118,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
 
         if (!isset($linkTypes[$type])) {
             throw new NoSuchEntityException(
-                sprintf("Provided link type \"%s\" does not exist", $type)
+                __('Provided link type "%1" does not exist', $type)
             );
         }
 
@@ -137,7 +137,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
             $linkedSku = $link->getLinkedProductSku();
             if (!isset($linkedProductIds[$linkedSku])) {
                 throw new NoSuchEntityException(
-                    sprintf("Product with SKU \"%s\" does not exist", $linkedSku)
+                    __('Product with SKU "%1" does not exist', $linkedSku)
                 );
             }
             $data['product_id'] = $linkedProductIds[$linkedSku];
@@ -147,7 +147,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
         try {
             $product->save();
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException('Invalid data provided for linked products');
+            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
         return true;
     }

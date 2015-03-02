@@ -193,7 +193,7 @@ class DeleteTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTe
             );
         // Use real translate model
         $this->_translateModelMock = null;
-        $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
+        $exceptionMessage = __('Integration with ID \'%1\' doesn\'t exist.', $intData[Info::DATA_ID]);
         $invalidIdException = new IntegrationException($exceptionMessage);
         $this->_integrationSvcMock->expects(
             $this->once()

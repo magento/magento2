@@ -58,8 +58,9 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->with('cartId')
             ->will($this->returnValue($quoteMock));
 
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException('error123')));
+        $this->validatorMock->expects($this->once())
+            ->method('validate')
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('error123')));
 
         $this->model->assign('cartId', $address);
     }

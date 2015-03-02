@@ -115,7 +115,9 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     {
         $productEntityId = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
         if ($attributeSet->getEntityTypeId() != $productEntityId) {
-            throw new \Magento\Framework\Exception\StateException('Provided Attribute set non product Attribute set.');
+            throw new \Magento\Framework\Exception\StateException(
+                __('Provided Attribute set non product Attribute set.')
+            );
         }
     }
 }

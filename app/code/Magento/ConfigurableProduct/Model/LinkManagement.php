@@ -84,7 +84,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
         $childrenIds = array_values($this->configurableType->getChildrenIds($product->getId())[0]);
         if (in_array($child->getId(), $childrenIds)) {
-            throw new StateException('Product has been already attached');
+            throw new StateException(__('Product has been already attached'));
         }
 
         $childrenIds[] = $child->getId();
@@ -116,7 +116,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $ids[] = $option->getId();
         }
         if (count($options) == count($ids)) {
-            throw new NoSuchEntityException('Requested option doesn\'t exist');
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
         $product->addData(['associated_product_ids' => $ids]);
         $product->save();

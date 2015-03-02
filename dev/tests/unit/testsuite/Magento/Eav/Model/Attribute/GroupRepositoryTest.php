@@ -138,10 +138,8 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
-            ->will(
-                $this->throwException(
-                    new \Magento\Framework\Exception\NoSuchEntityException('AttributeSet does not exist.')
-                )
+            ->willThrowException(
+                new \Magento\Framework\Exception\NoSuchEntityException(__('AttributeSet does not exist.'))
             );
         $this->model->save($groupMock);
     }

@@ -177,8 +177,10 @@ class Oauth implements OauthInterface
     {
         if (!in_array($params['oauth_signature_method'], self::getSupportedSignatureMethods())) {
             throw new OauthInputException(
-                'Signature method %1 is not supported',
-                [$params['oauth_signature_method']]
+                __(
+                    'Signature method %1 is not supported',
+                    [$params['oauth_signature_method']]
+                )
             );
         }
 
@@ -195,7 +197,7 @@ class Oauth implements OauthInterface
         );
 
         if ($calculatedSign != $params['oauth_signature']) {
-            throw new Exception('Invalid signature');
+            throw new Exception(__('Invalid signature'));
         }
     }
 
@@ -210,7 +212,7 @@ class Oauth implements OauthInterface
     {
         // validate version if specified
         if ('1.0' != $version) {
-            throw new OauthInputException('OAuth version %1 is not supported', [$version]);
+            throw new OauthInputException(__('OAuth version %1 is not supported', [$version]));
         }
     }
 
@@ -247,14 +249,16 @@ class Oauth implements OauthInterface
             $protocolParams['oauth_token']
         )
         ) {
-            throw new OauthInputException('Token is not the correct length');
+            throw new OauthInputException(__('Token is not the correct length'));
         }
 
         // Validate signature method.
         if (!in_array($protocolParams['oauth_signature_method'], self::getSupportedSignatureMethods())) {
             throw new OauthInputException(
-                'Signature method %1 is not supported',
-                [$protocolParams['oauth_signature_method']]
+                __(
+                    'Signature method %1 is not supported',
+                    [$protocolParams['oauth_signature_method']]
+                )
             );
         }
 

@@ -125,7 +125,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
              *  difficult to do without imposing more database calls
              */
             if ($e->getMessage() == (string)__('Customer Group already exists.')) {
-                throw new InvalidTransitionException('Customer Group already exists.');
+                throw new InvalidTransitionException(__('Customer Group already exists.'));
             }
             throw $e;
         }
@@ -265,7 +265,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $groupModel = $this->groupRegistry->retrieve($id);
 
         if ($id <= 0 || $groupModel->usesAsDefault()) {
-            throw new \Magento\Framework\Exception\StateException('Cannot delete group.');
+            throw new \Magento\Framework\Exception\StateException(__('Cannot delete group.'));
         }
 
         $groupModel->delete();

@@ -119,12 +119,11 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testIsEnabledWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
-                $this->throwException(new NoSuchEntityException(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
@@ -147,12 +146,11 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testIsRequiredWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
-                $this->throwException(new NoSuchEntityException(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
@@ -347,12 +345,11 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMinDateRangeWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
-                $this->throwException(new NoSuchEntityException(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
@@ -417,12 +414,11 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMaxDateRangeWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
-                $this->throwException(new NoSuchEntityException(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )

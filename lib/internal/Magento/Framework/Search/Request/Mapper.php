@@ -106,7 +106,9 @@ class Mapper
         if (!isset($this->queries[$queryName])) {
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
-            throw new StateException('Cycle found. Query %1 already used in request hierarchy', [$queryName]);
+            throw new StateException(
+                __('Cycle found. Query %1 already used in request hierarchy', [$queryName])
+            );
         }
         $this->mappedQueries[] = $queryName;
         $query = $this->queries[$queryName];
@@ -173,7 +175,9 @@ class Mapper
         if (!isset($this->filters[$filterName])) {
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
-            throw new StateException('Cycle found. Filter %1 already used in request hierarchy', [$filterName]);
+            throw new StateException(
+                __('Cycle found. Filter %1 already used in request hierarchy', [$filterName])
+            );
         }
         $this->mappedFilters[] = $filterName;
         $filter = $this->filters[$filterName];
@@ -286,7 +290,7 @@ class Mapper
         $allElements = array_keys($elements);
         $notUsedElements = implode(', ', array_diff($allElements, $mappedElements));
         if (!empty($notUsedElements)) {
-            throw new StateException($errorMessage, [$notUsedElements]);
+            throw new StateException(__($errorMessage, [$notUsedElements]));
         }
     }
 
@@ -348,7 +352,7 @@ class Mapper
                     );
                     break;
                 default:
-                    throw new StateException('Invalid bucket type');
+                    throw new StateException(__('Invalid bucket type'));
             }
             $buckets[] = $bucket;
         }

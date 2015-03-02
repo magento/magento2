@@ -125,8 +125,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 
         if (!$validator->isValid($address)) {
             throw new \Magento\Framework\Validator\ValidatorException(
-                InputException::DEFAULT_MESSAGE,
-                [],
+                null,
                 null,
                 $validator->getMessages()
             );

@@ -190,7 +190,9 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
     public function beforeDelete()
     {
         if ($this->_isInRule()) {
-            throw new CouldNotDeleteException('The tax rate cannot be removed. It exists in a tax rule.');
+            throw new CouldNotDeleteException(
+                __('The tax rate cannot be removed. It exists in a tax rule.')
+            );
         }
         return parent::beforeDelete();
     }

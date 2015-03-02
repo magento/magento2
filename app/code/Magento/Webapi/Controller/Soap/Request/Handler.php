@@ -108,8 +108,10 @@ class Handler
 
         if (!$isAllowed) {
             throw new AuthorizationException(
-                AuthorizationException::NOT_AUTHORIZED,
-                ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
+                __(
+                    AuthorizationException::NOT_AUTHORIZED,
+                    ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
+                )
             );
         }
         $service = $this->_objectManager->get($serviceClass);

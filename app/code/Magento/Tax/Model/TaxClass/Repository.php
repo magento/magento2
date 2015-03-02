@@ -96,7 +96,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
             /* should not be allowed to switch the tax class type */
             if ($originalTaxClassModel->getClassType() !== $taxClass->getClassType()) {
-                throw new InputException('Updating classType is not allowed.');
+                throw new InputException(__('Updating classType is not allowed.'));
             }
         }
         $this->validateTaxClassData($taxClass);
@@ -105,8 +105,10 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         } catch (ModelException $e) {
             if (strpos($e->getMessage(), (string)__('Class name and class type')) !== false) {
                 throw new InputException(
-                    'A class with the same name already exists for ClassType %classType.',
-                    ['classType' => $taxClass->getClassType()]
+                    __(
+                        'A class with the same name already exists for ClassType %classType.',
+                        ['classType' => $taxClass->getClassType()]
+                    )
                 );
             } else {
                 throw $e;
