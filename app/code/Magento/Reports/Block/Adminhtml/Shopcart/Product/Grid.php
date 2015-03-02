@@ -19,28 +19,26 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     protected $_quotesFactory;
 
     /**
-     * Flag to get data in one query when true
-     *
-     * @var boolean
+     * @var \Magento\Quote\Model\QueryResolver
      */
-    protected $singleQuery;
+    protected $queryResolver;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface $quotesFactory
+     * @param \Magento\Quote\Model\QueryResolver $queryResolver
      * @param array $data
-     * @param bool $singleQuery
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface $quotesFactory,
-        array $data = [],
-        $singleQuery = true
+        \Magento\Quote\Model\QueryResolver $queryResolver,
+        array $data = []
     ) {
         $this->_quotesFactory = $quotesFactory;
-        $this->singleQuery = $singleQuery;
+        $this->queryResolver = $queryResolver;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -59,7 +57,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     protected function _prepareCollection()
     {
         $collection = $this->_quotesFactory->create();
-        if ($this->singleQuery) {
+        if ($this->queryResolver->isSingleQuery()) {
             $collection->prepareForProductsInCarts();
             $collection->setSelectCountSqlType(
                 \Magento\Reports\Model\Resource\Quote\Collection::SELECT_COUNT_SQL_TYPE_CART
