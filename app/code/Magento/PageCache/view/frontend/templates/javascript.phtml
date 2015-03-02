@@ -5,14 +5,10 @@
  */
 ?>
 <?php /** @var \Magento\PageCache\Block\Javascript $block */ ?>
-<script>
-require([
-    'jquery',
-    'pageCache',
-    'domReady!'
-], function($){
-    'use strict';
-
-    $('body').pageCache(<?php echo $block->getScriptOptions(); ?>);
-});
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "pageCache": <?php echo $block->getScriptOptions(); ?>
+        }
+    }
 </script>
