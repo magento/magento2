@@ -1271,6 +1271,9 @@ table.table tbody tr:last-child td {
 .message.no-icon:before {
   display: none;
 }
+.magento-installer .message {
+  margin-bottom: 3rem;
+}
 .message-notice:before {
   color: #007bdb;
   content: '\e637';
@@ -1292,6 +1295,15 @@ table.table tbody tr:last-child td {
 .message-success:before {
   color: #79a22e;
   content: '\e62d';
+}
+.message-spinner:before {
+  display: none;
+}
+.message-spinner .spinner {
+  position: absolute;
+  font-size: 2.5rem;
+  left: 1.5rem;
+  top: 1.5rem;
 }
 .row {
   margin-left: 0;
@@ -2201,7 +2213,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .message-system-short .message-system-short-label {
   display: inline-block;
-  padding: 1.8rem .3rem 1.8rem 1rem;
+  padding: 1.8rem 0.3rem 1.8rem 1rem;
 }
 .message-system-short .message {
   display: inline-block;

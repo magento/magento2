@@ -13,6 +13,8 @@
 @alert__color: @color-gray20;
 @alert__background-color: @color-lazy-sun;
 @alert__error__background-color: @color-pink;
+@alert__spinner__font-size: 2.5rem;
+
 
 //
 //  Alert Icons
@@ -76,6 +78,9 @@
             display: none;
         }
     }
+    .magento-installer & {
+        margin-bottom: 3rem;
+    }
 }
 
 .message-notice {
@@ -107,5 +112,17 @@
     &:before {
         color: @alert-icon__success__color;
         content: @alert-icon__success__content;
+    }
+}
+
+.message-spinner {
+    &:before {
+        display: none;
+    }
+    .spinner {
+        position: absolute;
+        font-size: @alert__spinner__font-size;
+        left: 1.5rem;
+        top: 1.5rem;
     }
 }

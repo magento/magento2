@@ -8,10 +8,7 @@
 //  _____________________________________________
 
 @message-system__background-color: @color-lazy-sun;
-
-@message-system__error__background-color: @alert__background-color;
-@message-system__error__color: @alert-icon__warning__color;
-@message-system__error__content: @alert-icon__warning__content;
+@message-system-short__message__padding-vertical: 1.8rem;
 
 //
 //  Message system
@@ -39,11 +36,11 @@
     text-align: right;
     .message-system-short-label {
         display: inline-block;
-        padding: 1.8rem .3rem 1.8rem 1rem;
+        padding: @message-system-short__message__padding-vertical .3rem @message-system-short__message__padding-vertical 1rem;
     }
     .message {
         display: inline-block;
-        padding: 1.8rem 2rem 1.8rem 3.3rem;
+        padding: @message-system-short__message__padding-vertical 2rem @message-system-short__message__padding-vertical 3.3rem;
         &:before {
             left: .3rem;
         }
