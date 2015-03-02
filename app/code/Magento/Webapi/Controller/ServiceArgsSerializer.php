@@ -108,7 +108,7 @@ class ServiceArgsSerializer
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]);
+                $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;

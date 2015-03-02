@@ -162,18 +162,20 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $exception = new InputException();
 
         if (!\Zend_Validate::is(trim($taxClass->getClassName()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]));
         }
 
         $classType = $taxClass->getClassType();
         if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]));
         } elseif ($classType !== TaxClassManagementInterface::TYPE_CUSTOMER
             && $classType !== TaxClassManagementInterface::TYPE_PRODUCT
         ) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                )
             );
         }
 

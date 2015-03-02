@@ -278,26 +278,26 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $inputException = new InputException();
         if (!$option->getAttributeId()) {
-            $inputException->addError('Option attribute ID is not specified.');
+            $inputException->addError(__('Option attribute ID is not specified.'));
         }
         if (!$option->getType()) {
-            $inputException->addError('Option type is not specified.');
+            $inputException->addError(__('Option type is not specified.'));
         }
         if (!$option->getLabel()) {
-            $inputException->addError('Option label is not specified.');
+            $inputException->addError(__('Option label is not specified.'));
         }
         if (!$option->getValues()) {
-            $inputException->addError('Option values are not specified.');
+            $inputException->addError(__('Option values are not specified.'));
         } else {
             foreach ($option->getValues() as $optionValue) {
                 if (!$optionValue->getValueIndex()) {
-                    $inputException->addError('Value index is not specified for an option.');
+                    $inputException->addError(__('Value index is not specified for an option.'));
                 }
                 if (null === $optionValue->getPricingValue()) {
-                    $inputException->addError('Price is not specified for an option.');
+                    $inputException->addError(__('Price is not specified for an option.'));
                 }
                 if (null === $optionValue->getIsPercent()) {
-                    $inputException->addError('Percent/absolute is not specified for an option.');
+                    $inputException->addError(__('Percent/absolute is not specified for an option.'));
                 }
             }
         }
