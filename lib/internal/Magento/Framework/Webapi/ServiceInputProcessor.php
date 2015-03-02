@@ -36,36 +36,36 @@ class ServiceInputProcessor
     /** @var DataBuilderFactory */
     protected $builderFactory;
 
-    /** @var ServiceConfigReader */
-    protected $serviceConfigReader;
-
     /** @var AttributeDataBuilder */
     protected $attributeValueBuilder;
 
     /** @var WebapiCache */
     protected $cache;
 
+    /** @var  CustomAttributeTypeLocatorInterface */
+    protected $customAttributeTypeLocator;
+
     /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
      * @param DataBuilderFactory $builderFactory
-     * @param ServiceConfigReader $serviceConfigReader
      * @param AttributeDataBuilder $attributeValueBuilder
      * @param WebapiCache $cache
+     * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         DataBuilderFactory $builderFactory,
-        ServiceConfigReader $serviceConfigReader,
         AttributeDataBuilder $attributeValueBuilder,
-        WebapiCache $cache
+        WebapiCache $cache,
+        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->builderFactory = $builderFactory;
-        $this->serviceConfigReader = $serviceConfigReader;
         $this->attributeValueBuilder = $attributeValueBuilder;
         $this->cache = $cache;
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
     }
 
     /**
@@ -165,12 +165,8 @@ class ServiceInputProcessor
     protected function convertCustomAttributeValue($customAttributesValueArray, $returnType, $dataObjectClassName)
     {
         $result = [];
-        $allAttributes = $this->serviceConfigReader->read();
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
-        if (!isset($allAttributes[$dataObjectClassName])) {
-            return $this->_convertValue($customAttributesValueArray, $returnType);
-        }
-        $dataObjectAttributes = $allAttributes[$dataObjectClassName];
+
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
@@ -183,11 +179,9 @@ class ServiceInputProcessor
                 $customAttributeCode = null;
             }
 
-            //Check if type is defined, else default to mixed
-            $type = isset($dataObjectAttributes[$customAttributeCode])
-                ? $dataObjectAttributes[$customAttributeCode]
-                : TypeProcessor::ANY_TYPE;
-
+            //Check if type is defined, else default to string
+            $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
+            $type = $type ? $type : TypeProcessor::ANY_TYPE;
             $customAttributeValue = $customAttribute[AttributeValue::VALUE];
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
