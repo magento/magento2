@@ -721,6 +721,8 @@ return [
     ['isVerbose', 'Magento\Framework\Shell'],
     ['isWindowsOs', 'Magento\TestFramework\Helper\Memory'],
     ['joinTaxClass', 'Magento\Tax\Helper\Data'],
+    ['jsonDecode', 'Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data::jsonDecode'],
+    ['jsonEncode', 'Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data::jsonEncode'],
     ['load', 'Magento\Core\Model\Layout\Update', 'Magento\Framework\View\Model\Layout\Merge'],
     ['loadBaseContents', 'Magento\Email\Model\Template'],
     ['loadBase', 'Magento\Core\Model\Config'],
