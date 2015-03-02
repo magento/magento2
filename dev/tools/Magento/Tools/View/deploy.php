@@ -53,7 +53,7 @@ try {
     $deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
     $isAppInstalled = $deploymentConfig->isAvailable();
     if (!$isAppInstalled) {
-        throw new \Exception('Please install the Magento application before running this process.');
+        throw new \Exception('You need to install the Magento application before running this utility.');
     }
 
     /** @var \Magento\Tools\View\Deployer $deployer */
