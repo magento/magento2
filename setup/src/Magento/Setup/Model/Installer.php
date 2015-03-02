@@ -814,6 +814,7 @@ class Installer
      */
     public function updateModulesSequence()
     {
+        $this->assertDeploymentConfigExists();
         $allModules = array_keys($this->moduleLoader->load());
         $deploymentConfig = $this->deploymentConfigReader->load();
         $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
