@@ -111,7 +111,7 @@ class GroupedCollection extends Collection
     /**
      * Get asset group by content type
      *
-     * @param $contentType
+     * @param string $contentType
      * @return bool|PropertyGroup
      */
     public function getGroupByContentType($contentType)
@@ -119,7 +119,7 @@ class GroupedCollection extends Collection
         foreach ($this->groups as $group) {
             if ($group->getProperty(self::PROPERTY_CONTENT_TYPE) == $contentType
             ) {
-               return $group;
+                return $group;
             }
         }
 
