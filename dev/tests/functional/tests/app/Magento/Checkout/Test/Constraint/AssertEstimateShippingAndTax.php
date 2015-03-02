@@ -70,8 +70,7 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
         AssertGrandTotalInShoppingCart $assertGrandTotalInShoppingCart,
         AssertTaxInShoppingCart $assertTaxInShoppingCart,
         AssertShippingInShoppingCart $assertShippingInShoppingCart
-    )
-    {
+    ) {
         parent::__construct($objectManager);
         $this->assertSubtotalInShoppingCart = $assertSubtotalInShoppingCart;
         $this->assertGrandTotalInShoppingCart = $assertGrandTotalInShoppingCart;
