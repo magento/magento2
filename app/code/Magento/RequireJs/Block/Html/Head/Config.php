@@ -26,15 +26,11 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected $pageConfig;
 
-    /** @var \Magento\Framework\View\Asset\ConfigInterface */
-    protected $bundleConfig;
-
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\RequireJs\Config $config
      * @param \Magento\RequireJs\Model\FileManager $fileManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
      * @param array $data
      */
     public function __construct(
@@ -42,14 +38,12 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         \Magento\Framework\RequireJs\Config $config,
         \Magento\RequireJs\Model\FileManager $fileManager,
         \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
         $this->fileManager = $fileManager;
         $this->pageConfig = $pageConfig;
-        $this->bundleConfig = $bundleConfig;
     }
 
     /**
@@ -59,37 +53,8 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $groups = $this->pageConfig->getAssetCollection()->getGroups();
-        $jsAssets = [];
-        foreach ($groups as $group) {
-            if ($group->getProperty(\Magento\Framework\View\Asset\GroupedCollection::PROPERTY_CONTENT_TYPE) == 'js') {
-                $jsAssets = $group->getAll();
-                $group->removeAll();
-            }
-        }
-
         $asset = $this->fileManager->createRequireJsAsset();
         $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
-
-        if ($this->bundleConfig->isBundlingJsFiles()) {
-            $staticAsset = $this->fileManager->createStaticJsAsset();
-            if ($staticAsset !== false) {
-                $this->pageConfig->getAssetCollection()->add($staticAsset->getFilePath(), $staticAsset);
-            }
-
-            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
-            foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
-                $this->pageConfig->getAssetCollection()->add($bundleAsset->getFilePath(), $bundleAsset);
-            }
-        }
-
-        $asset = $this->fileManager->createRequireJsConfigAsset();
-        $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
-
-        foreach ($jsAssets as $asset) {
-            $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
-        }
-
         return parent::_prepareLayout();
     }
 
