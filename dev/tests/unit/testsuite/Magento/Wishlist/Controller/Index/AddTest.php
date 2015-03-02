@@ -759,11 +759,6 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('http://test-url.com'));
         $this->customerSession
             ->expects($this->once())
-            ->method('setAddActionReferer')
-            ->with('http://test-url.com')
-            ->will($this->returnValue(null));
-        $this->customerSession
-            ->expects($this->once())
             ->method('setBeforeWishlistUrl')
             ->with(null)
             ->will($this->returnValue(null));
