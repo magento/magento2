@@ -107,4 +107,22 @@ class GroupedCollection extends Collection
     {
         return $this->groups;
     }
+
+    /**
+     * Get asset group by content type
+     *
+     * @param $contentType
+     * @return bool|PropertyGroup
+     */
+    public function getGroupByContentType($contentType)
+    {
+        foreach ($this->groups as $group) {
+            if ($group->getProperty(self::PROPERTY_CONTENT_TYPE) == $contentType
+            ) {
+               return $group;
+            }
+        }
+
+        return false;
+    }
 }
