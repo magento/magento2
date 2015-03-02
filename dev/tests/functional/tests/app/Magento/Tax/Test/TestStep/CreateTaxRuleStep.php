@@ -51,7 +51,7 @@ class CreateTaxRuleStep implements TestStepInterface
         $result['taxRule'] = null;
         if ($this->taxRule !== null) {
             $taxRuleDataSets = explode(',', $this->taxRule);
-            foreach ($taxRuleDataSets as $key => $taxRuleDataSet) {
+            foreach ($taxRuleDataSets as $taxRuleDataSet) {
                 $taxRule = $this->fixtureFactory->createByCode(
                     'taxRule',
                     ['dataSet' => $taxRuleDataSet]
