@@ -28,34 +28,18 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected $_cache;
-
-    /**
-     * @var \Magento\Framework\App\Cache\StateInterface
-     */
-    protected $_cacheState;
-
-    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\Cache\StateInterface $cacheState
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($resource);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
-        $this->_cache = $cache;
-        $this->_cacheState = $cacheState;
     }
 
     /**
@@ -164,15 +148,10 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $setInfo = [];
         $setInfoData = [];
 
-        if (
-            $this->_cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)
-            && ($cache = $this->_cache->load($cacheKey))
-        ) {
+        if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
             $setInfoData = unserialize($cache);
             foreach ($attributeIds as $attributeId) {
-                $setInfo[$attributeId] = isset(
-                    $setInfoData[$attributeId]
-                ) ? $setInfoData[$attributeId] : [];
+                $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
             }
         } else {
             $select = $adapter->select()->from(
@@ -199,8 +178,8 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $setInfoData[$row['attribute_id']][$row['attribute_set_id']] = $data;
             }
 
-            if ($this->_cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)) {
-                $this->_cache->save(
+            if ($this->eavConfig->isCacheEnabled()) {
+                $this->eavConfig->getCache()->save(
                     serialize($setInfoData),
                     $cacheKey,
                     [
@@ -211,9 +190,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
 
             foreach ($attributeIds as $attributeId) {
-                $setInfo[$attributeId] = isset(
-                    $setInfoData[$attributeId]
-                ) ? $setInfoData[$attributeId] : [];
+                $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
             }
         }
 
