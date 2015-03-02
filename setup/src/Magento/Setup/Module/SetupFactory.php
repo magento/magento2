@@ -59,10 +59,19 @@ class SetupFactory
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList'),
             $this->serviceLocator->get('Magento\Setup\Module\Setup\FileResolver'),
             $moduleName,
-            $this->getResource()
+            new \Magento\Framework\Model\Resource\Db\Context(
+                $this->getResource(),
+                $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager'),
+                $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
+            )
         );
     }
 
+    /**
+     * Gets the resource.
+     *
+     * @return Resource
+     */
     private function getResource()
     {
         $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(

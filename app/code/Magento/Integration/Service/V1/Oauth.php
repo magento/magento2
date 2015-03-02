@@ -12,6 +12,7 @@ use Magento\Integration\Model\Oauth\ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
+use Magento\Framework\Exception\IntegrationException;
 
 /**
  * Integration oAuth service.
@@ -103,7 +104,7 @@ class Oauth implements OauthInterface
             $consumer = $this->_consumerFactory->create($consumerData);
             $consumer->save();
             return $consumer;
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
@@ -160,7 +161,7 @@ class Oauth implements OauthInterface
     {
         try {
             return $this->_consumerFactory->create()->load($consumerId);
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
@@ -176,7 +177,7 @@ class Oauth implements OauthInterface
     {
         try {
             return $this->_consumerFactory->create()->load($key, 'key');
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
@@ -215,7 +216,7 @@ class Oauth implements OauthInterface
             $this->_httpClient->setConfig(['maxredirects' => $maxredirects, 'timeout' => $timeout]);
             $this->_httpClient->request(\Magento\Framework\HTTP\ZendClient::POST);
             return $verifier->getVerifier();
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw $exception;
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;
@@ -258,13 +259,13 @@ class Oauth implements OauthInterface
      *
      * @param int $consumerId
      * @return ConsumerModel
-     * @throws \Magento\Integration\Exception
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     protected function _loadConsumerById($consumerId)
     {
         $consumer = $this->_consumerFactory->create()->load($consumerId);
         if (!$consumer->getId()) {
-            throw new \Magento\Integration\Exception(__("Consumer with ID '%1' does not exist.", $consumerId));
+            throw new IntegrationException(__('Consumer with ID \'%1\' does not exist.', $consumerId));
         }
         return $consumer;
     }

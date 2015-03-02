@@ -48,7 +48,7 @@ class Attribute extends AbstractFilter
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -74,7 +74,7 @@ class Attribute extends AbstractFilter
      * Get data array for building attribute filter items
      *
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getItemsData()
     {

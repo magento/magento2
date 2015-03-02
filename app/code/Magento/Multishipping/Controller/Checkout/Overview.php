@@ -38,7 +38,7 @@ class Overview extends \Magento\Multishipping\Controller\Checkout
             $this->_view->loadLayout();
             $this->_view->getLayout()->initMessages();
             $this->_view->renderLayout();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {

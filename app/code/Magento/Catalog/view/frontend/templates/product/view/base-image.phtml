@@ -138,40 +138,39 @@ $thumbHeight =  $block->getVar("product_page_more_views:height") ?: $thumbWidth;
     <script data-template="notice" type="text/x-magento-template">
         <p class="notice" data-role="notice"><%= data.text %></p>
     </script>
-    <script>
-        require(["jquery", "mage/mage"], function($){
-
-            $('[data-role=media-gallery]')
-                .mage('gallery', {
-                    sizes: {
-                        small: {
-                            width: <?php echo $thumbWidth ?>,
-                            height: <?php echo $thumbHeight ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=media-gallery]": {
+                "gallery": {
+                    "sizes": {
+                        "small": {
+                            "width": <?php echo $thumbWidth ?>,
+                            "height": <?php echo $thumbHeight ?>
                         },
-                        medium: {
-                            width: <?php echo $_resizedWidth ?>,
-                            height: <?php echo $_resizedHeight ?>
+                        "medium": {
+                            "width": <?php echo $_resizedWidth ?>,
+                            "height": <?php echo $_resizedHeight ?>
                         }
                     },
-                    controls: {
-                        notice: {
-                            text: '<?php echo $block->escapeJsQuote(__("Click on image to view it full sized")) ?>'
+                    "controls": {
+                        "notice": {
+                            "text": "<?php echo $block->escapeJsQuote(__('Click on image to view it full sized')) ?>"
                         }
                     }
-                })
-                .mage('zoom', {
-                    controls: {
-                        display: {
-                            left: 20,
-                            top: 65
+                },
+                "zoom": {
+                    "controls": {
+                        "display": {
+                            "left": 20,
+                            "top": 65
                         },
-                        notice: {
-                            text: '<?php echo $block->escapeJsQuote(__("Click on image to zoom")) ?>'
+                        "notice": {
+                            "text": "<?php echo $block->escapeJsQuote(__('Click on image to zoom')) ?>"
                         }
                     }
-                })
-                .mage('galleryFullScreen', {});
-
-        });
-</script>
+                },
+                "galleryFullScreen": {}
+            }
+        }
+    </script>
 <?php endif; ?>

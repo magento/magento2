@@ -98,10 +98,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($this->getInstanceTypeMap($this->getVirtualTypes()));
 
         $this->diContainerConfig->expects($this->any())
-            ->method('isShared')
-            ->willReturnMap($this->getExpectedNonShared());
-
-        $this->diContainerConfig->expects($this->any())
             ->method('getPreference')
             ->willReturnMap($this->getPreferencesMap());
 
@@ -138,13 +134,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'arguments' => [
-                'ConcreteType1' => serialize(['resolved_argument1', 'resolved_argument2']),
-                'ConcreteType2' => serialize(['resolved_argument1', 'resolved_argument2']),
-                'virtualType1' => serialize(['resolved_argument1', 'resolved_argument2'])
-            ],
-            'nonShared' => [
-                'ConcreteType2' => true,
-                'ThirdPartyInterface' => true
+                'ConcreteType1' => ['resolved_argument1', 'resolved_argument2'],
+                'ConcreteType2' => ['resolved_argument1', 'resolved_argument2'],
+                'virtualType1' => ['resolved_argument1', 'resolved_argument2']
             ],
             'preferences' => $this->getPreferences(),
             'instanceTypes' => $this->getVirtualTypes(),
@@ -170,19 +162,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     private function getVirtualTypes()
     {
         return ['virtualType1' => 'ConcreteType1'];
-    }
-
-    /**
-     * @return array
-     */
-    private function getExpectedNonShared()
-    {
-        return [
-            ['ConcreteType1', true],
-            ['ConcreteType2', false],
-            ['Interface1', true],
-            ['ThirdPartyInterface', false]
-        ];
     }
 
     /**

@@ -62,7 +62,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param array $data
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -274,13 +274,13 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Get attribute model associated with filter
      *
      * @return \Magento\Catalog\Model\Resource\Eav\Attribute
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeModel()
     {
         $attribute = $this->getData('attribute_model');
         if (is_null($attribute)) {
-            throw new \Magento\Framework\Model\Exception(__('The attribute model is not defined.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The attribute model is not defined.'));
         }
         return $attribute;
     }
@@ -289,7 +289,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Get filter text label
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getName()
     {
@@ -360,7 +360,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Get option text from frontend model by option id
      *
      * @param   int $optionId
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return  string|bool
      */
     protected function getOptionText($optionId)

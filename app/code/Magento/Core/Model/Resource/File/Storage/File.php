@@ -85,7 +85,7 @@ class File
      * Save directory to storage
      *
      * @param array $dir
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function saveDir($dir)
@@ -100,7 +100,7 @@ class File
             $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA)->create($path);
         } catch (\Exception $e) {
             $this->_logger->info($e->getMessage());
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Unable to create directory: %1', DirectoryList::MEDIA . '/' . $path)
             );
         }
@@ -114,7 +114,7 @@ class File
      * @param string $filePath
      * @param string $content
      * @param bool $overwrite
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
     public function saveFile($filePath, $content, $overwrite = false)
@@ -127,7 +127,7 @@ class File
             }
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             $this->_logger->info($e->getMessage());
-            throw new \Magento\Framework\Model\Exception(__('Unable to save file: %1', $filePath));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save file: %1', $filePath));
         }
 
         return false;

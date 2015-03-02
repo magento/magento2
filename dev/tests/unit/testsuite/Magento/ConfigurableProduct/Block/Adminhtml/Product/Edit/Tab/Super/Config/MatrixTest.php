@@ -56,7 +56,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
             'stockRegistry' => $this->stockRegistryMock,
         ];
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_object = $helper->getObject('Magento\Backend\Block\System\Config\Form', $data);
+        $this->_object = $helper->getObject('Magento\Config\Block\System\Config\Form', $data);
         $this->_block = $helper->getObject(
             'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
             $data
