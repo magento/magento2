@@ -56,7 +56,7 @@ class Decimal extends AbstractFilter
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {
@@ -88,7 +88,7 @@ class Decimal extends AbstractFilter
      * Get data array for building attribute filter items
      *
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getItemsData()

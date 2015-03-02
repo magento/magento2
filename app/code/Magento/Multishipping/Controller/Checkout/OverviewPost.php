@@ -8,6 +8,7 @@ namespace Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\PaymentException;
 
 /**
  * Class OverviewPost
@@ -87,7 +88,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_getCheckout()->getCheckoutSession()->clearQuote();
             $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
             $this->_redirect('*/*/success');
-        } catch (\Magento\Payment\Model\Info\Exception $e) {
+        } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
                 $this->messageManager->addError($message);
@@ -104,7 +105,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_getCheckout()->getCheckoutSession()->clearQuote();
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/cart');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(

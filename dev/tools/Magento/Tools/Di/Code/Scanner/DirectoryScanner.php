@@ -12,9 +12,10 @@ class DirectoryScanner
      *
      * @param string $dir
      * @param array $patterns
+     * @param string[] $excludePatterns
      * @return array
      */
-    public function scan($dir, array $patterns = [])
+    public function scan($dir, array $patterns = [], array $excludePatterns = [])
     {
         $recursiveIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dir, \FilesystemIterator::FOLLOW_SYMLINKS)
@@ -26,8 +27,15 @@ class DirectoryScanner
                 continue;
             }
 
+            $filePath = str_replace('\\', '/', $file->getRealPath());
+            if (!empty($excludePatterns)) {
+                foreach ($excludePatterns as $excludePattern) {
+                    if (preg_match($excludePattern, $filePath)) {
+                        continue 2;
+                    }
+                }
+            }
             foreach ($patterns as $type => $pattern) {
-                $filePath = str_replace('\\', '/', $file->getRealPath());
                 if (preg_match($pattern, $filePath)) {
                     $output[$type][] = $filePath;
                     break;
