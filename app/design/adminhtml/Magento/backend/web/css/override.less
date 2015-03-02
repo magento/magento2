@@ -1234,6 +1234,9 @@ table.table tbody td:first-child input[type='checkbox'] {
 table.table tbody tr:last-child td {
   border-bottom-color: transparent;
 }
+.messages {
+  margin: 2rem 0;
+}
 .message {
   background: #fffbbb;
   border: none;
@@ -1250,10 +1253,8 @@ table.table tbody tr:last-child td {
   border: 0;
   color: #007bdb;
   content: '\e637';
-  font-family: 'Admin Icons';
-  font-size: 1.9rem;
+  font: 400 1.9rem 'Admin Icons';
   font-style: normal;
-  font-weight: 400;
   height: auto;
   left: 1.9rem;
   line-height: inherit;
@@ -1264,38 +1265,33 @@ table.table tbody tr:last-child td {
   top: 50%;
   width: auto;
 }
-.message-notice:before,
-.message.notice:before {
+.message.no-icon {
+  padding-left: 1.9rem;
+}
+.message.no-icon:before {
+  display: none;
+}
+.message-notice:before {
   color: #007bdb;
   content: '\e637';
 }
-.message-warning:before,
-.message.warning:before {
+.message-warning:before {
   color: #eb5202;
   content: '\e623';
 }
-.message-error,
-.message.error {
+.message-error {
   background: #ffcccc;
 }
-.message-error:before,
-.message.error:before {
+.message-error:before {
   color: #e22626;
   content: '\e632';
   font-size: 1.5rem;
   left: 2.2rem;
   margin-top: -0.9rem;
 }
-.message-success:before,
-.message.success:before {
+.message-success:before {
   color: #79a22e;
   content: '\e62d';
-}
-.message.no-icon {
-  padding-left: 1.9rem;
-}
-.message.no-icon:before {
-  display: none;
 }
 .row {
   margin-left: 0;
@@ -1684,9 +1680,6 @@ body {
 .page-content {
   padding-left: 3rem;
   padding-right: 3rem;
-}
-.messages {
-  margin: 2rem 0;
 }
 .admin__control-text.hasDatepicker {
   width: 15rem;
@@ -2216,15 +2209,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .message-system-short .message:before {
   left: .3rem;
-}
-.message-system-short .message.error {
-  background: #fffbbb;
-}
-.message-system-short .message.error:before {
-  color: #eb5202;
-  content: '\e623';
-  font-size: 1.9rem;
-  margin-top: -1.3rem;
 }
 .menu-wrapper {
   height: 100%;
