@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -19,10 +18,11 @@ class QueryResolver
     public function __construct(
         $singleQuery = false
     ) {
-        $this->singleQuery;
+        $this->singleQuery = $singleQuery;
     }
 
     /**
+     * Get flag value
      *
      * @return bool
      */
