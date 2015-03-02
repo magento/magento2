@@ -19,18 +19,20 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
     protected $scope;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param string|null $resourcePrefix
      * @param null|string $scope
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        $resourcePrefix = null,
         $scope = null
     ) {
         $this->scopeResolver = $scopeResolver;
         $this->scope = $scope;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
