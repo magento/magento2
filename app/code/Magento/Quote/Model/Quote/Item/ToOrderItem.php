@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\Object\Copy;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Sales\Api\Data\OrderItemInterfaceFactory as OrderItemFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
@@ -47,28 +48,28 @@ class ToOrderItem
     }
 
     /**
-     * @param Item $quoteItem
+     * @param Item|AddressItem $item
      * @param array $data
      * @return OrderItemInterface
      */
-    public function convert(Item $quoteItem, $data = [])
+    public function convert($item, $data = [])
     {
-        $options = $quoteItem->getProductOrderOptions();
+        $options = $item->getProductOrderOptions();
         if (!$options) {
-            $options = $quoteItem->getProduct()->getTypeInstance()->getOrderOptions($quoteItem->getProduct());
+            $options = $item->getProduct()->getTypeInstance()->getOrderOptions($item->getProduct());
         }
         $orderItemData = $this->objectCopyService->getDataFromFieldset(
             'quote_convert_item',
             'to_order_item',
-            $quoteItem
+            $item
         );
-        if (!$quoteItem->getNoDiscount()) {
+        if (!$item->getNoDiscount()) {
             $data = array_merge(
                 $data,
                 $this->objectCopyService->getDataFromFieldset(
                     'quote_convert_item',
                     'to_order_item_discount',
-                    $quoteItem
+                    $item
                 )
             );
         }
@@ -80,9 +81,9 @@ class ToOrderItem
             '\Magento\Sales\Api\Data\OrderItemInterface'
         );
         $orderItem->setProductOptions($options);
-        if ($quoteItem->getParentItem()) {
+        if ($item->getParentItem()) {
             $orderItem->setQtyOrdered(
-                $orderItemData[OrderItemInterface::QTY_ORDERED] * $quoteItem->getParentItem()->getQty()
+                $orderItemData[OrderItemInterface::QTY_ORDERED] * $item->getParentItem()->getQty()
             );
         }
         return $orderItem;
