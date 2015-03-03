@@ -130,7 +130,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $elements
-     * @dataProvider importExceptionDataProviderElementNotFound
+     * @dataProvider importExceptionElementNotFoundDataProvider
      * @expectedException \OutOfBoundsException
      */
     public function testImportExceptionElementNotFound($elements)
@@ -138,7 +138,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->_structure->importElements($elements);
     }
 
-    public function importExceptionDataProviderElementNotFound()
+    public function importExceptionElementNotFoundDataProvider()
     {
         return [
             'non-existing parent' => [
