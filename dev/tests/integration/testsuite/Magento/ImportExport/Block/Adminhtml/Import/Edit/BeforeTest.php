@@ -18,10 +18,71 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * Source entity behaviors
+     *
+     * @var array
+     */
+    protected $_sourceEntities = [
+        'entity_1' => ['code' => 'behavior_1', 'token' => 'Some_Random_First_Class'],
+        'entity_2' => ['code' => 'behavior_2', 'token' => 'Some_Random_Second_Class'],
+    ];
+
+    /**
+     * Expected entity behaviors
+     *
+     * @var array
+     */
+    protected $_expectedEntities = ['entity_1' => 'behavior_1', 'entity_2' => 'behavior_2'];
+
+    /**
+     * Source unique behaviors
+     *
+     * @var array
+     */
+    protected $_sourceBehaviors = [
+        'behavior_1' => 'Some_Random_First_Class',
+        'behavior_2' => 'Some_Random_Second_Class',
+    ];
+
+    /**
+     * Expected unique behaviors
+     *
+     * @var array
+     */
+    protected $_expectedBehaviors = ['behavior_1', 'behavior_2'];
+
     protected function setUp()
     {
+        $importModel = $this->getMock(
+            'Magento\ImportExport\Model\Import',
+            ['getEntityBehaviors', 'getUniqueEntityBehaviors'],
+            [],
+            '',
+            false
+        );
+        $importModel->expects(
+            $this->any()
+        )->method(
+            'getEntityBehaviors'
+        )->will(
+            $this->returnValue($this->_sourceEntities)
+        );
+        $importModel->expects(
+            $this->any()
+        )->method(
+            'getUniqueEntityBehaviors'
+        )->will(
+            $this->returnValue($this->_sourceBehaviors)
+        );
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $objectManager->create('Magento\ImportExport\Block\Adminhtml\Import\Edit\Before');
+        $this->_model = $objectManager->create(
+            'Magento\ImportExport\Block\Adminhtml\Import\Edit\Before',
+            [
+                'importModel' => $importModel,
+            ]
+        );
     }
 
     /**
@@ -32,8 +93,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityBehaviors()
     {
         $actualEntities = $this->_model->getEntityBehaviors();
-        $expectedEntities = '{"catalog_product":"basic_behavior","customer_finance":"custom_behavior",' .
-            '"customer_composite":"basic_behavior","customer":"custom_behavior","customer_address":"custom_behavior"}';
+        $expectedEntities = \Zend_Json::encode($this->_expectedEntities);
         $this->assertEquals($expectedEntities, $actualEntities);
     }
 
@@ -45,7 +105,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     public function testGetUniqueBehaviors()
     {
         $actualBehaviors = $this->_model->getUniqueBehaviors();
-        $expectedBehaviors = '["basic_behavior","custom_behavior"]';
+        $expectedBehaviors = \Zend_Json::encode($this->_expectedBehaviors);
         $this->assertEquals($expectedBehaviors, $actualBehaviors);
     }
 }
