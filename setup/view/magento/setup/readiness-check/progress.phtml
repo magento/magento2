@@ -88,7 +88,7 @@
 <div id="php-rawpost" class="rediness-check-item" ng-show="rawpost.visible">
 
     <h3 class="readiness-check-title" ng-hide="version.processed">
-        Checking PHP Version and PHP Raw Post Data Settings...
+        Checking PHP Settings...
     </h3>
 
     <div ng-show="rawpost.processed" ng-switch="rawpost.responseType">
@@ -98,9 +98,9 @@
             <span class="readiness-check-icon icon-success-round"></span>
 
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Raw Post Data Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check</h3>
                 <p>
-                    You are not populating raw_post_data or your PHP version is less than 5.6.0
+                    Your PHP setting is correct.
                 </p>
             </div>
 
@@ -110,24 +110,23 @@
 
             <div class="rediness-check-side">
                 <p class="side-title">Need Help?</p>
-                <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>
+                <a href="http://php.net/manual/en/ini.core.php#ini.always-populate-raw-post-data" target="_blank">PHP Documentation</a>
             </div>
 
             <span class="readiness-check-icon icon-failed-round"></span>
 
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Raw Post Data Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check</h3>
                 <p>
-                    Your PHP Version is {{rawpost.data.version}}<br />
-                    always_populate_raw_post_data = {{rawpost.data.ini}}.
+                    Your PHP Version is {{rawpost.data.version}}, but always_populate_raw_post_data = {{rawpost.data.ini}}.
                     <a href="#php-rawpost" ng-click="updateOnExpand(rawpost)">
                         <span ng-hide="rawpost.expanded">Show detail</span>
                         <span ng-show="rawpost.expanded">Hide detail</span>
                     </a>
                 </p>
                 <p ng-show="rawpost.expanded">
-                    $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running,
-                    please open your php.ini file and set always_populate_raw_post_data to -1 (uncomment if necessary)
+                    $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
+                    Please open your php.ini file and set always_populate_raw_post_data to -1.
                 </p>
                 <p ng-show="rawpost.expanded">If you need more help please call your hosting provider.</p>
             </div>
