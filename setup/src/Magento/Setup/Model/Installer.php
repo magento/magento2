@@ -816,7 +816,8 @@ class Installer
     {
         $this->assertDeploymentConfigExists();
         $this->log->log('File system cleanup:');
-        $this->deleteDirContents(DirectoryList::VAR_DIR);
+        $this->deleteDirContents(DirectoryList::GENERATION);
+        $this->deleteDirContents(DirectoryList::CACHE);
         $this->log->log('Updating modules:');
         $allModules = array_keys($this->moduleLoader->load());
         $deploymentConfig = $this->deploymentConfigReader->load();

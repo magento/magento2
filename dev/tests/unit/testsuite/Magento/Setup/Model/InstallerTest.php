@@ -315,9 +315,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testUpdateModulesSequence()
     {
         $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $varDir->expects($this->once())->method('getAbsolutePath')->willReturn('/var');
+        $varDir->expects($this->exactly(2))->method('getAbsolutePath')->willReturn('/var');
         $this->filesystem
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getDirectoryWrite')
             ->willReturn($varDir);
 
@@ -345,7 +345,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
         $this->logger->expects($this->at(1))->method('log')
             ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
-        $this->logger->expects($this->at(2))->method('log')->with('Updating modules:');
+        $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
         $newObject->updateModulesSequence();
     }
 
