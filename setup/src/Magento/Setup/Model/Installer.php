@@ -32,6 +32,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Model\Resource\Db\Context;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -201,9 +202,9 @@ class Installer
     private $objectManagerProvider;
 
     /**
-     * @var Resource
+     * @var Context
      */
-    private $resource;
+    private $context;
 
     /**
      * Constructor
@@ -222,7 +223,7 @@ class Installer
      * @param Filesystem $filesystem
      * @param SampleData $sampleData
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Context $context
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -241,7 +242,7 @@ class Installer
         Filesystem $filesystem,
         SampleData $sampleData,
         ObjectManagerProvider $objectManagerProvider,
-        \Magento\Framework\App\Resource $resource
+        Context $context
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -259,7 +260,7 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->resource = $resource;
+        $this->context = $context;
     }
 
     /**
@@ -598,7 +599,7 @@ class Installer
     {
         $setup = $this->objectManagerProvider->get()->create(
             'Magento\Setup\Module\Setup',
-            ['resource' => $this->resource]
+            ['resource' => $this->context->getResources()]
         );
         $this->setupModuleRegistry($setup);
         $this->log->log('Schema creation/updates:');
@@ -639,7 +640,7 @@ class Installer
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
-        $resource = new \Magento\Framework\Module\Resource($this->resource);
+        $resource = new \Magento\Framework\Module\Resource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -733,7 +734,7 @@ class Installer
     {
         $setup = $this->objectManagerProvider->get()->create(
             'Magento\Setup\Module\Setup',
-            ['resource' => $this->resource]
+            ['resource' => $this->context->getResources()]
         );
         $dbConnection = $setup->getConnection();
 
@@ -779,7 +780,7 @@ class Installer
         $this->assertDeploymentConfigExists();
         $setup = $this->objectManagerProvider->get()->create(
             'Magento\Setup\Module\Setup',
-            ['resource' => $this->resource]
+            ['resource' => $this->context->getResources()]
         );
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
