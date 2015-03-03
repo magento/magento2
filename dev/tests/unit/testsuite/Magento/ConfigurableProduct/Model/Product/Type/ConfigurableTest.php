@@ -67,7 +67,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $_productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelperMock;
 
