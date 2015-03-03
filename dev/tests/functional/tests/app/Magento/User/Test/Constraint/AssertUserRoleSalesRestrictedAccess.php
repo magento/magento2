@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserRoleSalesRestrictedAccess extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const ROLE_RESOURCE = 'sales';
     const DENIED_ACCESS = 'Access denied';
 

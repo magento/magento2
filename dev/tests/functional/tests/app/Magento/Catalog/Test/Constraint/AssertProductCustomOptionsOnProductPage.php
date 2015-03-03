@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Skipped field for custom options
      *

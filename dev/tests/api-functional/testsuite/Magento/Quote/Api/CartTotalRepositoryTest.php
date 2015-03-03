@@ -12,7 +12,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class CartTotalRepositoryTest extends WebapiAbstract
 {
@@ -115,7 +114,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId . '/totals',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
     }

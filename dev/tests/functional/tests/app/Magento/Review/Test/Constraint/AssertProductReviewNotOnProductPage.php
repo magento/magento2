@@ -18,10 +18,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewNotOnProductPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product review Not available on product page
      *

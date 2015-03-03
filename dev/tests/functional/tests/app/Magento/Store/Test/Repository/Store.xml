@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Store\Test\Repository\Store">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Store\Test\Repository\Store">
         <dataset name="default">
             <field name="group_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">default</item>
@@ -44,5 +44,5 @@
             <field name="code" xsi:type="string">de%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

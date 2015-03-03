@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Tax\Test\Repository\TaxRule">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Tax\Test\Repository\TaxRule">
         <dataset name="custom_rule">
             <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
             <field name="tax_rate" xsi:type="array">
@@ -147,5 +147,5 @@
             <field name="priority" xsi:type="string">0</field>
             <field name="position" xsi:type="string">0</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
