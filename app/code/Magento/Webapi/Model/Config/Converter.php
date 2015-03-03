@@ -32,10 +32,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function convert($source)
     {
@@ -52,6 +48,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $serviceClass = $service->attributes->getNamedItem('class')->nodeValue;
             $serviceMethod = $service->attributes->getNamedItem('method')->nodeValue;
 
+            $serviceClassData = [];
+            if (isset($result[self::KEY_SERVICES][$serviceClass])) {
+                $serviceClassData = $result[self::KEY_SERVICES][$serviceClass];
+            }
+
             $resources = $route->getElementsByTagName('resource');
             $resourceReferences = [];
             $resourcePermissionSet = [];
@@ -65,50 +66,24 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 // For SOAP
                 $resourcePermissionSet[] = $ref;
             }
-            if (!isset(
-                $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES]
-            )) {
-                $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES]
-                    = $resourcePermissionSet;
+            if (!isset($serviceClassData[self::KEY_METHODS][$serviceMethod])) {
+                $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] = $resourcePermissionSet;
             } else {
-                $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] =
+                $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] =
                     array_unique(
                         array_merge(
-                            $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES],
+                            $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES],
                             $resourcePermissionSet
                         )
                     );
-            }
-
-            $parameters = $route->getElementsByTagName('parameter');
-            $data = [];
-            /** @var \DOMElement $parameter */
-            foreach ($parameters as $parameter) {
-                if ($parameter->nodeType != XML_ELEMENT_NODE) {
-                    continue;
-                }
-                $name = $parameter->attributes->getNamedItem('name')->nodeValue;
-                $forceNode = $parameter->attributes->getNamedItem('force');
-                $force = $forceNode ? (bool)$forceNode->nodeValue : false;
-                $value = $parameter->nodeValue;
-                $data[$name] = [
-                    self::KEY_FORCE => $force,
-                    self::KEY_VALUE => ($value === 'null') ? null : $value,
-                ];
-                $sourceNode = $parameter->attributes->getNamedItem('source');
-                if ($sourceNode) {
-                    $data[$name][self::KEY_SOURCE] = $sourceNode->nodeValue;
-                }
-                $methodNode = $parameter->attributes->getNamedItem('method');
-                if ($methodNode) {
-                    $data[$name][self::KEY_METHOD] = $methodNode->nodeValue;
-                }
             }
 
             $method = $route->attributes->getNamedItem('method')->nodeValue;
             $url = trim($route->attributes->getNamedItem('url')->nodeValue);
             $secureNode = $route->attributes->getNamedItem('secure');
             $secure = $secureNode ? (bool)trim($secureNode->nodeValue) : false;
+            $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
+
             // We could handle merging here by checking if the route already exists
             $result[self::KEY_ROUTES][$url][$method] = [
                 self::KEY_SECURE => $secure,
@@ -119,21 +94,56 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 self::KEY_ACL_RESOURCES => $resourceReferences,
                 self::KEY_DATA_PARAMETERS => $data,
             ];
+
             $serviceSecure = false;
-            if (
-                isset($result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_SECURE])
-            ) {
-                $serviceSecure =
-                    $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_SECURE];
+            if (isset($serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE])) {
+                $serviceSecure = $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE];
             }
-            $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod][self::KEY_SECURE] =
-                $serviceSecure || $secure;
-            // get version -- assumes the version is the first item in the URL after the first '/'
-            $version = substr($url, 1, strpos($url, '/', 1)-1);
-            if (!isset($result[self::KEY_SERVICES][$serviceClass][self::KEY_VERSION])) {
-                $result[self::KEY_SERVICES][$serviceClass][self::KEY_VERSION] = $version;
+            $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE] = $serviceSecure || $secure;
+
+            if (!isset($serviceClassData[self::KEY_VERSION])) {
+                $serviceClassData[self::KEY_VERSION] = $this->convertVersion($url);
             }
+
+            $result[self::KEY_SERVICES][$serviceClass] = $serviceClassData;
         }
         return $result;
+    }
+
+    /**
+     * @param $parameters \DOMNodeList
+     * @return array
+     */
+    protected function convertMethodParameters($parameters)
+    {
+        $data = [];
+        /** @var \DOMElement $parameter */
+        foreach ($parameters as $parameter) {
+            if ($parameter->nodeType != XML_ELEMENT_NODE) {
+                continue;
+            }
+            $name = $parameter->attributes->getNamedItem('name')->nodeValue;
+            $forceNode = $parameter->attributes->getNamedItem('force');
+            $force = $forceNode ? (bool)$forceNode->nodeValue : false;
+            $value = $parameter->nodeValue;
+            $data[$name] = [
+                self::KEY_FORCE => $force,
+                self::KEY_VALUE => ($value === 'null') ? null : $value,
+            ];
+            $sourceNode = $parameter->attributes->getNamedItem('source');
+            if ($sourceNode) {
+                $data[$name][self::KEY_SOURCE] = $sourceNode->nodeValue;
+            }
+            $methodNode = $parameter->attributes->getNamedItem('method');
+            if ($methodNode) {
+                $data[$name][self::KEY_METHOD] = $methodNode->nodeValue;
+            }
+        }
+        return $data;
+    }
+
+    protected function convertVersion($url)
+    {
+        return substr($url, 1, strpos($url, '/', 1)-1);
     }
 }

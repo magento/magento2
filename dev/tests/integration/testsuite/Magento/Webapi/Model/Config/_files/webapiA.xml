@@ -37,4 +37,16 @@
             <resource ref="Magento_Test1::resource2"/>
         </resources>
     </route>
+    <route method="GET" url="/V1/testmoduleMSC/:itemId">
+        <service class="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" method="item" />
+        <resources>
+            <resource ref="Magento_TestModuleMSC::resource1" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/testmoduleMSC">
+        <service class="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" method="create" />
+        <resources>
+            <resource ref="Magento_TestModuleMSC::resource3" />
+        </resources>
+    </route>
 </routes>

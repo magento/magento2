@@ -5,6 +5,23 @@
  */
 return [
     'services' => [
+        'Magento\TestModuleMSC\Api\AllSoapAndRestInterface' => [
+            'methods' => [
+                'item' => [
+                    'resources' => [
+                        'Magento_TestModuleMSC::resource1',
+                    ],
+                    'secure' => false,
+                ],
+                'create' => [
+                    'resources' => [
+                        'Magento_TestModuleMSC::resource3',
+                    ],
+                    'secure' => false,
+                ],
+            ],
+            'version' => 'V1',
+        ],
         'Magento\TestModule1\Service\V1\AllSoapAndRestInterface' => [
             'methods' => [
                 'item' => [
@@ -57,6 +74,34 @@ return [
         ],
     ],
     'routes' => [
+        '/V1/testmoduleMSC/:itemId' => [
+            'GET' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\TestModuleMSC\Api\AllSoapAndRestInterface',
+                    'method' => 'item',
+                ],
+                'resources' => [
+                    'Magento_TestModuleMSC::resource1' => true,
+                ],
+                'parameters' => [
+                ],
+            ],
+        ],
+        '/V1/testmoduleMSC' => [
+            'POST' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\TestModuleMSC\Api\AllSoapAndRestInterface',
+                    'method' => 'create',
+                ],
+                'resources' => [
+                    'Magento_TestModuleMSC::resource3' => true,
+                ],
+                'parameters' => [
+                ],
+            ],
+        ],
         '/V1/testmodule1/:id' => [
             'GET' => [
                 'secure' => false,
