@@ -9,10 +9,12 @@
 
 & when (@media-common = true) {
 
-.map-popup-wrapper.popup {
-    .action {
-        .close {
-            .css(top, @popup-button-close__position-top + @indent__s);
+.map-popup-wrapper {
+    &.popup {
+        .action {
+            &.close {
+                .css(top, @popup-button-close__position-top + @indent__s);
+            }
         }
     }
 }
@@ -39,7 +41,7 @@
         }
     }
     .action {
-        .primary {
+        &.primary {
             margin-right: @indent__s;
         }
     }
