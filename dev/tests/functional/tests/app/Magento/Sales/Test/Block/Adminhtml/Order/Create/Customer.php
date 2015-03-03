@@ -7,30 +7,29 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 
 /**
- * Class Customer
- * Customer selection grid
+ * Customer selection grid.
  */
 class Customer extends Grid
 {
     /**
-     * Selector for 'Create New Customer' button
+     * Selector for 'Create New Customer' button.
      *
      * @var string
      */
     protected $createNewCustomer = '.actions button';
 
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = 'td[data-column=email]';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -41,17 +40,17 @@ class Customer extends Grid
     ];
 
     /**
-     * Select customer if it is present in fixture or click create new customer button
+     * Select customer if it is present in fixture or click create new customer button.
      *
-     * @param FixtureInterface|null $fixture
+     * @param CustomerFixture $customer
      * @return void
      */
-    public function selectCustomer($fixture)
+    public function selectCustomer(CustomerFixture $customer)
     {
-        if ($fixture === null) {
-            $this->_rootElement->find($this->createNewCustomer)->click();
+        if ($customer->hasData('id')) {
+            $this->searchAndOpen(['email' => $customer->getEmail()]);
         } else {
-            $this->searchAndOpen(['email' => $fixture->getEmail()]);
+            $this->_rootElement->find($this->createNewCustomer)->click();
         }
         $this->getTemplateBlock()->waitLoader();
     }
