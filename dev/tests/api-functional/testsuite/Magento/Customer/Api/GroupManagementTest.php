@@ -54,7 +54,7 @@ class GroupManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/default/$storeId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -108,7 +108,7 @@ class GroupManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/default/$nonExistentStoreId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -151,7 +151,7 @@ class GroupManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupId/permissions",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -195,7 +195,7 @@ class GroupManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupId/permissions",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
