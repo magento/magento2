@@ -35,15 +35,15 @@ class Collection
      * @param string $key
      * @return void
      */
-    public function addAfter($identifier, AssetInterface $asset, $key)
+    public function insert($identifier, AssetInterface $asset, $key)
     {
         $result = [];
-        foreach ($this->assets as $k => $val) {
-            if ($k == $key) {
-                $result[$key] = $val;
+        foreach ($this->assets as $assetKey => $assetVal) {
+            if ($assetKey == $key) {
+                $result[$key] = $assetVal;
                 $result[$identifier] = $asset;
             } else {
-                $result[$k] = $val;
+                $result[$assetKey] = $assetVal;
             }
         }
 

@@ -54,9 +54,7 @@ class GroupedCollection extends Collection
     public function add($identifier, AssetInterface $asset, array $properties = [])
     {
         parent::add($identifier, $asset);
-        $properties = array_filter($properties);
-        $properties[self::PROPERTY_CONTENT_TYPE] = $asset->getContentType();
-        $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
+        $properties = $this->getFilteredProperties($asset, $properties);
         $this->getGroupFor($properties)->add($identifier, $asset);
     }
 
@@ -64,16 +62,27 @@ class GroupedCollection extends Collection
      * @param string $identifier
      * @param AssetInterface $asset
      * @param string $key
-     * @param array $properties
      * @return void
      */
-    public function addAfter($identifier, AssetInterface $asset, $key, array $properties = [])
+    public function insert($identifier, AssetInterface $asset, $key)
     {
-        parent::addAfter($identifier, $asset, $key);
+        parent::insert($identifier, $asset, $key);
+        $properties = $this->getFilteredProperties($asset);
+        $this->getGroupFor($properties)->insert($identifier, $asset, $key);
+    }
+
+    /**
+     * @param AssetInterface $asset
+     * @param array $properties
+     * @return array
+     */
+    public function getFilteredProperties(AssetInterface $asset, $properties = [])
+    {
         $properties = array_filter($properties);
         $properties[self::PROPERTY_CONTENT_TYPE] = $asset->getContentType();
         $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
-        $this->getGroupFor($properties)->addAfter($identifier, $asset, $key);
+
+        return $properties;
     }
 
     /**

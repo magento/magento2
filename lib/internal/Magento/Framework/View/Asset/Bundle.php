@@ -108,15 +108,13 @@ class Bundle
      */
     protected function getPartIndex(LocalInterface $asset)
     {
-        $contextCode = $this->getContextCode($asset);
-        $type = $asset->getContentType();
-        $parts = $this->assets[$contextCode][$type];
+        $parts = $this->assets[$this->getContextCode($asset)][$asset->getContentType()];
 
-        $maxSize = $this->getMaxPartSize($asset);
+        $maxPartSize = $this->getMaxPartSize($asset);
         $assetSize = $this->getAssetSize($asset);
-        $minSpace = $maxSize + 1;
+        $minSpace = $maxPartSize + 1;
         $minIndex = -1;
-        if ($maxSize && count($parts)) {
+        if ($maxPartSize && count($parts)) {
             foreach ($parts as $partIndex => $part) {
                 $space = $part['space'] - $assetSize;
                 if ($space >= 0 && $space < $minSpace) {
@@ -126,7 +124,7 @@ class Bundle
             }
         }
 
-        return ($maxSize != 0) ? ($minIndex >= 0) ? $minIndex : count($parts) : 0;
+        return ($maxPartSize != 0) ? ($minIndex >= 0) ? $minIndex : count($parts) : 0;
     }
 
     /**

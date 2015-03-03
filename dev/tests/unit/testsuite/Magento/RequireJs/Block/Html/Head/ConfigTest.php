@@ -86,16 +86,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getAssetCollection')
             ->willReturn($assetCollection);
 
-        $propertyGroup = $this->getMock('Magento\Framework\View\Asset\PropertyGroup', [], [], '', false);
-
         $assetCollection
-            ->expects($this->once())
-            ->method('getGroupByContentType')
-            ->willReturn($propertyGroup);
-
-        $propertyGroup
             ->expects($this->atLeastOnce())
-            ->method('addAfter')
+            ->method('insert')
             ->willReturn(true);
 
         $object = new Config($this->context, $this->config, $this->fileManager, $this->pageConfig, $this->bundleConfig);
