@@ -175,14 +175,17 @@ module.exports = function (grunt) {
             },
             all: {
                 cmd: function () {
-                    var command = '',
+                    var command = [],
                         cmdPlus = (/^win/.test(process.platform) == true) ? ' & ' : ' && ',
                         themes = Object.keys(theme),
                         i = 0;
                     for (i; i < themes.length; i++) {
-                        command += combo.collector(themes[i]) + cmdPlus;
+                        command.push(combo.collector(themes[i]));
                     }
+
+                    command = command.join(cmdPlus);
                     return 'echo ' + command;
+
                 }
             }
         },

@@ -28,6 +28,11 @@ class FileGenerator
     const LOCK_FILE = 'less.lock';
 
     /**
+     * Styling mode
+     */
+    const STYLING_MODE = true;
+
+    /**
      * @var string
      */
     protected $lessDirectory;
@@ -38,9 +43,19 @@ class FileGenerator
     protected $tmpDirectory;
 
     /**
+     * @var \Magento\Framework\View\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     private $assetRepo;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Source
+     */
+    private $assetSource;
 
     /**
      * @var \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport
@@ -57,16 +72,21 @@ class FileGenerator
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor
      * @param \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
+     * @param \Magento\Framework\View\Asset\Source $assetSource
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor,
-        \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
+        \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor,
+        \Magento\Framework\View\Asset\Source $assetSource
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->lessDirectory = DirectoryList::TMP_MATERIALIZATION_DIR . '/' . self::TMP_LESS_DIR;
         $this->assetRepo = $assetRepo;
+        $this->assetSource = $assetSource;
+
         $this->magentoImportProcessor = $magentoImportProcessor;
         $this->importProcessor = $importProcessor;
     }
@@ -98,6 +118,10 @@ class FileGenerator
         $this->generateRelatedFiles();
         $lessRelativePath = preg_replace('#\.css$#', '.less', $chain->getAsset()->getPath());
         $tmpFilePath = $this->createFile($lessRelativePath, $chain->getContent());
+        
+        if (self::STYLING_MODE) {
+            $this->createFileMain($lessRelativePath, $chain->getContent());
+        }
         $this->tmpDirectory->delete($lockFilePath);
         return $tmpFilePath;
     }
@@ -148,7 +172,12 @@ class FileGenerator
     protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
     {
         $relatedAsset = $this->assetRepo->createRelated($relatedFileId, $asset);
+        $relatedAsset->getFilePath();
+
         $this->createFile($relatedAsset->getPath(), $relatedAsset->getContent());
+        if (self::STYLING_MODE) {
+            $this->createSymlink($relatedAsset);
+        }
     }
 
     /**
@@ -166,5 +195,39 @@ class FileGenerator
             $this->tmpDirectory->writeFile($filePath, $contents);
         }
         return $this->tmpDirectory->getAbsolutePath($filePath);
+    }
+
+    /**
+     * @param $relativePath
+     * @param $contents
+     */
+    protected function createFileMain($relativePath, $contents)
+    {
+        $filePath = '/static/' . $relativePath;
+        $contents .= '@urls-resolved: true;' . PHP_EOL . PHP_EOL;
+        $this->pubDirectory->writeFile($filePath, $contents);
+        return;
+    }
+
+    /**
+     * @param LocalInterface $relatedAsset
+     */
+    protected function createSymLink(LocalInterface $relatedAsset)
+    {
+        $linkBase = '/static/';
+        $linkDir = $linkBase . str_replace(pathinfo($relatedAsset->getPath())['basename'], '', $relatedAsset->getPath());
+        if (strpos($relatedAsset->getSourceFile(),'view_preprocessed') !== false) {
+            $linkTarget = $this->assetSource->findSource($relatedAsset);
+        } else {
+            $linkTarget = $relatedAsset->getSourceFile();
+        }
+        $link = $this->pubDirectory->getAbsolutePath($linkBase . $relatedAsset->getPath());
+        if (!$this->pubDirectory->isExist($linkDir)) {
+            $this->pubDirectory->create($linkDir);
+        }
+        if (!file_exists($link)) {
+            symlink($linkTarget, $link);
+        }
+        return;
     }
 }

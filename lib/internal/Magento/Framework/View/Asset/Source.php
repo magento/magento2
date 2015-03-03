@@ -164,6 +164,15 @@ class Source
     }
 
     /**
+     * @param LocalInterface $asset
+     * @return bool|string
+     */
+    public function findSource(LocalInterface $asset)
+    {
+        return $this->findSourceFile($asset);
+    }
+
+    /**
      * Infer a content type from the specified path
      *
      * @param string $path
