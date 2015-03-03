@@ -39,7 +39,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
         array $arguments = []
     ) {
         parent::__construct($context, $resourcePrefix);
-        $this->_jsonHelper = $jsonHelper;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
