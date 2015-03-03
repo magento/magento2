@@ -2877,6 +2877,9 @@ return [
     ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\Test\Utility\AggregateInvoker'],
     ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\Test\Utility\Classes'],
     ['Magento\TestFramework\Utility\Files', 'Magento\Framework\Test\Utility\Files'],
+    ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
+    ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
+    ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files'],
     ['Magento\Framework\Module\Declaration\Reader\Filesystem', 'Magento\Framework\Module\ModuleList\Loader'],
     ['Magento\Framework\Module\Declaration\FileIterator'],
     ['Magento\Framework\Module\Declaration\FileIteratorFactory'],
@@ -2886,6 +2889,9 @@ return [
     ['Magento\Framework\Module\DependencyManagerInterface'],
     ['Magento\Framework\App\Arguments\Loader'],
     ['Magento\Framework\App\Arguments', 'Magento\Framework\App\DeploymentConfig'],
+    ['Magento\Framework\Test\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
+    ['Magento\Framework\Test\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
+    ['Magento\Framework\Test\Utility\Files', 'Magento\Framework\App\Utility\Files'],
     ['Magento\Bundle\Service\V1\Data\Product\Link', 'Magento\Bundle\Api\Data\LinkInterface'],
     ['Magento\Bundle\Service\V1\Data\Product\Option', 'Magento\Bundle\Api\Data\OptionInterface'],
     [
@@ -3073,11 +3079,4 @@ return [
     ['Magento\Webapi\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Service\V1\Integration'],
     ['Magento\Webapi\Model\Plugin\Setup', 'Magento\Integration\Model\Plugin\Setup'],
     ['Magento\Webapi\Model\Cache\Type', 'Magento\Framework\App\Cache\Type\Webapi'],
-
-    ['Magento\Framework\Test\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
-    ['Magento\Framework\Test\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
-    ['Magento\Framework\Test\Utility\Files', 'Magento\Framework\App\Utility\Files'],
-        ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
-       ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
-       ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files']
 ];
