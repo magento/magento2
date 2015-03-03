@@ -16,7 +16,7 @@ class QueryResolver
      * @param bool $singleQuery
      */
     public function __construct(
-        $singleQuery = false
+        $singleQuery = true
     ) {
         $this->singleQuery = $singleQuery;
     }
