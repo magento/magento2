@@ -3010,4 +3010,5 @@ return [
     ['Zend_Controller_Router_Route_Interface'],
     ['Zend_Controller_Response_Abstract', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
     ['Zend_Controller_Response_Http', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
+    ['Magento\Reports\Model\Resource\Shopcart\Product\Collection']
 ];
