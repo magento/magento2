@@ -815,6 +815,9 @@ class Installer
     public function updateModulesSequence()
     {
         $this->assertDeploymentConfigExists();
+        $this->log->log('File system cleanup:');
+        $this->deleteDirContents(DirectoryList::VAR_DIR);
+        $this->log->log('Updating modules:');
         $allModules = array_keys($this->moduleLoader->load());
         $deploymentConfig = $this->deploymentConfigReader->load();
         $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;

@@ -314,6 +314,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateModulesSequence()
     {
+        $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $varDir->expects($this->once())->method('getAbsolutePath')->willReturn('/var');
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($varDir);
+
         $allModules = [
             'Foo_One' => [],
             'Bar_Two' => [],
@@ -327,6 +334,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             'New_Module' => 1
         ];
 
+        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $this->deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
             ->willReturn($this->deploymentConfig);
 
@@ -334,6 +342,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
         $this->configWriter->expects($this->once())->method('update')->with($this->deploymentConfig);
+        $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
+        $this->logger->expects($this->at(1))->method('log')
+            ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
+        $this->logger->expects($this->at(2))->method('log')->with('Updating modules:');
         $newObject->updateModulesSequence();
     }
 
