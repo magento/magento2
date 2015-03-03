@@ -5,20 +5,52 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\App\Resource\ConfigInterface;
+
 class QueryResolver
 {
     /**
-     * @var bool
+     * @var array
      */
-    protected $singleQuery;
+    private $data = [];
 
     /**
-     * @param bool $singleQuery
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
+     * @var string
+     */
+    private $cacheId;
+
+    /**
+     * Cache tags
+     *
+     * @var array
+     */
+    protected $cacheTags = [];
+
+    /**
+     * @param ConfigInterface $config
+     * @param CacheInterface $cache
+     * @param string $cacheId
      */
     public function __construct(
-        $singleQuery = true
+        ConfigInterface $config,
+        CacheInterface $cache,
+        $cacheId = 'connection_config_cache'
     ) {
-        $this->singleQuery = $singleQuery;
+        $this->config = $config;
+        $this->cache = $cache;
+        $this->cacheId = $cacheId;
+        $this->initData();
     }
 
     /**
@@ -28,6 +60,34 @@ class QueryResolver
      */
     public function isSingleQuery()
     {
-        return $this->singleQuery;
+        return $this->data['checkout'];
+    }
+
+    /**
+     * Initialise data for configuration
+     * @return void
+     */
+    protected function initData()
+    {
+        $data = $this->cache->load($this->cacheId);
+        if (false === $data) {
+            $singleQuery = $this->config->getConnectionName('checkout_setup') == 'default' ? true : false;
+            $data['checkout'] = $singleQuery;
+            $this->cache->save(serialize($data), $this->cacheId, $this->cacheTags);
+        } else {
+            $data = unserialize($data);
+        }
+        $this->merge($data);
+    }
+
+    /**
+     * Merge config data to the object
+     *
+     * @param array $config
+     * @return void
+     */
+    public function merge(array $config)
+    {
+        $this->data = array_replace_recursive($this->data, $config);
     }
 }
