@@ -45,7 +45,7 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testCaching()
     {
-        $dataObjectClassName = '\Magento\Customer\Model\Data\Address';
+        $dataObjectClassName = 'Magento\Customer\Model\Data\Address';
         $attributeCode = 'street';
         $allAttributes = [
             $dataObjectClassName => [
