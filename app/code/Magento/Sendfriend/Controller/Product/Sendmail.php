@@ -50,7 +50,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
         }
 
         $product = $this->_initProduct();
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
 
         if (!$product || !$data) {
             $this->_forward('noroute');
@@ -93,7 +93,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
                     $this->messageManager->addError(__('We found some problems with the data.'));
                 }
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Some emails were not sent.'));

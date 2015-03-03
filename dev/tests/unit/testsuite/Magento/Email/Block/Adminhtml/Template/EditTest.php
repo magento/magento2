@@ -58,7 +58,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false, false);
         $urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false);
         $this->_configStructureMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure',
+            'Magento\Config\Model\Config\Structure',
             [],
             [],
             '',
@@ -119,7 +119,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testGetUsedCurrentlyForPaths()
     {
         $sectionMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Section',
+            'Magento\Config\Model\Config\Structure\Element\Section',
             [],
             [],
             '',
@@ -127,7 +127,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $groupMock1 = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Group',
+            'Magento\Config\Model\Config\Structure\Element\Group',
             [],
             [],
             '',
@@ -135,7 +135,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $groupMock2 = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Group',
+            'Magento\Config\Model\Config\Structure\Element\Group',
             [],
             [],
             '',
@@ -143,7 +143,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $groupMock3 = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Group',
+            'Magento\Config\Model\Config\Structure\Element\Group',
             [],
             [],
             '',
@@ -151,7 +151,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $filedMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Field',
+            'Magento\Config\Model\Config\Structure\Element\Field',
             [],
             [],
             '',

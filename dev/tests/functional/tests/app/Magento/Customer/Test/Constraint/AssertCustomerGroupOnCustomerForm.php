@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -37,9 +37,9 @@ class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
         CustomerIndexNew $customerIndexNew,
         CustomerIndex $customerIndex
     ) {
-        /** @var CustomerInjectable $customer */
+        /** @var Customer $customer */
         $customer = $fixtureFactory->createByCode(
-            'customerInjectable',
+            'customer',
             [
                 'dataSet' => 'defaultBackend',
                 'data' => ['group_id' => ['customerGroup' => $customerGroup]]

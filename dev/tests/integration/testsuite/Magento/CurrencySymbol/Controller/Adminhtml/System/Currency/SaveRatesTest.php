@@ -43,7 +43,7 @@ class SaveRatesTest extends \Magento\Backend\Utility\Controller
         $rate = 1.0000;
 
         $request = $this->getRequest();
-        $request->setPost(
+        $request->setPostValue(
             'rate',
             [
                 $currencyCode => [$currencyTo => $rate]
@@ -75,7 +75,7 @@ class SaveRatesTest extends \Magento\Backend\Utility\Controller
         $rate = '0';
 
         $request = $this->getRequest();
-        $request->setPost(
+        $request->setPostValue(
             'rate',
             [
                 $currencyCode => [$currencyTo => $rate]

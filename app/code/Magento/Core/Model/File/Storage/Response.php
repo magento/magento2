@@ -26,8 +26,8 @@ class Response extends Http implements \Magento\Framework\App\Response\FileInter
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Http\Context $context
      * @param \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
      */

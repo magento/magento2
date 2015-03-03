@@ -13,7 +13,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
      */
     public function execute()
     {
-        $postData = $this->getRequest()->getPost();
+        $postData = $this->getRequest()->getPostValue();
         if ($postData) {
             $model = $this->_objectManager->get('Magento\CheckoutAgreements\Model\Agreement');
             $model->setData($postData);
@@ -30,7 +30,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
                     $this->_redirect('checkout/*/');
                     return;
                 }
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));

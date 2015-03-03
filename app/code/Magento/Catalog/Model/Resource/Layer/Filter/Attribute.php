@@ -27,7 +27,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @param int $value
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function applyFilterToCollection(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $value)
@@ -56,7 +56,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Retrieve array with products counts per attribute option
      *
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
     public function getCount(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter)

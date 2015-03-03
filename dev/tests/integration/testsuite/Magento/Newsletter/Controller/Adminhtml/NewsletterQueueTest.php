@@ -48,7 +48,7 @@ class NewsletterQueueTest extends \Magento\Backend\Utility\Controller
             'subject' => 'test subject',
             'text' => 'newsletter text',
         ];
-        $this->getRequest()->setPost($postForQueue);
+        $this->getRequest()->setPostValue($postForQueue);
         $this->_model->loadByCode('some_unique_code');
         $this->getRequest()->setParam('template_id', $this->_model->getId());
         $this->dispatch('backend/newsletter/queue/save');

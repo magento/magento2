@@ -19,14 +19,12 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Initialize SUT. */
-        $this->_response = new \Magento\Webapi\Controller\Response();
-        parent::setUp();
+        $this->_response = $this->getMock('Magento\Webapi\Controller\Response', null, [], '', false);
     }
 
     protected function tearDown()
     {
         unset($this->_response);
-        parent::tearDown();
     }
 
     /**

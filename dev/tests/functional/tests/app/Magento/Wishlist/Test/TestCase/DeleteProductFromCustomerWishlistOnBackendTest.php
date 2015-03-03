@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 
@@ -40,10 +40,10 @@ class DeleteProductFromCustomerWishlistOnBackendTest extends AbstractWishlistTes
     /**
      * Prepare data
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return array
      */
-    public function __prepare(CustomerInjectable $customer)
+    public function __prepare(Customer $customer)
     {
         $customer->persist();
 
@@ -53,14 +53,14 @@ class DeleteProductFromCustomerWishlistOnBackendTest extends AbstractWishlistTes
     /**
      * Delete product from customer wishlist on backend
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param string $product
      * @param CustomerIndex $customerIndex
      * @param CustomerIndexEdit $customerIndexEdit
      * @return array
      */
     public function test(
-        CustomerInjectable $customer,
+        Customer $customer,
         $product,
         CustomerIndex $customerIndex,
         CustomerIndexEdit $customerIndexEdit

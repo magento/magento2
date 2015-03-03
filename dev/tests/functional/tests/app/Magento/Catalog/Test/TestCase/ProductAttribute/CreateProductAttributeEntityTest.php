@@ -11,9 +11,7 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Scenario;
 
 /**
- * Test Creation for CreateProductAttributeEntity
- *
- * Test Flow:
+ * Steps:
  * 1. Log in to Backend.
  * 2. Navigate to Stores > Attributes > Product.
  * 3. Start to create new Product Attribute.

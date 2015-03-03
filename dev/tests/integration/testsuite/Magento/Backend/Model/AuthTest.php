@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\Exception\AuthenticationException;
+
 /**
  * Test class for \Magento\Backend\Model\Auth.
  *
@@ -28,7 +30,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Backend\Model\Auth\Exception
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
      */
     public function testLoginFailed()
     {
@@ -48,7 +50,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_model->setAuthStorage($incorrectStorage);
             $this->fail('Incorrect authentication storage setted.');
-        } catch (\Magento\Backend\Model\Auth\Exception $e) {
+        } catch (AuthenticationException $e) {
             // in case of exception - Auth works correct
             $this->assertNotEmpty($e->getMessage());
         }

@@ -62,7 +62,7 @@ class Comment extends Entity implements ShipmentCommentResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -74,7 +74,7 @@ class Comment extends Entity implements ShipmentCommentResourceInterface
         parent::_beforeSave($object);
         $errors = $this->validator->validate($object);
         if (!empty($errors)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __("Cannot save comment") . ":\n" . implode("\n", $errors)
             );
         }

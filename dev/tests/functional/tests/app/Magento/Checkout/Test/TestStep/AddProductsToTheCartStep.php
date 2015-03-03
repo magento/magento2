@@ -13,7 +13,6 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class AddProductsToTheCartStep
  * Adding created products to the cart
  */
 class AddProductsToTheCartStep implements TestStepInterface
@@ -88,6 +87,7 @@ class AddProductsToTheCartStep implements TestStepInterface
         foreach ($this->products as $product) {
             $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
             $this->catalogProductView->getViewBlock()->addToCart($product);
+            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         }
     }
 }

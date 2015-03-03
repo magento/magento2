@@ -246,7 +246,7 @@ class Store extends AbstractModel implements
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\Resource\Config\Data
      */
     protected $_configDataResource;
 
@@ -309,7 +309,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -332,8 +332,8 @@ class Store extends AbstractModel implements
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Http\RequestInterface $request,
-        \Magento\Core\Model\Resource\Config\Data $configDataResource,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Config\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -761,9 +761,10 @@ class Store extends AbstractModel implements
 
         $uri = \Zend_Uri::factory($secureBaseUrl);
         $port = $uri->getPort();
-        $isSecure = $uri->getScheme() == 'https' && isset(
-            $_SERVER['SERVER_PORT']
-        ) && $port == $_SERVER['SERVER_PORT'];
+        $serverPort = $this->_request->getServer('SERVER_PORT');
+        $isSecure = $uri->getScheme() == 'https'
+            && isset($serverPort)
+            && $port == $serverPort;
         return $isSecure;
     }
 
@@ -1068,7 +1069,7 @@ class Store extends AbstractModel implements
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
 
-        $currQuery = $this->_request->getQuery();
+        $currQuery = $this->_request->getQueryValue();
         if (isset(
             $currQuery[$sidQueryParam]
         ) && !empty($currQuery[$sidQueryParam]) && $this->_getSession()->getSessionIdForHost(

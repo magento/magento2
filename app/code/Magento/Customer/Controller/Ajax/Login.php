@@ -13,7 +13,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 /**
  * Login controller
  *
- * @method \Zend_Controller_Request_Http getRequest()
+ * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
 class Login extends \Magento\Framework\App\Action\Action
@@ -85,7 +85,7 @@ class Login extends \Magento\Framework\App\Action\Action
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         try {
-            $credentials = $this->helper->jsonDecode($this->getRequest()->getRawBody());
+            $credentials = $this->helper->jsonDecode($this->getRequest()->getContent());
         } catch (\Exception $e) {
             return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }

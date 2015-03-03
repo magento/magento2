@@ -7,7 +7,7 @@
 namespace Magento\Tax\Model\TaxClass;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\SearchCriteria;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
@@ -221,10 +221,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Something went wrong
      */
-    public function testSaveWithModelException()
+    public function testSaveWithLocalizedException()
     {
         $taxClass = $this->getMock('\Magento\Tax\Model\ClassModel', [], [], '', false);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('Class Name');
@@ -241,12 +241,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new ModelException("Something went wrong"));
+            ->willThrowException(new LocalizedException("Something went wrong"));
         $this->model->save($taxClass);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage A class with the same name already exists for ClassType PRODUCT.
      */
     public function testSaveWithSameClassException()
@@ -266,7 +266,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new ModelException(\Magento\Tax\Model\Resource\TaxClass::UNIQUE_TAX_CLASS_MSG));
+            ->willThrowException(new LocalizedException(__('Class name and class type')));
         $this->model->save($taxClass);
     }
 

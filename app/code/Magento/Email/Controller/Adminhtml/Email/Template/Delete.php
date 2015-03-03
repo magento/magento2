@@ -33,7 +33,7 @@ class Delete extends \Magento\Email\Controller\Adminhtml\Email\Template
                 // redirect to edit form
                 $this->_redirect('adminhtml/*/edit', ['id' => $template->getId()]);
                 return;
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(

@@ -346,7 +346,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
-        if ($request->getPost()) {
+        if ($request->getPostValue()) {
             return;
         }
 

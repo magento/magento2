@@ -8,15 +8,6 @@
 $installer = $this->createMigrationSetup();
 $installer->startSetup();
 
-$installer->appendClassAliasReplace(
-    'core_config_data',
-    'value',
-    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
-    ['config_id']
-);
-$installer->doUpdateClassAliases();
-
 /**
  * Delete rows by condition from authorization_rule
  */

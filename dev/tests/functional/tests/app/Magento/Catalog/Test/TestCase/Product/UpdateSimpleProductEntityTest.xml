@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="UpdateSimpleProductEntityTest">
     <variation name="UpdateSimpleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update visibility to Catalog, Search</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -18,7 +20,6 @@
       <data name="product/data/weight" xsi:type="string">120.0000</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductSaveMessage"/>
       <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
@@ -26,6 +27,8 @@
       <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
     </variation>
     <variation name="UpdateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update visibility to Not Visible Individually</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -36,12 +39,13 @@
       <data name="product/data/weight" xsi:type="string">129.0000</data>
       <data name="product/data/visibility" xsi:type="string">Not Visible Individually</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductIsNotDisplayingOnFrontend" prev="assertProductSaveMessage"/>
       <constraint name="assertProductIsNotDisplayingOnFrontend" prev="assertProductForm"/>
     </variation>
     <variation name="UpdateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update visibility to Catalog</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -52,7 +56,6 @@
       <data name="product/data/weight" xsi:type="string">25.0000</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
       <constraint name="assertProductInStock" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductSearchableBySku" prev="assertProductInStock"/>
@@ -61,6 +64,8 @@
       <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
     </variation>
     <variation name="UpdateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update visibility to Search</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -71,7 +76,6 @@
       <data name="product/data/weight" xsi:type="string">89.0000</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
       <constraint name="assertProductInStock" next="assertProductForm" prev="assertProductSaveMessage"/>
       <constraint name="assertProductForm" next="assertProductVisibleInCategory" prev="assertProductInStock"/>
@@ -81,6 +85,8 @@
       <constraint name="assertProductPage" prev="assertProductSearchableBySku"/>
     </variation>
     <variation name="UpdateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update stock to Out of Stock</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -91,7 +97,6 @@
       <data name="product/data/weight" xsi:type="string">125.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductOutOfStock" prev="assertProductSaveMessage"/>
       <constraint name="assertProductOutOfStock" next="assertProductPage" prev="assertProductForm"/>
@@ -100,6 +105,8 @@
       <constraint name="assertProductSearchableBySku" prev="assertProductVisibleInCategory"/>
     </variation>
     <variation name="UpdateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update product status to offline</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -110,12 +117,13 @@
       <data name="product/data/weight" xsi:type="string">333.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">Product offline</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertProductIsNotDisplayingOnFrontend" prev="assertProductSaveMessage"/>
       <constraint name="assertProductIsNotDisplayingOnFrontend" prev="assertProductForm"/>
     </variation>
     <variation name="UpdateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update category</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">default</data>
       <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
       <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
@@ -126,11 +134,43 @@
       <data name="product/data/weight" xsi:type="string">333.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
       <constraint name="assertProductSaveMessage" next="assertProductForm"/>
       <constraint name="assertProductForm" next="assertUrlRewriteUpdatedProductInGrid" prev="assertProductSaveMessage"/>
       <constraint name="assertUrlRewriteUpdatedProductInGrid" next="assertProductVisibleInCategory" prev="assertProductForm"/>
       <constraint name="assertProductVisibleInCategory" prev="assertUrlRewriteUpdatedProductInGrid"/>
+    </variation>
+    <variation name="UpdateSimpleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12428: Edit Simple Product</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">default</data>
+      <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+      <data name="product/data/sku" xsi:type="string">test_simple_product_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">133.00</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <constraint name="assertProductSaveMessage" next="assertProductPage"/>
+      <constraint name="assertProductPage" prev="assertProductSaveMessage"/>
+    </variation>
+    <variation name="UpdateSimpleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12417: Unassign Products from the Category</data>
+      <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
+      <data name="product/data/category_ids/presets" xsi:type="string"> -</data>
+      <data name="product/data/name" xsi:type="string">-</data>
+      <data name="product/data/sku" xsi:type="string">-</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+      <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="product/data/url_key" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <data name="product/data/status" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="assertProductSaveMessage" next="assertProductNotVisibleInCategory"/>
+      <constraint name="assertProductNotVisibleInCategory" prev="assertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>

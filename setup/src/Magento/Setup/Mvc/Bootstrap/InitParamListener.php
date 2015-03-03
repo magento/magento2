@@ -21,7 +21,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;
 
 /**
- * A listener that injects relevant Magento initialization parameters and initializes Magento\Filesystem component
+ * A listener that injects relevant Magento initialization parameters and initializes Magento\Filesystem component.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 {

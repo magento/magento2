@@ -95,7 +95,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         ]);
     }
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Bad value was supplied.
      */
     public function testEmptyIds()
