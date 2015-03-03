@@ -72,17 +72,9 @@
         "jquery",
         "mage/mage"
     ], function($){
-
-        $('#change-password').mage('setPassword', {
-            'currentPasswordId': '#current-password',
-            'passwordId': '#password',
-            'confirmationId': '#password-confirmation',
-            'passwordContainer': 'fieldset.fieldset.password',
-            'showOnDefault': <?php echo $block->getChangePassword() ? 'true' : 'false' ?>
-        });
-
         var dataForm = $('#form-validate');
         var ignore = <?php echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
+        
         dataForm.mage('validation', {
         <?php if ($_dob->isEnabled()): ?>
             errorPlacement: function(error, element) {
@@ -104,4 +96,17 @@
         });
 
     });
+</script>
+<script type="text/x-magento-init">
+    {
+        "#change-password": {
+            "setPassword": {
+                "currentPasswordId": "#current-password",
+                "passwordId": "#password",
+                "confirmationId": "#password-confirmation",
+                "passwordContainer": "fieldset.fieldset.password",
+                "showOnDefault": <?php echo $block->getChangePassword() ? 'true' : 'false' ?>
+            }
+        }
+    }
 </script>
