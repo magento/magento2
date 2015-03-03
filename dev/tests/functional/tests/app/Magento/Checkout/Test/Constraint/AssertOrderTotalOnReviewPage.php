@@ -28,7 +28,7 @@ class AssertOrderTotalOnReviewPage extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             $checkoutReviewGrandTotal,
-            $grandTotal,
+            number_format($grandTotal, 2),
             'Grand Total price: \'' . $checkoutReviewGrandTotal
             . '\' not equals with price from data set: \'' . $grandTotal . '\''
         );
