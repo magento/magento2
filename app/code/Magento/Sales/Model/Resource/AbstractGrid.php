@@ -35,14 +35,6 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
     protected $addressTableName = 'sales_order_address';
 
     /**
-     * @param AppResource $resource
-     */
-    public function __construct(AppResource $resource)
-    {
-        parent::__construct($resource);
-    }
-
-    /**
      * Resource initialization
      *
      * @return void

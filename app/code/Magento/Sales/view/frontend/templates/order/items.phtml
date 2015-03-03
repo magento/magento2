@@ -68,11 +68,11 @@
     </table>
 </div>
 <?php if ($_giftMessage): ?>
-    <script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('a.action.show').add('a.action.close').mage('giftMessage', {});
-
-});
+<script type="text/x-magento-init">
+    {
+        "a.action.show, a.action.close": {
+            "giftMessage": {}
+        }
+    }
 </script>
 <?php endif; ?>
