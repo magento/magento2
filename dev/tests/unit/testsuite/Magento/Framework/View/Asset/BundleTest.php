@@ -155,36 +155,36 @@ EOL;
         return $this->bundle;
     }
 
-    //public function testAddAssetAndFlushWithoutSplit()
-    //{
-    //    $this->context
-    //        ->expects($this->atLeastOnce())
-    //        ->method('getPath')
-    //        ->willReturn('');
-    //
-    //    $this->bundleConfig
-    //        ->expects($this->atLeastOnce())
-    //        ->method('getPartSize')
-    //        ->willReturn('0');
-    //    $this->bundleConfig
-    //        ->expects($this->atLeastOnce())
-    //        ->method('isSplit')
-    //        ->willReturn(false);
-    //
-    //    $this->directoryWrite
-    //        ->expects($this->once())
-    //        ->method('writeFile')
-    //        ->with('/js/bundle/bundle0.js', $this->expectedResult)
-    //        ->willReturn(true);
-    //
-    //    $this->filesystem
-    //        ->expects($this->once())
-    //        ->method('getDirectoryWrite')
-    //        ->willReturn($this->directoryWrite);
-    //
-    //    $this->initBundle(['js', 'html']);
-    //    $this->bundle->flush();
-    //}
+    public function testAddAssetAndFlushWithoutSplit()
+    {
+        $this->context
+            ->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->willReturn('');
+
+        $this->bundleConfig
+            ->expects($this->atLeastOnce())
+            ->method('getPartSize')
+            ->willReturn('0');
+        $this->bundleConfig
+            ->expects($this->atLeastOnce())
+            ->method('isSplit')
+            ->willReturn(false);
+
+        $this->directoryWrite
+            ->expects($this->once())
+            ->method('writeFile')
+            ->with('/js/bundle/bundle0.js', $this->expectedResult)
+            ->willReturn(true);
+
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->directoryWrite);
+
+        $this->initBundle(['js', 'html']);
+        $this->bundle->flush();
+    }
 
     public function testAddAssetAndFlushWithSplit()
     {

@@ -73,14 +73,18 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
                 $group->addAfter($staticAsset->getFilePath(), $staticAsset, $after);
             }
         }
-
-        $group->addAfter(
-            $requireJsConfig->getFilePath(),
-            $requireJsConfig,
-            \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
-        );
-
-
+        if ($group) {
+            $group->addAfter(
+                $requireJsConfig->getFilePath(),
+                $requireJsConfig,
+                \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
+            );
+        } else {
+            $this->pageConfig->getAssetCollection()->add(
+                $requireJsConfig->getFilePath(),
+                $requireJsConfig
+            );
+        }
         return parent::_prepareLayout();
     }
 

@@ -56,23 +56,19 @@ class Bundle
     public function addAsset(LocalInterface $asset)
     {
         $this->init($asset);
-        $partIndex = $this->getPartIndex($asset);
-        $this->add($asset, $partIndex);
+        $this->add($asset);
     }
 
     /**
      * Add asset into array
      *
      * @param LocalInterface $asset
-     * @param int $partIndex
      * @return void
      */
-    protected function add(LocalInterface $asset, $partIndex)
+    protected function add(LocalInterface $asset)
     {
-        $contextCode = $this->getContextCode($asset);
-        $type = $asset->getContentType();
-
-        $parts = &$this->assets[$contextCode][$type];
+        $partIndex = $this->getPartIndex($asset);
+        $parts = &$this->assets[$this->getContextCode($asset)][$asset->getContentType()];
         if (!isset($parts[$partIndex])) {
             $parts[$partIndex]['assets'] = [];
             $parts[$partIndex]['space'] = $this->getMaxPartSize($asset);
@@ -248,6 +244,7 @@ class Bundle
     /**
      * @param array $parts
      * @param FallbackContext $context
+     * @return void
      */
     protected function fillContent($parts, $context)
     {

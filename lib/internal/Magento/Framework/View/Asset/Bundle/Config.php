@@ -67,7 +67,7 @@ class Config implements Bundle\ConfigInterface
 
     /**
      * @param FallbackContext $assetContext
-     * @return false|float|int|string
+     * @return int
      */
     public function getPartSize(FallbackContext $assetContext)
     {
