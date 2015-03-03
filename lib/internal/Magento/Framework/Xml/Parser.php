@@ -48,8 +48,8 @@ class Parser
     {
         $this->_dom = new \DOMDocument();
         $this->_currentDom = $this->_dom;
-	$this->_errorFormat = $errorFormat;
-	$this->setExceptionName($exceptionName);
+        $this->_errorFormat = $errorFormat;
+        $this->setExceptionName($exceptionName);
         return $this;
     }
 
@@ -85,11 +85,11 @@ class Parser
      */
     public function setExceptionName($exceptionName = null)
     {
-	if ($exceptionName === null) {
-	    $exceptionName = '\Exception';
-	}
-	$this->_exceptionName = $exceptionName;
-	return $this;
+        if ($exceptionName === null) {
+            $exceptionName = '\Exception';
+        }
+        $this->_exceptionName = $exceptionName;
+        return $this;
     }
 
     /**
@@ -159,10 +159,10 @@ class Parser
      */
     public function load($file)
     {
-	libxml_use_internal_errors(true);
-	$ok = $this->getDom()->load($file);
-	$this->_validateLoad($ok);
-	return $this;
+        libxml_use_internal_errors(true);
+        $ok = $this->getDom()->load($file);
+        $this->_validateLoad($ok);
+        return $this;
     }
 
     /**
@@ -173,9 +173,9 @@ class Parser
      */
     public function loadAndValidate($file, $schemaFileName)
     {
-	$this->load($file);
-	$e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
-	return empty($e);
+        $this->load($file);
+        $e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
+        return empty($e);
     }
 
     /**
@@ -184,121 +184,7 @@ class Parser
      */
     public function loadXML($string)
     {
-	libxml_use_internal_errors(true);
-	$ok = $this->getDom()->loadXML($string);
-	$this->_validateLoad($ok);
-	return $this;
-    }
-
-    /**
-     * @param string $string
-     * @param string $schemaFileName
-     * @return bool
-     * @throws \Exception
-     * @throws ValidationException
-     */
-    public function loadXMLandValidate($string, $schemaFileName)
-    {
-	$this->loadXML($string);
-	$e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
-	if (empty($e) === true) {
-	    return true;
-	}
-	throw new ValidationException(implode(PHP_EOL, $e));
-    }
-
-    /**
-     * checks if the load of the xml document has been successful and there are no parser errors
-     *
-     * @param boolean $result
-     * @return null
-     * @throws \Exception
-     */
-    private function _validateLoad($result)
-    {
-	if ($result) {
-	    return null;
-	}
-	$validationErrors = libxml_get_errors();
-	$errors = [];
-	foreach ($validationErrors as $error) {
-	    $errors[] = self::_renderErrorMessage($error, $this->_errorFormat);
-	}
-	libxml_use_internal_errors(false);
-	if (count($errors) > 0) {
-	    throw new $this->_exceptionName(implode("\n", $errors));
-	}
-    }
-
-    /**
-     * Render error message string by replacing placeholders '%field%' with properties of \LibXMLError
-     *
-     * @param \LibXMLError $errorInfo
-     * @param string $format
-     * @return string
-     * @throws \Magento\Framework\Xml\InvalidArgumentException
-     */
-    private static function _renderErrorMessage(\LibXMLError $errorInfo, $format)
-    {
-	$result = $format;
-	foreach ($errorInfo as $field => $value) {
-	    $placeholder = '%' . $field . '%';
-	    $value = trim((string)$value);
-	    $result = str_replace($placeholder, $value, $result);
-	}
-	if (strpos($result, '%') !== false) {
-	    throw new \Magento\Framework\Xml\InvalidArgumentException(
-		"Error format '{$format}' contains unsupported placeholders."
-	    );
-	}
-	return $result;
-    }
-
-    /**
-     * Validate dom document
-     *
-     * @param \DOMDocument $dom
-     * @param string $schemaFileName
-     * @param string $errorFormat
-     * @param string $exceptionName
-     * @return array of errors
-     * @throws \Exception
-     */
-    public static function validateDomDocument(
-	\DOMDocument $dom,
-	$schemaFileName,
-	$errorFormat = self::ERROR_FORMAT_DEFAULT,
-	$exceptionName = '\Exception'
-    ) {
-	libxml_clear_errors();
-	libxml_use_internal_errors(true);
-	$errors = [];
-	try {
-	    $result = $dom->schemaValidate($schemaFileName);
-	    if (!$result) {
-		$validationErrors = libxml_get_errors();
-		if (count($validationErrors) > 0) {
-		    foreach ($validationErrors as $error) {
-			$errors[] = self::_renderErrorMessage($error, $errorFormat);
-		    }
-		} else {
-		    $errors[] = 'Unknown validation error';
-		}
-	    }
-	} catch (\Magento\Framework\Xml\InvalidArgumentException $exception) {
-	    libxml_use_internal_errors(false);
-	    throw new \InvalidArgumentException($exception->getMessage());
-	} catch (\Exception $exception) {
-	    libxml_use_internal_errors(false);
-	    $error = [
-		$exception->getMessage(),
-		__('Schema File: ') . $schemaFileName,
-		__('Merged XML: ') . $dom->saveXML()
-	    ];
-	    throw new $exceptionName(implode(PHP_EOL, $error));
-	}
-	libxml_use_internal_errors(false);
-
-	return $errors;
+        $this->getDom()->loadXML($string);
+        return $this;
     }
 }
