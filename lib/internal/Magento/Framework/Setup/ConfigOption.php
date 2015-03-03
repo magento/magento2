@@ -42,8 +42,8 @@ class ConfigOption extends InputOption
      * Constructor
      *
      * @param string $name
-     * @param string $description
      * @param string $frontendType
+     * @param string $description
      * @param array $selectOptions
      * @param string|null $default
      * @param int|null $mode
@@ -51,16 +51,16 @@ class ConfigOption extends InputOption
      */
     public function __construct(
         $name,
-        $description = '',
         $frontendType,
+        $description = '',
         array $selectOptions = [],
         $default = null,
         $mode = null,
         $shortcut = null
     ) {
-        if ($frontendType != self::FRONTEND_WIZARD_TEXT || $frontendType != self::FRONTEND_WIZARD_CHECKBOX ||
-            $frontendType != self::FRONTEND_WIZARD_MULTISELECT || $frontendType != self::FRONTEND_WIZARD_PASSWORD ||
-            $frontendType != self::FRONTEND_WIZARD_RADIO || $frontendType != self::FRONTEND_WIZARD_SELECT ||
+        if ($frontendType != self::FRONTEND_WIZARD_TEXT && $frontendType != self::FRONTEND_WIZARD_CHECKBOX &&
+            $frontendType != self::FRONTEND_WIZARD_MULTISELECT && $frontendType != self::FRONTEND_WIZARD_PASSWORD &&
+            $frontendType != self::FRONTEND_WIZARD_RADIO && $frontendType != self::FRONTEND_WIZARD_SELECT &&
             $frontendType != self::FRONTEND_WIZARD_TEXTAREA
         ) {
             throw new \InvalidArgumentException('Unknown frontend input type.');
@@ -77,7 +77,7 @@ class ConfigOption extends InputOption
      */
     public function getFrontendInput()
     {
-        $this->frontendType;
+        return $this->frontendType;
     }
 
     /**
@@ -87,6 +87,6 @@ class ConfigOption extends InputOption
      */
     public function getSelectOptions()
     {
-        $this->selectOptions;
+        return $this->selectOptions;
     }
 }
