@@ -7,7 +7,6 @@
 namespace Magento\Quote\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class CartManagementTest extends WebapiAbstract
 {
@@ -32,7 +31,7 @@ class CartManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -75,7 +74,7 @@ class CartManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -119,7 +118,7 @@ class CartManagementTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $requestData = [
@@ -147,7 +146,7 @@ class CartManagementTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $requestData = [
@@ -175,7 +174,7 @@ class CartManagementTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'resourcePath' => '/V1/carts/' . $cartId,
             ],
             'soap' => [
@@ -217,7 +216,7 @@ class CartManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'AssignCustomer',
             ],
             'rest' => [
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'resourcePath' => '/V1/carts/' . $cartId,
             ],
         ];
@@ -259,7 +258,7 @@ class CartManagementTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
 
@@ -288,7 +287,7 @@ class CartManagementTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId . '/order',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
 
@@ -313,7 +312,7 @@ class CartManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/customer/' . $customerId . '/cart',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'quoteCartManagementV1',

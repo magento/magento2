@@ -9,7 +9,6 @@ namespace Magento\Catalog\Api;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ProductRepositoryMultiStoreTest extends WebapiAbstract
 {
@@ -65,7 +64,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
