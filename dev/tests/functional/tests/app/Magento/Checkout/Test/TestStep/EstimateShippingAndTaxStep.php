@@ -75,27 +75,27 @@ class EstimateShippingAndTaxStep implements TestStepInterface
      * @param CheckoutCart $checkoutCart
      * @param Address $address
      * @param AssertEstimateShippingAndTax $assertEstimateShippingAndTax
-     * @param Cart $cart
      * @param FixtureFactory $fixtureFactory
      * @param array $shipping
      * @param array $products
+     * @param Cart $cart
      */
     public function __construct(
         CheckoutCart $checkoutCart,
         Address $address,
         AssertEstimateShippingAndTax $assertEstimateShippingAndTax,
-        Cart $cart,
         FixtureFactory $fixtureFactory,
         array $shipping,
-        array $products
+        array $products,
+        Cart $cart = null
     ) {
         $this->checkoutCart = $checkoutCart;
         $this->address = $address;
         $this->assertEstimateShippingAndTax = $assertEstimateShippingAndTax;
-        $this->cart = $cart;
         $this->fixtureFactory = $fixtureFactory;
         $this->shipping = $shipping;
         $this->products = $products;
+        $this->cart = $cart;
     }
 
     /**
@@ -107,7 +107,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     {
         $this->checkoutCart->open();
         /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
-        if ($this->cart->hasData()) {
+        if ($this->cart) {
             $cart = $this->fixtureFactory->createByCode(
                 'cart',
                 ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]

@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Payment\Test\Fixture\Cc;
+use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
  * Class SelectPaymentMethodStep
@@ -40,12 +40,12 @@ class SelectPaymentMethodStep implements TestStepInterface
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param Cc $creditCard
+     * @param CreditCard $creditCard
      * @param array $payment
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        Cc $creditCard,
+        CreditCard $creditCard,
         array $payment
     ) {
         $this->checkoutOnepage = $checkoutOnepage;

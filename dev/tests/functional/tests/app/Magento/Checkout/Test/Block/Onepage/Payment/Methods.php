@@ -7,7 +7,7 @@
 namespace Magento\Checkout\Test\Block\Onepage\Payment;
 
 use Magento\Mtf\Block\Form;
-use Magento\Payment\Test\Fixture\Cc;
+use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
  * Class Methods
@@ -62,11 +62,11 @@ class Methods extends Form
      * Select payment method
      *
      * @param array $payment
-     * @param Cc $creditCard
+     * @param CreditCard $creditCard
      * @throws \Exception
      * @return void
      */
-    public function selectPaymentMethod(array $payment, Cc $creditCard)
+    public function selectPaymentMethod(array $payment, CreditCard $creditCard)
     {
         $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
         if ($paymentSelector->isVisible()) {
