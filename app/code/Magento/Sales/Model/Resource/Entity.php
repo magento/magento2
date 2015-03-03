@@ -56,21 +56,23 @@ abstract class Entity extends AbstractDb
     protected $gridAggregator;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
+     * @param string|null $resourcePrefix
      * @param GridInterface|null $gridAggregator
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
+        $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->attribute = $attribute;
         $this->salesIncrement = $salesIncrement;
         $this->gridAggregator = $gridAggregator;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

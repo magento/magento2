@@ -271,8 +271,21 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
         $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($adapter));
         $eavEntityType = $this->getMock('Magento\Eav\Model\Resource\Entity\Type', [], [], '', false, false);
+
+        $relationProcessorMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
+        $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
+
         $arguments = [
-            'resource' => $resource,
+            'context' => $contextMock,
             'storeManager' => $storeManager,
             'eavEntityType' => $eavEntityType,
         ];
