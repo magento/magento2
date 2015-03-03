@@ -7,108 +7,72 @@
 //  Variables
 //  _____________________________________________
 
-//
 //  Base button
-//  ---------------------------------------------
-
-@button__font-size: 1.4rem;
-@button__padding-vertical: .55em;
-@button__padding-horizontal: 1em;
-@button__color: @color-brownie;
 @button__background-color: @color-gray89;
 @button__border-color: @color-gray68;
+@button__color: @color-brownie;
+@button__font-family: @font-family__base;
+@button__font-size: @font-size__base;
+@button__padding-horizontal: 1em;
+@button__padding-vertical: .55em;
 
 @button__active__background-color: darken(@button__background-color, 5%);
 @button__hover__background-color: darken(@button__background-color, 3%);
 @button__hover__box-shadow: 0 0 0 1px @color-blue-dodger;
 
 @button__large__font-size: 1.6rem;
-@button__large__padding-vertical: .7em;
 @button__large__padding-horizontal: 1.45em;
+@button__large__padding-vertical: .7em;
 
-//
 //  Primary button
-//  ---------------------------------------------
-
-@button-primary__color: @color-white;
 @button-primary__background-color: @primary__color;
+@button-primary__color: @color-white;
 @button-primary__hover__background-color: @color-phoenix-brown;
 @button-primary__hover__border-color: @color-phoenix-brown;
 
-//
 //  Secondary button
-//  ---------------------------------------------
-
-@button-secondary__color: @color-white;
 @button-secondary__background-color: @color-brownie;
 @button-secondary__border-color: @color-brownie;
-@button-secondary__hover__background-color: @color-very-dark-gray-black2;
+@button-secondary__color: @color-white;
 @button-secondary__active__background-color: @color-very-dark-gray-black2;
+@button-secondary__hover__background-color: @color-very-dark-gray-black2;
 
 //
-//  Common
+//  Utilities
 //  _____________________________________________
 
-.action-button {
+.action-reset () {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    &:hover {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+}
+
+//
+//  Default button
+//  ---------------------------------------------
+
+.action-default,
+button {
+    &:extend(.abs-action-pattern all);
     background: @button__background-color;
     border: 1px solid @button__border-color;
     color: @button__color;
-    display: inline-block;
-    font-family: @font-family__base;
-    font-size: @button__font-size;
-    font-weight: @font-weight__regular;
-    padding: @button__padding-vertical @button__padding-horizontal;
-    text-align: center;
-    vertical-align: middle;
     &:hover {
+        text-decoration: none;
         background-color: @button__hover__background-color;
         color: @button__color;
-        .css(box-shadow, @button__hover__box-shadow);
-        text-decoration: none;
+        box-shadow: @button__hover__box-shadow;
     }
     &:active {
         background-color: @button__active__background-color;
-    }
-    &[disabled],
-    &.disabled {
-        cursor: default;
-        opacity: @disabled__opacity;
-        pointer-events: none;
-    }
-}
-
-//
-//  Action size
-//  ---------------------------------------------
-
-.action-size(
-    @_action-font-size: @button__large__font-size,
-    @_action-padding: @button__large__padding-vertical @button__large__padding-horizontal
-) {
-    .css(font-size, @_action-font-size);
-    .css(padding, @_action-padding);
-}
-
-//
-//  Buttons
-//  _____________________________________________
-
-//
-//  Link button
-//  ---------------------------------------------
-
-.action-link {
-    background-color: transparent;
-    border: none;
-    color: @link__color;
-    font-family: @font-family__base;
-    font-size: 1.4rem;
-    &:hover,
-    &:active {
-        background-color: transparent;
-        border-color: transparent;
-        color: @link__hover__color;
-        text-decoration: underline;
     }
 }
 
@@ -117,12 +81,14 @@
 //  ---------------------------------------------
 
 .action-primary {
+    &:extend(.abs-action-pattern all);
     background-color: @button-primary__background-color;
     border-color: @button-primary__background-color;
     color: @button-primary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
     &:active {
+        text-decoration: none;
         background-color: @button-primary__hover__background-color;
         border-color: @button-primary__hover__border-color;
         color: @button-primary__color;
@@ -140,12 +106,14 @@
 //  ---------------------------------------------
 
 .action-secondary {
+    &:extend(.abs-action-pattern all);
     background-color: @button-secondary__background-color;
     border-color: @button-secondary__border-color;
     color: @button-secondary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
     &:active {
+        text-decoration: none;
         background-color: @button-secondary__hover__background-color;
         color: @button-secondary__color;
     }
@@ -155,16 +123,20 @@
 }
 
 //
-//  Default button
+//  Tertiary button
 //  ---------------------------------------------
 
-.action-reset {
+.action-tertiary {
+    &:extend(.abs-action-pattern all);
     background-color: transparent;
-    border-color: transparent;
-    color: @color-gray20;
-    &:hover,
-    &:active {
+    border: none;
+    color: @link__color;
+    &:active,
+    &:hover {
         background-color: transparent;
+        border-color: transparent;
+        color: @link__hover__color;
+        text-decoration: underline;
     }
 }
 
@@ -189,7 +161,7 @@
             .css(box-shadow, @button__hover__box-shadow);
         }
     }
-    button {
+    .action {
         margin-left: 0;
         &.action-toggle {
             border-left: 1px solid @color-phoenix-brown;
@@ -203,17 +175,5 @@
         &:hover {
             box-shadow: none;
         }
-    }
-}
-
-button {
-    &:extend(.abs-action-button all);
-
-    &.primary {
-        &:extend(.abs-action-primary all);
-    }
-
-    &.secondary {
-        &:extend(.abs-action-secondary all);
     }
 }

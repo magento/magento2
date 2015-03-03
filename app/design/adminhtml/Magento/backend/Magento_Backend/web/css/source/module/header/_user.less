@@ -11,21 +11,22 @@
 //  Variables
 //  ---------------------------------------------
 
-@user__font-size: @font-size__base - .1rem;
+@user__font-size: round(@font-size__base - .1rem, 1);
 @user-account__indent-right: 2.8rem;
-@user-account__padding-top: (@page-header-action__height - @user__font-size) / 2 + .05rem;
 @user-account__padding-bottom: (@page-header-action__height - @user__font-size) / 2 - .05rem;
+@user-account__padding-top: (@page-header-action__height - @user__font-size) / 2 + .05rem;
 
 //
 
 .admin-user {
-    position: relative;
     float: right;
     line-height: 1;
-    margin-left: 1px;
+    margin-left: @page-header-action__shadow-size;
+    position: relative;
+    z-index: @user-account-menu__z-index;
     &.active {
         .admin-user-account {
-            border-color: @page-header-action__border-color;
+            border-color: @page-header-action__active__border-color;
             box-shadow: @page-header-action__box-shadow;
             &:after {
                 transform: rotate(180deg);
@@ -33,28 +34,28 @@
         }
         .admin-user-account-text {
             &:after {
-                position: absolute;
-                top: 100%;
-                left: -@page-header-action__shadow-size;
-                right: 0;
-                content: '';
-                height: @page-header-action__shadow-size;
                 background-color: @page-header-action__background-color;
+                content: '';
+                height: @page-header-action__shadow-size + 1;
+                left: -(@page-header-action__shadow-size + 1);
+                position: absolute;
+                right: 0;
+                top: 100%;
             }
         }
         .admin-user-menu {
-            visibility: visible;
             opacity: 1;
+            visibility: visible;
         }
     }
 }
 
 .admin-user-account {
     &:extend(.abs-page-header-action all);
-    padding: @user-account__padding-top @user-account__indent-right @user-account__padding-bottom 4rem;
     font-size: @user__font-size;
     letter-spacing: .05em;
-    z-index: @user-account-menu__z-index;
+    padding: @user-account__padding-top @user-account__indent-right @user-account__padding-bottom 4rem;
+    z-index: 2;
     &:hover {
         &:after {
             border-color: @page-header-action__hover__color transparent transparent transparent;
@@ -62,69 +63,59 @@
     }
     &:before {
         @_icon-user__size: 2rem;
-        position: absolute;
-        top: 50%;
-        left: 1.1rem;
-        margin-top: -(@_icon-user__size / 2) - .1rem;
+
         &:extend(.abs-icon all);
         content: @icon-account__content;
         font-size: @_icon-user__size;
+        left: 1.1rem;
+        margin-top: -(@_icon-user__size / 2) - .1rem;
+        position: absolute;
+        top: 50%;
     }
     &:after {
         @_triangle__width: 8px;
         @_triangle__height: 5px;
-        position: absolute;
-        top: 50%;
-        right: 1.3rem;
-        margin-top: -((@_triangle__width / 2) / 2);
-        content: '';
-        width: 0;
-        height: 0;
+
+        border-color: @text__color transparent transparent transparent;
         border-style: solid;
         border-width: @_triangle__height @_triangle__width / 2 0 @_triangle__width / 2;
-        border-color: @text__color transparent transparent transparent;
+        content: '';
+        height: 0;
+        margin-top: -((@_triangle__width / 2) / 2);
+        position: absolute;
+        right: 1.3rem;
+        top: 50%;
         transition: all .2s linear;
+        width: 0;
     }
 }
 
 .admin-user-menu {
     @_user-menu__inden-side: 1rem;
 
-    visibility: hidden;
-    position: absolute;
+    &:extend(.abs-page-header-action-menu all);
     line-height: @line-height__base;
-    top: 100%;
-    right: 0;
-    margin-top: -1px;
-    padding: @page-header-action__shadow-size @_user-menu__inden-side .5em;
-    z-index: @user-account-menu__z-index - 1;
-    background-color: @page-header-action__background-color;
-    border: 1px solid @page-header-action__border-color;
-    box-shadow: @page-header-action__box-shadow;
-    opacity: 0;
-    transition: all @page-header-action__transition-duration @page-header-action__transition-timing-function;
+    padding: .5em @_user-menu__inden-side;
+    z-index: 1;
     &:before {
-        content: '';
-        position: absolute;
-        z-index: @user-account-menu__z-index - 1;
+        z-index: 1;
     }
     > li {
-        display: block;
         > a {
+            color: @page-header-action__color;
             display: block;
             padding: .6rem (@user-account__indent-right - @_user-menu__inden-side) .6rem .5em;
-            color: @page-header-action__color;
             text-decoration: none;
-            white-space: nowrap;
             transition: background-color .1s linear;
+            white-space: nowrap;
             &:hover {
-                color: @page-header-action__color;
                 background-color: @page-header-action-menu__hover__background-color;
+                color: @page-header-action__color;
             }
             &:active {
-                position: relative;
-                bottom: -1px;
                 background-color: @page-header-action-menu__active__background-color;
+                bottom: -1px;
+                position: relative;
             }
         }
     }

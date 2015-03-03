@@ -24,19 +24,23 @@
         </div>
     </form>
     <script data-template="search-suggest" type="text/x-magento-template">
-        <ul class="dropdown-menu search-global-menu">
+        <ul class="search-global-menu">
         <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"
                 <%= data.optionData(value) %>
                 >
                 <a href="<%= value.url %>" class="title"><%= value.name %></a>
-                <div class="type"><%= value.type %></div>
+                <span class="type"><%= value.type %></span>
                 <%= value.description || "" %>
             </li>
             <% }); %>
         <% } else { %>
-            <li><span class="mage-suggest-no-records"><?php echo __('No records found.') ?></span></li>
+            <li>
+                <span class="mage-suggest-no-records">
+                    <?php echo __('No records found.') ?>
+                </span>
+            </li>
         <% } %>
         </ul>
     </script>

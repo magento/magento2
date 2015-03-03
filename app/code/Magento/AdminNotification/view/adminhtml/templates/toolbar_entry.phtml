@@ -20,40 +20,53 @@
             data-mage-init='{"dropdown":{}}'
             title="<?php echo __('Notifications'); ?>"
             data-toggle="dropdown">
-            <span class="notifications-counter"><?php echo $block->escapeHtml($notificationCount); ?></span>
+            <span class="notifications-counter">
+                <?php if ($block->escapeHtml($notificationCount) > 99) {
+                    echo '99+';
+                } else {
+                    echo $block->escapeHtml($notificationCount);
+                }?>
+            </span>
         </a>
         <ul
-            class="dropdown-menu notifications-list"
+            class="notifications-list"
             data-mark-as-read-url="<?php echo $block->getUrl('adminhtml/notification/ajaxMarkAsRead'); ?>">
             <?php foreach ($block->getLatestUnreadNotifications() as $notification) : ?>
             <?php /** @var $notification \Magento\AdminNotification\Model\Inbox*/ ?>
             <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
                 data-notification-id="<?php echo $block->escapeHtml($notification->getId()); ?>"
                 data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
-                <strong class="notifications-entry-title"><?php echo $block->escapeHtml($notification->getTitle()); ?></strong>
-                <span class="notifications-entry-description"><?php echo $block->escapeHtml($notification->getDescription()); ?></span>
-                <time class="notifications-entry-time"><?php echo $block->escapeHtml($block->formatNotificationDate($notification->getDateAdded())); ?></time>
-                <button type="button" class="action close notifications-close"><span><?php echo __('Close'); ?></span></button>
-                <div
-                    class="notifications-dialog-content"
-                    data-title="<?php echo __('Notification'); ?>"
-                    data-cancel-caption="<?php echo  __('Cancel'); ?>"
-                    data-acknowledge-caption="<?php echo __('Acknowledge'); ?>">
-                    <strong class="notifications-entry-title"><?php echo $block->escapeHtml($notification->getTitle()); ?></strong>
-                    <span class="notifications-entry-description"><?php echo $block->escapeHtml($notification->getDescription()); ?></span>
-                    <div class="actions notifications-entry-actions">
-                        <a
-                            class="notifications-url"
-                            href="<?php echo $block->escapeUrl($notification->getUrl()); ?>" target="_blank"><?php echo __('Read Details'); ?></a>
-                    </div>
-                    <time class="notifications-entry-time"><?php echo $block->escapeHtml($block->formatNotificationDate($notification->getDateAdded())); ?></time>
-                </div>
+                <strong class="notifications-entry-title">
+                    <?php echo $block->escapeHtml($notification->getTitle()); ?>
+                </strong>
+                <?php if (strlen($block->escapeHtml($notification->getDescription())) > $block->escapeHtml($block->getNotificationDescriptionLength())) : ?>
+                    <p class="notifications-entry-description _cutted">
+                        <span class="notifications-entry-description-start">
+                            <?php echo substr($block->escapeHtml($notification->getDescription()), 0, $block->escapeHtml($block->getNotificationDescriptionLength())); ?>
+                        </span>
+                        <span class="notifications-entry-description-end">
+                            <?php echo substr($block->escapeHtml($notification->getDescription()), $block->escapeHtml($block->getNotificationDescriptionLength())); ?>
+                        </span>
+                    </p>
+                <?php else : ?>
+                    <p class="notifications-entry-description">
+                        <?php echo $block->escapeHtml($notification->getDescription()); ?>
+                    </p>
+                <?php endif; ?>
+                <time class="notifications-entry-time">
+                    <?php echo $block->escapeHtml($block->formatNotificationDate($notification->getDateAdded())); ?>
+                </time>
+                <button
+                    type="button"
+                    class="notifications-close"
+                    title="<?php echo __('Close'); ?>"
+                    ></button>
             </li>
             <?php endforeach; ?>
-            <li class="last">
+            <li class="notifications-entry notifications-entry-last">
                 <a
                     href="<?php echo $block->getUrl('adminhtml/notification/index'); ?>"
-                    class="action more notification-more"><?php echo __('See All (%1 unread)', $notificationCount); ?></a>
+                    class="action-tertiary action-more"><?php echo __('See All (%1 unread)', $notificationCount); ?></a>
             </li>
         </ul>
     <?php else : ?>

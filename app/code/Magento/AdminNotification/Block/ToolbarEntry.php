@@ -18,7 +18,12 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     /**
      * Number of notifications showed on expandable window
      */
-    const NOTIFICATIONS_NUMBER = 4;
+    const NOTIFICATIONS_NUMBER = 3;
+
+    /**
+     * Length of notification description showed by default
+     */
+    const NOTIFICATION_DESCRIPTION_LENGTH = 150;
 
     /**
      * Collection of latest unread notifications
@@ -39,6 +44,16 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     ) {
         parent::__construct($context, $data);
         $this->_notificationList = $notificationList;
+    }
+
+    /**
+     * Retrieve notification description start length
+     *
+     * @return int
+     */
+    public function getNotificationDescriptionLength()
+    {
+        return self::NOTIFICATION_DESCRIPTION_LENGTH;
     }
 
     /**

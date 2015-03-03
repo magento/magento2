@@ -24,8 +24,27 @@
 //  Buttons
 //  ---------------------------------------------
 
-.abs-action-button {
-    .action-button();
+.abs-action-reset {
+    .action-reset();
+}
+
+.abs-action-pattern {
+    display: inline-block;
+    font-family: @button__font-family;
+    font-size: @button__font-size;
+    font-weight: @font-weight__regular;
+    padding: @button__padding-vertical @button__padding-horizontal;
+    text-align: center;
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+.abs-action-default {
+    .action-default();
 }
 
 .abs-action-primary {
@@ -36,18 +55,8 @@
     .action-secondary();
 }
 
-.abs-action-big {
-    .action-size();
-}
-
-.abs-btn-reset {
-    background-color: transparent;
-    border: none;
-    margin: 0;
-    padding: 0;
-    &:hover {
-        box-shadow: none;
-    }
+.abs-action-tertiary {
+    .action-tertiary();
 }
 
 //

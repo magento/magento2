@@ -262,7 +262,7 @@
     }
 
     .submenu-close {
-        &:extend(.abs-btn-reset all);
+        &:extend(.abs-action-reset all);
         padding: 2.4rem @submenu-action-close__indent-right;
         position: absolute;
         right: 0;
@@ -272,6 +272,7 @@
             color: @submenu-section-label__color;
             content: @icon-close-mage__content;
             font-size: 1.7rem;
+            .transition(color);
         }
         &:hover {
             &:before {
