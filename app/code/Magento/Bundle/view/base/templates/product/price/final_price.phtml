@@ -23,13 +23,11 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
 ?>
 <?php if ($block->getSaleableItem()->getPriceView()): ?>
     <p class="minimal-price">
-        <span class="minimal-price-<?php echo $productId;?>">
         <?php echo $block->renderAmount($minimalPrice, [
             'display_label'     => __('As low as'),
             'price_id'          => $block->getPriceId('from-'),
             'include_container' => true
         ]); ?>
-        </span>
         <?php if ($minimalPrice < $minimalRegularPrice): ?>
             <span class="old-price">
                 <?php echo $block->renderAmount($minimalRegularPrice, [

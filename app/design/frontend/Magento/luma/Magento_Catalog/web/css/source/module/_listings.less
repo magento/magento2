@@ -140,9 +140,6 @@
             padding-bottom: @indent__s;
         }
     }
-    .price-inner-label {
-        &:extend(.abs-visually-hidden all);
-    }
 }
 
 .column.main {
@@ -289,10 +286,12 @@
     }
 
     .products-grid {
-        .product-item-info:not(:hover) {
-            &:not(.active) {
-                .product-item-inner {
-                    &:extend(.abs-visually-hidden-desktop-s all);
+        .product-item-info {
+            &:not(:hover) {
+                &:not(.active) {
+                    .product-item-inner {
+                        &:extend(.abs-visually-hidden-desktop-s all);
+                    }
                 }
             }
         }
