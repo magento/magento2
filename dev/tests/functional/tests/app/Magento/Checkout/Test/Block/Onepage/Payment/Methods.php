@@ -62,11 +62,11 @@ class Methods extends Form
      * Select payment method
      *
      * @param array $payment
-     * @param CreditCard $creditCard
+     * @param CreditCard|null $creditCard
      * @throws \Exception
      * @return void
      */
-    public function selectPaymentMethod(array $payment, CreditCard $creditCard)
+    public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
     {
         $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
         if ($paymentSelector->isVisible()) {
@@ -81,7 +81,7 @@ class Methods extends Form
         if ($payment['method'] == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
-        if ($creditCard->hasData()) {
+        if ($creditCard) {
             /** @var \Magento\Payment\Test\Block\Form\Cc $formBlock */
             $formBlock = $this->blockFactory->create(
                 '\\Magento\\Payment\\Test\\Block\\Form\\Cc',
