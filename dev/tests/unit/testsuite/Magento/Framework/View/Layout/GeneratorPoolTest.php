@@ -37,21 +37,6 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     protected $structureMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfigMock;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeResolverMock;
-
-    /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
-    /**
      * @var GeneratorPool
      */
     protected $model;
@@ -81,14 +66,11 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
             'Magento\Framework\View\Layout\GeneratorPool',
             [
                 'helper' => $this->helperMock,
-                'logger' => $this->loggerMock,
                 'generators' => $this->getGeneratorsMocks()
             ]
         );
