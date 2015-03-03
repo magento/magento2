@@ -48,6 +48,22 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($config->getSchemaFile());
     }
 
+
+    /**
+     * @expectedException \Magento\Framework\Exception
+     * @expectedExceptionMessage expected '>'
+     */
+    public function testMalformedXML()
+    {
+	/** @var \Magento\Framework\Config\Theme $config */
+	$config = $this->objectManager->getObject(
+	    'Magento\Framework\Config\Theme',
+	    [
+		'configContent' => file_get_contents(__DIR__ . '/_files/area/theme_invalid.xml')
+	    ]
+	);
+    }
+
     /**
      * @param string $themePath
      * @param array $expected

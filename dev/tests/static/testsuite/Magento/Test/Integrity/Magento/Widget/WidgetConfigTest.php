@@ -72,7 +72,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
+	$errors = \Magento\Framework\Xml\Parser::validateDomDocument($dom, $schemaFile);
         if (!$errors) {
             $this->fail('There is a problem with the schema.  A known bad XML file passed validation');
         }
@@ -90,7 +90,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
+	$errors = \Magento\Framework\Xml\Parser::validateDomDocument($dom, $schemaFile);
         if ($errors) {
             $this->fail(
                 'There is a problem with the schema.  A known good XML file failed validation: ' . PHP_EOL . implode(

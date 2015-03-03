@@ -5,8 +5,15 @@
  */
 namespace Magento\Framework\Xml;
 
+use \Magento\Framework\Config\Dom\ValidationException;
+
 class Parser
 {
+    /**
+     * Format of items in errors array to be used by default. Available placeholders - fields of \LibXMLError.
+     */
+    const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
+
     /**
      * @var \DOMDocument|null
      */
@@ -23,12 +30,26 @@ class Parser
     protected $_content = [];
 
     /**
-     *
+     * @var string
      */
-    public function __construct()
+    protected $_exceptionName = null;
+    /**
+     * Format of error messages
+     *
+     * @var string
+     */
+    protected $_errorFormat;
+
+    /**
+     * @param string|null $exceptionName
+     * @param string $errorFormat
+     */
+    public function __construct($exceptionName = null, $errorFormat = self::ERROR_FORMAT_DEFAULT)
     {
         $this->_dom = new \DOMDocument();
         $this->_currentDom = $this->_dom;
+        $this->_errorFormat = $errorFormat;
+        $this->setExceptionName($exceptionName);
         return $this;
     }
 
@@ -55,6 +76,19 @@ class Parser
     protected function _setCurrentDom($node)
     {
         $this->_currentDom = $node;
+        return $this;
+    }
+
+    /**
+     * @param string|null $exceptionName
+     * @return $this
+     */
+    public function setExceptionName($exceptionName = null)
+    {
+        if ($exceptionName === null) {
+            $exceptionName = '\Exception';
+        }
+        $this->_exceptionName = $exceptionName;
         return $this;
     }
 
@@ -125,8 +159,23 @@ class Parser
      */
     public function load($file)
     {
-        $this->getDom()->load($file);
+        libxml_use_internal_errors(true);
+        $ok = $this->getDom()->load($file);
+        $this->_validateLoad($ok);
         return $this;
+    }
+
+    /**
+     * @param string $file
+     * @param string $schemaFileName
+     * @return bool
+     * @throws \Exception
+     */
+    public function loadAndValidate($file, $schemaFileName)
+    {
+        $this->load($file);
+        $e = self::validateDomDocument($this->getDom(), $schemaFileName, $this->_errorFormat, $this->_exceptionName);
+        return empty($e);
     }
 
     /**

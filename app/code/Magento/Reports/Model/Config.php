@@ -5,6 +5,8 @@
  */
 namespace Magento\Reports\Model;
 
+use \Magento\Framework\Xml\Parser;
+
 /**
  * Configuration for reports
  */
@@ -42,15 +44,15 @@ class Config extends \Magento\Framework\Object
      */
     public function getGlobalConfig()
     {
-        $dom = new \DOMDocument();
-        $dom->load($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexConfig.xml');
+	$parser = new Parser();
+	$parser->load($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexConfig.xml');
 
-        $baseUrl = $dom->createElement('baseUrl');
+	$baseUrl = $parser->getDom()->createElement('baseUrl');
         $baseUrl->nodeValue = $this->_storeManager->getBaseUrl();
 
-        $dom->documentElement->appendChild($baseUrl);
+	$parser->getDom()->documentElement->appendChild($baseUrl);
 
-        return $dom->saveXML();
+	return $parser->getDom()->saveXML();
     }
 
     /**

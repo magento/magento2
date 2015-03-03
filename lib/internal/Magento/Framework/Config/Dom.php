@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\Config;
 
+use \Magento\Framework\Xml\Parser;
+
 /**
  * Class Dom
  */
@@ -20,11 +22,6 @@ class Dom
      * Prefix which will be used for root namespace
      */
     const ROOT_NAMESPACE_PREFIX = 'x';
-
-    /**
-     * Format of items in errors array to be used by default. Available placeholders - fields of \LibXMLError.
-     */
-    const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
 
     /**
      * Dom document
@@ -83,14 +80,16 @@ class Dom
         array $idAttributes = [],
         $typeAttributeName = null,
         $schemaFile = null,
-        $errorFormat = self::ERROR_FORMAT_DEFAULT
+	$errorFormat = Parser::ERROR_FORMAT_DEFAULT
     ) {
         $this->_schemaFile = $schemaFile;
         $this->_nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
         $this->_typeAttributeName = $typeAttributeName;
         $this->_errorFormat = $errorFormat;
         $this->_dom = $this->_initDom($xml);
-        $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
+	if ($this->_dom) {
+	    $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
+	}
     }
 
     /**
@@ -161,7 +160,7 @@ class Dom
                     }
                 }
             }
-        } else {
+	} elseif ($this->_dom) {
             /* Add node as is to the document under the same parent element */
             $parentMatchedNode = $this->_getMatchedNode($parentPath);
             $newNode = $this->_dom->importNode($node, true);
@@ -228,6 +227,9 @@ class Dom
      */
     protected function _getMatchedNode($nodePath)
     {
+	if (!$this->_dom) {
+	    return null;
+	}
         $xPath = new \DOMXPath($this->_dom);
         if ($this->_rootNamespace) {
             $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->_rootNamespace);
@@ -243,67 +245,9 @@ class Dom
     }
 
     /**
-     * Validate dom document
-     *
-     * @param \DOMDocument $dom
-     * @param string $schemaFileName
-     * @param string $errorFormat
-     * @return array of errors
-     * @throws \Exception
-     */
-    public static function validateDomDocument(
-        \DOMDocument $dom,
-        $schemaFileName,
-        $errorFormat = self::ERROR_FORMAT_DEFAULT
-    ) {
-        libxml_use_internal_errors(true);
-        try {
-            $result = $dom->schemaValidate($schemaFileName);
-            $errors = [];
-            if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = self::_renderErrorMessage($error, $errorFormat);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
-            }
-        } catch (\Exception $exception) {
-            libxml_use_internal_errors(false);
-            throw $exception;
-        }
-        libxml_use_internal_errors(false);
-        return $errors;
-    }
-
-    /**
-     * Render error message string by replacing placeholders '%field%' with properties of \LibXMLError
-     *
-     * @param \LibXMLError $errorInfo
-     * @param string $format
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    private static function _renderErrorMessage(\LibXMLError $errorInfo, $format)
-    {
-        $result = $format;
-        foreach ($errorInfo as $field => $value) {
-            $placeholder = '%' . $field . '%';
-            $value = trim((string)$value);
-            $result = str_replace($placeholder, $value, $result);
-        }
-        if (strpos($result, '%') !== false) {
-            throw new \InvalidArgumentException("Error format '{$format}' contains unsupported placeholders.");
-        }
-        return $result;
-    }
-
-    /**
      * DOM document getter
      *
-     * @return \DOMDocument
+     * @return \DOMDocument|null
      */
     public function getDom()
     {
@@ -314,20 +258,18 @@ class Dom
      * Create DOM document based on $xml parameter
      *
      * @param string $xml
-     * @return \DOMDocument
+     * @return \DOMDocument|null
      * @throws \Magento\Framework\Config\Dom\ValidationException
      */
     protected function _initDom($xml)
     {
-        $dom = new \DOMDocument();
-        $dom->loadXML($xml);
+	$parser = new Parser('\Magento\Framework\Config\Dom\ValidationException', $this->_errorFormat);
         if ($this->_schemaFile) {
-            $errors = self::validateDomDocument($dom, $this->_schemaFile, $this->_errorFormat);
-            if (count($errors)) {
-                throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
-            }
+	    return $parser->loadXMLandValidate($xml, $this->_schemaFile) === true
+		? $parser->getDom()
+		: null;
         }
-        return $dom;
+	return $parser->loadXML($xml)->getDom();
     }
 
     /**
@@ -335,11 +277,12 @@ class Dom
      *
      * @param string $schemaFileName absolute path to schema file
      * @param array &$errors
+     * @param string $exceptionName
      * @return bool
      */
-    public function validate($schemaFileName, &$errors = [])
+    public function validate($schemaFileName, &$errors = [], $exceptionName = '\Exception')
     {
-        $errors = self::validateDomDocument($this->_dom, $schemaFileName, $this->_errorFormat);
+	$errors = Parser::validateDomDocument($this->_dom, $schemaFileName, $this->_errorFormat, $exceptionName);
         return !count($errors);
     }
 

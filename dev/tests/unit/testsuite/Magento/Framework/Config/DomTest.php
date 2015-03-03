@@ -92,6 +92,26 @@ class DomTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Config\Dom\ValidationException
+     * @expectedExceptionMessage Opening and ending tag mismatch: root line 7 and xroot
+     */
+    public function testLoadXMLMalformedXmlException()
+    {
+	$xml = file_get_contents(__DIR__ . "/_files/dom/malformed1.xml");
+	$config = new \Magento\Framework\Config\Dom($xml);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Config\Dom\ValidationException
+     * @expectedExceptionMessage Start tag expected, '<' not found
+     */
+    public function testLoadXMLEmptyXmlException()
+    {
+	$xml = file_get_contents(__DIR__ . "/_files/dom/malformed2.xml");
+	$config = new \Magento\Framework\Config\Dom($xml);
+    }
+
+    /**
      * @param string $xml
      * @param array $expectedErrors
      * @dataProvider validateDataProvider
@@ -112,18 +132,18 @@ class DomTest extends \PHPUnit_Framework_TestCase
         return [
             'valid' => ['<root><node id="id1"/><node id="id2"/></root>', []],
             'invalid' => [
-                '<root><node id="id1"/><unknown_node/></root>',
-                ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+		'<root><node id="id1"/><unknown_node1/></root>',
+		["Element 'unknown_node1': This element is not expected. Expected is ( node ).\nLine: 1\n"],
             ]
         ];
     }
 
     public function testValidateCustomErrorFormat()
     {
-        $xml = '<root><unknown_node/></root>';
+	$xml = '<root><unknown_node2/></root>';
         $errorFormat = 'Error: `%message%`';
         $expectedErrors = [
-            "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`",
+	    "Error: `Element 'unknown_node2': This element is not expected. Expected is ( node ).`",
         ];
         $dom = new \Magento\Framework\Config\Dom($xml, [], null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
@@ -137,22 +157,27 @@ class DomTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateCustomErrorFormatInvalid()
     {
-        $xml = '<root><unknown_node/></root>';
+	$xml = '<root><unknown_node3/></root>';
         $errorFormat = '%message%,%unknown%';
         $dom = new \Magento\Framework\Config\Dom($xml, [], null, null, $errorFormat);
         $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
 
+    /**
+     * This test method belongs normally into XML/ParserTest but here it is very useful to show the
+     * usage of libxml_clear_errors() in method validateDomDocument
+     */
     public function testValidateUnknownError()
     {
-        $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
-        $dom = new \Magento\Framework\Config\Dom($xml);
         $domMock = $this->getMock('DOMDocument', ['schemaValidate'], []);
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)
             ->will($this->returnValue(false));
-        $this->assertEquals(['Unknown validation error'], $dom->validateDomDocument($domMock, $schemaFile));
+	$this->assertEquals(
+	    ['Unknown validation error'],
+	    \Magento\Framework\Xml\Parser::validateDomDocument($domMock, $schemaFile)
+	);
     }
 }
