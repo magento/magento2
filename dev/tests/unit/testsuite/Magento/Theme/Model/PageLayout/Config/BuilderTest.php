@@ -51,11 +51,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->builder = $helper->getObject('Magento\Theme\Model\PageLayout\Config\Builder', [
-            'configFactory' => $this->configFactory,
-            'fileCollector' => $this->fileCollector,
-            'themeCollection' => $this->themeCollection
-        ]);
+        $this->builder = $helper->getObject(
+            'Magento\Theme\Model\PageLayout\Config\Builder',
+            [
+                'configFactory' => $this->configFactory,
+                'fileCollector' => $this->fileCollector,
+                'themeCollection' => $this->themeCollection
+            ]
+        );
     }
 
     public function testGetPageLayoutsConfig()
