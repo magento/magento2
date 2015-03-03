@@ -40,6 +40,13 @@ class ConfigOptionsCollector
     private $moduleList;
 
     /**
+     * Object manager provider
+     *
+     * @var ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+
+    /**
      * Constructor
      *
      * @param DirectoryList $directoryList
@@ -51,12 +58,14 @@ class ConfigOptionsCollector
         DirectoryList $directoryList,
         Filesystem $filesystem,
         FullModuleList $fullModuleList,
-        ModuleList $moduleList
+        ModuleList $moduleList,
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->directoryList = $directoryList;
         $this->filesystem = $filesystem;
         $this->fullModuleList = $fullModuleList;
         $this->moduleList = $moduleList;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -72,7 +81,7 @@ class ConfigOptionsCollector
         foreach ($this->moduleList->getNames() as $moduleName) {
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptions';
             if (class_exists($optionsClassName)) {
-                $optionsClass = new $optionsClassName();
+                $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
                 if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
                     $optionsList[$optionsClassName] = [
                         'options' => $optionsClass->getOptions(),
@@ -93,7 +102,7 @@ class ConfigOptionsCollector
             // remove .php
             $frameworkOptionsFile = substr($frameworkOptionsFile, 0, -4);
             $frameworkOptionsClassName = str_replace('/', '\\', $frameworkOptionsFile);
-            $optionsClass = new $frameworkOptionsClassName();
+            $optionsClass = $this->objectManagerProvider->get()->create($frameworkOptionsClassName);
             if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
                 $optionsList[$frameworkOptionsClassName] = [
                     'options' => $optionsClass->getOptions(),
@@ -113,7 +122,7 @@ class ConfigOptionsCollector
             // remove setup/src/ and .php
             $setupOptionsFile = substr($setupOptionsFile, 10, -4);
             $setupOptionsClassName = str_replace('/', '\\', $setupOptionsFile);
-            $optionsClass = new $setupOptionsClassName();
+            $optionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
             if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
                 $optionsList[$setupOptionsClassName] = [
                     'options' => $optionsClass->getOptions(),
