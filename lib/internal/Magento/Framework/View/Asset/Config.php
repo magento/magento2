@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\View\Asset;
+
 use Magento\Store\Model\ScopeInterface;
 
 /**

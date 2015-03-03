@@ -13,9 +13,12 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 class Config implements Bundle\ConfigInterface
 {
+    /**#@+
+     * Bundle config info
+     */
     const VIEW_CONFIG_MODULE = 'Js_Bundle';
-
     const VIEW_CONFIG_BUNDLE_SIZE_NAME = 'bundle_size';
+    /**#@-*/
 
     /**
      * @var ListInterface
@@ -76,13 +79,11 @@ class Config implements Bundle\ConfigInterface
         $unit = strtoupper($unit);
         switch ($unit) {
             case 'KB':
-                break;
+                return (int)$size;
             case 'MB':
-                $size = (int)$size * 1024;
-                break;
+                return (int)$size * 1024;
             default:
-                $size = (int)$size / 1024;
+                return (int)$size / 1024;
         }
-        return $size;
     }
 }

@@ -59,28 +59,27 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
         $group = $this->pageConfig->getAssetCollection()->getGroupByContentType('js');
 
-        if ($group) {
-            if ($this->bundleConfig->isBundlingJsFiles()) {
+        if ($group && $this->bundleConfig->isBundlingJsFiles()) {
 
-                $after = \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME;
-                /** @var \Magento\Framework\View\Asset\File $bundleAsset */
-                foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
-                    $group->addAfter($bundleAsset->getFilePath(), $bundleAsset, $after);
-                    $after = $bundleAsset->getFilePath();
-                }
-
-                $staticAsset = $this->fileManager->createStaticJsAsset();
-                if ($staticAsset !== false) {
-                    $group->addAfter($staticAsset->getFilePath(), $staticAsset, $after);
-                }
+            $after = \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME;
+            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
+            foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
+                $group->addAfter($bundleAsset->getFilePath(), $bundleAsset, $after);
+                $after = $bundleAsset->getFilePath();
             }
 
-            $group->addAfter(
-                $requireJsConfig->getFilePath(),
-                $requireJsConfig,
-                \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
-            );
+            $staticAsset = $this->fileManager->createStaticJsAsset();
+            if ($staticAsset !== false) {
+                $group->addAfter($staticAsset->getFilePath(), $staticAsset, $after);
+            }
         }
+
+        $group->addAfter(
+            $requireJsConfig->getFilePath(),
+            $requireJsConfig,
+            \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
+        );
+
 
         return parent::_prepareLayout();
     }

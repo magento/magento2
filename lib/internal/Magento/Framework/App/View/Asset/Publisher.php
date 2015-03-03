@@ -60,6 +60,10 @@ class Publisher
     private function publishAsset(Asset\LocalInterface $asset)
     {
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        return $dir->writeFile($asset->getPath(), $asset->getContent());
+        $content = $asset->getContent();
+        if (!$content) {
+            return false;
+        }
+        return $dir->writeFile($asset->getPath(), $content);
     }
 }

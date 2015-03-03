@@ -32,21 +32,27 @@ class Collection
     /**
      * @param string $identifier
      * @param AssetInterface $asset
-     * @param string $after
+     * @param string $key
      * @return void
      */
-    public function addAfter($identifier, AssetInterface $asset, $after)
+    public function addAfter($identifier, AssetInterface $asset, $key)
     {
-        if (!$after) {
+        if (!$key) {
             $this->add($identifier, $asset);
             return;
         }
-        $afterPosition = array_search($after, array_keys($this->assets));
-        $afterPosition++;
-        $partAfter = array_slice($this->assets, $afterPosition);
-        $partAfter = array_merge([$identifier => $asset], $partAfter);
-        $partBefore =  array_slice($this->assets, 0, $afterPosition);
-        $this->assets = array_merge($partBefore, $partAfter);
+
+        $result = [];
+        foreach ($this->assets as $k => $val) {
+            if ($k == $key) {
+                $result[$key] = $val;
+                $result[$identifier] = $asset;
+            } else {
+                $result[$key] = $val;
+            }
+        }
+
+        $this->assets = $result;
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Asset;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle\Manager;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,6 +33,11 @@ class Bundle
     ];
 
     /**
+     * @var array
+     */
+    protected $content = [];
+
+    /**
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
      */
@@ -43,26 +49,75 @@ class Bundle
         $this->bundleConfig = $bundleConfig;
     }
 
-
     /**
      * @param LocalInterface $asset
-     *
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAsset(LocalInterface $asset)
     {
-        $contextCode = $asset->getContext()->getAreaCode()
-            . ':' . $asset->getContext()->getThemePath()
-            . ':' . $asset->getContext()->getLocaleCode();
+        $this->init($asset);
+        $partIndex = $this->getPartIndex($asset);
+        $this->add($asset, $partIndex);
+    }
+
+    /**
+     * Add asset into array
+     *
+     * @param LocalInterface $asset
+     * @param int $partIndex
+     * @return void
+     */
+    protected function add(LocalInterface $asset, $partIndex)
+    {
+        $contextCode = $this->getContextCode($asset);
         $type = $asset->getContentType();
+
+        $parts = &$this->assets[$contextCode][$type];
+        if (!isset($parts[$partIndex])) {
+            $parts[$partIndex]['assets'] = [];
+            $parts[$partIndex]['space'] = $this->getMaxPartSize($asset);
+        }
+        $parts[$partIndex]['assets'][$this->getAssetKey($asset)] = $asset;
+        $parts[$partIndex]['space'] -= $this->getAssetSize($asset);
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return void
+     */
+    protected function init(LocalInterface $asset)
+    {
+        $contextCode = $this->getContextCode($asset);
+        $type = $asset->getContentType();
+
         if (!isset($this->assets[$contextCode][$type])) {
             $this->assets[$contextCode][$type] = [];
         }
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return string
+     */
+    protected function getContextCode(LocalInterface $asset)
+    {
+        /** @var FallbackContext $context */
+        $context = $asset->getContext();
+        return $context->getAreaCode() . ':' . $context->getThemePath() . ':' . $context->getLocaleCode();
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return int
+     */
+    protected function getPartIndex(LocalInterface $asset)
+    {
+        $contextCode = $this->getContextCode($asset);
+        $type = $asset->getContentType();
         $parts = $this->assets[$contextCode][$type];
 
-        $maxSize = $this->bundleConfig->getPartSize($asset->getContext());
-        $assetSize = mb_strlen(utf8_encode($asset->getContent()), 'utf-8') / 1024;
+        $maxSize = $this->getMaxPartSize($asset);
+        $assetSize = $this->getAssetSize($asset);
         $minSpace = $maxSize + 1;
         $minIndex = -1;
         if ($maxSize && count($parts)) {
@@ -74,20 +129,26 @@ class Bundle
                 }
             }
         }
-        $index = null;
-        if ($maxSize == 0) {
-            $index = 0;
-        } elseif ($minIndex >= 0) {
-            $index = $minIndex;
-        } else {
-            $index = count($parts);
-        }
-        if (!isset($this->assets[$contextCode][$type][$index])) {
-            $this->assets[$contextCode][$type][$index]['assets'] = [];
-            $this->assets[$contextCode][$type][$index]['space'] = $maxSize;
-        }
-        $this->assets[$contextCode][$type][$index]['assets'][$this->getAssetKey($asset)] = $asset;
-        $this->assets[$contextCode][$type][$index]['space'] -= $assetSize;
+
+        return ($maxSize != 0) ? ($minIndex >= 0) ? $minIndex : count($parts) : 0;
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return int
+     */
+    protected function getMaxPartSize(LocalInterface $asset)
+    {
+        return $this->bundleConfig->getPartSize($asset->getContext());
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return int
+     */
+    protected function getAssetSize(LocalInterface $asset)
+    {
+        return mb_strlen(utf8_encode($asset->getContent()), 'utf-8') / 1024;
     }
 
     /**
@@ -147,46 +208,58 @@ class Bundle
 
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function flush()
     {
+        foreach ($this->assets as $types) {
+            $this->save($types);
+        }
+        $this->assets = [];
+    }
+
+    /**
+     * @param array $types
+     * @return void
+     */
+    protected function save($types)
+    {
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
 
-        foreach ($this->assets as $types) {
-            $content = '';
-            $bundlePath = '';
-            $partIndex = 1;
-            $isSplit = null;
-            foreach ($types as $parts) {
-                /** @var LocalInterface $firstAsset */
-                $firstAsset = reset(reset($parts)['assets']);
-                $amountParts = isset($types[Manager::ASSET_TYPE_JS]) ? count($types[Manager::ASSET_TYPE_JS]) : 0;
-                $amountParts += isset($types[Manager::ASSET_TYPE_HTML]) ? count($types[Manager::ASSET_TYPE_HTML]) : 0;
-                if ($firstAsset) {
-                    $bundlePath = $firstAsset->getContext()->getPath() . Manager::BUNDLE_PATH;
-                    $isSplit = $this->bundleConfig->isSplit($firstAsset->getContext());
-                    foreach ($parts as $part) {
-                        if ($isSplit) {
-                            $content = '';
-                        }
-                        $content .= $this->getPartContent($part['assets']);
-                        if ($partIndex == $amountParts) {
-                            $content = $content . $this->getInitJs();
-                        }
-                        if ($isSplit) {
-                            $dir->writeFile($bundlePath . "$partIndex.js", $content);
-                        }
-                        $partIndex++;
-                    }
-                }
-            }
-            if ($bundlePath && !$isSplit) {
-                $dir->writeFile($bundlePath . "1.js", $content);
-            }
+        $bundlePath = '';
+        foreach ($types as $parts) {
+            /** @var FallbackContext $context */
+            $context = reset(reset($parts)['assets'])->getContext();
+            $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
+            $this->fillContent($parts, $context);
         }
 
-        $this->assets = [];
+        $this->content[count($this->content) > 0 ? count($this->content) - 1 : 0] .= $this->getInitJs();
+
+        if (count($this->content) > 1) {
+            foreach ($this->content as $partIndex => $content) {
+                $dir->writeFile($bundlePath . "$partIndex.js", $content);
+            }
+            return;
+        }
+
+        $dir->writeFile($bundlePath . '0.js', $this->content[0]);
+    }
+
+    /**
+     * @param array $parts
+     * @param FallbackContext $context
+     */
+    protected function fillContent($parts, $context)
+    {
+        $index = count($this->content) > 0 ? count($this->content) - 1 : 0 ;
+        foreach ($parts as $part) {
+            if (!isset($this->content[$index])) {
+                $this->content[$index] = '';
+            } elseif ($this->bundleConfig->isSplit($context)) {
+                ++$index;
+                $this->content[$index] = '';
+            }
+            $this->content[$index] .= $this->getPartContent($part['assets']);
+        }
     }
 }

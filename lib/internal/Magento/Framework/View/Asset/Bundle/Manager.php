@@ -178,11 +178,10 @@ class Manager
     /**
      * Flush bundle
      *
-     * @return bool
+     * @return void
      */
     public function flush()
     {
         $this->bundle->flush();
-        return true;
     }
 }
