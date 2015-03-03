@@ -6,14 +6,14 @@
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class SelectShippingMethodForOrderStep.
- * Select Shipping data
+ * Fill order account information.
  */
-class SelectShippingMethodForOrderStep implements TestStepInterface
+class FillAccountInformationStep implements TestStepInterface
 {
     /**
      * Sales order create index page.
@@ -23,34 +23,30 @@ class SelectShippingMethodForOrderStep implements TestStepInterface
     protected $orderCreateIndex;
 
     /**
-     * Shipping.
+     * Customer fixtrure.
      *
-     * @var array
+     * @var Customer
      */
-    protected $shipping;
+    protected $customer;
 
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param array $shipping
+     * @param Customer $customer
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, array $shipping = null)
+    public function __construct(OrderCreateIndex $orderCreateIndex, Customer $customer)
     {
         $this->orderCreateIndex = $orderCreateIndex;
-        $this->shipping = $shipping;
+        $this->customer = $customer;
     }
 
     /**
-     * Fill Shipping Data.
+     * Fill Order Account Data.
      *
-     * @return array
+     * @return void
      */
     public function run()
     {
-        if ($this->shipping['shipping_service'] !== null) {
-            $this->orderCreateIndex->getCreateBlock()->selectShippingMethod($this->shipping);
-        }
-
-        return ['shipping' => $this->shipping];
+        $this->orderCreateIndex->getCreateBlock()->getAccountBlock()->fill($this->customer);
     }
 }
