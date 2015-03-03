@@ -69,14 +69,14 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
         if (!$this->cartHelper->getQuote()->validateMinimumAmount()) {
             $warning = $this->_scopeConfig->getValue(
                 'sales/minimum_order/description',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             if (!$warning) {
                 $currencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
                 $minimumAmount = $this->currency->getCurrency($currencyCode)->toCurrency(
                     $this->_scopeConfig->getValue(
                         'sales/minimum_order/amount',
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     )
                 );
                 $warning = __('Minimum order amount is %1', $minimumAmount);
