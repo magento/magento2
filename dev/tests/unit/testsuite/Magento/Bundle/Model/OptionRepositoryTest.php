@@ -100,7 +100,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\Exception
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Only implemented for bundle product
      */
     public function testGetThrowsExceptionIfProductIsSimple()
@@ -416,7 +416,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\Exception
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Only implemented for bundle product
      */
     public function testGetListException()
