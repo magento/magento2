@@ -13,6 +13,7 @@
     <entity_type>quote</entity_type>
     <repository_class>Magento\Checkout\Test\Repository\Cart</repository_class>
     <handler_interface>Magento\Checkout\Test\Handler\Cart\CartInterface</handler_interface>
+    <dataset name="default" />
     <fields>
         <field name="entity_id">
             <attribute_code>entity_id</attribute_code>

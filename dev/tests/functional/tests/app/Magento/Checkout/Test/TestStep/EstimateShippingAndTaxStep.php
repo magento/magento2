@@ -106,16 +106,16 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     public function run()
     {
         $this->checkoutCart->open();
-        $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
-        if ($this->shipping['shipping_service'] !== '-') {
-            $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
-        }
         /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
-        if (!empty($this->cart->hasData())) {
+        if ($this->cart->hasData()) {
             $cart = $this->fixtureFactory->createByCode(
                 'cart',
                 ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
             );
+            $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
+            if ($this->shipping['shipping_service']) {
+                $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
+            }
             $this->assertEstimateShippingAndTax->processAssert($this->checkoutCart, $cart);
         }
     }
