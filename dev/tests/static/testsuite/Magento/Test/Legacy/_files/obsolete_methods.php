@@ -305,7 +305,7 @@ return [
         'Magento\Core\Model\Design\PackageInterface',
         'Magento\Framework\View\Asset\MergeService'
     ],
-    ['cleanVarFolder', '', 'Magento\Framework\Io\File::rmdirRecursive()'],
+    ['cleanVarFolder', '', 'Magento\Framework\Filesystem\Io\File::rmdirRecursive()'],
     [
         'cleanVarSubFolders',
         '',
@@ -2084,4 +2084,39 @@ return [
     ['getFiles', 'Magento\Framework\App\Request\Http'],
     ['getAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['setAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
+    [
+        'render',
+        'Magento\Framework\Webapi\ErrorProcessor',
+        'Magento\Framework\Webapi\ErrorProcessor::renderErrorMessage'
+    ],
+    [
+        'processServiceOutput',
+        'Magento\Webapi\Controller\Rest\Response\DataObjectConverter',
+        'Magento\Framework\Webapi\ServiceOutputProcessor::process'
+    ],
+    [
+        'getInputData',
+        'Magento\Webapi\Controller\ServiceArgsSerializer',
+        'Magento\Framework\Webapi\ServiceInputProcessor::process'
+    ],
+    [
+        'getServiceName',
+        'Magento\Webapi\Helper\Data',
+        'Magento\Webapi\Model\Soap\Config::getServiceName'
+    ],
+    [
+        'getServiceNameParts',
+        'Magento\Webapi\Helper\Data',
+        'Magento\Webapi\Model\Soap\Config::getServiceNameParts'
+    ],
+    [
+        'getSelectedResources',
+        'Magento\Webapi\Helper\Data',
+        'Magento\Webapi\Model\Soap\Config::getSelectedResources'
+    ],
+    [
+        'validateCredentials',
+        'Magento\Integration\Helper\Validator',
+        'Magento\Integration\Model\CredentialsValidator::validate'
+    ],
 ];

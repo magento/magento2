@@ -99,11 +99,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $coreHelper = $this->getMock('Magento\Core\Helper\Data', ['__construct'], [], '', false);
         unset($dependencies['resource'], $dependencies['json_helper']);
 
-        $object = new Data(
-            $resource,
-            $coreHelper,
-            $dependencies
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $object = $objectManager->getObject(
+            '\Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data',
+            [
+                'context' => $contextMock,
+                'coreHelper' => $coreHelper,
+                'arguments' => $dependencies,
+            ]
         );
+
         $this->assertEquals($expectedData, $object->getNextBunch());
     }
 

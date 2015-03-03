@@ -5,7 +5,6 @@
  */
 namespace Magento\Integration\Model;
 
-
 /**
  * Class to test Integration Manager
  */
@@ -28,7 +27,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Integration config
      *
-     * @var \Magento\Integration\Model\Manager
+     * @var \Magento\Integration\Model\ConfigBasedIntegrationManager
      */
     protected $_integrationManager;
 
@@ -46,7 +45,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ['findByName', 'update', 'create']
         )->getMock();
 
-        $this->_integrationManager = new \Magento\Integration\Model\Manager(
+        $this->_integrationManager = new \Magento\Integration\Model\ConfigBasedIntegrationManager(
             $this->_integrationConfigMock,
             $this->_integrationServiceMock
         );
