@@ -17,10 +17,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertBundleInCategory extends AssertProductInCategory
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Verify product price on category view page.
      *

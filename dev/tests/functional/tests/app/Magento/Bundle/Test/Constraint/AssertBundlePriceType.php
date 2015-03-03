@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertBundlePriceType extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Product price type
      *

@@ -14,10 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCurrencySelected extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that selected currency symbol displays on dashboard.
      *
