@@ -706,4 +706,9 @@ return [
         'Magento\Framework\App\Http',
         'Magento\Framework\App\SetupInfo::DEFAULT_PATH'
     ],
+    [
+        'PARAM_BACKEND_FRONT_NAME',
+        'Magento\Backend\App\Area\FrontNameResolver',
+        'Magento\Backend\Setup\ConfigOptions::CONFIG_PATH_BACKEND_FRONTNAME'
+    ],
 ];
