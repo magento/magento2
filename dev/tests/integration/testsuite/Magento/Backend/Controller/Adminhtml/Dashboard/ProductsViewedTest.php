@@ -6,14 +6,19 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+
 class ProductsViewedTest extends \Magento\Backend\Utility\Controller
 {
+    /**
+     * @magentoDataFixture Magento/Reports/_files/viewed_products.php
+     */
     public function testExecute()
     {
         $this->dispatch('backend/admin/dashboard/productsViewed/');
+
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('dashboard-item-content', $actual);
+        $this->assertContains('Simple Product', $actual);
     }
 }
