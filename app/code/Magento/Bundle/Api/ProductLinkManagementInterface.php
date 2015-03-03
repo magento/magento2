@@ -14,7 +14,7 @@ interface ProductLinkManagementInterface
      * @param string $productId
      * @return \Magento\Bundle\Api\Data\LinkInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getChildren($productId);
 
@@ -53,7 +53,7 @@ interface ProductLinkManagementInterface
      * @param int $optionId
      * @param string $childSku
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      * @return bool
      */
     public function removeChild($productSku, $optionId, $childSku);

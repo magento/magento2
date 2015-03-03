@@ -5,5 +5,6 @@
  */
 require_once dirname(__DIR__) . '/' . 'bootstrap.php';
 
-$fieldsProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Fixture\FieldsProvider');
-$objectManager->create('Magento\Mtf\Util\Generate\Fixture', ['fieldsProvider' => $fieldsProvider])->launch();
+$magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+$magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);
+$objectManager->create('Magento\Mtf\Util\Generate\Fixture')->launch();
