@@ -11,7 +11,7 @@
  */
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-class Minsaleqty extends \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
     /**
      * @var Customergroup

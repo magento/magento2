@@ -131,15 +131,12 @@ require(['jquery'], function(jQuery){
             <dt class="extra-options-container" id="extra-options-container-<?php echo $block->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-    <script>
-require([
-    'jquery',
-    'mage/mage'
-], function(jQuery){
-
-        jQuery('#allow_gift_options').add('#allow_gift_options_for_order').add('#allow_gift_options_for_items').mage('giftOptions');
-
-});
+<script type="text/x-magento-init">
+{
+    "#allow_gift_options, #allow_gift_options_for_order, #allow_gift_options_for_items": {
+        "giftOptions": {}
+    }
+}
 </script>
 <?php break; ?>
 
@@ -253,24 +250,21 @@ require([
             <dt class="extra-options-container" id="extra-options-container-<?php echo $block->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-<script>
-    require(['jquery', 'mage/mage'], function(jQuery){
-
-    jQuery('#allow_gift_options_<?php echo $block->getEntity()->getId() ?>')
-        .add('#allow_gift_options_for_order_<?php echo $block->getEntity()->getId() ?>')
-        .add('#allow_gift_options_for_items_<?php echo $block->getEntity()->getId() ?>')
-        .mage('giftOptions');
-
-    });
+<script type="text/x-magento-init">
+    {
+        "#allow_gift_options_<?php echo $block->getEntity()->getId() ?>, #allow_gift_options_for_order_<?php echo $block->getEntity()->getId() ?>, #allow_gift_options_for_items_<?php echo $block->getEntity()->getId() ?>": {
+            "giftOptions": {}
+        }
+    }
 </script>
     <?php break; ?>
 <?php endswitch ?>
 <?php if ($_giftMessage): ?>
-<script>
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('#shipping_method_form').mage('validation');
-
-});
+<script type="text/x-magento-init">
+    {
+        "#shipping_method_form": {
+            "validation": {}
+        }
+    }
 </script>
 <?php endif; ?>

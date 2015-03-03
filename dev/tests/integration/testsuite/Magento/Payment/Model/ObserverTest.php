@@ -44,7 +44,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'groups' => ['checkmo' => ['fields' => ['order_status' => ['value' => $statusCode]]]],
         ];
         $this->_objectManager->create(
-            'Magento\Backend\Model\Config'
+            'Magento\Config\Model\Config'
         )->setSection(
             'payment'
         )->setWebsite(
@@ -63,8 +63,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        /** @var \Magento\Core\Model\Resource\Config $config */
-        $config = $this->_objectManager->get('Magento\Core\Model\Resource\Config');
+        /** @var \Magento\Config\Model\Resource\Config $config */
+        $config = $this->_objectManager->get('Magento\Config\Model\Resource\Config');
         $config->saveConfig(
             'payment/checkmo/order_status',
             $statusCode,
@@ -101,8 +101,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $statusCode = 'custom_new_status';
 
-        /** @var \Magento\Core\Model\Resource\Config $config */
-        $config = $this->_objectManager->get('Magento\Core\Model\Resource\Config');
+        /** @var \Magento\Config\Model\Resource\Config $config */
+        $config = $this->_objectManager->get('Magento\Config\Model\Resource\Config');
         $config->saveConfig('payment/checkmo/order_status', $statusCode, 'default', 0);
 
         $this->_resetConfig();

@@ -36,7 +36,7 @@ class RemoveStoreLogo extends \Magento\DesignEditor\Controller\Adminhtml\System\
             }
 
             $this->_objectManager->get(
-                'Magento\Backend\Model\Config\Backend\Store'
+                'Magento\Config\Model\Config\Backend\Store'
             )->setScope(
                 'stores'
             )->setScopeId(
