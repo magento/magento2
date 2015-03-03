@@ -7,7 +7,10 @@ namespace Magento\Framework\Setup;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class Option extends InputOption
+/**
+ * An option in a segment of the deployment configuration
+ */
+class ConfigOption extends InputOption
 {
     /**#@+
      * Frontend input types
