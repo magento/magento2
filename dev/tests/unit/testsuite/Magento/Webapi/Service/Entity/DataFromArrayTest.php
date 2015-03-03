@@ -12,10 +12,14 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     /** @var ServiceArgsSerializer */
     protected $serializer;
 
+    protected $objectManagerMock;
+
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $objectFactory = new \Magento\Webapi\Service\Entity\WebapiBuilderFactory($objectManager);
+        $this->objectManagerMock = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
         $cache = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
@@ -25,7 +29,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
         $this->serializer = $objectManager->getObject(
             'Magento\Webapi\Controller\ServiceArgsSerializer',
-            ['typeProcessor' => $typeProcessor, 'builderFactory' => $objectFactory, 'cache' => $cache]
+            ['typeProcessor' => $typeProcessor, 'objectManager' => $this->objectManagerMock, 'cache' => $cache]
         );
     }
 
@@ -40,6 +44,36 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedDataProperties()
     {
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $nestedFactoryMock = $this->getMockBuilder('Magento\Webapi\Service\Entity\NestedFactory')
+            ->setMethods(['create'])
+            ->getMock();
+        $nestedFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(
+                function () use ($objectManager) {
+                    return $objectManager->getObject('Magento\Webapi\Service\Entity\Nested');
+                }
+            );
+        $simpleFactoryMock = $this->getMockBuilder('Magento\Webapi\Service\Entity\SimpleFactory')
+            ->setMethods(['create'])
+            ->getMock();
+        $simpleFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(
+                function () use ($objectManager) {
+                    return $objectManager->getObject('Magento\Webapi\Service\Entity\Simple');
+                }
+            );
+        $this->objectManagerMock->expects($this->at(0))
+            ->method('get')
+            ->with('Magento\Webapi\Service\Entity\NestedFactory')
+            ->willReturn($nestedFactoryMock);
+        $this->objectManagerMock->expects($this->at(1))
+            ->method('get')
+            ->with('\Magento\Webapi\Service\Entity\SimpleFactory')
+            ->willReturn($simpleFactoryMock);
+
         $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
@@ -100,6 +134,8 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfDataObjectProperties()
     {
+        $this->setupFactory(['\Magento\Webapi\Service\Entity\Simple']);
+
         $data = [
             'dataObjects' => [
                 ['entityId' => 14, 'name' => 'First'],
@@ -131,6 +167,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedSimpleArrayProperties()
     {
+        $this->setupFactory(['Magento\Webapi\Service\Entity\SimpleArray']);
         $data = ['arrayData' => ['ids' => [1, 2, 3, 4]]];
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
@@ -152,6 +189,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedAssociativeArrayProperties()
     {
+        $this->setupFactory(['Magento\Webapi\Service\Entity\AssociativeArray']);
         $data = [
             'associativeArrayData' => ['associativeArray' => ['key' => 'value', 'key2' => 'value2']],
         ];
@@ -175,6 +213,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedArrayOfDataObjectProperties()
     {
+        $this->setupFactory(['Magento\Webapi\Service\Entity\DataArray', '\Magento\Webapi\Service\Entity\Simple']);
         $data = [
             'dataObjects' => [
                 'items' => [['entityId' => 1, 'name' => 'First'], ['entityId' => 2, 'name' => 'Second']],
@@ -204,5 +243,28 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($second instanceof Simple);
         $this->assertEquals(2, $second->getEntityId());
         $this->assertEquals('Second', $second->getName());
+    }
+
+    protected function setupFactory(array $classNames)
+    {
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $returnValueMap = [];
+        foreach ($classNames as $className) {
+            $factoryMock = $this->getMockBuilder($className . 'Factory')
+                ->setMethods(['create'])
+                ->getMock();
+            $factoryMock->expects($this->any())
+                ->method('create')
+                ->willReturnCallback(
+                    function () use ($objectManager, $className) {
+                        return $objectManager->getObject($className);
+                    }
+                );
+            $returnValueMap[] = [$className . 'Factory', $factoryMock];
+        }
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($returnValueMap));
     }
 }

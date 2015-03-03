@@ -16,4 +16,13 @@ class AssociativeArray extends AbstractExtensibleObject
     {
         return $this->_get('associativeArray');
     }
+
+    /**
+     * @param string[] $associativeArray
+     * @return $this
+     */
+    public function setAssociativeArray(array $associativeArray = [])
+    {
+        return $this->setData('associativeArray', $associativeArray);
+    }
 }

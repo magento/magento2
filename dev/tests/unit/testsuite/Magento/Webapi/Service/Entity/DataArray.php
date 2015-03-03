@@ -16,4 +16,13 @@ class DataArray extends AbstractExtensibleObject
     {
         return $this->_get('items');
     }
+
+    /**
+     * @param \Magento\Webapi\Service\Entity\Simple[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null)
+    {
+        return $this->setData('items', $items);
+    }
 }

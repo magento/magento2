@@ -14,7 +14,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Serialization\DataBuilderFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Webapi\Exception as WebapiException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
@@ -33,8 +33,8 @@ class ServiceArgsSerializer
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
 
-    /** @var DataBuilderFactory */
-    protected $builderFactory;
+    /** @var ObjectManagerInterface */
+    protected $objectManager;
 
     /** @var ServiceConfigReader */
     protected $serviceConfigReader;
@@ -49,20 +49,20 @@ class ServiceArgsSerializer
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
-     * @param DataBuilderFactory $builderFactory
+     * @param ObjectManagerInterface $objectManager
      * @param ServiceConfigReader $serviceConfigReader
      * @param AttributeValueFactory $attributeValueFactory
      * @param WebapiCache $cache
      */
     public function __construct(
         TypeProcessor $typeProcessor,
-        DataBuilderFactory $builderFactory,
+        ObjectManagerInterface $objectManager,
         ServiceConfigReader $serviceConfigReader,
         AttributeValueFactory $attributeValueFactory,
         WebapiCache $cache
     ) {
         $this->typeProcessor = $typeProcessor;
-        $this->builderFactory = $builderFactory;
+        $this->objectManager = $objectManager;
         $this->serviceConfigReader = $serviceConfigReader;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->cache = $cache;
@@ -132,7 +132,8 @@ class ServiceArgsSerializer
         $data = is_array($data) ? $data : [];
         $class = new ClassReflection($className);
 
-        $builder = $this->builderFactory->getDataBuilder($className);
+        $factory = $this->objectManager->get($className . 'Factory');
+        $object = $factory->create();
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
@@ -148,10 +149,10 @@ class ServiceArgsSerializer
                 } else {
                     $setterValue = $this->_convertValue($value, $returnType);
                 }
-                $builder->{$setterName}($setterValue);
+                $object->{$setterName}($setterValue);
             }
         }
-        return $builder->create();
+        return $object;
     }
 
     /**

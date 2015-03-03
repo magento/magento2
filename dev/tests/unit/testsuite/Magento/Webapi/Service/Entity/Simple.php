@@ -18,10 +18,28 @@ class Simple extends AbstractExtensibleObject
     }
 
     /**
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData('entityId', $entityId);
+    }
+
+    /**
      * @return string|null
      */
     public function getName()
     {
         return $this->_get('name');
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 }

@@ -16,4 +16,13 @@ class SimpleArray extends AbstractExtensibleObject
     {
         return $this->_get('ids');
     }
+
+    /**
+     * @param int[] $ids
+     * @return $this
+     */
+    public function setIds(array $ids = null)
+    {
+        return $this->setData('ids', $ids);
+    }
 }
