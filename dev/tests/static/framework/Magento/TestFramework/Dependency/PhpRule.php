@@ -52,7 +52,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
-        $this->_namespaces = implode('|', \Magento\Framework\Utility\Files::init()->getNamespaces());
+        $this->_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
     }
 
     /**
@@ -72,7 +72,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
 
         $pattern = '~\b(?<class>(?<module>(' . implode(
             '_|',
-            \Magento\Framework\Utility\Files::init()->getNamespaces()
+            \Magento\Framework\App\Utility\Files::init()->getNamespaces()
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];

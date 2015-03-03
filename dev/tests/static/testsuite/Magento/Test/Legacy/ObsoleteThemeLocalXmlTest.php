@@ -18,7 +18,7 @@ class ObsoleteThemeLocalXmlTest extends \PHPUnit_Framework_TestCase
         $theme = '*';
         $this->assertEmpty(
             glob(
-                \Magento\Framework\Utility\Files::init()->getPathToSource() .
+                \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
                 "/app/design/{$area}/{$package}/{$theme}/local.xml"
             )
         );

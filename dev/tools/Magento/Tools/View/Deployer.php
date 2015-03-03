@@ -9,7 +9,7 @@ namespace Magento\Tools\View;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * A service for deploying Magento static view files for production mode

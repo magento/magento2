@@ -213,7 +213,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ['verbosity' => \Magento\Tools\View\Deployer\Log::SILENT]
         );
 
-        $filesUtil = $this->getMock('\Magento\Framework\Utility\Files', [], [], '', false);
+        $filesUtil = $this->getMock('\Magento\Framework\App\Utility\Files', [], [], '', false);
         $filesUtil->expects($this->any())
             ->method('getStaticLibraryFiles')
             ->will($this->returnValue([]));

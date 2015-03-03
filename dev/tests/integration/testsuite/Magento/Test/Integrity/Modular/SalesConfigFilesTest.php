@@ -40,7 +40,7 @@ class SalesConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $invalidFiles = [];
 
-        $files = \Magento\Framework\Utility\Files::init()->getConfigFiles('sales.xml');
+        $files = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('sales.xml');
         $mergedConfig = new \Magento\Framework\Config\Dom(
             '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></config>',
             $this->_idAttributes

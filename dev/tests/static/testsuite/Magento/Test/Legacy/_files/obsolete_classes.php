@@ -2874,9 +2874,9 @@ return [
     ['Magento\Tax\Service\V1\Data\TaxDetails\Item', 'Magento\Tax\Api\Data\TaxDetailsItemInterface'],
     ['Magento\Tax\Service\V1\OrderTaxServiceInterface', 'Magento\Tax\Api\OrderTaxManagementInterface'],
     ['Magento\Tools\I18n\Code', 'Magento\Tools\I18n'],
-    ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\Utility\AggregateInvoker'],
-    ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\Utility\Classes'],
-    ['Magento\TestFramework\Utility\Files', 'Magento\Framework\Utility\Files'],
+    ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
+    ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
+    ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files'],
     ['Magento\Framework\Module\Declaration\Reader\Filesystem', 'Magento\Framework\Module\ModuleList\Loader'],
     ['Magento\Framework\Module\Declaration\FileIterator'],
     ['Magento\Framework\Module\Declaration\FileIteratorFactory'],
@@ -3010,7 +3010,7 @@ return [
     ['Zend_Controller_Router_Route_Interface'],
     ['Zend_Controller_Response_Abstract', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
     ['Zend_Controller_Response_Http', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
-    ['Magento\Framework\Test\Utility\AggregateInvoker', 'Magento\Framework\Utility\AggregateInvoker'],
-    ['Magento\Framework\Test\Utility\Classes', 'Magento\Framework\Utility\Classes'],
-    ['Magento\Framework\Test\Utility\Files', 'Magento\Framework\Utility\Files']
+    ['Magento\Framework\Test\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
+    ['Magento\Framework\Test\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
+    ['Magento\Framework\Test\Utility\Files', 'Magento\Framework\App\Utility\Files']
 ];

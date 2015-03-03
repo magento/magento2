@@ -11,7 +11,7 @@ class SystemConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testSchema()
     {
-        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $configFile
@@ -19,14 +19,14 @@ class SystemConfigTest extends \PHPUnit_Framework_TestCase
             function ($configFile) {
                 $dom = new \DOMDocument();
                 $dom->loadXML(file_get_contents($configFile));
-                $schema = \Magento\Framework\Utility\Files::init()->getPathToSource() .
+                $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
                     '/app/code/Magento/Config/etc/system_file.xsd';
                 $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
                 if ($errors) {
                     $this->fail('XML-file has validation errors:' . PHP_EOL . implode(PHP_EOL . PHP_EOL, $errors));
                 }
             },
-            \Magento\Framework\Utility\Files::init()->getConfigFiles('adminhtml/system.xml', [])
+            \Magento\Framework\App\Utility\Files::init()->getConfigFiles('adminhtml/system.xml', [])
         );
     }
 }

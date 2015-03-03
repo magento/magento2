@@ -13,7 +13,7 @@ class ObsoleteMenuTest extends \PHPUnit_Framework_TestCase
 {
     public function testMenuDeclaration()
     {
-        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $menuFile
@@ -26,7 +26,7 @@ class ObsoleteMenuTest extends \PHPUnit_Framework_TestCase
                     'Obsolete menu structure detected in file ' . $menuFile . '.'
                 );
             },
-            \Magento\Framework\Utility\Files::init()->getMainConfigFiles()
+            \Magento\Framework\App\Utility\Files::init()->getMainConfigFiles()
         );
     }
 }

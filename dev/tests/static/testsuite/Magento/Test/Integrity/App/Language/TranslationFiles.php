@@ -23,7 +23,7 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
      */
     public function getLocalePlacePath()
     {
-        $pathToSource = \Magento\Framework\Utility\Files::init()->getPathToSource();
+        $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         $places = [];
         foreach (glob("{$pathToSource}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
             $places[basename($modulePath)] = ['placePath' => $modulePath];

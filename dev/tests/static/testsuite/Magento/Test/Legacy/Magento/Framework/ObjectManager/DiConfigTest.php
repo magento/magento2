@@ -9,10 +9,10 @@ class DiConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testObsoleteDiFormat()
     {
-        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             [$this, 'assertObsoleteFormat'],
-            \Magento\Framework\Utility\Files::init()->getDiConfigs(true)
+            \Magento\Framework\App\Utility\Files::init()->getDiConfigs(true)
         );
     }
 

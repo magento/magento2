@@ -13,7 +13,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
 {
     public function testTableName()
     {
-        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $filePath
@@ -32,7 +32,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
                 $message = $this->_composeFoundsMessage($legacyTables);
                 $this->assertEmpty($message, $message);
             },
-            \Magento\Framework\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\App\Utility\Files::init()->getPhpFiles()
         );
     }
 

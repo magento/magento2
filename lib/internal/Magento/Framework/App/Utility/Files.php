@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Utility;
+namespace Magento\Framework\App\Utility;
 
 /**
  * A helper to gather specific kind of files in Magento application
@@ -15,7 +15,7 @@ namespace Magento\Framework\Utility;
 class Files
 {
     /**
-     * @var \Magento\Framework\Utility\Files
+     * @var \Magento\Framework\App\Utility\Files
      */
     protected static $_instance = null;
 
@@ -47,7 +47,7 @@ class Files
     /**
      * Getter for an instance of self
      *
-     * @return \Magento\Framework\Utility\Files
+     * @return \Magento\Framework\App\Utility\Files
      * @throws \Exception when there is no instance set
      */
     public static function init()

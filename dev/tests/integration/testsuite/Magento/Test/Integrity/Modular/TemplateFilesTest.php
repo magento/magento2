@@ -14,7 +14,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 {
     public function testAllTemplates()
     {
-        $invoker = new \Magento\Framework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $template, $class, $area) {
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -58,7 +58,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 
             $templates = [];
             $skippedBlocks = $this->_getBlocksToSkip();
-            foreach (\Magento\Framework\Utility\Classes::collectModuleClasses('Block') as $blockClass => $module) {
+            foreach (\Magento\Framework\App\Utility\Classes::collectModuleClasses('Block') as $blockClass => $module) {
                 if (!in_array($module, $this->_getEnabledModules()) || in_array($blockClass, $skippedBlocks)) {
                     continue;
                 }
