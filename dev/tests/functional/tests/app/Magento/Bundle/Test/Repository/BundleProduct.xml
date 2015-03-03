@@ -243,5 +243,5 @@
                 <item name="preset" xsi:type="string">fixed_100_dollar</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
