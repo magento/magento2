@@ -82,7 +82,7 @@ class AdminTokenService implements AdminTokenServiceInterface
                  */
                 throw new AuthenticationException('Please correct the user name or password.');
             }
-        } catch (\Magento\Backend\Model\Auth\Exception $e) {
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
             throw new AuthenticationException($e->getMessage(), [], $e);
         } catch (\Magento\Framework\Model\Exception $e) {
             throw new LocalizedException($e->getMessage(), [], $e);
