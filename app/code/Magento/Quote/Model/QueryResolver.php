@@ -35,7 +35,7 @@ class QueryResolver
      *
      * @var array
      */
-    protected $cacheTags = [];
+    private $cacheTags = [];
 
     /**
      * @param ConfigInterface $config
@@ -50,7 +50,6 @@ class QueryResolver
         $this->config = $config;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
-        $this->initData();
     }
 
     /**
@@ -60,6 +59,7 @@ class QueryResolver
      */
     public function isSingleQuery()
     {
+        $this->initData();
         return $this->data['checkout'];
     }
 
