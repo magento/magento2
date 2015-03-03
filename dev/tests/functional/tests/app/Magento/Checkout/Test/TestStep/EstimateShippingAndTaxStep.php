@@ -76,25 +76,25 @@ class EstimateShippingAndTaxStep implements TestStepInterface
      * @param Address $address
      * @param AssertEstimateShippingAndTax $assertEstimateShippingAndTax
      * @param FixtureFactory $fixtureFactory
-     * @param array $shipping
      * @param array $products
-     * @param Cart $cart
+     * @param array|null $shipping
+     * @param Cart|null $cart
      */
     public function __construct(
         CheckoutCart $checkoutCart,
         Address $address,
         AssertEstimateShippingAndTax $assertEstimateShippingAndTax,
         FixtureFactory $fixtureFactory,
-        array $shipping,
         array $products,
+        array $shipping = null,
         Cart $cart = null
     ) {
         $this->checkoutCart = $checkoutCart;
         $this->address = $address;
         $this->assertEstimateShippingAndTax = $assertEstimateShippingAndTax;
         $this->fixtureFactory = $fixtureFactory;
-        $this->shipping = $shipping;
         $this->products = $products;
+        $this->shipping = $shipping;
         $this->cart = $cart;
     }
 
@@ -113,7 +113,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
                 ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
             );
             $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
-            if ($this->shipping['shipping_service']) {
+            if ($this->shipping) {
                 $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
             }
             $this->assertEstimateShippingAndTax->processAssert($this->checkoutCart, $cart);

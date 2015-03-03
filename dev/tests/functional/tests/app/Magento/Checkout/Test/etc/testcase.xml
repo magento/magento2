@@ -12,7 +12,7 @@
     <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart"/>
     <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax"/>
     <step name="estimateShippingAndTax" module="Magento_Checkout" next="proceedToCheckout"/>
-    <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod"/>
+    <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer"/>
     <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod"/>
     <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillBillingInformation"/>
     <step name="fillBillingInformation" module="Magento_Checkout" next="fillShippingMethod"/>

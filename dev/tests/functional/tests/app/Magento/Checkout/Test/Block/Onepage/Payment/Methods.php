@@ -81,7 +81,7 @@ class Methods extends Form
         if ($payment['method'] == "purchaseorder") {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
-        if (isset($creditCard)) {
+        if ($creditCard->hasData()) {
             /** @var \Magento\Payment\Test\Block\Form\Cc $formBlock */
             $formBlock = $this->blockFactory->create(
                 '\\Magento\\Payment\\Test\\Block\\Form\\Cc',
