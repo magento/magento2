@@ -7,7 +7,6 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 class OrderCreateTest extends WebapiAbstract
 {
@@ -115,7 +114,7 @@ class OrderCreateTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

@@ -27,15 +27,19 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param string|null $resourcePrefix
+     * @param array $arguments
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Json\Helper\Data $jsonHelper
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        $resourcePrefix = null,
+        array $arguments = []
     ) {
-        parent::__construct($resource);
-        $this->jsonHelper = $jsonHelper;
+        parent::__construct($context, $resourcePrefix);
+        $this->_jsonHelper = $jsonHelper;
     }
 
     /**

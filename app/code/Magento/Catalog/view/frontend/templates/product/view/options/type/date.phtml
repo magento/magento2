@@ -11,7 +11,7 @@
 <?php $_optionId = $_option->getId() ?>
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 <div class="field date<?php echo $class; ?>"
-     data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
+    data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
     <label class="label">
         <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
         <?php echo $block->getFormatedPrice() ?>
@@ -31,26 +31,25 @@
 
         <?php if ($_option->getIsRequire()): ?>
             <input type="hidden"
-                   name="validate_datetime_<?php echo $_optionId ?>"
-                   class="validate-datetime-<?php echo $_optionId ?>"
-                   value=""
-                   data-validate="{'validate-required-datetime':<?php echo $_optionId?>}"/>
+                name="validate_datetime_<?php echo $_optionId ?>"
+                class="validate-datetime-<?php echo $_optionId ?>"
+                value=""
+                data-validate="{'validate-required-datetime':<?php echo $_optionId?>}"/>
         <?php else: ?>
             <input type="hidden"
-                   name="validate_datetime_<?php echo $_optionId ?>"
-                   class="validate-datetime-<?php echo $_optionId ?>"
-                   value=""
-                   data-validate="{'validate-optional-datetime':<?php echo $_optionId?>}"/>
+                name="validate_datetime_<?php echo $_optionId ?>"
+                class="validate-datetime-<?php echo $_optionId ?>"
+                value=""
+                data-validate="{'validate-optional-datetime':<?php echo $_optionId?>}"/>
         <?php endif; ?>
-<script>
-require([
-    'jquery',
-    'mage/mage'
-], function($){
-    $('#product_addtocart_form').mage('validation', {
-        ignore: ':hidden:not(input[name^="validate_datetime_"])'
-    });
-});
-</script>
+        <script type="text/x-magento-init">
+            {
+                "#product_addtocart_form": {
+                    "validation": {
+                        "ignore": ":hidden:not(input[name^='validate_datetime_'])"
+                    }
+                }
+            }
+        </script>
     </div>
 </div>
