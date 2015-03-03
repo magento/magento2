@@ -61,6 +61,22 @@ class GroupedCollection extends Collection
     }
 
     /**
+     * @param string $identifier
+     * @param AssetInterface $asset
+     * @param string $key
+     * @param array $properties
+     * @return void
+     */
+    public function addAfter($identifier, AssetInterface $asset, $key, array $properties = [])
+    {
+        parent::addAfter($identifier, $asset, $key);
+        $properties = array_filter($properties);
+        $properties[self::PROPERTY_CONTENT_TYPE] = $asset->getContentType();
+        $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
+        $this->getGroupFor($properties)->addAfter($identifier, $asset, $key);
+    }
+
+    /**
      * Retrieve existing or new group matching the properties
      *
      * @param array $properties

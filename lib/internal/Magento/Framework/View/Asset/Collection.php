@@ -37,18 +37,13 @@ class Collection
      */
     public function addAfter($identifier, AssetInterface $asset, $key)
     {
-        if (!$key) {
-            $this->add($identifier, $asset);
-            return;
-        }
-
         $result = [];
         foreach ($this->assets as $k => $val) {
             if ($k == $key) {
                 $result[$key] = $val;
                 $result[$identifier] = $asset;
             } else {
-                $result[$key] = $val;
+                $result[$k] = $val;
             }
         }
 

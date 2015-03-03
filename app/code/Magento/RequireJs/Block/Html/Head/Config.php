@@ -57,34 +57,28 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     protected function _prepareLayout()
     {
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
-        $group = $this->pageConfig->getAssetCollection()->getGroupByContentType('js');
 
-        if ($group && $this->bundleConfig->isBundlingJsFiles()) {
+        if ($this->bundleConfig->isBundlingJsFiles()) {
 
             $after = \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME;
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
             foreach ($this->fileManager->createBundleJsPool() as $bundleAsset) {
-                $group->addAfter($bundleAsset->getFilePath(), $bundleAsset, $after);
+                $this->pageConfig->getAssetCollection()->addAfter($bundleAsset->getFilePath(), $bundleAsset, $after);
                 $after = $bundleAsset->getFilePath();
             }
 
             $staticAsset = $this->fileManager->createStaticJsAsset();
             if ($staticAsset !== false) {
-                $group->addAfter($staticAsset->getFilePath(), $staticAsset, $after);
+                $this->pageConfig->getAssetCollection()->addAfter($staticAsset->getFilePath(), $staticAsset, $after);
             }
         }
-        if ($group) {
-            $group->addAfter(
-                $requireJsConfig->getFilePath(),
-                $requireJsConfig,
-                \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
-            );
-        } else {
-            $this->pageConfig->getAssetCollection()->add(
-                $requireJsConfig->getFilePath(),
-                $requireJsConfig
-            );
-        }
+
+        $this->pageConfig->getAssetCollection()->addAfter(
+            $requireJsConfig->getFilePath(),
+            $requireJsConfig,
+            \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
+        );
+
         return parent::_prepareLayout();
     }
 
