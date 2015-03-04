@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Captcha\Helper;
+namespace Magento\Captcha\Test\Unit\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
