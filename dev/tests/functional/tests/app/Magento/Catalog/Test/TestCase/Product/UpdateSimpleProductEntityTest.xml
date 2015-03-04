@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateSimpleProductEntityTest">
-    <variation name="UpdateSimpleProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest">
+    <variation name="UpdateSimpleProductEntityTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update visibility to Catalog, Search</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -20,13 +20,13 @@
       <data name="product/data/weight" xsi:type="string">120.0000</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductForm"/>
-      <constraint name="assertProductForm" next="assertProductInStock" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductInStock" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductInStock"/>
-      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation2" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update visibility to Not Visible Individually</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -39,11 +39,11 @@
       <data name="product/data/weight" xsi:type="string">129.0000</data>
       <data name="product/data/visibility" xsi:type="string">Not Visible Individually</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductForm"/>
-      <constraint name="assertProductForm" next="assertProductIsNotDisplayingOnFrontend" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductIsNotDisplayingOnFrontend" prev="assertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update visibility to Catalog</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -56,14 +56,14 @@
       <data name="product/data/weight" xsi:type="string">25.0000</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
-      <constraint name="assertProductInStock" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductSearchableBySku" prev="assertProductInStock"/>
-      <constraint name="assertProductSearchableBySku" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductSearchableBySku"/>
-      <constraint name="assertProductPage" prev="assertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation4" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update visibility to Search</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -76,15 +76,15 @@
       <data name="product/data/weight" xsi:type="string">89.0000</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInStock"/>
-      <constraint name="assertProductInStock" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductVisibleInCategory" prev="assertProductInStock"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductForm"/>
-      <constraint name="assertProductPage" next="assertProductSearchableBySku" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductSearchableBySku" next="assertProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductPage" prev="assertProductSearchableBySku"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation5" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update stock to Out of Stock</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -97,14 +97,14 @@
       <data name="product/data/weight" xsi:type="string">125.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductForm"/>
-      <constraint name="assertProductForm" next="assertProductOutOfStock" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductOutOfStock" next="assertProductPage" prev="assertProductForm"/>
-      <constraint name="assertProductPage" next="assertProductVisibleInCategory" prev="assertProductOutOfStock"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation6" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update product status to offline</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">-</data>
@@ -117,11 +117,11 @@
       <data name="product/data/weight" xsi:type="string">333.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">Product offline</data>
-      <constraint name="assertProductSaveMessage" next="assertProductForm"/>
-      <constraint name="assertProductForm" next="assertProductIsNotDisplayingOnFrontend" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductIsNotDisplayingOnFrontend" prev="assertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation7" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">Update category</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">default</data>
@@ -134,12 +134,12 @@
       <data name="product/data/weight" xsi:type="string">333.0000</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductForm"/>
-      <constraint name="assertProductForm" next="assertUrlRewriteUpdatedProductInGrid" prev="assertProductSaveMessage"/>
-      <constraint name="assertUrlRewriteUpdatedProductInGrid" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" prev="assertUrlRewriteUpdatedProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" next="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteUpdatedProductInGrid" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteUpdatedProductInGrid" next="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" prev="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteUpdatedProductInGrid"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation8" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12428: Edit Simple Product</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string">default</data>
@@ -152,10 +152,10 @@
       <data name="product/data/weight" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
-      <constraint name="assertProductSaveMessage" next="assertProductPage"/>
-      <constraint name="assertProductPage" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
-    <variation name="UpdateSimpleProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateSimpleProductEntityTestVariation9" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12417: Unassign Products from the Category</data>
       <data name="initialProduct/dataSet" xsi:type="string">product_with_category</data>
       <data name="product/data/category_ids/presets" xsi:type="string"> -</data>
@@ -169,8 +169,8 @@
       <data name="product/data/visibility" xsi:type="string">-</data>
       <data name="product/data/status" xsi:type="string">-</data>
       <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-      <constraint name="assertProductSaveMessage" next="assertProductNotVisibleInCategory"/>
-      <constraint name="assertProductNotVisibleInCategory" prev="assertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
     </variation>
   </testCase>
 </config>

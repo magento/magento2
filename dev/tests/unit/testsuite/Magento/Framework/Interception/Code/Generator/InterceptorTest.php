@@ -24,7 +24,7 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->ioObjectMock = $this->getMock('\Magento\Framework\Code\Generator\Io', [], [], '', false);
         $this->classGeneratorMock = $this->getMock(
-            '\Magento\Framework\Code\Generator\CodeGenerator\CodeGeneratorInterface',
+            '\Magento\Framework\Code\Generator\CodeGeneratorInterface',
             [],
             [],
             '',

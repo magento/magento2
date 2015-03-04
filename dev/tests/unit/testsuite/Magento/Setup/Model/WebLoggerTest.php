@@ -79,12 +79,12 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
     public function testLogSuccess()
     {
         $this->webLogger->logSuccess('Success1');
-        $this->assertEquals('<span class="text-success">[SUCCESS] ' . 'Success1' . '</span><br/>', self::$log);
+        $this->assertEquals('<span class="text-success">[SUCCESS] ' . 'Success1' . '</span><br>', self::$log);
 
         $this->webLogger->logSuccess('Success2');
         $this->assertEquals(
-            '<span class="text-success">[SUCCESS] ' . 'Success1' . '</span><br/>' .
-            '<span class="text-success">[SUCCESS] ' . 'Success2' . '</span><br/>',
+            '<span class="text-success">[SUCCESS] ' . 'Success1' . '</span><br>' .
+            '<span class="text-success">[SUCCESS] ' . 'Success2' . '</span><br>',
             self::$log
         );
     }
@@ -105,11 +105,11 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
     public function testLog()
     {
         $this->webLogger->log('Message1');
-        $this->assertEquals('<span class="text-info">Message1</span><br/>', self::$log);
+        $this->assertEquals('<span class="text-info">Message1</span><br>', self::$log);
 
         $this->webLogger->log('Message2');
         $this->assertEquals(
-            '<span class="text-info">Message1</span><br/><span class="text-info">Message2</span><br/>',
+            '<span class="text-info">Message1</span><br><span class="text-info">Message2</span><br>',
             self::$log
         );
     }
@@ -119,7 +119,7 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         $this->webLogger->logInline('*');
         $this->webLogger->log('Message');
         $this->assertEquals(
-            '<span class="text-info">*</span></br><span class="text-info">Message</span><br/>',
+            '<span class="text-info">*</span><br><span class="text-info">Message</span><br>',
             self::$log
         );
     }
@@ -136,10 +136,10 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
     public function testLogMeta()
     {
         $this->webLogger->logMeta('Meta1');
-        $this->assertEquals('<span class="hidden">Meta1</span><br/>', self::$log);
+        $this->assertEquals('<span class="hidden">Meta1</span><br>', self::$log);
 
         $this->webLogger->logMeta('Meta2');
-        $this->assertEquals('<span class="hidden">Meta1</span><br/><span class="hidden">Meta2</span><br/>', self::$log);
+        $this->assertEquals('<span class="hidden">Meta1</span><br><span class="hidden">Meta2</span><br>', self::$log);
     }
 
     public function testGet()
@@ -149,7 +149,7 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
 
         $expected = [
             '<span class="text-info">Message1',
-            '</span><br/><span class="text-info">Message2</span><br/>',
+            '</span><br><span class="text-info">Message2</span><br>',
         ];
 
         $this->assertEquals($expected, $this->webLogger->get());
@@ -163,7 +163,7 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(['Magento\Setup\Model\WebLoggerTest', 'deleteLog']));
 
         $this->webLogger->log('Message1');
-        $this->assertEquals('<span class="text-info">Message1</span><br/>', self::$log);
+        $this->assertEquals('<span class="text-info">Message1</span><br>', self::$log);
 
         $this->webLogger->clear();
         $this->assertEquals('', self::$log);

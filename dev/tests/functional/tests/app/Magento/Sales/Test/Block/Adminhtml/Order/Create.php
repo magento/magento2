@@ -13,89 +13,96 @@ use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Create
- * Adminhtml sales order create block
+ * Adminhtml sales order create block.
  */
 class Create extends Block
 {
     /**
-     * Sales order create items block
+     * Sales order create items block.
      *
      * @var string
      */
     protected $itemsBlock = '#order-items';
 
     /**
-     * Sales order create search products block
+     * Sales order create search products block.
      *
      * @var string
      */
     protected $gridBlock = '#order-search';
 
     /**
-     * Sales order create billing address block
+     * Sales order create billing address block.
      *
      * @var string
      */
     protected $billingAddressBlock = '#order-billing_address';
 
     /**
-     * Sales order create shipping address block
+     * Sales order create shipping address block.
      *
      * @var string
      */
     protected $shippingAddressBlock = '#order-shipping_address';
 
     /**
-     * Sales order create payment method block
+     * Sales order create payment method block.
      *
      * @var string
      */
     protected $billingMethodBlock = '#order-billing_method';
 
     /**
-     * Sales order create shipping method block
+     * Sales order create shipping method block.
      *
      * @var string
      */
     protected $shippingMethodBlock = '#order-shipping_method';
 
     /**
-     * Sales order create totals block
+     * Sales order create totals block.
      *
      * @var string
      */
     protected $totalsBlock = '#order-totals';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Order items grid block
+     * Order items grid block.
      *
      * @var string
      */
     protected $orderItemsGrid = '#order-items_grid';
 
     /**
-     * Update items button
+     * Update items button.
      *
      * @var string
      */
     protected $updateItems = '#order-items_grid p button';
 
     /**
-     * 'Add Selected Product(s) to Order' button
+     * 'Add Selected Product(s) to Order' button.
      *
      * @var string
      */
     protected $addSelectedProducts = 'button[onclick="order.productGridAddSelected()"]';
 
     /**
-     * Getter for order selected products grid
+     * Sales order create account information block.
+     *
+     * @var string
+     */
+    protected $accountInformationBlock = '#order-form_account';
+
+    /**
+     * Getter for order selected products grid.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
      */
@@ -107,7 +114,7 @@ class Create extends Block
     }
 
     /**
-     * Get sales order create billing address block
+     * Get sales order create billing address block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing\Address
      */
@@ -119,7 +126,7 @@ class Create extends Block
     }
 
     /**
-     * Get sales order create billing address block
+     * Get sales order create billing address block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Shipping\Address
      */
@@ -131,7 +138,7 @@ class Create extends Block
     }
 
     /**
-     * Get sales order create payment method block
+     * Get sales order create payment method block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing\Method
      */
@@ -143,7 +150,7 @@ class Create extends Block
     }
 
     /**
-     * Get sales order create shipping method block
+     * Get sales order create shipping method block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Shipping\Method
      */
@@ -155,7 +162,7 @@ class Create extends Block
     }
 
     /**
-     * Get sales order create totals block
+     * Get sales order create totals block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals
      */
@@ -167,7 +174,7 @@ class Create extends Block
     }
 
     /**
-     * Get backend abstract block
+     * Get backend abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */
@@ -179,7 +186,7 @@ class Create extends Block
     }
 
     /**
-     * Get sales order create search products block
+     * Get sales order create search products block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Search\Grid
      */
@@ -191,7 +198,20 @@ class Create extends Block
     }
 
     /**
-     * Wait display order items grid
+     * Get sales order create account information block.
+     *
+     * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Form\Account
+     */
+    public function getAccountBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Sales\Test\Block\Adminhtml\Order\Create\Form\Account',
+            ['element' => $this->_rootElement->find($this->accountInformationBlock, Locator::SELECTOR_CSS)]
+        );
+    }
+
+    /**
+     * Wait display order items grid.
      *
      * @return void
      */
@@ -201,7 +221,7 @@ class Create extends Block
     }
 
     /**
-     * Update product data in sales
+     * Update product data in sales.
      *
      * @param array $products
      * @return void
@@ -232,22 +252,25 @@ class Create extends Block
     }
 
     /**
-     * Fill addresses based on present data in customer and order fixtures
+     * Fill addresses based on present data in customer and order fixtures.
      *
      * @param FixtureInterface $address
+     * @param string $saveAddress
      * @return void
      */
-    public function fillAddresses(FixtureInterface $address)
+    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No')
     {
         $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
         $this->getTemplateBlock()->waitLoader();
         $this->getBillingAddressBlock()->fill($address);
+        $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
+        $this->getTemplateBlock()->waitLoader();
         $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
         $this->getTemplateBlock()->waitLoader();
     }
 
     /**
-     * Select shipping method
+     * Select shipping method.
      *
      * @param array $shippingMethod
      * @return void
@@ -259,7 +282,7 @@ class Create extends Block
     }
 
     /**
-     * Select payment method
+     * Select payment method.
      *
      * @param array $paymentCode
      * @return void
@@ -271,7 +294,7 @@ class Create extends Block
     }
 
     /**
-     * Submit order
+     * Submit order.
      *
      * @return void
      */
@@ -281,7 +304,7 @@ class Create extends Block
     }
 
     /**
-     * Click "Add Selected Product(s) to Order" button
+     * Click "Add Selected Product(s) to Order" button.
      *
      * @return void
      */

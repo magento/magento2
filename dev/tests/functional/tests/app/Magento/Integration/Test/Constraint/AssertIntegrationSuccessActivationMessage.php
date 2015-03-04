@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertIntegrationSuccessActivationMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     const SUCCESS_ACTIVATION_MESSAGE = "The integration '%s' has been activated.";
 
     /**
