@@ -42,9 +42,6 @@ class Deployer
     /** @var \Magento\Framework\View\Asset\Bundle\Manager */
     private $bundleManager;
 
-    /** @var \Magento\Framework\View\Asset\ConfigInterface */
-    private $bundleConfig;
-
     /** @var bool */
     private $isDryRun;
 
@@ -66,7 +63,6 @@ class Deployer
      * @param Version\StorageInterface $versionStorage
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\View\Asset\MinifyService $minifyService
-     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
      * @param bool $isDryRun
      */
     public function __construct(
@@ -75,7 +71,6 @@ class Deployer
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\View\Asset\MinifyService $minifyService,
-        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
@@ -84,7 +79,6 @@ class Deployer
         $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
-        $this->bundleConfig = $bundleConfig;
     }
 
     /**
@@ -229,9 +223,7 @@ class Deployer
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
-                if ($this->bundleConfig->isBundlingJsFiles()) {
-                    $this->bundleManager->addAsset($asset);
-                }
+                $this->bundleManager->addAsset($asset);
             }
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {

@@ -119,12 +119,18 @@ class FileManager
             /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
             $context = $this->assetRepo->getStaticViewFileContext();
 
-            $bundleDir = $libDir->read($context->getPath() . '/' .\Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR);
-            foreach ($bundleDir as $bundleFile) {
+            $bundleDir = $context->getPath() . '/' .\Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR;
+
+            if (!$libDir->isExist($bundleDir)) {
+                return [];
+            }
+
+            foreach ($libDir->read($bundleDir) as $bundleFile) {
                 $relPath = $libDir->getRelativePath($bundleFile);
                 $bundles[] = $this->assetRepo->createArbitrary($relPath, '');
             }
         }
+
         return $bundles;
     }
 }
