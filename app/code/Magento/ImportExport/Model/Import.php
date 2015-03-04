@@ -95,7 +95,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_httpFactory;
 
     /**
-     * @var \Magento\Core\Model\File\UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
@@ -124,7 +124,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Resource\Import\Data $importData
      * @param Export\Adapter\CsvFactory $csvFactory
      * @param FileTransferFactory $httpFactory
-     * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param array $data
@@ -140,7 +140,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
-        \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         array $data = []
@@ -468,7 +468,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         }
 
         $entity = $this->getEntity();
-        /** @var $uploader \Magento\Core\Model\File\Uploader */
+        /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
         $uploader->skipDbProcessing(true);
         $result = $uploader->save($this->getWorkingDir());

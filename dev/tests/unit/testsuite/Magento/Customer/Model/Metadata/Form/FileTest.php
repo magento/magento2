@@ -8,6 +8,7 @@
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\ElementFactory;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 
 class FileTest extends AbstractFormTestCase
 {
@@ -15,7 +16,7 @@ class FileTest extends AbstractFormTestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\EncoderInterface */
     protected $urlEncode;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Model\File\Validator\NotProtectedExtension */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | NotProtectedExtension */
     protected $fileValidatorMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem */
@@ -34,8 +35,9 @@ class FileTest extends AbstractFormTestCase
         parent::setUp();
         $this->urlEncode = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
             ->disableOriginalConstructor()->getMock();
-        $this->fileValidatorMock = $this->getMockBuilder('Magento\Core\Model\File\Validator\NotProtectedExtension')
-            ->disableOriginalConstructor()->getMock();
+        $this->fileValidatorMock = $this->getMockBuilder(
+            'Magento\MediaStorage\Model\File\Validator\NotProtectedExtension'
+        )->disableOriginalConstructor()->getMock();
         $this->fileSystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()->getMock();
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')

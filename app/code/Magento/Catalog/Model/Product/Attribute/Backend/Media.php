@@ -52,7 +52,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_fileStorageDb = null;
 
@@ -75,7 +75,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
@@ -84,7 +84,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function __construct(
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
@@ -376,8 +376,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             throw new LocalizedException(__('Please correct the image file type.'));
         }
 
-        $fileName = \Magento\Core\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\Core\Model\File\Uploader::getDispretionPath($fileName);
+        $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
+        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
@@ -385,7 +385,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $destinationFile = $this->_mediaConfig->getTmpMediaPath($fileName);
 
         try {
-            /** @var $storageHelper \Magento\Core\Helper\File\Storage\Database */
+            /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
             $storageHelper = $this->_fileStorageDb;
             if ($move) {
                 $this->_mediaDirectory->renameFile($file, $destinationFile);
@@ -636,7 +636,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
         $destinationFile = $this->_getUniqueFileName($file);
 
-        /** @var $storageHelper \Magento\Core\Helper\File\Storage\Database */
+        /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
         $storageHelper = $this->_fileStorageDb;
 
         if ($storageHelper->checkDbUsage()) {
@@ -673,7 +673,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         } else {
             $destFile = dirname(
                 $file
-            ) . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+            ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                 $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file))
             );
         }
@@ -751,10 +751,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
     {
-        $fileMediaName = $dispretionPath . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+        $fileMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
             $this->_mediaConfig->getMediaPath($fileName)
         );
-        $fileTmpMediaName = $dispretionPath . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+        $fileTmpMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
             $this->_mediaConfig->getTmpMediaPath($fileName)
         );
 

@@ -15,6 +15,8 @@
         "magento/module-catalog-rule": "0.42.0-beta10",
         "magento/module-directory": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",
+        "magento/module-media-storage": "0.42.0-beta10",
+        "magento/module-webapi": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"
     },

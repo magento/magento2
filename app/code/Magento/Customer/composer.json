@@ -3,7 +3,6 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-config": "0.42.0-beta10",
         "magento/module-store": "0.42.0-beta10",
         "magento/module-eav": "0.42.0-beta10",
         "magento/module-directory": "0.42.0-beta10",
@@ -21,6 +20,7 @@
         "magento/framework": "0.42.0-beta10",
         "magento/module-authorization": "0.42.0-beta10",
         "magento/module-integration": "0.42.0-beta10",
+        "magento/module-media-storage": "0.42.0-beta10",
         "magento/module-ui": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"

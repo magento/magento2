@@ -557,7 +557,7 @@
     <type name="Magento\Framework\App\View\Asset\Publisher" shared="false" />
     <type name="Magento\Framework\App\StaticResource">
         <arguments>
-            <argument name="response" xsi:type="object" shared="false">Magento\Core\Model\File\Storage\Response</argument>
+            <argument name="response" xsi:type="object" shared="false">Magento\MediaStorage\Model\File\Storage\Response</argument>
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
