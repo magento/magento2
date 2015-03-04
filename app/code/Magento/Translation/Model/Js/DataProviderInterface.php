@@ -13,5 +13,5 @@ interface DataProviderInterface
      *
      * @return string[]
      */
-    public function getData();
+    public function getData($themePath);
 }

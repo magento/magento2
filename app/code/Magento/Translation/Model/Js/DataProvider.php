@@ -42,11 +42,11 @@ class DataProvider implements DataProviderInterface
     /**
      * Get translation data
      */
-    public function getData()
+    public function getData($themePath)
     {
         $dictionary = [];
 
-        $files = $this->filesUtility->getJsFilesForArea($this->appState->getAreaCode());
+        $files = $this->filesUtility->getJsFiles($this->appState->getAreaCode(), $themePath);
         foreach ($files as $filePath) {
             foreach ($this->getPhrases(file_get_contents($filePath)) as $phrase) {
                 $translatedPhrase = (string) __($phrase);

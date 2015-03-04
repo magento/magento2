@@ -6,27 +6,11 @@
 
 namespace Magento\Translation\Block;
 
-use Magento\Framework\Translate\InlineInterface as InlineTranslator;
-use Magento\Translation\Model\Js as DataProvider;
 use Magento\Framework\View\Element\Template;
 use Magento\Translation\Model\Js\Config;
 
-class Js extends \Magento\Framework\View\Element\Template
+class Js extends Template
 {
-    /**
-     * Data provider model
-     *
-     * @var DataProvider
-     */
-    protected $dataProvider;
-
-    /**
-     * Inline translator
-     *
-     * @var InlineTranslator
-     */
-    protected $translateInline;
-
     /**
      * @var Config
      */
@@ -34,31 +18,16 @@ class Js extends \Magento\Framework\View\Element\Template
 
     /**
      * @param Template\Context $context
-     * @param DataProvider $dataProvider
-     * @param InlineTranslator $translateInline
+     * @param Config $config
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        DataProvider $dataProvider,
-        InlineTranslator $translateInline,
         Config $config,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->dataProvider = $dataProvider;
-        $this->translateInline = $translateInline;
         $this->config = $config;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTranslatedJson()
-    {
-        $data = $this->dataProvider->getTranslateData();
-        $this->translateInline->processResponseBody($data);
-        return \Zend_Json::encode($data);
     }
 
     /**

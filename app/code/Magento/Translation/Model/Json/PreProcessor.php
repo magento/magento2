@@ -9,6 +9,7 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProviderInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * PreProcessor responsible for providing js translation dictionary
@@ -46,7 +47,9 @@ class PreProcessor implements PreProcessorInterface
     public function process(Chain $chain)
     {
         if ($this->isDictionaryPath($chain->getTargetAssetPath())) {
-            $chain->setContent(json_encode($this->dataProvider->getData()));
+            $context = $chain->getAsset()->getContext();
+            $themePath = ($context instanceof FallbackContext) ? $context->getThemePath() : '*/*';
+            $chain->setContent(json_encode($this->dataProvider->getData($themePath)));
             $chain->setContentType('json');
         }
     }
