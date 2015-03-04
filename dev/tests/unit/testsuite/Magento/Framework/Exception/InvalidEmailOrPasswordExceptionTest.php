@@ -13,8 +13,7 @@ class InvalidEmailOrPasswordExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new InvalidEmailOrPasswordException(
             new Phrase(
-                InvalidEmailOrPasswordException::INVALID_EMAIL_OR_PASSWORD,
-                ['consumer_id' => 1, 'resources' => 'record2']
+                InvalidEmailOrPasswordException::INVALID_EMAIL_OR_PASSWORD
             )
         );
         $this->assertSame('Invalid email or password', $exception->getMessage());

@@ -77,8 +77,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
 
         $exception = new NoSuchEntityException(
             new Phrase(
-                $message,
-                ['consumer_id' => 1, 'resources' => 'record2']
+                $message
             )
         );
         $this->assertSame($expectedMessage, $exception->getMessage());

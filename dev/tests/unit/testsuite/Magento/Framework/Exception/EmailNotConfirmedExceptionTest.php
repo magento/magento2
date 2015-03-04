@@ -13,8 +13,7 @@ class EmailNotConfirmedExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $emailNotConfirmedException = new EmailNotConfirmedException(
             new Phrase(
-                EmailNotConfirmedException::EMAIL_NOT_CONFIRMED,
-                ['consumer_id' => 1, 'resources' => 'record2']
+                EmailNotConfirmedException::EMAIL_NOT_CONFIRMED
             )
         );
         $this->assertSame('Email not confirmed', $emailNotConfirmedException->getMessage());

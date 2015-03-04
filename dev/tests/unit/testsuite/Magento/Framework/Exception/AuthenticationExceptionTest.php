@@ -18,8 +18,7 @@ class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $authenticationException = new AuthenticationException(
             new Phrase(
-                AuthenticationException::AUTHENTICATION_ERROR,
-                ['consumer_id' => 1, 'resources' => 'record2']
+                AuthenticationException::AUTHENTICATION_ERROR
             )
         );
         $this->assertSame('An authentication error occurred.', $authenticationException->getMessage());
