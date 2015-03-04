@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSuggestSearchingResult extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Check that after input some text(e.g. product name) into search field, drop-down window is appeared.
      * Window contains requested entity and number of quantity.

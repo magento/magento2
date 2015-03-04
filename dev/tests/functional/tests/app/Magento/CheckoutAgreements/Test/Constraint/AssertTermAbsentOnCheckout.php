@@ -21,10 +21,6 @@ use Magento\Mtf\ObjectManager;
  */
 class AssertTermAbsentOnCheckout extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Place order and verify there is no checkbox Terms and Conditions.
      *

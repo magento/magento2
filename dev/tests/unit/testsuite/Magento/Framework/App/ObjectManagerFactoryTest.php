@@ -34,7 +34,7 @@ class ObjectManagerFactoryTest extends \PHPUnit_Framework_TestCase
             spl_autoload_register($autoloadFunction);
         }
         set_include_path(self::$originalIncludePath);
-        \Magento\Framework\Io\File::rmdirRecursive(__DIR__ . '/_files/var/');
+        \Magento\Framework\Filesystem\Io\File::rmdirRecursive(__DIR__ . '/_files/var/');
     }
 
     /**
