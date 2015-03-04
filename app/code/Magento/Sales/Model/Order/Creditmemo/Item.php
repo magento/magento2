@@ -197,7 +197,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
     /**
      * Applying qty to order item
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Item
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item
      */
     public function register()
     {
