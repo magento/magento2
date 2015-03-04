@@ -8,8 +8,6 @@ namespace Magento\Framework\Webapi;
 
 /**
  * Interface to locate types for custom attributes
- *
- * @package Magento\Framework\Webapi
  */
 interface CustomAttributeTypeLocatorInterface
 {

@@ -52,4 +52,10 @@
     <type name="Magento\Eav\Model\Resource\Entity\Attribute">
         <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\Resource\Entity\Attribute" />
     </type>
+    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+        <arguments>
+            <argument name="serviceEntityTypeMap" xsi:type="object">serviceEntityTypeMap</argument>
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="object">serviceBackendModelDataInterfaceMap</argument>
+        </arguments>
+    </type>
 </config>

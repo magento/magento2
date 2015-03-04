@@ -306,8 +306,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider customAttributesDataProvider
      * @param $customAttributeType
-     * @param $customAttributeValue
-     * @param $attributeCode
+     * @param $inputData
+     * @param $expectedObject
      */
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
