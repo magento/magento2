@@ -3,12 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Config\File;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Stores file key to file name config
  */
-class ConfigFilePool 
+class ConfigFilePool
 {
     const APP_CONFIG = 'app_config';
 
@@ -18,13 +21,23 @@ class ConfigFilePool
      * @var array
      */
     private $applicationConfigFiles = [
-        // TODO: add DirectoryList
-        self::APP_CONFIG => 'app/etc/config.php'
+        self::APP_CONFIG => 'config.php'
     ];
 
-    public function __construct($additionalConfigFiles)
+    /**
+     * Constructor
+     *
+     * @param DirectoryList $directoryList
+     * @param array $additionalConfigFiles
+     */
+    public function __construct(DirectoryList $directoryList, $additionalConfigFiles = [])
     {
-        // TODO: implement it
+        $this->applicationConfigFiles = array_merge($this->applicationConfigFiles, $additionalConfigFiles);
+        $configurationDirectory = $directoryList->getPath(DirectoryList::CONFIG);
+        foreach ($this->applicationConfigFiles as $fileKey=>$filePath) {
+            $this->applicationConfigFiles[$fileKey] = $configurationDirectory . '/' . $filePath;
+        }
+
     }
 
     /**
@@ -40,16 +53,16 @@ class ConfigFilePool
     /**
      * Returns file path by config key
      *
-     * @param string $key
+     * @param string $fileKey
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
-    public function getPath($key)
+    public function getPath($fileKey)
     {
-        if (!isset($this->applicationConfigFiles[$key])) {
-            throw new \Exception('');
+        if (!isset($this->applicationConfigFiles[$fileKey])) {
+            throw new \Exception('File config key does not exist.');
         }
-        return $this->applicationConfigFiles[$key];
+        return $this->applicationConfigFiles[$fileKey];
     }
 
 }

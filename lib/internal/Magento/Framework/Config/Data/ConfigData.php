@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Config\Data;
+
 /**
  * Data transfer object to store config data for config options
  */
@@ -27,7 +29,7 @@ class ConfigData
     /**
      * Data
      *
-     * @var []
+     * @var array
      */
     private $data;
 
@@ -36,7 +38,7 @@ class ConfigData
      *
      * @param string $fileKey
      * @param string $segmentKey
-     * @param [] $data
+     * @param array $data
      */
     public function __construct($fileKey, $segmentKey, $data)
     {
