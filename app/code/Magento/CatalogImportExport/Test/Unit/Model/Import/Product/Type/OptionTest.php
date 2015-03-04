@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogImportExport\Model\Import\Product\Type;
+namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 /**
  * Test class for import product options module

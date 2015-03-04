@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin;
+namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Stock\Plugin;
 
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
          *      \PHPUnit_Framework_MockObject_MockObject $processorMock
          */
         $processorMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
+            'Magento\CatalogInventory\Model\Indexer\Stock\Processor',
             ['markIndexerAsInvalid'],
             [],
             '',
@@ -26,7 +26,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
         $someData = [1, 2, 3];
 
-        $model = new \Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import($processorMock);
+        $model = new \Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import($processorMock);
         $this->assertEquals($someData, $model->afterImportSource($subjectMock, $someData));
     }
 }

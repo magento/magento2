@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
+namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

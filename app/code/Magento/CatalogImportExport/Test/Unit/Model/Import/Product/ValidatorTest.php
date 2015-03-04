@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogImportExport\Model\Import\Product;
+namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
