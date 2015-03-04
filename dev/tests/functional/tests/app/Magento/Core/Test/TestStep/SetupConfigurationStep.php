@@ -11,40 +11,40 @@ use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class SetupConfigurationStep
- * Setup configuration using handler
+ * Setup configuration using handler.
  */
 class SetupConfigurationStep implements TestStepInterface
 {
     /**
-     * Factory for Fixtures
+     * Factory for Fixtures.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Configuration data
+     * Configuration data.
      *
      * @var string
      */
     protected $configData;
 
     /**
-     * Rollback
+     * Rollback.
      *
      * @var bool
      */
     protected $rollback;
 
     /**
-     * Preparing step properties
+     * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param string $configData
      * @param bool $rollback
      */
-    public function __construct(FixtureFactory $fixtureFactory, $configData, $rollback = false)
+    public function __construct(FixtureFactory $fixtureFactory, $configData = null, $rollback = false)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->configData = $configData;
@@ -52,13 +52,13 @@ class SetupConfigurationStep implements TestStepInterface
     }
 
     /**
-     * Set config
+     * Set config.
      *
      * @return array
      */
     public function run()
     {
-        if ($this->configData === '-') {
+        if ($this->configData === null) {
             return [];
         }
         $prefix = ($this->rollback == false) ? '' : '_rollback';

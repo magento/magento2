@@ -68,7 +68,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -88,7 +87,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -107,7 +105,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             $registry,
             $metadataService,
             $customAttributeFactory,
-            $coreData,
             $eavConfig,
             $eavTypeFactory,
             $storeManager,

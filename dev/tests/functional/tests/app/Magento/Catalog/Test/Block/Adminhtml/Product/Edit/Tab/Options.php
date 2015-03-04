@@ -138,15 +138,16 @@ class Options extends Tab
     /**
      * Get data of tab
      *
-     * @param array|null $fields
+     * @param array|null $tabFields
      * @param SimpleElement|null $element
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getDataFormTab($tabFields = null, SimpleElement $element = null)
     {
-        $fields = reset($fields);
+        $fields = reset($tabFields);
+        $name = key($tabFields);
         $formData = [];
         if (empty($fields['value'])) {
             return $formData;
@@ -184,7 +185,7 @@ class Options extends Tab
                     );
                 }
             }
-            $formData[$fields['attribute_code']][$keyRoot] = $formDataItem;
+            $formData[$name][$keyRoot] = $formDataItem;
         }
 
         return $formData;

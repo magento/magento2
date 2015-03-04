@@ -60,4 +60,16 @@ class Factory extends AbstractGenerate
 
         return $this->objectManager->get('Magento\Framework\App\ResponseInterface');
     }
+
+    /**
+     * Generate single class.
+     *
+     * @param string $className
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function generate($className)
+    {
+        return false;
+    }
 }

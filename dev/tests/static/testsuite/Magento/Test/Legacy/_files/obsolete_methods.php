@@ -305,7 +305,7 @@ return [
         'Magento\Core\Model\Design\PackageInterface',
         'Magento\Framework\View\Asset\MergeService'
     ],
-    ['cleanVarFolder', '', 'Magento\Framework\Io\File::rmdirRecursive()'],
+    ['cleanVarFolder', '', 'Magento\Framework\Filesystem\Io\File::rmdirRecursive()'],
     [
         'cleanVarSubFolders',
         '',
@@ -418,6 +418,7 @@ return [
     ['getConnectionTypeInstance', 'Magento\Framework\App\Resource'],
     ['getContainers', 'Magento\Core\Model\Layout\Update', 'Magento\Framework\View\Model\Layout\Merge'],
     ['getCurrentUrl', 'Magento\Core\Helper\Url', 'Magento\Framework\Url'],
+    ['getHomeUrl', 'Magento\Core\Helper\Url'],
     ['getCustomerData', 'Magento\Sales\Block\Adminhtml\Order\Create\Form\Account'],
     ['getDataForSave', 'Magento\Wishlist\Model\Item'],
     ['getDataMaxSize'],
@@ -720,6 +721,8 @@ return [
     ['isVerbose', 'Magento\Framework\Shell'],
     ['isWindowsOs', 'Magento\TestFramework\Helper\Memory'],
     ['joinTaxClass', 'Magento\Tax\Helper\Data'],
+    ['jsonDecode', 'Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data::jsonDecode'],
+    ['jsonEncode', 'Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data::jsonEncode'],
     ['load', 'Magento\Core\Model\Layout\Update', 'Magento\Framework\View\Model\Layout\Merge'],
     ['loadBaseContents', 'Magento\Email\Model\Template'],
     ['loadBase', 'Magento\Core\Model\Config'],
@@ -2085,4 +2088,39 @@ return [
     ['getAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['setAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['getParam', 'Magento\Framework\App\RequestInterface'],
+    [
+        'render',
+        'Magento\Framework\Webapi\ErrorProcessor',
+        'Magento\Framework\Webapi\ErrorProcessor::renderErrorMessage'
+    ],
+    [
+        'processServiceOutput',
+        'Magento\Webapi\Controller\Rest\Response\DataObjectConverter',
+        'Magento\Framework\Webapi\ServiceOutputProcessor::process'
+    ],
+    [
+        'getInputData',
+        'Magento\Webapi\Controller\ServiceArgsSerializer',
+        'Magento\Framework\Webapi\ServiceInputProcessor::process'
+    ],
+    [
+        'getServiceName',
+        'Magento\Webapi\Helper\Data',
+        'Magento\Webapi\Model\Soap\Config::getServiceName'
+    ],
+    [
+        'getServiceNameParts',
+        'Magento\Webapi\Helper\Data',
+        'Magento\Webapi\Model\Soap\Config::getServiceNameParts'
+    ],
+    [
+        'getSelectedResources',
+        'Magento\Webapi\Helper\Data',
+        'Magento\Webapi\Model\Soap\Config::getSelectedResources'
+    ],
+    [
+        'validateCredentials',
+        'Magento\Integration\Helper\Validator',
+        'Magento\Integration\Model\CredentialsValidator::validate'
+    ],
 ];

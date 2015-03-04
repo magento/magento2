@@ -129,7 +129,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -143,7 +142,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
@@ -154,7 +152,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
         array $data = []
     ) {
-        parent::__construct($coreData, $string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
 
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,

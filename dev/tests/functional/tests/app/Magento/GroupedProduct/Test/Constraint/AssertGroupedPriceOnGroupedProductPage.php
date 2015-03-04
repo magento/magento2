@@ -17,10 +17,6 @@ use Magento\Mtf\Client\BrowserInterface;
  */
 class AssertGroupedPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupedProductPage
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Format error message
      *
