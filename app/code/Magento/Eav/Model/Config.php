@@ -114,6 +114,16 @@ class Config
     }
 
     /**
+     * Get cache interface
+     *
+     * @return \Magento\Framework\App\CacheInterface
+     */
+    public function getCache()
+    {
+        return $this->_cache;
+    }
+
+    /**
      * Reset object state
      *
      * @return $this
@@ -239,7 +249,7 @@ class Config
      *
      * @return bool
      */
-    protected function _isCacheEnabled()
+    public function isCacheEnabled()
     {
         if ($this->_isCacheEnabled === null) {
             $this->_isCacheEnabled = $this->_cacheState->isEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER);
@@ -259,7 +269,7 @@ class Config
         }
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
 
-        if ($this->_isCacheEnabled() && ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))) {
+        if ($this->isCacheEnabled() && ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))) {
             $this->_entityTypeData = unserialize($cache);
             foreach ($this->_entityTypeData as $typeCode => $data) {
                 $typeId = $data['entity_type_id'];
@@ -282,7 +292,7 @@ class Config
             $this->_entityTypeData[$typeCode] = $typeData;
         }
 
-        if ($this->_isCacheEnabled()) {
+        if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 serialize($this->_entityTypeData),
                 self::ENTITIES_CACHE_ID,
@@ -353,7 +363,7 @@ class Config
             return $this;
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
-        if ($this->_isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
+        if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = unserialize($attributes);
             if ($attributes) {
                 foreach ($attributes as $attribute) {
@@ -379,7 +389,7 @@ class Config
             $this->_createAttribute($entityType, $attribute);
             $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attribute;
         }
-        if ($this->_isCacheEnabled()) {
+        if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 serialize($this->_attributeData[$entityTypeCode]),
                 $cacheKey,
@@ -464,7 +474,7 @@ class Config
             return $this->_attributeCodes[$cacheKey];
         }
 
-        if ($this->_isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
+        if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $this->_attributeCodes[$cacheKey] = unserialize($attributes);
             return $this->_attributeCodes[$cacheKey];
         }
@@ -490,7 +500,7 @@ class Config
         }
 
         $this->_attributeCodes[$cacheKey] = $attributes;
-        if ($this->_isCacheEnabled()) {
+        if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 serialize($attributes),
                 $cacheKey,
