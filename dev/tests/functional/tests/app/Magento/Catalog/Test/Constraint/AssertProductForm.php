@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductForm extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * List skipped fixture fields in verify
      *

@@ -69,6 +69,7 @@ class MetadataConfig implements MetadataServiceInterface
     {
         $attributes = [];
         $allAttributes = $this->serviceConfigReader->read();
+        $dataObjectClassName = ltrim($dataObjectClassName, '\\');
         if (isset($allAttributes[$dataObjectClassName])
             && is_array($allAttributes[$dataObjectClassName])
         ) {

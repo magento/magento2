@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct">
         <dataset name="default">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
@@ -334,5 +334,5 @@
                 <item name="preset" xsi:type="string">two_options_by_one_dollar</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
