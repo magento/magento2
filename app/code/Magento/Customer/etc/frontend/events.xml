@@ -24,4 +24,10 @@
     <event name="checkout_quote_destroy">
         <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteDestroy" />
     </event>
+    <event name="customer_login">
+        <observer name="customer_log" instance="Magento\Customer\Model\Log" method="saveLastLoginAt" />
+    </event>
+    <event name="customer_logout">
+        <observer name="customer_log" instance="Magento\Customer\Model\Log" method="saveLastLogoutAt" />
+    </event>
 </config>
