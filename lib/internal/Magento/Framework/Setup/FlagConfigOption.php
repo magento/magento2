@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Setup;
 
 /**
@@ -25,6 +29,6 @@ class FlagConfigOption extends AbstractConfigOption
         $default = '',
         $shortCut = null
     ) {
-        parent::__construct($name, self::FRONTEND_WIZARD_FLAG, $description, null, self::VALUE_NONE, $shortCut);
+        parent::__construct($name, self::FRONTEND_WIZARD_FLAG, $description, self::VALUE_NONE, null, $shortCut);
     }
 }

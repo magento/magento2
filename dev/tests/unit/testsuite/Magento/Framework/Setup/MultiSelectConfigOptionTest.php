@@ -25,10 +25,10 @@ class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
         new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, []);
     }
 
-    public function testGetFrontendInput()
+    public function testGetFrontendType()
     {
         $option = new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, ['a', 'b']);
-        $this->assertEquals(MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, $option->getFrontendInput());
+        $this->assertEquals(MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, $option->getFrontendType());
     }
 
     public function testGetSelectOptions()

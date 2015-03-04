@@ -25,16 +25,16 @@ abstract class AbstractConfigOption extends InputOption
      * @param string $name
      * @param string $frontendType
      * @param string $description
-     * @param string|null $default
      * @param int $mode
+     * @param string|null $default
      * @param string|null $shortcut
      */
     public function __construct(
         $name,
         $frontendType,
         $description = '',
-        $default = null,
         $mode,
+        $default = null,
         $shortcut = null
     ) {
         $this->frontendType = $frontendType;
@@ -46,7 +46,7 @@ abstract class AbstractConfigOption extends InputOption
      *
      * @return string
      */
-    public function getFrontendInput()
+    public function getFrontendType()
     {
         return $this->frontendType;
     }

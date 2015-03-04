@@ -25,10 +25,10 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
         new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, []);
     }
 
-    public function testGetFrontendInput()
+    public function testGetFrontendType()
     {
         $option = new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, ['a', 'b']);
-        $this->assertEquals(SelectConfigOption::FRONTEND_WIZARD_SELECT, $option->getFrontendInput());
+        $this->assertEquals(SelectConfigOption::FRONTEND_WIZARD_SELECT, $option->getFrontendType());
     }
 
     public function testGetSelectOptions()

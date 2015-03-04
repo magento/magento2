@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Setup;
 
 /**
@@ -22,6 +26,7 @@ class TextConfigOption extends AbstractConfigOption
      * @param string $description
      * @param string|null $default
      * @param string|null $shortCut
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         $name,
@@ -35,7 +40,7 @@ class TextConfigOption extends AbstractConfigOption
         ) {
             throw new \InvalidArgumentException('Frontend input type has to be text, textarea or password.');
         }
-        parent::__construct($name, $frontendType, $description, $default, self::VALUE_REQUIRED, $shortCut);
+        parent::__construct($name, $frontendType, $description, self::VALUE_REQUIRED, $default, $shortCut);
     }
 
     /**
@@ -43,6 +48,7 @@ class TextConfigOption extends AbstractConfigOption
      *
      * @param mixed $data
      * @return void
+     * @throws \InvalidArgumentException
      */
     public function validate($data)
     {

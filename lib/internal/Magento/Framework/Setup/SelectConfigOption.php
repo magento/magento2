@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Setup;
 
 /**
@@ -29,6 +33,7 @@ class SelectConfigOption extends AbstractConfigOption
      * @param string $description
      * @param string $default
      * @param string|null $shortCut
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         $name,
@@ -49,8 +54,8 @@ class SelectConfigOption extends AbstractConfigOption
             $name,
             $frontendType,
             $description,
-            $default,
             self::VALUE_REQUIRED,
+            $default,
             $shortCut
         );
     }
@@ -70,6 +75,7 @@ class SelectConfigOption extends AbstractConfigOption
      *
      * @param mixed $data
      * @return void
+     * @throws \InvalidArgumentException
      */
     public function validate($data)
     {

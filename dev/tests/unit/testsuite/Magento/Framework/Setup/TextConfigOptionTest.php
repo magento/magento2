@@ -16,10 +16,10 @@ class TextConfigOptionTest extends \PHPUnit_Framework_TestCase
         new TextConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT);
     }
 
-    public function testGetFrontendInput()
+    public function testGetFrontendType()
     {
         $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT);
-        $this->assertEquals(TextConfigOption::FRONTEND_WIZARD_TEXT, $option->getFrontendInput());
+        $this->assertEquals(TextConfigOption::FRONTEND_WIZARD_TEXT, $option->getFrontendType());
     }
 
     /**
