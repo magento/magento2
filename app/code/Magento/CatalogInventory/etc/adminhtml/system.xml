@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="cataloginventory" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Inventory</label>
@@ -15,16 +15,16 @@
                 <label>Stock Options</label>
                 <field id="can_subtract" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Decrease Stock When Order is Placed</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="can_back_in_stock" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Set Items' Status to be In Stock When Order is Cancelled</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="show_out_of_stock" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Display Out of Stock Products</label>
                     <comment>Products will still be shown by direct product URLs.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock</backend_model>
                 </field>
                 <field id="stock_threshold_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -33,7 +33,7 @@
                 </field>
                 <field id="display_product_stock_status" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display products availability in stock in the frontend</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
             <group id="item_options" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -43,7 +43,7 @@
                 <label>Product Stock Options</label>
                 <field id="manage_stock" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Manage Stock</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Managestock</backend_model>
                     <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
@@ -73,11 +73,11 @@
                 </field>
                 <field id="auto_return" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Automatically Return Credit Memo Item to Stock</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_qty_increments" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable Qty Increments</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="qty_increments" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Qty Increments</label>

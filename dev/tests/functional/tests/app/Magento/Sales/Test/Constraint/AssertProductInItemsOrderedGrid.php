@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInItemsOrderedGrid extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Fields for assert.
      *

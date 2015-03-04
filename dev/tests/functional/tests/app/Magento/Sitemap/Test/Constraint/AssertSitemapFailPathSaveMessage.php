@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapFailPathSaveMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const FAIL_PATH_MESSAGE = 'Path "/%s" is not available and cannot be used.';
 
     /**

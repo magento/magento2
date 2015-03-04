@@ -6,8 +6,8 @@
 /*
     Dashboard
 -------------------------------------- */
-@dashboard-bg: #f7f3eb;
-@dashboard-tab-content-bg: #fff;
+@dashboard-background-color: #f7f3eb;
+@dashboard-tab-content-background-color: #fff;
 @dashboard-active-color: #ef672f;
 
 /*
@@ -18,7 +18,7 @@
     border: none; // resets global styles
     border-radius: 0; // resets global styles
     padding: 0; // resets global styles
-    background: @dashboard-bg; // resets global styles
+    background: @dashboard-background-color; // resets global styles
 }
 
 .dashboard-container {
@@ -50,7 +50,7 @@
         padding: 20px 0;
     }
     &-image {
-        background: @dashboard-tab-content-bg url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+        background: @dashboard-tab-content-background-color url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
     }
     .form-select-label {
         display: inline-block;
@@ -65,7 +65,7 @@
 -------------------------------------- */
 .dashboard-container {
     .ui-tabs-panel {
-        background-color: @dashboard-tab-content-bg;
+        background-color: @dashboard-tab-content-background-color;
         min-height: 40px;
         padding: 15px;
     }
@@ -78,7 +78,7 @@
 .dashboard-store-stats {
     margin-top: 35px;
     .ui-tabs-panel {
-        background: @dashboard-tab-content-bg url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
+        background: @dashboard-tab-content-background-color url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
     }
     .empty-text { // "no data" messages
         background: #f7f3eb;
@@ -121,7 +121,7 @@
 }
 
 .dashboard-totals {
-    background: @dashboard-tab-content-bg;
+    background: @dashboard-tab-content-background-color;
     padding: 50px 15px 25px;
     &-list {
         .clearfix();
@@ -189,7 +189,7 @@
         }
     }
     .ui-tabs-panel & {
-        background-color: @dashboard-tab-content-bg;
+        background-color: @dashboard-tab-content-background-color;
         .col-name {
             &:extend(.ellipsis all);
             &:extend(.col-370-max all);

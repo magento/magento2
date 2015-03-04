@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
 
-class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class Statuses extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
      * Dummy element
@@ -17,7 +17,7 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Field renderer
      *
-     * @var \Magento\Backend\Block\System\Config\Form\Field
+     * @var \Magento\Config\Block\System\Config\Form\Field
      */
     protected $_fieldRenderer;
 
@@ -85,13 +85,13 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
     /**
      * Get field renderer
      *
-     * @return \Magento\Backend\Block\System\Config\Form\Field
+     * @return \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getFieldRenderer()
     {
         if (empty($this->_fieldRenderer)) {
             $this->_fieldRenderer = $this->getLayout()->getBlockSingleton(
-                'Magento\Backend\Block\System\Config\Form\Field'
+                'Magento\Config\Block\System\Config\Form\Field'
             );
         }
         return $this->_fieldRenderer;

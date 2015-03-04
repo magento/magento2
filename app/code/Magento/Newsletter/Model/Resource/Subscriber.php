@@ -55,18 +55,20 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Math\Random $mathRandom
+        \Magento\Framework\Math\Random $mathRandom,
+        $resourcePrefix = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
@@ -156,7 +158,7 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Newsletter\Model\Subscriber $subscriber
      * @param \Magento\Newsletter\Model\Queue $queue
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function received(\Magento\Newsletter\Model\Subscriber $subscriber, \Magento\Newsletter\Model\Queue $queue)
     {
@@ -171,7 +173,7 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_write->commit();
         } catch (\Exception $e) {
             $this->_write->rollBack();
-            throw new \Magento\Framework\Model\Exception(__('We cannot mark as received subscriber.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot mark as received subscriber.'));
         }
         return $this;
     }

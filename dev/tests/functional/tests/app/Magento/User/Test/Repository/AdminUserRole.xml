@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\User\Test\Repository\AdminUserRole">
+    <repository class="Magento\User\Test\Repository\AdminUserRole">
         <dataset name="default">
             <field name="rolename" xsi:type="string">RoleName%isolation%</field>
             <field name="resource_access" xsi:type="string">All</field>
@@ -44,5 +44,5 @@
                 <item name="Send Sales Emails" xsi:type="string">Magento_Sales::emails</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

@@ -127,8 +127,6 @@ class ObjectManagerFactory
             }
         }
 
-        $this->factory = $env->getObjectManagerFactory($arguments);
-
         $sharedInstances = [
             'Magento\Framework\App\DeploymentConfig' => $deploymentConfig,
             'Magento\Framework\App\Filesystem\DirectoryList' => $this->directoryList,
@@ -144,6 +142,8 @@ class ObjectManagerFactory
             'Magento\Framework\App\ObjectManager\ConfigLoader' => $env->getObjectManagerConfigLoader(),
             $this->_configClassName => $diConfig,
         ];
+        $arguments['shared_instances'] = &$sharedInstances;
+        $this->factory = $env->getObjectManagerFactory($arguments);
 
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = new $this->_locatorClassName($this->factory, $diConfig, $sharedInstances);
