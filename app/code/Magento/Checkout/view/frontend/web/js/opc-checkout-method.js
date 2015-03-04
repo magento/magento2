@@ -8,10 +8,11 @@
 /*global alert*/
 define([
     "jquery",
+    "accordion",
     "jquery/ui",
     "mage/validation/validation",
     "mage/translate"
-], function($){
+], function($, accordion){
     'use strict';
 
     // Base widget, handle ajax events and first section(Checkout Method) in one page checkout accordion
@@ -43,9 +44,13 @@ define([
 
         _create: function() {
             var self = this;
+            
+            this._initAccordion();
+
             this.sectionActiveClass = this.element.accordion("option","openedState");
             this.contentSelector = this.element.accordion("option","content");
             this.checkoutPrice = this.options.quoteBaseGrandTotal;
+            
             if (this.options.checkout.suggestRegistration) {
                 $(this.options.checkout.loginGuestSelector).prop('checked', false);
                 $(this.options.checkout.loginRegisterSelector).prop('checked', true);
@@ -94,6 +99,12 @@ define([
                     return false;
                 }
             });
+        },
+
+        _initAccordion: function(){
+            var config = this.element.data('accordion');
+
+            accordion(config, this.element[0]);
         },
 
         /**

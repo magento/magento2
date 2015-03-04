@@ -82,15 +82,15 @@ $product = $block->getSaleableItem();
     <?php endforeach; ?>
     </ul>
     <?php if ($msrpShowOnGesture):?>
-        <script>
-        require(["jquery", "mage/mage"], function($){
-
-            $('.product-info-main').mage('tierPrice', {
-                inputQty: '#qty',
-                productForm: '#product_addtocart_form'
-            });
-
-        });
-</script>
+        <script type="text/x-magento-init">
+            {
+                ".product-info-main": {
+                    "tierPrice": {
+                        "inputQty": "#qty",
+                        "productForm": "#product_addtocart_form"
+                    }
+                }
+            }
+        </script>
     <?php endif;?>
 <?php endif; ?>

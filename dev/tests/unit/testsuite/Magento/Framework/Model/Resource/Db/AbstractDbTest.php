@@ -20,6 +20,16 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
      */
     protected $_resourcesMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $relationProcessorMock;
+
     protected function setUp()
     {
         $this->_resourcesMock = $this->getMock(
@@ -30,9 +40,28 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->relationProcessorMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->transactionManagerMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\TransactionManagerInterface'
+        );
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->_resourcesMock);
+        $contextMock->expects($this->once())
+            ->method('getObjectRelationProcessor')
+            ->willReturn($this->relationProcessorMock);
+        $contextMock->expects($this->once())
+            ->method('getTransactionManager')
+            ->willReturn($this->transactionManagerMock);
+
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
-            [$this->_resourcesMock]
+            [$contextMock]
         );
     }
 
@@ -277,12 +306,32 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['__wakeup', 'getId', 'beforeDelete', 'afterDelete', 'afterDeleteCommit']
+            ['__wakeup', 'getId', 'beforeDelete', 'afterDelete', 'afterDeleteCommit', 'getData']
         );
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($adapterInterfaceMock)
         );
+
+        $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
+        $connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->transactionManagerMock->expects($this->once())
+            ->method('start')
+            ->with($adapterInterfaceMock)
+            ->willReturn($connectionMock);
+
+        $this->relationProcessorMock->expects($this->once())
+            ->method('delete')
+            ->with(
+                $this->transactionManagerMock,
+                $connectionMock,
+                'tableName',
+                'idFieldName',
+                ['data' => 'value']
+            );
+
+        $this->transactionManagerMock->expects($this->once())->method('commit');
+
         $data = 'tableName';
         $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
             $this->returnValue('tableName')
