@@ -39,10 +39,10 @@ class Observer extends \Magento\Framework\Object
     /**
      * Set gift messages to order from quote address
      *
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
-    public function salesEventConvertQuoteToOrder($observer)
+    public function salesEventQuoteSubmitBefore($observer)
     {
         $observer->getEvent()->getOrder()->setGiftMessageId($observer->getEvent()->getQuote()->getGiftMessageId());
         return $this;
