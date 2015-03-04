@@ -232,7 +232,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                     'fieldValue' => 'value1',
                     'field2Name' => 'resource_id',
                     'field2Value' => 'resource10',
-                ],
+                ]
             ],
             'NoSuchEntityException (Empty message)' => [
                 new NoSuchEntityException(),
@@ -249,7 +249,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
                 AuthorizationException::NOT_AUTHORIZED,
-                '4',
+                ['4'],
             ],
             'Exception' => [
                 new \Exception('Non service exception', 5678),
