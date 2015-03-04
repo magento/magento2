@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCartIsEmpty extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Text of empty cart.
      */

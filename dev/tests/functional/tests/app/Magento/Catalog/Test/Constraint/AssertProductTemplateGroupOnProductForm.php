@@ -23,10 +23,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
  */
 class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that created product template:
      * 1. Displays in product template suggest container dropdown
