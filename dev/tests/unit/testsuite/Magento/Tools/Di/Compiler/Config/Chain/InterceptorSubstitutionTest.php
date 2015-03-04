@@ -76,7 +76,7 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'arguments' => [
-                'Class\Interceptor' => [
+                'Class' => [
                     'argument_type' => ['_i_' => 'Class\Dependency'],
                     'argument_not_shared' => ['_ins_' => 'Class\Dependency'],
                     'array_configured' => [
@@ -84,24 +84,22 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
                         'argument_not_shared' => ['_ins_' => 'Class\Dependency'],
                         'array' => [
                             'argument_type' => ['_i_' => 'Class\Dependency'],
-                            'argument_not_shared' => ['_ins_' => 'Class\DependencyIntercepted\Interceptor'],
+                            'argument_not_shared' => ['_ins_' => 'Class\DependencyIntercepted'],
                         ]
                     ]
                 ],
                 'virtualType' => [
-                    'argument_type' => ['_i_' => 'Class\DependencyIntercepted\Interceptor'],
+                    'argument_type' => ['_i_' => 'Class\DependencyIntercepted'],
                     'argument_not_shared' => ['_ins_' => 'Class\Dependency'],
                     'array_configured' => ['banana']
                 ],
-                'Class\DependencyIntercepted\Interceptor' => []
+                'Class\DependencyIntercepted' => []
             ],
             'preferences' => [
-                'ClassInterface' => 'Class\Interceptor',
+                'ClassInterface' => 'Class',
             ],
             'instanceTypes' => [
-                'virtualType' => 'Class\Interceptor'
-            ],
-            'interceptors' => [
+                'virtualType' => 'Class\Interceptor',
                 'Class' => 'Class\Interceptor',
                 'Class\DependencyIntercepted' => 'Class\DependencyIntercepted\Interceptor'
             ]

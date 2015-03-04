@@ -53,7 +53,6 @@ class Compiled extends AbstractFactory
      */
     public function create($requestedType, array $arguments = [])
     {
-        /** @TODO get rid of ltrim() usage and place it to client code */
         $args = $this->config->getArguments($requestedType);
         $type = $this->config->getInstanceType($requestedType);
         if ($args === null) {

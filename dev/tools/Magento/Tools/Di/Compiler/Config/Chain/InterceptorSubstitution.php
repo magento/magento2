@@ -27,12 +27,10 @@ class InterceptorSubstitution implements ModificationInterface
         }
 
         $interceptors = $this->getInterceptorsList($config['arguments']);
-        $config['arguments'] = $this->resolveInstancesNames($config['arguments'], $interceptors);
-
-        $this->resolveArguments($config['arguments'], $interceptors);
-        $config['preferences'] = $this->resolvePreferences($config['preferences'], $interceptors);
+        $config['arguments'] = array_diff_key($config['arguments'], array_flip($interceptors));
         $config['instanceTypes'] = $this->resolvePreferences($config['instanceTypes'], $interceptors);
-        $config['interceptors'] = $interceptors;
+        $config['instanceTypes'] = array_merge($config['instanceTypes'], $interceptors);
+
         return $config;
     }
 
@@ -74,32 +72,6 @@ class InterceptorSubstitution implements ModificationInterface
         }
 
         return $resolvedInstances;
-    }
-
-    /**
-     * Resolves instances arguments
-     *
-     * @param array $argument
-     * @return array
-     */
-    private function resolveArguments(array &$argument, array $interceptors)
-    {
-        if (!is_array($argument)) {
-            return;
-        }
-
-        foreach ($argument as $key => &$value) {
-            if (in_array($key, ['_i_', '_ins_'])) {
-                if (isset($interceptors[$value])) {
-                    $value = $interceptors[$value];
-                    continue;
-                }
-            }
-            if (is_array($value)) {
-                $this->resolveArguments($value, $interceptors);
-            }
-        }
-        return;
     }
 
     /**
