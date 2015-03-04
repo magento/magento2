@@ -15,22 +15,28 @@ use Magento\Framework\App\State;
 class DataProvider implements DataProviderInterface
 {
     /**
-     * @var Files
-     */
-    protected $filesUtility;
-
-    /**
      * @var State
      */
     protected $appState;
 
     /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * @var Files
+     */
+    protected $filesUtility;
+
+    /**
      * @param State $appState
      */
-    public function __construct(State $appState)
+    public function __construct(State $appState, Config $config)
     {
         $this->appState = $appState;
-        $this->filesUtility = new \Magento\Framework\Test\Utility\Files(BP);
+        $this->config = $config;
+        $this->filesUtility = new Files(BP);
     }
 
     /**
@@ -42,9 +48,11 @@ class DataProvider implements DataProviderInterface
 
         $files = $this->filesUtility->getJsFilesForArea($this->appState->getAreaCode());
         foreach ($files as $filePath) {
-            $content = file_get_contents($filePath);
-            foreach ($this->getPhrases($content) as $phrase) {
-                $dictionary[$phrase] = __($phrase);
+            foreach ($this->getPhrases(file_get_contents($filePath)) as $phrase) {
+                $translatedPhrase = (string) __($phrase);
+                if ($phrase != $translatedPhrase) {
+                    $dictionary[$phrase] = $translatedPhrase;
+                }
             }
         }
 
@@ -58,17 +66,19 @@ class DataProvider implements DataProviderInterface
      */
     protected function getPhrases($content)
     {
-        $result = preg_match_all(Config::TRANSLATION_CALL_PATTERN, $content, $matches);
+        $phrases = [];
+        foreach ($this->config->getPatterns() as $pattern) {
+            $result = preg_match_all($pattern, $content, $matches);
 
-        if ($result) {
-            return $matches[1];
+            if ($result) {
+                $phrases = array_merge($phrases, $matches[1]);
+            }
+            if (false === $result) {
+                throw new \Exception(
+                    sprintf('Error while generating js translation dictionary: "%s"', error_get_last())
+                );
+            }
         }
-        if (false === $result) {
-            throw new \Exception(
-                sprintf('Error while generating js translation dictionary: "%s"', error_get_last())
-            );
-        }
-
-        return [];
+        return $phrases;
     }
 }

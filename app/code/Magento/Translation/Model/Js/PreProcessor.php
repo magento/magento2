@@ -35,7 +35,7 @@ class PreProcessor implements PreProcessorInterface
      */
     public function process(Chain $chain)
     {
-        if ($this->config->isPublishingMode()) {
+        if ($this->config->isEmbeddedStrategy()) {
             $chain->setContent($this->translate($chain->getContent()));
         }
     }
@@ -48,7 +48,10 @@ class PreProcessor implements PreProcessorInterface
      */
     public function translate($content)
     {
-        return preg_replace_callback(Config::TRANSLATION_CALL_PATTERN, [$this, 'replaceCallback'], $content);
+        foreach ($this->config->getPatterns() as $pattern) {
+            $content = preg_replace_callback($pattern, [$this, 'replaceCallback'], $content);
+        }
+        return $content;
     }
 
     /**

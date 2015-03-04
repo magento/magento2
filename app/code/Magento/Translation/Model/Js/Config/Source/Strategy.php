@@ -15,8 +15,8 @@ class Strategy implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['label' => __('Publishing'), 'value' => Config::PUBLISHING_STRATEGY],
-            ['label' => __('Dynamic'), 'value' => Config::DYNAMIC_STRATEGY]
+            ['label' => __('Embedded (Translation on backend side)'), 'value' => Config::EMBEDDED_STRATEGY],
+            ['label' => __('Dictionary (Translation on frontend side)'), 'value' => Config::DICTIONARY_STRATEGY]
         ];
     }
 }

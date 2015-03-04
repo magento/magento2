@@ -125,7 +125,7 @@ class Deployer
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);
                     }
-                    if ($this->jsTranslationConfig->isDictionaryMode()) {
+                    if ($this->jsTranslationConfig->isDictionaryStrategy()) {
                         $this->deployFile(JsTranslationConfig::DICTIONARY_FILE_NAME, $area, $themePath, $locale, null);
                     }
                     $this->logger->logMessage("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");

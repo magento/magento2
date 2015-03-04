@@ -15,28 +15,22 @@ class Config
     /**
      * Strategy when all js files are translated while publishing
      */
-    const PUBLISHING_STRATEGY = 'publishing';
+    const EMBEDDED_STRATEGY = 'embedded';
 
     /**
      * Strategy when dictionary is generated for dynamic translation
      */
-    const DYNAMIC_STRATEGY = 'dynamic';
+    const DICTIONARY_STRATEGY = 'dictionary';
 
     /**
      * Configuration path to translation strategy
      */
-    const TRANSLATE_CONFIG_PATH = 'dev/js/translate_strategy';
+    const XML_PATH_STRATEGY = 'dev/js/translate_strategy';
 
     /**
      * Dictionary file name
      */
     const DICTIONARY_FILE_NAME = 'js-translation.json';
-
-    /**
-     * Pattern that matches js call to translate string
-     * f.e. $.mage.__('this string should be translated');
-     */
-    const TRANSLATION_CALL_PATTERN = '~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~';
 
     /**
      * Core store config
@@ -46,26 +40,49 @@ class Config
     protected $scopeConfig;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
+     * Patterns to match strings for translation
+     *
+     * @var string[]
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
+    protected $patterns;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param string[] $patterns
+     */
+    public function __construct(ScopeConfigInterface $scopeConfig, $patterns)
     {
         $this->scopeConfig = $scopeConfig;
+        $this->patterns = $patterns;
     }
 
     /**
+     * Is Embedded Strategy selected
+     *
      * @return bool
      */
-    public function isPublishingMode()
+    public function isEmbeddedStrategy()
     {
-        return ($this->scopeConfig->getValue(self::TRANSLATE_CONFIG_PATH) == self::PUBLISHING_STRATEGY);
+        return ($this->scopeConfig->getValue(self::XML_PATH_STRATEGY) == self::EMBEDDED_STRATEGY);
     }
 
     /**
+     * Is Dictionary Strategy selected
+     *
      * @return bool
      */
-    public function isDictionaryMode()
+    public function isDictionaryStrategy()
     {
-        return ($this->scopeConfig->getValue(self::TRANSLATE_CONFIG_PATH) == self::DYNAMIC_STRATEGY);
+        return ($this->scopeConfig->getValue(self::XML_PATH_STRATEGY) == self::DICTIONARY_STRATEGY);
+    }
+
+    /**
+     * Retrieve translation patterns
+     *
+     * @return string[]
+     */
+    public function getPatterns()
+    {
+        return $this->patterns;
     }
 }

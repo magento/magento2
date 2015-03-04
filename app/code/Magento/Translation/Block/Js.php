@@ -66,8 +66,8 @@ class Js extends \Magento\Framework\View\Element\Template
      *
      * @return bool
      */
-    public function isDictionaryMode()
+    public function isDictionaryStrategy()
     {
-        return $this->config->isDictionaryMode();
+        return $this->config->isDictionaryStrategy();
     }
 }
