@@ -10,11 +10,15 @@
         <container name="backend.page">
             <container name="after.body.start" as="after.body.start" label="Page Top" before="-"/>
             <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
-                <container name="notification.window" as="notification_window" before="-"/>
-                <container name="global.notices" as="global_notices" after="notification.window"/>
+
+                <container name="notices.wrapper" before="-" htmlClass="notices-wrapper" htmlTag="div">
+                    <container name="notifications" as="notifications" />
+                    <container name="notification.window" as="notification_window" before="-"/>
+                    <container name="global.notices" as="global_notices" after="notification.window"/>
+                </container>
+
                 <container name="header" after="global.notices" htmlTag="header" htmlClass="page-header"/>
                 <container name="page.menu" as="page.menu" after="header"/>
-                <container name="notifications" as="notifications" after="page.menu"/>
                 <container name="page.breadcrumbs" after="notifications" as="page.breadcrumbs"/>
 
                 <container name="page.formkey" as="page.formkey"/>
@@ -22,10 +26,12 @@
 
                 <container name="page.content" as="page_content" htmlTag="main" htmlId="anchor-content" htmlClass="page-content">
                     <container name="main.top" as="main-top" label="main-top"/>
-                    <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages" htmlClass="messages admin__scope">
-                        <container name="page.messages" as="page.messages"/>
-                    </container>
                     <container name="page.main.actions" as="page_main_actions" htmlTag="div" htmlClass="page-main-actions"/>
+                    <container name="message-wrapper.scope" htmlTag="div" htmlClass="admin__scope">
+                        <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages" htmlClass="messages-in-context">
+                            <container name="page.messages" as="page.messages"/>
+                        </container>
+                    </container>
                     <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="col-1-layout">
                        <container name="content" as="content"/>
                     </container>

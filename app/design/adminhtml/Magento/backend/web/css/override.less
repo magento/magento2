@@ -1159,9 +1159,6 @@ table.table tbody td:first-child input[type='checkbox'] {
 table.table tbody tr:last-child td {
   border-bottom-color: transparent;
 }
-.messages {
-  margin: 2rem 0;
-}
 .message {
   background: #fffbbb;
   border: none;
@@ -1220,6 +1217,9 @@ table.table tbody tr:last-child td {
   font-size: 2.5rem;
   left: 1.5rem;
   top: 1.5rem;
+}
+.messages-in-context {
+  margin: 0 0 2rem;
 }
 .row {
   margin-left: 0;
@@ -1641,6 +1641,12 @@ body {
 .page-content {
   padding-left: 3rem;
   padding-right: 3rem;
+}
+.notices-wrapper {
+  margin: 0 3rem;
+  border: 1px solid #d4d4d4;
+  border-top: none;
+  padding: 0 1px;
 }
 .admin__control-text.hasDatepicker {
   width: 15rem;
@@ -2145,7 +2151,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .message-system-inner {
   background: #fffbbb;
-  margin: 0 3rem 2rem 3rem;
 }
 .message-system-inner .message-system-list {
   float: left;

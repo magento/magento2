@@ -13,7 +13,7 @@ define([
         options: {
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
-                    '<li class="<% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
+                    '<li class="message message-warning <% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
                         '<%= item.text %>' +
                     '</li>' +
                 '<% }); %>'

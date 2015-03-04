@@ -18,6 +18,8 @@
 
 @page-content__padding-horizontal: @content__indent;
 
+@notices-wrapper__border-color: @color-gray83;
+
 //
 
 body {
@@ -32,4 +34,11 @@ body {
 .page-content {
     padding-left: @page-content__padding-horizontal;
     padding-right: @page-content__padding-horizontal;
+}
+
+.notices-wrapper {
+    margin: 0 3rem;
+    border: 1px solid @notices-wrapper__border-color;
+    border-top: none;
+    padding: 0 1px;
 }

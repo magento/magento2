@@ -31,6 +31,7 @@
         <move element="logo" before="-" destination="menu.wrapper" />
 
         <move element="header" destination="header.wrapper.scope" />
+        <move element="notices.wrapper" before="header" destination="header.wrapper.scope" />
         <move element="page.title" before="-" destination="header.inner.left" />
         <move element="user" before="-" destination="header.inner.right" />
         <move element="notification.messages" after="user" destination="header.inner.right" />
