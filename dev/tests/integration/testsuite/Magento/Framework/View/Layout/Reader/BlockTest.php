@@ -71,9 +71,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->blockName, $structure->getStructure()[$this->childBlockName][self::IDX_PARENT]);
     }
 
-    /**
-     * @depends testInterpretBlockDirective
-     */
     public function testInterpretReferenceBlockDirective()
     {
         $pageXml = new \Magento\Framework\View\Layout\Element(

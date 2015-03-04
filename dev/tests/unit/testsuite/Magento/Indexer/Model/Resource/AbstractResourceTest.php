@@ -124,13 +124,13 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage array_keys() expects parameter 1 to be array, null given
      */
     public function testSyncDataException()
     {
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
+        $connectionMock->expects($this->once())->method('rollback');
         $this->model->syncData();
     }
 

@@ -118,7 +118,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([]);
+            ->willReturn([
+                'actions' => [
+                    ['someMethod', [], 'action_config_path', 'scope'],
+                ],
+            ]);
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(
@@ -142,8 +146,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareReaderPool(
             '<' . $literal . ' ifconfig="' . $ifconfigValue . '">'
-                . '<action method="someMethod" ifconfig="action_config_path" />'
-                . '</' . $literal . '>',
+            . '<action method="someMethod" ifconfig="action_config_path" />'
+            . '</' . $literal . '>',
             $literal
         );
 
@@ -187,7 +191,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([]);
+            ->willReturn([
+                'actions' => [
+                    ['someMethod', [], 'action_config_path', 'scope'],
+                ],
+            ]);
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(
@@ -202,8 +210,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareReaderPool(
             '<' . $literal . ' name="' . $literal . '">'
-                . '<action method="someMethod" ifconfig="action_config_path" />'
-                . '</' . $literal . '>',
+            . '<action method="someMethod" ifconfig="action_config_path" />'
+            . '</' . $literal . '>',
             $literal
         );
 

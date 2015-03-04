@@ -64,12 +64,14 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\File\LargeSizeException
-     * @expectedExceptionMessage The file you uploaded is larger than 2 Megabytes allowed by server
      * @return void
      */
     public function testLargeSizeException()
     {
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\File\LargeSizeException',
+            sprintf('The file you uploaded is larger than %s Megabytes allowed by server', $this->maxFileSizeInMb)
+        );
         $this->prepareEnv();
         $_SERVER['CONTENT_LENGTH'] = $this->maxFileSize + 1;
         $httpAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', ['getFileInfo']);

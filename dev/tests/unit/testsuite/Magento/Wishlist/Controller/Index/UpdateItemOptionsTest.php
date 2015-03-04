@@ -182,12 +182,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('product')
             ->willReturn(2);
 
-        $exception = $this->getMock('Magento\Framework\Exception\NoSuchEntityException', [], [], '', false);
         $this->productRepository
             ->expects($this->once())
             ->method('getById')
             ->with(2)
-            ->willThrowException($exception);
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
         $this->messageManager
             ->expects($this->once())
@@ -369,16 +368,15 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist_update_item', ['wishlist' => $wishlist, 'product' => $product, 'item' => $item])
             ->willReturn(true);
 
-        $exception = $this->getMock('\Magento\Framework\Exception\LocalizedException', [], [], '', false);
         $this->messageManager
             ->expects($this->once())
             ->method('addSuccess')
             ->with('Test name has been updated in your wish list.', null)
-            ->willThrowException($exception);
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException('error-message'));
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('', null)
+            ->with('error-message', null)
             ->willReturn(true);
 
         $this->redirect
@@ -399,7 +397,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $item = $this->getMock('Magento\Wishlist\Model\Item', [], [], '', false);
         $helper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);
         $logger = $this->getMock('Magento\Framework\Logger\Monolog', [], [], '', false);
-        $exception = $this->getMock('Exception', [], [], '', false);
+        $exception = new \Exception();
 
         $logger
             ->expects($this->once())
