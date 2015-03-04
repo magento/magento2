@@ -281,7 +281,8 @@ class Messages extends Template
                 }
 
                 foreach ($messages as $message) {
-                    $html .= '<' . $this->secondLevelTagName . ' class="message ' . 'message-' . $type . ' ' . $type . '">';
+                    $html .= '<' . $this->secondLevelTagName . ' class="message ' . 'message-' . $type . ' ' . $type .
+                        '">';
                     $html .= '<' . $this->contentWrapTagName . $this->getUiId('message', $type) . '>';
                     $html .= $message->getText();
                     $html .= '</' . $this->contentWrapTagName . '>';
