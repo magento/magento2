@@ -181,7 +181,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $product = $this->productRepository->get($productSku);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(__('Product with specified sku: %s is not a bundle product', $productSku));
+            throw new InputException(__('Product with specified sku: %1 is not a bundle product', $productSku));
         }
 
         $excludeSelectionIds = [];

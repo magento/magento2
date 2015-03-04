@@ -17,6 +17,7 @@ use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialization\DataBuilderFactory;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -108,7 +109,7 @@ class ServiceInputProcessor
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;
