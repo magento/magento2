@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backup\Model;
+namespace Magento\Backup\Test\Unit\Model;
 
 class BackupFactoryTest extends \PHPUnit_Framework_TestCase
 {
