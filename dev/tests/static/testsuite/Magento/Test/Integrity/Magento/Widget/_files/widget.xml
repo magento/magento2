@@ -25,7 +25,7 @@
                 </options>
             </parameter>
             <parameter name="link_display" xsi:type="select" visible="true" sort_order="10"
-                       source_model="Magento\Backend\Model\Config\Source\Yesno">
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
                 <label translate="true">Display a Link to Loading a Spreadsheet</label>
                 <description translate="true">Defines whether a link to My Account</description>
             </parameter>

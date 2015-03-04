@@ -67,7 +67,7 @@ class Baseurl implements \Magento\Framework\Notification\MessageInterface
         ) {
             $output = $this->_urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => 'web']);
         } else {
-            /** @var $dataCollection \Magento\Core\Model\Resource\Config\Data\Collection */
+            /** @var $dataCollection \Magento\Config\Model\Resource\Config\Data\Collection */
             $dataCollection = $this->_configValueFactory->create()->getCollection();
             $dataCollection->addValueFilter(\Magento\Store\Model\Store::BASE_URL_PLACEHOLDER);
 

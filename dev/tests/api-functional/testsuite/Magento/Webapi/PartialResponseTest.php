@@ -9,7 +9,6 @@ namespace Magento\Webapi;
 use Magento\Customer\Api\AccountManagementTest;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class PartialResponseTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -91,7 +90,7 @@ class PartialResponseTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $resourcePath,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 

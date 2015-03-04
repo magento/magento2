@@ -85,7 +85,7 @@ class Logo extends \Magento\Framework\View\Element\Template
      */
     protected function _getLogoUrl()
     {
-        $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
+        $folderName = \Magento\Config\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
         $storeLogoPath = $this->_scopeConfig->getValue(
             'design/header/logo_src',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

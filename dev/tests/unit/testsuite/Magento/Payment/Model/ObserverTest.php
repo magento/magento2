@@ -22,7 +22,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $paymentConfigMock;
 
-    /** @var \Magento\Core\Model\Resource\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Config\Model\Resource\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $coreResourceConfigMock;
 
     /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject */
@@ -39,7 +39,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderConfigMock = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
         $this->paymentConfigMock = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
-        $this->coreResourceConfigMock = $this->getMock('Magento\Core\Model\Resource\Config', [], [], '', false);
+        $this->coreResourceConfigMock = $this->getMock('Magento\Config\Model\Resource\Config', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->observer = $this->objectManagerHelper->getObject(

@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductPage extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Product view block on frontend page
      *

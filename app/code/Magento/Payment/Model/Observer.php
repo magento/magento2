@@ -21,7 +21,7 @@ class Observer
     protected $_paymentConfig;
 
     /**
-     * @var \Magento\Core\Model\Resource\Config
+     * @var \Magento\Config\Model\Resource\Config
      */
     protected $_resourceConfig;
 
@@ -30,12 +30,12 @@ class Observer
      *
      * @param \Magento\Sales\Model\Order\Config $salesOrderConfig
      * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param \Magento\Core\Model\Resource\Config $resourceConfig
+     * @param \Magento\Config\Model\Resource\Config $resourceConfig
      */
     public function __construct(
         \Magento\Sales\Model\Order\Config $salesOrderConfig,
         \Magento\Payment\Model\Config $paymentConfig,
-        \Magento\Core\Model\Resource\Config $resourceConfig
+        \Magento\Config\Model\Resource\Config $resourceConfig
     ) {
         $this->_salesOrderConfig = $salesOrderConfig;
         $this->_paymentConfig = $paymentConfig;

@@ -128,7 +128,6 @@ Magento/Usps/Model/Carrier
 Magento/Dhl/Model
 Magento/Shipping/Model
 Magento/Ui
-setup
 Magento/Sales/Service/V1
 Magento/Sales/Api
 Magento/Sales/Spi
@@ -148,3 +147,6 @@ Magento/Weee/Model/Resource
 Magento/Theme/Model/Design/Backend
 Magento/Core/Model/Resource/Layout/Link
 Magento/Theme/Model/Resource/Design
+Magento/Integration/Block/Adminhtml/Integration/Edit/Tab
+Magento/Config/Model/Config/Backend
+Magento/Backup/Model/Config/Backend

@@ -57,8 +57,8 @@ class SetupModule extends Setup
      * @param LoggerInterface $log
      * @param ModuleListInterface $moduleList
      * @param SetupFileResolver $fileResolver
-     * @param string $moduleName
-     * @param \Magento\Framework\App\Resource $resource
+     * @param $moduleName
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param string $connectionName
      */
     public function __construct(
@@ -66,14 +66,14 @@ class SetupModule extends Setup
         ModuleListInterface $moduleList,
         SetupFileResolver $fileResolver,
         $moduleName,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         $connectionName = SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        parent::__construct($resource, $connectionName);
+        parent::__construct($context->getResources(), $connectionName);
         $this->logger = $log;
         $this->fileResolver = $fileResolver;
         $this->moduleConfig = $moduleList->getOne($moduleName);
-        $this->resource = new Resource($resource);
+        $this->resource = new Resource($context);
         $this->resourceName = $this->fileResolver->getResourceCode($moduleName);
     }
 
@@ -216,39 +216,11 @@ class SetupModule extends Setup
         $arrRes = [];
         switch ($actionType) {
             case self::TYPE_DB_INSTALL:
-                uksort($arrFiles, 'version_compare');
-                foreach ($arrFiles as $version => $file) {
-                    if (version_compare($version, $toVersion, '<=')) {
-                        $arrRes[0] = [
-                            'toVersion' => $version,
-                            'fileName'  => $file,
-                        ];
-                    }
-                }
+                $arrRes = $this->prepareDbInstallFileCollection($toVersion, $arrFiles);
                 break;
 
             case self::TYPE_DB_UPGRADE:
-                uksort($arrFiles, 'version_compare');
-                foreach ($arrFiles as $version => $file) {
-                    $versionInfo = explode('-', $version);
-
-                    // In array must be 2 elements: 0 => version from, 1 => version to
-                    if (count($versionInfo) !== 2) {
-                        break;
-                    }
-                    $infoFrom = $versionInfo[0];
-                    $infoTo   = $versionInfo[1];
-                    if (version_compare($infoFrom, $fromVersion, '>=')
-                        && version_compare($infoTo, $fromVersion, '>')
-                        && version_compare($infoTo, $toVersion, '<=')
-                        && version_compare($infoFrom, $toVersion, '<')
-                    ) {
-                        $arrRes[] = [
-                            'toVersion' => $infoTo,
-                            'fileName'  => $file,
-                        ];
-                    }
-                }
+                $arrRes = $this->prepareDbUpgradeFileCollection($fromVersion, $toVersion, $arrFiles);
                 break;
 
             default:
@@ -270,5 +242,61 @@ class SetupModule extends Setup
     {
         $this->logger->log("Include {$fileName}");
         return include $fileName;
+    }
+
+    /**
+     * Get the files to do data modification during an install.
+     *
+     * @param string $toVersion
+     * @param array $arrFiles
+     * @return array
+     */
+    private function prepareDbInstallFileCollection($toVersion, $arrFiles)
+    {
+        $arrRes = [];
+        uksort($arrFiles, 'version_compare');
+        foreach ($arrFiles as $version => $file) {
+            if (version_compare($version, $toVersion, '<=')) {
+                $arrRes[0] = [
+                    'toVersion' => $version,
+                    'fileName'  => $file,
+                ];
+            }
+        }
+        return $arrRes;
+    }
+
+    /**
+     * Get the files to do data modification during an upgrade.
+     *
+     * @param string $fromVersion
+     * @param string $toVersion
+     * @param array $arrFiles
+     * @return array
+     */
+    private function prepareDbUpgradeFileCollection($fromVersion, $toVersion, $arrFiles)
+    {
+        $arrRes = [];
+        uksort($arrFiles, 'version_compare');
+        foreach ($arrFiles as $version => $file) {
+            $versionInfo = explode('-', $version);
+            // In array must be 2 elements: 0 => version from, 1 => version to
+            if (count($versionInfo) !== 2) {
+                break;
+            }
+            $infoFrom = $versionInfo[0];
+            $infoTo = $versionInfo[1];
+            if (version_compare($infoFrom, $fromVersion, '>=')
+                && version_compare($infoTo, $fromVersion, '>')
+                && version_compare($infoTo, $toVersion, '<=')
+                && version_compare($infoFrom, $toVersion, '<')
+            ) {
+                $arrRes[] = [
+                    'toVersion' => $infoTo,
+                    'fileName'  => $file,
+                ];
+            }
+        }
+        return $arrRes;
     }
 }

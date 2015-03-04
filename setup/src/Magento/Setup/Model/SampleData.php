@@ -50,8 +50,9 @@ class SampleData
      *
      * @param ObjectManagerInterface $objectManager
      * @param LoggerInterface $logger
-     * @param $adminUserName
+     * @param string $adminUserName
      * @throws \Exception
+     * @return void
      */
     public function install(ObjectManagerInterface $objectManager, LoggerInterface $logger, $adminUserName)
     {
