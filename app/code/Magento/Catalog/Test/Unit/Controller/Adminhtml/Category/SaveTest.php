@@ -137,13 +137,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             true,
             ['getParam', 'getPost', 'getPostValue']
         );
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->eventManagerMock = $this->getMockForAbstractClass(
             'Magento\Framework\Event\ManagerInterface',
             [],
@@ -393,13 +389,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             );
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['Magento\Catalog\Model\Category', $categoryMock],
-                    ]
-                )
-            );
+            ->will($this->returnValue($categoryMock));
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('get')
             ->will(

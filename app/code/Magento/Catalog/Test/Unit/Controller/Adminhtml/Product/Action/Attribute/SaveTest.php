@@ -33,7 +33,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $response;
 
-    /** @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManager;
 
     /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */

@@ -85,11 +85,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $catalogDesign;
 
     /**
-     * @var \Magento\Theme\Helper\Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $layoutHelper;
-
-    /**
      * @var \Magento\Catalog\Controller\Category\View
      */
     protected $action;
@@ -160,7 +155,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
 
         $this->catalogDesign = $this->getMock('Magento\Catalog\Model\Design', [], [], '', false);
-        $this->layoutHelper = $this->getMock('Magento\Theme\Helper\Layout', [], [], '', false);
 
         $resultPageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
@@ -186,7 +180,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
             ['Magento\Catalog\Helper\Category', $this->categoryHelper],
-            ['Magento\Theme\Helper\Layout', $this->layoutHelper],
         ]));
 
         $this->request->expects($this->any())->method('getParam')->will($this->returnValueMap([
