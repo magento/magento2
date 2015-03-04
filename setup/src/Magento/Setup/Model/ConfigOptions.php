@@ -37,11 +37,6 @@ class ConfigOptions implements ConfigOptionsInterface
     private $moduleList;
 
     /**
-     * @var array
-     */
-    private $options;
-
-    /**
      * @var Random
      */
     private $random;
@@ -64,9 +59,12 @@ class ConfigOptions implements ConfigOptionsInterface
     public function getOptions()
     {
         return [
-            new TextConfigOption('key', TextConfigOption::FRONTEND_WIZARD_TEXT, 'encryption key'),
+            new TextConfigOption(self::INPUT_KEY_CRYPT_KEY,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'encryption key'
+            ),
             new MultiSelectConfigOption(
-                'modules',
+                self::CONFIG_PATH_MODULES,
                 MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT,
                 $this->moduleList,
                 'modules list',
