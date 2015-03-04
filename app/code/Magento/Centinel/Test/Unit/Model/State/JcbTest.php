@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\Centinel\Model\State\Jcb.
  */
-namespace Magento\Centinel\Model\State;
+namespace Magento\Centinel\Test\Unit\Model\State;
 
 class JcbTest extends \PHPUnit_Framework_TestCase
 {

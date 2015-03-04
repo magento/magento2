@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Centinel\Model;
+namespace Magento\Centinel\Test\Unit\Model;
 
 class StateFactoryTest extends \PHPUnit_Framework_TestCase
 {

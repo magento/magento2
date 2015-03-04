@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\Centinel\Model\Service
  */
-namespace Magento\Centinel\Model;
+namespace Magento\Centinel\Test\Unit\Model;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
