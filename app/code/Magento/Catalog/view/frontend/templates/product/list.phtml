@@ -101,7 +101,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                            data-post='<?php echo $block->getAddToWishlistParams($_product); ?>'
                                            data-action="add-to-wishlist"
                                            role="button">
-                                            <span aria-hidden="true"><?php echo __('Add to Wishlist') ?></span>
+                                            <span><?php echo __('Add to Wishlist') ?></span>
                                         </a>
                                     <?php endif; ?>
                                     <?php
@@ -113,7 +113,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                                        aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
                                        data-post='<?php echo $compareHelper->getPostDataParams($_product); ?>'
                                        role="button">
-                                        <span aria-hidden="true"><?php echo __('Add to Compare') ?></span>
+                                        <span><?php echo __('Add to Compare') ?></span>
                                     </a>
                                 </div>
                             </div>
