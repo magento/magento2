@@ -58,7 +58,7 @@ class Renderer
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\View\Asset\Repository
      */
     private $assetRepo;
 
