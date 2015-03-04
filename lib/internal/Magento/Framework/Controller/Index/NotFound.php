@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Controller\Index;
+namespace Magento\Framework\Controller\Index;
 
 class NotFound extends \Magento\Framework\App\Action\Action
 {

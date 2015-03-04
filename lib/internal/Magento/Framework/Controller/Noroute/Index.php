@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Controller\Noroute;
+namespace Magento\Framework\Controller\Noroute;
 
 class Index extends \Magento\Framework\App\Action\Action
 {

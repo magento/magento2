@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Controller;
+namespace Magento\Framework\Controller;
 
 class NorouteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Controller\Noroute
+     * @var \Magento\Framework\Controller\Noroute
      */
     protected $_controller;
 
@@ -34,7 +34,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         $this->_viewMock = $this->getMock('\Magento\Framework\App\ViewInterface');
         $this->_statusMock = $this->getMock('Magento\Framework\Object', ['getLoaded'], [], '', false);
         $this->_controller = $helper->getObject(
-            'Magento\Core\Controller\Noroute\Index',
+            'Magento\Framework\Controller\Noroute\Index',
             ['request' => $this->_requestMock, 'view' => $this->_viewMock]
         );
     }
