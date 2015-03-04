@@ -11,7 +11,7 @@ namespace Magento\Framework\Setup;
 interface ConfigOptionsInterface
 {
     /**
-     * Gets deployment configuration options of a segment
+     * Gets user input options to a segment in deployment configuration
      *
      * @return AbstractConfigOption[]
      */
@@ -22,6 +22,7 @@ interface ConfigOptionsInterface
      *
      * @param array $options
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function createConfig(array $options);
 }
