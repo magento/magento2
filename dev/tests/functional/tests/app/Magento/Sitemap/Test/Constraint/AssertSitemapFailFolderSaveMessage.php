@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapFailFolderSaveMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const FAIL_FOLDER_MESSAGE = 'Please create the specified folder "%s" before saving the sitemap.';
 
     /**

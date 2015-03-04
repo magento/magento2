@@ -254,12 +254,15 @@ body {
     .navigation ul {
         padding: 0 8px;
     }
+
     .header {
         &.panel {
             > .header.links {
                 float: right;
+                font-size: 0;
                 .list-inline();
                 > li {
+                    font-size: @font-size__base;
                     margin: 0 0 0 15px;
                     &.welcome,
                     a {
@@ -275,7 +278,7 @@ body {
             }
         }
         &.content {
-            padding: 30px 20px 0;
+            padding: @indent__l @indent__base 0;
             &:extend(.abs-add-clearfix-desktop all);
         }
     }
@@ -287,8 +290,8 @@ body {
             border-bottom: 1px solid @secondary__color;
         }
         .header.panel {
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding-top: @indent__s;
+            padding-bottom: @indent__s;
             &:extend(.abs-add-clearfix-desktop all);
         }
         .switcher {
