@@ -5,7 +5,6 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Edit;
 
-
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -265,5 +264,4 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $this->block->toHtml();
     }
-
 }
