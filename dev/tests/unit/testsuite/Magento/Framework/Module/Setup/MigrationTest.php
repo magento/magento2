@@ -85,7 +85,6 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             'base_dir' => 'not_used',
             'path_to_map_file' => 'not_used',
             'connection' => $adapterMock,
-            'core_helper' => $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
             'aliases_map' => $aliasesMap
         ];
     }
@@ -216,7 +215,6 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $setupModel = new \Magento\Framework\Module\Setup\Migration(
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false),
             $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
-            $this->getMock('Magento\Core\Helper\Data', [], [], '', false),
             $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
             $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),

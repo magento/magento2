@@ -71,7 +71,7 @@ class RemoveTrack extends \Magento\Backend\App\Action
             $response = ['error' => true, 'message' => __('Cannot load track with retrieving identifier.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
+            $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

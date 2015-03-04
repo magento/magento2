@@ -22,7 +22,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
             $taxRate = $this->populateTaxRateData($rateData);
             $this->_taxRateRepository->save($taxRate);
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 [
                     'success' => true,
@@ -33,7 +33,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 [
                     'success' => false,
@@ -44,7 +44,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
             );
         } catch (\Exception $e) {
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 [
                     'success' => false,

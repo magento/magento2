@@ -92,7 +92,6 @@
     <type name="Magento\Store\Model\StoreManager">
         <arguments>
             <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
-            <argument name="helper" xsi:type="object">Magento\Core\Helper\Data\Proxy</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Store\Model\Resource\Group\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">

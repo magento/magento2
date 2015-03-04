@@ -15,10 +15,6 @@ use Magento\Install\Test\Fixture\Install as InstallConfig;
  */
 class AssertKeyCreated extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that selected encryption key displays on success full install page.
      *
