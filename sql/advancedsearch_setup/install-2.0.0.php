@@ -46,4 +46,15 @@ $table = $installer->getConnection()->newTable(
 )->setComment('Advanced Search Recommendations');
 $installer->getConnection()->createTable($table);
 
+$installer->getConnection()->addIndex(
+    $installer->getTable('search_query'),
+    $installer->getIdxName('search_query', ['num_results']),
+    'num_results'
+);
+$installer->getConnection()->addIndex(
+    $installer->getTable('search_query'),
+    $installer->getIdxName('search_query', ['query_text', 'store_id', 'num_results']),
+    ['query_text', 'store_id', 'num_results']
+);
+
 $installer->endSetup();
