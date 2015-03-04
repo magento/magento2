@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Product fixture
      *

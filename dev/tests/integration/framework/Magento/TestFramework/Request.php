@@ -30,7 +30,7 @@ class Request extends \Magento\Framework\App\Request\Http
      */
     public function getHttpHost($trimPort = true)
     {
-        return 'localhost';
+        return $trimPort ? 'localhost' : 'localhost:81';
     }
 
     /**

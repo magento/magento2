@@ -23,21 +23,23 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $scope;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param string|null $resourcePrefix
      * @param string|null $scope
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        $resourcePrefix = null,
         $scope = null
     ) {
         $this->_localeResolver = $localeResolver;
         $this->scopeResolver = $scopeResolver;
         $this->scope = $scope;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
