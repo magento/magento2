@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogRule\Model\Indexer;
+namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
 {

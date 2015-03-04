@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CatalogRule\Plugin\Indexer;
+namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

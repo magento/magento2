@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogRule\Model\Product;
+namespace Magento\CatalogRule\Test\Unit\Model\Product;
 
 class PriceModifierTest extends \PHPUnit_Framework_TestCase
 {

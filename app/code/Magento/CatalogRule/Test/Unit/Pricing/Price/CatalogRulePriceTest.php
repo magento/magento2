@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogRule\Pricing\Price;
+namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
+
+use \Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 
 /**
  * Class CatalogRulePriceTest

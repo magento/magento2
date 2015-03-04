@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogRule\Model\Indexer\Product;
+namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Product;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

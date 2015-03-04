@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogRule\Model\Rule;
+namespace Magento\CatalogRule\Test\Unit\Model\Rule;
+
+use \Magento\CatalogRule\Model\Rule\Job;
 
 class JobTest extends \PHPUnit_Framework_TestCase
 {

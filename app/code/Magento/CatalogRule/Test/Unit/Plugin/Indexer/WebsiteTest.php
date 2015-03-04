@@ -6,11 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CatalogRule\Plugin\Indexer;
+namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
-class ImportExportTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -18,12 +18,12 @@ class ImportExportTest extends \PHPUnit_Framework_TestCase
     protected $ruleProductProcessor;
 
     /**
-     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subject;
 
     /**
-     * @var \Magento\CatalogRule\Plugin\Indexer\ImportExport
+     * @var \Magento\CatalogRule\Plugin\Indexer\Website
      */
     protected $plugin;
 
@@ -31,19 +31,17 @@ class ImportExportTest extends \PHPUnit_Framework_TestCase
     {
         $this->ruleProductProcessor = $this->getMock('Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
             [], [], '', false);
-        $this->subject = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
+        $this->subject = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
 
-        $this->plugin = (new ObjectManager($this))->getObject('Magento\CatalogRule\Plugin\Indexer\ImportExport', [
+        $this->plugin = (new ObjectManager($this))->getObject('Magento\CatalogRule\Plugin\Indexer\Website', [
             'ruleProductProcessor' => $this->ruleProductProcessor,
         ]);
     }
 
-    public function testAfterImportSource()
+    public function testAfterDelete()
     {
-        $result = true;
-
         $this->ruleProductProcessor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->assertEquals($result, $this->plugin->afterImportSource($this->subject, $result));
+        $this->assertEquals($this->subject, $this->plugin->afterDelete($this->subject, $this->subject));
     }
 }

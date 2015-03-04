@@ -6,11 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CatalogRule\Plugin\Indexer;
+namespace Magento\CatalogRule\Test\Unit\Model;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class CronTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -18,30 +18,24 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected $ruleProductProcessor;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Cron
      */
-    protected $subject;
-
-    /**
-     * @var \Magento\CatalogRule\Plugin\Indexer\Website
-     */
-    protected $plugin;
+    protected $cron;
 
     protected function setUp()
     {
         $this->ruleProductProcessor = $this->getMock('Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
             [], [], '', false);
-        $this->subject = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
 
-        $this->plugin = (new ObjectManager($this))->getObject('Magento\CatalogRule\Plugin\Indexer\Website', [
+        $this->cron = (new ObjectManager($this))->getObject('Magento\CatalogRule\Model\Cron', [
             'ruleProductProcessor' => $this->ruleProductProcessor,
         ]);
     }
 
-    public function testAfterDelete()
+    public function testDailyCatalogUpdate()
     {
         $this->ruleProductProcessor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->assertEquals($this->subject, $this->plugin->afterDelete($this->subject, $this->subject));
+        $this->cron->dailyCatalogUpdate();
     }
 }

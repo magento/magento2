@@ -6,11 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CatalogRule\Model;
+namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
-class CronTest extends \PHPUnit_Framework_TestCase
+class ImportExportTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -18,24 +18,32 @@ class CronTest extends \PHPUnit_Framework_TestCase
     protected $ruleProductProcessor;
 
     /**
-     * @var \Magento\CatalogRule\Model\Cron
+     * @var \Magento\ImportExport\Model\Import|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cron;
+    protected $subject;
+
+    /**
+     * @var \Magento\CatalogRule\Plugin\Indexer\ImportExport
+     */
+    protected $plugin;
 
     protected function setUp()
     {
         $this->ruleProductProcessor = $this->getMock('Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
             [], [], '', false);
+        $this->subject = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
 
-        $this->cron = (new ObjectManager($this))->getObject('Magento\CatalogRule\Model\Cron', [
+        $this->plugin = (new ObjectManager($this))->getObject('Magento\CatalogRule\Plugin\Indexer\ImportExport', [
             'ruleProductProcessor' => $this->ruleProductProcessor,
         ]);
     }
 
-    public function testDailyCatalogUpdate()
+    public function testAfterImportSource()
     {
+        $result = true;
+
         $this->ruleProductProcessor->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->cron->dailyCatalogUpdate();
+        $this->assertEquals($result, $this->plugin->afterImportSource($this->subject, $result));
     }
 }

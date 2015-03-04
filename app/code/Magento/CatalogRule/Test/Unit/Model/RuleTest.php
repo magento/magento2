@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogRule\Model;
+namespace Magento\CatalogRule\Test\Unit\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
