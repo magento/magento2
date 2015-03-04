@@ -111,7 +111,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param $parameters \DOMNodeList
+     * Parses the method parameters into a string array.
+     *
+     * @param \DOMNodeList $parameters
      * @return array
      */
     protected function convertMethodParameters($parameters)
@@ -142,6 +144,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         return $data;
     }
 
+    /**
+     * Derive the version from the provided URL.
+     * Assumes the version is the first portion of the URL. For example, '/V1/customers'
+     *
+     * @param string $url
+     * @return string
+     */
     protected function convertVersion($url)
     {
         return substr($url, 1, strpos($url, '/', 1)-1);
