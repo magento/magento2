@@ -2,7 +2,7 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Select config option in deployment config
+ * Select option in deployment config tool
  */
 class SelectConfigOption extends AbstractConfigOption
 {

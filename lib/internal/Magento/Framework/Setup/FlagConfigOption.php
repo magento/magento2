@@ -2,7 +2,7 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Flag config option in deployment config
+ * Flag option in deployment config tool
  */
 class FlagConfigOption extends AbstractConfigOption
 {

@@ -2,7 +2,7 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Multi-select config option in deployment config
+ * Multi-select option in deployment config tool
  */
 class MultiSelectConfigOption extends AbstractConfigOption
 {

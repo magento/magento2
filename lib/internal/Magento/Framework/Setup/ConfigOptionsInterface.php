@@ -6,19 +6,20 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Interface for segment in deployment configuration
+ * Interface for handling options in deployment configuration tool
  */
 interface ConfigOptionsInterface
 {
     /**
-     * Gets user input options to a segment in deployment configuration
+     * Gets a list of input options so that user can provide required
+     * information that will be used in deployment config file
      *
      * @return AbstractConfigOption[]
      */
     public function getOptions();
 
     /**
-     * Creates deployment configuration options array that will be stored in deployment config file
+     * Creates config array from user inputted data. This array will be stored in deployment config file
      *
      * @param array $options
      * @return array

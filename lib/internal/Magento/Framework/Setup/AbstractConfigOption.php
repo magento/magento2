@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
- * Abstract Option class in a segment of the deployment configuration
+ * Abstract Option class in deployment configuration tool
  */
 abstract class AbstractConfigOption extends InputOption
 {

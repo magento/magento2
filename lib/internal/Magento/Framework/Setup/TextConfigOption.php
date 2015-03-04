@@ -2,7 +2,7 @@
 namespace Magento\Framework\Setup;
 
 /**
- * Text config option in deployment config
+ * Text option in deployment config tool
  */
 class TextConfigOption extends AbstractConfigOption
 {
