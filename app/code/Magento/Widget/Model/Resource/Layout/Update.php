@@ -19,12 +19,16 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
     private $_cache;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Cache\FrontendInterface $cache)
-    {
-        parent::__construct($resource);
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Cache\FrontendInterface $cache,
+        $resourcePrefix = null
+    ) {
+        parent::__construct($context, $resourcePrefix);
         $this->_cache = $cache;
     }
 

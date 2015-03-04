@@ -42,7 +42,7 @@ class PermissionsDialogTest extends \Magento\Integration\Controller\Adminhtml\In
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <handle id="adminhtml_integration_activate_permissions_webapi">
        <referenceBlock name="integration.activate.permissions.tabs">
-          <block class="Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi" name="integration_activate_permissions_tabs_webapi" template="integration/activate/permissions/tab/webapi.phtml"/>
+          <block class="Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi" name="integration_activate_permissions_tabs_webapi" template="integration/activate/permissions/tab/webapi.phtml"/>
           <action method="addTab">
              <argument name="name" xsi:type="string">integration_activate_permissions_tabs_webapi</argument>
              <argument name="block" xsi:type="string">integration_activate_permissions_tabs_webapi</argument>

@@ -18,14 +18,16 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     private $validator;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Bundle\Model\Option\Validator $validator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Bundle\Model\Option\Validator $validator
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Bundle\Model\Option\Validator $validator,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
         $this->validator = $validator;
     }
 

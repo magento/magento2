@@ -17,10 +17,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductNotSearchableBySku extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that product cannot be found via Quick Search using searchable product attributes.
      *

@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductCrossSells extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product is displayed in cross-sell section.
      *
