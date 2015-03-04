@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\Validator;
 
-use Magento\Framework\Exception\InputException;
-
 /**
  * Test case for \Magento\Framework\Validator\Exception
  */
