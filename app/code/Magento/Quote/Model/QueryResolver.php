@@ -59,7 +59,9 @@ class QueryResolver
      */
     public function isSingleQuery()
     {
-        $this->initData();
+        if (!isset($this->data['checkout'])) {
+            $this->initData();
+        }
         return $this->data['checkout'];
     }
 
