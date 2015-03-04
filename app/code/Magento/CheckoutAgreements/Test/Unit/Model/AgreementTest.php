@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CheckoutAgreements\Model;
+namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 class AgreementTest extends \PHPUnit_Framework_TestCase
 {

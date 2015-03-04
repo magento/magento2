@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CheckoutAgreements\Model;
+namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
+use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
@@ -48,7 +49,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->model = new CheckoutAgreementsRepository(
+        $this->model = new \Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository(
             $this->factoryMock,
             $this->storeManagerMock,
             $this->scopeConfigMock
