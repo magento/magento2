@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\AdminNotification\Model\NotificationService
  */
-namespace Magento\AdminNotification\Model;
+namespace Magento\AdminNotification\Test\Unit\Model;
 
 class NotificationServiceTest extends \PHPUnit_Framework_TestCase
 {

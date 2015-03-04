@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
+namespace Magento\AdminNotification\Test\Unit\Model\System\Message\Media\Synchronization;
 
 class SuccessTest extends \PHPUnit_Framework_TestCase
 {

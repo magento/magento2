@@ -9,7 +9,7 @@
 /**
  * Test class for \Magento\AdminNotification\Block\ToolbarEntry
  */
-namespace Magento\AdminNotification\Block;
+namespace Magento\AdminNotification\Test\Unit\Block;
 
 class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
 {
