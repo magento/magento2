@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogUrlRewrite\Model\Product;
+namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\TestFramework\Helper\ObjectManager;

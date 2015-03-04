@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogUrlRewrite\Service\V1;
+namespace Magento\CatalogUrlRewrite\Test\Unit\Service\V1;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

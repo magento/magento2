@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogUrlRewrite\Model\Category;
+namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
