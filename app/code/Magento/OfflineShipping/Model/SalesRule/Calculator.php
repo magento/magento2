@@ -11,7 +11,9 @@
  */
 namespace Magento\OfflineShipping\Model\SalesRule;
 
-class Calculator extends \Magento\SalesRule\Model\Validator
+use Magento\SalesRule\Model\Validator;
+
+class Calculator extends Validator
 {
     /**
      * Quote item free shipping ability check
@@ -37,11 +39,11 @@ class Calculator extends \Magento\SalesRule\Model\Validator
             }
 
             switch ($rule->getSimpleFreeShipping()) {
-                case \Magento\OfflineShipping\Model\SalesRule\Rule::FREE_SHIPPING_ITEM:
+                case Rule::FREE_SHIPPING_ITEM:
                     $item->setFreeShipping($rule->getDiscountQty() ? $rule->getDiscountQty() : true);
                     break;
 
-                case \Magento\OfflineShipping\Model\SalesRule\Rule::FREE_SHIPPING_ADDRESS:
+                case Rule::FREE_SHIPPING_ADDRESS:
                     $address->setFreeShipping(true);
                     break;
             }
