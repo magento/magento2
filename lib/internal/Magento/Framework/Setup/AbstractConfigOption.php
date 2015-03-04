@@ -20,19 +20,11 @@ abstract class AbstractConfigOption extends InputOption
     private $frontendType;
 
     /**
-     * Available options
-     *
-     * @var array
-     */
-    private $selectOptions;
-
-    /**
      * Constructor
      *
      * @param string $name
      * @param string $frontendType
      * @param string $description
-     * @param array $selectOptions
      * @param string|null $default
      * @param int $mode
      * @param string|null $shortcut
@@ -41,13 +33,11 @@ abstract class AbstractConfigOption extends InputOption
         $name,
         $frontendType,
         $description = '',
-        array $selectOptions = [],
         $default = null,
         $mode,
         $shortcut = null
     ) {
         $this->frontendType = $frontendType;
-        $this->selectOptions = $selectOptions;
         parent::__construct($name, $shortcut, $mode, $description, $default);
     }
 
@@ -59,16 +49,6 @@ abstract class AbstractConfigOption extends InputOption
     public function getFrontendInput()
     {
         return $this->frontendType;
-    }
-
-    /**
-     * Get available options
-     *
-     * @return array
-     */
-    public function getSelectOptions()
-    {
-        return $this->selectOptions;
     }
 
     /**

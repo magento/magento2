@@ -36,4 +36,14 @@ class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
         $option = new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, ['a', 'b']);
         $this->assertEquals(['a', 'b'], $option->getSelectOptions());
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedMessage Frontend input type has to be text, textarea or password.
+     */
+    public function testValidateException()
+    {
+        $option = new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, ['a', 'b']);
+        $option->validate('c');
+    }
 }

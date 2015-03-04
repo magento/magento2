@@ -25,6 +25,6 @@ class FlagConfigOption extends AbstractConfigOption
         $default = '',
         $shortCut = null
     ) {
-        parent::__construct($name, self::FRONTEND_WIZARD_FLAG, $description, [], null, self::VALUE_NONE, $shortCut);
+        parent::__construct($name, self::FRONTEND_WIZARD_FLAG, $description, null, self::VALUE_NONE, $shortCut);
     }
 }

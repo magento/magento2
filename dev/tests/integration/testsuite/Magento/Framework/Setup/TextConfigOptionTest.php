@@ -22,9 +22,13 @@ class TextConfigOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(TextConfigOption::FRONTEND_WIZARD_TEXT, $option->getFrontendInput());
     }
 
-    public function testGetSelectOptions()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedMessage must be a string
+     */
+    public function testValidateException()
     {
         $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT);
-        $this->assertEquals([], $option->getSelectOptions());
+        $option->validate(1);
     }
 }

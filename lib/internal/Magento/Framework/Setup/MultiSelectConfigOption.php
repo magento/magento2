@@ -14,6 +14,13 @@ class MultiSelectConfigOption extends AbstractConfigOption
     /**#@- */
 
     /**
+     * Available options
+     *
+     * @var array
+     */
+    private $selectOptions;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -37,15 +44,25 @@ class MultiSelectConfigOption extends AbstractConfigOption
         if (!$selectOptions) {
             throw new \InvalidArgumentException('Select options can\'t be empty.');
         }
+        $this->selectOptions = $selectOptions;
         parent::__construct(
             $name,
             $frontendType,
             $description,
-            $selectOptions,
             $default,
             self::VALUE_REQUIRED,
             $shortCut
         );
+    }
+
+    /**
+     * Get available options
+     *
+     * @return array
+     */
+    public function getSelectOptions()
+    {
+        return $this->selectOptions;
     }
 
     /**

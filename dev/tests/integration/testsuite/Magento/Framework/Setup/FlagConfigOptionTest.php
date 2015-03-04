@@ -12,10 +12,4 @@ class FlagConfigOptionTest extends \PHPUnit_Framework_TestCase
         $option = new FlagConfigOption('test', FlagConfigOption::FRONTEND_WIZARD_FLAG);
         $this->assertEquals(FlagConfigOption::FRONTEND_WIZARD_FLAG, $option->getFrontendInput());
     }
-
-    public function testGetSelectOptions()
-    {
-        $option = new FlagConfigOption('test', FlagConfigOption::FRONTEND_WIZARD_FLAG);
-        $this->assertEquals([], $option->getSelectOptions());
-    }
 }
