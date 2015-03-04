@@ -13,7 +13,7 @@
 @field-label__disabled__color: @color-gray65-almost;
 @field-label__required__color: @color-phoenix;
 @field-note__color: @color-very-dark-gray-black;
-@field-note__font-size: @font-size__s;
+@field-note__color: @color-very-dark-gray-black;
 
 @field-error-message__background-color: @color-lazy-sun;
 @field-error-message__color: @color-very-dark-gray2;
@@ -53,13 +53,13 @@
     margin: 0;
     text-align: right;
 
-    & + br {
+    + br {
         display: none;
     }
 
     [class]:not(.admin__field-option) > & {
-        font-family: 'Open Sans', arial, sans-serif;
-        font-size: 14px;
+        font-family: @font-family__base;
+        font-size: @font-size__base;
         font-weight: @font-weight__semibold;
         line-height: 3.2rem;
         padding-top: 0;
@@ -86,8 +86,8 @@
             color: @field-label__required__color;
             content: '*';
             display: inline;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: @font-size__l;
+            font-weight: @font-weight__heavier;
             margin-left: 10px;
             margin-top: 2px;
             position: absolute;
@@ -164,9 +164,9 @@
     box-sizing: border-box;
     color: @field-error-message__color;
     display: block;
-    line-height: @line-height__s;
     font-size: @font-size__s;
     font-weight: @font-weight__regular;
+    line-height: @line-height__s;
     margin: .2rem 0 0;
     padding: .8rem 1rem .9rem;
 }
@@ -191,12 +191,12 @@
         &:nth-child(1):nth-last-child(2),
         &:nth-child(2):nth-last-child(1) {
             display: inline-block;
-            & + .admin__field-option {
+            + .admin__field-option {
                 display: inline-block;
                 margin-left: 41px;
                 margin-top: 0;
             }
-            & + .admin__field-option:before {
+            + .admin__field-option:before {
                 background: @field-divider__background-color;
                 content: '';
                 display: inline-block;
@@ -257,7 +257,7 @@
         &:nth-child(n+2) {
             padding-left: 20px;
             &:not(.admin__field-option) .admin__field-label {
-                .extend__visually-hidden();
+                .visually-hidden();
             }
         }
     }
