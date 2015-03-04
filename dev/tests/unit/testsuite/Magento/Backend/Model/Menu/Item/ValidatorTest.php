@@ -51,7 +51,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         'id' => 'item',
         'title' => 'Item Title',
         'action' => '/system/config',
-        'resource' => 'Magento_Backend::system_config',
+        'resource' => 'Magento_Config::system_config',
         'dependsOnModule' => 'Magento_Backend',
         'dependsOnConfig' => 'system/config/isEnabled',
         'toolTip' => 'Item tooltip',

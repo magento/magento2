@@ -65,12 +65,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(serialize($this->_resourcesConfig))
         );
 
+        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfigMock->expects($this->once())
+            ->method('getSegment')
+            ->with('resource')
+            ->willReturn($this->_initialResources);
+
         $this->_model = new \Magento\Framework\App\Resource\Config(
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
-            'cacheId',
-            $this->_initialResources
+            $deploymentConfigMock,
+            'cacheId'
         );
     }
 
@@ -89,12 +95,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionConstructor()
     {
+        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfigMock->expects($this->once())
+            ->method('getSegment')
+            ->with('resource')
+            ->willReturn(['validResource' => ['somekey' => 'validConnectionName']]);
+
         new \Magento\Framework\App\Resource\Config(
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
-            'cacheId',
-            ['validResource' => ['somekey' => 'validConnectionName']]
+            $deploymentConfigMock,
+            'cacheId'
         );
     }
 
@@ -110,7 +122,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'resourceName' => 'brokenResourceName',
                 'connectionName' => \Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION
             ],
-            ['resourceName' => 'extendedResourceName', 'connectionName' => 'default'],
+            ['resourceName' => 'extendedResourceName', 'connectionName' => 'validConnectionName'],
             ['resourceName' => 'validResource', 'connectionName' => 'validConnectionName']
         ];
     }

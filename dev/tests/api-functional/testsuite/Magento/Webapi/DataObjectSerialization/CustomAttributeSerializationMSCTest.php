@@ -7,10 +7,9 @@
 namespace Magento\Webapi\DataObjectSerialization;
 
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleMSC\Api\Data\ItemDataBuilder;
-use Magento\Webapi\Controller\Rest\Response\DataObjectConverter;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * api-functional/testsuite/Magento/Webapi/DataObjectSerialization/CustomAttributeSerializationMSCTest.php
@@ -52,9 +51,9 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
     protected $dataObjectProcessor;
 
     /**
-     * @var DataObjectConverter $dataObjectConverter
+     * @var ServiceOutputProcessor $serviceOutputProcessor
      */
-    protected $dataObjectConverter;
+    protected $serviceOutputProcessor;
 
     /**
      * Set up custom attribute related data objects
@@ -81,8 +80,8 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
             'Magento\Framework\Reflection\DataObjectProcessor'
         );
 
-        $this->dataObjectConverter = Bootstrap::getObjectManager()->create(
-            'Magento\Webapi\Controller\Rest\Response\DataObjectConverter'
+        $this->serviceOutputProcessor = Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Webapi\ServiceOutputProcessor'
         );
     }
 
@@ -91,7 +90,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . 'itemAnyType',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'ItemAnyType'],
         ];
@@ -144,7 +143,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . 'itemAnyType',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'ItemAnyType'],
         ];
@@ -154,7 +153,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         );
         $result = $this->_webApiCall($serviceInfo, ['entityItem' => $requestData]);
 
-        $expectedResponse = $this->dataObjectConverter->processServiceOutput(
+        $expectedResponse = $this->serviceOutputProcessor->process(
             $item,
             '\Magento\TestModuleMSC\Api\AllSoapAndRestInterface',
             'itemAnyType'
@@ -168,7 +167,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . 'itemPreconfigured',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'GetPreconfiguredItem'],
         ];
@@ -187,7 +186,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
             ->setCustomAttribute('custom_attribute_string', 'someStringValue')
             ->create();
 
-        $expectedResponse = $this->dataObjectConverter->processServiceOutput(
+        $expectedResponse = $this->serviceOutputProcessor->process(
             $item,
             '\Magento\TestModuleMSC\Api\AllSoapAndRestInterface',
             'getPreconfiguredItem'
@@ -217,7 +216,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . 'itemAnyType',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'ItemAnyType'],
         ];
@@ -227,7 +226,7 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         );
         $result = $this->_webApiCall($serviceInfo, ['entityItem' => $requestData]);
 
-        $expectedResponse = $this->dataObjectConverter->processServiceOutput(
+        $expectedResponse = $this->serviceOutputProcessor->process(
             $item,
             '\Magento\TestModuleMSC\Api\AllSoapAndRestInterface',
             'itemAnyType'

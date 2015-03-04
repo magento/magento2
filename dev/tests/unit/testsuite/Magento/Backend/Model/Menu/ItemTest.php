@@ -54,7 +54,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         'id' => 'item',
         'title' => 'Item Title',
         'action' => '/system/config',
-        'resource' => 'Magento_Backend::config',
+        'resource' => 'Magento_Config::config',
         'dependsOnModule' => 'Magento_Backend',
         'dependsOnConfig' => 'system/config/isEnabled',
         'tooltip' => 'Item tooltip',
@@ -192,7 +192,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         )->method(
             'isAllowed'
         )->with(
-            'Magento_Backend::config'
+            'Magento_Config::config'
         )->will(
             $this->returnValue(true)
         );
@@ -206,7 +206,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         )->method(
             'isAllowed'
         )->with(
-            'Magento_Backend::config'
+            'Magento_Config::config'
         )->will(
             $this->throwException(new \Magento\Framework\Exception())
         );

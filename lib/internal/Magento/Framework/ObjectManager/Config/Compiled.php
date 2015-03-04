@@ -19,11 +19,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     /**
      * @var array
      */
-    private $nonShared;
-
-    /**
-     * @var array
-     */
     private $virtualTypes;
 
     /**
@@ -37,7 +32,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     public function __construct($data)
     {
         $this->arguments = $data['arguments'];
-        $this->nonShared = $data['nonShared'];
         $this->virtualTypes = $data['instanceTypes'];
         $this->preferences = $data['preferences'];
     }
@@ -91,10 +85,11 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      *
      * @param string $type
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isShared($type)
     {
-        return !isset($this->nonShared[$type]);
+        return true;
     }
 
     /**
@@ -135,7 +130,6 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     public function extend(array $configuration)
     {
         $this->arguments = $configuration['arguments'];
-        $this->nonShared = $configuration['nonShared'];
         $this->virtualTypes = $configuration['instanceTypes'];
         $this->preferences = $configuration['preferences'];
     }

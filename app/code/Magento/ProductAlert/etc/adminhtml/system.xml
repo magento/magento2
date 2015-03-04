@@ -5,30 +5,30 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="catalog">
             <group id="productalert" translate="label" type="text" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Product Alerts</label>
                 <field id="allow_price" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow Alert When Product Price Changes</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="allow_stock" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Allow Alert When Product Comes Back in Stock</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="email_price_template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Price Alert Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="email_stock_template" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Stock Alert Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="email_identity" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Alert Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
             </group>
             <group id="productalert_cron" translate="label" type="text" sortOrder="260" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -47,11 +47,11 @@
                 </field>
                 <field id="error_email_identity" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Error Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="error_email_template" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Error Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
             </group>
         </section>

@@ -17,10 +17,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAbsentUpSells extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert that product is not displayed in up-sell section.
      *

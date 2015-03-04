@@ -27,22 +27,24 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
     protected $attrLockValidator;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
-        LockValidatorInterface $lockValidator
+        LockValidatorInterface $lockValidator,
+        $resourcePrefix = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($resource, $storeManager, $eavEntityType);
+        parent::__construct($context, $storeManager, $eavEntityType, $resourcePrefix);
     }
 
     /**

@@ -5,8 +5,6 @@
  */
 namespace Magento\Webapi\Routing;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
-
 /**
  * Class to test routing with a service that has no webapi.xml
  */
@@ -38,7 +36,7 @@ class NoWebApiXmlTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
         $requestData = ['id' => $itemId];
@@ -52,7 +50,10 @@ class NoWebApiXmlTest extends \Magento\Webapi\Routing\BaseService
     {
         $this->_markTestAsRestOnly();
         $serviceInfo = [
-            'rest' => ['resourcePath' => $this->_restResourcePath, 'httpMethod' => RestConfig::HTTP_METHOD_GET],
+            'rest' => [
+                'resourcePath' => $this->_restResourcePath,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
+            ],
         ];
         $this->_assertNoRestRouteException($serviceInfo);
     }
@@ -65,7 +66,10 @@ class NoWebApiXmlTest extends \Magento\Webapi\Routing\BaseService
         $this->_markTestAsRestOnly();
         $createdItemName = 'createdItemName';
         $serviceInfo = [
-            'rest' => ['resourcePath' => $this->_restResourcePath, 'httpMethod' => RestConfig::HTTP_METHOD_POST],
+            'rest' => [
+                'resourcePath' => $this->_restResourcePath,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
         ];
         $requestData = ['name' => $createdItemName];
         $this->_assertNoRestRouteException($serviceInfo, $requestData);
@@ -81,7 +85,7 @@ class NoWebApiXmlTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
         $requestData = ['id' => $itemId];
@@ -98,7 +102,7 @@ class NoWebApiXmlTest extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
         ];
         $requestData = ['id' => $itemId];

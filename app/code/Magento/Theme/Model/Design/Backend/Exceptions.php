@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-use Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized;
+use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
 
 class Exceptions extends ArraySerialized
 {

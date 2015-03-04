@@ -5,38 +5,38 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="carriers">
             <group id="fedex" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>FedEx</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled for Checkout</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Title</label>
                 </field>
                 <field id="account" translate="label comment" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Account ID</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <comment>Please make sure to use only digits here. No dashes are allowed.</comment>
                 </field>
                 <field id="meter_number" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Meter Number</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Key</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="password" translate="label" type="obscure" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Password</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Encrypted</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="sandbox_mode" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sandbox Mode</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="production_webservices_url" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Web-Services URL (Production)</label>
@@ -84,7 +84,7 @@
                 </field>
                 <field id="residence_delivery" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Residential Delivery</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="allowed_methods" translate="label" type="multiselect" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Allowed Methods</label>
@@ -102,7 +102,7 @@
                 </field>
                 <field id="free_shipping_enable" translate="label" type="select" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Free Shipping Amount Threshold</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Free Shipping Amount Threshold</label>
@@ -123,12 +123,12 @@
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="270" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="showmethod" translate="label" type="select" sortOrder="280" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Method if Not Applicable</label>
                     <frontend_class>shipping-skip-hide</frontend_class>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="290" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>

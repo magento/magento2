@@ -5,18 +5,18 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="sales">
             <group id="gift_options" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Gift Options</label>
                 <field id="allow_order" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Allow Gift Messages on Order Level</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="allow_items" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Allow Gift Messages for Order Items</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>
