@@ -320,7 +320,7 @@ nav ol {
 .admin__control-multiselect,
 .admin__control-file-label:before,
 .admin__control-textarea,
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"]:before {
+.admin__control-addon [class*='admin__control-'] + [class*='admin__addon-']:before {
   background-color: #ffffff;
   border-radius: .1rem;
   border: 1px solid #adadad;
@@ -339,7 +339,7 @@ nav ol {
 .admin__control-file:active + .admin__control-file-label:before,
 .admin__control-file:focus + .admin__control-file-label:before,
 .admin__control-textarea:focus,
-.admin__control-addon [class*="admin__control-"]:focus + label:before {
+.admin__control-addon [class*='admin__control-']:focus + label:before {
   border-color: #007bdb;
   box-shadow: none;
   outline: 0;
@@ -349,7 +349,7 @@ nav ol {
 .admin__control-multiselect[disabled],
 .admin__control-file[disabled] + .admin__control-file-label:before,
 .admin__control-textarea[disabled],
-.admin__control-addon [class*="admin__control-"][disabled] + [class*="admin__addon-"]:before {
+.admin__control-addon [class*='admin__control-'][disabled] + [class*='admin__addon-']:before {
   background-color: #e9e9e9;
   border-color: #adadad;
   color: #303030;
@@ -483,8 +483,8 @@ option:empty {
   width: 100%;
   z-index: 1;
 }
-.admin__control-addon > [class*="admin__addon-"],
-.admin__control-addon > [class*="admin__control-"] {
+.admin__control-addon > [class*='admin__addon-'],
+.admin__control-addon > [class*='admin__control-'] {
   -webkit-flex-basis: auto;
   flex-basis: auto;
   -webkit-flex-grow: 0;
@@ -494,7 +494,7 @@ option:empty {
   position: relative;
   z-index: 1;
 }
-.admin__control-addon [class*="admin__control-"] {
+.admin__control-addon [class*='admin__control-'] {
   appearence: none;
   -webkit-flex-grow: 1;
   flex-grow: 1;
@@ -505,20 +505,20 @@ option:empty {
   vertical-align: top;
   width: auto;
 }
-.admin__control-addon [class*="admin__control-"] :focus {
+.admin__control-addon [class*='admin__control-'] :focus {
   box-shadow: 0;
 }
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"] {
+.admin__control-addon [class*='admin__control-'] + [class*='admin__addon-'] {
   padding-left: 1rem;
   position: static !important;
   z-index: 0;
 }
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"] > * {
+.admin__control-addon [class*='admin__control-'] + [class*='admin__addon-'] > * {
   position: relative;
   vertical-align: top;
   z-index: 2;
 }
-.admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"]:before {
+.admin__control-addon [class*='admin__control-'] + [class*='admin__addon-']:before {
   bottom: 0;
   box-sizing: border-box;
   content: '';
@@ -563,7 +563,7 @@ option:empty {
   white-space: nowrap;
   width: auto;
 }
-.ie9 .admin__addon [class*="admin__control-"] {
+.ie9 .admin__addon [class*='admin__control-'] {
   display: inline;
 }
 .ie9 .admin__addon-prefix {
@@ -603,8 +603,8 @@ option:empty {
   display: none;
 }
 [class]:not(.admin__field-option) > .admin__field-label {
-  font-family: 'Open Sans', arial, sans-serif;
-  font-size: 14px;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
   font-weight: 600;
   line-height: 3.2rem;
   padding-top: 0;
@@ -627,7 +627,7 @@ option:empty {
   color: #eb5202;
   content: '*';
   display: inline;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 500;
   margin-left: 10px;
   margin-top: 2px;
@@ -682,9 +682,9 @@ option:empty {
   box-sizing: border-box;
   color: #555555;
   display: block;
-  line-height: 1.2;
   font-size: 1.2rem;
   font-weight: 400;
+  line-height: 1.2;
   margin: .2rem 0 0;
   padding: .8rem 1rem .9rem;
 }
@@ -755,6 +755,16 @@ option:empty {
 }
 [class*='admin__control-grouped'] > .admin__field:nth-child(n+2) {
   padding-left: 20px;
+}
+[class*='admin__control-grouped'] > .admin__field:nth-child(n+2):not(.admin__field-option) .admin__field-label {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 .admin__field-tooltip {
   display: inline-block;
@@ -1543,7 +1553,6 @@ table.table th.required:after {
 }
 .abs-visually-hidden,
 .admin__control-fields .admin__field:nth-child(n+2):not(.admin__field-option) > .admin__field-label,
-[class*='admin__control-grouped'] > .admin__field:nth-child(n+2):not(.admin__field-option) .admin__field-label,
 .dashboard-diagram-switcher .label {
   border: 0;
   clip: rect(0, 0, 0, 0);
