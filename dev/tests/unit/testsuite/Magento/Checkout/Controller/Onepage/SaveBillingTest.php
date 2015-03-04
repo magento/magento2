@@ -140,10 +140,10 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRaw);
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
             ->disableOriginalConstructor()
             ->getMock();
-        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
