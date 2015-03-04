@@ -114,6 +114,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                         'BackslashTrim' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim'],
+                        'InterceptorSubstitution' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\InterceptorSubstitution'],
                         'ArgumentsSerialization' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                     ]
@@ -134,11 +136,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 'path' => BP . '/' . 'app/code',
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
-            Task\OperationFactory::AREA => [
+            Task\OperationFactory::APPLICATION_CODE_GENERATOR => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
             ],
             Task\OperationFactory::INTERCEPTION =>
                 BP . '/var/generation',
+            Task\OperationFactory::AREA_CONFIG_GENERATOR => [
+                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+            ],
             Task\OperationFactory::INTERCEPTION_CACHE => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
             ]

@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
+use Magento\Tools\Di\Code\Reader\ClassesScanner;
+use Magento\Tools\Di\Code\Reader\ClassReaderDecorator;
+use Magento\Framework\Filesystem\FilesystemException;
 
 /**
  * Class Area
@@ -13,22 +16,22 @@ namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
 class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
 {
     /**
-     * @var \Magento\Tools\Di\Code\Reader\ClassReaderDecorator
+     * @var ClassReaderDecorator
      */
     private $classReaderDecorator;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\ClassesScanner
+     * @var ClassesScanner
      */
     private $classesScanner;
 
     /**
-     * @param \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner
-     * @param \Magento\Tools\Di\Code\Reader\ClassReaderDecorator $classReaderDecorator
+     * @param ClassesScanner $classesScanner
+     * @param ClassReaderDecorator $classReaderDecorator
      */
     public function __construct(
-        \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner,
-        \Magento\Tools\Di\Code\Reader\ClassReaderDecorator $classReaderDecorator
+        ClassesScanner $classesScanner,
+        ClassReaderDecorator $classReaderDecorator
     ) {
         $this->classReaderDecorator = $classReaderDecorator;
         $this->classesScanner = $classesScanner;
@@ -40,7 +43,7 @@ class Area implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
      * @param string $path path to dir with files
      *
      * @return array
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws FilesystemException
      */
     public function getList($path)
     {

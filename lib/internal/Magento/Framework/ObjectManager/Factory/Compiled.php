@@ -84,13 +84,6 @@ class Compiled extends AbstractFactory
         }
 
         $args = array_values($args);
-        if (substr($type, -12) == '\Interceptor') {
-            $args = array_merge([
-                $this->objectManager,
-                $this->get($this->config->getPreference('Magento\Framework\Interception\PluginListInterface')),
-                $this->get($this->config->getPreference('Magento\Framework\Interception\ChainInterface')),
-            ], $args);
-        }
 
         return $this->createObject($type, $args);
     }
