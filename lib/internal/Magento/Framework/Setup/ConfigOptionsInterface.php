@@ -13,7 +13,7 @@ interface ConfigOptionsInterface
     /**
      * Gets deployment configuration options of a segment
      *
-     * @return ConfigOption[]
+     * @return AbstractConfigOption[]
      */
     public function getOptions();
 

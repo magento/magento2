@@ -47,4 +47,24 @@ class MultiSelectConfigOption extends AbstractConfigOption
             $shortCut
         );
     }
+
+    /**
+     * Validates input data
+     *
+     * @param mixed $data
+     * @return void
+     */
+    public function validate($data)
+    {
+        if (is_array($data)) {
+            foreach ($data as $value) {
+                if (!in_array($value, $this->getSelectOptions())) {
+                    throw new \InvalidArgumentException(
+                        "Value specified for '{$this->getName()}' is not supported: '{$value}'"
+                    );
+                }
+            }
+        }
+        parent::validate($data);
+    }
 }

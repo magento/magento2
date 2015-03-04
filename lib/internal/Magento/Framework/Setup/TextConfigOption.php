@@ -37,4 +37,18 @@ class TextConfigOption extends AbstractConfigOption
         }
         parent::__construct($name, $frontendType, $description, [], $default, self::VALUE_REQUIRED, $shortCut);
     }
+
+    /**
+     * Validates input data
+     *
+     * @param mixed $data
+     * @return void
+     */
+    public function validate($data)
+    {
+        if (!is_string($data)) {
+            throw new \InvalidArgumentException("'{$this->getName()}' must be a string");
+        }
+        parent::validate($data);
+    }
 }

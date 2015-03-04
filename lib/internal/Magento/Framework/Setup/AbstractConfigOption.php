@@ -70,4 +70,14 @@ abstract class AbstractConfigOption extends InputOption
     {
         return $this->selectOptions;
     }
+
+    /**
+     * No base validation
+     *
+     * @param mixed $data
+     * @return void
+     */
+    public function validate($data)
+    {
+    }
 }
