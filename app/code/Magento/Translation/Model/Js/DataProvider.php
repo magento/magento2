@@ -48,7 +48,7 @@ class DataProvider implements DataProviderInterface
 
         $files = $this->filesUtility->getJsFiles($this->appState->getAreaCode(), $themePath);
         foreach ($files as $filePath) {
-            foreach ($this->getPhrases(file_get_contents($filePath)) as $phrase) {
+            foreach ($this->getPhrases(file_get_contents($filePath[0])) as $phrase) {
                 $translatedPhrase = (string) __($phrase);
                 if ($phrase != $translatedPhrase) {
                     $dictionary[$phrase] = $translatedPhrase;
