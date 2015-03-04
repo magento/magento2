@@ -15,7 +15,7 @@ interface ProductOptionRepositoryInterface
      * @param int $optionId
      * @return \Magento\Bundle\Api\Data\OptionInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function get($productSku, $optionId);
 
@@ -25,7 +25,7 @@ interface ProductOptionRepositoryInterface
      * @param string $productSku
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getList($productSku);
 
@@ -35,7 +35,7 @@ interface ProductOptionRepositoryInterface
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function delete(\Magento\Bundle\Api\Data\OptionInterface $option);
 
@@ -46,7 +46,7 @@ interface ProductOptionRepositoryInterface
      * @param int $optionId
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function deleteById($productSku, $optionId);
 
@@ -57,7 +57,7 @@ interface ProductOptionRepositoryInterface
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,

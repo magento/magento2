@@ -6,12 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Cache/etc/cache.xsd">
-    <type name="config_webservice" translate="label,description" instance="Magento\Webapi\Model\Cache\Type">
+    <type name="config_webservice" translate="label,description" instance="Magento\Framework\App\Cache\Type\Webapi">
         <label>Web Services Configuration</label>
         <description>REST and SOAP configurations, generated WSDL file.</description>
-    </type>
-    <type name="config_integration_api" translate="label,description" instance="Magento\Webapi\Model\Cache\TypeIntegration">
-        <label>Integrations API Configuration</label>
-        <description>Integrations API configuration file.</description>
     </type>
 </config>
