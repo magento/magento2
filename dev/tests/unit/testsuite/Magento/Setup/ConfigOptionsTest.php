@@ -28,6 +28,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $config = $this->object->createConfig([ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key']);
         $this->assertNotEmpty($config['install']['date']);
+        $this->assertEquals('key', $config['crypt']['key']);
     }
 
     /**
