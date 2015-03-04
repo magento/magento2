@@ -9,6 +9,7 @@ namespace Magento\Translation\Block;
 use Magento\Framework\Translate\InlineInterface as InlineTranslator;
 use Magento\Translation\Model\Js as DataProvider;
 use Magento\Framework\View\Element\Template;
+use Magento\Translation\Model\Js\Config;
 
 class Js extends \Magento\Framework\View\Element\Template
 {
@@ -27,6 +28,11 @@ class Js extends \Magento\Framework\View\Element\Template
     protected $translateInline;
 
     /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * @param Template\Context $context
      * @param DataProvider $dataProvider
      * @param InlineTranslator $translateInline
@@ -36,11 +42,13 @@ class Js extends \Magento\Framework\View\Element\Template
         Template\Context $context,
         DataProvider $dataProvider,
         InlineTranslator $translateInline,
+        Config $config,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->dataProvider = $dataProvider;
         $this->translateInline = $translateInline;
+        $this->config = $config;
     }
 
     /**
@@ -51,5 +59,15 @@ class Js extends \Magento\Framework\View\Element\Template
         $data = $this->dataProvider->getTranslateData();
         $this->translateInline->processResponseBody($data);
         return \Zend_Json::encode($data);
+    }
+
+    /**
+     * Is js translation set to dictionary mode
+     *
+     * @return bool
+     */
+    public function isDictionaryMode()
+    {
+        return $this->config->isDictionaryMode();
     }
 }

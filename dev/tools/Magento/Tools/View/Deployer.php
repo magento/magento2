@@ -10,6 +10,8 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Translation\Model\Js\Config as JsTranslationConfig;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -55,11 +57,22 @@ class Deployer
     protected $minifyService;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var JsTranslationConfig
+     */
+    protected $jsTranslationConfig;
+
+    /**
      * @param Files $filesUtil
      * @param Deployer\Log $logger
      * @param Version\StorageInterface $versionStorage
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\View\Asset\MinifyService $minifyService
+     * @param JsTranslationConfig $jsTranslationConfig
      * @param bool $isDryRun
      */
     public function __construct(
@@ -68,6 +81,7 @@ class Deployer
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\View\Asset\MinifyService $minifyService,
+        JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
@@ -76,6 +90,7 @@ class Deployer
         $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
         $this->minifyService = $minifyService;
+        $this->jsTranslationConfig = $jsTranslationConfig;
     }
 
     /**
@@ -98,6 +113,7 @@ class Deployer
         foreach ($areas as $area => $themes) {
             $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
+                $this->emulateApplicationLocale($locale, $area);
                 foreach ($themes as $themePath) {
                     $this->logger->logMessage("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
@@ -108,6 +124,9 @@ class Deployer
                     }
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);
+                    }
+                    if ($this->jsTranslationConfig->isDictionaryMode()) {
+                        $this->deployFile(JsTranslationConfig::DICTIONARY_FILE_NAME, $area, $themePath, $locale, null);
                     }
                     $this->logger->logMessage("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
@@ -172,20 +191,34 @@ class Deployer
      */
     private function emulateApplicationArea($areaCode)
     {
-        $objectManager = $this->omFactory->create(
+        $this->objectManager = $this->omFactory->create(
             [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
         );
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
         /** @var \Magento\Framework\App\ObjectManager\ConfigLoader $configLoader */
-        $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
-        $objectManager->configure($configLoader->load($areaCode));
-        $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
+        $configLoader = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
+        $this->objectManager->configure($configLoader->load($areaCode));
+        $this->assetRepo = $this->objectManager->get('Magento\Framework\View\Asset\Repository');
 
-        $this->assetPublisher = $objectManager->create('Magento\Framework\App\View\Asset\Publisher');
-        $this->htmlMinifier = $objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
+        $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
+        $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
 
+    }
+
+    /**
+     * Set application locale and load translation for area
+     *
+     * @param string $locale
+     * @param string $area
+     */
+    protected function emulateApplicationLocale($locale, $area)
+    {
+        /** @var \Magento\Framework\TranslateInterface $translator */
+        $translator = $this->objectManager->get('Magento\Framework\TranslateInterface');
+        $translator->setLocale($locale);
+        $translator->loadData($area, true);
     }
 
     /**

@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,25 +14,25 @@ use Magento\Framework\View\Asset;
 class Publisher
 {
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $appState;
+
+    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
     /**
-     * @var MaterializationStrategy\Factory
-     */
-    private $materializationStrategyFactory;
-
-    /**
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param MaterializationStrategy\Factory $materializationStrategyFactory
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        MaterializationStrategy\Factory $materializationStrategyFactory
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\Filesystem $filesystem
     ) {
+        $this->appState = $appState;
         $this->filesystem = $filesystem;
-        $this->materializationStrategyFactory = $materializationStrategyFactory;
     }
 
     /**
@@ -41,11 +40,13 @@ class Publisher
      */
     public function publish(Asset\LocalInterface $asset)
     {
+        if ($this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
+            return false;
+        }
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
         if ($dir->isExist($asset->getPath())) {
             return true;
         }
-
         return $this->publishAsset($asset);
     }
 
@@ -57,11 +58,10 @@ class Publisher
      */
     private function publishAsset(Asset\LocalInterface $asset)
     {
-        $targetDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $rootDir->getRelativePath($asset->getSourceFile());
-        $destination = $asset->getPath();
-        $strategy = $this->materializationStrategyFactory->create($asset);
-        return $strategy->publishFile($rootDir, $targetDir, $source, $destination);
+        if ($asset->getContent()) {
+            $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+            return (bool) $dir->writeFile($asset->getPath(), $asset->getContent());
+        }
+        return false;
     }
 }

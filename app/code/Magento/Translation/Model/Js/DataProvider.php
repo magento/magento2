@@ -164,4 +164,24 @@ class DataProvider implements DataProviderInterface
             'Incl. Tax' => __('Incl. Tax'),
         ];
     }
+
+    /**
+     * @param string $content
+     * @return string[]
+     * @throws \Exception
+     */
+    protected function getPhrases($content)
+    {
+        $result = preg_match_all($this->pattern, $content, $matches);
+        $dictionary = [];
+        if ($result) {
+            return $matches[1];
+        }
+        if (false === $result) {
+            throw new \Exception(
+                sprintf('Error while identifying js translation dictionary: "%s"', error_get_last())
+            );
+        }
+        return $dictionary;
+    }
 }

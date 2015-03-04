@@ -5,10 +5,13 @@
  */
 ?>
 <?php /** @var $block \Magento\Translation\Block\Js */ ?>
+<?php if ($block->isDictionaryMode()): ?>
 <script>
 //<![CDATA[
     require(
-        ["jquery", "mage/translate"], function($){ $.mage.translate.add( <?php echo $block->getTranslatedJson() ?> ); }
-    )
+        ["jquery", "mage/translate", "text!<?php echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"],
+        function($, translate, data){ $.mage.translate.add(JSON.parse(data)); }
+    );
 // ]]>
 </script>
+<?php endif; ?>

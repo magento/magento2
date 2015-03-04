@@ -55,6 +55,13 @@ class Pool
         if ($targetContentType == 'css') {
             $result[] = $this->objectManager->get('Magento\Framework\View\Asset\PreProcessor\ModuleNotation');
         }
+        // need to be declared in di.xml after appropriate pull request from South team
+        if ($targetContentType == 'js') {
+            $result[] = $this->objectManager->get('Magento\Translation\Model\Js\PreProcessor');
+        }
+        if ($targetContentType == 'json') {
+            $result[] = $this->objectManager->get('Magento\Translation\Model\Json\PreProcessor');
+        }
         return $result;
     }
 }
