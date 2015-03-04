@@ -17,7 +17,7 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
 

@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Captcha\Model;
+namespace Magento\Captcha\Test\Unit\Model;
 
 /**
- * Class \Magento\Captcha\Model\CronTest
+ * Class \Magento\Captcha\Test\Unit\Model\CronTest
  */
 class CronTest extends \PHPUnit_Framework_TestCase
 {

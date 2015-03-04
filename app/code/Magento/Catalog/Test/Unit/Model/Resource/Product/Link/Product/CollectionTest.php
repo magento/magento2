@@ -23,7 +23,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityFactoryMock;
 
-    /** @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $loggerMock;
 
     /** @var \Magento\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */

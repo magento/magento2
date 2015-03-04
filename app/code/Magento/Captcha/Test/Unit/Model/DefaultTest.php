@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Captcha\Model;
+namespace Magento\Captcha\Test\Unit\Model;
 
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
@@ -272,7 +272,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getConfig'
         )->will(
-            $this->returnCallback('Magento\Captcha\Model\DefaultTest::getConfigNodeStub')
+            $this->returnCallback('Magento\Captcha\Test\Unit\Model\DefaultTest::getConfigNodeStub')
         );
 
         $helper->expects($this->any())->method('getFonts')->will($this->returnValue($this->_fontPath));
