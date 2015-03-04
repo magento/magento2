@@ -3091,11 +3091,12 @@ return [
     ['Magento\Tax\Model\Resource\Setup', 'Magento\Tax\Setup\TaxSetup'],
     ['Magento\Theme\Model\Resource\Setup', 'Magento\Theme\Setup\InstallData'],
     ['Magento\Weee\Model\Resource\Setup', 'Magento\Weee\Setup\InstallData'],
-    ['Magento\Integration\Model\Resource\Setup', 'Magento\Integration\Model\Manager::processIntegrationConfig()'],
+    ['Magento\Integration\Model\Resource\Setup'],
     ['Magento\Framework\Module\ResourceResolver'],
     ['Magento\Framework\Module\ResourceResolverInterface'],
     ['Magento\Setup\Module\SetupModule'],
     ['Magento\Setup\Module\Setup\FileResolver'],
     ['Magento\Framework\Module\Updater'],
     ['Magento\Setup\Module\SetupFactory'],
+    ['Magento\Framework\Module\Updater\SetupFactory'],
 ];
