@@ -209,6 +209,7 @@ class Bundle
             $this->save($types);
         }
         $this->assets = [];
+        $this->content = [];
     }
 
     /**
