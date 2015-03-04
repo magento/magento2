@@ -30,7 +30,13 @@ class Config
     /**
      * Dictionary file name
      */
-    const DICTIONARY_FILE_NAME = 'i18n.json';
+    const DICTIONARY_FILE_NAME = 'js-translation.json';
+
+    /**
+     * Pattern that matches js call to translate string
+     * f.e. $.mage.__('this string should be translated');
+     */
+    const TRANSLATION_CALL_PATTERN = '~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~';
 
     /**
      * Core store config

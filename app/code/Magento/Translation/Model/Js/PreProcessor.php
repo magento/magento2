@@ -15,26 +15,16 @@ use Magento\Framework\Filesystem;
 class PreProcessor implements PreProcessorInterface
 {
     /**
-     * Pattern for applying translation
-     * @var string
-     */
-    protected $pattern;
-
-    /**
      * @var Config
      */
     protected $config;
 
     /**
      * @param Config $config
-     * @param string $pattern
      */
-    public function __construct(
-        Config $config,
-        $pattern = '~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'
-    ) {
+    public function __construct(Config $config)
+    {
         $this->config = $config;
-        $this->pattern = $pattern;
     }
 
     /**
@@ -58,7 +48,7 @@ class PreProcessor implements PreProcessorInterface
      */
     public function translate($content)
     {
-        return preg_replace_callback($this->pattern, [$this, 'replaceCallback'], $content);
+        return preg_replace_callback(Config::TRANSLATION_CALL_PATTERN, [$this, 'replaceCallback'], $content);
     }
 
     /**
