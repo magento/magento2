@@ -17,10 +17,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAttributeDisplayingOnFrontend extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Check whether the attribute is visible on the frontend.
      *

@@ -14,10 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertShipmentSuccessCreateMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Shipment created success message
      */

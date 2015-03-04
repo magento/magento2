@@ -15,10 +15,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductDuplicatedInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that duplicated product is found by sku and has correct product type, product template,
      * product status disabled and out of stock

@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery">
         <dataset name="default">
             <field name="query_text" xsi:type="array">
                 <item name="value" xsi:type="string">Query text %isolation%</item>
@@ -16,5 +16,5 @@
             <field name="redirect" xsi:type="string">http://example.com/</field>
             <field name="display_in_terms" xsi:type="string">No</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
