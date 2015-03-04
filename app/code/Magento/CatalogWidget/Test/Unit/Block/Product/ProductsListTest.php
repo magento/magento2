@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogWidget\Block\Product;
+namespace Magento\CatalogWidget\Test\Unit\Block\Product;
+
+use \Magento\CatalogWidget\Block\Product\ProductsList;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;

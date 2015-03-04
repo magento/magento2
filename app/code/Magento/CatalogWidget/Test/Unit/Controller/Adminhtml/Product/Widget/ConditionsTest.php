@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogWidget\Controller\Adminhtml\Product\Widget;
+namespace Magento\CatalogWidget\Test\Unit\Controller\Adminhtml\Product\Widget;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

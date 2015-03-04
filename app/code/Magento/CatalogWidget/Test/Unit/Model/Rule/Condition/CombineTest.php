@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogWidget\Model\Rule\Condition;
+namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
