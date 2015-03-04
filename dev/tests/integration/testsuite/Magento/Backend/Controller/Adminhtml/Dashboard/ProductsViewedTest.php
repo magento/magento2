@@ -6,7 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-
 class ProductsViewedTest extends \Magento\Backend\Utility\Controller
 {
     /**
