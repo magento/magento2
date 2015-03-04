@@ -150,7 +150,7 @@ Bundle.Option.prototype = {
 
     add : function(data) {
         if (!data) {
-            data = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(['default_title' => __('New Option')])?>;
+            data = <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['default_title' => __('New Option')])?>;
         } else {
             data.title = data.title.replace(/</g, "&lt;");
             data.title = data.title.replace(/"/g, "&quot;");

@@ -21,11 +21,6 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     protected $_url;
 
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreHelper;
-
-    /**
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogHelperData;

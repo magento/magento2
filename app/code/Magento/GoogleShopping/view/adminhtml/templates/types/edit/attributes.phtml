@@ -75,7 +75,7 @@ var attributesSelectTemplate = '<tr id="<?php echo $block->getFieldId() ?>_<%- d
                     '<input type="hidden" name="<?php echo $block->getFieldName() ?>[<%- data.index %>][delete]" class="delete" value="">' +
                 '</td>' +
                 '<td><?php echo $block->getGcontentAttributesSelectHtml() ?></td>' +
-                '<td class="col-delete">' + <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getDeleteButtonHtml()) ?> + '</td>' +
+                '<td class="col-delete">' + <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getDeleteButtonHtml()) ?> + '</td>' +
             '</tr>';
 
 optionIndex = 0;

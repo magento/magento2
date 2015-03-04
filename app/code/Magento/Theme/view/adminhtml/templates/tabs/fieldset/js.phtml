@@ -58,7 +58,7 @@ jQuery(function($) {
     });
     $('body').trigger(
         'refreshJsList',
-        {jsList: <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
+        {jsList: <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
     );
 });
 

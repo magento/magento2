@@ -22,7 +22,7 @@ $element = $block->getElement();
 <?php $_showWebsite = $block->isMultiWebsites(); ?>
 <div class="field" id="attribute-<?php echo $_htmlId?>-container" data-attribute-code="<?php echo $_htmlId?>"
      data-apply-to="<?php echo $block->escapeHtml(
-         $this->helper('Magento\Core\Helper\Data')->jsonEncode(
+         $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
              $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
          )
      )?>">

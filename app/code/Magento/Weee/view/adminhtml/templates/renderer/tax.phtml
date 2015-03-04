@@ -10,7 +10,7 @@
 <?php
 /** @var $block \Magento\Weee\Block\Renderer\Weee\Tax */
 $data = ['fptAttribute' => [
-    'region' => $this->helper('Magento\Core\Helper\Data')->jsonDecode(
+    'region' => $this->helper('Magento\Framework\Json\Helper\Data')->jsonDecode(
         $this->helper('Magento\Directory\Helper\Data')->getRegionJson()
     ),
     'itemsData' => $block->getValues(),
@@ -19,7 +19,7 @@ $data = ['fptAttribute' => [
 ?>
 <div id="attribute-<?php echo $block->getElement()->getHtmlId(); ?>-container" class="field"
      data-attribute-code="<?php echo $block->getElement()->getHtmlId(); ?>"
-     data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>">
+     data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>">
     <label class="label"><span><?php echo $block->getElement()->getLabel() ?></span></label>
 
     <div class="control">
