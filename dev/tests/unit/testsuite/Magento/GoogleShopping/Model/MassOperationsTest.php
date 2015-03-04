@@ -9,6 +9,9 @@ namespace Magento\GoogleShopping\Model;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassOperationsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\GoogleShopping\Model\MassOperations */
