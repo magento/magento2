@@ -71,9 +71,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     {
         $product = $this->productRepository->get($productId);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(
-                'Only implemented for bundle product'
-            );
+            throw new InputException(__('Only implemented for bundle product'));
         }
 
         $childrenList = [];
@@ -183,9 +181,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $product = $this->productRepository->get($productSku);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException(
-                sprintf('Product with specified sku: %s is not a bundle product', $productSku)
-            );
+            throw new InputException(__('Product with specified sku: %s is not a bundle product', $productSku));
         }
 
         $excludeSelectionIds = [];

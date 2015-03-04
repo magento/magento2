@@ -213,7 +213,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     {
         $product = $this->productRepository->get($productSku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException('Only implemented for bundle product');
+            throw new InputException(__('Only implemented for bundle product'));
         }
         return $product;
     }

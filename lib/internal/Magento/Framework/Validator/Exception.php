@@ -45,6 +45,7 @@ class Exception extends InputException
                     $this->addMessage(new Error($propertyMessage));
                 }
             }
+            $phrase = new Phrase($message);
         }
         parent::__construct($phrase, $cause);
     }

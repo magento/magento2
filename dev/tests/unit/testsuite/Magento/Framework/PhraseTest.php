@@ -6,26 +6,27 @@
 namespace Magento\Framework;
 
 class PhraseTest extends \PHPUnit_Framework_TestCase
-{/**
-     * @var \Magento\Framework\Phrase\RendererInterface|PHPUnit_Framework_MockObject_MockObject
+{
+    /**
+     * @var \Magento\Framework\Phrase\RendererInterface
+     */
+    private $defaultRenderer;
+
+    /**
+     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $rendererMock;
 
     protected function setUp()
     {
+        $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
             ->getMock();
     }
 
-    /**
-     * Must be defined before any tests that call Phrase::setRenderer in their body
-     */
-    public function testRenderingWithoutRenderer()
+    protected function tearDown()
     {
-        $result = 'some text';
-        $phrase = new Phrase($result);
-
-        $this->assertEquals($result, $phrase->render());
+        \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
 
     public function testRendering()

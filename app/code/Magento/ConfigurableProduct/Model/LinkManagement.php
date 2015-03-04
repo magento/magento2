@@ -102,7 +102,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
         if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             throw new InputException(
-                sprintf('Product with specified sku: %s is not a configurable product', $productSku)
+                __('Product with specified sku: %1 is not a configurable product', $productSku)
             );
         }
 
