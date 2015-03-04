@@ -185,6 +185,7 @@ class Structure
                 }
             }
         }
+        $this->unsetChild($elementId);
         $wasFound = isset($this->_elements[$elementId]);
         unset($this->_elements[$elementId]);
         return $wasFound;
