@@ -12,7 +12,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * API Integration config
      *
-     * @var \Magento\Webapi\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationConfigMock;
 
@@ -45,7 +45,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->integrationConfigMock = $this->getMockBuilder(
-            '\Magento\Webapi\Model\IntegrationConfig'
+            '\Magento\Integration\Model\IntegrationConfig'
         )->disableOriginalConstructor()->setMethods(
             ['getIntegrations']
         )->getMock();
@@ -62,7 +62,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ['grantPermissions']
         )->getMock();
 
-        $this->subjectMock = $this->getMock('Magento\Integration\Model\ConfigBasedIntegrationManager', [], [], '', false);
+        $this->subjectMock = $this->getMock(
+            'Magento\Integration\Model\ConfigBasedIntegrationManager',
+            [],
+            [],
+            '',
+            false
+        );
         $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Manager(
             $this->integrationConfigMock,
             $this->integrationAuthorizationServiceMock,

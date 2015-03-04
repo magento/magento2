@@ -7,7 +7,7 @@ namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Service\V1\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
-use Magento\Webapi\Model\IntegrationConfig;
+use Magento\Integration\Model\IntegrationConfig;
 
 /**
  * Plugin for ConfigBasedIntegrationManager model to manage resource permissions of
