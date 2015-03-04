@@ -62,12 +62,7 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         $moduleList->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Module_One', 'Module_Two']));
-        $resourceResolver = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceResolverInterface');
-        $resourceResolver->expects($this->any())
-            ->method('getResourceList')
-            ->will($this->returnCallback(function ($moduleName) {
-                return ['resource_' . $moduleName];
-            }));
+
         $this->moduleManager = $this->getMock('\Magento\Framework\Module\Manager', [], [], '', false);
         $this->dbVersionInfoMock = $this->getMock('\Magento\Framework\Module\DbVersionInfo', [], [], '', false);
         $this->_model = new DbStatusValidator(

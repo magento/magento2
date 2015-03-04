@@ -32,4 +32,7 @@
             <argument name="customAttributeMap" xsi:type="object">CustomAttributeMap</argument>
         </arguments>
     </type>
+    <type name="Magento\Integration\Model\ConfigBasedIntegrationManager">
+        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
+    </type>
 </config>
