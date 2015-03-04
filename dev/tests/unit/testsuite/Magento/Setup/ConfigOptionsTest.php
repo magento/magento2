@@ -17,9 +17,62 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         $this->object = new ConfigOptions();
     }
 
+    public function testGetOptions()
+    {
+        $options = $this->object->getOptions();
+        $this->assertInstanceOf('\Magento\Framework\Setup\TextConfigOption', $options[0]);
+        $this->assertEquals(1, count($options));
+    }
+
     public function testCreateConfig()
     {
-        $config = $this->object->createConfig([]);
+        $config = $this->object->createConfig([ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key']);
         $this->assertNotEmpty($config['install']['date']);
+    }
+
+    /**
+     * @param array $options
+     *
+     * @dataProvider createConfigNoKeyDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage No encryption key provided.
+     */
+    public function testCreateConfigNoKey(array $options)
+    {
+        $this->object->createConfig($options);
+    }
+
+    /**
+     * @return array
+     */
+    public function createConfigNoKeyDataProvider()
+    {
+        return [
+            'no data' => [[]],
+            'no frontName' => [['something_else' => 'something']],
+        ];
+    }
+
+    /**
+     * @param array $options
+     *
+     * @dataProvider createConfigInvalidKeyDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid encryption key.
+     */
+    public function testCreateConfigInvalidKey(array $options)
+    {
+        $this->object->createConfig($options);
+    }
+
+    /**
+     * @return array
+     */
+    public function createConfigInvalidKeyDataProvider()
+    {
+        return [
+            [[ConfigOptions::INPUT_KEY_CRYPT_KEY => '']],
+            [[ConfigOptions::INPUT_KEY_CRYPT_KEY => '0']],
+        ];
     }
 }
