@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity">
         <dataset name="currency_symbols_uah">
             <field name="custom_currency_symbol" xsi:type="array">
                 <item name="UAH" xsi:type="string">custom</item>
@@ -19,5 +19,5 @@
             </field>
             <field name="code" xsi:type="string">EUR</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

@@ -80,11 +80,24 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->method('lastInsertId');
         $this->commentModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
         $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+
+        $relationProcessorMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
+        $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
+
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->commentResource = $objectManager->getObject(
             'Magento\Sales\Model\Resource\Order\Invoice\Comment',
             [
-                'resource' => $this->appResourceMock,
+                'context' => $contextMock,
                 'validator' => $this->validatorMock
             ]
         );
@@ -99,6 +112,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
             ->will($this->returnValue([]));
+        $this->commentModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);
     }

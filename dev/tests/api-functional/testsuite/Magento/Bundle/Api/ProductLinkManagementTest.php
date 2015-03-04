@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Webapi\Model\Rest\Config;
 
 class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -100,7 +99,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                     [$productSku, $optionId],
                     $resourcePath
                 ),
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -130,7 +129,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf($resourcePath, $productSku, $optionId, $childSku),
-                'httpMethod' => Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -151,7 +150,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/children',
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
