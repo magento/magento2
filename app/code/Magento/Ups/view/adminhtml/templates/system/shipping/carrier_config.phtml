@@ -87,10 +87,10 @@ require(["prototype"], function(){
             this.storedOriginShipment = '<?php echo $storedOriginShipment ?>';
             this.storedFreeShipment = '<?php echo $storedFreeShipment ?>';
             this.storedUpsType = '<?php echo $storedUpsType ?>';
-            <?php /** @var $_coreHelper \Magento\Core\Helper\Data */ $_coreHelper = $this->helper('Magento\Core\Helper\Data'); ?>
-            this.storedAllowedMethods = <?php echo $_coreHelper->jsonEncode($storedAllowedMethods) ?>;
-            this.originShipmentObj = <?php echo $_coreHelper->jsonEncode($orShipArr) ?>;
-            this.originShipmentObj['default'] = <?php echo $_coreHelper->jsonEncode($defShipArr) ?>;
+            <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data'); ?>
+            this.storedAllowedMethods = <?php echo $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
+            this.originShipmentObj = <?php echo $jsonHelper->jsonEncode($orShipArr) ?>;
+            this.originShipmentObj['default'] = <?php echo $jsonHelper->jsonEncode($defShipArr) ?>;
 
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));

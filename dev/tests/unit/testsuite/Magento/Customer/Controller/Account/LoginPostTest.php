@@ -42,11 +42,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     protected $url;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManager;
-
-    /**
      * @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerUrl;
@@ -130,13 +125,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->url = $this->getMock('\Magento\Framework\UrlInterface');
-        $this->objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
-            ['get'],
-            [],
-            '',
-            false
-        );
         $this->_formKeyValidator = $this->getMock(
             'Magento\Framework\Data\Form\FormKey\Validator',
             [],
@@ -180,7 +168,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
                 'url' => $this->url,
                 'request' => $this->request,
                 'response' => $this->response,
-                'objectManager' => $this->objectManager,
                 'formKeyValidator' => $this->_formKeyValidator,
                 'customerUrl' => $this->customerUrl,
                 'redirect' => $this->redirectMock,
@@ -209,24 +196,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     public function testLoginPostActionWhenRefererSetBeforeAuthUrl()
     {
         $this->_formKeyValidator->expects($this->once())->method('validate')->will($this->returnValue(true));
-        $this->objectManager->expects(
-            $this->any()
-        )->method(
-            'get'
-        )->will(
-            $this->returnValueMap(
-                [
-                    [
-                        'Magento\Framework\App\Config\ScopeConfigInterface',
-                        new \Magento\Framework\Object(['config_flag' => 1]),
-                    ],
-                    [
-                        'Magento\Core\Helper\Data',
-                        $this->getMock('Magento\Core\Helper\Data', [], [], '', false)
-                    ],
-                ]
-            )
-        );
         $this->customerSession->expects($this->at(0))->method('isLoggedIn')->with()->will($this->returnValue(0));
         $this->customerSession->expects($this->at(4))->method('isLoggedIn')->with()->will($this->returnValue(1));
         $this->request->expects(

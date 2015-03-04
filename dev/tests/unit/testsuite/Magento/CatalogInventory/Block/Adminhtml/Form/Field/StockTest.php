@@ -13,11 +13,6 @@ class StockTest extends \PHPUnit_Framework_TestCase
     const ATTRIBUTE_NAME = 'quantity_and_stock_status';
 
     /**
-     * @var \Magento\Core\Helper\Data|PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_coreHelperMock;
-
-    /**
      * @var \Magento\Framework\Data\Form\Element\Factory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_factoryElementMock;
@@ -38,7 +33,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected $_factoryTextMock;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock
      */
     protected $_block;
 
