@@ -8,6 +8,8 @@ namespace Magento\Setup\Model;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Setup\TextConfigOption;
+use Magento\Framework\Setup\MultiSelectConfigOption;
+use Magento\Framework\Module\ModuleList\Loader;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -25,6 +27,16 @@ class ConfigOptions implements ConfigOptionsInterface
     const INPUT_KEY_CRYPT_KEY = 'key';
 
     /**
+     * Path to modules in the deployment config
+     */
+    const CONFIG_PATH_MODULES = 'modules';
+
+    /**
+     * @var array
+     */
+    private $moduleList;
+
+    /**
      * @var array
      */
     private $options;
@@ -38,11 +50,12 @@ class ConfigOptions implements ConfigOptionsInterface
      * Constructor
      *
      * @param Random $random
+     * @param Loader $moduleLoader
      */
-    public function __construct(Random $random)
+    public function __construct(Random $random, Loader $moduleLoader)
     {
         $this->random = $random;
-        $this->options = [new TextConfigOption('key', TextConfigOption::FRONTEND_WIZARD_TEXT, 'encryption key')];
+        $this->moduleList = $moduleLoader->load();
     }
 
     /**
@@ -50,7 +63,16 @@ class ConfigOptions implements ConfigOptionsInterface
      */
     public function getOptions()
     {
-        return $this->options;
+        return [
+            new TextConfigOption('key', TextConfigOption::FRONTEND_WIZARD_TEXT, 'encryption key'),
+            new MultiSelectConfigOption(
+                'modules',
+                MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT,
+                $this->moduleList,
+                'modules list',
+                $this->moduleList
+            ),
+        ];
     }
 
     /**
@@ -68,6 +90,11 @@ class ConfigOptions implements ConfigOptionsInterface
         } else {
             $config['crypt']['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
         }
+
+        foreach ($this->moduleList as $key) {
+            $config['modules'][$key] = 1;
+        }
+
         return $config;
     }
 }
