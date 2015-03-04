@@ -19,7 +19,7 @@
                        showInStore="1">
                     <label>Enable Search Recommendations</label>
                     <comment>When you enable this option your site may slow down.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="search_recommendations_count"
                        translate="label"
@@ -42,7 +42,7 @@
                        showInWebsite="1"
                        showInStore="1">
                     <label>Show Results Count for Each Recommendation</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="search_recommendations_enabled">1</field>
                     </depends>
@@ -51,7 +51,7 @@
                     <field id="search_suggestion_enabled" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Search Suggestions</label>
                         <comment>When you enable this option your site may slow down.</comment>
-                        <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                     <field id="search_suggestion_count" translate="label" type="text" sortOrder="71" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Search Suggestions Count</label>
@@ -61,7 +61,7 @@
                     </field>
                     <field id="search_suggestion_count_results_enabled" translate="label" type="select" sortOrder="72" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Show Results Count for Each Suggestion</label>
-                        <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>When you enable this option your site may slow down.</comment>
                         <depends>
                             <field id="search_suggestion_enabled">1</field>
