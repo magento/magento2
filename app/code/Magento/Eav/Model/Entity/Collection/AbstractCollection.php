@@ -454,7 +454,6 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     public function addAttributeToSelect($attribute, $joinType = false)
     {
         if (is_array($attribute)) {
-            $this->_eavConfig->loadCollectionAttributes($this->getEntity()->getType(), $attribute);
             foreach ($attribute as $a) {
                 $this->addAttributeToSelect($a, $joinType);
             }
@@ -472,7 +471,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             if (isset($this->_joinAttributes[$attribute])) {
                 $attrInstance = $this->_joinAttributes[$attribute]['attribute'];
             } else {
-                $attrInstance = $this->_eavConfig->getCollectionAttribute($this->getEntity()->getType(), $attribute);
+                $attrInstance = $this->_eavConfig->getAttribute($this->getEntity()->getType(), $attribute);
             }
             if (empty($attrInstance)) {
                 throw new EavException(__('Invalid attribute requested: %1', (string)$attribute));
@@ -1121,7 +1120,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             if (!$attributeId) {
                 continue;
             }
-            $attribute = $this->_eavConfig->getCollectionAttribute($entity->getType(), $attributeCode);
+            $attribute = $this->_eavConfig->getAttribute($entity->getType(), $attributeCode);
             if ($attribute && !$attribute->isStatic()) {
                 $tableAttributes[$attribute->getBackendTable()][] = $attributeId;
                 if (!isset($attributeTypes[$attribute->getBackendTable()])) {
@@ -1226,7 +1225,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         }
         $attributeCode = array_search($valueInfo['attribute_id'], $this->_selectAttributes);
         if (!$attributeCode) {
-            $attribute = $this->_eavConfig->getCollectionAttribute(
+            $attribute = $this->_eavConfig->getAttribute(
                 $this->getEntity()->getType(),
                 $valueInfo['attribute_id']
             );

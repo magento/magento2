@@ -2120,4 +2120,5 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getCollectionAttribute', 'Magento\Eav\Model\Config'],
 ];
