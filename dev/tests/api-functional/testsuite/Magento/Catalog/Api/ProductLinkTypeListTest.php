@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Model\Product\Link;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ProductLinkTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -20,7 +19,7 @@ class ProductLinkTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'links/types',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -39,7 +38,7 @@ class ProductLinkTypeListTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'links/' . $linkType . '/attributes',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

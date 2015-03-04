@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="ActivateIntegrationEntityTest">
-    <variation name="ActivateIntegrationEntityTestVariation1" firstConstraint="assertIntegrationResourcesPopup" method="test">
+  <testCase name="Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest">
+    <variation name="ActivateIntegrationEntityTestVariation1">
       <data name="integration/dataSet" xsi:type="string">default_with_all_resources</data>
-      <constraint name="assertIntegrationResourcesPopup" next="assertIntegrationTokensPopup"/>
-      <constraint name="assertIntegrationTokensPopup" next="assertIntegrationSuccessActivationMessage" prev="assertIntegrationResourcesPopup"/>
-      <constraint name="assertIntegrationSuccessActivationMessage" prev="assertIntegrationTokensPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage"/>
     </variation>
   </testCase>
 </config>
