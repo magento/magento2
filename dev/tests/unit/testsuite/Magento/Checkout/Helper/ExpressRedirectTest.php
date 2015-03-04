@@ -106,7 +106,7 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
         );
 
         $urlMock = $this->getMockBuilder(
-            'Magento\Core\Helper\Url'
+            'Magento\Framework\Url\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
             ['addRequestParam']
         )->getMock();
@@ -126,7 +126,7 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            'Magento\Core\Helper\Url'
+            'Magento\Framework\Url\Helper\Data'
         )->will(
             $this->returnValue($urlMock)
         );
