@@ -92,15 +92,7 @@ require([
         $('synchronize_button').addClassName('disabled');
     }
 
-    Event.observe(window, 'load', function(){
-        disableStorageSelection();
-        disableSyncButton();
-        checkStatus();
-    });
-    $('system_media_storage_configuration_media_storage').observe('change', checkButtonState);
-    $('system_media_storage_configuration_media_database').observe('change', checkButtonState);
-
-    function checkStatus() {
+    var checkStatus = function() {
         u = new Ajax.PeriodicalUpdater('', '<?php echo $block->getAjaxStatusUpdateUrl() ?>', {
             method:     'get',
             frequency:  5,
@@ -111,7 +103,7 @@ require([
 
                 try {
                     response = eval('(' + transport.responseText + ')');
-                    if (response.state == '<?php echo \Magento\Core\Model\File\Storage\Flag::STATE_RUNNING ?>'
+                    if (response.state == '<?php echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING ?>'
                         && response.message
                     ) {
                         if ($('sync_span').hasClassName('no-display')) {
@@ -123,12 +115,12 @@ require([
                         enableStorageSelection();
                         $('sync_span').addClassName('no-display');
 
-                        if (response.state == '<?php echo \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED ?>') {
+                        if (response.state == '<?php echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED ?>') {
                             addAllowedStorage(
                                 $('system_media_storage_configuration_media_storage').value,
                                 $('system_media_storage_configuration_media_database').value
                             );
-                        } else if (response.state == '<?php echo \Magento\Core\Model\File\Storage\Flag::STATE_NOTIFIED ?>') {
+                        } else if (response.state == '<?php echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED ?>') {
                             if (response.has_errors) {
                                 enableSyncButton();
                             } else {
@@ -144,9 +136,17 @@ require([
                 }
             }
         });
-    }
+    };
 
-    function synchronize() {
+    Event.observe(window, 'load', function(){
+        disableStorageSelection();
+        disableSyncButton();
+        checkStatus();
+    });
+    $('system_media_storage_configuration_media_storage').observe('change', checkButtonState);
+    $('system_media_storage_configuration_media_database').observe('change', checkButtonState);
+
+    jQuery('#synchronize_button').click(function () {
         if (!jQuery.validator.validateElement('#synchronize-validation-input')) {
             jQuery('[for="synchronize-validation-input"]').hide();
         }
@@ -161,11 +161,11 @@ require([
             asynchronous:   true
         });
 
-        window.setTimeout('checkStatus()', 2011);
+        window.setTimeout(checkStatus, 2011);
 
         disableStorageSelection();
         disableSyncButton();
-    }
+    });
 
     jQuery.validator.addMethod('required-synchronize', function(){
         storage = getConnectionName(

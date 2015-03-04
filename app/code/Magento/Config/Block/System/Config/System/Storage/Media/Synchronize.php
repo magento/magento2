@@ -16,18 +16,18 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
     protected $_template = 'Magento_Config::system/config/system/storage/media/synchronize.phtml';
 
     /**
-     * @var \Magento\Core\Model\File\Storage
+     * @var \Magento\MediaStorage\Model\File\Storage
      */
     protected $_fileStorage;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\File\Storage $fileStorage
+     * @param \Magento\MediaStorage\Model\File\Storage $fileStorage
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\File\Storage $fileStorage,
+        \Magento\MediaStorage\Model\File\Storage $fileStorage,
         array $data = []
     ) {
         $this->_fileStorage = $fileStorage;
@@ -51,6 +51,8 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -90,7 +92,6 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
             [
                 'id' => 'synchronize_button',
                 'label' => __('Synchronize'),
-                'onclick' => 'javascript:synchronize(); return false;',
             ]
         );
 
@@ -113,7 +114,7 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
         $flag = $this->_fileStorage->getSyncFlag();
         $flagData = $flag->getFlagData();
 
-        if ($flag->getState() == \Magento\Core\Model\File\Storage\Flag::STATE_NOTIFIED && is_array(
+        if ($flag->getState() == \Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED && is_array(
             $flagData
         ) && isset(
             $flagData['destination_storage_type']
@@ -124,7 +125,7 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
             $storageType = $flagData['destination_storage_type'];
             $connectionName = $flagData['destination_connection_name'];
         } else {
-            $storageType = \Magento\Core\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM;
+            $storageType = \Magento\MediaStorage\Model\File\Storage::STORAGE_MEDIA_FILE_SYSTEM;
             $connectionName = '';
         }
 

@@ -16,17 +16,17 @@ class Storage extends \Magento\Backend\App\Action
     /**
      * Return file storage singleton
      *
-     * @return \Magento\Core\Model\File\Storage
+     * @return \Magento\MediaStorage\Model\File\Storage
      */
     protected function _getSyncSingleton()
     {
-        return $this->_objectManager->get('Magento\Core\Model\File\Storage');
+        return $this->_objectManager->get('Magento\MediaStorage\Model\File\Storage');
     }
 
     /**
      * Return synchronize process status flag
      *
-     * @return \Magento\Core\Model\File\Storage\Flag
+     * @return \Magento\MediaStorage\Model\File\Storage\Flag
      */
     protected function _getSyncFlag()
     {

@@ -52,10 +52,10 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->writeDirectoryMock));
 
-        $this->storageMock = $this->getMockBuilder('Magento\Core\Helper\File\Storage\Database')
+        $this->storageMock = $this->getMockBuilder('Magento\MediaStorage\Helper\File\Storage\Database')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storageFactoryMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\DatabaseFactory')
+        $this->storageFactoryMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Storage\DatabaseFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -134,7 +134,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->method('getMediaRelativePath')
             ->will($this->returnArgument(0));
 
-        $storageDatabaseMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\Database')
+        $storageDatabaseMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Storage\Database')
             ->disableOriginalConstructor()
             ->getMock();
         $storageDatabaseMock->expects($this->at(0))
@@ -199,7 +199,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ->method('getMediaRelativePath')
             ->will($this->returnArgument(0));
 
-        $storageDatabaseMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\Database')
+        $storageDatabaseMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Storage\Database')
             ->disableOriginalConstructor()
             ->setMethods(['loadByFilename', 'getId', '__wakeup'])
             ->getMock();
