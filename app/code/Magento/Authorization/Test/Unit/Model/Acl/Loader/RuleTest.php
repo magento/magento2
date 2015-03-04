@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Authorization\Model\Acl\Loader;
+namespace Magento\Authorization\Test\Unit\Model\Acl\Loader;
 
 class RuleTest extends \PHPUnit_Framework_TestCase
 {

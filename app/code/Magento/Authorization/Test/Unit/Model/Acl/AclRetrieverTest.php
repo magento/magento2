@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Authorization\Model\Acl;
+namespace Magento\Authorization\Test\Unit\Model\Acl;
+
+use \Magento\Authorization\Model\Acl\AclRetriever;
 
 use Magento\Authorization\Model\Resource\Role\Collection as RoleCollection;
 use Magento\Authorization\Model\Resource\Role\CollectionFactory as RoleCollectionFactory;

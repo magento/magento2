@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Authorization\Model;
+namespace Magento\Authorization\Test\Unit\Model;
+
+use \Magento\Authorization\Model\CompositeUserContext;
 
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 use Magento\TestFramework\Helper\ObjectManager;
