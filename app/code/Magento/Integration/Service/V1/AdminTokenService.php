@@ -79,7 +79,7 @@ class AdminTokenService implements AdminTokenServiceInterface
              * Constant cannot be created in Auth Model since it uses legacy translation that doesn't support it.
              * Need to make sure that this is refactored once exception handling is updated in Auth Model.
              */
-            throw new AuthenticationException('Please correct the user name or password.');
+            throw new AuthenticationException(__('Please correct the user name or password.'));
         }
         return $this->tokenModelFactory->create()->createAdminToken($this->userModel->getId())->getToken();
     }
