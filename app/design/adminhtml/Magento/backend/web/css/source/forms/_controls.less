@@ -3,11 +3,11 @@
 //  * See COPYING.txt for license details.
 //  */
 
+@import (reference) '_extends';
+
 //
 //  Variables
 //  _____________________________________________
-
-@import (reference) '_extends';
 
 @field-control__background-color: @color-white;
 @field-control__border-color: @color-gray68;
@@ -29,6 +29,7 @@
 //
 //  Common
 //  ---------------------------------------------
+
 .__form-control-styles() {
     background-color: @field-control__background-color;
     border-radius: .1rem;
@@ -42,11 +43,13 @@
     padding: 0 1rem;
     transition: border-color .1s ease-in;
 }
+
 .__form-control-styles__focus() {
     border-color: @field-control__focus__border-color;
     box-shadow: none;
     outline: 0;
 }
+
 .__form-control-styles__disabled() {
     background-color: @field-control__disabled__background-color;
     border-color: @field-control__border-color;
@@ -55,12 +58,14 @@
     cursor: not-allowed;
 }
 
+// Input text styles
 .admin__control-text {
     .extend__form-control-styles();
     line-height: @field-control__height;
     width: 100%;
 }
 
+// Select styles
 .admin__control-select {
     .extend__form-control-styles();
     .css(appearance, none, 1);
@@ -88,15 +93,13 @@
         background-position+: 100%;
 
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
-        background-position+: ~'calc(100% - @field-control__height)' 0;
+        background-position+: ~'calc(100% - 33px)' 0;
     }
     &::-ms-expand {
         display: none;
     }
-    .ie9 & {
-        padding-right: 0;
-    }
 }
+
 .ie9 .admin__control-select {
     padding-right: 0;
 }
@@ -104,12 +107,22 @@
 option:empty {
     display: none;
 }
+
+// Multiple select
+.admin__control-multiselect {
+    .extend__form-control-styles();
+    height: auto;
+    padding: .6rem 1rem;
+}
+
+// File uploader
 .admin__control-file-wrapper {
     display: inline-block;
     padding: .5rem 1rem;
     position: relative;
     z-index: 1;
 }
+
 .admin__control-file-label:before {
     &:extend(.__form-control-styles);
     content:'';
@@ -126,6 +139,7 @@ option:empty {
         &:extend(.__form-control-styles[disabled]);
     }
 }
+
 .admin__control-file {
     position: relative;
     z-index: 1;
@@ -134,12 +148,7 @@ option:empty {
     width: auto;
 }
 
-.admin__control-multiselect {
-    .extend__form-control-styles();
-    height: auto;
-    padding: .6rem 1rem;
-}
-
+// Textarea
 .admin__control-textarea {
     .extend__form-control-styles();
     height: 8.48rem;
@@ -148,6 +157,7 @@ option:empty {
     width: 100%;
 }
 
+// Checkboxes and radios
 .admin__control-radio,
 .admin__control-checkbox {
     margin: .3rem 0 0;
@@ -167,7 +177,7 @@ option:empty {
             color: transparent;
             content: @icon-check-mage__content;
             float: left;
-            font:  0/1.4rem @icons-admin__font-name;
+            font:  0/14px @icons-admin__font-name;
             height: 1.6rem;
             margin: 1px 10px 0 -26px;
             text-align: center;
@@ -193,20 +203,23 @@ option:empty {
         opacity: .5;
     }
 }
+
 .admin__control-radio + label:before {
     border-radius: .8rem;
     content: @icon-enable__content;
 }
+
 .admin__control-radio:checked + label:before {
     color: @color-brownie;
     font-size: 1rem;
 }
+
 .admin__control-checkbox:checked + label:before {
     color: @color-brownie;
     font-size: 1.1rem;
-    line-height: 1.5rem;
 }
 
+// Control with additional prefix or suffix label
 .admin__control-addon {
     .vendor-prefix-display(inline-flex);
     .vendor-prefix-flex-direction(row);
@@ -312,9 +325,4 @@ option:empty {
     &-suffix {
         float: right;
     }
-}
-
-.admin__control-value {
-    display: inline-block;
-    padding: .6rem 1rem;
 }

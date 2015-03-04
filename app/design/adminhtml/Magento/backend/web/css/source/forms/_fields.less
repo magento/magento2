@@ -8,11 +8,12 @@
 //  _____________________________________________
 
 @field-scope__color: @color-dark-gray;
-@field-divider__background-color: #ccc;
+@field-divider__background-color: @color-lighter-grayish;
 @field-label__color: @color-very-dark-gray-black;
-@field-label__disabled__color: #999;
+@field-label__disabled__color: @color-gray65-almost;
 @field-label__required__color: @color-phoenix;
 @field-note__color: @color-very-dark-gray-black;
+@field-note__font-size: @font-size__s;
 
 @field-error-message__background-color: @color-lazy-sun;
 @field-error-message__color: @color-very-dark-gray2;
@@ -23,6 +24,7 @@
 //  Form Fields
 //  _____________________________________________
 
+// Fieldset
 .admin__fieldset {
     border: 0;
     margin: 0;
@@ -45,6 +47,7 @@
     }
 }
 
+// Label
 .admin__field-label {
     color: @field-label__color;
     margin: 0;
@@ -97,7 +100,7 @@
     }
 }
 
-
+// Field
 .admin__field {
     margin-bottom: 0;
 
@@ -154,6 +157,7 @@
     }
 }
 
+// Field error message
 .admin__field-error {
     background: @field-error-message__background-color;
     border: 1px solid @field-error-message__border-color;
@@ -167,19 +171,15 @@
     padding: .8rem 1rem .9rem;
 }
 
+// Field notice message
 .admin__field-note {
     color: @field-note__color;
-    font-size: 12px;
+    font-size: @field-note__font-size;
     margin: 10px 0 0;
     padding: 0;
 }
 
-.admin__control-fields {
-    .admin__field-label ~ .admin__field-control {
-        width: 100%;
-    }
-}
-
+// Field containing checkbox or radio
 .admin__field-option {
     padding-top: 8px;
 
@@ -209,14 +209,38 @@
     }
 }
 
+//
+//  Field containing multiple fields
+//  _____________________________________________
+
+[class*='admin__control-grouped'],
 .admin__control-fields {
-    .admin__field:nth-child(n+2):not(.admin__field-option) {
-        > .admin__field-label {
-            .visually-hidden; // @todo !abstract
+    & > .admin__field:first-child {
+        position: static;
+        & > .admin__field-label {
+            #mix-grid .column(3, 9);
+            cursor: pointer;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
         }
     }
 }
 
+// In rows
+.admin__control-fields {
+    .admin__field-label ~ .admin__field-control {
+        width: 100%;
+    }
+    .admin__field:nth-child(n+2):not(.admin__field-option) {
+        > .admin__field-label {
+            .extend__visually-hidden();
+        }
+    }
+}
+
+// In line
 [class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
@@ -233,23 +257,8 @@
         &:nth-child(n+2) {
             padding-left: 20px;
             &:not(.admin__field-option) .admin__field-label {
-                .visually-hidden();
+                .extend__visually-hidden();
             }
-        }
-    }
-}
-
-[class*='admin__control-grouped'],
-.admin__control-fields {
-    & > .admin__field:first-child {
-        position: static;
-        & > .admin__field-label {
-            #mix-grid .column(3, 9);
-            cursor: pointer;
-            left: 0;
-            opacity: 0;
-            position: absolute;
-            top: 0;
         }
     }
 }

@@ -10,7 +10,6 @@
 @field-tooltip-icon__color: @color-brownie;
 @field-tooltip-content__background-color: @color-lazy-sun;
 @field-tooltip-content__border-color: @color-dark-grayish-orange;
-@field-tooltip__z-index: @z-index-5;
 
 //
 //  Form Fields
@@ -29,8 +28,9 @@
     .admin__field-option & {
         margin-top: 10px
     }
-    &-action {
+    .admin__field-tooltip-action {
         margin-left: 20px;
+        display: inline-block;
         .icon-font(
             @icon-help__content,
             @icons-admin__font-name,
@@ -39,11 +39,11 @@
             @_icon-font-color: @field-tooltip-icon__color
         );
     }
-    .admin__control-text:focus + &-content,
-    &:hover &-content {
+    .admin__control-text:focus + .admin__field-tooltip-content,
+    &:hover .admin__field-tooltip-content {
         display: block;
     }
-    &-content {
+    .admin__field-tooltip-content {
         @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
         .css(box-shadow, @_shadow);
         background: @field-tooltip-content__background-color;
@@ -58,7 +58,11 @@
         z-index: 1;
         &:after,
         &:before {
-            .arrow(down,16px,@field-tooltip-content__border-color);
+            .arrow(
+                @_position: down,
+                @_size: 16px,
+                @_color: @field-tooltip-content__border-color
+            );
             content: "";
             display: block;
             position: absolute;

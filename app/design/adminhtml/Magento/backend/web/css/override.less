@@ -317,8 +317,8 @@ nav ol {
 }
 .admin__control-text,
 .admin__control-select,
-.admin__control-file-label:before,
 .admin__control-multiselect,
+.admin__control-file-label:before,
 .admin__control-textarea,
 .admin__control-addon [class*="admin__control-"] + [class*="admin__addon-"]:before {
   background-color: #ffffff;
@@ -335,9 +335,9 @@ nav ol {
 }
 .admin__control-text:focus,
 .admin__control-select:focus,
+.admin__control-multiselect:focus,
 .admin__control-file:active + .admin__control-file-label:before,
 .admin__control-file:focus + .admin__control-file-label:before,
-.admin__control-multiselect:focus,
 .admin__control-textarea:focus,
 .admin__control-addon [class*="admin__control-"]:focus + label:before {
   border-color: #007bdb;
@@ -346,8 +346,8 @@ nav ol {
 }
 .admin__control-text[disabled],
 .admin__control-select[disabled],
-.admin__control-file[disabled] + .admin__control-file-label:before,
 .admin__control-multiselect[disabled],
+.admin__control-file[disabled] + .admin__control-file-label:before,
 .admin__control-textarea[disabled],
 .admin__control-addon [class*="admin__control-"][disabled] + [class*="admin__addon-"]:before {
   background-color: #e9e9e9;
@@ -373,7 +373,7 @@ nav ol {
 }
 .admin__control-select:focus {
   background-image: url('../images/arrows-bg.svg'), linear-gradient(#e3e3e3, #e3e3e3), linear-gradient(#007bdb, #007bdb);
-  background-position: ~" calc(100% - 12px) 13px, 100%, calc(100% - @field-control__height) 0";
+  background-position: ~" calc(100% - 12px) 13px, 100%, calc(100% - 33px) 0";
 }
 .admin__control-select::-ms-expand {
   display: none;
@@ -381,11 +381,12 @@ nav ol {
 .ie9 .admin__control-select {
   padding-right: 0;
 }
-.ie9 .admin__control-select {
-  padding-right: 0;
-}
 option:empty {
   display: none;
+}
+.admin__control-multiselect {
+  height: auto;
+  padding: .6rem 1rem;
 }
 .admin__control-file-wrapper {
   display: inline-block;
@@ -407,10 +408,6 @@ option:empty {
   background: transparent;
   border: 0;
   width: auto;
-}
-.admin__control-multiselect {
-  height: auto;
-  padding: .6rem 1rem;
 }
 .admin__control-textarea {
   height: 8.48rem;
@@ -440,7 +437,7 @@ option:empty {
   color: transparent;
   content: '\e62d';
   float: left;
-  font: 0/1.4rem 'Admin Icons';
+  font: 0/14px 'Admin Icons';
   height: 1.6rem;
   margin: 1px 10px 0 -26px;
   text-align: center;
@@ -473,7 +470,6 @@ option:empty {
 .admin__control-checkbox:checked + label:before {
   color: #514943;
   font-size: 1.1rem;
-  line-height: 1.5rem;
 }
 .admin__control-addon {
   display: -webkit-inline-flex;
@@ -576,10 +572,6 @@ option:empty {
 .ie9 .admin__addon-suffix {
   float: right;
 }
-.admin__control-value {
-  display: inline-block;
-  padding: .6rem 1rem;
-}
 .admin__fieldset {
   border: 0;
   margin: 0;
@@ -643,7 +635,7 @@ option:empty {
   z-index: 1;
 }
 ._disabled > .admin__field-label {
-  color: #999999;
+  color: #a79d95;
 }
 .admin__field {
   margin-bottom: 0;
@@ -698,12 +690,9 @@ option:empty {
 }
 .admin__field-note {
   color: #303030;
-  font-size: 12px;
+  font-size: 1.2rem;
   margin: 10px 0 0;
   padding: 0;
-}
-.admin__control-fields .admin__field-label ~ .admin__field-control {
-  width: 100%;
 }
 .admin__field-option {
   padding-top: 8px;
@@ -723,7 +712,7 @@ option:empty {
 }
 .admin__field-control > .admin__field-option:nth-child(1):nth-last-child(2) + .admin__field-option:before,
 .admin__field-control > .admin__field-option:nth-child(2):nth-last-child(1) + .admin__field-option:before {
-  background: #cccccc;
+  background: #cacaca;
   content: '';
   display: inline-block;
   height: 20px;
@@ -731,15 +720,23 @@ option:empty {
   position: absolute;
   width: 1px;
 }
-.admin__control-fields .admin__field:nth-child(n+2):not(.admin__field-option) > .admin__field-label {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
+[class*='admin__control-grouped'] > .admin__field:first-child,
+.admin__control-fields > .admin__field:first-child {
+  position: static;
+}
+[class*='admin__control-grouped'] > .admin__field:first-child > .admin__field-label,
+.admin__control-fields > .admin__field:first-child > .admin__field-label {
+  width: ~" calc( (100%) * 0.3333333333333333 - 30px )";
+  float: left;
+  margin-left: 30px;
+  cursor: pointer;
+  left: 0;
+  opacity: 0;
   position: absolute;
-  width: 1px;
+  top: 0;
+}
+.admin__control-fields .admin__field-label ~ .admin__field-control {
+  width: 100%;
 }
 [class*='admin__control-grouped'] {
   box-sizing: border-box;
@@ -759,31 +756,6 @@ option:empty {
 [class*='admin__control-grouped'] > .admin__field:nth-child(n+2) {
   padding-left: 20px;
 }
-[class*='admin__control-grouped'] > .admin__field:nth-child(n+2):not(.admin__field-option) .admin__field-label {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-[class*='admin__control-grouped'] > .admin__field:first-child,
-.admin__control-fields > .admin__field:first-child {
-  position: static;
-}
-[class*='admin__control-grouped'] > .admin__field:first-child > .admin__field-label,
-.admin__control-fields > .admin__field:first-child > .admin__field-label {
-  width: ~" calc( (100%) * 0.3333333333333333 - 30px )";
-  float: left;
-  margin-left: 30px;
-  cursor: pointer;
-  left: 0;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-}
 .admin__field-tooltip {
   display: inline-block;
   margin-top: 5px;
@@ -798,12 +770,12 @@ option:empty {
 .admin__field-option .admin__field-tooltip {
   margin-top: 10px;
 }
-.admin__field-tooltip-action {
+.admin__field-tooltip .admin__field-tooltip-action {
   margin-left: 20px;
   display: inline-block;
   text-decoration: none;
 }
-.admin__field-tooltip-action:before {
+.admin__field-tooltip .admin__field-tooltip-action:before {
   font-family: 'Admin Icons';
   content: '\e633';
   font-size: 2.2rem;
@@ -817,11 +789,11 @@ option:empty {
   vertical-align: middle;
   text-align: center;
 }
-.admin__control-text:focus + .admin__field-tooltip-content,
+.admin__field-tooltip .admin__control-text:focus + .admin__field-tooltip-content,
 .admin__field-tooltip:hover .admin__field-tooltip-content {
   display: block;
 }
-.admin__field-tooltip-content {
+.admin__field-tooltip .admin__field-tooltip-content {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
   background: #fffbbb;
   border-radius: 1px;
@@ -834,8 +806,8 @@ option:empty {
   width: 320px;
   z-index: 1;
 }
-.admin__field-tooltip-content:after,
-.admin__field-tooltip-content:before {
+.admin__field-tooltip .admin__field-tooltip-content:after,
+.admin__field-tooltip .admin__field-tooltip-content:before {
   border: 16px solid transparent;
   height: 0;
   width: 0;
@@ -847,7 +819,7 @@ option:empty {
   top: 100%;
   z-index: 3;
 }
-.admin__field-tooltip-content:after {
+.admin__field-tooltip .admin__field-tooltip-content:after {
   border-top-color: #fffbbb;
   margin-top: -1px;
   z-index: 4;
@@ -1570,6 +1542,8 @@ table.table th.required:after {
   margin-left: 3px;
 }
 .abs-visually-hidden,
+.admin__control-fields .admin__field:nth-child(n+2):not(.admin__field-option) > .admin__field-label,
+[class*='admin__control-grouped'] > .admin__field:nth-child(n+2):not(.admin__field-option) .admin__field-label,
 .dashboard-diagram-switcher .label {
   border: 0;
   clip: rect(0, 0, 0, 0);
@@ -1722,7 +1696,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   font-family: 'icons-blank-theme';
   content: '\e612';
   font-size: 3.8rem;
-  line-height: 3.3rem;
+  line-height: 33px;
   color: #514943;
   overflow: hidden;
   speak: none;
