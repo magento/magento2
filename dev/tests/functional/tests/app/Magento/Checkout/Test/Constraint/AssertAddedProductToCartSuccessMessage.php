@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertAddedProductToCartSuccessMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Success add to cart message
      */

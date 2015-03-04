@@ -6,6 +6,11 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+/**
+ * Class ChainTest
+ *
+ * @package Magento\Framework\View\Asset\PreProcessor
+ */
 class ChainTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -82,5 +87,47 @@ class ChainTest extends \PHPUnit_Framework_TestCase
             ['origContent', 'anotherType', true],
             ['anotherContent', 'anotherType', true],
         ];
+    }
+
+    public function testChainTargetAssetPathNonDevMode()
+    {
+        $assetPath = 'assetPath';
+        $origPath = 'origPath';
+
+        $this->asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $this->asset->expects($this->once())
+            ->method('getContentType')
+            ->will($this->returnValue('assetType'));
+        $this->asset->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue($assetPath));
+        $this->object = new Chain($this->asset, 'origContent', 'origType', $origPath);
+
+        $this->assertSame($this->object->getTargetAssetPath(), $assetPath);
+        $this->assertNotSame($this->object->getTargetAssetPath(), $origPath);
+    }
+
+    public function testChainTargetAssetPathDevMode()
+    {
+        $assetPath = 'assetPath';
+        $origPath = 'origPath';
+
+        $this->asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $this->asset->expects($this->once())
+            ->method('getContentType')
+            ->will($this->returnValue('assetType'));
+        $this->asset->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue($assetPath));
+        $this->object = new Chain(
+            $this->asset,
+            'origContent',
+            'origType',
+            $origPath,
+            \Magento\Framework\App\State::MODE_DEVELOPER
+        );
+
+        $this->assertSame($this->object->getTargetAssetPath(), $origPath);
+        $this->assertNotSame($this->object->getTargetAssetPath(), $assetPath);
     }
 }

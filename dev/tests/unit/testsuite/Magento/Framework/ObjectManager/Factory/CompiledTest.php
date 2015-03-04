@@ -23,16 +23,14 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * Definition list
-     *
-     * @var \Magento\Framework\ObjectManager\DefinitionInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $definitions;
-
-    /**
      * @var Compiled
      */
     protected $factory;
+
+    /**
+     * @var array
+     */
+    private $sharedInstances;
 
     public function setUp()
     {
@@ -44,36 +42,39 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->definitions = $this->getMockBuilder('Magento\Framework\ObjectManager\DefinitionInterface')
-            ->setMethods([])
-            ->getMock();
-
-        $this->factory = new Compiled($this->config, $this->objectManager, $this->definitions, []);
+        $this->sharedInstances = [];
+        $this->factory = new Compiled($this->config, $this->sharedInstances, []);
+        $this->factory->setObjectManager($this->objectManager);
     }
 
     public function testCreateSimple()
     {
         $expectedConfig = $this->getSimpleConfig();
 
-        $requestedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $requestedType = 'requestedType';
+        $type = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $sharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting';
+        $nonSharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting';
 
-        $this->config->expects($this->once())
-            ->method('getInstanceType')
-            ->with($requestedType)
-            ->willReturn($requestedType);
-        $this->config->expects($this->once())
+        $this->config->expects($this->any())
             ->method('getArguments')
-            ->with($requestedType)
-            ->willReturn($expectedConfig);
+            ->willReturnMap(
+                [
+                    [$requestedType, $expectedConfig],
+                    [$sharedType, null],
+                    [$nonSharedType, null]
+                ]
+            );
+        $this->config->expects($this->any())
+            ->method('getInstanceType')
+            ->willReturnMap(
+                [
+                    [$requestedType, $type],
+                    [$sharedType, $sharedType],
+                    [$nonSharedType, $nonSharedType]
+                ]
+            );
 
-        $this->objectManager->expects($this->once())
-            ->method('create')
-            ->with('Dependency\StdClass')
-            ->willReturn(new \StdClass);
-        $this->objectManager->expects($this->once())
-            ->method('get')
-            ->with('Dependency\Shared\StdClass')
-            ->willReturn(new \StdClass);
         $this->factory->setArguments(
             [
                 'globalValue' => 'GLOBAL_ARGUMENT',
@@ -87,8 +88,8 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting',
             $result
         );
-        $this->assertInstanceOf('StdClass', $result->getSharedDependency());
-        $this->assertInstanceOf('StdClass', $result->getNonSharedDependency());
+        $this->assertInstanceOf($sharedType, $result->getSharedDependency());
+        $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
         $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
@@ -99,25 +100,30 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfig = $this->getSimpleNestedConfig();
 
-        $requestedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $type = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting';
+        $requestedType = 'requestedType';
+        $sharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting';
+        $nonSharedType = 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting';
 
-        $this->config->expects($this->once())
-            ->method('getInstanceType')
-            ->with($requestedType)
-            ->willReturn($requestedType);
-        $this->config->expects($this->once())
+        $this->config->expects($this->any())
             ->method('getArguments')
-            ->with($requestedType)
-            ->willReturn($expectedConfig);
+            ->willReturnMap(
+                [
+                    [$requestedType, $expectedConfig],
+                    [$sharedType, null],
+                    [$nonSharedType, null]
+                ]
+            );
+        $this->config->expects($this->any())
+            ->method('getInstanceType')
+            ->willReturnMap(
+                [
+                    [$requestedType, $type],
+                    [$sharedType, $sharedType],
+                    [$nonSharedType, $nonSharedType]
+                ]
+            );
 
-        $this->objectManager->expects($this->exactly(2))
-            ->method('create')
-            ->with('Dependency\StdClass')
-            ->willReturn(new \StdClass);
-        $this->objectManager->expects($this->exactly(2))
-            ->method('get')
-            ->with('Dependency\Shared\StdClass')
-            ->willReturn(new \StdClass);
         $this->factory->setArguments(
             [
                 'array_global_existing_argument' => 'GLOBAL_ARGUMENT',
@@ -132,16 +138,16 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\SimpleClassTesting',
             $result
         );
-        $this->assertInstanceOf('StdClass', $result->getSharedDependency());
-        $this->assertInstanceOf('StdClass', $result->getNonSharedDependency());
+        $this->assertInstanceOf($sharedType, $result->getSharedDependency());
+        $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(
             [
                 'array_value' => 'value',
-                'array_configured_instance' => new \StdClass,
+                'array_configured_instance' => new $sharedType,
                 'array_configured_array' => [
                     'array_array_value' => 'value',
-                    'array_array_configured_instance' => new \StdClass,
+                    'array_array_configured_instance' => new $nonSharedType,
                 ],
                 'array_global_argument' => null,
                 'array_global_existing_argument' => 'GLOBAL_ARGUMENT',
@@ -162,10 +168,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'nonSharedDependency' => [
-                '_ins_' => 'Dependency\StdClass',
+                '_ins_' => 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting',
             ],
             'sharedDependency' => [
-                '_i_' => 'Dependency\Shared\StdClass',
+                '_i_' => 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting',
             ],
             'value' => [
                 '_v_' => 'value',
@@ -192,10 +198,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'nonSharedDependency' => [
-                '_ins_' => 'Dependency\StdClass',
+                '_ins_' => 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting',
             ],
             'sharedDependency' => [
-                '_i_' => 'Dependency\Shared\StdClass',
+                '_i_' => 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting',
             ],
             'value' => [
                 '_v_' => 'value',
@@ -204,12 +210,12 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
-                        '_i_' => 'Dependency\Shared\StdClass',
+                        '_i_' => 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencySharedTesting',
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_ins_' => 'Dependency\StdClass',
+                            '_ins_' => 'Magento\Framework\ObjectManager\Factory\Fixture\Compiled\DependencyTesting',
                         ],
                     ],
                     'array_global_argument' => [

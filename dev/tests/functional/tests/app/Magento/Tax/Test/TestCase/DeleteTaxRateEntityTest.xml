@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteTaxRateEntityTest">
-    <variation name="DeleteTaxRateEntityTestVariation1" firstConstraint="assertTaxRateSuccessDeleteMessage" method="test">
+  <testCase name="Magento\Tax\Test\TestCase\DeleteTaxRateEntityTest">
+    <variation name="DeleteTaxRateEntityTestVariation1">
       <data name="taxRate/dataSet" xsi:type="string">default</data>
-      <constraint name="assertTaxRateSuccessDeleteMessage" next="assertTaxRateNotInGrid"/>
-      <constraint name="assertTaxRateNotInGrid" next="assertTaxRateNotInTaxRule" prev="assertTaxRateSuccessDeleteMessage"/>
-      <constraint name="assertTaxRateNotInTaxRule" prev="assertTaxRateNotInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessDeleteMessage"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInGrid"/>
+      <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateNotInTaxRule"/>
     </variation>
   </testCase>
 </config>

@@ -85,9 +85,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->grid = new \Magento\Sales\Model\Resource\Order\Shipment\Grid(
-            $this->appResourceMock
-        );
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
+        $this->grid = new \Magento\Sales\Model\Resource\Order\Shipment\Grid($contextMock);
     }
 
     /**

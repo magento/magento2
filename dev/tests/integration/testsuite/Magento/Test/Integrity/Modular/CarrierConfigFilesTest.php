@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity\Modular;
 class CarrierConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Config\Structure\Reader
+     * @var \Magento\Config\Model\Config\Structure\Reader
      */
     protected $_reader;
 
@@ -19,9 +19,9 @@ class CarrierConfigFilesTest extends \PHPUnit_Framework_TestCase
         $moduleReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\Module\Dir\Reader'
         );
-        $schemaFile = $moduleReader->getModuleDir('etc', 'Magento_Backend') . '/system.xsd';
+        $schemaFile = $moduleReader->getModuleDir('etc', 'Magento_Config') . '/system.xsd';
         $this->_reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\Config\Structure\Reader',
+            'Magento\Config\Model\Config\Structure\Reader',
             ['perFileSchema' => $schemaFile, 'isValidated' => true]
         );
     }

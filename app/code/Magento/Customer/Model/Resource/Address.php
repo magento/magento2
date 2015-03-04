@@ -22,38 +22,20 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_customerFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Eav\Model\Entity\Context $context,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         $data = []
     ) {
         $this->_validatorFactory = $validatorFactory;
         $this->_customerFactory = $customerFactory;
-        parent::__construct(
-            $resource,
-            $eavConfig,
-            $attrSetEntity,
-            $localeFormat,
-            $resourceHelper,
-            $universalFactory,
-            $data
-        );
+        parent::__construct($context, $data);
     }
 
     /**

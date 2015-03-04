@@ -6,7 +6,9 @@
 require.config({
     paths: {
         'ko': 'ko/ko',
-        'domReady': 'requirejs/domReady'
+        'domReady': 'requirejs/domReady',
+        'text': 'requirejs/text',
+        'tests': 'dev/tests/js/spec'
     },
     shim: {
         'jquery/ui': ['jquery']

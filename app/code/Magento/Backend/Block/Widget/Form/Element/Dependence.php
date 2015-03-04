@@ -40,7 +40,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     protected $_configOptions = [];
 
     /**
-     * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
+     * @var \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory
      */
     protected $_fieldFactory;
 
@@ -52,13 +52,13 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
+        \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -84,13 +84,13 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      *
      * @param string $fieldName
      * @param string $fieldNameFrom
-     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Field|string $refField
+     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Field|string $refField
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
      */
     public function addFieldDependence($fieldName, $fieldNameFrom, $refField)
     {
         if (!is_object($refField)) {
-            /** @var $refField \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
+            /** @var $refField \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
             $refField = $this->_fieldFactory->create(
                 ['fieldData' => ['value' => (string)$refField], 'fieldPrefix' => '']
             );
@@ -139,7 +139,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         $result = [];
         foreach ($this->_depends as $to => $row) {
             foreach ($row as $from => $field) {
-                /** @var $field \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
+                /** @var $field \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
                 $result[$this->_fields[$to]][$this->_fields[$from]] = [
                     'values' => $field->getValues(),
                     'negative' => $field->isNegative(),

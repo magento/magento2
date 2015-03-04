@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Core\Test\Repository\ConfigData">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="config_currency_symbols_usd_and_uah">
             <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
                 <item label="US Dollar" xsi:type="string">USD</item>
@@ -32,5 +32,5 @@
                 <item label="US Dollar" xsi:type="string">USD</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
