@@ -25,9 +25,6 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $productFactory;
 
-    /** @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $coreHelper;
-
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
@@ -39,7 +36,6 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->encoderInterface = $this->getMock('Magento\Framework\Json\EncoderInterface');
         $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
-        $this->coreHelper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->registry = $this->getMock('Magento\Framework\Registry');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -111,7 +107,6 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'jsonEncoder' => $this->encoderInterface,
                 'productFactory' => $this->productFactory,
-                'coreData' => $this->coreHelper,
                 'registry' => $this->registry
             ]
         );

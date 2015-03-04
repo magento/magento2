@@ -27,7 +27,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Core\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Helper\PostHelper | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $postDataHelper;
 
@@ -69,7 +69,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlEncoder')
             ->will($this->returnValue($this->urlEncoder));
         $this->postDataHelper = $this->getMock(
-            'Magento\Core\Helper\PostData',
+            'Magento\Framework\Data\Helper\PostHelper',
             ['getPostData'],
             [],
             '',
@@ -78,7 +78,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
 
         $this->compareHelper = $objectManager->getObject(
             'Magento\Catalog\Helper\Product\Compare',
-            ['context' => $this->context, 'coreHelper' => $this->postDataHelper]
+            ['context' => $this->context, 'postHelper' => $this->postDataHelper]
         );
     }
 

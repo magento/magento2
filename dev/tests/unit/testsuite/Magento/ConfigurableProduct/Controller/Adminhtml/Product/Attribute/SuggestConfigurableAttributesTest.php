@@ -37,7 +37,7 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->helperMock = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
+        $this->helperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
         $this->attributeListMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\SuggestedAttributeList',
             [],
@@ -50,7 +50,7 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
             [
                 'response' => $this->responseMock,
                 'request' => $this->requestMock,
-                'coreHelper' => $this->helperMock,
+                'jsonHelper' => $this->helperMock,
                 'attributeList' => $this->attributeListMock
             ]
         );
