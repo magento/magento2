@@ -1,4 +1,4 @@
-namespace \Magento\Framework\Api\Code\Generator;
+namespace Magento\Framework\Api\Code\Generator;
 
 /**
  * Mapper class for @see \Magento\Framework\Api\Code\Generator\Sample
@@ -13,7 +13,7 @@ class SampleMapper
     protected $sampleBuilder = null;
 
     /**
-     * Magento\Framework\Api\Code\Generator\Sample[]
+     * \Magento\Framework\Api\Code\Generator\Sample[]
      *
      * @var array
      */

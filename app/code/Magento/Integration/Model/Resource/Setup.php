@@ -5,7 +5,7 @@
  */
 namespace Magento\Integration\Model\Resource;
 
-use Magento\Integration\Model\Manager;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
 
 /**
  * Resource Setup Model
@@ -13,7 +13,7 @@ use Magento\Integration\Model\Manager;
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
-     * @var  Manager
+     * @var  ConfigBasedIntegrationManager
      */
     protected $_integrationManager;
 
@@ -22,7 +22,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      *
      * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
-     * @param Manager $integrationManager
+     * @param ConfigBasedIntegrationManager $integrationManager
      * @param string $moduleName
      * @param string $connectionName
      *
@@ -30,7 +30,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     public function __construct(
         \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
-        Manager $integrationManager,
+        ConfigBasedIntegrationManager $integrationManager,
         $moduleName = 'Magento_Integration',
         $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
