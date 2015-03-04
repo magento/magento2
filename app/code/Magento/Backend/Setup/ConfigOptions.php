@@ -5,9 +5,8 @@
  */
 namespace Magento\Backend\Setup;
 
-use Magento\Framework\Setup\ConfigOption;
 use Magento\Framework\Setup\ConfigOptionsInterface;
-use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\Setup\TextConfigOption;
 
 /*
  * Deployment configuration options needed for Backend module
@@ -30,13 +29,11 @@ class ConfigOptions implements ConfigOptionsInterface
     public function getOptions()
     {
         return [
-            new ConfigOption(
+            new TextConfigOption(
                 self::INPUT_KEY_BACKEND_FRONTNAME,
-                ConfigOption::FRONTEND_WIZARD_TEXT,
-                'Backenad frontname (e.g., "backend" or "admin")',
-                [],
-                '',
-                InputOption::VALUE_REQUIRED
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Backend frontname',
+                'admin'
             )
         ];
     }

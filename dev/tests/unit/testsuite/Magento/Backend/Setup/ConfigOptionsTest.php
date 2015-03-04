@@ -21,7 +21,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $options = $this->object->getOptions();
         foreach ($options as $option) {
-            $this->assertInstanceOf('\Magento\Framework\Setup\ConfigOption', $option);
+            $this->assertInstanceOf('\Magento\Framework\Setup\AbstractConfigOption', $option);
         }
     }
 
