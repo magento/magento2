@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup;
 
+use Magento\Framework\Math\Random;
 use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Setup\TextConfigOption;
 
@@ -29,10 +30,18 @@ class ConfigOptions implements ConfigOptionsInterface
     private $options;
 
     /**
-     * Constructor
+     * @var Random
      */
-    public function __construct()
+    private $random;
+
+    /**
+     * Constructor
+     *
+     * @param Random $random
+     */
+    public function __construct(Random $random)
     {
+        $this->random = $random;
         $this->options = [new TextConfigOption('key', TextConfigOption::FRONTEND_WIZARD_TEXT, 'encryption key')];
     }
 
@@ -51,13 +60,14 @@ class ConfigOptions implements ConfigOptionsInterface
     {
         $config = [];
         $config['install']['date'] = date('r');
-        if (!isset($data[self::INPUT_KEY_CRYPT_KEY])) {
-            throw new \InvalidArgumentException('No encryption key provided.');
-        }
-        if (!$data[self::INPUT_KEY_CRYPT_KEY]) {
+        if (isset($data[self::INPUT_KEY_CRYPT_KEY]) && !$data[self::INPUT_KEY_CRYPT_KEY]) {
             throw new \InvalidArgumentException('Invalid encryption key.');
         }
-        $config['crypt']['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
+        if (!isset($data[self::INPUT_KEY_CRYPT_KEY])) {
+            $config['crypt']['key'] = md5($this->random->getRandomString(10));
+        } else {
+            $config['crypt']['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
+        }
         return $config;
     }
 }

@@ -14,7 +14,9 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->object = new ConfigOptions();
+        $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
+        $random->expects($this->any())->method('getRandomString')->willReturn('key');
+        $this->object = new ConfigOptions($random);
     }
 
     public function testGetOptions()
@@ -33,14 +35,12 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $options
-     *
      * @dataProvider createConfigNoKeyDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage No encryption key provided.
      */
     public function testCreateConfigNoKey(array $options)
     {
-        $this->object->createConfig($options);
+        $config = $this->object->createConfig($options);
+        $this->assertEquals(md5('key'), $config['crypt']['key']);
     }
 
     /**
