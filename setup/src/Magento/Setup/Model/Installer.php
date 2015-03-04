@@ -591,6 +591,171 @@ class Installer
     }
 
     /**
+     * Set up core_* tables
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function setupCoreVariables(SchemaSetupInterface $setup)
+    {
+        $installer = $setup;
+
+        /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connection = $installer->getConnection();
+
+        $installer->startSetup();
+
+        /**
+         * Create table 'core_session'
+         */
+        $table = $connection->newTable(
+            $installer->getTable('core_session')
+        )->addColumn(
+            'session_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false, 'primary' => true],
+            'Session Id'
+        )->addColumn(
+            'session_expires',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Date of Session Expiration'
+        )->addColumn(
+            'session_data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+            '2M',
+            ['nullable' => false],
+            'Session Data'
+        )->setComment(
+            'Database Sessions Storage'
+        );
+        $connection->createTable($table);
+
+        /**
+         * Create table 'core_cache'
+         */
+        $table = $connection->newTable(
+            $installer->getTable('core_cache')
+        )->addColumn(
+            'id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            200,
+            ['nullable' => false, 'primary' => true],
+            'Cache Id'
+        )->addColumn(
+            'data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+            '2M',
+            [],
+            'Cache Data'
+        )->addColumn(
+            'create_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Cache Creation Time'
+        )->addColumn(
+            'update_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Time of Cache Updating'
+        )->addColumn(
+            'expire_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Cache Expiration Time'
+        )->addIndex(
+            $installer->getIdxName('core_cache', ['expire_time']),
+            ['expire_time']
+        )->setComment(
+            'Caches'
+        );
+        $connection->createTable($table);
+
+        /**
+         * Create table 'core_cache_tag'
+         */
+        $table = $connection->newTable(
+            $installer->getTable('core_cache_tag')
+        )->addColumn(
+            'tag',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            100,
+            ['nullable' => false, 'primary' => true],
+            'Tag'
+        )->addColumn(
+            'cache_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            200,
+            ['nullable' => false, 'primary' => true],
+            'Cache Id'
+        )->addIndex(
+            $installer->getIdxName('core_cache_tag', ['cache_id']),
+            ['cache_id']
+        )->setComment(
+            'Tag Caches'
+        );
+        $connection->createTable($table);
+
+        /**
+         * Create table 'core_flag'
+         */
+        $table = $connection->newTable(
+            $installer->getTable('core_flag')
+        )->addColumn(
+            'flag_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Flag Id'
+        )->addColumn(
+            'flag_code',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Flag Code'
+        )->addColumn(
+            'state',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Flag State'
+        )->addColumn(
+            'flag_data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            '64k',
+            [],
+            'Flag Data'
+        )->addColumn(
+            'last_update',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            'Date of Last Flag Update'
+        )->addIndex(
+            $installer->getIdxName('core_flag', ['last_update']),
+            ['last_update']
+        )->setComment(
+            'Flag'
+        );
+        $connection->createTable($table);
+
+        /**
+         * Drop Foreign Key on core_cache_tag.cache_id
+         */
+        $connection->dropForeignKey(
+            $installer->getTable('core_cache_tag'),
+            $installer->getFkName('core_cache_tag', 'cache_id', 'core_cache', 'id')
+        );
+
+        $installer->endSetup();
+    }
+
+    /**
      * Installs DB schema
      *
      * @return void
@@ -602,6 +767,7 @@ class Installer
             ['resource' => $this->context->getResources()]
         );
         $this->setupModuleRegistry($setup);
+        $this->setupCoreVariables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
     }
