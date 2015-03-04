@@ -54,12 +54,16 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock
             ->expects($this->once())
             ->method('log');
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceModelMock);
+
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
             $fileResolver,
             $this->moduleName,
-            $this->resourceModelMock
+            $contextMock
         );
         $setupModule = $setupModule->applyRecurringUpdates();
         $this->assertInstanceOf('Magento\Setup\Module\SetupModule', $setupModule);
@@ -80,12 +84,16 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock
             ->expects($this->once())
             ->method('log');
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceModelMock);
+
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
             $fileResolver,
             $this->moduleName,
-            $this->resourceModelMock
+            $contextMock
         );
         $setupModule->applyRecurringUpdates();
     }
@@ -97,12 +105,16 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getResourceCode')
             ->will($this->returnValue(null));
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceModelMock);
+
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
             $fileResolver,
             $this->moduleName,
-            $this->resourceModelMock
+            $contextMock
         );
         $setupModule = $setupModule->applyUpdates();
         $this->assertInstanceOf('Magento\Setup\Module\SetupModule', $setupModule);
@@ -111,12 +123,16 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
     public function testApplyUpdatesWithNoVersions()
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
+
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceModelMock);
+
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
             $fileResolver,
             $this->moduleName,
-            $this->resourceModelMock
+            $contextMock
         );
         $setupModule = $setupModule->applyUpdates();
         $this->assertInstanceOf('Magento\Setup\Module\SetupModule', $setupModule);

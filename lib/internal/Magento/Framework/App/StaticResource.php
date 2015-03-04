@@ -30,7 +30,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $request;
 
     /**
-     * @var \Magento\Framework\App\View\Asset\Publisher
+     * @var View\Asset\Publisher
      */
     private $publisher;
 
@@ -62,7 +62,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param State $state
      * @param Response\FileInterface $response
      * @param Request\Http $request
-     * @param \Magento\Framework\App\View\Asset\Publisher $publisher
+     * @param View\Asset\Publisher $publisher
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

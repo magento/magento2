@@ -7,6 +7,8 @@
  */
 namespace Magento\Webapi\Controller\Rest;
 
+use \Magento\Framework\Webapi\Rest\Request;
+
 class Router
 {
     /** @var array */
@@ -31,7 +33,7 @@ class Router
      *
      * @param Request $request
      * @return \Magento\Webapi\Controller\Rest\Router\Route
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function match(Request $request)
     {
@@ -48,10 +50,10 @@ class Router
         if (!empty($matched)) {
             return array_pop($matched);
         }
-        throw new \Magento\Webapi\Exception(
+        throw new \Magento\Framework\Webapi\Exception(
             __('Request does not match any route.'),
             0,
-            \Magento\Webapi\Exception::HTTP_NOT_FOUND
+            \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND
         );
     }
 }

@@ -9,7 +9,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Sample;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class SampleRepositoryTest extends WebapiAbstract
 {
@@ -38,7 +37,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links/samples',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => 'downloadableSampleRepositoryV1',
@@ -49,7 +48,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
         $this->updateServiceInfo = [
             'rest' => [
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => 'downloadableSampleRepositoryV1',
@@ -60,7 +59,7 @@ class SampleRepositoryTest extends WebapiAbstract
 
         $this->deleteServiceInfo = [
             'rest' => [
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => 'downloadableSampleRepositoryV1',

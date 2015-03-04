@@ -1,19 +1,12 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\GiftMessage\Test\Fixture\GiftMessage">
-    <module>Magento_GiftMessage</module>
-    <type>flat</type>
-    <entity_type>gift_message</entity_type>
-    <collection>Magento\GiftMessage\Model\Resource\Message\Collection</collection>
-    <identifier>gift_message_id</identifier>
-    <repository_class>Magento\GiftMessage\Test\Repository\GiftMessage</repository_class>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="giftMessage" module="Magento_GiftMessage" type="flat" entity_type="gift_message" collection="Magento\GiftMessage\Model\Resource\Message\Collection" identifier="gift_message_id" repository_class="Magento\GiftMessage\Test\Repository\GiftMessage" class="Magento\GiftMessage\Test\Fixture\GiftMessage">
     <dataset name="default">
         <field name="allow_gift_options" xsi:type="string">Yes</field>
         <field name="allow_gift_messages_for_order" xsi:type="string">Yes</field>
@@ -21,60 +14,28 @@
         <field name="recipient" xsi:type="string">Jane Doe</field>
         <field name="message" xsi:type="string">text_%isolation%</field>
     </dataset>
-    <fields>
-        <field name="gift_message_id">
-            <attribute_code>gift_message_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="customer_id">
-            <attribute_code>customer_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required />
-            <default_value xsi:type="number">0</default_value>
-            <input />
-        </field>
-        <field name="sender">
-           <attribute_code>sender</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">John Doe</default_value>
-            <input />
-        </field>
-        <field name="recipient">
-            <attribute_code>recipient</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">Jane Doe</default_value>
-            <input />
-        </field>
-        <field name="message">
-             <attribute_code>message</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required />
-            <default_value xsi:type="string">text_%isolation%</default_value>
-            <input />
-        </field>
-        <field name="allow_gift_options">
-            <attribute_code>allow_gift_options</attribute_code>
-            <backend_type>virtual</backend_type>
-            <default_value xsi:type="string">Yes</default_value>
-        </field>
-        <field name="allow_gift_messages_for_order">
-            <attribute_code>allow_gift_messages_for_order</attribute_code>
-            <backend_type>virtual</backend_type>
-            <default_value xsi:type="string">Yes</default_value>
-        </field>
-        <field name="allow_gift_options_for_items">
-            <attribute_code>allow_gift_options_for_items</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-        <field name="items">
-            <attribute_code>items</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\GiftMessage\Test\Fixture\GiftMessage\Items</source>
-        </field>
-    </fields>
-</fixture>
+    <field name="gift_message_id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="customer_id" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+    <field name="sender" is_required="">
+      <default_value xsi:type="string">John Doe</default_value>
+    </field>
+    <field name="recipient" is_required="">
+      <default_value xsi:type="string">Jane Doe</default_value>
+    </field>
+    <field name="message" is_required="">
+      <default_value xsi:type="string">text_%isolation%</default_value>
+    </field>
+    <field name="allow_gift_options">
+      <default_value xsi:type="string">Yes</default_value>
+    </field>
+    <field name="allow_gift_messages_for_order">
+      <default_value xsi:type="string">Yes</default_value>
+    </field>
+    <field name="allow_gift_options_for_items"/>
+    <field name="items" source="Magento\GiftMessage\Test\Fixture\GiftMessage\Items"/>
+  </fixture>
+</config>
