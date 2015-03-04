@@ -100,6 +100,10 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
             ],
             'instanceTypes' => [
                 'virtualType' => 'Class\Interceptor'
+            ],
+            'interceptors' => [
+                'Class' => 'Class\Interceptor',
+                'Class\DependencyIntercepted' => 'Class\DependencyIntercepted\Interceptor'
             ]
         ];
     }

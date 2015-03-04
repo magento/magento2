@@ -32,7 +32,7 @@ class InterceptorSubstitution implements ModificationInterface
         $this->resolveArguments($config['arguments'], $interceptors);
         $config['preferences'] = $this->resolvePreferences($config['preferences'], $interceptors);
         $config['instanceTypes'] = $this->resolvePreferences($config['instanceTypes'], $interceptors);
-
+        $config['interceptors'] = $interceptors;
         return $config;
     }
 
