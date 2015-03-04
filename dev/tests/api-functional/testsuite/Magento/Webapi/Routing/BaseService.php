@@ -22,7 +22,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
     protected function assertUnauthorizedException($serviceInfo, $requestData = null)
     {
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->_assertSoapException($serviceInfo, $requestData, 'Consumer is not authorized to access %resources');
+            $this->_assertSoapException($serviceInfo, $requestData, 'Consumer is not authorized to access %1');
         } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $this->_assertRestUnauthorizedException($serviceInfo, $requestData);
         }
