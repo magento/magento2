@@ -63,6 +63,7 @@ define([
                     }
                     if (res.minicart) {
                         $(self.options.minicartSelector).replaceWith(res.minicart);
+                        $(self.options.minicartSelector).trigger('contentUpdated');
                     }
                     if (res.product && res.product.statusText) {
                         $(self.options.productStatusSelector)
