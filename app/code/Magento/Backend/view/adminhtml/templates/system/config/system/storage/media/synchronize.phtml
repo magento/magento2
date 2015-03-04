@@ -136,12 +136,12 @@ require([
                 }
             }
         });
-    }
+    };
 
     Event.observe(window, 'load', function(){
         disableStorageSelection();
         disableSyncButton();
-        checkStatus.call();
+        checkStatus();
     });
     $('system_media_storage_configuration_media_storage').observe('change', checkButtonState);
     $('system_media_storage_configuration_media_database').observe('change', checkButtonState);

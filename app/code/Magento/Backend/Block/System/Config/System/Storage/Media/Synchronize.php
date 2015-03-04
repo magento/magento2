@@ -92,7 +92,6 @@ class Synchronize extends \Magento\Backend\Block\System\Config\Form\Field
             [
                 'id' => 'synchronize_button',
                 'label' => __('Synchronize'),
-//                'onclick' => 'javascript:synchronize(); return false;',
             ]
         );
 
