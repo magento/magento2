@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateProductAttributeEntityTest">
-    <variation name="UpdateProductAttributeEntityTestVariation1" firstConstraint="assertProductAttributeSaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateProductAttributeEntityTest">
+    <variation name="UpdateProductAttributeEntityTestVariation1">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_text_field</data>
       <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_%isolation%</data>
@@ -30,10 +30,10 @@
       <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="isRequired" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeSaveMessage" next="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
-    <variation name="UpdateProductAttributeEntityTestVariation2" firstConstraint="assertProductAttributeSaveMessage" method="test">
+    <variation name="UpdateProductAttributeEntityTestVariation2">
       <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
       <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_dropdown</data>
       <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
@@ -56,8 +56,8 @@
       <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
       <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
       <data name="isRequired" xsi:type="string">Yes</data>
-      <constraint name="assertProductAttributeSaveMessage" next="assertAddedProductAttributeOnProductForm"/>
-      <constraint name="assertAddedProductAttributeOnProductForm" prev="assertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
     </variation>
   </testCase>
 </config>

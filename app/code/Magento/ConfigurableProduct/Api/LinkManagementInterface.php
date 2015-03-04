@@ -29,7 +29,7 @@ interface LinkManagementInterface
      * @param string $productSku
      * @param string $childSku
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      * @return bool
      */
     public function removeChild($productSku, $childSku);

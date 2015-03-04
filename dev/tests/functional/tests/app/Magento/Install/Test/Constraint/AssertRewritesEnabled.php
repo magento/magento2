@@ -16,10 +16,6 @@ use Magento\Catalog\Test\Fixture\Category;
  */
 class AssertRewritesEnabled extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that apache redirect works by opening category page and asserting index.php in its url
      *

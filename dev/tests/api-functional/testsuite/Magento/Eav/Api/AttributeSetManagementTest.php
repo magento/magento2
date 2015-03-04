@@ -7,8 +7,7 @@ namespace Magento\Eav\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 class AttributeSetManagementTest extends WebapiAbstract
 {
@@ -22,7 +21,7 @@ class AttributeSetManagementTest extends WebapiAbstract
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetManagementV1',

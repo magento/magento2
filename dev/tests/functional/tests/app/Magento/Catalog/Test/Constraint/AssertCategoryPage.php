@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
  */
 class AssertCategoryPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * CMS Block display mode
      *
