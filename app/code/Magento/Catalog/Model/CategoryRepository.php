@@ -95,8 +95,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not save category: %message',
-                    ['message' => $e->getMessage()]
+                    'Could not save category: %1',
+                    $e->getMessage()
                 ),
                 $e
             );
@@ -136,10 +136,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         } catch (\Exception $e) {
             throw new StateException(
                 __(
-                    'Cannot delete category with id %category_id',
-                    [
-                        'category_id' => $category->getId()
-                    ]
+                    'Cannot delete category with id %1',
+                    $category->getId()
                 ),
                 $e
             );

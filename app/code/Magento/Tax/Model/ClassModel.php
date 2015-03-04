@@ -100,8 +100,8 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         if ($typeModel->isAssignedToObjects()) {
             throw new CouldNotDeleteException(
                 __(
-                    'You cannot delete this tax class because it is used in existing %object(s).',
-                    ['object' => $typeModel->getObjectTypeName()]
+                    'You cannot delete this tax class because it is used in existing %1(s).',
+                    $typeModel->getObjectTypeName()
                 )
             );
         }

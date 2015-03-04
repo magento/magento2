@@ -127,10 +127,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\StateException(
-                __(
-                    'Cannot delete option with id %option_id',
-                    ['option_id' => $option->getOptionId()]
-                ),
+                __('Cannot delete option with id %1', $option->getOptionId()),
                 $exception
             );
         }

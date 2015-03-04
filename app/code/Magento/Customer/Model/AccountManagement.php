@@ -648,8 +648,8 @@ class AccountManagement implements AccountManagementInterface
         if ($length < self::MIN_PASSWORD_LENGTH) {
             throw new InputException(
                 __(
-                    'The password must have at least %min_length characters.',
-                    ['min_length' => self::MIN_PASSWORD_LENGTH]
+                    'The password must have at least %1 characters.',
+                    self::MIN_PASSWORD_LENGTH
                 )
             );
         }

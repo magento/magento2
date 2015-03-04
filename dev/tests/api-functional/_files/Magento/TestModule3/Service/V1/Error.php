@@ -44,8 +44,8 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
     {
         throw new NoSuchEntityException(
             __(
-                'Resource with ID "%resource_id" not found.',
-                ['resource_id' => 'resourceY']
+                'Resource with ID "%1" not found.',
+                'resourceY'
             )
         );
     }
@@ -65,8 +65,8 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
     {
         throw new AuthorizationException(
             __(
-                'Consumer is not authorized to access %resources',
-                ['resources' => 'resourceN']
+                'Consumer is not authorized to access %1',
+                'resourceN'
             )
         );
     }
