@@ -18,10 +18,17 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  */
 class PersonalInfo extends \Magento\Backend\Block\Template
 {
+    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $customer;
+
+    /**
+     * @var \Magento\Customer\Model\Log
+     */
+    protected $customerLog;
 
     /**
      * @var AccountManagementInterface
@@ -75,6 +82,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param Mapper $addressMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Customer\Model\Log $customerLog
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,6 +96,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         \Magento\Framework\Registry $registry,
         Mapper $addressMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Customer\Model\Log $customerLog,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -98,7 +107,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->dateTime = $dateTime;
         $this->addressMapper = $addressMapper;
         $this->dataObjectHelper = $dataObjectHelper;
+
         parent::__construct($context, $data);
+
+        $this->customerLog = $customerLog->loadByCustomer(
+            $this->getCustomer()->getId()
+        );
     }
 
     /**
@@ -247,5 +261,84 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             $group = null;
         }
         return $group;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStoreLastLoginDateTimezone()
+    {
+        return $this->_scopeConfig->getValue(
+            $this->_localeDate->getDefaultTimezonePath(),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getCustomer()->getStoreId()
+        );
+    }
+
+    /**
+     * Get customer's current status.
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getCurrentStatus()
+    {
+        if (!$this->customerLog->getLastLoginAt()) {
+            return __('Offline');
+        }
+
+        if ($this->customerLog->getLastLogoutAt() &&
+            strtotime($this->customerLog->getLastLogoutAt()) > strtotime($this->customerLog->getLastLoginAt())
+        ) {
+            return __('Offline');
+        }
+
+        $interval = $this->getOnlineMinutesInterval();
+
+        if ($this->customerLog->getLastVisitAt() &&
+            strtotime($this->dateTime->now()) - strtotime($this->customerLog->getLastVisitAt()) > $interval * 60
+        ) {
+            return __('Offline');
+        }
+
+        return __('Online');
+    }
+
+    /**
+     * Get customer last login date.
+     *
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getLastLoginDate()
+    {
+        if ($date = $this->customerLog->getLastLoginAt()) {
+            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+        }
+        return __('Never');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getStoreLastLoginDate()
+    {
+        if ($date = strtotime($this->customerLog->getLastLoginAt())) {
+            $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
+            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+        }
+        return __('Never');
+    }
+
+    /**
+     * Return online minutes interval.
+     *
+     * @return int Minutes Interval
+     */
+    public function getOnlineMinutesInterval()
+    {
+        $configValue = $this->_scopeConfig->getValue(
+            'customer/online_customers/online_minutes_interval',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }
