@@ -14,86 +14,11 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Item getResource()
- * @method \Magento\Sales\Model\Order\Item setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Item setParentItemId(int $value)
- * @method \Magento\Sales\Model\Order\Item setQuoteItemId(int $value)
- * @method \Magento\Sales\Model\Order\Item setStoreId(int $value)
  * @method \Magento\Sales\Model\Order\Item setCreatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Item setUpdatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Item setProductId(int $value)
- * @method \Magento\Sales\Model\Order\Item setProductType(string $value)
- * @method \Magento\Sales\Model\Order\Item setWeight(float $value)
- * @method \Magento\Sales\Model\Order\Item setIsVirtual(int $value)
- * @method \Magento\Sales\Model\Order\Item setSku(string $value)
- * @method \Magento\Sales\Model\Order\Item setName(string $value)
- * @method \Magento\Sales\Model\Order\Item setDescription(string $value)
- * @method \Magento\Sales\Model\Order\Item setAppliedRuleIds(string $value)
- * @method \Magento\Sales\Model\Order\Item setAdditionalData(string $value)
- * @method \Magento\Sales\Model\Order\Item setFreeShipping(int $value)
- * @method \Magento\Sales\Model\Order\Item setIsQtyDecimal(int $value)
- * @method \Magento\Sales\Model\Order\Item setNoDiscount(int $value)
- * @method \Magento\Sales\Model\Order\Item setQtyBackordered(float $value)
- * @method \Magento\Sales\Model\Order\Item setQtyCanceled(float $value)
- * @method \Magento\Sales\Model\Order\Item setQtyInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setQtyOrdered(float $value)
- * @method \Magento\Sales\Model\Order\Item setQtyRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setQtyShipped(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseCost(float $value)
- * @method \Magento\Sales\Model\Order\Item setPrice(float $value)
- * @method \Magento\Sales\Model\Order\Item setBasePrice(float $value)
- * @method \Magento\Sales\Model\Order\Item setOriginalPrice(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseOriginalPrice(float $value)
- * @method \Magento\Sales\Model\Order\Item setTaxPercent(float $value)
- * @method \Magento\Sales\Model\Order\Item setTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setDiscountPercent(float $value)
- * @method \Magento\Sales\Model\Order\Item setDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setDiscountInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseDiscountInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setAmountRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseAmountRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setRowTotal(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseRowTotal(float $value)
- * @method \Magento\Sales\Model\Order\Item setRowInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseRowInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setRowWeight(float $value)
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageId(int $value)
  * @method int getGiftMessageAvailable()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageAvailable(int $value)
- * @method \Magento\Sales\Model\Order\Item setBaseTaxBeforeDiscount(float $value)
- * @method \Magento\Sales\Model\Order\Item setTaxBeforeDiscount(float $value)
- * @method \Magento\Sales\Model\Order\Item setExtOrderItemId(string $value)
- * @method \Magento\Sales\Model\Order\Item setWeeeTaxApplied(string $value)
- * @method \Magento\Sales\Model\Order\Item setWeeeTaxAppliedAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setWeeeTaxAppliedRowAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseWeeeTaxAppliedAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseWeeeTaxAppliedRowAmnt(float $value)
- * @method \Magento\Sales\Model\Order\Item setWeeeTaxDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Item setWeeeTaxRowDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseWeeeTaxDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseWeeeTaxRowDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Item setLockedDoInvoice(int $value)
- * @method \Magento\Sales\Model\Order\Item setLockedDoShip(int $value)
- * @method \Magento\Sales\Model\Order\Item setPriceInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Item setBasePriceInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Item setRowTotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseRowTotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Item setHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Item setHiddenTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseHiddenTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order\Item setHiddenTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseHiddenTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setTaxCanceled(float $value)
- * @method \Magento\Sales\Model\Order\Item setHiddenTaxCanceled(float $value)
- * @method \Magento\Sales\Model\Order\Item setTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setDiscountRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Item setBaseDiscountRefunded(float $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -528,7 +453,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * @param array $options
      * @return $this
      */
-    public function setProductOptions(array $options)
+    public function setProductOptions(array $options = null)
     {
         $this->setData('product_options', $options);
         return $this;
@@ -1673,4 +1598,734 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     {
         return $this->getData(OrderItemInterface::WEIGHT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(OrderItemInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setItemId($id)
+    {
+        return $this->setData(OrderItemInterface::ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(OrderItemInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentItemId($id)
+    {
+        return $this->setData(OrderItemInterface::PARENT_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteItemId($id)
+    {
+        return $this->setData(OrderItemInterface::QUOTE_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($id)
+    {
+        return $this->setData(OrderItemInterface::STORE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($id)
+    {
+        return $this->setData(OrderItemInterface::PRODUCT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductType($productType)
+    {
+        return $this->setData(OrderItemInterface::PRODUCT_TYPE, $productType);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(OrderItemInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVirtual($isVirtual)
+    {
+        return $this->setData(OrderItemInterface::IS_VIRTUAL, $isVirtual);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(OrderItemInterface::SKU, $sku);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(OrderItemInterface::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(OrderItemInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAppliedRuleIds($appliedRuleIds)
+    {
+        return $this->setData(OrderItemInterface::APPLIED_RULE_IDS, $appliedRuleIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(OrderItemInterface::ADDITIONAL_DATA, $additionalData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsQtyDecimal($isQtyDecimal)
+    {
+        return $this->setData(OrderItemInterface::IS_QTY_DECIMAL, $isQtyDecimal);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setNoDiscount($noDiscount)
+    {
+        return $this->setData(OrderItemInterface::NO_DISCOUNT, $noDiscount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyBackordered($qtyBackordered)
+    {
+        return $this->setData(OrderItemInterface::QTY_BACKORDERED, $qtyBackordered);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyCanceled($qtyCanceled)
+    {
+        return $this->setData(OrderItemInterface::QTY_CANCELED, $qtyCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyInvoiced($qtyInvoiced)
+    {
+        return $this->setData(OrderItemInterface::QTY_INVOICED, $qtyInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyOrdered($qtyOrdered)
+    {
+        return $this->setData(OrderItemInterface::QTY_ORDERED, $qtyOrdered);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyRefunded($qtyRefunded)
+    {
+        return $this->setData(OrderItemInterface::QTY_REFUNDED, $qtyRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyShipped($qtyShipped)
+    {
+        return $this->setData(OrderItemInterface::QTY_SHIPPED, $qtyShipped);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseCost($baseCost)
+    {
+        return $this->setData(OrderItemInterface::BASE_COST, $baseCost);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(OrderItemInterface::PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBasePrice($price)
+    {
+        return $this->setData(OrderItemInterface::BASE_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOriginalPrice($price)
+    {
+        return $this->setData(OrderItemInterface::ORIGINAL_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseOriginalPrice($price)
+    {
+        return $this->setData(OrderItemInterface::BASE_ORIGINAL_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxPercent($taxPercent)
+    {
+        return $this->setData(OrderItemInterface::TAX_PERCENT, $taxPercent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxInvoiced($taxInvoiced)
+    {
+        return $this->setData(OrderItemInterface::TAX_INVOICED, $taxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxInvoiced($baseTaxInvoiced)
+    {
+        return $this->setData(OrderItemInterface::BASE_TAX_INVOICED, $baseTaxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        return $this->setData(OrderItemInterface::DISCOUNT_PERCENT, $discountPercent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountInvoiced($discountInvoiced)
+    {
+        return $this->setData(OrderItemInterface::DISCOUNT_INVOICED, $discountInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountInvoiced($baseDiscountInvoiced)
+    {
+        return $this->setData(OrderItemInterface::BASE_DISCOUNT_INVOICED, $baseDiscountInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAmountRefunded($amountRefunded)
+    {
+        return $this->setData(OrderItemInterface::AMOUNT_REFUNDED, $amountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountRefunded($baseAmountRefunded)
+    {
+        return $this->setData(OrderItemInterface::BASE_AMOUNT_REFUNDED, $baseAmountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotal($amount)
+    {
+        return $this->setData(OrderItemInterface::ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseRowTotal($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowInvoiced($rowInvoiced)
+    {
+        return $this->setData(OrderItemInterface::ROW_INVOICED, $rowInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseRowInvoiced($baseRowInvoiced)
+    {
+        return $this->setData(OrderItemInterface::BASE_ROW_INVOICED, $baseRowInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowWeight($rowWeight)
+    {
+        return $this->setData(OrderItemInterface::ROW_WEIGHT, $rowWeight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxBeforeDiscount($baseTaxBeforeDiscount)
+    {
+        return $this->setData(OrderItemInterface::BASE_TAX_BEFORE_DISCOUNT, $baseTaxBeforeDiscount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxBeforeDiscount($taxBeforeDiscount)
+    {
+        return $this->setData(OrderItemInterface::TAX_BEFORE_DISCOUNT, $taxBeforeDiscount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtOrderItemId($id)
+    {
+        return $this->setData(OrderItemInterface::EXT_ORDER_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLockedDoInvoice($flag)
+    {
+        return $this->setData(OrderItemInterface::LOCKED_DO_INVOICE, $flag);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLockedDoShip($flag)
+    {
+        return $this->setData(OrderItemInterface::LOCKED_DO_SHIP, $flag);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPriceInclTax($amount)
+    {
+        return $this->setData(OrderItemInterface::PRICE_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBasePriceInclTax($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_PRICE_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotalInclTax($amount)
+    {
+        return $this->setData(OrderItemInterface::ROW_TOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseRowTotalInclTax($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxInvoiced($hiddenTaxInvoiced)
+    {
+        return $this->setData(OrderItemInterface::HIDDEN_TAX_INVOICED, $hiddenTaxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced)
+    {
+        return $this->setData(OrderItemInterface::BASE_HIDDEN_TAX_INVOICED, $baseHiddenTaxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxRefunded($hiddenTaxRefunded)
+    {
+        return $this->setData(OrderItemInterface::HIDDEN_TAX_REFUNDED, $hiddenTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded)
+    {
+        return $this->setData(OrderItemInterface::BASE_HIDDEN_TAX_REFUNDED, $baseHiddenTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxCanceled($taxCanceled)
+    {
+        return $this->setData(OrderItemInterface::TAX_CANCELED, $taxCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxCanceled($hiddenTaxCanceled)
+    {
+        return $this->setData(OrderItemInterface::HIDDEN_TAX_CANCELED, $hiddenTaxCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxRefunded($taxRefunded)
+    {
+        return $this->setData(OrderItemInterface::TAX_REFUNDED, $taxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxRefunded($baseTaxRefunded)
+    {
+        return $this->setData(OrderItemInterface::BASE_TAX_REFUNDED, $baseTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountRefunded($discountRefunded)
+    {
+        return $this->setData(OrderItemInterface::DISCOUNT_REFUNDED, $discountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountRefunded($baseDiscountRefunded)
+    {
+        return $this->setData(OrderItemInterface::BASE_DISCOUNT_REFUNDED, $baseDiscountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwId($id)
+    {
+        return $this->setData(OrderItemInterface::GW_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwBasePrice($price)
+    {
+        return $this->setData(OrderItemInterface::GW_BASE_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwPrice($price)
+    {
+        return $this->setData(OrderItemInterface::GW_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwBaseTaxAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::GW_BASE_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwTaxAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::GW_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwBasePriceInvoiced($gwBasePriceInvoiced)
+    {
+        return $this->setData(OrderItemInterface::GW_BASE_PRICE_INVOICED, $gwBasePriceInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwPriceInvoiced($gwPriceInvoiced)
+    {
+        return $this->setData(OrderItemInterface::GW_PRICE_INVOICED, $gwPriceInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwBaseTaxAmountInvoiced($gwBaseTaxAmountInvoiced)
+    {
+        return $this->setData(OrderItemInterface::GW_BASE_TAX_AMOUNT_INVOICED, $gwBaseTaxAmountInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwTaxAmountInvoiced($gwTaxAmountInvoiced)
+    {
+        return $this->setData(OrderItemInterface::GW_TAX_AMOUNT_INVOICED, $gwTaxAmountInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwBasePriceRefunded($gwBasePriceRefunded)
+    {
+        return $this->setData(OrderItemInterface::GW_BASE_PRICE_REFUNDED, $gwBasePriceRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwPriceRefunded($gwPriceRefunded)
+    {
+        return $this->setData(OrderItemInterface::GW_PRICE_REFUNDED, $gwPriceRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwBaseTaxAmountRefunded($gwBaseTaxAmountRefunded)
+    {
+        return $this->setData(OrderItemInterface::GW_BASE_TAX_AMOUNT_REFUNDED, $gwBaseTaxAmountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGwTaxAmountRefunded($gwTaxAmountRefunded)
+    {
+        return $this->setData(OrderItemInterface::GW_TAX_AMOUNT_REFUNDED, $gwTaxAmountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFreeShipping($freeShipping)
+    {
+        return $this->setData(OrderItemInterface::FREE_SHIPPING, $freeShipping);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQtyReturned($qtyReturned)
+    {
+        return $this->setData(OrderItemInterface::QTY_RETURNED, $qtyReturned);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEventId($id)
+    {
+        return $this->setData(OrderItemInterface::EVENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseWeeeTaxAppliedAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::BASE_WEEE_TAX_APPLIED_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseWeeeTaxAppliedRowAmnt($amnt)
+    {
+        return $this->setData(OrderItemInterface::BASE_WEEE_TAX_APPLIED_ROW_AMNT, $amnt);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeeeTaxAppliedAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::WEEE_TAX_APPLIED_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeeeTaxAppliedRowAmount($amount)
+    {
+        return $this->setData(OrderItemInterface::WEEE_TAX_APPLIED_ROW_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeeeTaxApplied($weeeTaxApplied)
+    {
+        return $this->setData(OrderItemInterface::WEEE_TAX_APPLIED, $weeeTaxApplied);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeeeTaxDisposition($weeeTaxDisposition)
+    {
+        return $this->setData(OrderItemInterface::WEEE_TAX_DISPOSITION, $weeeTaxDisposition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeeeTaxRowDisposition($weeeTaxRowDisposition)
+    {
+        return $this->setData(OrderItemInterface::WEEE_TAX_ROW_DISPOSITION, $weeeTaxRowDisposition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition)
+    {
+        return $this->setData(OrderItemInterface::BASE_WEEE_TAX_DISPOSITION, $baseWeeeTaxDisposition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
+    {
+        return $this->setData(OrderItemInterface::BASE_WEEE_TAX_ROW_DISPOSITION, $baseWeeeTaxRowDisposition);
+    }
+    //@codeCoverageIgnoreEnd
 }
