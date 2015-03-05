@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Setup;
 
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -20,9 +22,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        $setup->startSetup();
+
         if (version_compare($context->getVersion(), '2.0.0.1') < 0) {
             $installer = $setup;
-            $installer->startSetup();
             $connection = $installer->getConnection();
 
             $tableNames = [
@@ -57,7 +60,95 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
             $connection->dropColumn($installer->getTable('customer_entity'), 'entity_type_id');
             $connection->dropColumn($installer->getTable('customer_entity'), 'attribute_set_id');
-            $installer->endSetup();
         }
+
+        if (version_compare($context->getVersion(), '2.0.0.2') < 0) {
+            /**
+             * Update 'customer_visitor' table.
+             */
+            $setup->getConnection()
+                ->addColumn(
+                    $setup->getTable('customer_visitor'),
+                    'customer_id',
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'after' => 'visitor_id',
+                        'comment' => 'Customer ID'
+                    ]
+                );
+
+            $setup->getConnection()
+                ->addIndex(
+                    $setup->getTable('customer_visitor'),
+                    $setup->getIdxName(
+                        $setup->getTable('customer_visitor'),
+                        ['customer_id']
+                    ),
+                    'customer_id'
+                );
+
+            /**
+             * Create 'customer_log' table.
+             */
+            $table = $setup->getConnection()
+                ->newTable(
+                    $setup->getTable('customer_log')
+                )
+                ->addColumn(
+                    'log_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    [
+                        'nullable' => false,
+                        'identity' => true,
+                        'primary' => true
+                    ],
+                    'Log ID'
+                )
+                ->addColumn(
+                    'customer_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    [
+                        'nullable' => false
+                    ],
+                    'Customer ID'
+                )
+                ->addColumn(
+                    'last_login_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    [
+                        'nullable' => false
+                    ],
+                    'Last Login Time'
+                )
+                ->addColumn(
+                    'last_logout_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    [
+                        'nullable' => true,
+                        'default' => null
+                    ],
+                    'Last Logout Time'
+                )
+                ->addIndex(
+                    $setup->getIdxName(
+                        $setup->getTable('customer_log'),
+                        ['customer_id'],
+                        AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
+                    ['customer_id'],
+                    [
+                        'type' => AdapterInterface::INDEX_TYPE_UNIQUE
+                    ]
+                )
+                ->setComment('Customer Log Table');
+
+            $setup->getConnection()->createTable($table);
+        }
+
+        $setup->endSetup();
     }
 }
