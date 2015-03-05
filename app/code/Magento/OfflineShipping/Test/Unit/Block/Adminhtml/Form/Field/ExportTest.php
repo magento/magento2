@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
+namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
 class ExportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Export
+     * @var \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export
      */
     protected $_object;
 

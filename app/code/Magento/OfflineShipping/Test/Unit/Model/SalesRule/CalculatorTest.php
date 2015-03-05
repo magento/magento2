@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Model\SalesRule;
+namespace Magento\OfflineShipping\Test\Unit\Model\SalesRule;
 
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {

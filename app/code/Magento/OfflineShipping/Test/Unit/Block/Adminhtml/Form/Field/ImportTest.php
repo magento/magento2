@@ -9,12 +9,12 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
+namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Import
+     * @var \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import
      */
     protected $_object;
 

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Model\Config\Backend;
+namespace Magento\OfflineShipping\Test\Unit\Model\Config\Backend;
 
 class TablerateTest extends \PHPUnit_Framework_TestCase
 {

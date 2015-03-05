@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate;
+namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Carrier\Tablerate;
 
 class GridTest extends \PHPUnit_Framework_TestCase
 {

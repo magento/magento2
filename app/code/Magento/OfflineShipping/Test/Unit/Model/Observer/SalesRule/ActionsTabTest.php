@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Model\Observer\SalesRule;
+namespace Magento\OfflineShipping\Test\Unit\Model\Observer\SalesRule;
 
 use Magento\OfflineShipping\Model\SalesRule\Rule;
 
@@ -16,7 +16,7 @@ class ActionsTabTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = new ActionsTab();
+        $this->model = new \Magento\OfflineShipping\Model\Observer\SalesRule\ActionsTab();
     }
 
     public function testPrepareForm()
