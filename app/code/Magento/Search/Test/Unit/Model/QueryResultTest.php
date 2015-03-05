@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Search\Model;
+namespace Magento\Search\Test\Unit\Model;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

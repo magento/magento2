@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Model;
+namespace Magento\Search\Test\Unit\Model;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
 class SearchEngineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SearchEngine
+     * @var \Magento\Search\Model\SearchEngine
      */
     private $searchEngine;
 
