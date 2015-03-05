@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Code\Reader;
+namespace Magento\Framework\Code\Test\Unit\Reader;
 
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
 class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase

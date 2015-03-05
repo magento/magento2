@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Code\Validator;
+namespace Magento\Framework\Code\Test\Unit\Validator;
 
 class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
 {

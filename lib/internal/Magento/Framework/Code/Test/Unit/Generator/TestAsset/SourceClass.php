@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Code\Generator\TestAsset;
+namespace Magento\Framework\Code\Test\Unit\Generator\TestAsset;
 
 use Zend\Code\Generator\ClassGenerator;
 

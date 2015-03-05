@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Code\Validator;
+namespace Magento\Framework\Code\Test\Unit\Validator;
 
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Three/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Two/Test.php';
