@@ -6,7 +6,7 @@
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 class QuickEdit extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor
 {
@@ -20,8 +20,8 @@ class QuickEdit extends \Magento\DesignEditor\Controller\Adminhtml\System\Design
         $themeId = (int)$this->getRequest()->getParam('theme_id');
         $themeTitle = (string)$this->getRequest()->getParam('theme_title');
 
-        /** @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
+        /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */
+        $jsonHelper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
         try {
             $theme = $this->_loadThemeById($themeId);
             if (!$theme->isEditable()) {
@@ -37,6 +37,6 @@ class QuickEdit extends \Magento\DesignEditor\Controller\Adminhtml\System\Design
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => true, 'message' => __('This theme is not saved.')];
         }
-        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($jsonHelper->jsonEncode($response));
     }
 }

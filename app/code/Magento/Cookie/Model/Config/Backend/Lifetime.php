@@ -39,7 +39,7 @@ class Lifetime extends \Magento\Framework\App\Config\Value
      * Validate a domain name value
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -47,7 +47,7 @@ class Lifetime extends \Magento\Framework\App\Config\Value
 
         if (!empty($value) && !$this->configValidator->isValid($value)) {
             $msg = __('Invalid cookie lifetime: ' . join('; ', $this->configValidator->getMessages()));
-            throw new \Magento\Framework\Model\Exception($msg);
+            throw new \Magento\Framework\Exception\LocalizedException($msg);
         }
     }
 }

@@ -13,13 +13,6 @@
             <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="authorization_setup" xsi:type="string">Magento\Authorization\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Acl\Builder">
         <arguments>
             <argument name="ruleLoader" xsi:type="object">Magento\Authorization\Model\Acl\Loader\Rule</argument>

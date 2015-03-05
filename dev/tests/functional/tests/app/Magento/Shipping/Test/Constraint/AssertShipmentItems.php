@@ -18,10 +18,6 @@ use Magento\Mtf\ObjectManager;
  */
 class AssertShipmentItems extends AbstractAssertItems
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Shipment index page
      *

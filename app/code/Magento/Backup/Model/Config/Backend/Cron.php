@@ -20,17 +20,13 @@ class Cron extends \Magento\Framework\App\Config\Value
 
     const XML_PATH_BACKUP_FREQUENCY = 'groups/backup/fields/frequency/value';
 
-    /**
-     * Config value factory
-     *
-     * @var \Magento\Framework\App\Config\ValueFactory
-     */
+    /** @var \Magento\Framework\App\Config\ValueFactory */
     protected $_configValueFactory;
 
-    /**
-     * @var string
-     */
+
+    /** @var string */
     protected $_runModelPath = '';
+
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -61,7 +57,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * Cron settings after save
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave()
     {
@@ -104,7 +100,7 @@ class Cron extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Model\Exception(__('We can\'t save the Cron expression.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t save the Cron expression.'));
         }
     }
 }

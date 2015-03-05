@@ -74,7 +74,7 @@ class Currencysymbol
     protected $_cacheTypeList;
 
     /**
-     * @var \Magento\Backend\Model\Config\Factory
+     * @var \Magento\Config\Model\Config\Factory
      */
     protected $_configFactory;
 
@@ -108,7 +108,7 @@ class Currencysymbol
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig
-     * @param \Magento\Backend\Model\Config\Factory $configFactory
+     * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -118,7 +118,7 @@ class Currencysymbol
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig,
-        \Magento\Backend\Model\Config\Factory $configFactory,
+        \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,

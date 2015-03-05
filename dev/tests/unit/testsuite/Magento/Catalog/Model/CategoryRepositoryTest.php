@@ -27,23 +27,11 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManagerMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $categoryBuilderMock;
-
     protected function setUp()
     {
         $this->categoryFactoryMock = $this->getMock(
             '\Magento\Catalog\Model\CategoryFactory',
             ['create'],
-            [],
-            '',
-            false
-        );
-        $this->categoryBuilderMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\CategoryDataBuilder',
-            [],
             [],
             '',
             false
@@ -54,8 +42,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Catalog\Model\CategoryRepository(
             $this->categoryFactoryMock,
             $this->categoryResourceMock,
-            $this->storeManagerMock,
-            $this->categoryBuilderMock
+            $this->storeManagerMock
         );
     }
 

@@ -21,28 +21,37 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $optionBuilderMock;
+    protected $optionFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkListMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelperMock;
+
     protected function setUp()
     {
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
-        $this->optionBuilderMock = $this->getMock(
-            '\Magento\Bundle\Api\Data\OptionDataBuilder',
-            ['populateWithArray', 'setOptionId', 'setTitle', 'setProductLinks', 'create', 'setSku'],
+        $this->optionFactoryMock = $this->getMock(
+            '\Magento\Bundle\Api\Data\OptionInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->linkListMock = $this->getMock('\Magento\Bundle\Model\Product\LinksList', [], [], '', false);
         $this->model = new \Magento\Bundle\Model\Product\OptionList(
             $this->typeMock,
-            $this->optionBuilderMock,
-            $this->linkListMock
+            $this->optionFactoryMock,
+            $this->linkListMock,
+            $this->dataObjectHelperMock
         );
     }
 
@@ -82,22 +91,22 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->with($productMock, $optionId)
             ->willReturn([$linkMock]);
-        $this->optionBuilderMock->expects($this->once())
+        $newOptionMock = $this->getMock('\Magento\Bundle\Api\Data\OptionInterface');
+        $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($optionData)
+            ->with($newOptionMock, $optionData, '\Magento\Bundle\Api\Data\OptionInterface')
             ->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())->method('setOptionId')->with($optionId)->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())
+        $newOptionMock->expects($this->once())->method('setOptionId')->with($optionId)->willReturnSelf();
+        $newOptionMock->expects($this->once())
             ->method('setTitle')
             ->with($optionData['title'])
             ->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())->method('setSku')->with($productSku)->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())
+        $newOptionMock->expects($this->once())->method('setSku')->with($productSku)->willReturnSelf();
+        $newOptionMock->expects($this->once())
             ->method('setProductLinks')
             ->with([$linkMock])
             ->willReturnSelf();
-        $newOptionMock = $this->getMock('\Magento\Bundle\Api\Data\OptionInterface');
-        $this->optionBuilderMock->expects($this->once())->method('create')->willReturn($newOptionMock);
+        $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($newOptionMock);
 
         $this->assertEquals(
             [$newOptionMock],

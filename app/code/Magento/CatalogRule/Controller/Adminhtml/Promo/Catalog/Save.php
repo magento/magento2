@@ -6,7 +6,7 @@
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
@@ -34,7 +34,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 if ($id) {
                     $model->load($id);
                     if ($id != $model->getId()) {
-                        throw new Exception(__('Wrong rule specified.'));
+                        throw new LocalizedException(__('Wrong rule specified.'));
                     }
                 }
 
@@ -71,7 +71,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     $this->_redirect('catalog_rule/*/');
                 }
                 return;
-            } catch (Exception $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(

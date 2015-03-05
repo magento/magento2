@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />
     <type name="Magento\Framework\App\Config\Initial\SchemaLocator">
         <arguments>
             <argument name="moduleName" xsi:type="string">Magento_Core</argument>
@@ -27,7 +26,7 @@
             <argument name="confPathToMapFile" xsi:type="string">app/etc/aliases_to_classes_map.json</argument>
             <argument name="resourceName" xsi:type="string">core_setup</argument>
             <argument name="moduleName" xsi:type="string">Magento_Core</argument>
-            <argument name="connectionName" xsi:type="string">\Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION</argument>
+            <argument name="connectionName" xsi:type="string">\Magento\Framework\Setup\ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION</argument>
         </arguments>
     </type>
     <type name="Magento\Core\Helper\File\Storage">
@@ -64,12 +63,6 @@
         <arguments>
             <argument name="defaultLocalePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Config\Value">
-        <arguments>
-            <argument name="resource" xsi:type="object">Magento\Core\Model\Resource\Config\Data</argument>
-            <argument name="resourceCollection" xsi:type="object">Magento\Core\Model\Resource\Config\Data\Collection\Proxy</argument>
         </arguments>
     </type>
 </config>

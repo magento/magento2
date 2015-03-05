@@ -11,11 +11,6 @@ namespace Magento\Sitemap\Model;
 class SitemapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_helperMockCore;
-
-    /**
      * @var \Magento\Sitemap\Helper\Data
      */
     protected $_helperMockSitemap;
@@ -60,7 +55,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperMockCore = $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false);
         $this->_sitemapCategoryMock = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Catalog\Category'
         )->disableOriginalConstructor()->getMock();
@@ -152,7 +146,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check not allowed sitemap path validation
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please define a correct path.
      */
     public function testNotAllowedPath()
@@ -165,7 +159,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check not exists sitemap path validation
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please create the specified folder "" before saving the sitemap.
      */
     public function testPathNotExists()
@@ -179,7 +173,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check not writable sitemap path validation
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please make sure that "/" is writable by the web-server.
      */
     public function testPathNotWritable()
@@ -195,7 +189,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * Check invalid chars in sitemap filename validation
      *
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.
      * No spaces or other characters are allowed.
      */
@@ -624,7 +618,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'categoryFactory' => $categoryFactory,
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
-                'coreData' => $this->_helperMockCore,
                 'sitemapData' => $this->_helperMockSitemap,
                 'filesystem' => $this->_filesystemMock
             ]

@@ -18,10 +18,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertAddToCartButtonAbsent extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that "Add to cart" button is not display on page.
      *

@@ -12,7 +12,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -43,11 +43,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_mediaDirectory;
 
     /**
-     * Core data
+     * Json Helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData = null;
+    protected $jsonHelper = null;
 
     /**
      * Core file storage database
@@ -76,7 +76,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
@@ -85,7 +85,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
@@ -93,7 +93,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_productFactory = $productFactory;
         $this->_eventManager = $eventManager;
         $this->_fileStorageDb = $fileStorageDb;
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->_resourceModel = $resourceProductAttribute;
         $this->_mediaConfig = $mediaConfig;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
@@ -145,7 +145,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate($object)
     {
@@ -158,7 +158,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new Exception(__('The value of attribute "%1" must be unique.', $label));
+                throw new LocalizedException(__('The value of attribute "%1" must be unique.', $label));
             }
         }
 
@@ -180,7 +180,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!is_array($value['images']) && strlen($value['images']) > 0) {
-            $value['images'] = $this->_coreData->jsonDecode($value['images']);
+            $value['images'] = $this->jsonHelper->jsonDecode($value['images']);
         }
 
         if (!is_array($value['images'])) {
@@ -354,7 +354,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param boolean $move if true, it will move source file
      * @param boolean $exclude mark image as disabled in product page view
      * @return string
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -367,13 +367,13 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     ) {
         $file = $this->_mediaDirectory->getRelativePath($file);
         if (!$this->_mediaDirectory->isFile($file)) {
-            throw new Exception(__('The image does not exist.'));
+            throw new LocalizedException(__('The image does not exist.'));
         }
 
         $pathinfo = pathinfo($file);
         $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            throw new Exception(__('Please correct the image file type.'));
+            throw new LocalizedException(__('Please correct the image file type.'));
         }
 
         $fileName = \Magento\Core\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
@@ -399,7 +399,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_mediaDirectory->changePermissions($destinationFile, 0777);
             }
         } catch (\Exception $e) {
-            throw new Exception(__('We couldn\'t move this file: %1.', $e->getMessage()));
+            throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
         }
 
         $fileName = str_replace('\\', '/', $fileName);
@@ -686,7 +686,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param string $file
      * @return string
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _copyImage($file)
     {
@@ -713,7 +713,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return str_replace('\\', '/', $destinationFile);
         } catch (\Exception $e) {
             $file = $this->_mediaConfig->getMediaPath($file);
-            throw new Exception(
+            throw new LocalizedException(
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
             );
         }

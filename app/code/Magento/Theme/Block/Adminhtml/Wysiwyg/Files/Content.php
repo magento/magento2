@@ -18,23 +18,23 @@ class Content extends \Magento\Backend\Block\Widget\Container
     protected $_storageHelper;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Theme\Helper\Storage $storageHelper
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Theme\Helper\Storage $storageHelper,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         $this->_storageHelper = $storageHelper;
         parent::__construct($context, $data);
     }
@@ -132,7 +132,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
             ]
         );
 
-        return $this->_coreHelper->jsonEncode($setupObject);
+        return $this->jsonHelper->jsonEncode($setupObject);
     }
 
     /**

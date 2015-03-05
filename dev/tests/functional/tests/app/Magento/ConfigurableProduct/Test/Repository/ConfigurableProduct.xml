@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct">
         <dataset name="default">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
@@ -34,6 +34,37 @@
             </field>
             <field name="checkout_data" xsi:type="array">
                 <item name="preset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_special_price">
+            <field name="name" xsi:type="string">Test configurable product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+            </field>
+            <field name="special_price" xsi:type="string">9</field>
+            <field name="weight" xsi:type="string">5</field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">configurable-product-%isolation%</field>
+            <field name="configurable_attributes_data" xsi:type="array">
+                <item name="preset" xsi:type="string">with_one_option</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="preset" xsi:type="string">with_special_price</item>
             </field>
         </dataset>
 
@@ -303,5 +334,5 @@
                 <item name="preset" xsi:type="string">two_options_by_one_dollar</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
