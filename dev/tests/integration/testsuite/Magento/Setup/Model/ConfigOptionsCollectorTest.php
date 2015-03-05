@@ -12,11 +12,6 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManagerProvider;
 
-    /**
-     * @var array
-     */
-    private $expected;
-
     public function setUp()
     {
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
@@ -24,16 +19,9 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('get')
             ->willReturn(\Magento\TestFramework\Helper\Bootstrap::getObjectManager());
-        $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Setup\Model\ConfigOptions');
-        $backendOptions = new \Magento\Backend\Setup\ConfigOptions();
-        $this->expected = [
-            'Magento\Setup\Model\ConfigOptions' => ['options' => $setupOptions->getOptions(), 'enabled' => true],
-            'Magento\Backend\Setup\ConfigOptions' => ['options' => $backendOptions->getOptions()],
-        ];
     }
 
-    public function testCollectOptions()
+    public function testCollectOptionsAllModules()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Setup\Model\ConfigOptionsCollector $object */
@@ -41,12 +29,23 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
             'Magento\Setup\Model\ConfigOptionsCollector',
             ['objectManagerProvider' => $this->objectManagerProvider]
         );
-        $result = $object->collectOptions();
-        $this->assertOptions($result, true);
+        $result = $object->collectOptions(true);
+
+        $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Setup\Model\ConfigOptions');
+        $backendOptions = new \Magento\Backend\Setup\ConfigOptions();
+        $configOptions = new \Magento\Config\Setup\ConfigOptions();
+        $expected = [
+            'setup' => $setupOptions,
+            'Magento_Backend' => $backendOptions,
+            'Magento_Config' => $configOptions,
+        ];
+
+        $this->assertEquals($expected, $result);
 
     }
 
-    public function testCollectOptionsDisabledModules()
+    public function testCollectOptionsEnabledModules()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
@@ -58,25 +57,13 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
                 'moduleList' => $moduleListMock,
             ]
         );
-        $result = $object->collectOptions();
-        $this->assertOptions($result, false);
-    }
+        $result = $object->collectOptions(false);
 
-    /**
-     * Assert options array
-     *
-     * @param $actual
-     * @param $enabled
-     */
-    private function assertOptions($actual, $enabled)
-    {
-        $expected = [];
-        foreach ($this->expected as $key => $value) {
-            $expected[$key] = $value;
-            if (!isset($value['enabled'])) {
-                $expected[$key]['enabled'] = $enabled;
-            }
-        }
-        $this->assertEquals($expected, $actual);
+        $expected = [
+            'setup' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get('Magento\Setup\Model\ConfigOptions'),
+        ];
+
+        $this->assertEquals($expected, $result);
     }
 }

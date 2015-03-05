@@ -74,11 +74,14 @@ class ConfigOptionsCollector
     }
 
     /**
-     * Auto discover Options class and collect their options
+     * Auto discover ConfigOptions class and collect them. These classes should reside in <module>/Setup directories.
+     * If $collectAll is true, all modules' ConfigOptions classes will be collected.
+     * Otherwise, only enabled modules' ConfigOptions classes will be collected.
      *
-     * @return array
+     * @param bool $collectAll
+     * @return \Magento\Framework\Setup\ConfigOptionsInterface[]
      */
-    public function collectOptions()
+    public function collectOptions($collectAll)
     {
         $optionsList = [];
 
@@ -88,10 +91,9 @@ class ConfigOptionsCollector
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
                 if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
-                    $optionsList[$optionsClassName] = [
-                        'options' => $optionsClass->getOptions(),
-                        'enabled' => $this->moduleList->has($moduleName),
-                    ];
+                    if ($this->moduleList->has($moduleName) || $collectAll) {
+                        $optionsList[$moduleName] = $optionsClass;
+                    }
                 }
             }
         }
@@ -101,10 +103,7 @@ class ConfigOptionsCollector
         if (class_exists($setupOptionsClassName)) {
             $setupOptionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
             if ($setupOptionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
-                $optionsList[$setupOptionsClassName] = [
-                    'options' => $setupOptionsClass->getOptions(),
-                    'enabled' => true,
-                ];
+                $optionsList['setup'] = $setupOptionsClass;
             }
         }
 
