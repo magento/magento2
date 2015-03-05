@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Translate\Inline;
+namespace Magento\Framework\Translate\Test\Unit\Inline;
+
+use \Magento\Framework\Translate\Inline\State;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {

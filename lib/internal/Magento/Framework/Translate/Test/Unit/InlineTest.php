@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Translate;
+namespace Magento\Framework\Translate\Test\Unit;
+
+use \Magento\Framework\Translate\Inline;
 
 class InlineTest extends \PHPUnit_Framework_TestCase
 {
