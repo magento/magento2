@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Shell;
+namespace Magento\Framework\Shell\Test\Unit;
+
+use \Magento\Framework\Shell\ComplexParameter;
 
 class ComplexParameterTest extends \PHPUnit_Framework_TestCase
 {
