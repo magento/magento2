@@ -212,9 +212,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         /** @var $entry ProductAttributeMediaGalleryEntryInterface */
         $entry = $product->getCustomAttribute('media_gallery')->getValue();
         $entryContent = $entry->getContent();
-        $storeId = $product->getStoreId() ? $product->getStoreId() : 0;
 
-        return $this->create($product->getSku(), $entry, $entryContent, $storeId);
+        return $this->create($product->getSku(), $entry, $entryContent);
     }
 
     /**
