@@ -118,6 +118,20 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
+     * Checks if module list information is available.
+     *
+     * @return bool
+     */
+    public function isModuleInfoAvailable()
+    {
+        $this->loadConfigData();
+        if ($this->configData) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Loads configuration data only
      *
      * @return void

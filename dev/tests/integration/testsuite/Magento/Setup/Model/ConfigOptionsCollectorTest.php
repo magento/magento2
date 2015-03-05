@@ -21,35 +21,43 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Magento\TestFramework\Helper\Bootstrap::getObjectManager());
     }
 
-    public function testCollectOptionsAllModules()
+    public function testCollectOptionsDeploymentConfigAvailable()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $moduleListMock->expects($this->once())->method('isModuleInfoAvailable')->willReturn(true);
+        $moduleListMock->expects($this->once())->method('getNames')->willReturn(['Magento_Backend']);
+        $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $fullModuleListMock->expects($this->never())->method('getNames');
         /** @var \Magento\Setup\Model\ConfigOptionsCollector $object */
         $object = $objectManager->create(
             'Magento\Setup\Model\ConfigOptionsCollector',
-            ['objectManagerProvider' => $this->objectManagerProvider]
+            [
+                'objectManagerProvider' => $this->objectManagerProvider,
+                'moduleList' => $moduleListMock,
+                'fullModuleList' => $fullModuleListMock,
+            ]
         );
-        $result = $object->collectOptions(true);
+        $result = $object->collectOptions();
 
         $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Setup\Model\ConfigOptions');
         $backendOptions = new \Magento\Backend\Setup\ConfigOptions();
-        $configOptions = new \Magento\Config\Setup\ConfigOptions();
         $expected = [
             'setup' => $setupOptions,
             'Magento_Backend' => $backendOptions,
-            'Magento_Config' => $configOptions,
         ];
 
         $this->assertEquals($expected, $result);
 
     }
 
-    public function testCollectOptionsEnabledModules()
+    public function testCollectOptionsDeploymentConfigUnavailable()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $moduleListMock->expects($this->once())->method('getNames')->willReturn([]);
+        $moduleListMock->expects($this->once())->method('isModuleInfoAvailable')->willReturn(false);
+        $moduleListMock->expects($this->never())->method('getNames');
         $object = $objectManager->create(
             'Magento\Setup\Model\ConfigOptionsCollector',
             [
@@ -57,11 +65,15 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
                 'moduleList' => $moduleListMock,
             ]
         );
-        $result = $object->collectOptions(false);
+        $result = $object->collectOptions();
 
+        $backendOptions = new \Magento\Backend\Setup\ConfigOptions();
+        $configOptions = new \Magento\Config\Setup\ConfigOptions();
         $expected = [
             'setup' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                 ->get('Magento\Setup\Model\ConfigOptions'),
+            'Magento_Backend' => $backendOptions,
+            'Magento_Config' => $configOptions,
         ];
 
         $this->assertEquals($expected, $result);

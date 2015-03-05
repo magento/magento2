@@ -84,6 +84,18 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->has('bar'));
     }
 
+    public function testIsModuleInfoAvailable()
+    {
+        $this->setLoadConfigExpectation(true);
+        $this->assertTrue($this->model->isModuleInfoAvailable());
+    }
+
+    public function testIsModuleInfoAvailableNoConfig()
+    {
+        $this->config->expects($this->once())->method('getSegment')->willReturn(null);
+        $this->assertFalse($this->model->isModuleInfoAvailable());
+    }
+
     /**
      * Prepares expectation for loading deployment configuration
      *

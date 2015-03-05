@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
@@ -75,17 +76,16 @@ class ConfigOptionsCollector
 
     /**
      * Auto discover ConfigOptions class and collect them. These classes should reside in <module>/Setup directories.
-     * If $collectAll is true, all modules' ConfigOptions classes will be collected.
-     * Otherwise, only enabled modules' ConfigOptions classes will be collected.
+     * If deployment config is not available, all modules will be searched. Otherwise, only enabled modules
+     * will be searched.
      *
-     * @param bool $collectAll
      * @return \Magento\Framework\Setup\ConfigOptionsInterface[]
      */
-    public function collectOptions($collectAll)
+    public function collectOptions()
     {
         $optionsList = [];
 
-        $moduleList = $collectAll ? $this->fullModuleList : $this->moduleList;
+        $moduleList = $this->moduleList->isModuleInfoAvailable() ? $this->moduleList : $this->fullModuleList;
         // go through modules
         foreach ($moduleList->getNames() as $moduleName) {
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptions';
