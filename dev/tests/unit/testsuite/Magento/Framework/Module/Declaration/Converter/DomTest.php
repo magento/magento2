@@ -37,7 +37,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         try {
             $dom->loadXML($xmlString);
             $this->_converter->convert($dom);
-        } catch(\PHPUnit_Framework_Error $ex) {
+        } catch (\PHPUnit_Framework_Error $ex) {
             // do nothing because we expect \Exception but not \PHPUnit_Framework_Error
         }
     }
