@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 
-use Magento\Framework\Api\Code\Generator\EntityChildTestAbstract;
+use Magento\Framework\Api\Test\Unit\Code\Generator\EntityChildTestAbstract;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
