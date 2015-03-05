@@ -43,7 +43,7 @@ class Aggregation implements \IteratorAggregate
      */
     public function getBucket($bucketName)
     {
-        return $this->buckets[$bucketName];
+        return isset($this->buckets[$bucketName]) ? $this->buckets[$bucketName] : null;
     }
 
     /**
