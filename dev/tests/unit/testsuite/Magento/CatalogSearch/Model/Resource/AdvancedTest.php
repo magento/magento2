@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
+use Magento\Catalog\Model\Resource\Eav\Attribute;
 use PHPUnit_Framework_TestCase;
 
 class AdvancedTest extends PHPUnit_Framework_TestCase
@@ -21,67 +22,44 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $storeManager = $this->getStoreManager();
-
-        $this->model = $helper->getObject(
-            'Magento\CatalogSearch\Model\Resource\Advanced',
-            [
-                'storeManager' => $storeManager
-            ]
-        );
+        $this->model = $helper->getObject('Magento\CatalogSearch\Model\Resource\Advanced');
     }
 
     /**
-     * @dataProvider indexableAttributeDataProvider
+     * @dataProvider prepareConditionDataProvider
      */
-    public function testAddIndexableAttributeModifiedFilter($indexType, $value, $expected)
+    public function testPrepareCondition($backendType, $value, $expected)
     {
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $collectionMock = $this->getMock('Magento\CatalogSearch\Model\Resource\Advanced\Collection', [], [], '', false);
-        $collectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
-
-        $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
-        $attributeMock->expects($this->once())->method('getIndexType')->willReturn($indexType);
-        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(1);
+        /** @var Attribute|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->setMethods(['getBackendType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->once())
+            ->method('getBackendType')
+            ->willReturn($backendType);
 
         $this->assertEquals(
             $expected,
-            $this->model->addIndexableAttributeModifiedFilter($collectionMock, $attributeMock, $value)
+            $this->model->prepareCondition($attributeMock, $value)
         );
     }
 
-    public function indexableAttributeDataProvider()
+    /**
+     * Data provider for testPrepareCondition
+     *
+     * @return array
+     */
+    public function prepareConditionDataProvider()
     {
         return [
-            ['decimal', '', true],
-            ['source', ['from' => 0, 'to' => 0], false],
-            [false, ['from' => 0], true],
-            ['decimal', ['to' => 0], true],
-            ['source', ['from' => 1, 'to' => 1], true]
+            ['string', 'string', 'string'],
+            ['varchar', 'string', ['like' => '%string%']],
+            ['varchar', ['test'], ['in_set' => ['test']]],
+            ['select', ['test'], ['in' => ['test']]],
+            ['range', ['from' => 1], ['from' => 1]],
+            ['range', ['to' => 3], ['to' => 3]],
+            ['range', ['from' => 1, 'to' => 3], ['from' => 1, 'to' => 3]]
         ];
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getStoreManager()
-    {
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $storeManager->expects($this->once())
-            ->method('getStore')
-            ->willReturn($store);
-
-        return $storeManager;
     }
 }

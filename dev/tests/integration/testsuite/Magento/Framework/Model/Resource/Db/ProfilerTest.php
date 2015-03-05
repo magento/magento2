@@ -69,7 +69,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\App\Resource $resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
-        $testTableName = $resource->getTableName('core_resource');
+        $testTableName = $resource->getTableName('setup_module');
         $selectQuery = sprintf($selectQuery, $testTableName);
 
         $result = $connection->query($selectQuery);
@@ -99,18 +99,18 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         return [
             ["SELECT * FROM %s", \Magento\Framework\DB\Profiler::SELECT],
             [
-                "INSERT INTO %s (code, version, data_version) " .
+                "INSERT INTO %s (module, schema_version, data_version) " .
                 "VALUES ('" .
                 self::$_testResourceName .
                 "', '1.1', '1.1')",
                 \Magento\Framework\DB\Profiler::INSERT
             ],
             [
-                "UPDATE %s SET version = '1.2' WHERE code = '" . self::$_testResourceName . "'",
+                "UPDATE %s SET schema_version = '1.2' WHERE module = '" . self::$_testResourceName . "'",
                 \Magento\Framework\DB\Profiler::UPDATE
             ],
             [
-                "DELETE FROM %s WHERE code = '" . self::$_testResourceName . "'",
+                "DELETE FROM %s WHERE module = '" . self::$_testResourceName . "'",
                 \Magento\Framework\DB\Profiler::DELETE
             ]
         ];
@@ -135,7 +135,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\App\Resource $resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Resource');
-        $testTableName = $resource->getTableName('core_resource');
+        $testTableName = $resource->getTableName('setup_module');
         $connection->query('SELECT * FROM ' . $testTableName);
 
         /** @var \Magento\Framework\Model\Resource\Db\Profiler $profiler */

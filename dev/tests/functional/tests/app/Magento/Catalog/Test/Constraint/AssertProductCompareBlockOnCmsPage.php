@@ -16,10 +16,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
  */
 class AssertProductCompareBlockOnCmsPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that Compare Products block is presented on CMS pages.
      * Block contains information about compared products

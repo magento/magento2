@@ -41,25 +41,25 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     protected $quoteCollection;
 
     /**
-     * @var \Magento\Quote\Api\Data\CartSearchResultsDataBuilder
+     * @var \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsDataFactory;
 
     /**
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
-     * @param \Magento\Quote\Api\Data\CartSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      */
     public function __construct(
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
-        \Magento\Quote\Api\Data\CartSearchResultsDataBuilder $searchResultsBuilder
+        \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsDataFactory = $searchResultsDataFactory;
         $this->quoteCollection = $quoteCollection;
     }
 
@@ -201,13 +201,14 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
+        $searchData = $this->searchResultsDataFactory->create();
+        $searchData->setSearchCriteria($searchCriteria);
 
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $this->quoteCollection);
         }
 
-        $this->searchResultsBuilder->setTotalCount($this->quoteCollection->getSize());
+        $searchData->setTotalCount($this->quoteCollection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
             foreach ($sortOrders as $sortOrder) {
@@ -220,9 +221,9 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         $this->quoteCollection->setCurPage($searchCriteria->getCurrentPage());
         $this->quoteCollection->setPageSize($searchCriteria->getPageSize());
 
-        $this->searchResultsBuilder->setItems($this->quoteCollection->getItems());
+        $searchData->setItems($this->quoteCollection->getItems());
 
-        return $this->searchResultsBuilder->create();
+        return $searchData;
     }
 
     /**

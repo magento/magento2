@@ -24,9 +24,9 @@ abstract class AbstractTypeHandler
     protected $deletedItems = [];
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $coreData;
+    protected $jsonHelper;
 
     /**
      * @var \Magento\Downloadable\Helper\File
@@ -34,14 +34,14 @@ abstract class AbstractTypeHandler
     protected $downloadableFile;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile
     ) {
-        $this->coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->downloadableFile = $downloadableFile;
     }
 
@@ -134,7 +134,7 @@ abstract class AbstractTypeHandler
     protected function getFiles(array $item)
     {
         $files = isset($item[self::FIELD_FILE])
-            ? $this->coreData->jsonDecode($item[self::FIELD_FILE])
+            ? $this->jsonHelper->jsonDecode($item[self::FIELD_FILE])
             : [];
         return $files;
     }
