@@ -31,13 +31,19 @@ define([
 
             wrapper = $('<div id="create_new_attribute"/>').appendTo('body').dialog({
                 title: 'New Attribute',
-                width: 600,
+                width: '75%',
                 minHeight: 650,
                 modal: true,
                 resizable: false,
                 resizeStop: function () {
                     iframe.height($(this).outerHeight() + 'px');
                     iframe.width($(this).outerWidth() + 'px');
+                },
+                open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                },
+                close: function () {
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 }
             });
 

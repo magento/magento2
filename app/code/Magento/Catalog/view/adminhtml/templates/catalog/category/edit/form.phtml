@@ -73,12 +73,24 @@ require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function($){
                 modal:      true,
                 dialogClass: 'popup-window',
                 resizable: false,
+                width: '75%',
                 title: $.mage.__('Warning message'),
-                buttons: [
-                    {text: $.mage.__('Ok'), click: function() { onEvent('ok', this); }},
-                    {text: $.mage.__('Cancel'), click: function() { onEvent('cancel', this); } }
-                ],
+                buttons: [{
+                        text: $.mage.__('Ok'),
+                        'class' :'action-primary',
+                        click: function () {
+                            onEvent('ok', this);
+                        }
+                    }, {
+                        text: $.mage.__('Cancel'),
+                        'class' :'action-close',
+                        click: function () {
+                            onEvent('cancel', this);
+                        }
+
+                }],
                 open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
                     self.dialogOpened = true;
                     self.callback.ok.push(function() {
                         self.needShow = false;

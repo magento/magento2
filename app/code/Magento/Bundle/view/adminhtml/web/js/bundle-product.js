@@ -120,17 +120,13 @@ define([
                             .replace('%1',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
                     autoOpen: false,
                     minWidth: 980,
-                    'class': 'bundle',
+                    width: '75%',
+                    dialogClass: 'bundle',
                     modal: true,
                     resizable: true,
                     buttons: [{
-                        text: $.mage.__('Cancel'),
-                        click: function() {
-                            $selectionGrid.dialog('close');
-                        }
-                    }, {
                         text: $.mage.__('Add Selected Products'),
-                        'class': 'add primary',
+                        'class': 'action-primary action-add',
                         click: function() {
                             $.each(selectedProductList, function() {
                                 window.bSelection.addRow(optionIndex, this);
@@ -146,9 +142,23 @@ define([
                             widget._updateSelectionsPositions.apply(widget.element);
                             $selectionGrid.dialog('close');
                         }
+                    }, {
+                        text: $.mage.__('Cancel'),
+                        'class': 'action-close',
+                        click: function() {
+                            $selectionGrid.dialog('close');
+                        }
                     }],
+                    open: function () {
+                        $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                    },
                     close: function() {
+                        $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                         $(this).dialog('destroy');
+                    },
+                    position: {
+                        my: "left+12.5% top",
+                        of: "body"
                     }
                 });
 

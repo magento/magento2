@@ -34,17 +34,29 @@ require([
                 resizable: false,
                 minHeight: 200,
                 minWidth: 300,
+                width: '75%',
                 dialogClass: "no-close",
                 position: {at: 'center'},
-                buttons: {
-                    Cancel: function () {
-                        $(this).dialog("close");
-                    },
-                    Delete: function () {
+                open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                },
+                close: function () {
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                },
+                buttons: [{
+                    text: $.mage.__('Delete'),
+                    'class': 'action-primary',
+                    click: function () {
                         $(this).dialog("close");
                         window.location.href = $(e.target).data('url');
                     }
-                }
+                }, {
+                    text: $.mage.__('Cancel'),
+                    'class': 'action-close',
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                }]
             });
             e.stopPropagation();
         });
@@ -52,7 +64,8 @@ require([
 
 });
 </script>
-<div id="integration-popup-container" style="display:none;"></div>
-<div id="integration-delete-container" style="display:none;" title="<?php echo __('Are you sure ?'); ?>">
+
+<div id="integration-popup-container" style="display: none;"></div>
+<div id="integration-delete-container" style="display: none;" title="<?php echo __('Are you sure ?'); ?>">
     <p><?php echo __("Are you sure you want to delete this integration? You can't undo this action."); ?></p>
 </div>

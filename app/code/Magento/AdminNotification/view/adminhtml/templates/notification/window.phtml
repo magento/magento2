@@ -12,19 +12,20 @@
  * @see \Magento\AdminNotification\Block\Window
  */
 ?>
-<div data-mage-init='{"modalPopup": {}}' class="fade critical-notification">
+<div data-mage-init='{"modalPopup": {}}' class="fade critical-notification admin__scope">
     <div class="popup popup-<?php echo preg_replace('#[^a-z0-9]+#', '-', strtolower($block->getSeverityText())) ?>">
         <div class="popup-inner">
-            <header class="popup-header">
-                <h2 class="popup-title"><?php echo $block->getHeaderText(); ?></h2>
-            </header>
+            <div class="popup-header">
+                <div class="popup-title"><?php echo $block->getHeaderText(); ?></div>
+            </div>
             <div class="popup-content">
                 <span><?php echo $block->getSeverityText();?></span>
+
                 <p class="message-text"><?php echo $block->getNoticeMessageText(); ?></p>
 
                 <a href="<?php echo $block->getNoticeMessageUrl(); ?>"><?php echo $block->getReadDetailsText(); ?></a>
             </div>
-            <span class="close" data-dismiss="popup" title="<?php echo __('Close popup'); ?>"><?php echo __('Close'); ?></span>
+            <span class="action close" data-dismiss="popup" title="<?php echo __('Close popup'); ?>"><?php echo __('Close'); ?></span>
         </div>
     </div>
 </div>

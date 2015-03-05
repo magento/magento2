@@ -97,12 +97,7 @@
 .page-login .action-back,
 .page-login .action-back:hover,
 .page-login .action-back:active,
-.page-login .action-back.active,
-.attribute-popup .page-actions #reset,
-.attribute-popup .page-actions #reset:hover,
-.attribute-popup .page-actions #reset:active,
-.attribute-popup .page-actions #reset.active,
-.attribute-popup .page-actions #reset[disabled] {
+.page-login .action-back.active {
     border: none;
     border-radius: 0;
     background: none;
@@ -185,8 +180,7 @@
 .vde-image-sizing .action-reset[disabled],
 .image .action-delete[disabled],
 .fieldset-wrapper-title .actions .action-delete[disabled],
-.address-list-item-actions .action-delete[disabled]
-{
+.address-list-item-actions .action-delete[disabled] {
     border: 0;
     border-radius: 0;
     background: none;
@@ -229,8 +223,7 @@
 /*
     Actions as links
 -------------------------------------- */
-.notification-entry-dialog .action-cancel,
-.attribute-popup .page-actions #reset {
+.notification-entry-dialog .action-close {
     background: none;
     border: none;
     color: #6d665e;
@@ -240,8 +233,7 @@
     text-decoration: underline;
 }
 
-.notification-entry-dialog .action-cancel:hover,
-.attribute-popup .page-actions #reset:hover {
+.notification-entry-dialog .action-close:hover {
     color: #000;
     border-bottom-color: #000;
     filter: none;
@@ -2329,24 +2321,6 @@ address {
     z-index: 3;
 }
 
-/*
-    Footer
--------------------------------------- */
-.footer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    color: #989288;
-    font-size: 11px;
-}
-
-.footer-content {
-    margin: 0 auto;
-    max-width: 1300px;
-    min-width: 960px;
-    padding: 20px;
-}
 
 /*
     Switcher
@@ -2796,17 +2770,6 @@ tr.dynamic-grid input.input-text {
     border: none;
 }
 
-.attribute-popup .page-actions {
-    position: fixed;
-    top: auto !important;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #fff;
-    padding: 27px 50px 25px 23px;
-    border-top: 1px solid #dfdcd7;
-}
-
 .attribute-popup .page-actions [class^='action-'] {
     margin-left: 18px;
 }
@@ -2817,15 +2780,6 @@ tr.dynamic-grid input.input-text {
 
 .attribute-popup #base_fieldset > .legend {
     display: none;
-}
-
-.attribute-popup .page-actions #reset,
-.attribute-popup .page-actions #reset:hover,
-.attribute-popup .page-actions #reset:active,
-.attribute-popup .page-actions #reset:focus {
-    float: right;
-    vertical-align: middle;
-    margin: 5px 0 0 18px;
 }
 
 .attribute-popup .page-actions-placeholder {
@@ -3016,8 +2970,6 @@ tr.dynamic-grid input.input-text {
 .clearfix:before,
 .clearfix:after,
 [class$="-layout"]:after,
-.footer-content:before,
-.footer-content:after,
 .tabs-horiz:before,
 .tabs-horiz:after,
 .actions-split:before,
@@ -3042,7 +2994,6 @@ tr.dynamic-grid input.input-text {
 
 .clearfix:after,
 [class$="-layout"]:after,
-.footer-content:after,
 .tabs-horiz:after,
 .actions-split:after,
 .page-create-order:after,

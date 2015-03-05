@@ -9,7 +9,6 @@
     <head>
         <css src="mui/mui_legacy.css"/>
         <css src="css/styles-old.css"/>
-        <css src="Magento_Theme::prototype/magento.css"/>
         <css src="css/styles-migration.css"/> <!-- New styles scope -->
     </head>
 

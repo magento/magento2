@@ -59,7 +59,12 @@ window.Variables = {
             modal:      true,
             resizable:  false,
             minWidth:   500,
+            width:      '75%',
+            open:       function () {
+                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
+            },
             close:      function(event, ui) {
+                jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 jQuery(this).dialog('destroy');
                 jQuery('#' + windowId).remove();
             }

@@ -11,7 +11,6 @@
         <remove src="css/styles-old.css"/>
         <remove src="css/styles-migration.css"/>
         <remove src="jquery/farbtastic/css/farbtastic.css"/>
-        <remove src="Magento_Core::prototype/magento.css"/>
 
         <css src="css/styles.css"/>
     </head>
