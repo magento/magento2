@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Mview\View;
+namespace Magento\Framework\Mview\Test\Unit\View;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
