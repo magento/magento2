@@ -12,8 +12,8 @@ use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\Setup\Option\MultiSelectConfigOption;
 use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\DbConfig;
 
 /**
@@ -25,7 +25,6 @@ class ConfigOptions implements ConfigOptionsInterface
      * Path to the values in the deployment config
      */
     const CONFIG_PATH_INSTALL_DATE = 'install/date';
-    const CONFIG_PATH_MODULES = 'modules';
     /**#@-*/
 
     /**#@+
@@ -42,6 +41,11 @@ class ConfigOptions implements ConfigOptionsInterface
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
     /**#@-*/
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * @var array
@@ -73,11 +77,13 @@ class ConfigOptions implements ConfigOptionsInterface
      *
      * @param Random $random
      * @param Loader $moduleLoader
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(Random $random, Loader $moduleLoader)
+    public function __construct(Random $random, Loader $moduleLoader, DeploymentConfig $deploymentConfig)
     {
         $this->random = $random;
-        $this->moduleList = $moduleLoader->load();
+        $this->deploymentConfig = $deploymentConfig;
+        $this->moduleList = array_keys($moduleLoader->load());
     }
 
     /**
@@ -90,13 +96,6 @@ class ConfigOptions implements ConfigOptionsInterface
                 self::INPUT_KEY_CRYPT_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 'Encryption key'
-            ),
-            new MultiSelectConfigOption(
-                self::CONFIG_PATH_MODULES,
-                MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT,
-                $this->moduleList,
-                'modules list',
-                $this->moduleList
             ),
             new SelectConfigOption(
                 self::INPUT_KEY_SESSION_SAVE,
@@ -171,13 +170,15 @@ class ConfigOptions implements ConfigOptionsInterface
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
 
         // module segment
-        $modulesData = [];
-        if (isset($this->moduleList)) {
-            foreach ($this->moduleList as $key) {
-                $modulesData[$key] = 1;
+        if (!$this->deploymentConfig->isAvailable()) {
+            $modulesData = [];
+            if (isset($this->moduleList)) {
+                foreach (array_values($this->moduleList) as $key) {
+                    $modulesData[$key] = 1;
+                }
             }
+            $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'modules', $modulesData);
         }
-        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'modules', $modulesData);
 
         // session segment
         $sessionData = [];
