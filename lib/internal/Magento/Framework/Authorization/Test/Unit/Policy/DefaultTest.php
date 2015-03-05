@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Authorization\Policy;
+namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
