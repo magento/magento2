@@ -14,7 +14,7 @@ interface ConfigOptionsInterface
      * Gets a list of input options so that user can provide required
      * information that will be used in deployment config file
      *
-     * @return AbstractConfigOption[]
+     * @return Option\AbstractConfigOption[]
      */
     public function getOptions();
 
@@ -22,7 +22,7 @@ interface ConfigOptionsInterface
      * Creates config array from user inputted data. This array will be stored in deployment config file
      *
      * @param array $options
-     * @return array
+     * @return \Magento\Framework\Config\Data\ConfigData[]
      * @throws \InvalidArgumentException
      */
     public function createConfig(array $options);
