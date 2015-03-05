@@ -40,7 +40,7 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
             ->setCollectRecursively(true)
             ->setFilesFilter('/\Test.(php)$/i');
 
-        foreach($this->scanList as $dir){
+        foreach ($this->scanList as $dir){
             $filesystem->addTargetDir($this->root . '/' . $dir);
         }
 
