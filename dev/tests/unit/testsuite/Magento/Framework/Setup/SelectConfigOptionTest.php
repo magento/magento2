@@ -9,7 +9,7 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage Frontend input type has to be select or radio.
+     * @expectedExceptionMessage Frontend input type has to be 'select' or 'radio'.
      */
     public function testConstructInvalidFrontendType()
     {
@@ -18,7 +18,7 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage Select options can't be empty.
+     * @expectedExceptionMessage Select options can't be empty.
      */
     public function testConstructNoOptions()
     {
@@ -39,7 +39,7 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage Frontend input type has to be text, textarea or password.
+     * @expectedExceptionMessage Value specified for
      */
     public function testValidateException()
     {

@@ -9,7 +9,7 @@ class TextConfigOptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage Frontend input type has to be text, textarea or password.
+     * @expectedExceptionMessage Frontend input type has to be 'text', 'textarea' or 'password'.
      */
     public function testConstructInvalidFrontendType()
     {
@@ -24,7 +24,7 @@ class TextConfigOptionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedMessage must be a string
+     * @expectedExceptionMessage must be a string
      */
     public function testValidateException()
     {

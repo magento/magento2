@@ -20,13 +20,11 @@ class FlagConfigOption extends AbstractConfigOption
      *
      * @param string $name
      * @param string $description
-     * @param string $default
      * @param string|null $shortCut
      */
     public function __construct(
         $name,
         $description = '',
-        $default = '',
         $shortCut = null
     ) {
         parent::__construct($name, self::FRONTEND_WIZARD_FLAG, $description, self::VALUE_NONE, null, $shortCut);

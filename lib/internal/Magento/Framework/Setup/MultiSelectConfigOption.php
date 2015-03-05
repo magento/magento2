@@ -31,7 +31,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * @param string $frontendType
      * @param array $selectOptions
      * @param string $description
-     * @param string $default
+     * @param string $defaultValue
      * @param string|null $shortCut
      * @throws \InvalidArgumentException
      */
@@ -40,11 +40,13 @@ class MultiSelectConfigOption extends AbstractConfigOption
         $frontendType,
         array $selectOptions,
         $description = '',
-        $default = '',
+        $defaultValue = '',
         $shortCut = null
     ) {
         if ($frontendType != self::FRONTEND_WIZARD_MULTISELECT && $frontendType != self::FRONTEND_WIZARD_CHECKBOX) {
-            throw new \InvalidArgumentException('Frontend input type has to be multiselect, textarea or checkbox.');
+            throw new \InvalidArgumentException(
+                "Frontend input type has to be 'multiselect', 'textarea' or 'checkbox'."
+            );
         }
         if (!$selectOptions) {
             throw new \InvalidArgumentException('Select options can\'t be empty.');
@@ -55,7 +57,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
             $frontendType,
             $description,
             self::VALUE_REQUIRED,
-            $default,
+            $defaultValue,
             $shortCut
         );
     }

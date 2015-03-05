@@ -31,7 +31,7 @@ class SelectConfigOption extends AbstractConfigOption
      * @param string $frontendType
      * @param array $selectOptions
      * @param string $description
-     * @param string $default
+     * @param string $defaultValue
      * @param string|null $shortCut
      * @throws \InvalidArgumentException
      */
@@ -40,11 +40,11 @@ class SelectConfigOption extends AbstractConfigOption
         $frontendType,
         array $selectOptions,
         $description = '',
-        $default = '',
+        $defaultValue = '',
         $shortCut = null
     ) {
         if ($frontendType != self::FRONTEND_WIZARD_SELECT && $frontendType != self::FRONTEND_WIZARD_RADIO) {
-            throw new \InvalidArgumentException('Frontend input type has to be select or radio.');
+            throw new \InvalidArgumentException("Frontend input type has to be 'select' or 'radio'.");
         }
         if (!$selectOptions) {
             throw new \InvalidArgumentException('Select options can\'t be empty.');
@@ -55,7 +55,7 @@ class SelectConfigOption extends AbstractConfigOption
             $frontendType,
             $description,
             self::VALUE_REQUIRED,
-            $default,
+            $defaultValue,
             $shortCut
         );
     }
