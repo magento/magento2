@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="UpdateVirtualProductEntityTest">
-    <variation name="UpdateVirtualProductEntityTestVariation1" firstConstraint="assertProductSaveMessage" method="test">
+  <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest">
+    <variation name="UpdateVirtualProductEntityTestVariation1">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -22,16 +22,16 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductInCategory" prev="assertProductPage"/>
-      <constraint name="assertProductInCategory" next="assertProductTierPriceOnProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductTierPriceOnProductPage" next="assertProductSearchableBySku" prev="assertProductInCategory"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation2" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation2">
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">120.00</data>
@@ -46,17 +46,17 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductInCategory" prev="assertProductPage"/>
-      <constraint name="assertProductInCategory" next="assertProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductPage" next="assertProductSpecialPriceOnProductPage" prev="assertProductInCategory"/>
-      <constraint name="assertProductSpecialPriceOnProductPage" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductSpecialPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation3" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation3">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">185.00</data>
@@ -71,17 +71,17 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductPage" next="assertProductOutOfStock" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductOutOfStock" next="assertProductTierPriceOnProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductTierPriceOnProductPage" next="assertProductSearchableBySku" prev="assertProductOutOfStock"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation4" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation4">
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -96,14 +96,14 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductOutOfStock" prev="assertProductForm"/>
-      <constraint name="assertProductOutOfStock" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation5" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation5">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -118,14 +118,14 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductOutOfStock" prev="assertProductForm"/>
-      <constraint name="assertProductOutOfStock" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation6" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation6">
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">145.00</data>
@@ -140,16 +140,16 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductGroupedPriceOnProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductGroupedPriceOnProductPage" next="assertProductTierPriceOnProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductTierPriceOnProductPage" next="assertProductSearchableBySku" prev="assertProductGroupedPriceOnProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation7" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation7">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -164,14 +164,14 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductOutOfStock" prev="assertProductForm"/>
-      <constraint name="assertProductOutOfStock" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation8" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation8">
       <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -186,14 +186,14 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductOutOfStock" prev="assertProductForm"/>
-      <constraint name="assertProductOutOfStock" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation9" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation9">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">120.00</data>
@@ -208,15 +208,15 @@
       <data name="product/data/custom_options/preset" xsi:type="string">options-suite</data>
       <data name="product/data/visibility" xsi:type="string">Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductSpecialPriceOnProductPage" prev="assertProductForm"/>
-      <constraint name="assertProductSpecialPriceOnProductPage" next="assertProductCustomOptionsOnProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductCustomOptionsOnProductPage" next="assertProductSearchableBySku" prev="assertProductSpecialPriceOnProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductCustomOptionsOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation10" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation10">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -231,14 +231,14 @@
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
       <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
       <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductOutOfStock" prev="assertProductForm"/>
-      <constraint name="assertProductOutOfStock" next="assertProductSearchableBySku" prev="assertProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
-    <variation name="UpdateVirtualProductEntityTestVariation11" firstConstraint="assertProductSaveMessage" method="test">
+    <variation name="UpdateVirtualProductEntityTestVariation11">
       <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
       <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
       <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -251,19 +251,19 @@
       <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
       <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="product/data/custom_options/preset" xsi:type="string">-</data>
-      <data name="product/data/visibility" xsi:type="string">virtual-product-%isolation%</data>
-      <data name="product/data/url_key" xsi:type="string">Catalog</data>
-      <constraint name="assertProductSaveMessage" next="assertProductInGrid"/>
-      <constraint name="assertProductInGrid" next="assertProductForm" prev="assertProductSaveMessage"/>
-      <constraint name="assertProductForm" next="assertProductPage" prev="assertProductInGrid"/>
-      <constraint name="assertProductPage" next="assertProductVisibleInCategory" prev="assertProductForm"/>
-      <constraint name="assertProductVisibleInCategory" next="assertProductSpecialPriceOnProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductSpecialPriceOnProductPage" next="assertProductPage" prev="assertProductVisibleInCategory"/>
-      <constraint name="assertProductPage" next="assertProductGroupedPriceOnProductPage" prev="assertProductSpecialPriceOnProductPage"/>
-      <constraint name="assertProductGroupedPriceOnProductPage" next="assertProductTierPriceOnProductPage" prev="assertProductPage"/>
-      <constraint name="assertProductTierPriceOnProductPage" next="assertProductInCategory" prev="assertProductGroupedPriceOnProductPage"/>
-      <constraint name="assertProductInCategory" next="assertProductSearchableBySku" prev="assertProductTierPriceOnProductPage"/>
-      <constraint name="assertProductSearchableBySku" prev="assertProductInCategory"/>
+      <data name="product/data/visibility" xsi:type="string">Catalog</data>
+      <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku"/>
     </variation>
   </testCase>
 </config>

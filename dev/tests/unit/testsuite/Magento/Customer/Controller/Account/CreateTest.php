@@ -63,18 +63,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->registrationMock = $this->getMock('\Magento\Customer\Model\Registration', [], [], '', false);
         $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface');
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->setMethods([
-                'isPost',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie',
-                'isSecure',
-            ])
-            ->getMock();
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
 
         $this->redirectFactoryMock = $this->getMock(

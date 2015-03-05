@@ -29,7 +29,7 @@ class Login extends \Magento\Framework\App\Action\Action
     protected $customerAccountManagement;
 
     /**
-     * @var \Magento\Core\Helper\Data $helper
+     * @var \Magento\Framework\Json\Helper\Data $helper
      */
     protected $helper;
 
@@ -48,7 +48,7 @@ class Login extends \Magento\Framework\App\Action\Action
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Json\Helper\Data $helper
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -56,7 +56,7 @@ class Login extends \Magento\Framework\App\Action\Action
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Helper\Data $helper,
+        \Magento\Framework\Json\Helper\Data $helper,
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory

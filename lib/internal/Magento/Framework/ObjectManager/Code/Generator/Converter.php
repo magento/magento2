@@ -47,7 +47,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getFactoryPropertyName()
     {
-        $parts = explode('\\', $this->_getSourceClassName());
+        $parts = explode('\\', ltrim($this->_getSourceClassName(), '\\'));
         return lcfirst(end($parts)) . 'Factory';
     }
 
@@ -58,7 +58,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getFactoryClass()
     {
-        return $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory';
+        return $this->_getSourceClassName() . 'Factory';
     }
 
     /**
@@ -84,7 +84,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => '\\' . $this->_getSourceClassName()
+                        'description' => $this->_getSourceClassName()
                             . " \$" . $this->_getFactoryPropertyName(),
                     ],
                 ],
@@ -121,7 +121,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'return',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                        'description' => $this->_getSourceClassName()
                     ],
                 ],
             ],

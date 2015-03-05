@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Setup\Module\ResourceFactory;
 
 class InstallerFactory
 {
@@ -18,13 +19,20 @@ class InstallerFactory
     protected $serviceLocator;
 
     /**
+     * @var ResourceFactory
+     */
+    private $resourceFactory;
+
+    /**
      * Constructor
      *
      * @param ServiceLocatorInterface $serviceLocator
+     * @param ResourceFactory $resourceFactory
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ServiceLocatorInterface $serviceLocator, ResourceFactory $resourceFactory)
     {
         $this->serviceLocator = $serviceLocator;
+        $this->resourceFactory = $resourceFactory;
     }
 
     /**
@@ -39,7 +47,6 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig'),
-            $this->serviceLocator->get('Magento\Setup\Module\SetupFactory'),
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList'),
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList\Loader'),
             $this->serviceLocator->get('Magento\Framework\App\Filesystem\DirectoryList'),
@@ -50,7 +57,26 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
             $this->serviceLocator->get('Magento\Setup\Model\SampleData'),
-            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider')
+            $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
+            new \Magento\Framework\Model\Resource\Db\Context(
+                $this->getResource(),
+                $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager'),
+                $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
+            )
         );
+    }
+
+    /**
+     * creates Resource Factory
+     *
+     * @return Resource
+     */
+    private function getResource()
+    {
+        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
+            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
+            []
+        );
+        return $this->resourceFactory->create($deploymentConfig);
     }
 }

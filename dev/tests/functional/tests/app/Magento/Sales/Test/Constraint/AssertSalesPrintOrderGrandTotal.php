@@ -14,10 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSalesPrintOrderGrandTotal extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that Grand Total price was printed correctly on sales guest print page.
      *

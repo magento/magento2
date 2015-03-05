@@ -106,9 +106,9 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
      */
     private function _createDummyIntegration()
     {
-        /** @var $factory \Magento\Integration\Model\Integration\Factory */
+        /** @var $factory \Magento\Integration\Model\IntegrationFactory */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $factory = $objectManager->create('Magento\Integration\Model\Integration\Factory');
+        $factory = $objectManager->create('Magento\Integration\Model\IntegrationFactory');
         $this->_integration = $factory->create()->setName(md5(rand()))->save();
 
         /** Grant permissions to integrations */

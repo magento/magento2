@@ -29,14 +29,48 @@ class SetTest extends \PHPUnit_Framework_TestCase
      */
     protected $typeMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resourceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $relationProcessor;
+
     protected function setUp()
     {
+        $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', ['getConnection'], [], '', false);
+        $this->transactionManagerMock = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\TransactionManagerInterface'
+        );
+        $this->relationProcessor = $this->getMock(
+            '\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+        $contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())
+            ->method('getTransactionManager')
+            ->willReturn($this->transactionManagerMock);
+        $contextMock->expects($this->once())
+            ->method('getObjectRelationProcessor')
+            ->willReturn($this->relationProcessor);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->model = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set',
             [
                 'beginTransaction',
-                '_getWriteAdapter',
                 'getMainTable',
                 'getIdFieldName',
                 '_afterDelete',
@@ -45,7 +79,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
                 '__wakeup'
             ],
             [
-                $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
+                $contextMock,
                 $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory', [], [], '', false),
                 $this->eavConfigMock
             ],
@@ -78,6 +112,15 @@ class SetTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDeleteStateException()
     {
+        $this->resourceMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
+
+        $this->transactionManagerMock->expects($this->once())
+            ->method('start')
+            ->with($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'))
+            ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
+
         $this->objectMock->expects($this->once())->method('getEntityTypeId')->willReturn(665);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(665)->willReturn($this->typeMock);
         $this->typeMock->expects($this->once())->method('getDefaultAttributeSetId')->willReturn(4);
@@ -92,12 +135,21 @@ class SetTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDelete()
     {
+        $this->resourceMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
+
+        $this->transactionManagerMock->expects($this->once())
+            ->method('start')
+            ->with($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'))
+            ->willReturn($this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface'));
+
         $this->objectMock->expects($this->once())->method('getEntityTypeId')->willReturn(665);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(665)->willReturn($this->typeMock);
         $this->typeMock->expects($this->once())->method('getDefaultAttributeSetId')->willReturn(4);
         $this->objectMock->expects($this->once())->method('getAttributeSetId')->willReturn(5);
-        $this->model->expects($this->once())
-            ->method('_getWriteAdapter')
+        $this->relationProcessor->expects($this->once())
+            ->method('delete')
             ->willThrowException(new \Exception('test exception'));
 
         $this->model->delete($this->objectMock);

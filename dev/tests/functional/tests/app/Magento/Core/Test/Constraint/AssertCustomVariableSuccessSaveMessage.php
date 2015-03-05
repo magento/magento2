@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomVariableSuccessSaveMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     const SUCCESS_SAVE_MESSAGE = 'You saved the custom variable.';
 
     /**

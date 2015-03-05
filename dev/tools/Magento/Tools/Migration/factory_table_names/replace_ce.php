@@ -134,7 +134,7 @@ return [
     'core/flag' => 'core_flag',
     'core/layout_link' => 'layout_link',
     'core/layout_update' => 'layout_update',
-    'core/resource' => 'core_resource',
+    'core_resource' => 'setup_module',
     'core/session' => 'core_session',
     'core/store' => 'store',
     'core/store_group' => 'store_group',

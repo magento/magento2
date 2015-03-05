@@ -30,13 +30,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="msrp_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Msrp\Model\Product\Options" shared="true"/>
     <type name="Magento\Msrp\Helper\Data" shared="true">
         <arguments>
