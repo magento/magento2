@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\ConfigurableImportExport\Model\Export;
+namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
 class RowCustomizerTest extends \PHPUnit_Framework_TestCase
 {
