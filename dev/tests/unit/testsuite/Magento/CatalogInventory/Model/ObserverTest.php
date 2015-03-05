@@ -61,9 +61,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemBuilder;
+    protected $stockItemFactory;
 
     /**
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -168,9 +168,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->stockItemBuilder = $this->getMock(
-            '\Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder',
-            ['mergeDataObjectWithArray'],
+        $this->stockItemFactory = $this->getMock(
+            '\Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -192,7 +192,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'stockHelper' => $this->stockHelper,
                 'stockConfiguration' => $this->stockConfiguration,
                 'stockItemRepository' => $this->stockItemRepository,
-                'stockItemBuilder' => $this->stockItemBuilder
+                'stockItemFactory' => $this->stockItemFactory
             ]
         );
 

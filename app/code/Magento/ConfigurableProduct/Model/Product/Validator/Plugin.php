@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Core\Helper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Json\Helper\Data;
 
 /**
  * Configurable product validation
@@ -28,20 +29,23 @@ class Plugin
     protected $productFactory;
 
     /**
-     * @var Helper\Data
+     * @var Data
      */
-    protected $coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param Manager $eventManager
      * @param ProductFactory $productFactory
-     * @param Helper\Data $coreHelper
+     * @param Data $jsonHelper
      */
-    public function __construct(Manager $eventManager, ProductFactory $productFactory, Helper\Data $coreHelper)
-    {
+    public function __construct(
+        Manager $eventManager,
+        ProductFactory $productFactory,
+        Data $jsonHelper
+    ) {
         $this->eventManager = $eventManager;
         $this->productFactory = $productFactory;
-        $this->coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -105,7 +109,7 @@ class Plugin
             $product->addData($this->getRequiredDataFromProduct($parentProduct));
             $product->addData($productData);
             $product->setCollectExceptionMessages(true);
-            $configurableAttribute = $this->coreHelper->jsonDecode($productData['configurable_attribute']);
+            $configurableAttribute = $this->jsonHelper->jsonDecode($productData['configurable_attribute']);
             $configurableAttribute = implode('-', $configurableAttribute);
 
             $errorAttributes = $product->validate();

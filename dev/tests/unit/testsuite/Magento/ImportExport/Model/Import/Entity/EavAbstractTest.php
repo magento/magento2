@@ -24,11 +24,6 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_coreDataMock;
-
-    /**
      * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
@@ -65,7 +60,6 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->_string = new \Magento\Framework\Stdlib\String();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
@@ -97,7 +91,6 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Import\Entity\AbstractEav',
             [
-                $this->_coreDataMock,
                 $this->_string,
                 $scopeConfig,
                 $this->_importFactory,

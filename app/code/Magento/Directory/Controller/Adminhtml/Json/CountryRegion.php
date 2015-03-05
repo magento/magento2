@@ -32,7 +32,7 @@ class CountryRegion extends \Magento\Backend\App\Action
             }
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($arrRes)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($arrRes)
         );
     }
 }
