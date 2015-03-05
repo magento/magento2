@@ -89,8 +89,10 @@ class ConfigOptions implements ConfigOptionsInterface
             $config['crypt']['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
         }
 
-        foreach ($this->moduleList as $key) {
-            $config['modules'][$key] = 1;
+        if (isset($this->moduleList)) {
+            foreach ($this->moduleList as $key) {
+                $config['modules'][$key] = 1;
+            }
         }
 
         return $config;
