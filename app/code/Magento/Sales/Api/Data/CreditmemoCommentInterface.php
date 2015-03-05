@@ -84,4 +84,36 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
      * @return int Parent ID.
      */
     public function getParentId();
+
+    /**
+     * Sets the parent ID for the credit memo.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the is-customer-notified flag value for the credit memo.
+     *
+     * @param int $isCustomerNotified
+     * @return $this
+     */
+    public function setIsCustomerNotified($isCustomerNotified);
+
+    /**
+     * Sets the is-visible-on-storefront flag value for the credit memo.
+     *
+     * @param int $isVisibleOnFront
+     * @return $this
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront);
+
+    /**
+     * Sets the credit memo comment.
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function setComment($comment);
 }

@@ -14,6 +14,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     AttributeInterface,
@@ -96,9 +97,19 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $_universalFactory;
 
     /**
-     * @var \Magento\Eav\Api\Data\AttributeOptionDataBuilder
+     * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory
      */
-    protected $optionDataBuilder;
+    protected $optionDataFactory;
+
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -110,7 +121,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -126,7 +139,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
+        \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -145,7 +160,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;
-        $this->optionDataBuilder = $optionDataBuilder;
+        $this->optionDataFactory = $optionDataFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -308,6 +325,17 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     public function getDefaultValue()
     {
         return $this->_getData('default_value');
+    }
+
+    /**
+     * Set default value for the element.
+     *
+     * @param string $defaultValue
+     * @return $this
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        return $this->setData('default_value', $defaultValue);
     }
 
     /**
@@ -914,11 +942,33 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set whether this is a unique attribute
+     *
+     * @param string $isUnique
+     * @return $this
+     */
+    public function setIsUnique($isUnique)
+    {
+        return $this->setData(self::IS_UNIQUE, $isUnique);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getFrontendClass()
     {
         return $this->getData(self::FRONTEND_CLASS);
+    }
+
+    /**
+     * Set frontend class of attribute
+     *
+     * @param string $frontendClass
+     * @return $this
+     */
+    public function setFrontendClass($frontendClass)
+    {
+        return $this->setData(self::FRONTEND_CLASS, $frontendClass);
     }
 
     /**
@@ -932,9 +982,25 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * {@inheritdoc}
      */
+    public function setFrontendInput($frontendInput)
+    {
+        return $this->setData(self::FRONTEND_INPUT, $frontendInput);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getIsRequired()
     {
         return $this->getData(self::IS_REQUIRED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsRequired($isRequired)
+    {
+        return $this->setData(self::IS_REQUIRED, $isRequired);
     }
     //@codeCoverageIgnoreEnd
 
@@ -952,6 +1018,30 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set options of the attribute (key => value pairs for select)
+     *
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface[] $options
+     * @return $this
+     */
+    public function setOptions(array $options = null)
+    {
+        if (!is_null($options)) {
+            $optionDataArray = [];
+            foreach ($options as $option) {
+                $optionData = $this->dataObjectProcessor->buildOutputDataArray(
+                    $option,
+                    '\Magento\Eav\Api\Data\AttributeOptionInterface'
+                );
+                $optionDataArray[] = $optionData;
+            }
+            $this->setData(self::OPTIONS, $optionDataArray);
+        } else {
+            $this->setData(self::OPTIONS, $options);
+        }
+        return $this;
+    }
+
+    /**
      * Convert option values from arrays to data objects
      *
      * @param array $options
@@ -961,7 +1051,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         $dataObjects = [];
         foreach ($options as $option) {
-            $dataObjects[] = $this->optionDataBuilder->populateWithArray($option)->create();
+            /** @var \Magento\Eav\Api\Data\AttributeOptionInterface $optionDataObject */
+            $optionDataObject = $this->optionDataFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $optionDataObject,
+                $option,
+                '\Magento\Eav\Api\Data\AttributeOptionInterface'
+            );
+            $dataObjects[] = $optionDataObject;
         }
         return $dataObjects;
     }
@@ -976,11 +1073,33 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set whether current attribute has been defined by a user.
+     *
+     * @param bool $isUserDefined
+     * @return $this
+     */
+    public function setIsUserDefined($isUserDefined)
+    {
+        return $this->setData(self::IS_USER_DEFINED, $isUserDefined);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getDefaultFrontendLabel()
     {
         return $this->getData(self::FRONTEND_LABEL);
+    }
+
+    /**
+     * Set frontend label for default store
+     *
+     * @param string $defaultFrontendLabel
+     * @return $this
+     */
+    public function setDefaultFrontendLabel($defaultFrontendLabel)
+    {
+        return $this->setData(self::FRONTEND_LABEL, $defaultFrontendLabel);
     }
 
     /**
@@ -992,6 +1111,17 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set frontend label for each store
+     *
+     * @param \Magento\Eav\Api\Data\AttributeFrontendLabelInterface[] $frontendLabels
+     * @return $this
+     */
+    public function setFrontendLabels(array $frontendLabels = null)
+    {
+        return $this->setData(self::FRONTEND_LABELS, $frontendLabels);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getNote()
@@ -1000,11 +1130,33 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
+     * Set the note attribute for the element.
+     *
+     * @param string $note
+     * @return $this
+     */
+    public function setNote($note)
+    {
+        return $this->setData(self::NOTE, $note);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSourceModel()
     {
         return $this->getData(self::SOURCE_MODEL);
+    }
+
+    /**
+     * Set source model
+     *
+     * @param string $sourceModel
+     * @return $this
+     */
+    public function setSourceModel($sourceModel)
+    {
+        return $this->setData(self::SOURCE_MODEL, $sourceModel);
     }
     //@codeCoverageIgnoreEnd
 
@@ -1020,5 +1172,16 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             return unserialize($rules);
         }
         return [];
+    }
+
+    /**
+     * Set validation rules.
+     *
+     * @param \Magento\Eav\Api\Data\AttributeValidationRuleInterface[] $validationRules
+     * @return $this
+     */
+    public function setValidationRules(array $validationRules = null)
+    {
+        return $this->setData(self::VALIDATE_RULES, $validationRules);
     }
 }
