@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Developer\Model\TemplateEngine\Plugin;
+namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Plugin;
+
+use Magento\Developer\Model\TemplateEngine\Plugin\DebugHints;
 
 class DebugHintsTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +46,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new DebugHints($this->objectManagerMock, $this->scopeConfigMock, $this->devHelperMock);
+        $this->model = new \Magento\Developer\Model\TemplateEngine\Plugin\DebugHints($this->objectManagerMock, $this->scopeConfigMock, $this->devHelperMock);
     }
 
     /**

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Developer\Model\TemplateEngine\Decorator;
+namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Decorator;
 
 class DebugHintsTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('<div id="fixture"/>')
         );
-        $model = new DebugHints($subject, $showBlockHints);
+        $model = new \Magento\Developer\Model\TemplateEngine\Decorator\DebugHints($subject, $showBlockHints);
         $actualResult = $model->render($block, 'template.phtml', ['var' => 'val']);
         $this->assertSelectEquals('div > div[title="template.phtml"]', 'template.phtml', 1, $actualResult);
         $this->assertSelectCount('div > div#fixture', 1, $actualResult);
