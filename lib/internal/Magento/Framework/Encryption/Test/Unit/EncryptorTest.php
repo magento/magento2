@@ -3,8 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Encryption;
+namespace Magento\Framework\Encryption\Test\Unit;
 
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Encryption\Crypt;
 use Magento\Framework\App\DeploymentConfig;
 
 class EncryptorTest extends \PHPUnit_Framework_TestCase

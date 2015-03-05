@@ -7,7 +7,7 @@
 /**
  * Test case for \Magento\Framework\Encryption\Crypt
  */
-namespace Magento\Framework\Encryption;
+namespace Magento\Framework\Encryption\Test\Unit;
 
 class CryptTest extends \PHPUnit_Framework_TestCase
 {
