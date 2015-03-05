@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Model\Product;
-use Magento\Core\Helper\Data;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\PriceBox as PriceBoxRender;
@@ -22,9 +22,9 @@ use Magento\Framework\View\Element\Template\Context;
 class PriceBox extends PriceBoxRender
 {
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $coreDataHelper;
+    protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\Math\Random
@@ -36,7 +36,7 @@ class PriceBox extends PriceBoxRender
      * @param Product $saleableItem
      * @param PriceInterface $price
      * @param RendererPool $rendererPool
-     * @param Data $coreDataHelper
+     * @param Data $jsonHelper
      * @param Random $mathRandom
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -46,11 +46,11 @@ class PriceBox extends PriceBoxRender
         Product $saleableItem,
         PriceInterface $price,
         RendererPool $rendererPool,
-        Data $coreDataHelper,
+        Data $jsonHelper,
         Random $mathRandom,
         array $data = []
     ) {
-        $this->coreDataHelper = $coreDataHelper;
+        $this->jsonHelper = $jsonHelper;
         $this->mathRandom = $mathRandom;
         parent::__construct($context, $saleableItem, $price, $rendererPool);
     }
@@ -59,13 +59,11 @@ class PriceBox extends PriceBoxRender
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
-     * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
-     * @param array $options Additional options used during encoding
      * @return string
      */
-    public function jsonEncode($valueToEncode, $cycleCheck = false, $options = [])
+    public function jsonEncode($valueToEncode)
     {
-        return $this->coreDataHelper->jsonEncode($valueToEncode, $cycleCheck, $options);
+        return $this->jsonHelper->jsonEncode($valueToEncode);
     }
 
     /**

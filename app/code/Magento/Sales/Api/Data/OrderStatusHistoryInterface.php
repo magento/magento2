@@ -105,4 +105,52 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * @return string Status.
      */
     public function getStatus();
+
+    /**
+     * Sets the parent ID for the order status history.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the is-customer-notified flag value for the order status history.
+     *
+     * @param int $isCustomerNotified
+     * @return $this
+     */
+    public function setIsCustomerNotified($isCustomerNotified);
+
+    /**
+     * Sets the is-visible-on-storefront flag value for the order status history.
+     *
+     * @param int $isVisibleOnFront
+     * @return $this
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront);
+
+    /**
+     * Sets the comment for the order status history.
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function setComment($comment);
+
+    /**
+     * Sets the status for the order status history.
+     *
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status);
+
+    /**
+     * Sets the entity name for the order status history.
+     *
+     * @param string $entityName
+     * @return $this
+     */
+    public function setEntityName($entityName);
 }
