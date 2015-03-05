@@ -16,6 +16,9 @@
             </group>
             <group id="search" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Catalog Search</label>
+                <field id="engine">
+                    <backend_model>Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend\Engine</backend_model>
+                </field>
                 <field id="min_query_length" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minimal Query Length</label>
                     <validate>validate-digits</validate>
