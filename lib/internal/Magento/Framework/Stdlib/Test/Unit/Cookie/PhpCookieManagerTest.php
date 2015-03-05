@@ -126,6 +126,7 @@ use \Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
         protected function setUp()
         {
+            $this->markTestSkipped('To be fixed in MAGETWO-34765');
             $this->cookieArray = $_COOKIE;
             global $mockTranslateSetCookie;
             $mockTranslateSetCookie = true;
