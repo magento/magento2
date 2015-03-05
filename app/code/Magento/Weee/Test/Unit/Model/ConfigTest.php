@@ -7,7 +7,9 @@
 /**
  * Test class for \Magento\Weee\Model\Config
  */
-namespace Magento\Weee\Model;
+namespace Magento\Weee\Test\Unit\Model;
+
+use \Magento\Weee\Model\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

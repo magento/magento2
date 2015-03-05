@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Helper;
+namespace Magento\Weee\Test\Unit\Helper;
 
 use Magento\Weee\Helper\Data as WeeeHelper;
 

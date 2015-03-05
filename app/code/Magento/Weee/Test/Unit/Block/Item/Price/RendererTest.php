@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Block\Item\Price;
+namespace Magento\Weee\Test\Unit\Block\Item\Price;
 
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 

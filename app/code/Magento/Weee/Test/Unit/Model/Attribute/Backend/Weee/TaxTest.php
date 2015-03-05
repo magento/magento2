@@ -9,7 +9,7 @@
 /**
  * Test class for \Magento\Weee\Model\Attribute\Backend\Weee\Tax
  */
-namespace Magento\Weee\Model\Attribute\Backend\Weee;
+namespace Magento\Weee\Test\Unit\Model\Attribute\Backend\Weee;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

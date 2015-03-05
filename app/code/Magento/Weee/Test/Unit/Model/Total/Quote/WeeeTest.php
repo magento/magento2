@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Weee\Model\Total\Quote;
+namespace Magento\Weee\Test\Unit\Model\Total\Quote;
 
 use Magento\Tax\Model\Calculation;
 
