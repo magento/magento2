@@ -125,7 +125,7 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     public function testCreateBundleJsPool()
     {
         unset($this->config);
-        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], 'libDir', false);
         $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
         $assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
         $config = $this->getMock('\Magento\Framework\RequireJs\Config', [], [], '', false);
@@ -142,31 +142,29 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
         $dirRead
             ->expects($this->once())
+            ->method('isExist')
+            ->with('path/to/bundle/dir/js/bundle')
+            ->willReturn(true);
+        $dirRead
+            ->expects($this->once())
             ->method('read')
             ->with('path/to/bundle/dir/js/bundle')
             ->willReturn(['bundle1.js', 'bundle2.js']);
-
         $dirRead
-            ->expects($this->at(1))
+            ->expects($this->exactly(2))
             ->method('getRelativePath')
-            ->with('bundle1.js')
-            ->willReturn('path/to/bundle1.js');
-        $dirRead
-            ->expects($this->at(2))
-            ->method('getRelativePath')
-            ->with('bundle2.js')
-            ->willReturn('path/to/bundle2.js');
+            ->willReturnMap([
+                'path/to/bundle1.js',
+                'path/to/bundle2.js'
+            ]);
+        $assetRepo
+            ->expects($this->exactly(2))
+            ->method('createArbitrary')
+            ->willReturnMap([
+                $this->asset,
+                $this->asset
+            ]);
 
-        $assetRepo
-            ->expects($this->at(1))
-            ->method('createArbitrary')
-            ->with('path/to/bundle1.js')
-            ->willReturn($this->asset);
-        $assetRepo
-            ->expects($this->at(2))
-            ->method('createArbitrary')
-            ->with('path/to/bundle2.js')
-            ->willReturn($this->asset);
         $assetRepo
             ->expects($this->once())
             ->method('getStaticViewFileContext')
