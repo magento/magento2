@@ -16,27 +16,31 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
         $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $loader = $this->getMock('\Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $loader->expects($this->any())->method('load')->willReturn(['module1', 'module2']);
-        $this->object = new ConfigOptions($random, $loader);
+        $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
+        $this->object = new ConfigOptions($random, $loader, $deployConfig);
     }
 
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[0]);
-        $this->assertInstanceOf('Magento\Framework\Setup\Option\MultiSelectConfigOption', $options[1]);
-        $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[2]);
-        $this->assertEquals(4, count($options));
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[1]);
+        $this->assertEquals(10, count($options));
     }
 
     public function testCreateConfig()
     {
         $config = $this->object->createConfig([
             ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key',
-            ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db'
+            ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db',
+            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
         ]);
-        $this->assertEquals(4, count($config));
+        $this->assertEquals(5, count($config));
         $this->assertNotEmpty($config[0]->getData()['date']);
         $this->assertNotEmpty($config[1]->getData()['key']);
         $this->assertEquals('key', $config[1]->getData()['key']);
@@ -47,7 +51,12 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateConfigNoSessionSave()
     {
-        $config = $this->object->createConfig([ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key']);
+        $config = $this->object->createConfig([
+            ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key',
+            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+        ]);
         $this->assertNotEmpty($config[3]);
         $this->assertEquals('files', $config[3]->getData()['save']);
     }
@@ -58,7 +67,12 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateConfigInvalidSessionSave()
     {
-        $this->object->createConfig([ConfigOptions::INPUT_KEY_SESSION_SAVE => 'invalid']);
+        $this->object->createConfig([
+            ConfigOptions::INPUT_KEY_SESSION_SAVE => 'invalid',
+            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+        ]);
     }
 
     /**
@@ -77,8 +91,17 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     public function createConfigNoKeyDataProvider()
     {
         return [
-            'no data' => [[]],
-            'no frontName' => [['something_else' => 'something']],
+            'no key data' => [[
+                ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+                ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+                ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+            ]],
+            'no frontName' => [[
+                'something_else' => 'something',
+                ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+                ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+                ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+            ]],
         ];
     }
 
@@ -103,5 +126,18 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
             [[ConfigOptions::INPUT_KEY_CRYPT_KEY => '']],
             [[ConfigOptions::INPUT_KEY_CRYPT_KEY => '0']],
         ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Missing value for db configuration: db_user
+     */
+    public function testCreateConfigInvalidDB()
+    {
+        $data = [
+            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+        ];
+        $this->object->createConfig($data);
     }
 }
