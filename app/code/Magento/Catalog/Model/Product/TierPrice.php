@@ -32,4 +32,26 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->getData(self::VALUE);
     }
+
+    /**
+     * Set tier qty
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(self::QTY, $qty);
+    }
+
+    /**
+     * Set price value
+     *
+     * @param float $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        return $this->setData(self::VALUE, $value);
+    }
 }

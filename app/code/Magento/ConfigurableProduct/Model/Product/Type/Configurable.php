@@ -154,9 +154,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $productFactory;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData;
+    protected $jsonHelper;
 
     /**
      * @codingStandardsIgnoreStart/End
@@ -170,7 +170,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
      * @param \Magento\Eav\Model\EntityFactory $entityFactory
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
@@ -194,7 +194,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory,
         \Magento\Eav\Model\EntityFactory $entityFactory,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
@@ -217,7 +217,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_scopeConfig = $scopeConfig;
         $this->stockConfiguration = $stockConfiguration;
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -1065,7 +1065,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $generatedProductIds = [];
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
-            $configurableAttribute = $this->_coreData->jsonDecode($simpleProductData['configurable_attribute']);
+            $configurableAttribute = $this->jsonHelper->jsonDecode($simpleProductData['configurable_attribute']);
             unset($simpleProductData['configurable_attribute']);
 
             $this->_fillSimpleProductData(

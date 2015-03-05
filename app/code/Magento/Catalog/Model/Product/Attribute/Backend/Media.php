@@ -43,11 +43,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_mediaDirectory;
 
     /**
-     * Core data
+     * Json Helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData = null;
+    protected $jsonHelper = null;
 
     /**
      * Core file storage database
@@ -76,7 +76,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
@@ -85,7 +85,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
@@ -93,7 +93,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_productFactory = $productFactory;
         $this->_eventManager = $eventManager;
         $this->_fileStorageDb = $fileStorageDb;
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->_resourceModel = $resourceProductAttribute;
         $this->_mediaConfig = $mediaConfig;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
@@ -180,7 +180,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!is_array($value['images']) && strlen($value['images']) > 0) {
-            $value['images'] = $this->_coreData->jsonDecode($value['images']);
+            $value['images'] = $this->jsonHelper->jsonDecode($value['images']);
         }
 
         if (!is_array($value['images'])) {

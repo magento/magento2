@@ -88,7 +88,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'productFactory' => $this->productFactory,
                 'eventManager' => $eventManager,
                 'fileStorageDb' => $fileStorageDb,
-                'coreData' => $coreData,
                 'mediaConfig' => $this->mediaConfig,
                 'filesystem' => $filesystem,
                 'resourceProductAttribute' => $this->resourceModel

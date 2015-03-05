@@ -60,11 +60,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     private $typeHandler;
 
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -76,7 +71,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory
      * @param \Magento\Downloadable\Model\Resource\Link $linkResource
      * @param \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory
@@ -96,7 +90,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory,
         \Magento\Downloadable\Model\Resource\Link $linkResource,
         \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory,
@@ -112,7 +105,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $this->_sampleFactory = $sampleFactory;
         $this->_linkFactory = $linkFactory;
         $this->typeHandler = $typeHandler;
-        $this->_coreData = $coreData;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,

@@ -22,7 +22,7 @@ class FileTest extends AbstractFormTestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem */
     protected $fileSystemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Request\Http */
     protected $requestMock;
 
     /**
@@ -40,20 +40,8 @@ class FileTest extends AbstractFormTestCase
         )->disableOriginalConstructor()->getMock();
         $this->fileSystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->setMethods(
-                [
-                    'getParam',
-                    'getParams',
-                    'getModuleName',
-                    'setModuleName',
-                    'getActionName',
-                    'setActionName',
-                    'getCookie',
-                    'isSecure',
-                ]
-            )
-            ->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->uploaderFactoryMock = $this->getMock('Magento\Framework\File\UploaderFactory', [], [], '', false);
     }
 

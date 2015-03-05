@@ -85,7 +85,7 @@ class AddTrack extends \Magento\Backend\App\Action
             $response = ['error' => true, 'message' => __('Cannot add tracking number.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
+            $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

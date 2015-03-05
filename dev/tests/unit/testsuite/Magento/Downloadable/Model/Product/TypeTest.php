@@ -34,7 +34,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
         $fileStorageDb = $this->getMockBuilder(
             'Magento\MediaStorage\Helper\File\Storage\Database'
         )->disableOriginalConstructor()->getMock();
@@ -112,7 +111,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             'Magento\Downloadable\Model\Product\Type',
             [
                 'eventManager' => $eventManager,
-                'coreData' => $coreData,
                 'fileStorageDb' => $fileStorageDb,
                 'filesystem' => $filesystem,
                 'coreRegistry' => $coreRegistry,

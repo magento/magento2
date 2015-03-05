@@ -49,11 +49,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreDataMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_requestMock;
 
     /**
@@ -135,9 +130,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('Magento_Backend::system_acl_roles')
         );
 
-        $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', ['getHash'], [], '', false);
-        $this->_coreDataMock->expects($this->any())->method('getHash')->will($this->returnArgument(0));
-
         $this->_authSessionMock = $this->getMock(
             'Magento\Backend\Model\Auth\Session',
             [],
@@ -171,7 +163,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'backendHelper' => $helperMock,
                 'formKey' => $this->_formKey,
                 'menuConfig' => $this->_menuConfigMock,
-                'coreData' => $this->_coreDataMock,
                 'authSession' => $this->_authSessionMock,
                 'encryptor' => $this->_encryptor,
                 'routeParamsResolver' => $this->_paramsResolverMock
@@ -193,7 +184,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'backendHelper' => $helperMock,
                 'formKey' => $this->_formKey,
                 'menuConfig' => $this->_menuConfigMock,
-                'coreData' => $this->_coreDataMock,
                 'authSession' => $this->_authSessionMock,
                 'encryptor' => $this->_encryptor,
                 'routeParamsResolver' => $this->_paramsResolverMock

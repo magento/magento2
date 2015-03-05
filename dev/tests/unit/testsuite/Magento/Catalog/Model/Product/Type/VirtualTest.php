@@ -16,7 +16,6 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $coreDataMock = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $coreRegistryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $fileStorageDbMock = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
@@ -28,7 +27,6 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Product\Type\Virtual',
             [
                 'eventManager' => $eventManager,
-                'coreData' => $coreDataMock,
                 'fileStorageDb' => $fileStorageDbMock,
                 'filesystem' => $filesystem,
                 'coreRegistry' => $coreRegistryMock,
