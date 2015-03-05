@@ -14,20 +14,20 @@ class TypeList implements \Magento\Catalog\Api\ProductCustomOptionTypeListInterf
     protected $config;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductCustomOptionTypeDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterfaceFactory
      */
-    protected $builder;
+    protected $factory;
 
     /**
      * @param Config $config
-     * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeDataBuilder $builder
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterfaceFactory $factory
      */
     public function __construct(
         Config $config,
-        \Magento\Catalog\Api\Data\ProductCustomOptionTypeDataBuilder $builder
+        \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterfaceFactory $factory
     ) {
         $this->config = $config;
-        $this->builder = $builder;
+        $this->factory = $factory;
     }
 
     /**
@@ -41,12 +41,12 @@ class TypeList implements \Magento\Catalog\Api\ProductCustomOptionTypeListInterf
                 if ($type['disabled']) {
                     continue;
                 }
-                $itemData = [
-                    'label' => __($type['label']),
-                    'code' => $type['name'],
-                    'group' => __($option['label']),
-                ];
-                $output[] = $this->builder->populateWithArray($itemData)->create();
+                /** @var \Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface $optionType */
+                $optionType = $this->factory->create();
+                $optionType->setLabel(__($type['label']))
+                    ->setCode($type['name'])
+                    ->setGroup(__($option['label']));
+                $output[] = $optionType;
             }
         }
         return $output;
