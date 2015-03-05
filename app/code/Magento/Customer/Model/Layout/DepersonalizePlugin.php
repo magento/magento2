@@ -8,6 +8,7 @@
 namespace Magento\Customer\Model\Layout;
 
 use Magento\PageCache\Model\DepersonalizeChecker;
+
 /**
  * Class DepersonalizePlugin
  */
