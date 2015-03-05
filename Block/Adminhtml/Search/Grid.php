@@ -23,16 +23,16 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_registryManager;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\AdvancedSearch\Model\Adminhtml\Search\Grid\Options $options
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
@@ -40,10 +40,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\AdvancedSearch\Model\Adminhtml\Search\Grid\Options $options,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $backendHelper, $data);
         $this->_options = $options;
         $this->_registryManager = $registry;
@@ -104,7 +104,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     {
         $queries = array_flip($this->getSelectedQueries());
         if (!empty($queries)) {
-            return $this->_coreHelper->jsonEncode($queries);
+            return $this->jsonHelper->jsonEncode($queries);
         }
         return '{}';
     }
