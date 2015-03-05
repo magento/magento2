@@ -8,7 +8,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
