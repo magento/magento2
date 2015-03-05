@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\RequireJs\Block\Html\Head;
+namespace Magento\RequireJs\Test\Unit\Block\Html\Head;
+
+use \Magento\RequireJs\Block\Html\Head\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

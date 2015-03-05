@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\RequireJs\Model;
+namespace Magento\RequireJs\Test\Unit\Model;
+
+use \Magento\RequireJs\Model\FileManager;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
