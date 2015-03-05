@@ -11,6 +11,10 @@ namespace Magento\Framework\Config\Data;
  */
 class ConfigData
 {
+    /**
+     * Default file key
+     */
+    const DEFAULT_FILE_KEY = 'config.php';
 
     /**
      * File key

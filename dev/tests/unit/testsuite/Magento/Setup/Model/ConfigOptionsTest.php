@@ -24,18 +24,42 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
-        $this->assertInstanceOf('\Magento\Framework\Setup\TextConfigOption', $options[0]);
-        $this->assertInstanceOf('\Magento\Framework\Setup\MultiSelectConfigOption', $options[1]);
-        $this->assertEquals(2, count($options));
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[0]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\MultiSelectConfigOption', $options[1]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[2]);
+        $this->assertEquals(3, count($options));
     }
 
     public function testCreateConfig()
     {
-        $config = $this->object->createConfig([ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key']);
-        $this->assertNotEmpty($config['install']['date']);
-        $this->assertEquals('key', $config['crypt']['key']);
+        $config = $this->object->createConfig([
+            ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key',
+            ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db'
+        ]);
+        $this->assertEquals(4, count($config));
+        $this->assertNotEmpty($config['install']);
+        $this->assertNotEmpty($config['crypt']);
+        $this->assertEquals('key', $config['crypt']->getData()['key']);
         $this->assertNotEmpty($config['modules']);
-        $this->assertEquals(2, count($config['modules']));
+        $this->assertEquals(2, count($config['modules']->getData()));
+        $this->assertNotEmpty($config['session']);
+        $this->assertEquals('db', $config['session']->getData()['save']);
+    }
+
+    public function testCreateConfigNoSessionSave()
+    {
+        $config = $this->object->createConfig([ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key']);
+        $this->assertNotEmpty($config['session']);
+        $this->assertEquals('files', $config['session']->getData()['save']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid session save location.
+     */
+    public function testCreateConfigInvalidSessionSave()
+    {
+        $this->object->createConfig([ConfigOptions::INPUT_KEY_SESSION_SAVE => 'invalid']);
     }
 
     /**
@@ -45,7 +69,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     public function testCreateConfigNoKey(array $options)
     {
         $config = $this->object->createConfig($options);
-        $this->assertEquals(md5('key'), $config['crypt']['key']);
+        $this->assertEquals(md5('key'), $config['crypt']->getData()['key']);
     }
 
     /**

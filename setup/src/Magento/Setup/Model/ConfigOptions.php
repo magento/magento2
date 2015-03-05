@@ -5,8 +5,10 @@
  */
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Setup\ConfigOptionsInterface;
+use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\Setup\Option\MultiSelectConfigOption;
 use Magento\Framework\Module\ModuleList\Loader;
@@ -25,6 +27,11 @@ class ConfigOptions implements ConfigOptionsInterface
      * Input key for encryption key
      */
     const INPUT_KEY_CRYPT_KEY = 'key';
+
+    /**
+     * Input key for session save
+     */
+    const INPUT_KEY_SESSION_SAVE = 'session_save';
 
     /**
      * Path to modules in the deployment config
@@ -59,7 +66,8 @@ class ConfigOptions implements ConfigOptionsInterface
     public function getOptions()
     {
         return [
-            new TextConfigOption(self::INPUT_KEY_CRYPT_KEY,
+            new TextConfigOption(
+                self::INPUT_KEY_CRYPT_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 'encryption key'
             ),
@@ -70,6 +78,13 @@ class ConfigOptions implements ConfigOptionsInterface
                 'modules list',
                 $this->moduleList
             ),
+            new SelectConfigOption(
+                self::INPUT_KEY_SESSION_SAVE,
+                SelectConfigOption::FRONTEND_WIZARD_SELECT,
+                ['files', 'db'],
+                'session save location',
+                'files'
+            ),
         ];
     }
 
@@ -78,23 +93,44 @@ class ConfigOptions implements ConfigOptionsInterface
      */
     public function createConfig(array $data)
     {
-        $config = [];
-        $config['install']['date'] = date('r');
+        $configData = [];
+        // install segment
+        $installData['date'] = date('r');
+        $configData['install'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'install', $installData);
+
+        // crypt segment
         if (isset($data[self::INPUT_KEY_CRYPT_KEY]) && !$data[self::INPUT_KEY_CRYPT_KEY]) {
             throw new \InvalidArgumentException('Invalid encryption key.');
         }
+        $cryptData = [];
         if (!isset($data[self::INPUT_KEY_CRYPT_KEY])) {
-            $config['crypt']['key'] = md5($this->random->getRandomString(10));
+            $cryptData['key'] = md5($this->random->getRandomString(10));
         } else {
-            $config['crypt']['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
+            $cryptData['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
         }
+        $configData['crypt'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'crypt', $cryptData);
 
+        // module segment
+        $modulesData = [];
         if (isset($this->moduleList)) {
             foreach ($this->moduleList as $key) {
-                $config['modules'][$key] = 1;
+                $modulesData[$key] = 1;
             }
         }
+        $configData['modules'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'modules', $modulesData);
 
-        return $config;
+        // session segment
+        $sessionData = [];
+        if (isset($data[self::INPUT_KEY_SESSION_SAVE])) {
+            if ($data[self::INPUT_KEY_SESSION_SAVE] != 'files' && $data[self::INPUT_KEY_SESSION_SAVE] != 'db') {
+                throw new \InvalidArgumentException('Invalid session save location.');
+            }
+            $sessionData['save'] = $data[self::INPUT_KEY_SESSION_SAVE];
+        } else {
+            $sessionData['save'] = 'files';
+        }
+        $configData['session'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'session', $sessionData);
+
+        return $configData;
     }
 }
