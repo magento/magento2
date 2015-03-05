@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Exception;
+namespace Magento\Framework\Exception\Test\Unit;
+
+use \Magento\Framework\Exception\InvalidEmailOrPasswordException;
 
 /**
  * Class InvalidEmailOrPasswordExceptionTest
