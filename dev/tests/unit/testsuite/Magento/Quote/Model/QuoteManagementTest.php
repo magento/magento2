@@ -576,6 +576,62 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
 
+    /**
+     * //Last method throws exception because class method 'submit()' already covered.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Quote prepared for guest customer.
+     */
+    public function testPlaceOrderIfCustomerIsQuest()
+    {
+        $cartId = 100;
+        $email = 'email@mail.com';
+        $quoteMock = $this->getMock(
+            'Magento\Quote\Model\Quote',
+            [
+                'getCheckoutMethod',
+                'setCustomerId',
+                'setCustomerEmail',
+                'getBillingAddress',
+                'setCustomerIsGuest',
+                'setCustomerGroupId'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)->willReturn($quoteMock);
+
+        $quoteMock->expects($this->once())
+            ->method('getCheckoutMethod')
+            ->willReturn(\Magento\Checkout\Model\Type\Onepage::METHOD_GUEST);
+        $quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
+        $quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
+
+        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', ['getEmail'], [], '', false);
+        $addressMock->expects($this->once())->method('getEmail')->willReturn($email);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->with()->willReturn($addressMock);
+
+        $quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
+        $quoteMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID)
+            ->willThrowException(new \Exception('Quote prepared for guest customer.'));
+
+        $this->model->placeOrder($cartId);
+    }
+
+    /**
+     * @param $isGuest
+     * @param $isVirtual
+     * @param Quote\Address $billingAddress
+     * @param Quote\Payment $payment
+     * @param $customerId
+     * @param $id
+     * @param array $quoteItems
+     * @param Quote\Address $shippingAddress
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getQuote(
         $isGuest,
         $isVirtual,
@@ -649,6 +705,16 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         return $quote;
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $baseOrder
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
+     * @param array $addresses
+     * @param array $payments
+     * @param array $items
+     * @param $quoteId
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function prepareOrderFactory(
         \Magento\Sales\Api\Data\OrderInterface $baseOrder,
         \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress,
@@ -656,7 +722,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         array $payments,
         array $items,
         $quoteId,
-        \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null
+        \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null,
+        $customerId = null
     ) {
         $order = $this->getMock(
             'Magento\Sales\Model\Order',
@@ -676,6 +743,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
         if ($shippingAddress) {
             $order->expects($this->once())->method('setShippingAddress')->with($shippingAddress);
+        }
+        if ($customerId) {
+            $this->orderFactory->expects($this->once())
+                ->method('setCustomerId')
+                ->with($customerId);
         }
         $order->expects($this->any())->method('getAddressesCollection');
         $order->expects($this->any())->method('getAddresses');
