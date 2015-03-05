@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Session\SaveHandler;
+namespace Magento\Framework\Session\Test\Unit\SaveHandler;
 
 class DbTableTest extends \PHPUnit_Framework_TestCase
 {

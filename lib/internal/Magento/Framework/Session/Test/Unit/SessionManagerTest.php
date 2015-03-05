@@ -8,7 +8,7 @@ namespace {
     $mockPHPFunctions = false;
 }
 
-namespace Magento\Framework\Session {
+namespace Magento\Framework\Session\Test\Unit {
     // @codingStandardsIgnoreEnd
 
     /**

@@ -9,7 +9,9 @@
 /**
  * Test class for \Magento\Framework\Session\Config
  */
-namespace Magento\Framework\Session;
+namespace Magento\Framework\Session\Test\Unit;
+
+use \Magento\Framework\Session\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
