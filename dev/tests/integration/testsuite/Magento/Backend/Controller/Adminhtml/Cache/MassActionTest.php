@@ -84,6 +84,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
      * @link https://github.com/facebook/hhvm/issues/1447
      *
      * @return array
+     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     protected function getCacheStates()
     {

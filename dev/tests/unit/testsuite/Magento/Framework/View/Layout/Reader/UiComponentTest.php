@@ -68,7 +68,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ['attributes' => ['group' => '', 'component' => 'listing']]
         );
         $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
-            $element->getAttribute('name'), 'config_path', 'scope'
+            $element->getAttribute('name'),
+            'config_path',
+            'scope'
         );
         $this->model->interpret($this->context, $element);
     }
