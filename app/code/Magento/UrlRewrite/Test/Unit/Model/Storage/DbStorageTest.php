@@ -6,7 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\UrlRewrite\Model\Storage;
+namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
+
+use \Magento\UrlRewrite\Model\Storage\DbStorage;
 
 use Magento\Framework\App\Resource;
 use Magento\TestFramework\Helper\ObjectManager;

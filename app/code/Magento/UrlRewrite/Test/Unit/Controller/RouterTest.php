@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\UrlRewrite\Controller;
+namespace Magento\UrlRewrite\Test\Unit\Controller;
 
 use Magento\TestFramework\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;

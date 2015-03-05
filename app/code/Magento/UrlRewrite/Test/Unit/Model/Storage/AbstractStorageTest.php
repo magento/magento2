@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Model\Storage;
+namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
+
+use Magento\UrlRewrite\Model\Storage\DuplicateEntryException;
 
 class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 {

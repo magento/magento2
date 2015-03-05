@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\UrlRewrite\Block\Catalog\Edit;
+namespace Magento\UrlRewrite\Test\Unit\Block\Catalog\Edit;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
