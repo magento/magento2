@@ -15,11 +15,11 @@ use Magento\Quote\Api\CartTotalRepositoryInterface;
 class CartTotalRepository implements CartTotalRepositoryInterface
 {
     /**
-     * Cart totals builder.
+     * Cart totals factory.
      *
-     * @var Api\Data\TotalsDataBuilder
+     * @var Api\Data\TotalsInterfaceFactory
      */
-    private $totalsBuilder;
+    private $totalsFactory;
 
     /**
      * Quote repository.
@@ -29,17 +29,25 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     private $quoteRepository;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * Constructs a cart totals data object.
      *
-     * @param Api\Data\TotalsDataBuilder $totalsBuilder Cart totals builder.
+     * @param Api\Data\TotalsInterfaceFactory $totalsFactory Cart totals factory.
      * @param QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        Api\Data\TotalsDataBuilder $totalsBuilder,
-        QuoteRepository $quoteRepository
+        Api\Data\TotalsInterfaceFactory $totalsFactory,
+        QuoteRepository $quoteRepository,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->totalsBuilder = $totalsBuilder;
+        $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -57,10 +65,11 @@ class CartTotalRepository implements CartTotalRepositoryInterface
          */
         $quote = $this->quoteRepository->getActive($cartId);
         $shippingAddress = $quote->getShippingAddress();
-        $totals = array_merge($shippingAddress->getData(), $quote->getData());
-        $this->totalsBuilder->populateWithArray($totals);
-        $this->totalsBuilder->setItems($quote->getAllItems());
+        $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
+        $totals = $this->totalsFactory->create();
+        $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
+        $totals->setItems($quote->getAllItems());
 
-        return $this->totalsBuilder->create();
+        return $totals;
     }
 }

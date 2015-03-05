@@ -19,9 +19,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Helper\Data */
     protected $_userData;
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_coreData;
-
     /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportBuilderMock;
 
@@ -56,11 +53,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->_userData = $this->getMockBuilder(
             'Magento\User\Helper\Data'
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
-        $this->_coreData = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -136,7 +128,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             [
                 'eventManager' => $eventManagerMock,
                 'userData' => $this->_userData,
-                'coreData' => $this->_coreData,
                 'context' => $this->_contextMock,
                 'registry' => $coreRegistry,
                 'resource' => $this->_resourceMock,

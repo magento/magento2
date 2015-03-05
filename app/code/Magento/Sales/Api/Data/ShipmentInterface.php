@@ -146,6 +146,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getPackages();
 
     /**
+     * Sets any packages for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
+     * @return $this
+     */
+    public function setPackages(array $packages = null);
+
+    /**
      * Gets the shipment status.
      *
      * @return int Shipment status.
@@ -214,4 +222,100 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface[] Array of comments.
      */
     public function getComments();
+
+    /**
+     * Sets the store ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setStoreId($id);
+
+    /**
+     * Sets the total weight for the shipment.
+     *
+     * @param float $totalWeight
+     * @return $this
+     */
+    public function setTotalWeight($totalWeight);
+
+    /**
+     * Sets the total quantity for the shipment.
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setTotalQty($qty);
+
+    /**
+     * Sets the email-sent flag value for the shipment.
+     *
+     * @param int $emailSent
+     * @return $this
+     */
+    public function setEmailSent($emailSent);
+
+    /**
+     * Sets the order ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderId($id);
+
+    /**
+     * Sets the customer ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setCustomerId($id);
+
+    /**
+     * Sets the shipping address ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setShippingAddressId($id);
+
+    /**
+     * Sets the billing address ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setBillingAddressId($id);
+
+    /**
+     * Sets the shipment status.
+     *
+     * @param int $shipmentStatus
+     * @return $this
+     */
+    public function setShipmentStatus($shipmentStatus);
+
+    /**
+     * Sets the increment ID for the shipment.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setIncrementId($id);
+
+    /**
+     * Sets the shipping label for the shipment.
+     *
+     * @param string $shippingLabel
+     * @return $this
+     */
+    public function setShippingLabel($shippingLabel);
+
+    /**
+     * Sets the updated-at timestamp for the shipment.
+     *
+     * @param string $timestamp
+     * @return $this
+     */
+    public function setUpdatedAt($timestamp);
 }
