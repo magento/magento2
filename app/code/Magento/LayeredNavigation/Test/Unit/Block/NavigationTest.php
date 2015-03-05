@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\LayeredNavigation\Block;
+namespace Magento\LayeredNavigation\Test\Unit\Block;
 
 class NavigationTest extends \PHPUnit_Framework_TestCase
 {

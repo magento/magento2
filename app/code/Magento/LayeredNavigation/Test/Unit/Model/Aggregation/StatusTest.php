@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\LayeredNavigation\Model\Aggregation;
+namespace Magento\LayeredNavigation\Test\Unit\Model\Aggregation;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
