@@ -85,15 +85,14 @@ class ConfigOptionsCollector
     {
         $optionsList = [];
 
+        $moduleList = $collectAll ? $this->fullModuleList : $this->moduleList;
         // go through modules
-        foreach ($this->fullModuleList->getNames() as $moduleName) {
+        foreach ($moduleList->getNames() as $moduleName) {
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptions';
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
                 if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
-                    if ($this->moduleList->has($moduleName) || $collectAll) {
-                        $optionsList[$moduleName] = $optionsClass;
-                    }
+                    $optionsList[$moduleName] = $optionsClass;
                 }
             }
         }

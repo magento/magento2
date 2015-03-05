@@ -49,7 +49,7 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $moduleListMock->expects($this->any())->method('has')->willReturn(false);
+        $moduleListMock->expects($this->once())->method('getNames')->willReturn([]);
         $object = $objectManager->create(
             'Magento\Setup\Model\ConfigOptionsCollector',
             [
