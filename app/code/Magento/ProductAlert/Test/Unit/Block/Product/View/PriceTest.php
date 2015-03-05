@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ProductAlert\Block\Product\View;
+namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
 
 /**
  * Test class for \Magento\ProductAlert\Block\Product\View\Price

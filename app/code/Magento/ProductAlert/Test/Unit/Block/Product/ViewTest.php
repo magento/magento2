@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ProductAlert\Block\Product;
+namespace Magento\ProductAlert\Test\Unit\Block\Product;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
