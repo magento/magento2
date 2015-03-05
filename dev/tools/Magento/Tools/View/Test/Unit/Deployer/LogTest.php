@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tools\View\Deployer;
+namespace Magento\Tools\View\Test\Unit\Deployer;
+
+use \Magento\Tools\View\Deployer\Log;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {
