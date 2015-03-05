@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Css\PreProcessor;
+namespace Magento\Framework\Css\Test\Unit\PreProcessor;
 
 class LessTest extends \PHPUnit_Framework_TestCase
 {
