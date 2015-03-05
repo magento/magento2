@@ -17,11 +17,15 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 class PreProcessor implements PreProcessorInterface
 {
     /**
+     * Js translation configuration
+     *
      * @var Config
      */
     protected $config;
 
     /**
+     * Translation data provider
+     *
      * @var DataProviderInterface
      */
     protected $dataProvider;

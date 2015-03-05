@@ -15,16 +15,22 @@ use Magento\Framework\App\State;
 class DataProvider implements DataProviderInterface
 {
     /**
+     * Application state
+     *
      * @var State
      */
     protected $appState;
 
     /**
+     * Js translation configuration
+     *
      * @var Config
      */
     protected $config;
 
     /**
+     * Files utility
+     *
      * @var Files
      */
     protected $filesUtility;
@@ -41,6 +47,11 @@ class DataProvider implements DataProviderInterface
 
     /**
      * Get translation data
+     *
+     * @param string $themePath
+     * @return string[]
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getData($themePath)
     {
@@ -60,6 +71,8 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Parse content for entries to be translated
+     *
      * @param string $content
      * @return string[]
      * @throws \Exception
