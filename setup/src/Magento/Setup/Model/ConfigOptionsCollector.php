@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -7,7 +11,7 @@ use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
 
 /**
- * Collects all ConfigOptions throughout modules, framework and setup
+ * Collects all ConfigOptions class in modules and setup
  */
 class ConfigOptionsCollector
 {
@@ -53,6 +57,7 @@ class ConfigOptionsCollector
      * @param Filesystem $filesystem
      * @param FullModuleList $fullModuleList
      * @param ModuleList $moduleList
+     * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         DirectoryList $directoryList,
@@ -78,7 +83,7 @@ class ConfigOptionsCollector
         $optionsList = [];
 
         // go through modules
-        foreach ($this->moduleList->getNames() as $moduleName) {
+        foreach ($this->fullModuleList->getNames() as $moduleName) {
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptions';
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
@@ -91,66 +96,18 @@ class ConfigOptionsCollector
             }
         }
 
-        // go through framework
-        $frameworkOptionsFiles = [];
-        $this->collectRecursively(
-            $this->filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL),
-            'Magento/Framework',
-            $frameworkOptionsFiles
-        );
-        foreach ($frameworkOptionsFiles as $frameworkOptionsFile) {
-            // remove .php
-            $frameworkOptionsFile = substr($frameworkOptionsFile, 0, -4);
-            $frameworkOptionsClassName = str_replace('/', '\\', $frameworkOptionsFile);
-            $optionsClass = $this->objectManagerProvider->get()->create($frameworkOptionsClassName);
-            if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
-                $optionsList[$frameworkOptionsClassName] = [
-                    'options' => $optionsClass->getOptions(),
-                    'enabled' => true,
-                ];
-            }
-        }
-
-        // go through setup
-        $setupOptionsFiles = [];
-        $this->collectRecursively(
-            $this->filesystem->getDirectoryRead(DirectoryList::ROOT),
-            'setup/src',
-            $setupOptionsFiles
-        );
-        foreach ($setupOptionsFiles as $setupOptionsFile) {
-            // remove setup/src/ and .php
-            $setupOptionsFile = substr($setupOptionsFile, 10, -4);
-            $setupOptionsClassName = str_replace('/', '\\', $setupOptionsFile);
-            $optionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
-            if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
+        // check setup
+        $setupOptionsClassName = 'Magento\Setup\Model\ConfigOptions';
+        if (class_exists($setupOptionsClassName)) {
+            $setupOptionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
+            if ($setupOptionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
                 $optionsList[$setupOptionsClassName] = [
-                    'options' => $optionsClass->getOptions(),
+                    'options' => $setupOptionsClass->getOptions(),
                     'enabled' => true,
                 ];
             }
         }
 
         return $optionsList;
-    }
-
-    /**
-     * Collects Options files recursively
-     *
-     * @param Filesystem\Directory\ReadInterface $dir
-     * @param string $path
-     * @param array $result
-     */
-    private function collectRecursively(\Magento\Framework\Filesystem\Directory\ReadInterface $dir, $path, &$result)
-    {
-        $localResult = $dir->search($path . '/Setup/ConfigOptions.php');
-        foreach ($localResult as $optionFile) {
-            $result[] = $optionFile;
-        }
-
-        // goes deeper if current search is successful or next depth level exists
-        if ($localResult || $dir->search($path . '/*')) {
-            $this->collectRecursively($dir, $path . '/*', $result);
-        }
     }
 }
