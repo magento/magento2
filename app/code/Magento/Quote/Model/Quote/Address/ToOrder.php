@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\Quote\Address;
 
 use Magento\Framework\Object\Copy;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Api\Data\OrderDataBuilder as OrderBuilder;
+use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Framework\Event\ManagerInterface;
 
@@ -23,9 +23,9 @@ class ToOrder
     protected $objectCopyService;
 
     /**
-     * @var OrderBuilder|\Magento\Framework\Api\Builder
+     * @var OrderFactory
      */
-    protected $orderBuilder;
+    protected $orderFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -33,18 +33,26 @@ class ToOrder
     protected $eventManager;
 
     /**
-     * @param OrderBuilder $orderBuilder
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @param OrderFactory $orderFactory
      * @param Copy $objectCopyService
      * @param ManagerInterface $eventManager
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OrderBuilder $orderBuilder,
+        OrderFactory $orderFactory,
         Copy $objectCopyService,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->orderBuilder = $orderBuilder;
+        $this->orderFactory = $orderFactory;
         $this->objectCopyService = $objectCopyService;
         $this->eventManager = $eventManager;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -59,11 +67,15 @@ class ToOrder
             'to_order',
             $object
         );
-        $order = $this->orderBuilder
-            ->populateWithArray(array_merge($orderData, $data))
-            ->setStoreId($object->getQuote()->getStoreId())
-            ->setQuoteId($object->getQuote()->getId())
-            ->create();
+
+        $order = $this->orderFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $order,
+            array_merge($orderData, $data),
+            '\Magento\Sales\Api\Data\OrderInterface'
+        );
+        $order->setStoreId($object->getQuote()->getStoreId())
+            ->setQuoteId($object->getQuote()->getId());
 
         $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
         $this->eventManager->dispatch(
