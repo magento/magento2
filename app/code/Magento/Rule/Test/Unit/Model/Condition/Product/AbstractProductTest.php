@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Rule\Model\Condition\Product;
+namespace Magento\Rule\Test\Unit\Model\Condition\Product;
 
 use ReflectionMethod;
 use ReflectionProperty;

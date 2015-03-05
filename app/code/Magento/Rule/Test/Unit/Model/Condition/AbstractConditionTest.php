@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Rule\Model\Condition;
+namespace Magento\Rule\Test\Unit\Model\Condition;
 
 class AbstractConditionTest extends \PHPUnit_Framework_TestCase
 {

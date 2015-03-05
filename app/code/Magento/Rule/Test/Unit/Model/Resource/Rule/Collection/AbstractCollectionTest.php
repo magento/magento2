@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Rule\Model\Resource\Rule\Collection;
+namespace Magento\Rule\Test\Unit\Model\Resource\Rule\Collection;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

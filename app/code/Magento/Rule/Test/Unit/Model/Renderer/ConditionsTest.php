@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Rule\Model\Renderer;
+namespace Magento\Rule\Test\Unit\Model\Renderer;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
