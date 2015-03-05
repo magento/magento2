@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Less\PreProcessor\Instruction;
+namespace Magento\Framework\Less\Test\Unit\PreProcessor\Instruction;
 
 class MagentoImportTest extends \PHPUnit_Framework_TestCase
 {

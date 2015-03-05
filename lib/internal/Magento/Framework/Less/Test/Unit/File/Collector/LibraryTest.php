@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Less\File\Collector;
+namespace Magento\Framework\Less\Test\Unit\File\Collector;
+
+use \Magento\Framework\Less\File\Collector\Library;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;

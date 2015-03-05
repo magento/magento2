@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Less;
+namespace Magento\Framework\Less\Test\Unit;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
