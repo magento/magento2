@@ -19,10 +19,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInCart extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assertion that the product is correctly displayed in cart
      *
@@ -42,6 +38,7 @@ class AssertProductInCart extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->fillOptions($product);
         $catalogProductView->getViewBlock()->clickAddToCart();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         // Check price
         $this->assertOnShoppingCart($product, $checkoutCart);
@@ -53,12 +50,16 @@ class AssertProductInCart extends AbstractConstraint
      * @param FixtureInterface $product
      * @param CheckoutCart $checkoutCart
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function assertOnShoppingCart(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
+        $checkoutCart->open();
         /** @var CatalogProductSimple $product */
         $customOptions = $product->getCustomOptions();
         $checkoutData = $product->getCheckoutData();
+        $checkoutCartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
         $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
             ? $checkoutData['options']['custom_options']
             : [];
@@ -74,6 +75,9 @@ class AssertProductInCart extends AbstractConstraint
         }
         if ($specialPrice) {
             $fixturePrice = $specialPrice;
+        }
+        if (isset($checkoutCartItem['price'])) {
+            $fixturePrice = $checkoutCartItem['price'];
         }
         $fixtureActualPrice = $fixturePrice;
 

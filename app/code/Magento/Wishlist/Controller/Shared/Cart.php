@@ -14,7 +14,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      * If Product has required options - redirect
      * to product view page with message about needed defined required options
      *
-     * @return \Zend_Controller_Response_Abstract
+     * @return \Magento\Framework\App\Response\Http
      */
     public function execute()
     {
@@ -41,7 +41,7 @@ class Cart extends \Magento\Framework\App\Action\Action
             if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
                 $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
                 $this->messageManager->addError(__('This product(s) is out of stock.'));
             } else {

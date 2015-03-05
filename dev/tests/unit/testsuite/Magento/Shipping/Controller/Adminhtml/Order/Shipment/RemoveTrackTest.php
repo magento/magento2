@@ -36,7 +36,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Backend\Model\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 
@@ -84,7 +84,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->viewMock = $this->getMock(
-            'Magento\Backend\Model\View',
+            'Magento\Framework\App\View',
             ['loadLayout', 'getLayout', 'getPage'],
             [],
             '',
@@ -204,15 +204,15 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
      */
     protected function representJson(array $errors)
     {
-        $dataHelper = $this->getMock('Magento\Core\Helper\Data', ['jsonEncode'], [], '', false);
-        $dataHelper->expects($this->once())
+        $jsonHelper = $this->getMock('Magento\Framework\Json\Helper\Data', ['jsonEncode'], [], '', false);
+        $jsonHelper->expects($this->once())
             ->method('jsonEncode')
             ->with($errors)
             ->will($this->returnValue('{json}'));
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($dataHelper));
+            ->with('Magento\Framework\Json\Helper\Data')
+            ->will($this->returnValue($jsonHelper));
         $this->responseMock->expects($this->once())
             ->method('representJson')
             ->with('{json}');

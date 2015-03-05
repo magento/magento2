@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Oauth\Helper;
 
+use Magento\Framework\App\RequestInterface;
+
 class Request
 {
     /**#@+
@@ -25,7 +27,7 @@ class Request
     /**
      * Process HTTP request object and prepare for token validation
      *
-     * @param \Zend_Controller_Request_Http $httpRequest
+     * @param RequestInterface $httpRequest
      * @return array
      */
     public function prepareRequest($httpRequest)
@@ -33,7 +35,7 @@ class Request
         $oauthParams = $this->_processRequest(
             $httpRequest->getHeader('Authorization'),
             $httpRequest->getHeader(\Zend_Http_Client::CONTENT_TYPE),
-            $httpRequest->getRawBody(),
+            $httpRequest->getContent(),
             $this->getRequestUrl($httpRequest)
         );
         return $oauthParams;
@@ -42,13 +44,12 @@ class Request
     /**
      * Compute the request Url from the Http request
      *
-     * @param \Zend_Controller_Request_Http $httpRequest
+     * @param RequestInterface $httpRequest
      * @return string
      */
     public function getRequestUrl($httpRequest)
     {
-        // TODO: Fix needed for $this->getRequest()->getHttpHost(). Hosts with port are not covered.
-        return $httpRequest->getScheme() . '://' . $httpRequest->getHttpHost() . $httpRequest->getRequestUri();
+        return $httpRequest->getScheme() . '://' . $httpRequest->getHttpHost(false) . $httpRequest->getRequestUri();
     }
 
     /**
@@ -186,11 +187,13 @@ class Request
      * Create response string for problem during request and set HTTP error code
      *
      * @param \Exception $exception
-     * @param \Zend_Controller_Response_Http $response OPTIONAL If NULL - will use internal getter
+     * @param \Magento\Framework\HTTP\PhpEnvironment\Response $response OPTIONAL If NULL - will use internal getter
      * @return array
      */
-    public function prepareErrorResponse(\Exception $exception, \Zend_Controller_Response_Http $response = null)
-    {
+    public function prepareErrorResponse(
+        \Exception $exception,
+        \Magento\Framework\HTTP\PhpEnvironment\Response $response = null
+    ) {
         $errorMsg = $exception->getMessage();
 
         if ($exception instanceof \Magento\Framework\Oauth\Exception) {

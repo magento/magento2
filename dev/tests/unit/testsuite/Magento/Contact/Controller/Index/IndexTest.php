@@ -79,7 +79,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Framework\Mail\Template\TransportBuilder', [], [], '', false),
             $this->getMockForAbstractClass('\Magento\Framework\Translate\Inline\StateInterface', [], '', false),
             $this->_scopeConfig,
-            $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface', [], '', false)
+            $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface', [], '', false)
         );
     }
 

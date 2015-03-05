@@ -32,7 +32,7 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
         $this->queryFactoryMock = $this->getMock(
             '\Magento\Search\Model\QueryFactory',
@@ -46,8 +46,8 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\CatalogSearch\Model\Layer\Search\StateKey::toString
-     * @covers \Magento\CatalogSearch\Model\Layer\Search\StateKey::__construct
+     * covers \Magento\CatalogSearch\Model\Layer\Search\StateKey::toString
+     * covers \Magento\CatalogSearch\Model\Layer\Search\StateKey::__construct
      */
     public function testToString()
     {

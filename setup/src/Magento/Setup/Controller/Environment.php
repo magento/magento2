@@ -52,7 +52,7 @@ class Environment extends AbstractActionController
      */
     public function phpVersionAction()
     {
-        try{
+        try {
             $requiredVersion = $this->phpInformation->getRequiredPhpVersion();
         } catch (\Exception $e) {
             return new JsonModel(
@@ -66,7 +66,13 @@ class Environment extends AbstractActionController
             );
         }
         $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        $currentPhpVersion = new VersionConstraint('=', PHP_VERSION);
+        try {
+            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
+        } catch (\UnexpectedValueException $e) {
+            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
+            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
+        }
+        $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
@@ -88,7 +94,7 @@ class Environment extends AbstractActionController
      */
     public function phpExtensionsAction()
     {
-        try{
+        try {
             $required = $this->phpInformation->getRequired();
             $current = $this->phpInformation->getCurrent();
 

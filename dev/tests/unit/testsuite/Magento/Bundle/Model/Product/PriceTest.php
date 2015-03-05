@@ -66,7 +66,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
         $this->eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
@@ -95,8 +95,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @param bool $dateInInterval
      * @param float $expected
      *
-     * @covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
-     * @covers \Magento\Bundle\Model\Product\Price::__construct
+     * covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
+     * covers \Magento\Bundle\Model\Product\Price::__construct
      * @dataProvider calculateSpecialPrice
      */
     public function testCalculateSpecialPrice($finalPrice, $specialPrice, $callsNumber, $dateInInterval, $expected)

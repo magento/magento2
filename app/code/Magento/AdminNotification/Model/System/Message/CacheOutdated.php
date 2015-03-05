@@ -69,7 +69,7 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
     public function isDisplayed()
     {
         return $this->_authorization->isAllowed(
-            'Magento_Adminhtml::cache'
+            'Magento_Backend::cache'
         ) && count(
             $this->_getCacheTypesForRefresh()
         ) > 0;

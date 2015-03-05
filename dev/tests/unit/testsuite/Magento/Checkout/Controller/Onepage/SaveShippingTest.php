@@ -81,7 +81,6 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->coreHelper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', ['getPost', 'isPost'], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
@@ -169,12 +168,14 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(false);
-        $this->resultRaw->expects($this->exactly(2))
+        $this->resultRaw->expects($this->once())
+            ->method('setStatusHeader')
+            ->with(403, '1.1', 'Session Expired')
+            ->willReturn($this->resultRaw);
+        $this->resultRaw->expects($this->once())
             ->method('setHeader')
-            ->willReturnMap([
-                ['HTTP/1.1', '403 Session Expired', false, $this->resultRaw],
-                ['Login-Required', 'true', false, $this->resultRaw]
-            ]);
+            ->with('Login-Required', 'true', false)
+            ->willReturn($this->resultRaw);
         $this->assertSame($this->resultRaw, $this->controller->execute());
     }
 
@@ -230,7 +231,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             ->method('toHtml')
             ->willReturn('some_html');
 
-        $update = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
+        $update = $this->getMock('Magento\Framework\View\Model\Layout\Merge', [], [], '', false);
         $layout->expects($this->any())
             ->method('getUpdate')
             ->willReturn($update);

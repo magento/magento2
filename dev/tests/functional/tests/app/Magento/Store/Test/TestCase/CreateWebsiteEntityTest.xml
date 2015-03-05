@@ -5,12 +5,15 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="CreateWebsiteEntityTest">
-        <variation name="CreateWebsiteEntityTestVariation1">
-            <data name="website/data/name">website_%isolation%</data>
-            <data name="website/data/code">code_%isolation%</data>
-            <data name="constraint">assertWebsiteSuccessSaveMessage, assertWebsiteInGrid, assertWebsiteForm, assertWebsiteOnStoreForm</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Store\Test\TestCase\CreateWebsiteEntityTest">
+    <variation name="CreateWebsiteEntityTestVariation1">
+      <data name="website/data/name" xsi:type="string">website_%isolation%</data>
+      <data name="website/data/code" xsi:type="string">code_%isolation%</data>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessSaveMessage"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteInGrid"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteForm"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteOnStoreForm"/>
+    </variation>
+  </testCase>
 </config>

@@ -44,7 +44,7 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Textarea::__construct
+     * covers \Magento\Framework\Data\Form\Element\Textarea::__construct
      */
     public function testConstruct()
     {
@@ -55,7 +55,7 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Textarea::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Textarea::getElementHtml
      */
     public function testGetElementHtml()
     {
@@ -67,7 +67,7 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Textarea::getHtmlAttributes
+     * covers \Magento\Framework\Data\Form\Element\Textarea::getHtmlAttributes
      */
     public function testGetHtmlAttributes()
     {

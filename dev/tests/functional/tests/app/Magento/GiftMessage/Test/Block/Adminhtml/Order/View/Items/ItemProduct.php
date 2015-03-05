@@ -11,7 +11,7 @@ use Magento\GiftMessage\Test\Fixture\GiftMessage;
 
 /**
  * Class ItemProduct
- * Item product block on OrderView page.
+ * Item product block on SalesOrderView page.
  */
 class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items\ItemProduct
 {

@@ -8,8 +8,8 @@ namespace Magento\Framework\Filter;
 class RemoveTagsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Framework\Filter\RemoveTags::filter
-     * @covers \Magento\Framework\Filter\RemoveTags::_convertEntities
+     * covers \Magento\Framework\Filter\RemoveTags::filter
+     * covers \Magento\Framework\Filter\RemoveTags::_convertEntities
      */
     public function testRemoveTags()
     {

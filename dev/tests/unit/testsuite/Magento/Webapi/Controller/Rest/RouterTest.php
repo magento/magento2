@@ -10,7 +10,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Rest\Router\Route */
     protected $_routeMock;
 
-    /** @var \Magento\Webapi\Controller\Rest\Request */
+    /** @var \Magento\Framework\Webapi\Rest\Request */
     protected $_request;
 
     /** @var \Magento\Webapi\Model\Rest\Config */
@@ -40,7 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_request = $objectManager->getObject(
-            'Magento\Webapi\Controller\Rest\Request',
+            'Magento\Framework\Webapi\Rest\Request',
             [
                 'areaList' => $areaListMock,
             ]
@@ -88,7 +88,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\Exception
+     * @expectedException \Magento\Framework\Webapi\Exception
      */
     public function testNotMatch()
     {

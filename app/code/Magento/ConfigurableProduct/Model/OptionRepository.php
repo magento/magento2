@@ -7,7 +7,6 @@
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Webapi\Exception;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -26,9 +25,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $productRepository;
 
     /**
-     * @var \Magento\ConfigurableProduct\Api\Data\OptionValueDataBuilder
+     * @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory
      */
-    protected $optionValueBuilder;
+    protected $optionValueFactory;
 
     /**
      * @var Product\Type\Configurable
@@ -41,7 +40,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     protected $optionResource;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -57,24 +56,24 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueDataBuilder $optionValueBuilder
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory
      * @param ConfigurableType $configurableType
      * @param Resource\Product\Type\Configurable\Attribute $optionResource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\ConfigurableProduct\Api\Data\OptionValueDataBuilder $optionValueBuilder,
+        \Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory $optionValueFactory,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $optionResource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory
     ) {
         $this->productRepository = $productRepository;
-        $this->optionValueBuilder = $optionValueBuilder;
+        $this->optionValueFactory = $optionValueFactory;
         $this->configurableType = $configurableType;
         $this->optionResource = $optionResource;
         $this->storeManager = $storeManager;
@@ -98,11 +97,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $prices = $configurableAttribute->getPrices();
         if (is_array($prices)) {
             foreach ($prices as $price) {
-                $values[] = $this->optionValueBuilder
-                    ->setValueIndex($price['value_index'])
+                /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
+                $value = $this->optionValueFactory->create();
+                $value->setValueIndex($price['value_index'])
                     ->setPricingValue($price['pricing_value'])
-                    ->setIsPercent($price['is_percent'])
-                    ->create();
+                    ->setIsPercent($price['is_percent']);
+                $values[] = $value;
             }
         }
         $configurableAttribute->setValues($values);
@@ -121,11 +121,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $prices = $option->getPrices();
             if (is_array($prices)) {
                 foreach ($prices as $price) {
-                    $values[] = $this->optionValueBuilder
-                        ->setValueIndex($price['value_index'])
+                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
+                    $value = $this->optionValueFactory->create();
+                    $value->setValueIndex($price['value_index'])
                         ->setPricingValue($price['pricing_value'])
-                        ->setIsPercent($price['is_percent'])
-                        ->create();
+                        ->setIsPercent($price['is_percent']);
+                    $values[] = $value;
                 }
             }
             $option->setValues($values);
@@ -241,15 +242,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      *
      * @param string $productSku
      * @return \Magento\Catalog\Model\Product
-     * @throws \Magento\Webapi\Exception
+     * @throws InputException
      */
     private function getProduct($productSku)
     {
         $product = $this->productRepository->get($productSku);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
-            throw new Exception(
-                sprintf('Only implemented for configurable product: %s', $productSku),
-                Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                sprintf('Only implemented for configurable product: %s', $productSku)
             );
         }
         return $product;

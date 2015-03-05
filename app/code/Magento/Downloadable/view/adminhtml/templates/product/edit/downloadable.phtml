@@ -17,17 +17,18 @@
 require([
     'jquery',
     'Magento_Ui/js/lib/registry/registry',
+    'mage/template',
     'mage/mage',
     'prototype'
-], function(jQuery, registry){
+], function (jQuery, registry, mageTemplate) {
 
 //<![CDATA[>
 var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
-                                '<div id="{{id}}" class="file-row file-row-narrow">' +
+                                '<div id="<%= data.id %>" class="file-row file-row-narrow">' +
                                     '<span class="file-info">' +
-                                        '<span class="file-info-name">{{name}}</span>' +
+                                        '<span class="file-info-name"><%= data.name %></span>' +
                                         ' ' +
-                                        '<span class="file-info-size">({{size}})</span>' +
+                                        '<span class="file-info-size">(<%= data.size %>)</span>' +
                                     '</span>' +
                                     '<div class="progressbar-container">' +
                                         '<div class="progressbar upload-progress" style="width: 0%;"></div>' +
@@ -36,13 +37,13 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                                 '</div>' +
                             '</div>' +
                                 '<div class="no-display" id="[[idName]]-template-progress">' +
-                                '{{percent}}% {{uploaded}} / {{total}}' +
+                                '<%= data.percent %>% <%= data.uploaded %> / <%= data.total %>' +
                                 '</div>';
 
     var fileListTemplate = '<span class="file-info">' +
-                                '<span class="file-info-name">{{name}}</span>' +
+                                '<span class="file-info-name"><%= data.name %></span>' +
                                 ' ' +
-                                '<span class="file-info-size">({{size}})</span>' +
+                                '<span class="file-info-size">(<%= data.size %>)</span>' +
                             '</span>';
 
     window.Downloadable = {
@@ -149,14 +150,13 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
         container: null,
         uploader: null,
         fileListTemplate: fileListTemplate,
-        templatePattern : /(^|.|\r|\n)({{(\w+)}})/,
         listTemplate : null,
         initialize: function (containerId, uploader) {
             this.containerId  = containerId,
             this.container = $(this.containerId);
             this.uploader = uploader;
             this.file = this.getElement('save').value.evalJSON();
-            this.listTemplate = new Template(this.fileListTemplate, this.templatePattern);
+            this.listTemplate = mageTemplate(this.fileListTemplate);
             this.updateFiles();
         },
         handleFileRemoveAll: function(fileId) {
@@ -188,7 +188,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                 : Object.toJSON(this.file);
             this.file.each(function(row){
                 row.size = byteConvert(row.size);
-                $(this.containerId + '-old').innerHTML = this.listTemplate.evaluate(row);
+                $(this.containerId + '-old').innerHTML = this.listTemplate({data: row});
                 $(this.containerId + '-new').hide();
                 $(this.containerId + '-old').show();
             }.bind(this));
@@ -197,7 +197,6 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 
     var alertAlreadyDisplayed = false;
 
-    window.fileListTemplate = fileListTemplate;
     window.uploaderTemplate = uploaderTemplate;
 
     window.alertAlreadyDisplayed = alertAlreadyDisplayed;

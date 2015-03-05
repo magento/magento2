@@ -15,16 +15,6 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Item setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setRowTotal(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setPrice(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setWeight(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setProductId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setOrderItemId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setAdditionalData(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setDescription(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setName(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setSku(string $value)
  */
 class Item extends AbstractExtensibleModel implements ShipmentItemInterface
 {
@@ -152,7 +142,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
      *
      * @param float $qty
      * @return \Magento\Sales\Model\Order\Invoice\Item
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
@@ -168,7 +158,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
         if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Framework\Model\Exception(__('We found an invalid qty to ship for item "%1".', $this->getName()));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid qty to ship for item "%1".', $this->getName()));
         }
         return $this;
     }
@@ -293,4 +283,86 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     {
         return $this->getData(ShipmentItemInterface::WEIGHT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentItemInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotal($amount)
+    {
+        return $this->setData(ShipmentItemInterface::ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(ShipmentItemInterface::PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(ShipmentItemInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($id)
+    {
+        return $this->setData(ShipmentItemInterface::PRODUCT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderItemId($id)
+    {
+        return $this->setData(ShipmentItemInterface::ORDER_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(ShipmentItemInterface::ADDITIONAL_DATA, $additionalData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(ShipmentItemInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(ShipmentItemInterface::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(ShipmentItemInterface::SKU, $sku);
+    }
+    //@codeCoverageIgnoreEnd
 }

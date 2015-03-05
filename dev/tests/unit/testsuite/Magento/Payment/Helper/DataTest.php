@@ -34,27 +34,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $className = 'Magento\Payment\Helper\Data';
+        $arguments = $objectManagerHelper->getConstructArguments($className);
+        /** @var \Magento\Framework\App\Helper\Context $context */
+        $context = $arguments['context'];
+        $this->scopeConfig = $context->getScopeConfig();
         $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-        $layoutFactoryMock = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
-            ->disableOriginalConstructor()->getMock();
+        $layoutFactoryMock = $arguments['layoutFactory'];
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 
-        $this->methodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->appEmulation = $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false);
-        $paymentConfig = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
-        $this->initialConfig = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
+        $this->methodFactory = $arguments['paymentMethodFactory'];
+        $this->appEmulation = $arguments['appEmulation'];
+        $this->initialConfig = $arguments['initialConfig'];
 
-        $this->helper = new \Magento\Payment\Helper\Data(
-            $context,
-            $this->scopeConfig,
-            $layoutFactoryMock,
-            $this->methodFactory,
-            $this->appEmulation,
-            $paymentConfig,
-            $this->initialConfig
-        );
+        $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
 

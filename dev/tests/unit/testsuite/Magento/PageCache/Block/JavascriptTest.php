@@ -6,7 +6,7 @@
 namespace Magento\PageCache\Block;
 
 /**
- * @covers \Magento\PageCache\Block\Javascript
+ * covers \Magento\PageCache\Block\Javascript
  */
 class JavascriptTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,18 +48,6 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'isSecure',
-                    'getModuleName',
-                    'setModuleName',
-                    'getActionName',
-                    'setActionName',
-                    'getParam',
-                    'getCookie'
-                ]
-            )
             ->getMock();
         $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
             ->disableOriginalConstructor()
@@ -92,7 +80,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\PageCache\Block\Javascript::getScriptOptions
+     * covers \Magento\PageCache\Block\Javascript::getScriptOptions
      * @param bool $isSecure
      * @param string $url
      * @param string $expectedResult

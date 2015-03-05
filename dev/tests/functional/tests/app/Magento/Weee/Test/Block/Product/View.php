@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Test\Block\Product;
 
-use Magento\Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product view block on the product page

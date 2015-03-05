@@ -8,6 +8,9 @@ namespace Magento\AdminNotification\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FeedTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\AdminNotification\Model\Feed */
@@ -16,7 +19,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\AdminNotification\Model\InboxFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $inboxFactory;
 
     /** @var \Magento\AdminNotification\Model\Inbox|\PHPUnit_Framework_MockObject_MockObject */
@@ -40,14 +43,21 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
     protected $deploymentConfig;
 
+    /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    protected $productMetadata;
+
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $urlBuilder;
+
     protected function setUp()
     {
         $this->inboxFactory = $this->getMock('Magento\AdminNotification\Model\InboxFactory', ['create'], [], '', false);
-        $this->curlFactory = $this->getMock('\Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
-        $this->curl = $this->getMock('\Magento\Framework\HTTP\Adapter\Curl', ['read']);
-        $this->appState = $this->getMock('\Magento\Framework\App\State', ['getInstallDate'], [], '', false);
+        $this->curlFactory = $this->getMock('Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
+        $this->curl = $this->getMockBuilder('Magento\Framework\HTTP\Adapter\Curl')
+            ->disableOriginalConstructor()->getMock();
+        $this->appState = $this->getMock('Magento\Framework\App\State', ['getInstallDate'], [], '', false);
         $this->inboxModel = $this->getMock(
-            '\Magento\AdminNotification\Model\Inbox',
+            'Magento\AdminNotification\Model\Inbox',
             [
                 '__wakeup',
                 'parse'
@@ -65,7 +75,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->cacheManager = $this->getMock(
-            '\Magento\Framework\App\CacheInterface',
+            'Magento\Framework\App\CacheInterface',
             [
                 'load',
                 'getFrontend',
@@ -75,9 +85,13 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder('\Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfig = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->productMetadata = $this->getMock('Magento\Framework\App\ProductMetadata');
+        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
+
         $this->feed = $this->objectManagerHelper->getObject(
             'Magento\AdminNotification\Model\Feed',
             [
@@ -87,6 +101,8 @@ class FeedTest extends \PHPUnit_Framework_TestCase
                 'appState' => $this->appState,
                 'curlFactory' => $this->curlFactory,
                 'deploymentConfig' => $this->deploymentConfig,
+                'productMetadata' => $this->productMetadata,
+                'urlBuilder' => $this->urlBuilder
             ]
         );
     }
@@ -98,14 +114,31 @@ class FeedTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckUpdate($callInbox, $curlRequest)
     {
-        $lastUpdate = 1410121748;
+        $mockName    = 'Test Product Name';
+        $mockVersion = '0.0.0';
+        $mockEdition = 'Test Edition';
+        $mockUrl = 'http://test-url';
+
+        $this->productMetadata->expects($this->once())->method('getName')->willReturn($mockName);
+        $this->productMetadata->expects($this->once())->method('getVersion')->willReturn($mockVersion);
+        $this->productMetadata->expects($this->once())->method('getEdition')->willReturn($mockEdition);
+        $this->urlBuilder->expects($this->once())->method('getUrl')->with('*/*/*')->willReturn($mockUrl);
+
+        $configValues = [
+            'timeout'   => 2,
+            'useragent' => $mockName . '/' . $mockVersion . ' (' . $mockEdition . ')',
+            'referer'   => $mockUrl
+        ];
+
+        $lastUpdate = 0;
+        $this->cacheManager->expects($this->once())->method('load')->will(($this->returnValue($lastUpdate)));
         $this->curlFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->curl));
-        $this->curl->expects($this->any())->method('read')->will($this->returnValue($curlRequest));
+        $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
+        $this->curl->expects($this->once())->method('read')->will($this->returnValue($curlRequest));
         $this->backendConfig->expects($this->at(0))->method('getValue')->will($this->returnValue('1'));
         $this->backendConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue(false));
         $this->backendConfig->expects($this->at(1))->method('getValue')
             ->will($this->returnValue('http://feed.magento.com'));
-        $this->cacheManager->expects($this->once())->method('load')->will(($this->returnValue($lastUpdate)));
         $this->deploymentConfig->expects($this->once())->method('get')
             ->with('install/date')->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
         if ($callInbox) {

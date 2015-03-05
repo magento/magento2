@@ -21,9 +21,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $productRepository;
 
     /**
-     * @var \Magento\Bundle\Api\Data\LinkDataBuilder
+     * @var \Magento\Bundle\Api\Data\LinkInterfaceFactory
      */
-    protected $linkBuilder;
+    protected $linkFactory;
 
     /**
      * @var \Magento\Bundle\Model\Resource\BundleFactory
@@ -41,27 +41,35 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $optionCollection;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Bundle\Api\Data\LinkDataBuilder $linkBuilder
+     * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
      * @param \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory
      * @param \Magento\Bundle\Model\SelectionFactory $bundleSelection
      * @param \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        \Magento\Bundle\Api\Data\LinkDataBuilder $linkBuilder,
+        \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory,
         \Magento\Bundle\Model\SelectionFactory $bundleSelection,
         \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory,
         \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
-        $this->linkBuilder = $linkBuilder;
+        $this->linkFactory = $linkFactory;
         $this->bundleFactory = $bundleFactory;
         $this->bundleSelection = $bundleSelection;
         $this->optionCollection = $optionCollection;
         $this->storeManager = $storeManager;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -71,9 +79,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     {
         $product = $this->productRepository->get($productId);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new \Magento\Webapi\Exception(
-                'Only implemented for bundle product',
-                \Magento\Webapi\Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                'Only implemented for bundle product'
             );
         }
 
@@ -178,9 +185,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $product = $this->productRepository->get($productSku);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new \Magento\Webapi\Exception(
-                sprintf('Product with specified sku: %s is not a bundle product', $productSku),
-                \Magento\Webapi\Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                sprintf('Product with specified sku: %s is not a bundle product', $productSku)
             );
         }
 
@@ -226,13 +232,19 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             $selectionPrice = $selection->getSelectionPriceValue();
         }
 
-        return $this->linkBuilder->populateWithArray($selection->getData())
-            ->setIsDefault($selection->getIsDefault())
+        /** @var \Magento\Bundle\Api\Data\LinkInterface $link */
+        $link = $this->linkFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $link,
+            $selection->getData(),
+            '\Magento\Bundle\Api\Data\LinkInterface'
+        );
+        $link->setIsDefault($selection->getIsDefault())
             ->setQty($selection->getSelectionQty())
             ->setIsDefined($selection->getSelectionCanChangeQty())
             ->setPrice($selectionPrice)
-            ->setPriceType($selectionPriceType)
-            ->create();
+            ->setPriceType($selectionPriceType);
+        return $link;
     }
 
     /**

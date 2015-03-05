@@ -12,10 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Comment setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Comment setIsCustomerNotified(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Comment setIsVisibleOnFront(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Comment setComment(string $value)
  * @method \Magento\Sales\Model\Order\Shipment\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements ShipmentCommentInterface
@@ -28,7 +24,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     protected $_shipment;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -39,7 +35,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -52,7 +48,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -165,4 +161,38 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     {
         return $this->getData(ShipmentCommentInterface::PARENT_ID);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentCommentInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsCustomerNotified($isCustomerNotified)
+    {
+        return $this->setData(ShipmentCommentInterface::IS_CUSTOMER_NOTIFIED, $isCustomerNotified);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(ShipmentCommentInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(ShipmentCommentInterface::COMMENT, $comment);
+    }
+    //@codeCoverageIgnoreEnd
 }

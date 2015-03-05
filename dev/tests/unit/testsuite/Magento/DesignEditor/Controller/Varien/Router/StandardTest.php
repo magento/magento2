@@ -66,9 +66,6 @@ class StandardTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->_model = $this->_prepareMocksForTestMatch($request, $isVde, $isLoggedIn, $routers);
         $this->assertEquals($matchedValue, $this->_model->match($request));
-        if ($isVde && $isLoggedIn) {
-            $this->assertEquals(self::TEST_PATH, $request->getPathInfo());
-        }
     }
 
     /**
@@ -79,30 +76,26 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function matchDataProvider()
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_cookieReaderMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
-        $uri    = self::TEST_HOST . '/' . self::VDE_FRONT_NAME . self::TEST_PATH;
-        $notVdeUrl = self::TEST_HOST . self::TEST_PATH;
+        $vdePath    = '/' . self::VDE_FRONT_NAME . self::TEST_PATH;
+        $notVdePath = self::TEST_PATH;
 
         $excludedRouters = ['admin' => 'admin router', 'vde' => 'vde router'];
-
-        $routerListMock = $this->getMock(
-            '\Magento\Framework\App\Route\ConfigInterface\Proxy',
-            [],
-            [],
-            '',
-            false
-        );
 
         $infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
 
         // test data to verify routers match logic
-        $matchedRequest = $this->getMock(
-            'Magento\Framework\App\Request\Http',
-            ['_isFrontArea'],
-            [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $objectManagerMock, $uri]
-        );
+        $notVdeRequest = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
+        $notVdeRequest->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn($vdePath);
+        $vdeRequest = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
+        $vdeRequest->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn($notVdePath);
 
         $matchedController = $this->getMockForAbstractClass(
             'Magento\Framework\App\Action\AbstractAction',
@@ -112,23 +105,23 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         );
 
         // method "match" will be invoked for this router because it's first in the list
-        $matchedRouter = $this->getMock('Magento\Core\App\Router\Base', [], [], '', false);
+        $matchedRouter = $this->getMock('Magento\Framework\App\Router\Base', [], [], '', false);
         $matchedRouter->expects(
             $this->once()
         )->method(
             'match'
         )->with(
-            $matchedRequest
+            $notVdeRequest
         )->will(
             $this->returnValue($matchedController)
         );
         $matchedRouter->expects($this->once())
             ->method('match')
-            ->with($matchedRequest)
+            ->with($notVdeRequest)
             ->will($this->returnValue($matchedController));
 
         // method "match" will not be invoked for this router because controller will be found by first router
-        $notMatchedRouter = $this->getMock('Magento\Core\App\Router\Base', [], [], '', false);
+        $notMatchedRouter = $this->getMock('Magento\Framework\App\Router\Base', [], [], '', false);
         $notMatchedRouter->expects($this->never())->method('match');
 
         $matchedRouters = array_merge(
@@ -138,39 +131,23 @@ class StandardTest extends \PHPUnit_Framework_TestCase
 
         $routers = [
             'not vde request' => [
-                '$request' => $this->getMock(
-                        'Magento\Framework\App\Request\Http', ['_isFrontArea'], [
-                            $routerListMock,
-                            $infoProcessorMock,
-                            $this->_cookieReaderMock,
-                            $objectManagerMock,
-                            $notVdeUrl
-                        ]
-                    ),
+                '$request' => $vdeRequest,
                 '$isVde'           => false,
                 '$isLoggedIn'      => true,
             ],
             'not logged as admin' => [
-                '$request' => $this->getMock(
-                        'Magento\Framework\App\Request\Http',
-                        ['_isFrontArea'],
-                        [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $objectManagerMock, $uri]
-                    ),
+                '$request' => $notVdeRequest,
                 '$isVde'           => true,
                 '$isLoggedIn'      => false,
             ],
             'no matched routers' => [
-                '$request' => $this->getMock(
-                        'Magento\Framework\App\Request\Http',
-                        ['_isFrontArea'],
-                        [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $objectManagerMock, $uri]
-                    ),
+                '$request' => $notVdeRequest,
                 '$isVde'           => true,
                 '$isLoggedIn'      => true,
                 '$routers'         => $excludedRouters
             ],
             'matched routers' => [
-                '$request' => $matchedRequest,
+                '$request' => $notVdeRequest,
                 '$isVde' => true,
                 '$isLoggedIn' => true,
                 '$routers' => $matchedRouters,

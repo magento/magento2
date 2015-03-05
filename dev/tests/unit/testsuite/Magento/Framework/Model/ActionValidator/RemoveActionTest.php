@@ -14,8 +14,8 @@ class RemoveActionTest extends \PHPUnit_Framework_TestCase
      * @param bool $expectedResult
      *
      * @dataProvider isAllowedDataProvider
-     * @covers \Magento\Framework\Model\ActionValidator\RemoveAction::isAllowed
-     * @covers \Magento\Framework\Model\ActionValidator\RemoveAction::getBaseClassName
+     * covers \Magento\Framework\Model\ActionValidator\RemoveAction::isAllowed
+     * covers \Magento\Framework\Model\ActionValidator\RemoveAction::getBaseClassName
      */
     public function testIsAllowed($modelToCheck, $protectedModel, $secureArea, $expectedResult)
     {

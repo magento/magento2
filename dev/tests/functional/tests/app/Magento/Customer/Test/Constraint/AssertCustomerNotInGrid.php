@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -16,19 +16,15 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerNotInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Asserts that customer is not in customer's grid
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CustomerIndex $customerIndexPage
      * @return void
      */
     public function processAssert(
-        CustomerInjectable $customer,
+        Customer $customer,
         CustomerIndex $customerIndexPage
     ) {
         $customerIndexPage->open();

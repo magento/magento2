@@ -6,7 +6,7 @@
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 class RemoveStoreLogo extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools
 {
@@ -36,7 +36,7 @@ class RemoveStoreLogo extends \Magento\DesignEditor\Controller\Adminhtml\System\
             }
 
             $this->_objectManager->get(
-                'Magento\Backend\Model\Config\Backend\Store'
+                'Magento\Config\Model\Config\Backend\Store'
             )->setScope(
                 'stores'
             )->setScopeId(
@@ -61,7 +61,7 @@ class RemoveStoreLogo extends \Magento\DesignEditor\Controller\Adminhtml\System\
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response)
         );
     }
 }

@@ -72,7 +72,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_alt'])) {
             $this->_data['logo_alt'] = $this->_scopeConfig->getValue(
                 'design/header/logo_alt',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
         return $this->_data['logo_alt'];
@@ -85,10 +85,10 @@ class Logo extends \Magento\Framework\View\Element\Template
      */
     protected function _getLogoUrl()
     {
-        $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
+        $folderName = \Magento\Config\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
         $storeLogoPath = $this->_scopeConfig->getValue(
             'design/header/logo_src',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $path = $folderName . '/' . $storeLogoPath;
         $logoUrl = $this->_urlBuilder

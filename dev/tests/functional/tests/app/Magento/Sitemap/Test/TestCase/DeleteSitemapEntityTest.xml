@@ -5,11 +5,12 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteSitemapEntityTest">
-        <variation name="DeleteSitemapEntityTestVariation1">
-            <data name="sitemap/dataSet">default</data>
-            <data name="constraint">assertSitemapSuccessDeleteMessage, assertSitemapNotInGrid</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Sitemap\Test\TestCase\DeleteSitemapEntityTest">
+    <variation name="DeleteSitemapEntityTestVariation1">
+      <data name="sitemap/dataSet" xsi:type="string">default</data>
+      <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessDeleteMessage"/>
+      <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapNotInGrid"/>
+    </variation>
+  </testCase>
 </config>

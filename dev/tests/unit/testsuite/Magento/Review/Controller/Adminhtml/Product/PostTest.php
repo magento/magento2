@@ -117,27 +117,15 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMockObjects()
     {
-        $requestMethods = [
-            'getPost',
-            'getModuleName',
-            'setModuleName',
-            'getActionName',
-            'setActionName',
-            'getParam',
-            'getCookie'
-        ];
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->_requestMock = $this->getMock(
-            '\Magento\Framework\App\RequestInterface', $requestMethods
-        );
+        $this->_requestMock = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->_responseMock = $this->getMock(
             '\Magento\Framework\App\ResponseInterface', ['setRedirect', 'sendResponse']
         );
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Store\StoreManagerInterface'
-        );
+        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $this->_storeModelMock = $this->getMock(
             'Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false
         );
@@ -184,10 +172,10 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->_requestMock->expects($this->at(2))->method('getParam')
             ->will($this->returnValue(['1' => '1']));
-        $this->_requestMock->expects($this->once())->method('getPost')
+        $this->_requestMock->expects($this->once())->method('getPostValue')
             ->will($this->returnValue(['status_id' => 1]));
         $this->_objectManagerMock->expects($this->at(0))->method('get')
-            ->with('Magento\Framework\Store\StoreManagerInterface')
+            ->with('Magento\Store\Model\StoreManagerInterface')
             ->will($this->returnValue($this->_storeManagerInterfaceMock));
         $this->_reviewFactoryMock->expects($this->once())->method('create')
             ->will($this->returnValue($this->_reviewModelMock));

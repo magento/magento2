@@ -14,10 +14,6 @@ use Magento\Sales\Model\AbstractModel;
  *
  * @method \Magento\Sales\Model\Resource\Order\Status\History _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Status\History getResource()
- * @method \Magento\Sales\Model\Order\Status\History setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Status\History setIsVisibleOnFront(int $value)
- * @method \Magento\Sales\Model\Order\Status\History setComment(string $value)
- * @method \Magento\Sales\Model\Order\Status\History setStatus(string $value)
  * @method \Magento\Sales\Model\Order\Status\History setCreatedAt(string $value)
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
@@ -42,7 +38,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     protected $_eventObject = 'status_history';
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -53,7 +49,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -66,7 +62,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -264,4 +260,46 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     {
         return $this->getData(OrderStatusHistoryInterface::STATUS);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(OrderStatusHistoryInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(OrderStatusHistoryInterface::COMMENT, $comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(OrderStatusHistoryInterface::STATUS, $status);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEntityName($entityName)
+    {
+        return $this->setData(OrderStatusHistoryInterface::ENTITY_NAME, $entityName);
+    }
+    //@codeCoverageIgnoreEnd
 }

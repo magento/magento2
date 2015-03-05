@@ -40,14 +40,14 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** @var $order \Magento\Sales\Model\Order */
         $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->loadByIncrementId('100000001');
-        $this->assertFalse($order->getShippingAddress());
+        $this->assertNull($order->getShippingAddress());
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
         $this->_model->initFromOrder($order);
 
-        $this->assertFalse($order->getShippingAddress());
+        $this->assertNull($order->getShippingAddress());
     }
 
     /**
@@ -234,7 +234,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_model->createOrder();
             $this->fail('Validation errors are expected to lead to exception during createOrder() call.');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             /** createOrder is expected to throw exception with empty message when validation error occurs */
         }
         $errorMessages = [];

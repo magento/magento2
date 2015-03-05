@@ -210,7 +210,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $timezoneLocal = $this->_scopeConfig->getValue(
             $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         list($dateStart, $dateEnd) = $this->_collectionFactory->create()->getDateRange(

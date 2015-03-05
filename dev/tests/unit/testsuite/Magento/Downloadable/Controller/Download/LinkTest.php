@@ -16,7 +16,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
     protected $request;
 
@@ -82,17 +82,8 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
-                'getParam',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getCookie'
-            ]
-        );
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->response = $this->getMock(
             '\Magento\Framework\App\ResponseInterface',
             [

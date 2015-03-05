@@ -11,13 +11,11 @@ $objectManager->create('Magento\Mtf\Util\Generate\Page')->launch();
 // Generate fixtures
 $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
 $magentoObjectManager = $magentoObjectManagerFactory->create($_SERVER);
-$fieldsProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Fixture\FieldsProvider');
-$objectManager->create('Magento\Mtf\Util\Generate\Fixture', ['fieldsProvider' => $fieldsProvider])->launch();
+$objectManager->create('Magento\Mtf\Util\Generate\Fixture')->launch();
 
 // Generate repositories
 $magentoObjectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-$collectionProvider = $magentoObjectManager->create('\Magento\Mtf\Util\Generate\Repository\CollectionProvider');
-$objectManager->create('Magento\Mtf\Util\Generate\Repository', ['collectionProvider' => $collectionProvider])->launch();
+$objectManager->create('Magento\Mtf\Util\Generate\Repository')->launch();
 
 // Generate factories for old end-to-end tests
 $magentoObjectManager->create('Magento\Mtf\Util\Generate\Factory')->launch();

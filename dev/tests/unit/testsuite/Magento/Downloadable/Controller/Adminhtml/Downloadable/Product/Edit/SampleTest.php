@@ -17,7 +17,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
 
@@ -50,17 +50,8 @@ class SampleTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
-                'getParam',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getCookie'
-            ]
-        );
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->response = $this->getMock(
             '\Magento\Framework\App\ResponseInterface',
             [

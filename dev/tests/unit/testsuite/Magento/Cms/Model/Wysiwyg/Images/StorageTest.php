@@ -223,7 +223,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeWidth
+     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeWidth
      */
     public function testGetResizeWidth()
     {
@@ -231,7 +231,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeHeight
+     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeHeight
      */
     public function testGetResizeHeight()
     {
@@ -239,24 +239,24 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
      */
     public function testDeleteDirectoryOverRoot()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Model\Exception',
+            '\Magento\Framework\Exception\LocalizedException',
             sprintf('Directory %s is not under storage root path.', self::INVALID_DIRECTORY_OVER_ROOT)
         );
         $this->_model->deleteDirectory(self::INVALID_DIRECTORY_OVER_ROOT);
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
      */
     public function testDeleteRootDirectory()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Model\Exception',
+            '\Magento\Framework\Exception\LocalizedException',
             sprintf('We cannot delete root directory %s.', self::STORAGE_ROOT_DIR)
         );
         $this->_model->deleteDirectory(self::STORAGE_ROOT_DIR);

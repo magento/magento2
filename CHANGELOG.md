@@ -1,3 +1,96 @@
+0.42.0-beta10
+=============
+* Framework
+    * Replaced \Magento\Framework\Model\Exception with LocalizedException
+    * Replaced obsolete exceptions
+    * Config components are moved to new Magento_Config module
+    * Variables components are moved to new Magento_Variable module
+    * Preferences, shared instance creation and compiled factory accelerated by 3%
+    * Fixed "HEADERS ALREADY SENT" error when controller action outputs directly
+* Setup
+    * Added ability to install and upgrade components in Setup Tool (CLI)
+    * Added ability to manage list of modules in Setup Wizard
+    * Fixed error after "Start Readiness Check" button press in Setup Wizard
+    * Fixed error with Base URL change after "Previous" button press on Step 4 in Setup Wizard
+    * Fixed error with HTTPS options related to auto-filled Base URL on Step 3 of Setup Wizard
+    * Fixed error in "app\design\frontend\Magento\luma\composer.json"
+* LESS Compiler
+    * Added automatic update in "pub/static" of changed "css/js/images" after materialization
+    * Variable names are renamed to meet Magento Code Standards
+    * Added client-side LESS files compilation to reduce page load time in developer mode
+* Widgets
+    * Fixed fatal error on page which contain a widget with a condition based on "Category"
+* GitHub requests
+    * [#899](https://github.com/magento/magento2/issues/899) -- When accessing any category - error report generated
+    * [#986](https://github.com/magento/magento2/pull/986) -- Make it possible to exclude classes (directories) for compilation
+    * [#1054](https://github.com/magento/magento2/pull/1054) -- Fix typo in MAGE_MODE
+
+0.42.0-beta9
+=============
+* Framework Improvements:
+    * Layout Models are moved from Core module to appropriate modules
+    * View components are moved from Core to Theme module
+    * Rest of theme related configuration files are refactored
+    * StoreManagerInterface is moved from Framework to App folder
+    * ZF1 controller libraries are updated
+    * Class definitions in multi-tenant mode are removed
+    * DI configuration became more optimal: OM cached configuration uses the general pattern for all argument types in application
+    * Varnish 4 configuration is updated
+    * Layout Processing became more fast
+    * HTML response minified
+    * App Components and Specific Helper Components are moved from the Magento_Core Module
+* UI improvements:
+    * Add to cart operation became asynchronous and doesn`t reload page (AJAX call)
+* Fixed Defects:
+    * When Inline Translation is enabled, JQuery buttons for translate were broken
+    * Base URL has invalid place inside Magento Admin Address on "Web Configuration" step of installation wizard
+    * Inability of submit Product from keyboard while Product Creation
+    * Sold products aren't displayed in Bestsellers
+    * Compiled definitions can cause unexpected errors compared to runtime definitions
+* Accessibility improvements:
+    * WAI-ARIA attributes are added to Frontend Layered Navigation and Customer Dropdown, Frontend Product Page Tabs, Frontend Cart Summary collapsible panels, Frontend forms and notifications, Frontend Checkout pages
+* Tests improvements:
+    * Added mechanism of replacing 3-rd party credentials in functional tests
+    * Update of end-to-end tests for create product, update product, promoted product, out of stock product, create product with new category, unassign products on category, create backend customer with injectable test
+* Various improvements:
+    * JS template engine became unified on Backend and Frontend
+    * Increased unit test coverage for Magento/Indexer module
+    * Version number info became accessible at a public URL
+* GitHub requests:
+    * [#1027](https://github.com/magento/magento2/issues/1027) -- Can't add new subcategory
+    * [#921](https://github.com/magento/magento2/issues/921) -- Change resource ids from Magento_Adminhtml::* to Magento_Backend
+
+0.42.0-beta8
+=============
+* Various improvements:
+    * Existing Builders were replaced with DataFactories in Customer and Tax modules
+    * Refactored controller actions in the Checkout and CMS modules
+    * Increased coverage with static tests for `.phtml` files
+    * Moved Cookie related functionality from `Theme` and `Core` modules into a new `Cookie` module
+    * Moved minfication configuration settings to the `View` library level
+* UI improvements:
+    * Restyled installation wizard
+    * Prepared styles for Dashboard in the Backend area
+* Framework improvements:
+    * Added `setCustomAttribute` and `setCustomAttributes` methods to `ExtensibleDataInterface`
+    * Added setter methods to data object interfaces
+    * Replaced `Builders` with `Factories`
+    * Added `DataObjectHelper.php` which contains the common set of methods of all builders
+    * Refactored `__()` to return `Phrase` object
+    * Allowed usage of `LocalizedException` on the framework's library level
+    * Added expiration/lifetime management of frontend resources
+    * Unified MTF configurations format for Framework, TestCase variations and TestCase scenario configurations
+* Fixed bugs:
+    * Fixed an issue with product reviews list paging
+    * Fixed an issue where sold products were not displayed in Bestsellers
+    * Fixed an issue with image rendering on the CMS page on Frontend when `webserver rewrites = no`
+* GitHub requests:
+    * [#790](https://github.com/magento/magento2/issues/790) -- Magento API fails in a CGI env (zf1 issue)
+    * [#909](https://github.com/magento/magento2/issues/909) -- Manage Titles in popup window front-end issue
+    * [#996](https://github.com/magento/magento2/issues/996) -- Pager block should support url "fragment".
+    * [#985](https://github.com/magento/magento2/pull/985) -- Allow camelcase in vendorname for menus
+    * [#1025](https://github.com/magento/magento2/pull/1025) -- Wrong parameter for getting base url for 'media' path in "Image" form element.
+
 0.42.0-beta7
 =============
 * Various improvements:

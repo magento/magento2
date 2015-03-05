@@ -27,25 +27,25 @@ class StoreView extends \Magento\Backend\Block\Template
     protected $_customizationConfig;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Store\Model\Resource\Website\Collection $websiteCollection
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Store\Model\Resource\Website\Collection $websiteCollection,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         $this->_websiteCollection = $websiteCollection;
         $this->_customizationConfig = $customizationConfig;
 
@@ -197,8 +197,8 @@ class StoreView extends \Magento\Backend\Block\Template
         $options['actionOnAssign'] = $this->getData('actionOnAssign');
         $options['afterAssignOpen'] = false;
 
-        /** @var $helper \Magento\Core\Helper\Data */
-        $helper = $this->_coreHelper;
+        /** @var $helper \Magento\Framework\Json\Helper\Data */
+        $helper = $this->jsonHelper;
 
         return $helper->jsonEncode($options);
     }

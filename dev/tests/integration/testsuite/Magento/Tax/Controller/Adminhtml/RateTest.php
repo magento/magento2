@@ -16,13 +16,13 @@ class RateTest extends \Magento\Backend\Utility\Controller
      */
     public function testAjaxSaveAction($postData, $expectedData)
     {
-        $this->getRequest()->setPost($postData);
+        $this->getRequest()->setPostValue($postData);
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Helper\Data'
+            'Magento\Framework\Json\Helper\Data'
         )->jsonDecode(
             $jsonBody
         );
@@ -79,13 +79,13 @@ class RateTest extends \Magento\Backend\Utility\Controller
      */
     public function testAjaxSaveActionInvalidData($postData, $expectedData)
     {
-        $this->getRequest()->setPost($postData);
+        $this->getRequest()->setPostValue($postData);
 
         $this->dispatch('backend/tax/rate/ajaxSave');
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Helper\Data'
+            'Magento\Framework\Json\Helper\Data'
         )->jsonDecode(
             $jsonBody
         );

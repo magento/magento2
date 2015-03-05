@@ -27,7 +27,7 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\ImportExport\Model\Resource\CollectionByPagesIterator::iterate
+     * covers \Magento\ImportExport\Model\Resource\CollectionByPagesIterator::iterate
      */
     public function testIterate()
     {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Session;
 
+use Zend\Stdlib\Parameters;
+
 class SidResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,6 +44,11 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected $customSessionQueryParam = 'csqp';
 
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -61,21 +68,22 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             ['isOwnOriginUrl']
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
+        $this->request = $objectManager->get('Magento\Framework\App\RequestInterface');
+
         $this->model = $objectManager->create(
             'Magento\Framework\Session\SidResolver',
             [
                 'scopeConfig' => $this->scopeConfig,
                 'urlBuilder' => $this->urlBuilder,
-                'sidNameMap' => [$this->customSessionName => $this->customSessionQueryParam]
+                'sidNameMap' => [$this->customSessionName => $this->customSessionQueryParam],
+                'request' => $this->request,
             ]
         );
     }
 
     public function tearDown()
     {
-        if (is_object($this->model) && isset($_GET[$this->model->getSessionIdQueryParam($this->session)])) {
-            unset($_GET[$this->model->getSessionIdQueryParam($this->session)]);
-        }
+        $this->request->setQuery(new Parameters());
     }
 
     /**
@@ -93,7 +101,7 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue($useFrontedSid)
         );
@@ -101,7 +109,7 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilder->expects($this->any())->method('isOwnOriginUrl')->will($this->returnValue($isOwnOriginUrl));
 
         if ($testSid) {
-            $_GET[$this->model->getSessionIdQueryParam($this->session)] = $testSid;
+            $this->request->getQuery()->set($this->model->getSessionIdQueryParam($this->session), $testSid);
         }
         $this->assertEquals($sid, $this->model->getSid($this->session));
     }

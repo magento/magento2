@@ -10,9 +10,9 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**#@+
      * Source and result class parameters
      */
-    const SOURCE_CLASS = 'Magento\Framework\Object';
+    const SOURCE_CLASS = '\Magento\Framework\Object';
 
-    const RESULT_CLASS = 'Magento\Framework\Object_MyResult';
+    const RESULT_CLASS = '\Magento\Framework\Object_MyResult';
 
     const RESULT_FILE = 'MyResult/MyResult.php';
 
@@ -58,7 +58,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEmpty('_resultClassName', $this->_model);
         $this->assertAttributeInstanceOf('Magento\Framework\Code\Generator\Io', '_ioObject', $this->_model);
         $this->assertAttributeInstanceOf(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             '_classGenerator',
             $this->_model
         );
@@ -79,7 +79,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         // with all arguments
         $ioObject = $this->getMock('Magento\Framework\Code\Generator\Io', [], [], '', false);
         $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             [],
             [],
             '',
@@ -163,17 +163,17 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * @param bool $isValid
      *
      * @dataProvider generateDataProvider
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::generate
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getSourceClassName
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
-     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::generate
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getSourceClassName
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
+     * covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
      */
     public function testGenerate(
         $errors = [],
@@ -382,7 +382,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $mocks = $this->_prepareMocksForValidateData();
 
         $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
+            'Magento\Framework\Code\Generator\ClassGenerator',
             ['setName', 'addProperties', 'addMethods', 'setClassDocBlock', 'generate'],
             [],
             '',

@@ -35,6 +35,8 @@ class CategoryIds implements FixtureInterface
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
@@ -57,8 +59,14 @@ class CategoryIds implements FixtureInterface
         } elseif (isset($data['presets'])) {
             $presets = explode(',', $data['presets']);
             foreach ($presets as $preset) {
+                if (trim($preset) == '-') {
+                    $this->data[] = '';
+                    continue;
+                }
                 $category = $fixtureFactory->createByCode('category', ['dataSet' => $preset]);
-                $category->persist();
+                if (!isset($data['new_category']) || $data['new_category'] !== 'yes') {
+                    $category->persist();
+                }
 
                 /** @var Category $category */
                 $this->data[] = $category->getName();

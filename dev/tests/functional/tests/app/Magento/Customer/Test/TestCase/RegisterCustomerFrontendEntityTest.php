@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
@@ -64,9 +64,9 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     /**
      * Create Customer account on frontend
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      */
-    public function test(CustomerInjectable $customer)
+    public function test(Customer $customer)
     {
         //Steps
         $this->cmsIndex->open();

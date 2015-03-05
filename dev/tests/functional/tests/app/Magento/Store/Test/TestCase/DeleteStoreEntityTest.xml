@@ -5,17 +5,22 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
-    <testCase name="DeleteStoreEntityTest">
-        <variation name="DeleteStoreEntityTestVariation1">
-            <data name="store/dataSet">custom</data>
-            <data name="createBackup">Yes</data>
-            <data name="constraint">assertStoreSuccessDeleteAndBackupMessages, assertStoreNotInGrid, assertBackupInGrid, assertStoreNotOnFrontend</data>
-        </variation>
-        <variation name="DeleteStoreEntityTestVariation2">
-            <data name="store/dataSet">custom</data>
-            <data name="createBackup">No</data>
-            <data name="constraint">assertStoreSuccessDeleteMessage, assertStoreNotInGrid, assertStoreNotOnFrontend</data>
-        </variation>
-    </testCase>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Store\Test\TestCase\DeleteStoreEntityTest">
+    <variation name="DeleteStoreEntityTestVariation1">
+      <data name="store/dataSet" xsi:type="string">custom</data>
+      <data name="createBackup" xsi:type="string">Yes</data>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteAndBackupMessages"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreNotInGrid"/>
+      <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend"/>
+    </variation>
+    <variation name="DeleteStoreEntityTestVariation2">
+      <data name="store/dataSet" xsi:type="string">custom</data>
+      <data name="createBackup" xsi:type="string">No</data>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessDeleteMessage"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreNotInGrid"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertStoreNotOnFrontend"/>
+    </variation>
+  </testCase>
 </config>

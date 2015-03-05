@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -18,24 +18,20 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertAddressDeletedBackend extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that deleted customers address is not displayed on backend during order creation
      *
      * @param OrderIndex $orderIndex
      * @param OrderCreateIndex $orderCreateIndex
-     * @param AddressInjectable $deletedAddress
-     * @param CustomerInjectable $customer
+     * @param Address $deletedAddress
+     * @param Customer $customer
      * @return void
      */
     public function processAssert(
         OrderIndex $orderIndex,
         OrderCreateIndex $orderCreateIndex,
-        AddressInjectable $deletedAddress,
-        CustomerInjectable $customer
+        Address $deletedAddress,
+        Customer $customer
     ) {
         $filter = ['email' => $customer->getEmail()];
         $orderIndex->open()->getGridPageActions()->addNew();

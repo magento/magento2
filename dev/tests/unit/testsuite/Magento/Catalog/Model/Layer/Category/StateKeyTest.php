@@ -25,14 +25,14 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
         $this->model = new StateKey($this->storeManagerMock, $this->customerSessionMock);
     }
 
     /**
-     * @covers \Magento\Catalog\Model\Layer\Category\StateKey::toString
-     * @covers \Magento\Catalog\Model\Layer\Category\StateKey::__construct
+     * covers \Magento\Catalog\Model\Layer\Category\StateKey::toString
+     * covers \Magento\Catalog\Model\Layer\Category\StateKey::__construct
      */
     public function testToString()
     {

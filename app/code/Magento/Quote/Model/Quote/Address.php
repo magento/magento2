@@ -19,7 +19,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method Address setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method Address setUpdatedAt(string $value)
- * @method Address setCustomerId(int $value)
  * @method int getSaveInAddressBook()
  * @method Address setSaveInAddressBook(int $value)
  * @method int getCustomerAddressId()
@@ -28,20 +27,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @method string getAddressType()
  * @method Address setAddressType(string $value)
- * @method Address setEmail(string $value)
- * @method Address setPrefix(string $value)
- * @method Address setFirstname(string $value)
- * @method Address setMiddlename(string $value)
- * @method Address setLastname(string $value)
- * @method Address setSuffix(string $value)
- * @method Address setCompany(string $value)
- * @method Address setCity(string $value)
- * @method Address setRegion(string $value)
- * @method Address setRegionId(int $value)
- * @method Address setPostcode(string $value)
- * @method Address setCountryId(string $value)
- * @method Address setTelephone(string $value)
- * @method Address setFax(string $value)
  * @method int getSameAsBilling()
  * @method Address setSameAsBilling(int $value)
  * @method int getFreeShipping()
@@ -1139,7 +1124,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $storeId = $this->getQuote()->getStoreId();
         $validateEnabled = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$validateEnabled) {
@@ -1152,12 +1137,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
         $amount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxInclude = $this->_scopeConfig->getValue(
             'sales/minimum_order/tax_including',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
@@ -1368,10 +1353,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setCountryId($countryId)
+    {
+        return $this->setData(self::KEY_COUNTRY_ID, $countryId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getStreet()
     {
         $street = $this->getData(self::KEY_STREET);
         return explode("\n", $street);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStreet($street)
+    {
+        return $this->setData(self::KEY_STREET, $street);
     }
 
     /**
@@ -1385,9 +1386,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setCompany($company)
+    {
+        return $this->setData(self::KEY_COMPANY, $company);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTelephone()
     {
         return $this->getData(self::KEY_TELEPHONE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTelephone($telephone)
+    {
+        return $this->setData(self::KEY_TELEPHONE, $telephone);
     }
 
     /**
@@ -1401,9 +1418,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setFax($fax)
+    {
+        return $this->setData(self::KEY_FAX, $fax);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPostcode()
     {
         return $this->getData(self::KEY_POSTCODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPostcode($postcode)
+    {
+        return $this->setData(self::KEY_POSTCODE, $postcode);
     }
 
     /**
@@ -1417,9 +1450,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setCity($city)
+    {
+        return $this->setData(self::KEY_CITY, $city);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFirstname()
     {
         return $this->getData(self::KEY_FIRSTNAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFirstname($firstname)
+    {
+        return $this->setData(self::KEY_FIRSTNAME, $firstname);
     }
 
     /**
@@ -1433,9 +1482,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setLastname($lastname)
+    {
+        return $this->setData(self::KEY_LASTNAME, $lastname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMiddlename()
     {
         return $this->getData(self::KEY_MIDDLENAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMiddlename($middlename)
+    {
+        return $this->setData(self::KEY_MIDDLENAME, $middlename);
     }
 
     /**
@@ -1449,9 +1514,25 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setPrefix($prefix)
+    {
+        return $this->setData(self::KEY_PREFIX, $prefix);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSuffix()
     {
         return $this->getData(self::KEY_SUFFIX);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSuffix($suffix)
+    {
+        return $this->setData(self::KEY_SUFFIX, $suffix);
     }
 
     /**
@@ -1465,6 +1546,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setVatId($vatId)
+    {
+        return $this->setData(self::KEY_VAT_ID, $vatId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCustomerId()
     {
         return $this->getData(self::KEY_CUSTOMER_ID);
@@ -1473,9 +1562,49 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * {@inheritdoc}
      */
+    public function setCustomerId($customerId)
+    {
+        return $this->setData(self::KEY_CUSTOMER_ID, $customerId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEmail()
     {
         return $this->getData(self::KEY_EMAIL);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmail($email)
+    {
+        return $this->setData(self::KEY_EMAIL, $email);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRegion($region)
+    {
+        return $this->setData(self::KEY_REGION, $region);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRegionId($regionId)
+    {
+        return $this->setData(self::KEY_REGION_ID, $regionId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRegionCode($regionCode)
+    {
+        return $this->setData(self::KEY_REGION_CODE, $regionCode);
     }
     //@codeCoverageIgnoreEnd
 }

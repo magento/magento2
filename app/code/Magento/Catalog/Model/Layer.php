@@ -40,7 +40,7 @@ class Layer extends \Magento\Framework\Object
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -90,7 +90,7 @@ class Layer extends \Magento\Framework\Object
      * @param Layer\StateFactory $layerStateFactory
      * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param Resource\Product $catalogProduct
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
@@ -100,7 +100,7 @@ class Layer extends \Magento\Framework\Object
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         CategoryRepositoryInterface $categoryRepository,
         array $data = []
@@ -209,7 +209,7 @@ class Layer extends \Magento\Framework\Object
      *
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCurrentCategory($category)
     {
@@ -217,14 +217,14 @@ class Layer extends \Magento\Framework\Object
             try {
                 $category = $this->categoryRepository->get($category);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'), [], $e);
             }
         } elseif ($category instanceof \Magento\Catalog\Model\Category) {
             if (!$category->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'));
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Must be category model instance or its id.')
             );
         }

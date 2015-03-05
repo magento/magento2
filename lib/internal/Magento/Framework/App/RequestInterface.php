@@ -49,6 +49,22 @@ interface RequestInterface
     public function getParam($key, $defaultValue = null);
 
     /**
+     * Set params from key value array
+     *
+     * @param array $params
+     * @return $this
+     */
+    public function setParams(array $params);
+
+    /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getParams();
+
+
+    /**
      * Retrieve cookie value
      *
      * @param string|null $name
@@ -56,4 +72,11 @@ interface RequestInterface
      * @return string|null
      */
     public function getCookie($name, $default);
+
+    /**
+     * Returns whether request was delivered over HTTPS
+     *
+     * @return bool
+     */
+    public function isSecure();
 }

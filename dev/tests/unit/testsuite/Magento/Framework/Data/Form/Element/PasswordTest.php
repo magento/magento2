@@ -44,7 +44,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Password::__construct
+     * covers \Magento\Framework\Data\Form\Element\Password::__construct
      */
     public function testConstruct()
     {
@@ -53,7 +53,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Password::getHtml
+     * covers \Magento\Framework\Data\Form\Element\Password::getHtml
      */
     public function testGetHtml()
     {

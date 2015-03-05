@@ -19,7 +19,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $instances = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -41,26 +41,18 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
 
     /**
-     * @var \Magento\Catalog\Api\Data\CategoryDataBuilder
-     */
-    protected $categoryBuilder;
-
-    /**
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
-        $this->categoryBuilder = $dataBuilder;
     }
 
     /**
@@ -154,7 +146,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      *
      * @param  Category $category
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateCategory(Category $category)
     {
@@ -170,9 +162,11 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             foreach ($validate as $code => $error) {
                 if ($error === true) {
                     $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
-                    throw new \Magento\Framework\Model\Exception(__('Attribute "%1" is required.', $attribute));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Attribute "%1" is required.', $attribute)
+                    );
                 } else {
-                    throw new \Magento\Framework\Model\Exception($error);
+                    throw new \Magento\Framework\Exception\LocalizedException($error);
                 }
             }
         }
