@@ -39,14 +39,12 @@
     </variation>
     <variation name="AddProductToWishlistEntityTestVariation6" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
       <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-33952</data>
       <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductDetailsInWishlist"/>
       <constraint name="assertProductDetailsInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
       <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductDetailsInWishlist"/>
     </variation>
     <variation name="AddProductToWishlistEntityTestVariation7" firstConstraint="assertAddProductToWishlistSuccessMessage" method="test">
       <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
-      <data name="issue" xsi:type="string">Bug: MAGETWO-33952</data>
       <constraint name="assertAddProductToWishlistSuccessMessage" next="assertProductDetailsInWishlist"/>
       <constraint name="assertProductDetailsInWishlist" next="assertProductIsPresentInCustomerBackendWishlist" prev="assertAddProductToWishlistSuccessMessage"/>
       <constraint name="assertProductIsPresentInCustomerBackendWishlist" prev="assertProductDetailsInWishlist"/>
