@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Reports\Model\Resource\Report\Collection;
+namespace Magento\Reports\Test\Unit\Model\Resource\Report\Collection;
 
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $resource->method('getReadConnection')->willReturn($connection);
 
-        $this->_model = new AbstractCollection(
+        $this->_model = new \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection(
             $entityFactory,
             $logger,
             $fetchStrategy,

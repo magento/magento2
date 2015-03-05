@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Reports\Model\Plugin;
+namespace Magento\Reports\Test\Unit\Model\Plugin;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {

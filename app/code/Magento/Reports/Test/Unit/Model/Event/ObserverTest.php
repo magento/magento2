@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Reports\Model\Event;
+namespace Magento\Reports\Test\Unit\Model\Event;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,7 +75,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->reportEventMock);
 
-        /** @var \Magento\Store\Model\StoreManagerInterfac|\PHPUnit_Framework_MockObject_MockObject $storeManager */
+        /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManager */
         $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
@@ -179,7 +179,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $isLoggedIn
-     * @param str $userKey
+     * @param string $userKey
      * @param int $userId
      * @dataProvider catalogProductCompareAddProductDataProvider
      */
