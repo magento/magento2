@@ -29,7 +29,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<label for="widget_instance[<%= data.id %>][page_group]">Display on <span class="required">*</span></label>'+
         '<?php echo $block->getDisplayOnSelectHtml(); ?>'+
         '<div class="actions">'+
-        <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
+        <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
         '</div>'+
     '</div>'+
     '<div class="fieldset-wrapper-content">'+
