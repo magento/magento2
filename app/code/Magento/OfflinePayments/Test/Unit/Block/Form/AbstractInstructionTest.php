@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflinePayments\Block\Form;
+namespace Magento\OfflinePayments\Test\Unit\Block\Form;
 
 class AbstractInstructionTest extends \PHPUnit_Framework_TestCase
 {
