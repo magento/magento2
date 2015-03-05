@@ -3,10 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Model;
+namespace Magento\Cron\Test\Unit\Model;
+
+use Magento\Cron\Model\Schedule;
 
 /**
- * Class \Magento\Cron\Model\ObserverTest
+ * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ScheduleTest extends \PHPUnit_Framework_TestCase

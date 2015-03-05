@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Model\Config;
+namespace Magento\Cron\Test\Unit\Model\Config;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

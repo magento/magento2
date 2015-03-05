@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cron\Model;
+namespace Magento\Cron\Test\Unit\Model;
 
 /**
- * Class \Magento\Cron\Model\ObserverTest
+ * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObserverTest extends \PHPUnit_Framework_TestCase
@@ -344,7 +344,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testDispatchRunJob()
     {
         require_once __DIR__ . '/CronJob.php';
-        $testCronJob = new \Magento\Cron\Model\CronJob();
+        $testCronJob = new \Magento\Cron\Test\Unit\Model\CronJob();
 
         $jobConfig = [
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
