@@ -206,12 +206,10 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception was not raised');
         } catch (\Exception $e) {
-            $expectedMessage = 'Code already exists.';
-            $this->assertContains(
-                $expectedMessage,
-                $e->getMessage(),
-                "Exception does not contain expected message."
-            );
+            $expectedMessage = '%1 already exists.';
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['Code'], $errorObj['parameters']);
         }
 
         // Clean up the new tax rule so it won't affect other tests

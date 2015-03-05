@@ -109,14 +109,19 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Requested option doesn't exist: -42
      */
     public function testGetUndefinedOption()
     {
+        $expectedMessage = 'Requested option doesn\'t exist: %1';
         $productSku = 'configurable';
         $attributeId = -42;
-        $this->get($productSku, $attributeId);
+        try {
+            $this->get($productSku, $attributeId);
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$attributeId], $errorObj['parameters']);
+        }
     }
 
     /**
