@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleAdwords\Model\Config\Source;
+namespace Magento\GoogleAdwords\Test\Unit\Model\Config\Source;
 
 class ValueTypeTest extends \PHPUnit_Framework_TestCase
 {

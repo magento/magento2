@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleAdwords\Model\Filter;
+namespace Magento\GoogleAdwords\Test\Unit\Model\Filter;
 
 class UppercaseTitleTest extends \PHPUnit_Framework_TestCase
 {

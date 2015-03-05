@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-namespace Magento\GoogleAdwords\Model\Validator;
+namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
 use Magento\Framework\Validator\Int;
 use Magento\Framework\Validator\Regex;
