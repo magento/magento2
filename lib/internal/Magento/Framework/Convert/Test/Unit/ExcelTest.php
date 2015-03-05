@@ -7,7 +7,7 @@
 /**
  * Magento_Convert Test Case for \Magento\Framework\Convert\Excel Export
  */
-namespace Magento\Framework\Convert;
+namespace Magento\Framework\Convert\Test\Unit;
 
 class ExcelTest extends \PHPUnit_Framework_TestCase
 {

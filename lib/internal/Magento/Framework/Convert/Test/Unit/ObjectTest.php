@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Convert;
+namespace Magento\Framework\Convert\Test\Unit;
+
+use \Magento\Framework\Convert\Object;
 
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
