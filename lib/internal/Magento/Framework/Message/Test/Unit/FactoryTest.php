@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Message;
+namespace Magento\Framework\Message\Test\Unit;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

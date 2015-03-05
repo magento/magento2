@@ -3,7 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Message;
+namespace Magento\Framework\Message\Test\Unit;
+
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * \Magento\Framework\Message\Manager test case
