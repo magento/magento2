@@ -49,20 +49,22 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      */
     public function getType($attributeCode, $serviceClass)
     {
-        $entityType = $this->serviceEntityTypeMap[$serviceClass];
-        if (!$entityType) {
+        if (!$serviceClass || !$attributeCode || !isset($this->serviceEntityTypeMap[$serviceClass])
+            || !isset($this->serviceBackendModelDataInterfaceMap[$serviceClass])
+        ) {
             return null;
         }
 
         try {
-            $backendModel = $this->attributeRepository->get($entityType, $attributeCode)->getBackendModel();
+            $backendModel = $this->attributeRepository
+                ->get($this->serviceEntityTypeMap[$serviceClass], $attributeCode)
+                ->getBackendModel();
         } catch (NoSuchEntityException $e) {
             return null;
         }
 
-        $dataInterfaceBackendTypeMap = $this->serviceBackendModelDataInterfaceMap[$serviceClass];
-        $dataInterface = isset($dataInterfaceBackendTypeMap[$backendModel])
-            ? $dataInterfaceBackendTypeMap[$backendModel]
+        $dataInterface = isset($this->serviceBackendModelDataInterfaceMap[$serviceClass][$backendModel])
+            ? $this->serviceBackendModelDataInterfaceMap[$serviceClass][$backendModel]
             : null;
 
         return $dataInterface;
