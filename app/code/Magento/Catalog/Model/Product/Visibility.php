@@ -31,13 +31,6 @@ class Visibility extends \Magento\Framework\Object
     protected $_attribute;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * Eav entity attribute
      *
      * @var \Magento\Eav\Model\Resource\Entity\Attribute
@@ -48,16 +41,13 @@ class Visibility extends \Magento\Framework\Object
      * Construct
      *
      * @param \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute
-     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute $eavEntityAttribute,
-        \Magento\Core\Helper\Data $coreData,
         array $data = []
     ) {
         $this->_eavEntityAttribute = $eavEntityAttribute;
-        $this->_coreData = $coreData;
         parent::__construct($data);
         $this->setIdFieldName('visibility_id');
     }

@@ -33,11 +33,27 @@ interface AttributeOptionInterface
     public function getLabel();
 
     /**
+     * Set option label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
+
+    /**
      * Get option value
      *
      * @return string
      */
     public function getValue();
+
+    /**
+     * Set option value
+     *
+     * @param string $value
+     * @return string
+     */
+    public function setValue($value);
 
     /**
      * Get option order
@@ -47,16 +63,40 @@ interface AttributeOptionInterface
     public function getSortOrder();
 
     /**
+     * Set option order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
+
+    /**
      * is default
      *
-     * @return bool|nulll
+     * @return bool|null
      */
     public function getIsDefault();
 
     /**
-     * Set option label for store scopes
+     * set is default
+     *
+     * @param bool $isDefault
+     * @return $this
+     */
+    public function setIsDefault($isDefault);
+
+    /**
+     * Get option label for store scopes
      *
      * @return \Magento\Eav\Api\Data\AttributeOptionLabelInterface[]|null
      */
     public function getStoreLabels();
+
+    /**
+     * Set option label for store scopes
+     *
+     * @param \Magento\Eav\Api\Data\AttributeOptionLabelInterface[] $storeLabels
+     * @return $this
+     */
+    public function setStoreLabels(array $storeLabels = null);
 }

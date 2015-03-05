@@ -27,7 +27,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
             $template->setData('orig_template_used_default_for', $templateBlock->getUsedDefaultForPaths(false));
 
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($template->getData())
+                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($template->getData())
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
