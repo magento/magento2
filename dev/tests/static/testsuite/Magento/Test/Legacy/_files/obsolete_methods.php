@@ -2087,7 +2087,6 @@ return [
     ['getFiles', 'Magento\Framework\App\Request\Http'],
     ['getAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
     ['setAlias', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request'],
-    ['getParam', 'Magento\Framework\App\RequestInterface'],
     [
         'render',
         'Magento\Framework\Webapi\ErrorProcessor',
