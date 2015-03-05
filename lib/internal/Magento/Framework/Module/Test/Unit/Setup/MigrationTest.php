@@ -7,7 +7,7 @@
 /**
  * Tests for resource setup model needed for migration process between Magento versions
  */
-namespace Magento\Framework\Module\Setup;
+namespace Magento\Framework\Module\Test\Unit\Setup;
 
 class MigrationTest extends \PHPUnit_Framework_TestCase
 {

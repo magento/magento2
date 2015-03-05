@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Module\ModuleList;
+namespace Magento\Framework\Module\Test\Unit\ModuleList;
+
+use \Magento\Framework\Module\ModuleList\DeploymentConfig;
 
 class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,7 +8,7 @@
 /**
  * Test class for \Magento\Framework\Module\Dir\File
  */
-namespace Magento\Framework\Module\Dir;
+namespace Magento\Framework\Module\Test\Unit\Dir;
 
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;

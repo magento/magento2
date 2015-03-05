@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Module\Plugin;
+namespace Magento\Framework\Module\Test\Unit\Plugin;
+
+use \Magento\Framework\Module\Plugin\DbStatusValidator;
 
 use Magento\Framework\Module\DbVersionInfo;
 

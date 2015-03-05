@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Module;
+namespace Magento\Framework\Module\Test\Unit;
+
+use \Magento\Framework\Module\Setup;
 
 class SetupTest extends \PHPUnit_Framework_TestCase
 {
