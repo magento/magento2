@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\DB\Ddl;
+namespace Magento\Framework\DB\Test\Unit\Ddl;
 
 class TriggerTest extends \PHPUnit_Framework_TestCase
 {

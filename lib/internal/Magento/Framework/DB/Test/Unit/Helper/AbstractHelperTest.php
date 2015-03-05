@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\DB\Helper;
+namespace Magento\Framework\DB\Test\Unit\Helper;
 
 class AbstractHelperTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\DB;
+namespace Magento\Framework\DB\Test\Unit;
+
+use Magento\Framework\DB\Select;
 
 /**
  * Class AbstractMapperTest

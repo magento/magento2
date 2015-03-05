@@ -9,7 +9,7 @@
 /**
  * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
  */
-namespace Magento\Framework\DB\Adapter\Pdo;
+namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
