@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Locale;
+namespace Magento\Framework\Locale\Test\Unit;
 
 class ListsTest extends \PHPUnit_Framework_TestCase
 {

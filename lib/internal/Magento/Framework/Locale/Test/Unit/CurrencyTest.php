@@ -6,9 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Locale;
+namespace Magento\Framework\Locale\Test\Unit;
 
-
+use Magento\Framework\Locale\CurrencyInterface;
 
 class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
