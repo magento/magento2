@@ -12,8 +12,8 @@ use Magento\Tools\View\Deployer\Log;
  *
  * @package Magento\Tools\Webdev
  */
-class CliParams {
-
+class CliParams
+{
     /**
      * AREA_DOC
      */
@@ -56,10 +56,10 @@ class CliParams {
 
     /**
      * @param \Zend_Console_Getopt $opt
-     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @throws \Zend_Console_Getopt_Exception
      */
-    function __construct(\Zend_Console_Getopt $opt)
+    public function __construct(\Zend_Console_Getopt $opt)
     {
         $this->locale = $opt->getOption('locale')? :$this->locale;
 
@@ -91,6 +91,8 @@ class CliParams {
      * @param string $locale
      *
      * @throws \Zend_Console_Getopt_Exception
+     *
+     * @return void
      */
     public function setLocale($locale)
     {
@@ -107,6 +109,8 @@ class CliParams {
 
     /**
      * @param string $area
+     *
+     * @return void
      */
     public function setArea($area)
     {
@@ -123,6 +127,8 @@ class CliParams {
 
     /**
      * @param string $theme
+     *
+     * @return void
      */
     public function setTheme($theme)
     {
@@ -139,6 +145,8 @@ class CliParams {
 
     /**
      * @param array $files
+     *
+     * @return void
      */
     public function setFiles($files)
     {
@@ -155,6 +163,8 @@ class CliParams {
 
     /**
      * @param int $verbose
+     *
+     * @return void
      */
     public function setVerbose($verbose)
     {

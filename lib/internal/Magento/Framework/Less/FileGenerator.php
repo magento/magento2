@@ -198,8 +198,10 @@ class FileGenerator
     }
 
     /**
-     * @param $relativePath
-     * @param $contents
+     * @param string $relativePath
+     * @param string $contents
+     *
+     * @return void
      */
     protected function createFileMain($relativePath, $contents)
     {
@@ -211,17 +213,19 @@ class FileGenerator
 
     /**
      * @param LocalInterface $relatedAsset
+     *
+     * @return void
      */
     protected function createSymLink(LocalInterface $relatedAsset)
     {
-        $linkBase = '/static/';
-        $linkDir = $linkBase . str_replace(pathinfo($relatedAsset->getPath())['basename'], '', $relatedAsset->getPath());
-        if (strpos($relatedAsset->getSourceFile(),'view_preprocessed') !== false) {
+        $prefix = '/static/';
+        $linkDir = $prefix . str_replace(pathinfo($relatedAsset->getPath())['basename'], '', $relatedAsset->getPath());
+        if (strpos($relatedAsset->getSourceFile(), 'view_preprocessed') !== false) {
             $linkTarget = $this->assetSource->findSource($relatedAsset);
         } else {
             $linkTarget = $relatedAsset->getSourceFile();
         }
-        $link = $this->pubDirectory->getAbsolutePath($linkBase . $relatedAsset->getPath());
+        $link = $this->pubDirectory->getAbsolutePath($prefix . $relatedAsset->getPath());
         if (!$this->pubDirectory->isExist($linkDir)) {
             $this->pubDirectory->create($linkDir);
         }

@@ -55,9 +55,9 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
                 return "content of '$file'";
             }));
         $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
+        $filesystem->expects($this->exactly(2))
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
+            //->with(DirectoryList::VAR_DIR)
             ->will($this->returnValue($this->tmpDirectory));
         $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->magentoImport = $this->getMock(
@@ -66,8 +66,13 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->import = $this->getMock(
             '\Magento\Framework\Less\PreProcessor\Instruction\Import', [], [], '', false
         );
+
+        $repo = $this->getMock(
+            'Magento\Framework\View\Asset\Source', [], [], '', false
+        );
+
         $this->object = new \Magento\Framework\Less\FileGenerator(
-            $filesystem, $this->assetRepo, $this->magentoImport, $this->import
+            $filesystem, $this->assetRepo, $this->magentoImport, $this->import, $repo
         );
     }
 

@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\WebDev\App;
+namespace Magento\Tools\Webdev\App;
 
 use Magento\Framework\App;
 use Magento\Framework\App\State;
@@ -23,6 +23,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
  *
  * Class Compiler
  * @package Magento\Tools\Di\App
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Lesser implements AppInterface
 {
@@ -114,7 +115,7 @@ class Lesser implements AppInterface
         $this->state->setAreaCode($this->params->getArea());
         $this->objectManager->configure($this->configLoader->load($this->params->getArea()));
 
-        foreach ($this->params->getFiles() as $file ) {
+        foreach ($this->params->getFiles() as $file) {
             $file .= '.less';
 
             $this->logger->logMessage("Gathering {$file} sources.");

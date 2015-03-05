@@ -41,6 +41,7 @@ try {
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication(
-    'Magento\Tools\WebDev\App\Lesser', ['params' => $params, 'logger' => $logger]
+    'Magento\Tools\WebDev\App\Lesser',
+    ['params' => $params, 'logger' => $logger]
 );
 $bootstrap->run($app);

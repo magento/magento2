@@ -73,6 +73,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile', [], [], '', false
         );
         $this->theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
+        $config = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $themeList = $this->getMockForAbstractClass('Magento\Framework\View\Design\Theme\ListInterface');
         $themeList->expects($this->any())
@@ -87,7 +89,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->preProcessorPool,
             $this->viewFileResolution,
-            $themeList
+            $themeList,
+            $config
         );
     }
 
