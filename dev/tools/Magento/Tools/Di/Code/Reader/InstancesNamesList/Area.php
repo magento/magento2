@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
+
 use Magento\Tools\Di\Code\Reader\ClassesScanner;
 use Magento\Tools\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Framework\Filesystem\FilesystemException;

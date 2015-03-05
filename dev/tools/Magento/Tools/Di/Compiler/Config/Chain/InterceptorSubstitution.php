@@ -55,26 +55,6 @@ class InterceptorSubstitution implements ModificationInterface
     }
 
     /**
-     * Resolves instances names
-     *
-     * @param array $arguments
-     * @return array
-     */
-    private function resolveInstancesNames(array $arguments, array $interceptors)
-    {
-        $resolvedInstances = [];
-        foreach ($arguments as $instance => &$constructor) {
-            if (isset($interceptors[$instance])) {
-                unset($arguments[$interceptors[$instance]]);
-                $instance = $interceptors[$instance];
-            }
-            $resolvedInstances[$instance] = $constructor;
-        }
-
-        return $resolvedInstances;
-    }
-
-    /**
      * Resolves config preferences
      *
      * @param array $preferences
