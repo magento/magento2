@@ -58,11 +58,13 @@ class Curl extends AbstractCurl implements ConfigDataInterface
         $fields = $fixture->getData();
         if (isset($fields['section'])) {
             foreach ($fields['section'] as $itemSection) {
-                list($scope, $group, $field) = explode('/', $itemSection['path']);
-                $value = isset($this->mappingData[$field])
-                    ? $this->mappingData[$field][$itemSection['value']]
-                    : $itemSection['value'];
-                $result[$scope]['groups'][$group]['fields'][$field]['value'] = $value;
+                $path = explode('/', $itemSection['path']);
+                $scope = $path[0];
+                $field = end($path);
+                $path = array_slice($path, 1, -1);
+                $groupName = implode('][groups][', $path);
+                parse_str($scope . '[groups][' . $groupName . '][fields][' . $field . '][value]='. $itemSection['value'], $partialResult);
+                $result = array_merge_recursive($result, $partialResult);
             }
         }
         return $result;
