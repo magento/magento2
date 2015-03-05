@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Newsletter\Controller\Manage;
+namespace Magento\Newsletter\Test\Unit\Controller\Manage;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 

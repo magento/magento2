@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Newsletter\Model\Queue;
+namespace Magento\Newsletter\Test\Unit\Model\Queue;
 
 class TransportBuilderTest extends \Magento\Framework\Mail\Template\TransportBuilderTest
 {
