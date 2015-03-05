@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 
+use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
@@ -28,12 +29,19 @@ class Match implements QueryInterface
     private $resolver;
 
     /**
-     * @param ResolverInterface $resolver
+     * @var Fulltext
      */
-    public function __construct(ResolverInterface $resolver)
+    private $fulltextHelper;
+
+    /**
+     * @param ResolverInterface $resolver
+     * @param Fulltext $fulltextHelper
+     */
+    public function __construct(ResolverInterface $resolver, Fulltext $fulltextHelper)
     {
         $this->resolver = $resolver;
         $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
+        $this->fulltextHelper = $fulltextHelper;
     }
 
     /**
@@ -56,10 +64,16 @@ class Match implements QueryInterface
 
         $queryBoost = $query->getBoost();
         $scoreBuilder->addCondition(
-            $select->getMatchQuery($resolvedFieldList, $queryValue, Select::FULLTEXT_MODE_BOOLEAN),
+            $this->fulltextHelper->getMatchQuery($resolvedFieldList, $queryValue, Fulltext::FULLTEXT_MODE_BOOLEAN),
             !is_null($queryBoost) ? $queryBoost : 1
         );
-        $select->match($resolvedFieldList, $queryValue, true, Select::FULLTEXT_MODE_BOOLEAN);
+        $select = $this->fulltextHelper->match(
+            $select,
+            $resolvedFieldList,
+            $queryValue,
+            true,
+            Fulltext::FULLTEXT_MODE_BOOLEAN
+        );
 
         return $select;
     }
