@@ -16,9 +16,11 @@
     &.popup {
         .action {
             &.close {
+                width: 40px;
+                height: 40px;
+                top: 0;
+                right: 0;
                 .css(position, @popup-button-close__position);
-                .css(top, @popup-button-close__position-top);
-                .css(right, @popup-button-close__position-right);
                 .css(bottom, @popup-button-close__position-bottom);
                 .css(left, @popup-button-close__position-left);
                 z-index: 1001;
