@@ -29,7 +29,6 @@ class DepersonalizePlugin
     public function __construct(
         DepersonalizeChecker $depersonalizeChecker,
         \Magento\Checkout\Model\Session $checkoutSession
-
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->depersonalizeChecker = $depersonalizeChecker;
