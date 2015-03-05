@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Controller\Result;
+namespace Magento\Framework\Controller\Test\Unit\Result;
+
+use \Magento\Framework\Controller\Result\Redirect;
 
 class RedirectTest extends \PHPUnit_Framework_TestCase
 {

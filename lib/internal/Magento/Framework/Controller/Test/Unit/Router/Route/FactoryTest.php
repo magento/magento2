@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Controller\Router\Route;
+namespace Magento\Framework\Controller\Test\Unit\Router\Route;
+
+use \Magento\Framework\Controller\Router\Route\Factory;
 
 use Magento\Framework\Controller\Router\Route\Factory as RouteFactory;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManager;

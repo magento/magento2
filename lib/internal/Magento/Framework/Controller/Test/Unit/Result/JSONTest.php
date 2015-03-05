@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Controller\Result;
+namespace Magento\Framework\Controller\Test\Unit\Result;
 
 /**
  * Class JSONTest
