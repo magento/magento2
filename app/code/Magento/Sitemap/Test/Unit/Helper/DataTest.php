@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sitemap\Helper;
+namespace Magento\Sitemap\Test\Unit\Helper;
+
+use \Magento\Sitemap\Helper\Data;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
