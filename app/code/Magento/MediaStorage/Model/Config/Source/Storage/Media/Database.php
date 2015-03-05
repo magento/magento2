@@ -7,7 +7,7 @@
 /**
  * Generate options for media database selection
  */
-namespace Magento\Config\Model\Config\Source\Storage\Media;
+namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\ResourceConfig;

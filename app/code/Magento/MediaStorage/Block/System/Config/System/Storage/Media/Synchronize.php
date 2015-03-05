@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Block\System\Config\System\Storage\Media;
+namespace Magento\MediaStorage\Block\System\Config\System\Storage\Media;
 
 /**
  * Synchronize button renderer
@@ -13,7 +13,7 @@ class Synchronize extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @var string
      */
-    protected $_template = 'Magento_Config::system/config/system/storage/media/synchronize.phtml';
+    protected $_template = 'Magento_MediaStorage::system/config/system/storage/media/synchronize.phtml';
 
     /**
      * @var \Magento\MediaStorage\Model\File\Storage

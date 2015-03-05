@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Model\Config\Backend\Storage\Media;
+namespace Magento\MediaStorage\Model\Config\Backend\Storage\Media;
 
 class Database extends \Magento\Framework\App\Config\Value
 {

@@ -7,7 +7,7 @@
 /**
  * Generate options for media storage selection
  */
-namespace Magento\Config\Model\Config\Source\Storage\Media;
+namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
 class Storage implements \Magento\Framework\Option\ArrayInterface
 {

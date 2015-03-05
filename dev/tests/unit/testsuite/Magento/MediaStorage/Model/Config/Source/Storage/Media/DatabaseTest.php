@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Config\Model\Config\Source\Storage\Media;
+namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
 use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 
@@ -16,7 +16,7 @@ use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 class DatabaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Source\Storage\Media\Database
+     * @var \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database
      */
     protected $mediaDatabase;
 
@@ -41,7 +41,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ]
         )
         );
-        $this->mediaDatabase = new \Magento\Config\Model\Config\Source\Storage\Media\Database($this->configMock);
+        $this->mediaDatabase = new \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database($this->configMock);
     }
 
     /**

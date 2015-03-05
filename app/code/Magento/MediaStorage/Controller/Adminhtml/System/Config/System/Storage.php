@@ -9,7 +9,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Config\Controller\Adminhtml\System\Config\System;
+namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System;
 
 class Storage extends \Magento\Backend\App\Action
 {

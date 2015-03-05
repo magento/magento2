@@ -4,9 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Config\Controller\Adminhtml\System\Config\System\Storage;
+namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage;
 
-class Synchronize extends \Magento\Config\Controller\Adminhtml\System\Config\System\Storage
+class Synchronize extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 {
     /**
      * Synchronize action between storages
