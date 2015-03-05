@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
 
 /**
  * Test case for \Magento\Framework\Validator

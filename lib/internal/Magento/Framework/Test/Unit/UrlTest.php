@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
 
 /**
  * Test class for Magento\Framework\Url

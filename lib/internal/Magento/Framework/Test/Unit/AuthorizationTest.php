@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\Framework\AuthorizationInterface.
  */
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
 
 class AuthorizationTest extends \PHPUnit_Framework_TestCase
 {

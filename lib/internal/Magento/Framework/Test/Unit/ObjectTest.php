@@ -7,7 +7,7 @@
 /**
  * \Magento\Framework\Object test case.
  */
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
 
 use PHPUnit_Framework_TestCase;
 

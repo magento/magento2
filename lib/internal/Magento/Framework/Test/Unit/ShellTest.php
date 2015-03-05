@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
 
 class ShellTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework;
+namespace Magento\Framework\Test\Unit;
+
+use \Magento\Framework\Archive;
 
 class ArchiveTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,8 +38,8 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->archive = new Archive();
-        $this->sourceFilePath = __DIR__ . '/Archive/_files/source.txt';
-        $this->destinationDir = __DIR__ . '/Archive/_files/archives/';
+        $this->sourceFilePath = __DIR__ . '/_files/source.txt';
+        $this->destinationDir = __DIR__ . '/_files/archives/';
     }
 
     protected function tearDown()
