@@ -60,8 +60,10 @@
         border: 0;
         color: @alert-icon__notice__color;
         content: @alert-icon__notice__content;
-        font: @alert__font-weight @alert-icon__font-size @alert-icon__font-name;
+        font-family: @alert-icon__font-name;
+        font-size: @alert-icon__font-size;
         font-style: @alert__font-style;
+        font-weight: @alert__font-weight;
         height: auto;
         left: 1.9rem;
         line-height: inherit;
@@ -111,9 +113,9 @@
         display: none;
     }
     .spinner {
-        position: absolute;
         font-size: @alert__spinner__font-size;
         left: 1.5rem;
+        position: absolute;
         top: 1.5rem;
     }
 }
