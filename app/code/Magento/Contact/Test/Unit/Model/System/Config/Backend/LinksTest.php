@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Contact\Model\System\Config\Backend;
+namespace Magento\Contact\Test\Unit\Model\System\Config\Backend;
 
 class LinksTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = new Links(
+        $this->_model = new \Magento\Contact\Model\System\Config\Backend\Links(
             $this->getMock('\Magento\Framework\Model\Context', [], [], '', false),
             $this->getMock('\Magento\Framework\Registry', [], [], '', false),
             $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface', [], '', false),

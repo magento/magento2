@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Contact\Controller;
+namespace Magento\Contact\Test\Unit\Controller;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
