@@ -16,6 +16,14 @@ interface ProductCustomOptionTypeInterface
     public function getLabel();
 
     /**
+     * Set option type label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
+
+    /**
      * Get option type code
      *
      * @return string
@@ -23,9 +31,25 @@ interface ProductCustomOptionTypeInterface
     public function getCode();
 
     /**
+     * Set option type code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCode($code);
+
+    /**
      * Get option type group
      *
      * @return string
      */
     public function getGroup();
+
+    /**
+     * Set option type group
+     *
+     * @param string $group
+     * @return $this
+     */
+    public function setGroup($group);
 }
