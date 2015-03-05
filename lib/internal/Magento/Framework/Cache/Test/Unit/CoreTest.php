@@ -9,7 +9,7 @@
 /**
  * \Magento\Framework\Cache\Core test case
  */
-namespace Magento\Framework\Cache;
+namespace Magento\Framework\Cache\Test\Unit;
 
 class CoreTest extends \PHPUnit_Framework_TestCase
 {
@@ -145,7 +145,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
         $ids = ['id', 'id2', 'id3'];
 
-        $backendMock = $this->getMock('Magento\Framework\Cache\CoreMock');
+        $backendMock = $this->getMock('Magento\Framework\Cache\Test\Unit\CoreMock');
         $backendMock->expects($this->once())
             ->method('getIdsMatchingTags')
             ->with($prefixedTags)
@@ -170,7 +170,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
         $ids = ['id', 'id2', 'id3'];
 
-        $backendMock = $this->getMock('Magento\Framework\Cache\CoreMock');
+        $backendMock = $this->getMock('Magento\Framework\Cache\Test\Unit\CoreMock');
         $backendMock->expects($this->once())
             ->method('getIdsNotMatchingTags')
             ->with($prefixedTags)

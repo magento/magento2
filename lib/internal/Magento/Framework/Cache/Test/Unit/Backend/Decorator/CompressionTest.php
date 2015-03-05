@@ -7,7 +7,7 @@
 /**
  * \Magento\Framework\Cache\Backend\Decorator\Compression test case
  */
-namespace Magento\Framework\Cache\Backend\Decorator;
+namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
 class CompressionTest extends \PHPUnit_Framework_TestCase
 {
