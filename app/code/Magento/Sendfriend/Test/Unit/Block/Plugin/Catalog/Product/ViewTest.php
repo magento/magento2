@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sendfriend\Block\Plugin\Catalog\Product;
+namespace Magento\Sendfriend\Test\Unit\Block\Plugin\Catalog\Product;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

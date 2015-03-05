@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sendfriend\Block;
+namespace Magento\Sendfriend\Test\Unit\Block;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
