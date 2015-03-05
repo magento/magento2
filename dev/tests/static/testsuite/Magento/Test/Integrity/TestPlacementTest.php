@@ -30,7 +30,7 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
         $this->scanList = $this->getScanListFromFile();
     }
 
-    public function testReadmeFiles()
+    public function testUnitTestFilesPlacement()
     {
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
         /** @var \Magento\Framework\Data\Collection\Filesystem $filesystem */
