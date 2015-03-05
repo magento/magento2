@@ -25,7 +25,7 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * Core url
      *
-     * @var \Magento\Core\Helper\Url
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $coreUrl;
 
@@ -41,7 +41,7 @@ class Info extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Registration $registration
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Core\Helper\Url $coreUrl
+     * @param \Magento\Framework\Url\Helper\Data $coreUrl
      * @param array $data
      */
     public function __construct(
@@ -49,7 +49,7 @@ class Info extends \Magento\Framework\View\Element\Template
         \Magento\Customer\Model\Registration $registration,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Core\Helper\Url $coreUrl,
+        \Magento\Framework\Url\Helper\Data $coreUrl,
         array $data = []
     ) {
         parent::__construct($context, $data);
