@@ -97,6 +97,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
 
     public function testCreateTaxRateExistingCode()
     {
+        $expectedMessage = '%1 already exists.';
         $data = [
             'tax_rate' => [
                 'tax_country_id' => 'US',
@@ -121,8 +122,13 @@ class TaxRateRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
         } catch (\Exception $e) {
-            $expectedMessage = '%1 already exists.';
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['Code'], $errorObj['parameters']);
