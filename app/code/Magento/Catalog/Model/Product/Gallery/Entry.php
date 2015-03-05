@@ -72,4 +72,12 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->getData(self::FILE);
     }
+
+    /**
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface|null
+     */
+    public function getContent()
+    {
+        return $this->getData(self::CONTENT);
+    }
 }

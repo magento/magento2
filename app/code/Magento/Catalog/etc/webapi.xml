@@ -208,6 +208,13 @@
             <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
+    <!-- Temporary route. This will replace V1/products/:productSku/media -->
+    <route url="/V1/products/:productSku/media-as-custom-attribute" method="POST">
+        <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="createUsingCustomAttribute"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
     <route url="/V1/products/:productSku/media/:entryId" method="PUT">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="update"/>
         <resources>

@@ -180,10 +180,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         );
         // Update additional fields that are still empty after addImage call
         $productMediaGallery->updateImage($product, $imageFileUri, [
-                'label' => $entry->getLabel(),
-                'position' => $entry->getPosition(),
-                'disabled' => $entry->getIsDisabled(),
-            ]);
+            'label' => $entry->getLabel(),
+            'position' => $entry->getPosition(),
+            'disabled' => $entry->getIsDisabled(),
+        ]);
         $product->setStoreId($storeId);
 
         try {
@@ -198,6 +198,23 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $product,
             $productMediaGallery->getRenamedImage($imageFileUri)
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createUsingCustomAttribute($product) {
+        try {
+            $this->storeManager->getStore($product->getStoreId());
+        } catch (\Exception $exception) {
+            throw new NoSuchEntityException('There is no store with provided ID.');
+        }
+        /** @var $entry ProductAttributeMediaGalleryEntryInterface */
+        $entry = $product->getCustomAttribute('media_gallery')->getValue();
+        $entryContent = $entry->getContent();
+        $storeId = $product->getStoreId() ? $product->getStoreId() : 0;
+
+        return $this->create($product->getSku(), $entry, $entryContent, $storeId);
     }
 
     /**

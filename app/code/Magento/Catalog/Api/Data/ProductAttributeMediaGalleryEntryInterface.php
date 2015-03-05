@@ -15,6 +15,7 @@ interface ProductAttributeMediaGalleryEntryInterface
     const DISABLED = 'is_disabled';
     const TYPES = 'types';
     const FILE = 'file';
+    const CONTENT = 'content';
 
     /**
      * Retrieve gallery entry ID
@@ -58,4 +59,9 @@ interface ProductAttributeMediaGalleryEntryInterface
      * @return string|null
      */
     public function getFile();
+
+    /**
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface|null
+     */
+    public function getContent();
 }

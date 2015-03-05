@@ -18,12 +18,12 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
     private $attributeRepository;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var array
      */
     private $serviceEntityTypeMap;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var array
      */
     private $serviceBackendModelDataInterfaceMap;
 
@@ -31,13 +31,13 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * Initialize EavCustomAttributeTypeLocator
      *
      * @param AttributeRepositoryInterface $attributeRepository
-     * @param \Magento\Framework\Object $serviceEntityTypeMap
-     * @param \Magento\Framework\Object $serviceBackendModelDataInterfaceMap
+     * @param array $serviceEntityTypeMap
+     * @param array $serviceBackendModelDataInterfaceMap
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
-        \Magento\Framework\Object $serviceEntityTypeMap,
-        \Magento\Framework\Object $serviceBackendModelDataInterfaceMap
+        array $serviceEntityTypeMap = [],
+        array $serviceBackendModelDataInterfaceMap = []
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->serviceEntityTypeMap = $serviceEntityTypeMap;
@@ -49,7 +49,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      */
     public function getType($attributeCode, $serviceClass)
     {
-        $entityType = $this->serviceEntityTypeMap->getData($serviceClass);
+        $entityType = $this->serviceEntityTypeMap[$serviceClass];
         if (!$entityType) {
             return null;
         }
@@ -60,7 +60,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
             return null;
         }
 
-        $dataInterfaceBackendTypeMap = $this->serviceBackendModelDataInterfaceMap->getData($serviceClass);
+        $dataInterfaceBackendTypeMap = $this->serviceBackendModelDataInterfaceMap[$serviceClass];
         $dataInterface = isset($dataInterfaceBackendTypeMap[$backendModel])
             ? $dataInterfaceBackendTypeMap[$backendModel]
             : null;
