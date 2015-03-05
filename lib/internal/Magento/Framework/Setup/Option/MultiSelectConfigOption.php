@@ -31,7 +31,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * @param string $frontendType
      * @param array $selectOptions
      * @param string $description
-     * @param string $defaultValue
+     * @param array $defaultValue
      * @param string|null $shortCut
      * @throws \InvalidArgumentException
      */
@@ -40,7 +40,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
         $frontendType,
         array $selectOptions,
         $description = '',
-        $defaultValue = '',
+        array $defaultValue = [],
         $shortCut = null
     ) {
         if ($frontendType != self::FRONTEND_WIZARD_MULTISELECT && $frontendType != self::FRONTEND_WIZARD_CHECKBOX) {
