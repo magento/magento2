@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleOptimizer\Model\Observer\Product;
+namespace Magento\GoogleOptimizer\Test\Unit\Model\Observer\Product;
 
 class DeleteTest extends \PHPUnit_Framework_TestCase
 {

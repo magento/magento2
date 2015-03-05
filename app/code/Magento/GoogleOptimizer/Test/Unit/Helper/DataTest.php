@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  *
  */
-namespace Magento\GoogleOptimizer\Helper;
+namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 
 /**
  * Class DataTest

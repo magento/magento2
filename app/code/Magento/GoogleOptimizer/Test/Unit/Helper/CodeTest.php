@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleOptimizer\Helper;
+namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 
 class CodeTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleOptimizer\Model\Observer\Block\Category;
+namespace Magento\GoogleOptimizer\Test\Unit\Model\Observer\Block\Category;
 
 class TabTest extends \PHPUnit_Framework_TestCase
 {

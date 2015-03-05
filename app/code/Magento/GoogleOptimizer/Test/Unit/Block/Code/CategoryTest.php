@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleOptimizer\Block\Code;
+namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\GoogleOptimizer\Block\Code\Product
+     * @var \Magento\GoogleOptimizer\Block\Code\Category
      */
     protected $block;
 
@@ -22,7 +22,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->block = $objectManager->getObject(
-            'Magento\GoogleOptimizer\Block\Code\Product',
+            'Magento\GoogleOptimizer\Block\Code\Category',
             ['registry' => $this->registry]
         );
     }
@@ -34,18 +34,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentities()
     {
-        $productTags = ['catalog_product_1'];
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $categoryTags = ['catalog_category_1'];
+        $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $category->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTags));
         $this->registry->expects(
             $this->once()
         )->method(
             'registry'
         )->with(
-            'current_product'
+            'current_category'
         )->will(
-            $this->returnValue($product)
+            $this->returnValue($category)
         );
-        $this->assertEquals($productTags, $this->block->getIdentities());
+        $this->assertEquals($categoryTags, $this->block->getIdentities());
     }
 }
