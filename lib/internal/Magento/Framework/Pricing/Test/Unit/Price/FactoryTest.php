@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Pricing\Price;
+namespace Magento\Framework\Pricing\Test\Unit\Price;
+
+use \Magento\Framework\Pricing\Price\Factory;
 
 /**
  * Test class for \Magento\Framework\Pricing\Factory

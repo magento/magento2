@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Pricing\Price;
+namespace Magento\Framework\Pricing\Test\Unit\Price;
+
+use \Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Class RegularPriceTest
@@ -60,7 +62,7 @@ class AbstractPriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
 
         $this->price = $objectManager->getObject(
-            'Magento\Framework\Pricing\Price\Stub',
+            'Magento\Framework\Pricing\Test\Unit\Price\Stub',
             [
                 'saleableItem' => $this->saleableItemMock,
                 'quantity' => $qty,

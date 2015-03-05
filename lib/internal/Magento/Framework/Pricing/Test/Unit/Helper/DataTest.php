@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Pricing\Helper;
+namespace Magento\Framework\Pricing\Test\Unit\Helper;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 

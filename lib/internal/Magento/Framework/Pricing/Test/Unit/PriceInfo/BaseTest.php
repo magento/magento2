@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Pricing\PriceInfo;
+namespace Magento\Framework\Pricing\Test\Unit\PriceInfo;
+
+use \Magento\Framework\Pricing\PriceInfo\Base;
 
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Base

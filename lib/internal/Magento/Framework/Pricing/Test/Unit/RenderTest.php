@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Pricing;
+namespace Magento\Framework\Pricing\Test\Unit;
+
+use \Magento\Framework\Pricing\Render;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render

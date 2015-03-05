@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Pricing\Amount;
+namespace Magento\Framework\Pricing\Test\Unit\Amount;
 
 /**
  * Class AmountFactoryTest

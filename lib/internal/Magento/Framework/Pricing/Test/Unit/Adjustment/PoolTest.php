@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Pricing\Adjustment;
+namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
+
+use \Magento\Framework\Pricing\Adjustment\Pool;
 
 class PoolTest extends \PHPUnit_Framework_TestCase
 {
