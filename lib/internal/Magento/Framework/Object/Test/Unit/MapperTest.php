@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Object;
+namespace Magento\Framework\Object\Test\Unit;
 
 class MapperTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Object\Copy\Config;
+namespace Magento\Framework\Object\Test\Unit\Copy\Config;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
