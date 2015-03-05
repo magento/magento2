@@ -12,41 +12,6 @@ namespace Magento\Framework\Session\Test\Unit {
     // @codingStandardsIgnoreEnd
 
     /**
-     * Mock ini_set global function
-     *
-     * @param string $varName
-     * @param string $newValue
-     * @return bool|string
-     */
-    function ini_set($varName, $newValue)
-    {
-        global $mockPHPFunctions;
-        if ($mockPHPFunctions) {
-            SessionManagerTest::$isIniSetInvoked = true;
-            SessionManagerTest::assertSame(SessionManagerTest::SESSION_USE_ONLY_COOKIES, $varName);
-            SessionManagerTest::assertSame(SessionManagerTest::SESSION_USE_ONLY_COOKIES_ENABLE, $newValue);
-            return true;
-        }
-        return call_user_func_array('\ini_set', func_get_args());
-    }
-
-    /**
-     * Mock session_regenerate_id to fail if false is passed
-     *
-     * @param bool $var
-     * @return bool
-     */
-    function session_regenerate_id($var)
-    {
-        global $mockPHPFunctions;
-        if ($mockPHPFunctions) {
-            SessionManagerTest::assertTrue($var);
-            return true;
-        }
-        return call_user_func_array('\session_regenerate_id', func_get_args());
-    }
-
-    /**
      * Test SessionManager
      *
      */
@@ -87,8 +52,10 @@ namespace Magento\Framework\Session\Test\Unit {
 
         public function setUp()
         {
-            $this->markTestSkipped('To be fixed in MAGETWO-34765');
             global $mockPHPFunctions;
+            require_once __DIR__ . '/_files/mock_ini_set.php';
+            require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
+
             $mockPHPFunctions = true;
             $this->mockSessionConfig = $this->getMockBuilder('\Magento\Framework\Session\Config\ConfigInterface')
                 ->disableOriginalConstructor()

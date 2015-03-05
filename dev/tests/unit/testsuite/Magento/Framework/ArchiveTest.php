@@ -36,8 +36,8 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->archive = new Archive();
-        $this->sourceFilePath = __DIR__ . '/_files/Archive/source.txt';
-        $this->destinationDir = __DIR__ . '/_files/Archive/archives/';
+        $this->sourceFilePath = __DIR__ . '/Archive/_files/source.txt';
+        $this->destinationDir = __DIR__ . '/Archive/_files/archives/';
     }
 
     protected function tearDown()
