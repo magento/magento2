@@ -7,7 +7,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Persistent\Model\Observer;
+namespace Magento\Persistent\Test\Unit\Model\Observer;
+
+use \Magento\Persistent\Model\Observer\RemovePersistentCookie;
 
 class RemovePersistentCookieTest extends \PHPUnit_Framework_TestCase
 {

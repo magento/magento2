@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Persistent\Model\Observer;
+namespace Magento\Persistent\Test\Unit\Model\Observer;
 
 /**
  * Class UpdateCustomerCookiesTest

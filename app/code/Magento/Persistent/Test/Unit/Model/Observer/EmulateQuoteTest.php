@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Persistent\Model\Observer;
+namespace Magento\Persistent\Test\Unit\Model\Observer;
 
 class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
 {

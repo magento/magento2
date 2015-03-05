@@ -7,7 +7,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Persistent\Model;
+namespace Magento\Persistent\Test\Unit\Model;
+
+use \Magento\Persistent\Model\QuoteManager;
 
 class QuoteManagerTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Persistent\Model;
+namespace Magento\Persistent\Test\Unit\Model;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

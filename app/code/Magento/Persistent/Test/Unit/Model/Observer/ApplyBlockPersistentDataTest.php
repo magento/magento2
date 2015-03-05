@@ -7,7 +7,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Persistent\Model\Observer;
+namespace Magento\Persistent\Test\Unit\Model\Observer;
 
 class ApplyBlockPersistentDataTest extends \PHPUnit_Framework_TestCase
 {
