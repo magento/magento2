@@ -40,6 +40,7 @@ class GeneratorPool
      * @param ScheduledStructure\Helper $helper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $generators
      */
     public function __construct(
