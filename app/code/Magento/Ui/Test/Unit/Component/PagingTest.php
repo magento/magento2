@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component;
+namespace Magento\Ui\Test\Unit\Component;
+
+use \Magento\Ui\Component\Paging;
 
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Element\Template;

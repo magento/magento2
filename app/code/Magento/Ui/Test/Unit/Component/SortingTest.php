@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component;
+namespace Magento\Ui\Test\Unit\Component;
+
+use \Magento\Ui\Component\Sorting;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
@@ -12,7 +14,7 @@ use Magento\Framework\View\Element\UiComponent\ConfigFactory;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Ui\ContentType\ContentTypeFactory;
 
-class MassActionTest extends \PHPUnit_Framework_TestCase
+class SortingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TemplateContext||\PHPUnit_Framework_MockObject_MockObject
@@ -50,7 +52,7 @@ class MassActionTest extends \PHPUnit_Framework_TestCase
     protected $dataProviderManagerMock;
 
     /**
-     * @var MassAction
+     * @var Sorting
      */
     protected $view;
 
@@ -110,7 +112,7 @@ class MassActionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->view = new MassAction(
+        $this->view = new Sorting(
             $this->contextMock,
             $this->renderContextMock,
             $this->contentTypeFactoryMock,
@@ -149,6 +151,13 @@ class MassActionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $dataCollectionMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Api\CriteriaInterface',
+            ['addOrder'],
+            '',
+            false
+        );
+
         $this->renderContextMock->expects($this->at(0))
             ->method('getNamespace')
             ->will($this->returnValue('namespace'));
@@ -166,6 +175,36 @@ class MassActionTest extends \PHPUnit_Framework_TestCase
         $configStorageMock->expects($this->once())
             ->method('addComponentsData')
             ->with($configurationMock);
+
+        $configurationMock->expects($this->at(0))
+            ->method('getData')
+            ->with('field')
+            ->will($this->returnValue('field'));
+
+        $configurationMock->expects($this->at(1))
+            ->method('getData')
+            ->with('direction')
+            ->will($this->returnValue('direction'));
+
+        $this->renderContextMock->expects($this->any())
+            ->method('getStorage')
+            ->will($this->returnValue($configStorageMock));
+
+        $configStorageMock->expects($this->once())
+            ->method('getDataCollection')
+            ->will($this->returnValue($dataCollectionMock));
+
+        $dataCollectionMock->expects($this->once())
+            ->method('addOrder')
+            ->with('field', 'FIELD');
+
+        $this->renderContextMock->expects($this->any())
+            ->method('getRequestParam')
+            ->will($this->returnValue('field'));
+
+        $this->renderContextMock->expects($this->any())
+            ->method('getRequestParam')
+            ->will($this->returnValue('direction'));
 
         $this->assertNull($this->view->prepare());
     }

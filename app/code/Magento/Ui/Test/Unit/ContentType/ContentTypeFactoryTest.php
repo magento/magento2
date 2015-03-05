@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\ContentType;
+namespace Magento\Ui\Test\Unit\ContentType;
+
+use \Magento\Ui\ContentType\ContentTypeFactory;
 
 /**
  * Class ContentTypeFactoryTest

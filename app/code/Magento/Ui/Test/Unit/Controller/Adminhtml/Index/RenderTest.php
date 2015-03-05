@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Controller\Adminhtml\Index;
+namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index;
+
+use \Magento\Ui\Controller\Adminhtml\Index\Render;
 
 /**
  * Class RenderTest

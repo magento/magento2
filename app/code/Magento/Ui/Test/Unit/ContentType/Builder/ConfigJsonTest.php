@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\ContentType\Builder;
+namespace Magento\Ui\Test\Unit\ContentType\Builder;
+
+use \Magento\Ui\ContentType\Builder\ConfigJson;
 
 /**
  * Class ConfigJsonTest

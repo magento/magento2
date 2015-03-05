@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Ui\Context;
+namespace Magento\Ui\Test\Unit\Context;
 
+use \Magento\Ui\Context\ConfigurationStorage;
+use \Magento\Ui\Context\Configuration;
 use Magento\Framework\Data\Collection as DataCollection;
 
 /**

@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Ui\Context;
+namespace Magento\Ui\Test\Unit\Context;
+
+use \Magento\Ui\Context\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

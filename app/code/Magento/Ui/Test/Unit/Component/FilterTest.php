@@ -3,16 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component;
+namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
 use Magento\Framework\View\Element\UiComponent\ConfigFactory;
 use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Ui\Component\Filter\FilterPool as FilterPoolProvider;
 use Magento\Ui\ContentType\ContentTypeFactory;
 
-class SortingTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class FilterTest
+ */
+class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TemplateContext||\PHPUnit_Framework_MockObject_MockObject
@@ -50,9 +54,19 @@ class SortingTest extends \PHPUnit_Framework_TestCase
     protected $dataProviderManagerMock;
 
     /**
-     * @var Sorting
+     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $view;
+    protected $dataHelperMock;
+
+    /**
+     * @var FilterPoolProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterPoolMock;
+
+    /**
+     * @var \Magento\Ui\Component\FilterPool
+     */
+    protected $filter;
 
     /**
      * Set up
@@ -109,15 +123,23 @@ class SortingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->filterPoolMock = $this->getMock(
+            'Magento\Ui\Component\Filter\FilterPool',
+            ['getFilter'],
+            [],
+            '',
+            false
+        );
 
-        $this->view = new Sorting(
+        $this->filter = new \Magento\Ui\Component\FilterPool(
             $this->contextMock,
             $this->renderContextMock,
             $this->contentTypeFactoryMock,
             $this->configFactoryMock,
             $this->configBuilderMock,
             $this->dataProviderFactoryMock,
-            $this->dataProviderManagerMock
+            $this->dataProviderManagerMock,
+            $this->filterPoolMock
         );
     }
 
@@ -144,14 +166,7 @@ class SortingTest extends \PHPUnit_Framework_TestCase
          */
         $configStorageMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponent\ConfigStorageInterface',
-            ['addComponentsData', 'getDataCollection'],
-            '',
-            false
-        );
-
-        $dataCollectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\CriteriaInterface',
-            ['addOrder'],
+            ['addComponentsData', 'getDataCollection', 'getMeta'],
             '',
             false
         );
@@ -169,41 +184,10 @@ class SortingTest extends \PHPUnit_Framework_TestCase
         $this->renderContextMock->expects($this->any())
             ->method('getStorage')
             ->will($this->returnValue($configStorageMock));
-
         $configStorageMock->expects($this->once())
             ->method('addComponentsData')
             ->with($configurationMock);
 
-        $configurationMock->expects($this->at(0))
-            ->method('getData')
-            ->with('field')
-            ->will($this->returnValue('field'));
-
-        $configurationMock->expects($this->at(1))
-            ->method('getData')
-            ->with('direction')
-            ->will($this->returnValue('direction'));
-
-        $this->renderContextMock->expects($this->any())
-            ->method('getStorage')
-            ->will($this->returnValue($configStorageMock));
-
-        $configStorageMock->expects($this->once())
-            ->method('getDataCollection')
-            ->will($this->returnValue($dataCollectionMock));
-
-        $dataCollectionMock->expects($this->once())
-            ->method('addOrder')
-            ->with('field', 'FIELD');
-
-        $this->renderContextMock->expects($this->any())
-            ->method('getRequestParam')
-            ->will($this->returnValue('field'));
-
-        $this->renderContextMock->expects($this->any())
-            ->method('getRequestParam')
-            ->will($this->returnValue('direction'));
-
-        $this->assertNull($this->view->prepare());
+        $this->assertNull($this->filter->prepare());
     }
 }

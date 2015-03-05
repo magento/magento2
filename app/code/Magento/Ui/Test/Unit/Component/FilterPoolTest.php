@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Ui\Component;
+namespace Magento\Ui\Test\Unit\Component;
+
+use \Magento\Ui\Component\FilterPool;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;

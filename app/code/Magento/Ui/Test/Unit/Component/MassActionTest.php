@@ -3,20 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component;
+namespace Magento\Ui\Test\Unit\Component;
+
+use \Magento\Ui\Component\MassAction;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
 use Magento\Framework\View\Element\UiComponent\ConfigFactory;
 use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Ui\Component\Filter\FilterPool as FilterPoolProvider;
 use Magento\Ui\ContentType\ContentTypeFactory;
 
-/**
- * Class FilterTest
- */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class MassActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TemplateContext||\PHPUnit_Framework_MockObject_MockObject
@@ -54,19 +52,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $dataProviderManagerMock;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var MassAction
      */
-    protected $dataHelperMock;
-
-    /**
-     * @var FilterPoolProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filterPoolMock;
-
-    /**
-     * @var \Magento\Ui\Component\FilterPool
-     */
-    protected $filter;
+    protected $view;
 
     /**
      * Set up
@@ -123,23 +111,15 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->filterPoolMock = $this->getMock(
-            'Magento\Ui\Component\Filter\FilterPool',
-            ['getFilter'],
-            [],
-            '',
-            false
-        );
 
-        $this->filter = new \Magento\Ui\Component\FilterPool(
+        $this->view = new MassAction(
             $this->contextMock,
             $this->renderContextMock,
             $this->contentTypeFactoryMock,
             $this->configFactoryMock,
             $this->configBuilderMock,
             $this->dataProviderFactoryMock,
-            $this->dataProviderManagerMock,
-            $this->filterPoolMock
+            $this->dataProviderManagerMock
         );
     }
 
@@ -166,7 +146,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
          */
         $configStorageMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponent\ConfigStorageInterface',
-            ['addComponentsData', 'getDataCollection', 'getMeta'],
+            ['addComponentsData', 'getDataCollection'],
             '',
             false
         );
@@ -184,10 +164,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->renderContextMock->expects($this->any())
             ->method('getStorage')
             ->will($this->returnValue($configStorageMock));
+
         $configStorageMock->expects($this->once())
             ->method('addComponentsData')
             ->with($configurationMock);
 
-        $this->assertNull($this->filter->prepare());
+        $this->assertNull($this->view->prepare());
     }
 }
