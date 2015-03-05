@@ -27,7 +27,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[0]);
         $this->assertInstanceOf('Magento\Framework\Setup\Option\MultiSelectConfigOption', $options[1]);
         $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[2]);
-        $this->assertEquals(3, count($options));
+        $this->assertEquals(4, count($options));
     }
 
     public function testCreateConfig()
@@ -37,20 +37,19 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
             ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db'
         ]);
         $this->assertEquals(4, count($config));
-        $this->assertNotEmpty($config['install']);
-        $this->assertNotEmpty($config['crypt']);
-        $this->assertEquals('key', $config['crypt']->getData()['key']);
-        $this->assertNotEmpty($config['modules']);
-        $this->assertEquals(2, count($config['modules']->getData()));
-        $this->assertNotEmpty($config['session']);
-        $this->assertEquals('db', $config['session']->getData()['save']);
+        $this->assertNotEmpty($config[0]->getData()['date']);
+        $this->assertNotEmpty($config[1]->getData()['key']);
+        $this->assertEquals('key', $config[1]->getData()['key']);
+        $this->assertEquals(2, count($config[2]->getData()));
+        $this->assertNotEmpty($config[3]->getData()['save']);
+        $this->assertEquals('db', $config[3]->getData()['save']);
     }
 
     public function testCreateConfigNoSessionSave()
     {
         $config = $this->object->createConfig([ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key']);
-        $this->assertNotEmpty($config['session']);
-        $this->assertEquals('files', $config['session']->getData()['save']);
+        $this->assertNotEmpty($config[3]);
+        $this->assertEquals('files', $config[3]->getData()['save']);
     }
 
     /**
@@ -69,7 +68,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     public function testCreateConfigNoKey(array $options)
     {
         $config = $this->object->createConfig($options);
-        $this->assertEquals(md5('key'), $config['crypt']->getData()['key']);
+        $this->assertEquals(md5('key'), $config[1]->getData()['key']);
     }
 
     /**

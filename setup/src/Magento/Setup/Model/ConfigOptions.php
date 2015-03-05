@@ -96,7 +96,7 @@ class ConfigOptions implements ConfigOptionsInterface
     {
         $configData = [];
         // install segment
-        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'install', ['data' => date('r')]);
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'install', ['date' => date('r')]);
 
         // crypt segment
         if (isset($data[self::INPUT_KEY_CRYPT_KEY]) && !$data[self::INPUT_KEY_CRYPT_KEY]) {
