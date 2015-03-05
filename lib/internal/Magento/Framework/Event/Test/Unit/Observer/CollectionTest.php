@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Event\Observer;
+namespace Magento\Framework\Event\Test\Unit\Observer;
+
+use \Magento\Framework\Event\Observer\Collection;
 
 /**
  * Class CollectionTest

@@ -7,7 +7,7 @@
 /**
  * Event manager stub
  */
-namespace Magento\Framework\Event;
+namespace Magento\Framework\Event\Test\Unit;
 
 class ManagerStub implements \Magento\Framework\Event\ManagerInterface
 {

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Event\Invoker;
+namespace Magento\Framework\Event\Test\Unit\Invoker;
 
 class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
 {

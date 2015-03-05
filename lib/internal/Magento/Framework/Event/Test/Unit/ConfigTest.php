@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Event;
+namespace Magento\Framework\Event\Test\Unit;
+
+use \Magento\Framework\Event\Config;
 
 use Magento\Framework\Event\Config\Data;
 
