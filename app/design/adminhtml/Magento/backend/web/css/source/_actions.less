@@ -51,12 +51,12 @@
 //  _____________________________________________
 
 .action-reset () {
-    margin: 0;
-    padding: 0;
-    border: none;
     background-color: transparent;
+    border: none;
     border-radius: 0;
     box-shadow: none;
+    margin: 0;
+    padding: 0;
     &:hover {
         background-color: transparent;
         border: none;
@@ -73,6 +73,8 @@
 }
 
 .abs-action-pattern {
+    border: 1px solid;
+    border-radius: 0; // ToDo UI: Delete with admin scope
     display: inline-block;
     font-family: @button__font-family;
     font-size: @button__font-size;
@@ -80,7 +82,6 @@
     padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
     text-align: center;
     vertical-align: baseline; // ToDo UI: Delete with admin scope
-    border-radius: 0; // ToDo UI: Delete with admin scope
     &[disabled],
     &.disabled {
         cursor: default;
@@ -90,10 +91,10 @@
 }
 
 .abs-action-l {
-    padding-top: @button__padding-vertical__l;
-    padding-bottom: @button__padding-vertical__l;
     font-size: @font-size__l;
     letter-spacing: .025em;
+    padding-bottom: @button__padding-vertical__l;
+    padding-top: @button__padding-vertical__l;
 }
 
 .abs-action-default {
@@ -124,12 +125,12 @@
 button {
     &:extend(.abs-action-pattern all);
     background: @button__background-color;
-    border: 1px solid @button__border-color;
+    border-color: @button__border-color;
     color: @button__color;
     &:hover {
-        text-decoration: none;
         background-color: @button__hover__background-color;
         color: @button__color;
+        text-decoration: none;
     }
 }
 
@@ -145,11 +146,11 @@ button {
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
     &:hover,
     &:active {
-        text-decoration: none;
         background-color: @button-primary__hover__background-color;
         border-color: @button-primary__hover__border-color;
-        color: @button-primary__color;
         box-shadow: @button__hover__box-shadow;
+        color: @button-primary__color;
+        text-decoration: none;
     }
     &.disabled,
     &[disabled] {
@@ -171,10 +172,10 @@ button {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
     &:active {
-        text-decoration: none;
         background-color: @button-secondary__hover__background-color;
-        color: @button-secondary__color;
         box-shadow: @button__hover__box-shadow;
+        color: @button-secondary__color;
+        text-decoration: none;
     }
     &:active {
         background-color: @button-secondary__active__background-color;

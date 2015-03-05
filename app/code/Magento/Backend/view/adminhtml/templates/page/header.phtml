@@ -18,7 +18,9 @@
     <?php case 'user': ?>
         <div class="admin-user">
             <a href="<?php echo $block->getUrl('adminhtml/system_account/index') ?>" class="admin-user-account" title="<?php echo __('My Account') ?>" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>
+                <span class="admin-user-account-text-wrapper">
+                    <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>
+                </span>
             </a>
             <ul class="admin-user-menu">
                 <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::myaccount')): ?>

@@ -12,7 +12,7 @@
 <div
     data-mage-init='{"toolbarEntry": {}}'
     class="notifications-wrapper"
-    data-notification-count="<?php echo $block->escapeHtml($notificationCount); ?>">
+    data-notification-count="<?php echo $notificationCount; ?>">
     <?php if ($notificationCount > 0) : ?>
         <a
             href="<?php echo $block->getUrl('adminhtml/notification/index'); ?>"
@@ -21,11 +21,7 @@
             title="<?php echo __('Notifications'); ?>"
             data-toggle="dropdown">
             <span class="notifications-counter">
-                <?php if ($block->escapeHtml($notificationCount) > 99) {
-                    echo '99+';
-                } else {
-                    echo $block->escapeHtml($notificationCount);
-                }?>
+                <?php echo ($block->escapeHtml($notificationCount) > 99) ? '99+' : $block->escapeHtml($notificationCount); ?>
             </span>
         </a>
         <ul
@@ -36,21 +32,25 @@
             <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
                 data-notification-id="<?php echo $block->escapeHtml($notification->getId()); ?>"
                 data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
+                <?php
+                    $notificationDescription = $block->escapeHtml($notification->getDescription());
+                    $notificationDescriptionLength = $block->getNotificationDescriptionLength();
+                ?>
                 <strong class="notifications-entry-title">
                     <?php echo $block->escapeHtml($notification->getTitle()); ?>
                 </strong>
-                <?php if (strlen($block->escapeHtml($notification->getDescription())) > $block->escapeHtml($block->getNotificationDescriptionLength())) : ?>
+                <?php if (strlen($notificationDescription) > $block->escapeHtml($notificationDescriptionLength)) : ?>
                     <p class="notifications-entry-description _cutted">
                         <span class="notifications-entry-description-start">
-                            <?php echo substr($block->escapeHtml($notification->getDescription()), 0, $block->escapeHtml($block->getNotificationDescriptionLength())); ?>
+                            <?php echo substr($notificationDescription, 0, $notificationDescriptionLength); ?>
                         </span>
                         <span class="notifications-entry-description-end">
-                            <?php echo substr($block->escapeHtml($notification->getDescription()), $block->escapeHtml($block->getNotificationDescriptionLength())); ?>
+                            <?php echo substr($notificationDescription, $notificationDescriptionLength); ?>
                         </span>
                     </p>
                 <?php else : ?>
                     <p class="notifications-entry-description">
-                        <?php echo $block->escapeHtml($notification->getDescription()); ?>
+                        <?php echo $notificationDescription; ?>
                     </p>
                 <?php endif; ?>
                 <time class="notifications-entry-time">

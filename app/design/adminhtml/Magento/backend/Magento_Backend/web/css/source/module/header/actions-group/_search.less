@@ -32,6 +32,7 @@
 
 .search-global {
     float: right;
+    margin-right: -.3rem; // px perfect
     position: relative;
     z-index: @search-global__z-index;
 }
@@ -40,6 +41,7 @@
     min-width: @search-global-field__width;
     &._active {
         .search-global-input {
+            background-color: @page-header-action__background-color;
             border-color: @page-header-action__active__border-color;
             box-shadow: @component__box-shadow__base;
             padding-right: @search-global-input__active__padding-right;
@@ -51,8 +53,8 @@
             height: @search-global-input__height;
             position: absolute;
             right: 0;
-            top: 0;
             text-indent: -100%;
+            top: 0;
             width: @search-global-icon__width + @search-global-input__padding-side * 2;
             z-index: 3;
         }
@@ -127,7 +129,7 @@
 }
 
 .search-global-input {
-    background-color: @page-header-action__background-color;
+    background-color: transparent;
     border: 1px solid transparent;
     font-size: @search-global-input__font-size;
     height: @search-global-input__height;
@@ -137,7 +139,7 @@
     top: 0;
     transition: all .1s linear, width .3s linear;
     width: @search-global-input__width;
-    z-index: 1
+    z-index: 1;
 }
 
 .search-global-action {

@@ -34,10 +34,9 @@
 .notifications-wrapper {
     float: right;
     line-height: 1;
-    margin-left: @component__shadow-size__base;
     position: relative;
-    z-index: @notifications-action-menu__z-index;
     &.active {
+        z-index: @notifications-action-menu__z-index; // Should be over global search when active
         .notifications-action {
             border-color: @page-header-action__active__border-color;
             box-shadow: @component__box-shadow__base;

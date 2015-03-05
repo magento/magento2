@@ -23,10 +23,10 @@
 
 .page-main-actions,
 .page-actions.fixed {
-    .extend__clearfix();
     background: @page-main-actions__background-color;
     border-bottom: 1px solid @page-main-actions__border-color;
     border-top: 1px solid @page-main-actions__border-color;
+    .extend__clearfix();
     padding: @page-main-actions__padding-side;
 }
 
@@ -40,22 +40,21 @@
 
 .page-actions {
     @_page-action__indent: 1.3rem;
-
     float: right;
     &.fixed {
-        position: fixed;
-        top: 0;
         left: @page-wrapper__indent-left;
+        position: fixed;
         right: 0;
+        top: 0;
         z-index: @page-actions__fixed__z-index;
         .page-actions-inner {
             &:before {
+                color: @page-title__color;
                 content: attr(data-title);
                 float: left;
                 font-size: @page-title__font-size;
-                max-width: 50%;
                 margin-top: .3rem;
-                color: @page-title__color;
+                max-width: 50%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -103,8 +102,8 @@
         }
     }
     .actions-split {
-        margin-left: @_page-action__indent;
         float: right;
+        margin-left: @_page-action__indent;
         .vendor-prefix-order(2);
         .dropdown-menu {
             .item {
@@ -115,9 +114,9 @@
 }
 
 .page-actions-buttons {
-    .vendor-prefix-display(flex);
-    justify-content: flex-end;
     float: right;
+    justify-content: flex-end;
+    .vendor-prefix-display(flex);
     .customer-index-edit & {
         background-color: transparent;
     }
