@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model;
+namespace Magento\Framework\Model\Test\Unit;
 
 
 class AbstractModelTest extends \PHPUnit_Framework_TestCase

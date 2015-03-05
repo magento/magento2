@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Resource\Type\Db\Pdo;
+namespace Magento\Framework\Model\Test\Unit\Resource\Type\Db\Pdo;
+
+use \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {

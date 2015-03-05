@@ -6,8 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Model\Resource\Db\Collection;
+namespace Magento\Framework\Model\Test\Unit\Resource\Db\Collection;
 
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Framework\Object as MagentoObject;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -80,7 +81,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected function getUut()
     {
         return $this->objectManagerHelper->getObject(
-            'Magento\Framework\Model\Resource\Db\Collection\Uut',
+            'Magento\Framework\Model\Test\Unit\Resource\Db\Collection\Uut',
             [
                 'entityFactory' => $this->entityFactoryMock,
                 'logger' => $this->loggerMock,

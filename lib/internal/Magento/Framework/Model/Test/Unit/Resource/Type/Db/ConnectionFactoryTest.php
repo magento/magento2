@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Model\Resource\Type\Db;
+namespace Magento\Framework\Model\Test\Unit\Resource\Type\Db;
+
+use \Magento\Framework\Model\Resource\Type\Db\ConnectionFactory;
 
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {

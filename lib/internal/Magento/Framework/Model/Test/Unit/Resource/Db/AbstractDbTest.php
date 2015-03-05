@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Model\Resource\Db;
+namespace Magento\Framework\Model\Test\Unit\Resource\Db;
 
 class AbstractDbTest extends \PHPUnit_Framework_TestCase
 {
