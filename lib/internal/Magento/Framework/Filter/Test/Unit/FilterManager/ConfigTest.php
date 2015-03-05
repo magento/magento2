@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Filter\FilterManager;
+namespace Magento\Framework\Filter\Test\Unit\FilterManager;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

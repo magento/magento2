@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Filter\Template;
+namespace Magento\Framework\Filter\Test\Unit\Template;
 
 class SimpleTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Filter;
+namespace Magento\Framework\Filter\Test\Unit;
+
+use \Magento\Framework\Filter\Input;
 
 class InputTest extends \PHPUnit_Framework_TestCase
 {

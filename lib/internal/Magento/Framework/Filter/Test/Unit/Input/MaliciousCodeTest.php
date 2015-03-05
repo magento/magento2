@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Filter\Input;
+namespace Magento\Framework\Filter\Test\Unit\Input;
+
+use \Magento\Framework\Filter\Input\MaliciousCode;
 
 class MaliciousCodeTest extends \PHPUnit_Framework_TestCase
 {

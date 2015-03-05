@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Filter;
+namespace Magento\Framework\Filter\Test\Unit;
 
 class SprintfTest extends \PHPUnit_Framework_TestCase
 {

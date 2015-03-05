@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Filter\Object;
+namespace Magento\Framework\Filter\Test\Unit\Object;
+
+use \Magento\Framework\Filter\Object\Grid;
 
 use Magento\Framework\Object;
 
