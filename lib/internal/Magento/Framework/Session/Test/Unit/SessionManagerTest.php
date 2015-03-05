@@ -87,6 +87,7 @@ namespace Magento\Framework\Session\Test\Unit {
 
         public function setUp()
         {
+            $this->markTestSkipped('To be fixed in MAGETWO-34765');
             global $mockPHPFunctions;
             $mockPHPFunctions = true;
             $this->mockSessionConfig = $this->getMockBuilder('\Magento\Framework\Session\Config\ConfigInterface')
