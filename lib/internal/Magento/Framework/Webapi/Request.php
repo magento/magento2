@@ -45,9 +45,9 @@ class Request extends HttpRequest implements RequestInterface
      *
      * Added CGI environment support.
      */
-    public function getHeader($header)
+    public function getHeader($header, $default = false)
     {
-        $headerValue = parent::getHeader($header);
+        $headerValue = parent::getHeader($header, $default);
         if ($headerValue == false) {
             /** Workaround for hhvm environment */
             $header = 'REDIRECT_HTTP_' . strtoupper(str_replace('-', '_', $header));
