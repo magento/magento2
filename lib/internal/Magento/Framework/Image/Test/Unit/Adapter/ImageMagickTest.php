@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Image\Adapter;
+namespace Magento\Framework\Image\Test\Unit\Adapter;
 
 use Magento\Framework\Filesystem\FilesystemException;
 use Magento\TestFramework\Helper\ObjectManager;

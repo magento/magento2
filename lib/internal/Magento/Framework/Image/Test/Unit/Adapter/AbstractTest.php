@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\Framework\Image\Adapter\AbstractAdapter.
  */
-namespace Magento\Framework\Image\Adapter;
+namespace Magento\Framework\Image\Test\Unit\Adapter;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
