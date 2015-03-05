@@ -7,7 +7,9 @@
 /**
  * Test class for \Magento\Email\Model\AbstractTemplate.
  */
-namespace Magento\Email\Model;
+namespace Magento\Email\Test\Unit\Model;
+
+use Magento\Email\Model\AbstractTemplate;
 
 class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 {

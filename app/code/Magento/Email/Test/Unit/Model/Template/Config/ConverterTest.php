@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Email\Model\Template\Config;
+namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {

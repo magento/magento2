@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Email\Block\Adminhtml\Template;
+namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 class PreviewTest extends \PHPUnit_Framework_TestCase
 {
