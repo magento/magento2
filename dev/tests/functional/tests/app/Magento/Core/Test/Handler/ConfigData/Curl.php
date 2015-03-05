@@ -55,15 +55,14 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     protected function prepareData(FixtureInterface $fixture)
     {
         $result = [];
-        $path = '';
         $fields = $fixture->getData();
         if (isset($fields['section'])) {
             foreach ($fields['section'] as $itemSection) {
-                $sectionItem = explode('/', $itemSection['path']);
-                foreach(array_slice($sectionItem, 1, -1) as $item) {
-                    $path .= "['groups']['" . $item . "']";
-                }
-                $result[$itemSection['scope']]{$path}['fields'][end($sectionItem)]['value'] = $itemSection['value'];
+                list($scope, $group, $field) = explode('/', $itemSection['path']);
+                $value = isset($this->mappingData[$field])
+                    ? $this->mappingData[$field][$itemSection['value']]
+                    : $itemSection['value'];
+                $result[$scope]['groups'][$group]['fields'][$field]['value'] = $value;
             }
         }
         return $result;
