@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GroupedImportExport\Model\Import\Product\Type;
+namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
 use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\GroupedImportExport;
