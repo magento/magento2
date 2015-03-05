@@ -42,8 +42,9 @@ define([
         _create: function () {
             $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
 
-            $(this.options.popupId).on('click', function () {
+            $(this.options.popupId).on('click', function (event) {
                 var dialog;
+                event.preventDefault();
 
                 if (this.options.submitUrl) {
                     location.href = this.options.submitUrl;
@@ -88,7 +89,7 @@ define([
          */
         _popupDialog: function (elementTarget, elementTrigger) {
             var target = $(elementTarget),
-                trigger = $(elementTrigger).length ? $(elementTrigger) : $('body'),
+                trigger = $(elementTrigger),
                 counter = 0,
                 triggerClass = 'dropdown-active',
                 options;
@@ -106,8 +107,7 @@ define([
                     within: 'body',
                     of: trigger
                 },
-                shadowHinter: 'popup popup-pointer',
-                triggerTarget: trigger.parent()
+                shadowHinter: 'popup popup-pointer'
             };
             options = _.extend(options, this.options.dialog);
 
