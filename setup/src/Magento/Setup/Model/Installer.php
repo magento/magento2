@@ -604,10 +604,10 @@ class Installer
         $setup->startSetup();
 
         /**
-         * Create table 'core_session'
+         * Create table 'session'
          */
         $table = $connection->newTable(
-            $setup->getTable('core_session')
+            $setup->getTable('session')
         )->addColumn(
             'session_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -632,10 +632,10 @@ class Installer
         $connection->createTable($table);
 
         /**
-         * Create table 'core_cache'
+         * Create table 'cache'
          */
         $table = $connection->newTable(
-            $setup->getTable('core_cache')
+            $setup->getTable('cache')
         )->addColumn(
             'id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -667,7 +667,7 @@ class Installer
             [],
             'Cache Expiration Time'
         )->addIndex(
-            $setup->getIdxName('core_cache', ['expire_time']),
+            $setup->getIdxName('cache', ['expire_time']),
             ['expire_time']
         )->setComment(
             'Caches'
@@ -675,10 +675,10 @@ class Installer
         $connection->createTable($table);
 
         /**
-         * Create table 'core_cache_tag'
+         * Create table 'cache_tag'
          */
         $table = $connection->newTable(
-            $setup->getTable('core_cache_tag')
+            $setup->getTable('cache_tag')
         )->addColumn(
             'tag',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -692,7 +692,7 @@ class Installer
             ['nullable' => false, 'primary' => true],
             'Cache Id'
         )->addIndex(
-            $setup->getIdxName('core_cache_tag', ['cache_id']),
+            $setup->getIdxName('cache_tag', ['cache_id']),
             ['cache_id']
         )->setComment(
             'Tag Caches'
@@ -700,10 +700,10 @@ class Installer
         $connection->createTable($table);
 
         /**
-         * Create table 'core_flag'
+         * Create table 'flag'
          */
         $table = $connection->newTable(
-            $setup->getTable('core_flag')
+            $setup->getTable('flag')
         )->addColumn(
             'flag_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -735,20 +735,12 @@ class Installer
             ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Date of Last Flag Update'
         )->addIndex(
-            $setup->getIdxName('core_flag', ['last_update']),
+            $setup->getIdxName('flag', ['last_update']),
             ['last_update']
         )->setComment(
             'Flag'
         );
         $connection->createTable($table);
-
-        /**
-         * Drop Foreign Key on core_cache_tag.cache_id
-         */
-        $connection->dropForeignKey(
-            $setup->getTable('core_cache_tag'),
-            $setup->getFkName('core_cache_tag', 'cache_id', 'core_cache', 'id')
-        );
 
         $setup->endSetup();
     }
