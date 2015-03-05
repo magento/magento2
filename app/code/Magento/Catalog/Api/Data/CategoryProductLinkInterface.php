@@ -14,9 +14,21 @@ interface CategoryProductLinkInterface
     public function getSku();
 
     /**
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
+
+    /**
      * @return int|null
      */
     public function getPosition();
+
+    /**
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position);
 
     /**
      * Get category id
@@ -24,4 +36,12 @@ interface CategoryProductLinkInterface
      * @return string
      */
     public function getCategoryId();
+
+    /**
+     * Set category id
+     *
+     * @param string $categoryId
+     * @return $this
+     */
+    public function setCategoryId($categoryId);
 }

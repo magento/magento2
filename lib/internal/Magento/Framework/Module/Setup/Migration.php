@@ -6,13 +6,15 @@
 namespace Magento\Framework\Module\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Resource setup model with methods needed for migration process between Magento versions
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Migration extends \Magento\Framework\Module\DataSetup
+class Migration
 {
     /**#@+
      * Type of field content where class alias is used
@@ -119,29 +121,30 @@ class Migration extends \Magento\Framework\Module\DataSetup
     protected $_directory;
 
     /**
-     * @var \Magento\Framework\Module\Setup\MigrationData
+     * @var MigrationData
      */
     protected $_migrationData;
 
     /**
-     * @param \Magento\Framework\Module\Setup\Context $context
-     * @param \Magento\Framework\Module\Setup\MigrationData $migrationData
+     * @var ModuleDataSetupInterface
+     */
+    private $setup;
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @param Filesystem $filesystem
+     * @param MigrationData $migrationData
      * @param string $confPathToMapFile
-     * @param string $resourceName
-     * @param string $moduleName
-     * @param string $connectionName
      * @param array $compositeModules
      */
     public function __construct(
-        \Magento\Framework\Module\Setup\Context $context,
-        $resourceName,
-        $moduleName,
-        \Magento\Framework\Module\Setup\MigrationData $migrationData,
+        ModuleDataSetupInterface $setup,
+        Filesystem $filesystem,
+        MigrationData $migrationData,
         $confPathToMapFile,
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION,
         $compositeModules = []
     ) {
-        $this->_directory = $context->getFilesystem()->getDirectoryRead(DirectoryList::ROOT);
+        $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pathToMapFile = $confPathToMapFile;
         $this->_migrationData = $migrationData;
         $this->_replacePatterns = [
@@ -149,7 +152,7 @@ class Migration extends \Magento\Framework\Module\DataSetup
             self::FIELD_CONTENT_TYPE_XML => $this->_migrationData->getXmlFindPattern(),
         ];
         $this->_compositeModules = $compositeModules;
-        parent::__construct($context, $resourceName, $moduleName, $connectionName);
+        $this->setup = $setup;
     }
 
     /**
@@ -227,10 +230,10 @@ class Migration extends \Magento\Framework\Module\DataSetup
      */
     protected function _getRowsCount($tableName, $fieldName, $additionalWhere = '')
     {
-        $adapter = $this->getConnection();
+        $adapter = $this->setup->getConnection();
 
         $query = $adapter->select()->from(
-            $this->getTable($tableName),
+            $this->setup->getTable($tableName),
             ['rows_count' => new \Zend_Db_Expr('COUNT(*)')]
         )->where(
             $fieldName . ' IS NOT NULL'
@@ -301,14 +304,14 @@ class Migration extends \Magento\Framework\Module\DataSetup
     protected function _updateRowsData($tableName, $fieldName, array $fieldReplacements)
     {
         if (count($fieldReplacements) > 0) {
-            $adapter = $this->getConnection();
+            $adapter = $this->setup->getConnection();
 
             foreach ($fieldReplacements as $fieldReplacement) {
                 $where = [];
                 foreach ($fieldReplacement['where_fields'] as $whereFieldName => $value) {
                     $where[$adapter->quoteIdentifier($whereFieldName) . ' = ?'] = $value;
                 }
-                $adapter->update($this->getTable($tableName), [$fieldName => $fieldReplacement['to']], $where);
+                $adapter->update($this->setup->getTable($tableName), [$fieldName => $fieldReplacement['to']], $where);
             }
         }
     }
@@ -330,10 +333,10 @@ class Migration extends \Magento\Framework\Module\DataSetup
         $additionalWhere = '',
         $currPage = 0
     ) {
-        $adapter = $this->getConnection();
+        $adapter = $this->setup->getConnection();
 
         $query = $adapter->select()->from(
-            $this->getTable($tableName),
+            $this->setup->getTable($tableName),
             $fieldsToSelect
         )->where(
             $fieldName . ' IS NOT NULL'

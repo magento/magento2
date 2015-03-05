@@ -17,28 +17,10 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Address _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Address getResource()
- * @method Address setParentId(int $value)
- * @method Address setCustomerAddressId(int $value)
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddressData()
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
- * @method Address setQuoteAddressId(int $value)
- * @method Address setRegionId(int $value)
- * @method Address setCustomerId(int $value)
- * @method Address setFax(string $value)
- * @method Address setRegion(string $value)
- * @method Address setPostcode(string $value)
- * @method Address setLastname(string $value)
- * @method Address setCity(string $value)
- * @method Address setEmail(string $value)
- * @method Address setTelephone(string $value)
- * @method Address setCountryId(string $value)
- * @method Address setFirstname(string $value)
- * @method Address setAddressType(string $value)
- * @method Address setPrefix(string $value)
- * @method Address setMiddlename(string $value)
- * @method Address setSuffix(string $value)
- * @method Address setCompany(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Address extends AbstractAddress implements OrderAddressInterface
 {
@@ -416,4 +398,198 @@ class Address extends AbstractAddress implements OrderAddressInterface
     {
         return $this->getData(OrderAddressInterface::VAT_REQUEST_SUCCESS);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(OrderAddressInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerAddressId($id)
+    {
+        return $this->setData(OrderAddressInterface::CUSTOMER_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteAddressId($id)
+    {
+        return $this->setData(OrderAddressInterface::QUOTE_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRegionId($id)
+    {
+        return $this->setData(OrderAddressInterface::REGION_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerId($id)
+    {
+        return $this->setData(OrderAddressInterface::CUSTOMER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFax($fax)
+    {
+        return $this->setData(OrderAddressInterface::FAX, $fax);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRegion($region)
+    {
+        return $this->setData(OrderAddressInterface::REGION, $region);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPostcode($postcode)
+    {
+        return $this->setData(OrderAddressInterface::POSTCODE, $postcode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLastname($lastname)
+    {
+        return $this->setData(OrderAddressInterface::LASTNAME, $lastname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCity($city)
+    {
+        return $this->setData(OrderAddressInterface::CITY, $city);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmail($email)
+    {
+        return $this->setData(OrderAddressInterface::EMAIL, $email);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTelephone($telephone)
+    {
+        return $this->setData(OrderAddressInterface::TELEPHONE, $telephone);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCountryId($id)
+    {
+        return $this->setData(OrderAddressInterface::COUNTRY_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFirstname($firstname)
+    {
+        return $this->setData(OrderAddressInterface::FIRSTNAME, $firstname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAddressType($addressType)
+    {
+        return $this->setData(OrderAddressInterface::ADDRESS_TYPE, $addressType);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrefix($prefix)
+    {
+        return $this->setData(OrderAddressInterface::PREFIX, $prefix);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMiddlename($middlename)
+    {
+        return $this->setData(OrderAddressInterface::MIDDLENAME, $middlename);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSuffix($suffix)
+    {
+        return $this->setData(OrderAddressInterface::SUFFIX, $suffix);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCompany($company)
+    {
+        return $this->setData(OrderAddressInterface::COMPANY, $company);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setVatId($id)
+    {
+        return $this->setData(OrderAddressInterface::VAT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setVatIsValid($vatIsValid)
+    {
+        return $this->setData(OrderAddressInterface::VAT_IS_VALID, $vatIsValid);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setVatRequestId($id)
+    {
+        return $this->setData(OrderAddressInterface::VAT_REQUEST_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setVatRequestDate($vatRequestDate)
+    {
+        return $this->setData(OrderAddressInterface::VAT_REQUEST_DATE, $vatRequestDate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setVatRequestSuccess($vatRequestSuccess)
+    {
+        return $this->setData(OrderAddressInterface::VAT_REQUEST_SUCCESS, $vatRequestSuccess);
+    }
+    //@codeCoverageIgnoreEnd
 }

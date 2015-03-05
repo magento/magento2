@@ -26,7 +26,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $optionBuilderMock;
+    protected $optionFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -58,25 +58,22 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $linkListMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelperMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
-        $this->optionBuilderMock = $this->getMock(
-            '\Magento\Bundle\Api\Data\OptionDataBuilder',
-            ['populateWithArray', 'setOptionId', 'setTitle', 'setSku', 'setProductLinks', 'create'],
-            [],
-            '',
-            false
-        );
-        $this->linkBuilderMock = $this->getMock(
-            '\Magento\Bundle\Api\Data\LinkDataBuilder',
-            ['populateWithArray', 'setIsDefault', 'setQty', 'setIsDefined', 'setPrice', 'setPriceType', 'create'],
-            [],
-            '',
-            false
-        );
+        $this->optionFactoryMock = $this->getMockBuilder('\Magento\Bundle\Api\Data\OptionInterfaceFactory')
+            ->setMethods(['create'])
+            ->getMock();
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->optionResourceMock = $this->getMock(
             '\Magento\Bundle\Model\Resource\Option',
             ['delete', '__wakeup', 'save'],
@@ -92,12 +89,13 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Bundle\Model\OptionRepository(
             $this->productRepositoryMock,
             $this->typeMock,
-            $this->optionBuilderMock,
+            $this->optionFactoryMock,
             $this->optionResourceMock,
             $this->storeManagerMock,
             $this->linkManagementMock,
             $this->optionListMock,
-            $this->linkListMock
+            $this->linkListMock,
+            $this->dataObjectHelperMock
         );
     }
 
@@ -186,23 +184,23 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $linkMock = ['item'];
         $this->linkListMock->expects($this->once())->method('getItems')->with($productMock, 100)->willReturn($linkMock);
 
-        $this->optionBuilderMock->expects($this->once())
+        $newOptionMock = $this->getMock('\Magento\Bundle\Api\Data\OptionInterface');
+        $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($optionData)
+            ->with($newOptionMock, $optionData, '\Magento\Bundle\Api\Data\OptionInterface')
             ->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())->method('setOptionId')->with(1)->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())
+        $newOptionMock->expects($this->once())->method('setOptionId')->with(1)->willReturnSelf();
+        $newOptionMock->expects($this->once())
             ->method('setTitle')
             ->with($optionData['title'])
             ->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())->method('setSku')->with()->willReturnSelf();
-        $this->optionBuilderMock->expects($this->once())
+        $newOptionMock->expects($this->once())->method('setSku')->with()->willReturnSelf();
+        $newOptionMock->expects($this->once())
             ->method('setProductLinks')
             ->with($linkMock)
             ->willReturnSelf();
 
-        $newOptionMock = $this->getMock('\Magento\Bundle\Api\Data\OptionInterface');
-        $this->optionBuilderMock->expects($this->once())->method('create')->willReturn($newOptionMock);
+        $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($newOptionMock);
 
         $this->assertEquals($newOptionMock, $this->model->get($productSku, $optionId));
     }
