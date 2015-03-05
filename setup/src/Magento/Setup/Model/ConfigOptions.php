@@ -7,8 +7,8 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Math\Random;
 use Magento\Framework\Setup\ConfigOptionsInterface;
-use Magento\Framework\Setup\TextConfigOption;
-use Magento\Framework\Setup\MultiSelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\Setup\Option\MultiSelectConfigOption;
 use Magento\Framework\Module\ModuleList\Loader;
 
 /**

@@ -6,7 +6,7 @@
 namespace Magento\Backend\Setup;
 
 use Magento\Framework\Setup\ConfigOptionsInterface;
-use Magento\Framework\Setup\TextConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
 
 /*
  * Deployment configuration options needed for Backend module

@@ -3,18 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Setup;
+namespace Magento\Framework\Setup\Option;
 
 /**
- * Select option in deployment config tool
+ * Multi-select option in deployment config tool
  */
-class SelectConfigOption extends AbstractConfigOption
+class MultiSelectConfigOption extends AbstractConfigOption
 {
     /**#@+
      * Frontend input types
      */
-    const FRONTEND_WIZARD_RADIO = 'radio';
-    const FRONTEND_WIZARD_SELECT = 'select';
+    const FRONTEND_WIZARD_CHECKBOX = 'checkbox';
+    const FRONTEND_WIZARD_MULTISELECT = 'multiselect';
     /**#@- */
 
     /**
@@ -43,8 +43,10 @@ class SelectConfigOption extends AbstractConfigOption
         $defaultValue = '',
         $shortCut = null
     ) {
-        if ($frontendType != self::FRONTEND_WIZARD_SELECT && $frontendType != self::FRONTEND_WIZARD_RADIO) {
-            throw new \InvalidArgumentException("Frontend input type has to be 'select' or 'radio'.");
+        if ($frontendType != self::FRONTEND_WIZARD_MULTISELECT && $frontendType != self::FRONTEND_WIZARD_CHECKBOX) {
+            throw new \InvalidArgumentException(
+                "Frontend input type has to be 'multiselect', 'textarea' or 'checkbox'."
+            );
         }
         if (!$selectOptions) {
             throw new \InvalidArgumentException('Select options can\'t be empty.');
@@ -54,7 +56,7 @@ class SelectConfigOption extends AbstractConfigOption
             $name,
             $frontendType,
             $description,
-            self::VALUE_REQUIRED,
+            self::VALUE_REQUIRED | self::VALUE_IS_ARRAY,
             $defaultValue,
             $shortCut
         );
@@ -79,8 +81,14 @@ class SelectConfigOption extends AbstractConfigOption
      */
     public function validate($data)
     {
-        if (!in_array($data, $this->getSelectOptions())) {
-            throw new \InvalidArgumentException("Value specified for '{$this->getName()}' is not supported: '{$data}'");
+        if (is_array($data)) {
+            foreach ($data as $value) {
+                if (!in_array($value, $this->getSelectOptions())) {
+                    throw new \InvalidArgumentException(
+                        "Value specified for '{$this->getName()}' is not supported: '{$value}'"
+                    );
+                }
+            }
         }
         parent::validate($data);
     }

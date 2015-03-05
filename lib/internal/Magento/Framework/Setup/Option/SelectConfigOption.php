@@ -3,18 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Setup;
+namespace Magento\Framework\Setup\Option;
 
 /**
- * Multi-select option in deployment config tool
+ * Select option in deployment config tool
  */
-class MultiSelectConfigOption extends AbstractConfigOption
+class SelectConfigOption extends AbstractConfigOption
 {
     /**#@+
      * Frontend input types
      */
-    const FRONTEND_WIZARD_CHECKBOX = 'checkbox';
-    const FRONTEND_WIZARD_MULTISELECT = 'multiselect';
+    const FRONTEND_WIZARD_RADIO = 'radio';
+    const FRONTEND_WIZARD_SELECT = 'select';
     /**#@- */
 
     /**
@@ -43,10 +43,8 @@ class MultiSelectConfigOption extends AbstractConfigOption
         $defaultValue = '',
         $shortCut = null
     ) {
-        if ($frontendType != self::FRONTEND_WIZARD_MULTISELECT && $frontendType != self::FRONTEND_WIZARD_CHECKBOX) {
-            throw new \InvalidArgumentException(
-                "Frontend input type has to be 'multiselect', 'textarea' or 'checkbox'."
-            );
+        if ($frontendType != self::FRONTEND_WIZARD_SELECT && $frontendType != self::FRONTEND_WIZARD_RADIO) {
+            throw new \InvalidArgumentException("Frontend input type has to be 'select' or 'radio'.");
         }
         if (!$selectOptions) {
             throw new \InvalidArgumentException('Select options can\'t be empty.');
@@ -81,14 +79,8 @@ class MultiSelectConfigOption extends AbstractConfigOption
      */
     public function validate($data)
     {
-        if (is_array($data)) {
-            foreach ($data as $value) {
-                if (!in_array($value, $this->getSelectOptions())) {
-                    throw new \InvalidArgumentException(
-                        "Value specified for '{$this->getName()}' is not supported: '{$value}'"
-                    );
-                }
-            }
+        if (!in_array($data, $this->getSelectOptions())) {
+            throw new \InvalidArgumentException("Value specified for '{$this->getName()}' is not supported: '{$data}'");
         }
         parent::validate($data);
     }

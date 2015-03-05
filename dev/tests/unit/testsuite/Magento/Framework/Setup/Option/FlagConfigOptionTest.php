@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Setup;
+namespace Magento\Framework\Setup\Option;
 
 class FlagConfigOptionTest extends \PHPUnit_Framework_TestCase
 {
