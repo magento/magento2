@@ -22,6 +22,7 @@
         "magento/module-integration": "0.42.0-beta10",
         "magento/module-media-storage": "0.42.0-beta10",
         "magento/module-ui": "0.42.0-beta10",
+        "magento/module-config": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"
     },
