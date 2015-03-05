@@ -6,7 +6,9 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
+use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
@@ -22,21 +24,14 @@ class ConfigOptions implements ConfigOptionsInterface
      * Path to the values in the deployment config
      */
     const CONFIG_PATH_INSTALL_DATE = 'install/date';
+    const CONFIG_PATH_MODULES = 'modules';
 
     /**
-     * Input key for encryption key
+     * Input keys for the options
      */
     const INPUT_KEY_CRYPT_KEY = 'key';
-
-    /**
-     * Input key for session save
-     */
     const INPUT_KEY_SESSION_SAVE = 'session_save';
-
-    /**
-     * Path to modules in the deployment config
-     */
-    const CONFIG_PATH_MODULES = 'modules';
+    const INPUT_KEY_DEFINITION_FORMAT = 'definition_format';
 
     /**
      * @var array
@@ -69,7 +64,7 @@ class ConfigOptions implements ConfigOptionsInterface
             new TextConfigOption(
                 self::INPUT_KEY_CRYPT_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'encryption key'
+                'Encryption key'
             ),
             new MultiSelectConfigOption(
                 self::CONFIG_PATH_MODULES,
@@ -82,8 +77,14 @@ class ConfigOptions implements ConfigOptionsInterface
                 self::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 ['files', 'db'],
-                'session save location',
+                'Session save location',
                 'files'
+            ),
+            new SelectConfigOption(
+                self::INPUT_KEY_DEFINITION_FORMAT,
+                SelectConfigOption::FRONTEND_WIZARD_SELECT,
+                DefinitionFactory::getSupportedFormats(),
+                'Type of definitions used by Object Manager'
             ),
         ];
     }
@@ -95,8 +96,7 @@ class ConfigOptions implements ConfigOptionsInterface
     {
         $configData = [];
         // install segment
-        $installData['date'] = date('r');
-        $configData['install'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'install', $installData);
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'install', ['data' => date('r')]);
 
         // crypt segment
         if (isset($data[self::INPUT_KEY_CRYPT_KEY]) && !$data[self::INPUT_KEY_CRYPT_KEY]) {
@@ -108,7 +108,7 @@ class ConfigOptions implements ConfigOptionsInterface
         } else {
             $cryptData['key'] = $data[self::INPUT_KEY_CRYPT_KEY];
         }
-        $configData['crypt'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'crypt', $cryptData);
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
 
         // module segment
         $modulesData = [];
@@ -117,7 +117,7 @@ class ConfigOptions implements ConfigOptionsInterface
                 $modulesData[$key] = 1;
             }
         }
-        $configData['modules'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'modules', $modulesData);
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'modules', $modulesData);
 
         // session segment
         $sessionData = [];
@@ -129,7 +129,17 @@ class ConfigOptions implements ConfigOptionsInterface
         } else {
             $sessionData['save'] = 'files';
         }
-        $configData['session'] = new ConfigData(ConfigData::DEFAULT_FILE_KEY, 'session', $sessionData);
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
+
+        // definitions segment
+        if (!empty($data[self::INPUT_KEY_DEFINITION_FORMAT])) {
+            $config['definition']['format'] = $data[self::INPUT_KEY_DEFINITION_FORMAT];
+            $configData[] = new ConfigData(
+                ConfigFilePool::APP_CONFIG,
+                'definition',
+                ['format' => $data[self::INPUT_KEY_DEFINITION_FORMAT]]
+            );
+        }
 
         return $configData;
     }

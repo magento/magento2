@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Setup;
 
-use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         $options = [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
         $actualConfig = $this->object->createConfig($options);
         $expectedData = [
-            ['file' => ConfigData::DEFAULT_FILE_KEY, 'segment' => 'backend', 'data' => ['frontName' => 'admin']]
+            ['file' => ConfigFilePool::APP_CONFIG, 'segment' => 'backend', 'data' => ['frontName' => 'admin']]
         ];
         $this->assertInternalType('array', $actualConfig);
         /** @var \Magento\Framework\Config\Data\ConfigData $config */

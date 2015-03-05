@@ -6,6 +6,7 @@
 namespace Magento\Backend\Setup;
 
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
@@ -53,7 +54,7 @@ class ConfigOptions implements ConfigOptionsInterface
             );
         }
         return [new ConfigData(
-            ConfigData::DEFAULT_FILE_KEY,
+            ConfigFilePool::APP_CONFIG,
             'backend',
             ['frontName' => $options[self::INPUT_KEY_BACKEND_FRONTNAME]]
         )];
