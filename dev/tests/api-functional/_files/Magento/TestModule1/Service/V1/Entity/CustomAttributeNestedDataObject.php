@@ -14,4 +14,13 @@ class CustomAttributeNestedDataObject extends \Magento\Framework\Api\AbstractExt
     {
         return $this->_data['name'];
     }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
+    }
 }

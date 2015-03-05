@@ -143,7 +143,7 @@ class ServiceInputProcessor
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                $setterName = 'set' . $camelCaseProperty;
+                $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
                 if ($camelCaseProperty === 'CustomAttributes') {
                     $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
                 } else {
@@ -201,7 +201,7 @@ class ServiceInputProcessor
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }
             //Populate the attribute value data object once the value for custom attribute is derived based on type
-            $result[] = $this->attributeValueFactory->create()
+            $result[$customAttributeCode] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
                 ->setValue($attributeValue);
         }

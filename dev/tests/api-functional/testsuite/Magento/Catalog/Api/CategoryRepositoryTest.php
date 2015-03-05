@@ -166,13 +166,13 @@ class CategoryRepositoryTest extends WebapiAbstract
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
+            'include_in_menu' => "1",
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Custom description'],
                 ['attribute_code' => 'meta_title', 'value' => ''],
                 ['attribute_code' => 'meta_keywords', 'value' => ''],
                 ['attribute_code' => 'meta_description', 'value' => ''],
-                ['attribute_code' => 'include_in_menu', 'value' => '1'],
                 ['attribute_code' => 'display_mode', 'value' => 'PRODUCTS'],
                 ['attribute_code' => 'landing_page', 'value' => ''],
                 ['attribute_code' => 'is_anchor', 'value' => '0'],
