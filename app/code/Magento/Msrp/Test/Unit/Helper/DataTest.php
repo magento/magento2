@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Msrp\Helper;
+namespace Magento\Msrp\Test\Unit\Helper;
 
 
 /**

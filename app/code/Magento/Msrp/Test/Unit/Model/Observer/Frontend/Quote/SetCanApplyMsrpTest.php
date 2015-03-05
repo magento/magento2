@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Msrp\Model\Observer\Frontend\Quote;
+namespace Magento\Msrp\Test\Unit\Model\Observer\Frontend\Quote;
 
 use Magento\Quote\Model\Quote\Address;
 use Magento\TestFramework\Helper\ObjectManager;

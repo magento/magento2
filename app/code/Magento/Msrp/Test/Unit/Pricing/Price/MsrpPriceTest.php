@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Msrp\Pricing\Price;
+namespace Magento\Msrp\Test\Unit\Pricing\Price;
 
 use Magento\Framework\Pricing\PriceInfoInterface;
 
@@ -93,7 +93,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
 
-        $this->object = new MsrpPrice(
+        $this->object = new \Magento\Msrp\Pricing\Price\MsrpPrice(
             $this->saleableItem,
             PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT,
             $this->calculator,
