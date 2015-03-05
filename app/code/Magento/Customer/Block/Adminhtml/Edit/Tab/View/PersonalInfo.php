@@ -7,7 +7,6 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -333,7 +332,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      *
      * @return int Minutes Interval
      */
-    public function getOnlineMinutesInterval()
+    protected function getOnlineMinutesInterval()
     {
         $configValue = $this->_scopeConfig->getValue(
             'customer/online_customers/online_minutes_interval',
