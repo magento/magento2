@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Directory\Model\Currency\Import\Source;
+namespace Magento\Directory\Test\Unit\Model\Currency\Import\Source;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {

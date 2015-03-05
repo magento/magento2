@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Block;
+namespace Magento\Directory\Test\Unit\Block;
 
 class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +51,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
         $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface', [], [], '', false);
 
-        $this->object = new Currency(
+        $this->object = new \Magento\Directory\Block\Currency(
             $context,
             $currencyFactory,
             $this->postDataHelper,

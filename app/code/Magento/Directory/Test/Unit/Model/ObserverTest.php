@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Model;
+namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Directory\Model\Observer;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Model;
+namespace Magento\Directory\Test\Unit\Model;
+
+use Magento\Directory\Model\PriceCurrency;
 
 class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
 {

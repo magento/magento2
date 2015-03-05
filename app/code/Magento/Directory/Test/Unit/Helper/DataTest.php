@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Directory\Helper;
+namespace Magento\Directory\Test\Unit\Helper;
+
+use Magento\Directory\Helper\Data;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

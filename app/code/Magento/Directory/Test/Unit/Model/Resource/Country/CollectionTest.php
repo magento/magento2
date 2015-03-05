@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Directory\Model\Resource\Country;
+namespace Magento\Directory\Test\Unit\Model\Resource\Country;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
