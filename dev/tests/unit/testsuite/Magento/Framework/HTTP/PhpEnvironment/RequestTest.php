@@ -20,6 +20,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cookieReader;
+
+    /**
      * @var array
      */
     private $serverArray;
@@ -27,7 +32,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-
+        $this->cookieReader = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
     }
@@ -39,7 +44,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     private function getModel($uri = null)
     {
-        return new Request($uri);
+        return new Request($this->cookieReader, $uri);
     }
 
     public function testSetPathInfoWithNullValue()
@@ -198,5 +203,63 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = $this->getModel();
         $this->assertNull($this->model->getAlias(''));
+    }
+
+
+    public function testGetCookie()
+    {
+        $key = "cookieName";
+        $default = "defaultValue";
+
+        $this->cookieReader
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with($key, $default);
+
+        $this->getModel()->getCookie($key, $default);
+    }
+
+
+    public function testGetCookieDefault()
+    {
+        $key = "cookieName";
+        $default = "defaultValue";
+
+        $this->cookieReader
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with($key, $default)
+            ->will($this->returnValue($default));
+
+        $this->assertEquals($default, $this->getModel()->getCookie($key, $default));
+    }
+
+    public function testGetCookieNameExists()
+    {
+        $key = "cookieName";
+        $default = "defaultValue";
+        $value = "cookieValue";
+
+        $this->cookieReader
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with($key, $default)
+            ->will($this->returnValue($value));
+
+        $this->assertEquals($value, $this->getModel()->getCookie($key, $default));
+    }
+
+    public function testGetCookieNullName()
+    {
+        $nullKey = null;
+        $default = "defaultValue";
+
+        $this->cookieReader
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with($nullKey, $default)
+            ->will($this->returnValue($default));
+
+        $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
     }
 }

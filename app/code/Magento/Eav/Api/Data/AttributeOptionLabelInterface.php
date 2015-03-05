@@ -20,9 +20,25 @@ interface AttributeOptionLabelInterface
     public function getStoreId();
 
     /**
+     * Set store id
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId);
+
+    /**
      * Get option label
      *
      * @return string|null
      */
     public function getLabel();
+
+    /**
+     * Set option label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
 }
