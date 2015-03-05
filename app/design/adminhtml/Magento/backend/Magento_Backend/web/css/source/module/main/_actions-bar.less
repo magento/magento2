@@ -21,16 +21,17 @@
 
 //
 
-.page-main-actions {
+.page-main-actions,
+.page-actions.fixed {
     .extend__clearfix();
     background: @page-main-actions__background-color;
     border-bottom: 1px solid @page-main-actions__border-color;
     border-top: 1px solid @page-main-actions__border-color;
-    margin: 0 0 2rem;
     padding: @page-main-actions__padding-side;
-    &:empty {
-        display: none;
-    }
+}
+
+.page-main-actions {
+    margin: 0 0 2rem;
 }
 
 //
@@ -41,6 +42,26 @@
     @_page-action__indent: 1.3rem;
 
     float: right;
+    &.fixed {
+        position: fixed;
+        top: 0;
+        left: @page-wrapper__indent-left;
+        right: 0;
+        z-index: @page-actions__fixed__z-index;
+        .page-actions-inner {
+            &:before {
+                content: attr(data-title);
+                float: left;
+                font-size: @page-title__font-size;
+                max-width: 50%;
+                margin-top: .3rem;
+                color: @page-title__color;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
     button,
     .page-actions-buttons > button {
         &:extend(.abs-action-l all);
@@ -101,49 +122,3 @@
         background-color: transparent;
     }
 }
-
-//
-//  Old styles
-//  _____________________________________________
-
-.page-main-actions {
-    .page-actions {
-
-        // Fixed page actions
-        &.fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10;
-            padding: 0;
-            background: -webkit-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); // Use in 4.3 Android
-            background: -ms-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); // Use in 10 IE
-            background: linear-gradient(to bottom, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%);
-            background: #e0dace;
-            .page-actions-inner {
-                position: relative;
-                padding-top: 15px;
-                padding-bottom: 15px;
-                min-height: 36px;
-                text-align: right;
-                .clearfix();
-                box-sizing: border-box;
-                &:before {
-                    text-align: left;
-                    content: attr(data-title);
-                    float: left;
-                    font-size: 20px;
-                    max-width: 50%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-                .lt-ie10 & {
-                    background: #f5f2ed;
-                }
-            }
-        }
-    }
-}
-
