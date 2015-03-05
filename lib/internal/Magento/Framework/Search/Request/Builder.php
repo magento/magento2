@@ -107,7 +107,7 @@ class Builder
      * Bind data to placeholder
      *
      * @param string $placeholder
-     * @param string $value
+     * @param mixed $value
      * @return $this
      */
     public function bind($placeholder, $value)

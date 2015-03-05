@@ -26,6 +26,11 @@ class MetadataConfig implements MetadataServiceInterface
     private $attributeMetadataBuilder;
 
     /**
+     * @var array
+     */
+    private $allAttributes = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param ServiceConfigReader $serviceConfigReader
@@ -68,12 +73,14 @@ class MetadataConfig implements MetadataServiceInterface
     protected function getAttributesMetadata($dataObjectClassName)
     {
         $attributes = [];
-        $allAttributes = $this->serviceConfigReader->read();
+        if (empty($this->allAttributes)) {
+            $this->allAttributes = $this->serviceConfigReader->read();
+        }
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
-        if (isset($allAttributes[$dataObjectClassName])
-            && is_array($allAttributes[$dataObjectClassName])
+        if (isset($this->allAttributes[$dataObjectClassName])
+            && is_array($this->allAttributes[$dataObjectClassName])
         ) {
-            $attributeCodes = array_keys($allAttributes[$dataObjectClassName]);
+            $attributeCodes = array_keys($this->allAttributes[$dataObjectClassName]);
             foreach ($attributeCodes as $attributeCode) {
                 $this->attributeMetadataBuilder->setAttributeCode($attributeCode);
                 $attributes[$attributeCode] = $this->attributeMetadataBuilder->create();

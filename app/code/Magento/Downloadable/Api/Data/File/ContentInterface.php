@@ -18,9 +18,25 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getFileData();
 
     /**
+     * Set data (base64 encoded content)
+     *
+     * @param string $fileData
+     * @return $this
+     */
+    public function setFileData($fileData);
+
+    /**
      * Retrieve file name
      *
      * @return string
      */
     public function getName();
+
+    /**
+     * Set file name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
 }
