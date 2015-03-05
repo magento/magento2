@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Log\Model;
+namespace Magento\Log\Test\Unit\Model;
+
+use \Magento\Log\Model\Log;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
