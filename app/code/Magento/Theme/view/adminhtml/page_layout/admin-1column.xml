@@ -28,7 +28,7 @@
                     <container name="main.top" as="main-top" label="main-top"/>
                     <container name="page.main.actions" as="page_main_actions" htmlTag="div" htmlClass="page-main-actions"/>
                     <container name="message-wrapper.scope" htmlTag="div" htmlClass="admin__scope">
-                        <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages" htmlClass="messages-in-context">
+                        <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages">
                             <container name="page.messages" as="page.messages"/>
                         </container>
                     </container>

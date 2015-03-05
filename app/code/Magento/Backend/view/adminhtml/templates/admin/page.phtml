@@ -27,8 +27,8 @@
 
         <main class="page-content" id="anchor-content">
             <?php echo $block->getChildHtml('main-top'); ?>
-            <div id="messages" data-container-for="messages" class="admin__scope">
-                <div class="messages-in-context">
+            <div class="admin__scope">
+                <div class="messages" id="messages" data-container-for="messages">
                     <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
                 </div>
             </div>
