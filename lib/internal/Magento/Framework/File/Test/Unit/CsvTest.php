@@ -9,7 +9,7 @@
 /**
  * Test class for \Magento\Framework\File\Csv.
  */
-namespace Magento\Framework\File;
+namespace Magento\Framework\File\Test\Unit;
 
 class CsvTest extends \PHPUnit_Framework_TestCase
 {

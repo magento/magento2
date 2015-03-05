@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\File;
+namespace Magento\Framework\File\Test\Unit;
 
 class MimeTest extends \PHPUnit_Framework_TestCase
 {
