@@ -4,6 +4,12 @@
 //  */
 
 //
+//  Imports
+//  _____________________________________________
+
+@import 'actions/_actions-split.less';
+
+//
 //  Variables
 //  _____________________________________________
 
@@ -13,12 +19,15 @@
 @button__color: @color-brownie;
 @button__font-family: @font-family__base;
 @button__font-size: @font-size__base;
+@button__padding-top: .5em;
+@button__padding-bottom: .57em;
 @button__padding-horizontal: 1em;
-@button__padding-vertical: .55em;
+@button__padding-vertical__l: .6875em;
 
 @button__active__background-color: darken(@button__background-color, 5%);
 @button__hover__background-color: darken(@button__background-color, 3%);
-@button__hover__box-shadow: 0 0 0 1px @color-blue-dodger;
+@button__hover__border-color: @color-blue-pure;
+@button__hover__box-shadow: 0 0 0 1px @button__hover__border-color;
 
 @button__large__font-size: 1.6rem;
 @button__large__padding-horizontal: 1.45em;
@@ -27,7 +36,7 @@
 //  Primary button
 @button-primary__background-color: @primary__color;
 @button-primary__color: @color-white;
-@button-primary__hover__background-color: @color-phoenix-brown;
+@button-primary__hover__background-color: @color-phoenix-brown-almost;
 @button-primary__hover__border-color: @color-phoenix-brown;
 
 //  Secondary button
@@ -56,7 +65,59 @@
 }
 
 //
-//  Default button
+//  Extends
+//  _____________________________________________
+
+.abs-action-reset {
+    .action-reset();
+}
+
+.abs-action-pattern {
+    display: inline-block;
+    font-family: @button__font-family;
+    font-size: @button__font-size;
+    font-weight: @font-weight__semibold;
+    padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
+    text-align: center;
+    vertical-align: baseline; // ToDo UI: Delete with admin scope
+    border-radius: 0; // ToDo UI: Delete with admin scope
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+.abs-action-l {
+    padding-top: @button__padding-vertical__l;
+    padding-bottom: @button__padding-vertical__l;
+    font-size: @font-size__l;
+    letter-spacing: .025em;
+}
+
+.abs-action-default {
+    .action-default();
+}
+
+.abs-action-primary {
+    .action-primary();
+}
+
+.abs-action-secondary {
+    .action-secondary();
+}
+
+.abs-action-tertiary {
+    .action-tertiary();
+}
+
+.abs-action-quaternary {
+    .action-quaternary();
+}
+
+//
+//  Default action
 //  ---------------------------------------------
 
 .action-default,
@@ -71,13 +132,10 @@ button {
         color: @button__color;
         box-shadow: @button__hover__box-shadow;
     }
-    &:active {
-        background-color: @button__active__background-color;
-    }
 }
 
 //
-//  Primary button
+//  Primary action
 //  ---------------------------------------------
 
 .action-primary {
@@ -85,7 +143,7 @@ button {
     background-color: @button-primary__background-color;
     border-color: @button-primary__background-color;
     color: @button-primary__color;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
     &:hover,
     &:active {
         text-decoration: none;
@@ -102,7 +160,7 @@ button {
 }
 
 //
-//  Secondary button
+//  Secondary action
 //  ---------------------------------------------
 
 .action-secondary {
@@ -123,57 +181,52 @@ button {
 }
 
 //
-//  Tertiary button
+//  Tertiary action & Quaternary action
 //  ---------------------------------------------
 
-.action-tertiary {
+.action-tertiary,
+.action-quaternary {
     &:extend(.abs-action-pattern all);
     background-color: transparent;
-    border: none;
-    color: @link__color;
+    border-color: transparent;
     &:active,
     &:hover {
         background-color: transparent;
         border-color: transparent;
+        box-shadow: none;
+    }
+}
+
+.action-tertiary {
+    color: @link__color;
+    &:active,
+    &:hover {
         color: @link__hover__color;
         text-decoration: underline;
     }
 }
 
-//
-//  Split button
-//  ---------------------------------------------
-
-.actions-split {
-    .dropdown-split(
-    @_toggle-selector: ~".action-toggle",
-    @_button-selector: ~".action-default",
-    @_options-selector :  ~".dropdown-menu",
-    @_dropdown-split-button-border-radius-fix: true,
-    @_dropdown-split-list-min-width: 175px,
-    @_icon-font-size: 40px,
-    @_icon-font-line-height: 14px,
-    @_icon-font-vertical-align: middle
-    );
-    vertical-align: middle;
+.action-quaternary {
+    color: @text__color;
+    &:active,
     &:hover {
-        &:not(.disabled) {
-            .css(box-shadow, @button__hover__box-shadow);
-        }
+        color: darken(@text__color, 10%);
     }
-    .action {
-        margin-left: 0;
-        &.action-toggle {
-            border-left: 1px solid @color-phoenix-brown;
-            padding: @button__padding-vertical 0;
-        }
-        &.action-large {
-            &.action-toggle {
-                padding: @button__large__padding-vertical 0;
-            }
-        }
-        &:hover {
-            box-shadow: none;
-        }
+}
+
+//
+//  ToDo UI: Button migration
+//  _____________________________________________
+
+button {
+    &:extend(.abs-action-default all);
+    &.primary {
+        &:extend(.abs-action-primary all);
+    }
+    &.secondary {
+        &:extend(.abs-action-secondary all);
+    }
+    &.tertiary {
+        &:extend(.abs-action-tertiary all);
     }
 }

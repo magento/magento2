@@ -11,167 +11,18 @@
 //  Components
 //  ---------------------------------------------
 
-@import 'header/_user';
-@import 'header/_search';
-@import 'header/_notifications';
+@import 'header/_actions-group';
+@import 'header/_headings-group';
 
-//
 //  Variables
 //  ---------------------------------------------
 
 @page-header__indent-horizontal: @content__indent;
 @page-header__indent-vertical: @content__indent / 2;
 
-@page-title__color: @text__color;
-@page-title__font-size: 2.8rem;
-
-@page-title-breadcrumbs__min-height: round(@page-title-breadcrumb__font-size * @line-height__base, 1);
-@page-title-breadcrumb__font-size: @font-size__s;
-
 //
 
 .page-header {
+    margin-bottom: 1.2rem;
     padding: @page-header__indent-vertical @page-header__indent-horizontal;
-}
-
-//
-//  Heading group
-//  ---------------------------------------------
-
-.page-header-hgroup {
-    padding-right: @content__indent / 2;
-}
-
-//  Page title
-.page-title-wrapper {
-    margin-top: @page-title-breadcrumbs__min-height;
-}
-
-.page-title {
-    color: @page-title__color;
-    font-size: @page-title__font-size;
-}
-
-//  Breadcrumbs
-
-.page-title-breadcrumbs {
-    font-size: @page-title-breadcrumb__font-size;
-    min-height: @page-title-breadcrumbs__min-height;
-    + .page-title-wrapper {
-        margin-top: 0;
-    }
-}
-
-.page-title-breadcrumb {
-    &:hover {
-        text-decoration: none;
-    }
-    &:after {
-        &:extend(.abs-icon all);
-        content: @icon-caret-right__content;
-        font-size: .75em;
-        margin-left: .5em;
-    }
-}
-
-//
-//  Actions group
-//  ---------------------------------------------
-
-@page-header-action__height: 3.4rem;
-@page-header-action__color: @text__color;
-@page-header-action__hover__color: darken(@page-header-action__color, 20%);
-@page-header-action__background-color: @page-wrapper__background-color;
-@page-header-action__active__border-color: @color-blue-pure;
-@page-header-action__border-color: @color-light-gray;
-@page-header-action__shadow-size: 6px;
-@page-header-action__box-shadow: 1px 1px @page-header-action__shadow-size rgba(0, 0, 0, .5);
-@page-header-action__transition-duration: .15s;
-@page-header-action__transition-timing-function: ease;
-
-@page-header-action-menu__hover__background-color: @color-blue-clear-sky;
-@page-header-action-menu__active__background-color: darken(@color-blue-clear-sky, 5%);
-
-//
-
-.page-header-actions {
-    &:extend(.abs-clearfix all);
-    padding-top: 1.1rem;
-}
-
-.abs-page-header-action {
-    background-color: @page-header-action__background-color;
-    border: 1px solid transparent;
-    border-bottom: none;
-    color: @page-header-action__color;
-    display: inline-block;
-    height: @page-header-action__height;
-    position: relative;
-    transition: border-color @page-header-action__transition-duration @page-header-action__transition-timing-function;
-    &:hover {
-        color: @page-header-action__hover__color;
-        text-decoration: none;
-    }
-}
-
-.abs-page-header-action-menu {
-    background-color: @page-header-action__background-color;
-    border: 1px solid @page-header-action__active__border-color;
-    box-shadow: @page-header-action__box-shadow;
-    margin-top: -1px;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    transition: all @page-header-action__transition-duration @page-header-action__transition-timing-function;
-    visibility: hidden;
-    &:before {
-        content: '';
-        position: absolute;
-    }
-    > li {
-        display: block;
-        > a {
-        }
-    }
-}
-
-//
-//  Page main actions
-//  ---------------------------------------------
-
-@page-main-actions__background-color: @color-white-fog;
-@page-main-actions__border-color: @color-lighter-gray2;
-
-//
-
-.page-main-actions {
-    .extend__clearfix();
-    background: @page-main-actions__background-color ;
-    border-bottom: 1px solid @page-main-actions__border-color;
-    border-top: 1px solid @page-main-actions__border-color;
-    margin: 0 0 2rem;
-    padding: 1.5rem;
-
-    .store-switcher {
-        display: inline-block;
-        .label {
-            margin-right: .5rem;
-        }
-        > .actions {
-            display: inline-block;
-            position: relative;
-
-            &.active {
-                .dropdown-menu {
-                    opacity: 1;
-                    visibility: visible;
-                }
-            }
-        }
-        .tooltip {
-            display: inline-block;
-            margin-left: .5rem;
-        }
-    }
 }

@@ -4,7 +4,7 @@
 //  */
 
 //
-//  Page header. Global search
+//  Page header -> Action group -> Notifications
 //  _____________________________________________
 
 //
@@ -34,18 +34,18 @@
 .notifications-wrapper {
     float: right;
     line-height: 1;
-    margin-left: @page-header-action__shadow-size;
+    margin-left: @component__shadow-size__base;
     position: relative;
     z-index: @notifications-action-menu__z-index;
     &.active {
         .notifications-action {
             border-color: @page-header-action__active__border-color;
-            box-shadow: @page-header-action__box-shadow;
+            box-shadow: @component__box-shadow__base;
             &:after {
                 background-color: @page-header-action__background-color;
                 content: '';
-                height: @page-header-action__shadow-size + 1;
-                left: -(@page-header-action__shadow-size + 1);
+                height: @component__shadow-size__base + 1;
+                left: -(@component__shadow-size__base + 1);
                 position: absolute;
                 right: 0;
                 top: 100%;

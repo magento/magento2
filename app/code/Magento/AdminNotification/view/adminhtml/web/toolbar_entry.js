@@ -46,6 +46,7 @@ define([
             }
         },
 
+        // Show popup with notification details
         showNotificationDetails = function (notificationEntry) {
             var notificationDescription = notificationEntry.find('.notifications-entry-description'),
                 notificationDescriptionEnd = notificationEntry.find('.notifications-entry-description-end');

@@ -4,7 +4,7 @@
 //  */
 
 //
-//  Page header. User menu
+//  Page header -> Actions group -> User menu
 //  _____________________________________________
 
 //
@@ -21,23 +21,20 @@
 .admin-user {
     float: right;
     line-height: 1;
-    margin-left: @page-header-action__shadow-size;
+    margin-left: @component__shadow-size__base;
     position: relative;
     z-index: @user-account-menu__z-index;
     &.active {
         .admin-user-account {
             border-color: @page-header-action__active__border-color;
-            box-shadow: @page-header-action__box-shadow;
-            &:after {
-                transform: rotate(180deg);
-            }
+            box-shadow: @component__box-shadow__base;
         }
         .admin-user-account-text {
             &:after {
                 background-color: @page-header-action__background-color;
                 content: '';
-                height: @page-header-action__shadow-size + 1;
-                left: -(@page-header-action__shadow-size + 1);
+                height: @component__shadow-size__base + 1;
+                left: -(@component__shadow-size__base + 1);
                 position: absolute;
                 right: 0;
                 top: 100%;
@@ -52,15 +49,18 @@
 
 .admin-user-account {
     &:extend(.abs-page-header-action all);
+    .dropdown-triangle(
+        @_dropdown__padding-right: @user-account__indent-right;
+        @_triangle__color: @page-header-action__color;
+        @_triangle__hover__color: @page-header-action__hover__color;
+        @_triangle__right: 1.3rem;
+    );
     font-size: @user__font-size;
     letter-spacing: .05em;
-    padding: @user-account__padding-top @user-account__indent-right @user-account__padding-bottom 4rem;
+    padding-bottom: @user-account__padding-bottom;
+    padding-left: 4rem;
+    padding-top: @user-account__padding-top;
     z-index: 2;
-    &:hover {
-        &:after {
-            border-color: @page-header-action__hover__color transparent transparent transparent;
-        }
-    }
     &:before {
         @_icon-user__size: 2rem;
 
@@ -71,22 +71,6 @@
         margin-top: -(@_icon-user__size / 2) - .1rem;
         position: absolute;
         top: 50%;
-    }
-    &:after {
-        @_triangle__width: 8px;
-        @_triangle__height: 5px;
-
-        border-color: @text__color transparent transparent transparent;
-        border-style: solid;
-        border-width: @_triangle__height @_triangle__width / 2 0 @_triangle__width / 2;
-        content: '';
-        height: 0;
-        margin-top: -((@_triangle__width / 2) / 2);
-        position: absolute;
-        right: 1.3rem;
-        top: 50%;
-        transition: all .2s linear;
-        width: 0;
     }
 }
 
@@ -109,11 +93,11 @@
             transition: background-color .1s linear;
             white-space: nowrap;
             &:hover {
-                background-color: @page-header-action-menu__hover__background-color;
+                background-color: @dropdown-menu__hover__background-color;
                 color: @page-header-action__color;
             }
             &:active {
-                background-color: @page-header-action-menu__active__background-color;
+                background-color: @dropdown-menu__active__background-color;
                 bottom: -1px;
                 position: relative;
             }

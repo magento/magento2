@@ -26,7 +26,9 @@
 
                 <container name="page.content" as="page_content" htmlTag="main" htmlId="anchor-content" htmlClass="page-content">
                     <container name="main.top" as="main-top" label="main-top"/>
-                    <container name="page.main.actions" as="page_main_actions" htmlTag="div" htmlClass="page-main-actions"/>
+                    <container name="page.main.actions.wrapper" htmlTag="div" htmlClass="admin__scope">
+                        <container name="page.main.actions" as="page_main_actions" htmlTag="div" htmlClass="page-main-actions"/>
+                    </container>
                     <container name="message-wrapper.scope" htmlTag="div" htmlClass="admin__scope">
                         <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages">
                             <container name="page.messages" as="page.messages"/>

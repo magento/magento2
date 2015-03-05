@@ -20,7 +20,9 @@
                     data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()))?>'>
             <button
                 type="submit"
-                class="search-global-action"><?php echo __('Search') ?></button>
+                class="search-global-action"
+                title="<?php echo __('Search') ?>"
+                ></button>
         </div>
     </form>
     <script data-template="search-suggest" type="text/x-magento-template">
