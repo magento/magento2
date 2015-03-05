@@ -86,7 +86,7 @@ require([
 
 jQuery(function ($) {
     var fieldSet = $('#Custom_Options');
-    fieldSet.customOptions(<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(
+    fieldSet.customOptions(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
         [
             'fieldId' => $block->getFieldId(),
             'productGridUrl' => $block->getProductGridUrl(),

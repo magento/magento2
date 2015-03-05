@@ -41,13 +41,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->request = $this->getMock(
-            '\Magento\Framework\App\RequestInterface',
-            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getCookie', 'getParam', 'isSecure'],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
 
         $this->wishlistFactory = $this->getMock(
             '\Magento\Wishlist\Model\WishlistFactory',

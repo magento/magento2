@@ -23,7 +23,7 @@ class NoRouteHandlerTest extends \Magento\Test\BaseTestCase
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
@@ -31,20 +31,7 @@ class NoRouteHandlerTest extends \Magento\Test\BaseTestCase
     {
         parent::setUp();
         $this->configMock = $this->basicMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $requestMethods = [
-            'getActionName',
-            'getModuleName',
-            'getParam',
-            'setActionName',
-            'setModuleName',
-            'setControllerName',
-            'getCookie',
-            'isSecure',
-        ];
-        $this->requestMock = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            $requestMethods
-        );
+        $this->requestMock = $this->basicMock('Magento\Framework\App\Request\Http');
         $this->model = $this->objectManager->getObject('Magento\Framework\App\Router\NoRouteHandler',
             [
                 'config' => $this->configMock,

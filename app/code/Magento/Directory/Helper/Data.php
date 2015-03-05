@@ -80,9 +80,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_regCollectionFactory;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -99,7 +99,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      */
@@ -108,7 +108,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory
     ) {
@@ -116,7 +116,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_configCacheType = $configCacheType;
         $this->_countryCollection = $countryCollection;
         $this->_regCollectionFactory = $regCollectionFactory;
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
     }
@@ -182,7 +182,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                         'name' => (string)__($region->getName()),
                     ];
                 }
-                $json = $this->_coreHelper->jsonEncode($regions);
+                $json = $this->jsonHelper->jsonEncode($regions);
                 if ($json === false) {
                     $json = 'false';
                 }
@@ -234,7 +234,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_optZipCountries = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         }
         if ($asJson) {
-            return $this->_coreHelper->jsonEncode($this->_optZipCountries);
+            return $this->jsonHelper->jsonEncode($this->_optZipCountries);
         }
         return $this->_optZipCountries;
     }
@@ -260,11 +260,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->scopeConfig->getValue(self::XML_PATH_STATES_REQUIRED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            $this->scopeConfig->getValue(
+                self::XML_PATH_STATES_REQUIRED,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         if ($asJson) {
-            return $this->_coreHelper->jsonEncode($countryList);
+            return $this->jsonHelper->jsonEncode($countryList);
         }
         return $countryList;
     }

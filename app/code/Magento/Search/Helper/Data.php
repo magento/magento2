@@ -9,12 +9,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
-use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Stdlib\String;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\Query as SearchQuery;
 use Magento\Search\Model\QueryFactory;
-use Magento\Search\Model\Resource\Query\Collection;
 
 /**
  * Search helper
@@ -55,6 +53,13 @@ class Data extends AbstractHelper
     protected $string;
 
     /**
+     * Core store config
+     *
+     * @var ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * Query factory
      *
      * @var QueryFactory
@@ -65,11 +70,6 @@ class Data extends AbstractHelper
      * @var Escaper
      */
     protected $_escaper;
-
-    /**
-     * @var FilterManager
-     */
-    protected $filter;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -83,7 +83,6 @@ class Data extends AbstractHelper
      * @param String $string
      * @param QueryFactory $queryFactory
      * @param Escaper $escaper
-     * @param FilterManager $filter
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -91,13 +90,12 @@ class Data extends AbstractHelper
         String $string,
         QueryFactory $queryFactory,
         Escaper $escaper,
-        FilterManager $filter,
         StoreManagerInterface $storeManager
     ) {
         $this->string = $string;
+        $this->_scopeConfig = $context->getScopeConfig();
         $this->_queryFactory = $queryFactory;
         $this->_escaper = $escaper;
-        $this->filter = $filter;
         $this->_storeManager = $storeManager;
         parent::__construct($context);
     }
@@ -122,16 +120,6 @@ class Data extends AbstractHelper
     public function getEscapedQueryText()
     {
         return $this->_escaper->escapeHtml($this->_queryFactory->get()->getQueryText());
-    }
-
-    /**
-     * Retrieve suggest collection for query
-     *
-     * @return Collection
-     */
-    public function getSuggestCollection()
-    {
-        return $this->_queryFactory->get()->getSuggestCollection();
     }
 
     /**
@@ -180,7 +168,7 @@ class Data extends AbstractHelper
      */
     public function getMinQueryLength($store = null)
     {
-        return $this->scopeConfig->getValue(
+        return $this->_scopeConfig->getValue(
             SearchQuery::XML_PATH_MIN_QUERY_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -195,7 +183,7 @@ class Data extends AbstractHelper
      */
     public function getMaxQueryLength($store = null)
     {
-        return $this->scopeConfig->getValue(
+        return $this->_scopeConfig->getValue(
             SearchQuery::XML_PATH_MAX_QUERY_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -276,34 +264,6 @@ class Data extends AbstractHelper
             }
         }
         return join($separator, array_filter($_index));
-    }
-
-    /**
-     * @return array
-     */
-    public function getSuggestData()
-    {
-        if (!$this->_suggestData) {
-            $collection = $this->getSuggestCollection();
-            $query = $this->_queryFactory->get()->getQueryText();
-            $counter = 0;
-            $data = [];
-            foreach ($collection as $item) {
-                $_data = [
-                    'title' => $item->getQueryText(),
-                    'row_class' => ++$counter % 2 ? 'odd' : 'even',
-                    'num_of_results' => $item->getNumResults(),
-                ];
-
-                if ($item->getQueryText() == $query) {
-                    array_unshift($data, $_data);
-                } else {
-                    $data[] = $_data;
-                }
-            }
-            $this->_suggestData = $data;
-        }
-        return $this->_suggestData;
     }
 
     /**

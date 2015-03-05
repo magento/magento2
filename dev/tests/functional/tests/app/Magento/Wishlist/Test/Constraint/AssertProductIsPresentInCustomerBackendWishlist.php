@@ -19,10 +19,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertProductIsPresentInCustomerBackendWishlist extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that products added to wishlist are present on Customers account on backend.
      *

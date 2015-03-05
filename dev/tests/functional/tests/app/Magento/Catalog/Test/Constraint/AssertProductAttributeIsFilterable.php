@@ -18,10 +18,6 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
  */
 class AssertProductAttributeIsFilterable extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Check whether the attribute filter is displayed on the frontend in Layered navigation.
      *

@@ -8,16 +8,16 @@ namespace Magento\Downloadable\Model\Product\CopyConstructor;
 class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $encoder;
+    protected $jsonHelper;
 
     /**
-     * @param \Magento\Core\Helper\Data $encoder
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      */
-    public function __construct(\Magento\Core\Helper\Data $encoder)
+    public function __construct(\Magento\Framework\Json\Helper\Data $jsonHelper)
     {
-        $this->encoder = $encoder;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -47,7 +47,7 @@ class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInte
                 'sample' => [
                     'type' => $linkData['sample_type'],
                     'url' => $linkData['sample_url'],
-                    'file' => $this->encoder->jsonEncode(
+                    'file' => $this->jsonHelper->jsonEncode(
                         [
                             [
                                 'file' => $linkData['sample_file'],
@@ -58,7 +58,7 @@ class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInte
                         ]
                     ),
                 ],
-                'file' => $this->encoder->jsonEncode(
+                'file' => $this->jsonHelper->jsonEncode(
                     [
                         [
                             'file' => $linkData['link_file'],
@@ -84,7 +84,7 @@ class Downloadable implements \Magento\Catalog\Model\Product\CopyConstructorInte
                 'sample_id' => null,
                 'title' => $sampleData['title'],
                 'type' => $sampleData['sample_type'],
-                'file' => $this->encoder->jsonEncode(
+                'file' => $this->jsonHelper->jsonEncode(
                     [
                         [
                             'file' => $sampleData['sample_file'],

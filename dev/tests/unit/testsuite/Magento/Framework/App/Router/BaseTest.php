@@ -15,7 +15,7 @@ class BaseTest extends \Magento\Test\BaseTestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
@@ -53,26 +53,7 @@ class BaseTest extends \Magento\Test\BaseTestCase
     {
         parent::setUp();
         // Create mocks
-        $requestMethods = [
-            'getActionName',
-            'getModuleName',
-            'getParam',
-            'setActionName',
-            'setModuleName',
-            'setRouteName',
-            'getPathInfo',
-            'getControllerName',
-            'setControllerName',
-            'setControllerModule',
-            'setAlias',
-            'getCookie',
-            'getOriginalPathInfo',
-            'getPostValue',
-            'isSecure',
-            'setParams',
-        ];
-
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', $requestMethods);
+        $this->requestMock = $this->basicMock('Magento\Framework\App\Request\Http');
         $this->routeConfigMock = $this->basicMock('Magento\Framework\App\Route\ConfigInterface');
         $this->appStateMock = $this->basicMock('Magento\Framework\App\State');
         $this->actionListMock = $this->basicMock('Magento\Framework\App\Router\ActionList');

@@ -11,7 +11,7 @@
  */
 namespace Magento\Multishipping\Helper;
 
-class Url extends \Magento\Core\Helper\Url
+class Url extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Retrieve shopping cart url
