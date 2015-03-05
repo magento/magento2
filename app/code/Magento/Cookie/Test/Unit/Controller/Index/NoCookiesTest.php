@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cookie\Controller\Index;
+namespace Magento\Cookie\Test\Unit\Controller\Index;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

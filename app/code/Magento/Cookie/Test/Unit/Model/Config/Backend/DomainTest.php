@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Cookie\Model\Config\Backend;
+namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
