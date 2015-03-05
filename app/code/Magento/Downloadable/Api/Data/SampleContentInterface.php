@@ -18,11 +18,27 @@ interface SampleContentInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getTitle();
 
     /**
+     * Set sample title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title);
+
+    /**
      * Retrieve sample type ('url' or 'file')
      *
      * @return string|null
      */
     public function getSampleType();
+
+    /**
+     * Set sample type ('url' or 'file')
+     *
+     * @param string $sampleType
+     * @return $this
+     */
+    public function setSampleType($sampleType);
 
     /**
      * Retrieve sample file content
@@ -32,6 +48,14 @@ interface SampleContentInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getSampleFile();
 
     /**
+     * Set sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFile
+     * @return $this
+     */
+    public function setSampleFile(\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFile = null);
+
+    /**
      * Retrieve sample sort order
      *
      * @return int
@@ -39,9 +63,25 @@ interface SampleContentInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getSortOrder();
 
     /**
+     * Set sample sort order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
+
+    /**
      * Retrieve sample URL
      *
      * @return string|null
      */
     public function getSampleUrl();
+
+    /**
+     * Set sample URL
+     *
+     * @param string $sampleUrl
+     * @return $this
+     */
+    public function setSampleUrl($sampleUrl);
 }

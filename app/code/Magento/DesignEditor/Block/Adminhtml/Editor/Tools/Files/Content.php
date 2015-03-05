@@ -47,6 +47,6 @@ class Content extends \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content
             ]
         );
 
-        return $this->_coreHelper->jsonEncode($setupObject);
+        return $this->jsonHelper->jsonEncode($setupObject);
     }
 }

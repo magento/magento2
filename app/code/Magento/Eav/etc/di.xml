@@ -33,13 +33,6 @@
             <argument name="modulePrefix" xsi:type="string">eav</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="eav_setup" xsi:type="string">Magento\Eav\Model\Entity\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">

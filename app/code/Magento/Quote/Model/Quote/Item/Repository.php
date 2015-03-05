@@ -27,25 +27,25 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Quote\Api\Data\CartItemDataBuilder
+     * @var \Magento\Quote\Api\Data\CartItemInterfaceFactory
      */
-    protected $itemDataBuilder;
+    protected $itemDataFactory;
 
     /**
      * Constructs a read service object.
      *
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Quote\Api\Data\CartItemDataBuilder $itemDataBuilder
+     * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Quote\Api\Data\CartItemDataBuilder $itemDataBuilder
+        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
-        $this->itemDataBuilder = $itemDataBuilder;
+        $this->itemDataFactory = $itemDataFactory;
     }
 
     /**
@@ -136,7 +136,10 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      */
     public function deleteById($cartId, $itemId)
     {
-        $item = $this->itemDataBuilder->setQuoteId($cartId)->setItemId($itemId)->create();
+        $item = $this->itemDataFactory->create()
+            ->setQuoteId($cartId)
+            ->setItemId($itemId);
+
         $this->delete($item);
         return true;
     }

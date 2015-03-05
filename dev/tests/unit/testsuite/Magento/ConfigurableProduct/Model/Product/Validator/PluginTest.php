@@ -25,7 +25,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $coreHelperMock;
+    protected $jsonHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -72,8 +72,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->coreHelperMock = $this->getMock('Magento\Core\Helper\Data', ['jsonDecode'], [], '', false);
-        $this->coreHelperMock->expects($this->any())->method('jsonDecode')->will($this->returnArgument(0));
+        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', ['jsonDecode'], [], '', false);
+        $this->jsonHelperMock->expects($this->any())->method('jsonDecode')->will($this->returnArgument(0));
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
             ['getData', 'getAttributes'],
@@ -104,7 +104,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->plugin = new \Magento\ConfigurableProduct\Model\Product\Validator\Plugin(
             $this->eventManagerMock,
             $this->productFactoryMock,
-            $this->coreHelperMock
+            $this->jsonHelperMock
         );
     }
 
@@ -115,7 +115,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Validator\Plugin',
             ['_validateProductVariations'],
-            [$this->eventManagerMock, $this->productFactoryMock, $this->coreHelperMock]
+            [$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock]
         );
 
         $plugin->expects(
@@ -161,7 +161,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Validator\Plugin',
             ['_validateProductVariations'],
-            [$this->eventManagerMock, $this->productFactoryMock, $this->coreHelperMock]
+            [$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock]
         );
 
         $plugin->expects(
