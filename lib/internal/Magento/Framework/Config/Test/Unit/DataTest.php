@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Config;
+namespace Magento\Framework\Config\Test\Unit;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Config\Converter;
+namespace Magento\Framework\Config\Test\Unit\Converter;
+
+use \Magento\Framework\Config\Converter\Dom;
 
 class DomTest extends \PHPUnit_Framework_TestCase
 {

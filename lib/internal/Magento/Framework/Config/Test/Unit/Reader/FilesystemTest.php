@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Config\Reader;
+namespace Magento\Framework\Config\Test\Unit\Reader;
+
+use \Magento\Framework\Config\Reader\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {

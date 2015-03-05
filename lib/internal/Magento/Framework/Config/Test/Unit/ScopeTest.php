@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Config;
+namespace Magento\Framework\Config\Test\Unit;
+
+use \Magento\Framework\Config\Scope;
 
 class ScopeTest extends \PHPUnit_Framework_TestCase
 {
