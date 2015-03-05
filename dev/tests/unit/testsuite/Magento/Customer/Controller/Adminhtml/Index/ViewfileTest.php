@@ -126,7 +126,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
-                    ['Magento\Core\Helper\File\Storage', $this->storage]
+                    ['Magento\MediaStorage\Helper\File\Storage', $this->storage]
                 ]
             );
 
@@ -176,7 +176,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
-                    ['Magento\Core\Helper\File\Storage', $this->storage]
+                    ['Magento\MediaStorage\Helper\File\Storage', $this->storage]
                 ]
             );
 
