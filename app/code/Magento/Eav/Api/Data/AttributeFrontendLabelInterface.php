@@ -6,19 +6,6 @@
  */
 namespace Magento\Eav\Api\Data;
 
-interface AttributeFrontendLabelInterface
+interface AttributeFrontendLabelInterface extends AttributeOptionLabelInterface
 {
-    /**
-     * Return store id
-     *
-     * @return int|null
-     */
-    public function getStoreId();
-
-    /**
-     * Return label
-     *
-     * @return string|null
-     */
-    public function getLabel();
 }

@@ -19,19 +19,19 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
         try {
             $this->taxClassRepository->deleteById($classId);
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 ['success' => true, 'error_message' => '']
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 ['success' => false, 'error_message' => $e->getMessage()]
             );
         } catch (\Exception $e) {
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 ['success' => false, 'error_message' => __('Something went wrong deleting this tax class.')]
             );

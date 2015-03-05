@@ -34,11 +34,6 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     protected $layout;
 
     /**
-     * @var \Magento\Core\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $coreHelper;
-
-    /**
      * @var \Magento\Framework\Json\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $jsonEncoder;
@@ -56,14 +51,12 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
-        $this->coreHelper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->jsonEncoder = $this->getMock('Magento\Framework\Json\EncoderInterface', [], [], '', false);
 
         $this->linksBlock = $objectManager->getObject(
             'Magento\Downloadable\Block\Catalog\Product\Links',
             [
                 'context' => $contextMock,
-                'coreData' => $this->coreHelper,
                 'encoder' => $this->jsonEncoder,
                 'data' => [
                     'product' => $this->productMock,

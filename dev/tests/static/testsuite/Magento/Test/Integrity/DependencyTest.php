@@ -311,9 +311,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $hard = $this->_getDependencies($currentModule, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
 
         $declared = $type == self::TYPE_SOFT ? array_merge($soft, $hard) : $hard;
-        if (!in_array($module, $declared) && !in_array($nsModule, $declared) && !$this->_isFake($module)) {
+        if (!in_array($module, $declared) && !in_array($nsModule, $declared) && !$this->_isFake($nsModule)) {
             $undeclared[$type][] = $module;
-        } elseif ((in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($module)) {
+        } elseif ((in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($nsModule)) {
             $this->_setDependencies($currentModule, $type, self::MAP_TYPE_REDUNDANT, $module);
         }
 
