@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Dhl\Model;
+namespace Magento\Dhl\Test\Unit\Model;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
