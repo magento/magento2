@@ -152,7 +152,7 @@ class Log extends \Magento\Framework\Object
             )
             ->limit(1);
 
-        $this->_data = $adapter->fetchRow($select);
+        $this->setData($adapter->fetchRow($select));
 
         return $this;
     }
