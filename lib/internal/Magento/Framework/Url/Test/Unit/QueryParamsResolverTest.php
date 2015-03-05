@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Url;
+namespace Magento\Framework\Url\Test\Unit;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

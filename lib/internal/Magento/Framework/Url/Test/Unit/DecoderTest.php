@@ -3,7 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Url;
+namespace Magento\Framework\Url\Test\Unit;
+
+use \Magento\Framework\Url\Decoder;
+use \Magento\Framework\Url\Encoder;
 
 class DecoderTest extends \PHPUnit_Framework_TestCase
 {
