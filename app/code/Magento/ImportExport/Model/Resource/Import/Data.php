@@ -20,26 +20,24 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
     /**
      * Helper to encode/decode json
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_jsonHelper;
+    protected $jsonHelper;
 
     /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param string|null $resourcePrefix
-     * @param array $arguments
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Core\Helper\Data $coreHelper,
-        $resourcePrefix = null,
-        array $arguments = []
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        $resourcePrefix = null
     ) {
         parent::__construct($context, $resourcePrefix);
-        $this->_jsonHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -138,7 +136,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
         }
         if ($this->_iterator->valid()) {
             $dataRow = $this->_iterator->current();
-            $dataRow = $this->_jsonHelper->jsonDecode($dataRow[0]);
+            $dataRow = $this->jsonHelper->jsonDecode($dataRow[0]);
             $this->_iterator->next();
         } else {
             $this->_iterator = null;
@@ -159,7 +157,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
     {
         return $this->_getWriteAdapter()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $this->_jsonHelper->jsonEncode($data)]
+            ['behavior' => $behavior, 'entity' => $entity, 'data' => $this->jsonHelper->jsonEncode($data)]
         );
     }
 }

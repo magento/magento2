@@ -22,11 +22,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     private $observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Helper\Data
-     */
-    private $coreData;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config
      */
     private $scopeConfig;
@@ -87,10 +82,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->coreData = $this->getMockBuilder('\Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config')
             ->disableOriginalConstructor()
             ->setMethods(['isSetFlag', 'getValue'])
@@ -151,7 +142,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->observer = (new ObjectManagerHelper($this))->getObject(
             '\Magento\Downloadable\Model\Observer',
             [
-                'coreData' => $this->coreData,
                 'scopeConfig' => $this->scopeConfig,
                 'purchasedFactory' => $this->purchasedFactory,
                 'productFactory' => $this->productFactory,

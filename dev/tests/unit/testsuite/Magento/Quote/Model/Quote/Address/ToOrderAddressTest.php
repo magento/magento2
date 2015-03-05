@@ -18,9 +18,9 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
     protected $objectCopyMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderAddressDataBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderAddressInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderAddressBuilderMock;
+    protected $orderAddressFactoryMock;
 
     /**
      * @var \Magento\Sales\Api\Data\OrderInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -32,23 +32,30 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $converter;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
     protected function setUp()
     {
-        $this->orderAddressBuilderMock = $this->getMock(
-            'Magento\Sales\Api\Data\OrderAddressDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->orderAddressFactoryMock = $this->getMock(
+            'Magento\Sales\Api\Data\OrderAddressInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
-        $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderInterface', [], [], '', false);
+        $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderAddressInterface', [], [], '', false);
+        $this->dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Quote\Address\ToOrderAddress',
             [
-                'orderAddressBuilder' => $this->orderAddressBuilderMock,
-                'objectCopyService' => $this->objectCopyMock
+                'orderAddressFactory' => $this->orderAddressFactoryMock,
+                'objectCopyService' => $this->objectCopyMock,
+                'dataObjectHelper' => $this->dataObjectHelper
             ]
         );
     }
@@ -66,10 +73,10 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
             'to_order_address',
             $object
         )->willReturn($orderData);
-        $this->orderAddressBuilderMock->expects($this->once())->method('populateWithArray')
-            ->with(['test' => 'beer'])
+        $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
+            ->with($this->orderInterfaceMock, ['test' => 'beer'], '\Magento\Sales\Api\Data\OrderAddressInterface')
             ->willReturnSelf();
-        $this->orderAddressBuilderMock->expects($this->once())
+        $this->orderAddressFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderInterfaceMock);
         $this->assertSame($this->orderInterfaceMock, $this->converter->convert($object, $data));

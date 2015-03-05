@@ -18,10 +18,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertDownloadableSamplesData extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * List downloadable sample links fields for verify
      *
