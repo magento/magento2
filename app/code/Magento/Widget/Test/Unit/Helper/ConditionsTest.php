@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Helper;
+namespace Magento\Widget\Test\Unit\Helper;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

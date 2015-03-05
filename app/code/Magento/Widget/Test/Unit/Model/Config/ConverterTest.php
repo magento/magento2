@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Config;
+namespace Magento\Widget\Test\Unit\Model\Config;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {

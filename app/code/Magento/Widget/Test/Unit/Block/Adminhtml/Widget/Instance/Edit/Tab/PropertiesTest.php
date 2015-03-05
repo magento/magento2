@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
+namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 class PropertiesTest extends \PHPUnit_Framework_TestCase
 {

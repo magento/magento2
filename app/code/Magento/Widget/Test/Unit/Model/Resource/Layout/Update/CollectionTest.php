@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Resource\Layout\Update;
+namespace Magento\Widget\Test\Unit\Model\Resource\Layout\Update;
 
-class CollectionTest extends \Magento\Widget\Model\Resource\Layout\AbstractTestCase
+class CollectionTest extends \Magento\Widget\Test\Unit\Model\Resource\Layout\AbstractTestCase
 {
     /**
      * Retrieve layout update collection instance

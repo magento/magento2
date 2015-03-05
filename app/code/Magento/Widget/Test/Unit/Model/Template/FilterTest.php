@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Template;
+namespace Magento\Widget\Test\Unit\Model\Template;
 
 use Magento\Store\Model\StoreManagerInterface;
 

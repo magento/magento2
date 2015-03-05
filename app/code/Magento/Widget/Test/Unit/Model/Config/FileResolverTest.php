@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Model\Config;
+namespace Magento\Widget\Test\Unit\Model\Config;
+
+use \Magento\Widget\Model\Config\FileResolver;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 

@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Widget\Model\Widget;
+namespace Magento\Widget\Test\Unit\Model\Widget;
 
 class InstanceTest extends \PHPUnit_Framework_TestCase
 {
