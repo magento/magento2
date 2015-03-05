@@ -5,15 +5,15 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-require __DIR__ . '/../../_files/ChildInterface.php';
-require __DIR__ . '/../../_files/DiParent.php';
-require __DIR__ . '/../../_files/Child.php';
-require __DIR__ . '/../../_files/Child/A.php';
-require __DIR__ . '/../../_files/Child/Circular.php';
-require __DIR__ . '/../../_files/Aggregate/AggregateInterface.php';
-require __DIR__ . '/../../_files/Aggregate/AggregateParent.php';
-require __DIR__ . '/../../_files/Aggregate/Child.php';
-require __DIR__ . '/../../_files/Aggregate/WithOptional.php';
+require __DIR__ . '/_files/ChildInterface.php';
+require __DIR__ . '/_files/DiParent.php';
+require __DIR__ . '/_files/Child.php';
+require __DIR__ . '/_files/Child/A.php';
+require __DIR__ . '/_files/Child/Circular.php';
+require __DIR__ . '/_files/Aggregate/AggregateInterface.php';
+require __DIR__ . '/_files/Aggregate/AggregateParent.php';
+require __DIR__ . '/_files/Aggregate/Child.php';
+require __DIR__ . '/_files/Aggregate/WithOptional.php';
 
 class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 {

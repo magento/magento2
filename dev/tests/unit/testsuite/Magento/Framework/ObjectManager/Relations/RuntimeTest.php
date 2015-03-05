@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Relations;
 
-require_once __DIR__ . '/../../../_files/Child.php';
+require_once __DIR__ . '/../_files/Child.php';
 class RuntimeTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -22,7 +22,7 @@ class TreeBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\Framework\Acl\Resource\TreeBuilder();
-        $this->_fixturePath = realpath(__DIR__ . '/../../') . '/_files/Acl/Resource/';
+        $this->_fixturePath = realpath(__DIR__ . '/../') . '/_files/';
     }
 
     public function testBuild()
