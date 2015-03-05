@@ -124,13 +124,13 @@ class ShippingMethodManagementTest extends WebapiAbstract
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $data = [
-            ShippingMethodInterface::CARRIER_CODE => $carrierCode,
-            ShippingMethodInterface::METHOD_CODE => $methodCode,
-            ShippingMethodInterface::CARRIER_TITLE => $carrierTitle,
-            ShippingMethodInterface::METHOD_TITLE => $methodTitle,
-            ShippingMethodInterface::SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
-            ShippingMethodInterface::BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
-            ShippingMethodInterface::AVAILABLE => true,
+            ShippingMethodInterface::KEY_CARRIER_CODE => $carrierCode,
+            ShippingMethodInterface::KEY_METHOD_CODE => $methodCode,
+            ShippingMethodInterface::KEY_CARRIER_TITLE => $carrierTitle,
+            ShippingMethodInterface::KEY_METHOD_TITLE => $methodTitle,
+            ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
+            ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
+            ShippingMethodInterface::KEY_AVAILABLE => true,
         ];
 
         $requestData = ["cartId" => $cartId];
