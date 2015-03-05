@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Fedex\Model;
+namespace Magento\Fedex\Test\Unit\Model;
 
 use Magento\Framework\Object;
 
