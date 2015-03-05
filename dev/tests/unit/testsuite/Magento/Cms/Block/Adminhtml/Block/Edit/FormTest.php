@@ -5,6 +5,9 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Edit;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -152,7 +155,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->viewFileSystem = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
         $this->logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
         $this->rootDirectory = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false
+            'Magento\Framework\Filesystem\Directory\ReadInterface',
+            [],
+            [],
+            '',
+            false
         );
         $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
 
