@@ -40,7 +40,7 @@ class SelectConfigOption extends AbstractConfigOption
         $frontendType,
         array $selectOptions,
         $description = '',
-        $defaultValue = '',
+        $defaultValue = null,
         $shortCut = null
     ) {
         if ($frontendType != self::FRONTEND_WIZARD_SELECT && $frontendType != self::FRONTEND_WIZARD_RADIO) {
