@@ -15,6 +15,8 @@ use Magento\Framework\Filesystem;
 class PreProcessor implements PreProcessorInterface
 {
     /**
+     * Javascript translation configuration
+     *
      * @var Config
      */
     protected $config;
@@ -55,10 +57,12 @@ class PreProcessor implements PreProcessorInterface
     }
 
     /**
+     * Replace callback for preg_replace_callback function
+     *
      * @param array $matches
      * @return string
      */
-    public function replaceCallback($matches)
+    protected function replaceCallback($matches)
     {
         return '"' . __($matches[1]) . '"';
     }

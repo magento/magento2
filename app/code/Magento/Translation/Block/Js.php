@@ -35,8 +35,8 @@ class Js extends Template
      *
      * @return bool
      */
-    public function isDictionaryStrategy()
+    public function dictionaryEnabled()
     {
-        return $this->config->isDictionaryStrategy();
+        return $this->config->dictionaryEnabled();
     }
 }

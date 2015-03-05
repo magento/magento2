@@ -5,12 +5,13 @@
  */
 namespace Magento\Translation\Model\Js;
 
+use Magento\Framework\Translate\Js\Config as FrameworkJsConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Js Translation config
  */
-class Config
+class Config extends FrameworkJsConfig
 {
     /**
      * Strategy when all js files are translated while publishing
@@ -50,10 +51,14 @@ class Config
      * @param ScopeConfigInterface $scopeConfig
      * @param string[] $patterns
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, $patterns)
+    public function __construct(ScopeConfigInterface $scopeConfig, array $patterns)
     {
         $this->scopeConfig = $scopeConfig;
         $this->patterns = $patterns;
+        parent::__construct(
+            $this->scopeConfig->getValue(self::XML_PATH_STRATEGY) == self::DICTIONARY_STRATEGY,
+            self::DICTIONARY_FILE_NAME
+        );
     }
 
     /**
@@ -71,7 +76,7 @@ class Config
      *
      * @return bool
      */
-    public function isDictionaryStrategy()
+    public function dictionaryEnabled()
     {
         return ($this->scopeConfig->getValue(self::XML_PATH_STRATEGY) == self::DICTIONARY_STRATEGY);
     }

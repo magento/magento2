@@ -11,7 +11,7 @@ use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Translation\Model\Js\Config as JsTranslationConfig;
+use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -125,8 +125,14 @@ class Deployer
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);
                     }
-                    if ($this->jsTranslationConfig->isDictionaryStrategy()) {
-                        $this->deployFile(JsTranslationConfig::DICTIONARY_FILE_NAME, $area, $themePath, $locale, null);
+                    if ($this->jsTranslationConfig->dictionaryEnabled()) {
+                        $this->deployFile(
+                            $this->jsTranslationConfig->getDictionaryFileName(),
+                            $area,
+                            $themePath,
+                            $locale,
+                            null
+                        );
                     }
                     $this->logger->logMessage("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
