@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Rss\Model;
+namespace Magento\Rss\Test\Unit\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

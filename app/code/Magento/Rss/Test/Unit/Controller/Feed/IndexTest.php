@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Rss\Controller\Feed;
+namespace Magento\Rss\Test\Unit\Controller\Feed;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
