@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Api\Code\Generator;
+namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
 {

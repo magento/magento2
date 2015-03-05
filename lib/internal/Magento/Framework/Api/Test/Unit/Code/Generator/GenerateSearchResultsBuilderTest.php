@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Code\Generator;
+namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 
 /**
- * Class SearchResultTest
+ * Class SearchResultBuilderTest
  */
-class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
+class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,13 +31,14 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generate SearchResult class
+     * generate SearchResultBuilder class
      */
     public function testGenerate()
     {
         require_once __DIR__ . '/_files/Sample.php';
+        /** @var \Magento\Framework\Api\Code\Generator\SearchResultsBuilder $model */
         $model = $this->getMock(
-            'Magento\Framework\Api\Code\Generator\SearchResults',
+            'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
             [
                 '_validateData'
             ],
@@ -50,18 +51,18 @@ class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Filesystem\FileResolver')
             ]
         );
-        $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResults.txt');
+        $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResultsBuilder.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('getResultFileName')
-            ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResults')
-            ->will($this->returnValue('SampleSearchResults.php'));
+            ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResultsBuilder')
+            ->will($this->returnValue('SampleSearchResultsBuilder.php'));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
-            ->with('SampleSearchResults.php', $sampleSearchResultBuilderCode);
+            ->with('SampleSearchResultsBuilder.php', $sampleSearchResultBuilderCode);
 
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertEquals('SampleSearchResults.php', $model->generate());
+        $this->assertEquals('SampleSearchResultsBuilder.php', $model->generate(), implode("\n", $model->getErrors()));
     }
 }

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Data;
+namespace Magento\Framework\Api\Test\Unit\Data;
 
 use Magento\Framework\Api\AttributeValue;
 

@@ -3,12 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Code\Generator;
+namespace Magento\Framework\Api\Test\Unit\Code\Generator;
+
 
 /**
- * Class MapperTest
+ * Class SearchResultTest
  */
-class GenerateMapperTest extends \PHPUnit_Framework_TestCase
+class GenerateSearchResultsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -16,7 +17,7 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
     protected $ioObjectMock;
 
     /**
-     * Prepare test env
+     * Create mock for class \Magento\Framework\Code\Generator\Io
      */
     protected function setUp()
     {
@@ -30,13 +31,13 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create mock for class \Magento\Framework\Code\Generator\Io
+     * Generate SearchResult class
      */
     public function testGenerate()
     {
         require_once __DIR__ . '/_files/Sample.php';
         $model = $this->getMock(
-            'Magento\Framework\Api\Code\Generator\Mapper',
+            'Magento\Framework\Api\Code\Generator\SearchResults',
             [
                 '_validateData'
             ],
@@ -49,18 +50,18 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Filesystem\FileResolver')
             ]
         );
-        $sampleMapperCode = file_get_contents(__DIR__ . '/_files/SampleMapper.txt');
+        $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResults.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('getResultFileName')
-            ->with('\Magento\Framework\Api\Code\Generator\SampleMapper')
-            ->will($this->returnValue('SampleMapper.php'));
+            ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResults')
+            ->will($this->returnValue('SampleSearchResults.php'));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
-            ->with('SampleMapper.php', $sampleMapperCode);
+            ->with('SampleSearchResults.php', $sampleSearchResultBuilderCode);
 
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertEquals('SampleMapper.php', $model->generate());
+        $this->assertEquals('SampleSearchResults.php', $model->generate());
     }
 }

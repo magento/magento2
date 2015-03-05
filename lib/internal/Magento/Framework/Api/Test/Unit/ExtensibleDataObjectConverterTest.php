@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Api;
+namespace Magento\Framework\Api\Test\Unit;
 
 use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Api\AttributeValue;
 
 class ExtensibleDataObjectConverterTest extends \PHPUnit_Framework_TestCase
 {

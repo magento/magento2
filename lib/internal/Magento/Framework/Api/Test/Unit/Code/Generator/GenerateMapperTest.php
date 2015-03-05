@@ -3,13 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Api\Code\Generator;
-
+namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 /**
- * Class SearchResultBuilderTest
+ * Class MapperTest
  */
-class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
+class GenerateMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -17,7 +16,7 @@ class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
     protected $ioObjectMock;
 
     /**
-     * Create mock for class \Magento\Framework\Code\Generator\Io
+     * Prepare test env
      */
     protected function setUp()
     {
@@ -31,14 +30,13 @@ class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * generate SearchResultBuilder class
+     * Create mock for class \Magento\Framework\Code\Generator\Io
      */
     public function testGenerate()
     {
         require_once __DIR__ . '/_files/Sample.php';
-        /** @var \Magento\Framework\Api\Code\Generator\SearchResultsBuilder $model */
         $model = $this->getMock(
-            'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
+            'Magento\Framework\Api\Code\Generator\Mapper',
             [
                 '_validateData'
             ],
@@ -51,18 +49,18 @@ class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Filesystem\FileResolver')
             ]
         );
-        $sampleSearchResultBuilderCode = file_get_contents(__DIR__ . '/_files/SampleSearchResultsBuilder.txt');
+        $sampleMapperCode = file_get_contents(__DIR__ . '/_files/SampleMapper.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('getResultFileName')
-            ->with('\Magento\Framework\Api\Code\Generator\SampleSearchResultsBuilder')
-            ->will($this->returnValue('SampleSearchResultsBuilder.php'));
+            ->with('\Magento\Framework\Api\Code\Generator\SampleMapper')
+            ->will($this->returnValue('SampleMapper.php'));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
-            ->with('SampleSearchResultsBuilder.php', $sampleSearchResultBuilderCode);
+            ->with('SampleMapper.php', $sampleMapperCode);
 
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertEquals('SampleSearchResultsBuilder.php', $model->generate(), implode("\n", $model->getErrors()));
+        $this->assertEquals('SampleMapper.php', $model->generate());
     }
 }
