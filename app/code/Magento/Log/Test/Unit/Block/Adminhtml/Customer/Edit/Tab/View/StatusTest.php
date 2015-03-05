@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View;
+namespace Magento\Log\Test\Unit\Block\Adminhtml\Customer\Edit\Tab\View;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

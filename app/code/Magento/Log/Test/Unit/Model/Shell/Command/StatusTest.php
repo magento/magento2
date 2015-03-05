@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Log\Model\Shell\Command;
+namespace Magento\Log\Test\Unit\Model\Shell\Command;
 
 class StatusTest extends \PHPUnit_Framework_TestCase
 {
