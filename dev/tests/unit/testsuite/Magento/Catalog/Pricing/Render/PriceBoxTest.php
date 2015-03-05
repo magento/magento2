@@ -17,9 +17,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $coreHelper;
+    protected $jsonHelperMock;
 
     /**
      * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
@@ -28,14 +28,14 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->coreHelper = $this->getMock('Magento\Core\Helper\Data', ['jsonEncode'], [], '', false);
+        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', ['jsonEncode'], [], '', false);
         $this->mathRandom = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
             'Magento\Catalog\Pricing\Render\PriceBox',
             [
-                'coreDataHelper' => $this->coreHelper,
+                'jsonHelper' => $this->jsonHelperMock,
                 'mathRandom' => $this->mathRandom,
             ]
         );
@@ -45,7 +45,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $expectedValue = 'string';
 
-        $this->coreHelper->expects($this->once())
+        $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
             ->with($this->equalTo($expectedValue))
             ->will($this->returnValue($expectedValue));

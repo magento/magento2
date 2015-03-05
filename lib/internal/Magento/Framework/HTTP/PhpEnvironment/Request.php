@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Zend\Http\Header\HeaderInterface;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ParametersInterface;
@@ -66,11 +67,21 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     protected $dispatched = false;
 
+
     /**
+     * @var CookieReaderInterface
+     */
+    protected $cookieReader;
+
+    /**
+     * @param CookieReaderInterface $cookieReader
      * @param UriInterface|string|null $uri
      */
-    public function __construct($uri = null)
-    {
+    public function __construct(
+        CookieReaderInterface $cookieReader,
+        $uri = null
+    ) {
+        $this->cookieReader = $cookieReader;
         if (null !== $uri) {
             if (!$uri instanceof UriInterface) {
                 $uri = UriFactory::factory($uri);
@@ -371,6 +382,18 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function isSecure()
     {
         return ($this->getScheme() == self::SCHEME_HTTPS);
+    }
+
+    /**
+     * Retrieve a value from a cookie.
+     *
+     * @param string|null $name
+     * @param string|null $default The default value to return if no value could be found for the given $name.
+     * @return string|null
+     */
+    public function getCookie($name = null, $default = null)
+    {
+        return $this->cookieReader->getCookie($name, $default);
     }
 
     /**
