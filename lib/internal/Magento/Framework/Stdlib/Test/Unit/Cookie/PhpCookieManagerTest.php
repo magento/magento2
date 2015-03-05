@@ -11,7 +11,9 @@ namespace {
     $mockTranslateSetCookie = false;
 }
 
-namespace Magento\Framework\Stdlib\Cookie {
+namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
+
+use \Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     // @codingStandardsIgnoreEnd
     use Magento\Framework\Exception\InputException;
 

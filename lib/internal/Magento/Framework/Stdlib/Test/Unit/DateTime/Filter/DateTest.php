@@ -3,9 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Stdlib\DateTime\Filter;
+namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
-class DateTimeTest extends \PHPUnit_Framework_TestCase
+use \Magento\Framework\Stdlib\DateTime\Filter\Date;
+
+class DateTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilter()
     {
@@ -13,14 +15,14 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
         $localeMock->expects(
             $this->once()
         )->method(
-            'getDateTimeFormat'
+            'getDateFormat'
         )->with(
             \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
         )->will(
-            $this->returnValue('HH:mm:ss MM-dd-yyyy')
+            $this->returnValue('MM-dd-yyyy')
         );
-        $model = new DateTime($localeMock);
-        // Check that datetime is converted to 'yyyy-MM-dd HH:mm:ss' format
-        $this->assertEquals('2241-12-31 23:59:53', $model->filter('23:59:53 12-31-2241'));
+        $model = new Date($localeMock);
+        // Check that date is converted to 'yyyy-MM-dd' format
+        $this->assertEquals('2241-12-31', $model->filter('12-31-2241'));
     }
 }

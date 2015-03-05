@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Stdlib\DateTime\Timezone;
+namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Timezone;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

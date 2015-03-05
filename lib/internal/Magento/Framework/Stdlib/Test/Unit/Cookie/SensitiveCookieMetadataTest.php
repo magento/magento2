@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Stdlib\Cookie;
+namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
+
+use \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

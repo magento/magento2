@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Stdlib\Cookie;
+namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
+
+use \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 
 use Magento\TestFramework\Helper\ObjectManager;
 

@@ -7,7 +7,7 @@
 /**
  * \Magento\Framework\Stdlib\DateTime test case
  */
-namespace Magento\Framework\Stdlib;
+namespace Magento\Framework\Stdlib\Test\Unit;
 
 class DateTimeTest extends \PHPUnit_Framework_TestCase
 {
