@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Filesystem\Driver;
+namespace Magento\Framework\Filesystem\Test\Unit\Driver;
+
+use \Magento\Framework\Filesystem\Driver\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -141,14 +143,4 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         self::$fsockopen = $fsockopenResult;
         $this->assertEquals($fsockopenResult, (new Http())->fileOpen('example.com', 'r'));
     }
-}
-
-/**
- * Override standard function
- *
- * @return array
- */
-function get_headers()
-{
-    return HttpTest::$headers;
 }

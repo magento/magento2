@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Filesystem;
+namespace Magento\Framework\Filesystem\Test\Unit;
+
+use \Magento\Framework\Filesystem\DriverPool;
 
 class DriverPoolTest extends \PHPUnit_Framework_TestCase
 {

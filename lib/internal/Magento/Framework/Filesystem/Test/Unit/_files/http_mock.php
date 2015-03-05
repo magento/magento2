@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
+use Magento\Framework\Filesystem\Test\Unit\Driver\HttpTest;
+
 /**
  * Override standard function
  *
@@ -54,4 +56,14 @@ function fwrite()
 function feof()
 {
     return true;
+}
+
+/**
+ * Override standard function
+ *
+ * @return array
+ */
+function get_headers()
+{
+    return HttpTest::$headers;
 }

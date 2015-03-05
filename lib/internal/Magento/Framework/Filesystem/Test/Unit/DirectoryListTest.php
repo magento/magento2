@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Filesystem;
+namespace Magento\Framework\Filesystem\Test\Unit;
+
+use \Magento\Framework\Filesystem\DirectoryList;
 
 class DirectoryListTest extends \PHPUnit_Framework_TestCase
 {
