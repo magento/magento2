@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Model\Authorization;
+namespace Magento\User\Test\Unit\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 

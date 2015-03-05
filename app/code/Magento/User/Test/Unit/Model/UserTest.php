@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Model;
+namespace Magento\User\Test\Unit\Model;
 
 /**
  * Test class for \Magento\User\Model\User testing
