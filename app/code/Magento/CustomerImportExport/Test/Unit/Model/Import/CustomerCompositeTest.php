@@ -6,8 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\CustomerImportExport\Model\Import;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
+use Magento\CustomerImportExport\Model\Import\CustomerComposite;
+use Magento\CustomerImportExport\Model\Import\Customer;
+use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\ImportExport\Model\Import;
@@ -157,7 +160,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createModelMock($data)
     {
-        return new CustomerComposite(
+        return new \Magento\CustomerImportExport\Model\Import\CustomerComposite(
             $this->_string,
             $this->_scopeConfigMock,
             $this->_importFactory,

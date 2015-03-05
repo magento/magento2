@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CustomerImportExport\Model\Import;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
+use Magento\CustomerImportExport\Model\Import\Address;
 
 /**
  * Class AddressTest
@@ -418,7 +419,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function _getModelMock()
     {
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $modelMock = new Address(
+        $modelMock = new \Magento\CustomerImportExport\Model\Import\Address(
             $this->_stringLib,
             $scopeConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false),

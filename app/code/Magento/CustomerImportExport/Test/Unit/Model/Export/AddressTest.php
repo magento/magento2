@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CustomerImportExport\Model\Export;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Export;
+
+use Magento\CustomerImportExport\Model\Export\Address;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -117,7 +119,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
 
-        /** @var $attributeCollection \Magento\Framework\Data\Collection|PHPUnit_Framework_TestCase */
+        /** @var $attributeCollection \Magento\Framework\Data\Collection|\PHPUnit_Framework_TestCase */
         $attributeCollection = $this->getMock(
             'Magento\Framework\Data\Collection',
             ['getEntityTypeCode'],

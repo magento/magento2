@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CustomerImportExport\Model\Export;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Export;
+
+use Magento\CustomerImportExport\Model\Export\Customer;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,7 +71,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'getStores'])
         );
 
-        $this->_model = new Customer(
+        $this->_model = new \Magento\CustomerImportExport\Model\Export\Customer(
             $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),

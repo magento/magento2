@@ -9,14 +9,16 @@
 /**
  * Test class for \Magento\CustomerImportExport\Model\Import\Customer
  */
-namespace Magento\CustomerImportExport\Model\Import;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
+
+use Magento\CustomerImportExport\Model\Import\Customer;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Customer entity import model
      *
-     * @var Customer|PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -74,7 +76,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create mock for import with custom behavior test
      *
-     * @return Customer|PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getModelMockForTestImportDataWithCustomBehaviour()
     {
@@ -191,7 +193,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $entitiesToCreate
      * @param array $entitiesToUpdate
-     * @return Customer|PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
      */
     public function validateSaveCustomerEntities(array $entitiesToCreate, array $entitiesToUpdate)
     {
@@ -206,7 +208,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      * Validation method for _deleteCustomerEntities
      *
      * @param array $customerIdsToDelete
-     * @return Customer|PHPUnit_Framework_MockObject_MockObject
+     * @return Customer|\PHPUnit_Framework_MockObject_MockObject
      */
     public function validateDeleteCustomerEntities(array $customerIdsToDelete)
     {

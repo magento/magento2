@@ -7,14 +7,16 @@
 /**
  * Test class for \Magento\CustomerImportExport\Model\Import\AbstractCustomer
  */
-namespace Magento\CustomerImportExport\Model\Import;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
+
+use Magento\CustomerImportExport\Model\Import\AbstractCustomer;
 
 class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Abstract customer export model
      *
-     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -62,7 +64,7 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create mock for abstract customer model class
      *
-     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CustomerImportExport\Model\Import\AbstractCustomer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function _getModelMock()
     {

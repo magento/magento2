@@ -7,7 +7,7 @@
 /**
  * Test class for \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data
  */
-namespace Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite;
+namespace Magento\CustomerImportExport\Test\Unit\Model\Resource\Import\CustomerComposite;
 
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\Import\CustomerComposite;
