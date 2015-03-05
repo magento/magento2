@@ -13,7 +13,7 @@ interface OptionTypesListInterface
      *
      * @return string[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function getItems();
 }

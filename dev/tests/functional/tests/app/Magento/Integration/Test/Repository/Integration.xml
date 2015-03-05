@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Integration\Test\Repository\Integration">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Integration\Test\Repository\Integration">
         <dataset name="default_with_all_resources">
             <field name="name" xsi:type="string">default_integration_%isolation%</field>
             <field name="email" xsi:type="string">test_%isolation%@example.com</field>
@@ -25,5 +25,5 @@
                 <item name="10" xsi:type="string">Global Search</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
