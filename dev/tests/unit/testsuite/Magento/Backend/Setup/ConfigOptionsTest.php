@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Setup;
 
+use Magento\Framework\Config\Data\ConfigData;
+
 class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -20,16 +22,27 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
+        $this->assertInternalType('array', $options);
         foreach ($options as $option) {
-            $this->assertInstanceOf('\Magento\Framework\Setup\AbstractConfigOption', $option);
+            $this->assertInstanceOf('\Magento\Framework\Setup\Option\AbstractConfigOption', $option);
         }
     }
 
     public function testCreateConfig()
     {
         $options = [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
-        $expected = ['backend' => ['frontName' => 'admin']];
-        $this->assertSame($expected, $this->object->createConfig($options));
+        $actualConfig = $this->object->createConfig($options);
+        $expectedData = [
+            ['file' => ConfigData::DEFAULT_FILE_KEY, 'segment' => 'backend', 'data' => ['frontName' => 'admin']]
+        ];
+        $this->assertInternalType('array', $actualConfig);
+        /** @var \Magento\Framework\Config\Data\ConfigData $config */
+        foreach ($actualConfig as $i => $config) {
+            $this->assertInstanceOf('\Magento\Framework\Config\Data\ConfigData', $config);
+            $this->assertSame($expectedData[$i]['file'], $config->getFileKey());
+            $this->assertSame($expectedData[$i]['segment'], $config->getSegmentKey());
+            $this->assertSame($expectedData[$i]['data'], $config->getData());
+        }
     }
 
     /**

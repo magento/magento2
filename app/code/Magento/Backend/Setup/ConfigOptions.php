@@ -5,6 +5,7 @@
  */
 namespace Magento\Backend\Setup;
 
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
@@ -43,7 +44,6 @@ class ConfigOptions implements ConfigOptionsInterface
      */
     public function createConfig(array $options)
     {
-        $config = [];
         if (empty($options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
             throw new \InvalidArgumentException('No backend frontname provided.');
         }
@@ -52,7 +52,10 @@ class ConfigOptions implements ConfigOptionsInterface
                 "Invalid backend frontname {$options[self::INPUT_KEY_BACKEND_FRONTNAME]}"
             );
         }
-        $config['backend']['frontName'] = $options[self::INPUT_KEY_BACKEND_FRONTNAME];
-        return $config;
+        return [new ConfigData(
+            ConfigData::DEFAULT_FILE_KEY,
+            'backend',
+            ['frontName' => $options[self::INPUT_KEY_BACKEND_FRONTNAME]]
+        )];
     }
 }
