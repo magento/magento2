@@ -12,38 +12,14 @@ namespace {
 }
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
-
-use \Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     // @codingStandardsIgnoreEnd
+    use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     use Magento\Framework\Exception\InputException;
-
-    /**
-     * Mock global setcookie function
-     *
-     * @param string $name
-     * @param string $value
-     * @param int $expiry
-     * @param string $path
-     * @param string $domain
-     * @param bool $secure
-     * @param bool $httpOnly
-     * @return bool
-     */
-    function setcookie($name, $value, $expiry, $path, $domain, $secure, $httpOnly)
-    {
-        global $mockTranslateSetCookie;
-
-        if (isset($mockTranslateSetCookie) && $mockTranslateSetCookie === true) {
-            PhpCookieManagerTest::$isSetCookieInvoked = true;
-            return PhpCookieManagerTest::assertCookie($name, $value, $expiry, $path, $domain, $secure, $httpOnly);
-        } else {
-            return call_user_func_array(__FUNCTION__, func_get_args());
-        }
-    }
+    use Magento\Framework\Stdlib\Cookie\FailureToSendException;
+    use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 
     /**
      * Test PhpCookieManager
-     *
      */
     class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
     {
@@ -126,6 +102,7 @@ use \Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
         protected function setUp()
         {
+            require_once __DIR__ . '/_files/setcookie_mock.php';
             $this->cookieArray = $_COOKIE;
             global $mockTranslateSetCookie;
             $mockTranslateSetCookie = true;
