@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Autoload;
+namespace Magento\Framework\Autoload\Test\Unit;
 
 use Composer\Autoload\ClassLoader;
 use Magento\TestFramework\Helper\ObjectManager;
