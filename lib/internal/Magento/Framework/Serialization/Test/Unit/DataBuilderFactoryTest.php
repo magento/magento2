@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Serialization;
+namespace Magento\Framework\Serialization\Test\Unit;
+
+use \Magento\Framework\Serialization\DataBuilderFactory;
 
 use Magento\Framework\ObjectManagerInterface;
 
