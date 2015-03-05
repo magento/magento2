@@ -8,13 +8,13 @@ namespace Magento\Framework\Webapi;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\ServiceInputProcessor\DataArray;
-use Magento\Webapi\Service\Entity\DataArrayData;
+use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\ServiceInputProcessor\Nested;
-use Magento\Webapi\Service\Entity\NestedData;
+use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
 use Magento\Framework\Webapi\ServiceInputProcessor\Simple;
 use Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray;
-use Magento\Webapi\Service\Entity\SimpleArrayData;
-use Magento\Webapi\Service\Entity\SimpleData;
+use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
+use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
 use Magento\Framework\Webapi\ServiceInputProcessor\TestService;
 
 class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
