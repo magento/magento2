@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Reflection;
+namespace Magento\Framework\Reflection\Test\Unit;
+
+use \Magento\Framework\Reflection\AttributeTypeResolver;
 
 class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
 {
