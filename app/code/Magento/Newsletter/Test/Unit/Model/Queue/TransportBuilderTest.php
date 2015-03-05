@@ -5,7 +5,7 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model\Queue;
 
-class TransportBuilderTest extends \Magento\Framework\Mail\Template\TransportBuilderTest
+class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\TransportBuilderTest
 {
     /**
      * @var string

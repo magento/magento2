@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Mail;
+namespace Magento\Framework\Mail\Test\Unit;
 
 class MessageTest extends \PHPUnit_Framework_TestCase
 {
