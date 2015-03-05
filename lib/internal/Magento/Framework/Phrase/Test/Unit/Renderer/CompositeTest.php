@@ -6,7 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Phrase\Renderer;
+namespace Magento\Framework\Phrase\Test\Unit\Renderer;
+
+use \Magento\Framework\Phrase\Renderer\Composite;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {
