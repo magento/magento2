@@ -1,3 +1,15 @@
+HTTP/1.1 100 Continue
+Set-Cookie: ...
+
+HTTP/1.1 100 Continue
+Set-Cookie: ...
+
+HTTP/1.1 101 Continue
+Set-Cookie: ...
+
+HTTP/1.1 100 Continue
+Set-Cookie: ...
+
 HTTP/1.1 200 OK
 Server: Apache
 X-Frame-Options: SAMEORIGIN
