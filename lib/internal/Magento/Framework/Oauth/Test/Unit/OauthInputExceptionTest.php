@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Oauth;
+namespace Magento\Framework\Oauth\Test\Unit;
+
+use \Magento\Framework\Oauth\OauthInputException;
 
 class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
 {
