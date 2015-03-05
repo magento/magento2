@@ -3099,4 +3099,5 @@ return [
     ['Magento\Framework\Module\Updater'],
     ['Magento\Setup\Module\SetupFactory'],
     ['Magento\Framework\Module\Updater\SetupFactory'],
+    ['Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View\Status'],
 ];
