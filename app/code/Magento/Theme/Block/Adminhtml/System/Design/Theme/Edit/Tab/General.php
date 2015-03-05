@@ -102,8 +102,8 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
         /** @var \Magento\Theme\Model\Theme\Collection $themesCollections */
         $themesCollections = $this->_objectManager->create('Magento\Theme\Model\Theme\Collection');
 
-        /** @var \Magento\Core\Helper\Data $helper */
-        $helper = $this->_objectManager->get('Magento\Core\Helper\Data');
+        /** @var \Magento\Framework\Json\Helper\Data $helper */
+        $helper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
 
         $onChangeScript = sprintf(
             'parentThemeOnChange(this.value, %s)',

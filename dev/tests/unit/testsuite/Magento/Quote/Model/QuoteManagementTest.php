@@ -29,9 +29,9 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     protected $eventManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderDataBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderBuilder;
+    protected $orderFactory;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\ToOrder|\PHPUnit_Framework_MockObject_MockObject
@@ -89,13 +89,9 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteValidator = $this->getMock('Magento\Quote\Model\QuoteValidator', [], [], '', false);
         $this->eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface');
-        $this->orderBuilder = $this->getMock(
-            'Magento\Sales\Api\Data\OrderDataBuilder',
-            [
-                'populate', 'setShippingAddress', 'setBillingAddress', 'setAddresses', 'setPayments',
-                'setItems', 'setCustomerId', 'setQuoteId', 'create', 'setCustomerEmail', 'setCustomerFirstname',
-                'setCustomerMiddlename', 'setCustomerLastname'
-            ],
+        $this->orderFactory = $this->getMock(
+            'Magento\Sales\Api\Data\OrderInterfaceFactory',
+            [ 'create' ],
             [],
             '',
             false
@@ -142,12 +138,14 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\QuoteManagement',
             [
                 'quoteValidator' => $this->quoteValidator,
                 'eventManager' => $this->eventManager,
-                'orderBuilder' => $this->orderBuilder,
+                'orderFactory' => $this->orderFactory,
                 'orderManagement' => $this->orderManagement,
                 'customerManagement' => $this->customerManagement,
                 'quoteAddressToOrder' => $this->quoteAddressToOrder,
@@ -158,6 +156,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'userContext' => $this->userContextMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
+                'dataObjectHelper' => $dataObjectHelper,
             ]
         );
     }
@@ -550,7 +549,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($payment)
             ->willReturn($convertedPayment);
 
-        $order = $this->prepareOrderBuilder(
+        $order = $this->prepareOrderFactory(
             $baseOrder,
             $convertedBillingAddress,
             $addresses,
@@ -650,50 +649,43 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         return $quote;
     }
 
-    protected function prepareOrderBuilder(
+    protected function prepareOrderFactory(
         \Magento\Sales\Api\Data\OrderInterface $baseOrder,
         \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress,
         array $addresses,
         array $payments,
         array $items,
         $quoteId,
-        \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null,
-        $customerId = null
+        \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null
     ) {
-        $this->orderBuilder->expects($this->once())
-            ->method('populate')
-            ->with($baseOrder);
-        if ($shippingAddress) {
-            $this->orderBuilder->expects($this->once())
-                ->method('setShippingAddress')
-                ->with($shippingAddress);
-        }
-        $this->orderBuilder->expects($this->once())
-            ->method('setBillingAddress')
-            ->with($billingAddress);
-        $this->orderBuilder->expects($this->once())
-            ->method('setAddresses')
-            ->with($addresses);
-        $this->orderBuilder->expects($this->once())
-            ->method('setPayments')
-            ->with($payments);
-        $this->orderBuilder->expects($this->once())
-            ->method('setItems')
-            ->with($items);
-        if ($customerId) {
-            $this->orderBuilder->expects($this->once())
-                ->method('setCustomerId')
-                ->with($customerId);
-        }
-        $this->orderBuilder->expects($this->once())
-            ->method('setQuoteId')
-            ->with($quoteId);
+        $order = $this->getMock(
+            'Magento\Sales\Model\Order',
+            ['setShippingAddress', 'getAddressesCollection', 'getAddresses', 'getBillingAddress', 'addAddresses',
+            'setBillingAddress', 'setAddresses', 'setPayments', 'setItems', 'setQuoteId'],
+            [],
+            '',
+            false
+        );
 
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
-
-        $this->orderBuilder->expects($this->once())
+        $this->orderFactory->expects($this->once())
             ->method('create')
             ->willReturn($order);
+        $this->orderFactory->expects($this->never())
+            ->method('populate')
+            ->with($baseOrder);
+
+        if ($shippingAddress) {
+            $order->expects($this->once())->method('setShippingAddress')->with($shippingAddress);
+        }
+        $order->expects($this->any())->method('getAddressesCollection');
+        $order->expects($this->any())->method('getAddresses');
+        $order->expects($this->any())->method('getBillingAddress')->willReturn(false);
+        $order->expects($this->any())->method('addAddresses')->withAnyParameters()->willReturnSelf();
+        $order->expects($this->once())->method('setBillingAddress')->with($billingAddress);
+        $order->expects($this->once())->method('setAddresses')->with($addresses);
+        $order->expects($this->once())->method('setPayments')->with($payments);
+        $order->expects($this->once())->method('setItems')->with($items);
+        $order->expects($this->once())->method('setQuoteId')->with($quoteId);
 
         return $order;
     }

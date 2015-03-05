@@ -148,4 +148,92 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return float Weight.
      */
     public function getWeight();
+
+    /**
+     * Sets the parent ID for the shipment item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the row total for the shipment item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setRowTotal($amount);
+
+    /**
+     * Sets the price for the shipment item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price);
+
+    /**
+     * Sets the weight for the shipment item.
+     *
+     * @param float $weight
+     * @return $this
+     */
+    public function setWeight($weight);
+
+    /**
+     * Sets the quantity for the shipment item.
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty);
+
+    /**
+     * Sets the product ID for the shipment item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setProductId($id);
+
+    /**
+     * Sets the order item ID for the shipment item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderItemId($id);
+
+    /**
+     * Sets the additional data for the shipment item.
+     *
+     * @param string $additionalData
+     * @return $this
+     */
+    public function setAdditionalData($additionalData);
+
+    /**
+     * Sets the description for the shipment item.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description);
+
+    /**
+     * Sets the name for the shipment item.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
+     * Sets the SKU for the shipment item.
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
 }

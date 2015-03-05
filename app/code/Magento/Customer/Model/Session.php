@@ -49,7 +49,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Core url
      *
-     * @var \Magento\Core\Helper\Url|null
+     * @var \Magento\Framework\Url\Helper\Data|null
      */
     protected $_coreUrl = null;
 
@@ -103,7 +103,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param Share $configShare
-     * @param \Magento\Core\Helper\Url $coreUrl
+     * @param \Magento\Framework\Url\Helper\Data $coreUrl
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param ResourceCustomer $customerResource
      * @param CustomerFactory $customerFactory
@@ -125,7 +125,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         Config\Share $configShare,
-        \Magento\Core\Helper\Url $coreUrl,
+        \Magento\Framework\Url\Helper\Data $coreUrl,
         \Magento\Customer\Model\Url $customerUrl,
         Resource\Customer $customerResource,
         CustomerFactory $customerFactory,

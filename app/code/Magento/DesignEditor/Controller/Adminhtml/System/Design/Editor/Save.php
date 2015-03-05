@@ -33,8 +33,8 @@ class Save extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Edit
             $response = ['error' => true, 'message' => __('Sorry, there was an unknown error.')];
         }
 
-        /** @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
-        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
+        /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */
+        $jsonHelper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
+        $this->getResponse()->representJson($jsonHelper->jsonEncode($response));
     }
 }

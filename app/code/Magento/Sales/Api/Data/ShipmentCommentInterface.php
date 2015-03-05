@@ -82,4 +82,36 @@ interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleData
      * @return int Parent ID.
      */
     public function getParentId();
+
+    /**
+     * Sets the parent ID for the shipment comment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the is-customer-notified flag value for the shipment comment.
+     *
+     * @param int $isCustomerNotified
+     * @return $this
+     */
+    public function setIsCustomerNotified($isCustomerNotified);
+
+    /**
+     * Sets the is-visible-on-storefront flag value for the shipment comment.
+     *
+     * @param int $isVisibleOnFront
+     * @return $this
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront);
+
+    /**
+     * Sets the comment for the shipment.
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function setComment($comment);
 }
