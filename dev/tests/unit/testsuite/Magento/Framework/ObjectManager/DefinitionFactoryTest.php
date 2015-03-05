@@ -16,7 +16,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     protected $filesystemDriverMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\DefinitionFactory
+     * @var DefinitionFactory
      */
     protected $model;
 
@@ -35,7 +35,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Framework\ObjectManager\DefinitionFactory(
+        $this->model = new DefinitionFactory(
             $this->filesystemDriverMock,
             'DefinitionDir',
             'GenerationDir',
@@ -112,5 +112,14 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
                 '\Magento\Framework\Interception\Definition\Runtime',
             ],
         ];
+    }
+
+    public function testGetSupportedFormats()
+    {
+        $actual = DefinitionFactory::getSupportedFormats();
+        $this->assertInternalType('array', $actual);
+        foreach ($actual as $className) {
+            $this->assertInternalType('string', $className);
+        }
     }
 }
