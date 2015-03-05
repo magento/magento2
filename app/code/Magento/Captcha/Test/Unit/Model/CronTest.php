@@ -30,7 +30,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\DirectoryWriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_directory;
 
@@ -82,6 +82,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteExpiredImages($website, $isFile, $filename, $mTime, $timeout, $mustDelete)
     {
+        $this->markTestSkipped("MAGETWO-34751: Hidden dependency");
         $this->_storeManager->expects(
             $this->once()
         )->method(
