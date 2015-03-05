@@ -27,10 +27,6 @@
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
-            <exclude>
-                <directory suffix=".php">../../../app/code/Magento/*/sql</directory>
-                <directory suffix=".php">../../../app/code/Magento/*/data</directory>
-            </exclude>
         </whitelist>
     </filter>
     <!-- PHP INI settings and constants definition -->
@@ -41,6 +37,8 @@
         <ini name="xdebug.max_nesting_level" value="200"/>
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
         <const name="TESTS_INSTALL_CONFIG_FILE" value="etc/install-config-mysql.php"/>
+        <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
+        <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Whether to cleanup the application before running tests or not -->

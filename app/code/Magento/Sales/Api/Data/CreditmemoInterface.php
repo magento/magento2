@@ -562,9 +562,369 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getItems();
 
     /**
+     * Sets credit memo items.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets credit memo comments.
      *
      * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
      */
     public function getComments();
+
+    /**
+     * Sets credit memo comments.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments($comments);
+
+    /**
+     * Sets the credit memo store ID.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setStoreId($id);
+
+    /**
+     * Sets the credit memo positive adjustment.
+     *
+     * @param float $adjustmentPositive
+     * @return $this
+     */
+    public function setAdjustmentPositive($adjustmentPositive);
+
+    /**
+     * Sets the credit memo base shipping tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingTaxAmount($amount);
+
+    /**
+     * Sets the credit memo store-to-order rate.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setStoreToOrderRate($rate);
+
+    /**
+     * Sets the credit memo base discount amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseDiscountAmount($amount);
+
+    /**
+     * Sets the credit memo base-to-order rate.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setBaseToOrderRate($rate);
+
+    /**
+     * Sets the credit memo grand total.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setGrandTotal($amount);
+
+    /**
+     * Sets the credit memo base subtotal including tax.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseSubtotalInclTax($amount);
+
+    /**
+     * Sets the credit memo shipping amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingAmount($amount);
+
+    /**
+     * Sets the credit memo subtotal including tax.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setSubtotalInclTax($amount);
+
+    /**
+     * Sets the credit memo negative adjustment.
+     *
+     * @param float $adjustmentNegative
+     * @return $this
+     */
+    public function setAdjustmentNegative($adjustmentNegative);
+
+    /**
+     * Sets the credit memo base shipping amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingAmount($amount);
+
+    /**
+     * Sets the credit memo store-to-base rate.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setStoreToBaseRate($rate);
+
+    /**
+     * Sets the credit memo base-to-global rate.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setBaseToGlobalRate($rate);
+
+    /**
+     * Sets the credit memo base adjustment.
+     *
+     * @param float $baseAdjustment
+     * @return $this
+     */
+    public function setBaseAdjustment($baseAdjustment);
+
+    /**
+     * Sets the credit memo base subtotal.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseSubtotal($amount);
+
+    /**
+     * Sets the credit memo discount amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setDiscountAmount($amount);
+
+    /**
+     * Sets the credit memo subtotal.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setSubtotal($amount);
+
+    /**
+     * Sets the credit memo adjustment.
+     *
+     * @param float $adjustment
+     * @return $this
+     */
+    public function setAdjustment($adjustment);
+
+    /**
+     * Sets the credit memo base grand total.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseGrandTotal($amount);
+
+    /**
+     * Sets the credit memo base tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseTaxAmount($amount);
+
+    /**
+     * Sets the credit memo shipping tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingTaxAmount($amount);
+
+    /**
+     * Sets the credit memo tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setTaxAmount($amount);
+
+    /**
+     * Sets the credit memo order ID.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderId($id);
+
+    /**
+     * Sets the credit memo email sent flag value.
+     *
+     * @param int $emailSent
+     * @return $this
+     */
+    public function setEmailSent($emailSent);
+
+    /**
+     * Sets the credit memo status.
+     *
+     * @param int $creditmemoStatus
+     * @return $this
+     */
+    public function setCreditmemoStatus($creditmemoStatus);
+
+    /**
+     * Sets the credit memo state.
+     *
+     * @param int $state
+     * @return $this
+     */
+    public function setState($state);
+
+    /**
+     * Sets the credit memo shipping address ID.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setShippingAddressId($id);
+
+    /**
+     * Sets the credit memo billing address ID.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setBillingAddressId($id);
+
+    /**
+     * Sets the credit memo invoice ID.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setInvoiceId($id);
+
+    /**
+     * Sets the credit memo store currency code.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setStoreCurrencyCode($code);
+
+    /**
+     * Sets the credit memo order currency code.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setOrderCurrencyCode($code);
+
+    /**
+     * Sets the credit memo base currency code.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setBaseCurrencyCode($code);
+
+    /**
+     * Sets the credit memo global currency code.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setGlobalCurrencyCode($code);
+
+    /**
+     * Sets the credit memo increment ID.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setIncrementId($id);
+
+    /**
+     * Sets the credit memo updated-at timestamp.
+     *
+     * @param string $timestamp
+     * @return $this
+     */
+    public function setUpdatedAt($timestamp);
+
+    /**
+     * Sets the credit memo hidden tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setHiddenTaxAmount($amount);
+
+    /**
+     * Sets the credit memo base hidden tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseHiddenTaxAmount($amount);
+
+    /**
+     * Sets the credit memo shipping hidden tax amount.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingHiddenTaxAmount($amount);
+
+    /**
+     * Sets the credit memo base shipping hidden tax amount.
+     *
+     * @param float $amnt
+     * @return $this
+     */
+    public function setBaseShippingHiddenTaxAmnt($amnt);
+
+    /**
+     * Sets the credit memo shipping including tax.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingInclTax($amount);
+
+    /**
+     * Sets the credit memo base shipping including tax.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingInclTax($amount);
+
+    /**
+     * Sets the credit memo discount description.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDiscountDescription($description);
 }

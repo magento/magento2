@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeAbsenceInUnassignedAttributes extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that deleted attribute isn't displayed in Product template's Unassigned Attributes section
      *

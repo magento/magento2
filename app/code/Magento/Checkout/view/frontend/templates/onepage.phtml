@@ -40,8 +40,8 @@ $_paymentBlock = $block->getLayout()->getBlock('checkout.onepage.payment');
     <script type="text/x-magento-init">
         {
            "#checkoutSteps": {
-                "opcOrderReview": <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
-           }    
+                "opcOrderReview": <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
+           }
         }
     </script>
 </div>

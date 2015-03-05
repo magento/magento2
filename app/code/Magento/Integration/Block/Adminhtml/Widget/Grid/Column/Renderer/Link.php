@@ -16,21 +16,21 @@ class Link extends AbstractRenderer
     protected $_row;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $data);
     }
 
@@ -131,8 +131,8 @@ class Link extends AbstractRenderer
      */
     protected function _getAttributes()
     {
-        /** @var \Magento\Core\Helper\Data $helper */
-        $helper = $this->_coreHelper;
+        /** @var \Magento\Framework\Json\Helper\Data $helper */
+        $helper = $this->jsonHelper;
         $attributes = ['title' => $this->getCaption()];
 
         foreach ($this->_getDataAttributes() as $key => $attr) {

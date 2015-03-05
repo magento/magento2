@@ -15,13 +15,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_optionsDefault = [];
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
      */
     protected $_attrOptionCollectionFactory;
@@ -32,16 +25,13 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_attrOptionFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
     ) {
-        $this->_coreData = $coreData;
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
     }

@@ -88,15 +88,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getNextBunchDataProvider
      * @param string $entityType
-     * @param array $bunchData
+     * @param string $bunchData
      * @param array $expectedData
      */
     public function testGetNextBunch($entityType, $bunchData, $expectedData)
     {
-        $dependencies = $this->_getDependencies($entityType, $bunchData);
+        $dependencies = $this->_getDependencies($entityType, [[$bunchData]]);
 
         $resource = $dependencies['resource'];
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', ['__construct'], [], '', false);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $jsonDecoderMock = $this->getMockBuilder('Magento\Framework\Json\DecoderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $jsonDecoderMock->expects($this->once())
+            ->method('decode')
+            ->willReturn(\Zend_Json::decode($bunchData));
+        $jsonHelper = $helper->getObject(
+            'Magento\Framework\Json\Helper\Data',
+            [
+                'jsonDecoder' => $jsonDecoderMock,
+            ]
+        );
         unset($dependencies['resource'], $dependencies['json_helper']);
 
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
@@ -107,11 +119,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '\Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data',
             [
                 'context' => $contextMock,
-                'coreHelper' => $coreHelper,
+                'jsonHelper' => $jsonHelper,
                 'arguments' => $dependencies,
             ]
         );
-
         $this->assertEquals($expectedData, $object->getNextBunch());
     }
 
@@ -126,26 +137,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
         return [
             'address entity' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
-                '$bunchData' => [
+                '$bunchData' => \Zend_Json::encode(
                     [
-                        \Zend_Json::encode(
-                            [
-                                [
-                                    '_scope' => CustomerComposite::SCOPE_DEFAULT,
-                                    Address::COLUMN_WEBSITE => 'website1',
-                                    Address::COLUMN_EMAIL => 'email1',
-                                    Address::COLUMN_ADDRESS_ID => null,
-                                    CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
-                                    CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
-                                    'customer_attribute1' => 'value',
-                                    'customer_attribute2' => 'value',
-                                    CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
-                                    CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
-                                ],
-                            ]
-                        ),
-                    ],
-                ],
+                        [
+                            '_scope' => CustomerComposite::SCOPE_DEFAULT,
+                            Address::COLUMN_WEBSITE => 'website1',
+                            Address::COLUMN_EMAIL => 'email1',
+                            Address::COLUMN_ADDRESS_ID => null,
+                            CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
+                            CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
+                            'customer_attribute1' => 'value',
+                            'customer_attribute2' => 'value',
+                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
+                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
+                        ],
+                    ]
+                ),
                 '$expectedData' => [
                     0 => [
                         Address::COLUMN_WEBSITE => 'website1',
@@ -160,26 +167,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'customer entity default scope' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => [
+                '$bunchData' => \Zend_Json::encode(
                     [
-                        \Zend_Json::encode(
-                            [
-                                [
-                                    '_scope' => CustomerComposite::SCOPE_DEFAULT,
-                                    Address::COLUMN_WEBSITE => 'website1',
-                                    Address::COLUMN_EMAIL => 'email1',
-                                    Address::COLUMN_ADDRESS_ID => null,
-                                    CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
-                                    CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
-                                    'customer_attribute1' => 'value',
-                                    'customer_attribute2' => 'value',
-                                    CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
-                                    CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
-                                ],
-                            ]
-                        ),
-                    ],
-                ],
+                        [
+                            '_scope' => CustomerComposite::SCOPE_DEFAULT,
+                            Address::COLUMN_WEBSITE => 'website1',
+                            Address::COLUMN_EMAIL => 'email1',
+                            Address::COLUMN_ADDRESS_ID => null,
+                            CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
+                            CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
+                            'customer_attribute1' => 'value',
+                            'customer_attribute2' => 'value',
+                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
+                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
+                        ],
+                    ]
+                ),
                 '$expectedData' => [
                     0 => [
                         Address::COLUMN_WEBSITE => 'website1',
@@ -196,26 +199,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'customer entity address scope' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => [
+                '$bunchData' => \Zend_Json::encode(
                     [
-                        \Zend_Json::encode(
-                            [
-                                [
-                                    '_scope' => CustomerComposite::SCOPE_ADDRESS,
-                                    Address::COLUMN_WEBSITE => 'website1',
-                                    Address::COLUMN_EMAIL => 'email1',
-                                    Address::COLUMN_ADDRESS_ID => null,
-                                    CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
-                                    CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
-                                    'customer_attribute1' => 'value',
-                                    'customer_attribute2' => 'value',
-                                    CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
-                                    CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
-                                ],
-                            ]
-                        ),
-                    ],
-                ],
+                        [
+                            '_scope' => CustomerComposite::SCOPE_ADDRESS,
+                            Address::COLUMN_WEBSITE => 'website1',
+                            Address::COLUMN_EMAIL => 'email1',
+                            Address::COLUMN_ADDRESS_ID => null,
+                            CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
+                            CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
+                            'customer_attribute1' => 'value',
+                            'customer_attribute2' => 'value',
+                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
+                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
+                        ],
+                    ]
+                ),
                 '$expectedData' => [],
             ]
         ];

@@ -72,36 +72,30 @@ class Http extends Request implements RequestInterface
     protected $pathInfoProcessor;
 
     /**
-     * @var CookieReaderInterface
-     */
-    protected $cookieReader;
-
-    /**
      * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
+     * @param CookieReaderInterface $cookieReader
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
-     * @param CookieReaderInterface $cookieReader
-     * @param ObjectManagerInterface  $objectManager,
+     * @param ObjectManagerInterface  $objectManager
      * @param string|null $uri
      * @param array $directFrontNames
      */
     public function __construct(
+        CookieReaderInterface $cookieReader,
         ConfigInterface $routeConfig,
         PathInfoProcessorInterface $pathInfoProcessor,
-        CookieReaderInterface $cookieReader,
         ObjectManagerInterface $objectManager,
         $uri = null,
         $directFrontNames = []
     ) {
+        parent::__construct($cookieReader, $uri);
         $this->routeConfig = $routeConfig;
         $this->pathInfoProcessor = $pathInfoProcessor;
-        $this->cookieReader = $cookieReader;
         $this->objectManager = $objectManager;
-        parent::__construct($uri);
         $this->directFrontNames = $directFrontNames;
     }
 
@@ -371,18 +365,6 @@ class Http extends Request implements RequestInterface
     public function __sleep()
     {
         return [];
-    }
-
-    /**
-     * Retrieve a value from a cookie.
-     *
-     * @param string|null $name
-     * @param string|null $default The default value to return if no value could be found for the given $name.
-     * @return string|null
-     */
-    public function getCookie($name = null, $default = null)
-    {
-        return $this->cookieReader->getCookie($name, $default);
     }
 
     /**

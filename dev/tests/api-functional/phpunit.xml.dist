@@ -24,12 +24,6 @@
         <whitelist>
             <!-- All CE modules -->
             <directory suffix=".php">../../app/code/Magento</directory>
-            <exclude>
-                <!-- Excluding installation and upgrade scripts -->
-                <directory>../../app/code/Magento/*/sql</directory>
-                <!-- Excluding data installation and upgrade scripts -->
-                <directory>../../app/code/Magento/*/data</directory>
-            </exclude>
         </whitelist>
     </filter>
 
