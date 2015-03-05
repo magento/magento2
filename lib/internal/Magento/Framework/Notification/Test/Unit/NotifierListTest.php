@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Notification;
+namespace Magento\Framework\Notification\Test\Unit;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
