@@ -88,7 +88,7 @@ interface TimezoneInterface
      * Format date using current locale options and time zone.
      *
      * @param \DateTime|null $date
-     * @param string $format
+     * @param int $format
      * @param bool $showTime
      * @return string
      */
