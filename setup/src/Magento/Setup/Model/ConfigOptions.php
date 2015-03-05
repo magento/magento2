@@ -14,24 +14,34 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\Setup\Option\MultiSelectConfigOption;
 use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\App\DeploymentConfig\DbConfig;
 
 /**
  * Deployment configuration options needed for Setup application
  */
 class ConfigOptions implements ConfigOptionsInterface
 {
-    /**
+    /**#@+
      * Path to the values in the deployment config
      */
     const CONFIG_PATH_INSTALL_DATE = 'install/date';
     const CONFIG_PATH_MODULES = 'modules';
+    /**#@-*/
 
-    /**
+    /**#@+
      * Input keys for the options
      */
     const INPUT_KEY_CRYPT_KEY = 'key';
     const INPUT_KEY_SESSION_SAVE = 'session_save';
     const INPUT_KEY_DEFINITION_FORMAT = 'definition_format';
+    const INPUT_KEY_DB_HOST = 'db_host';
+    const INPUT_KEY_DB_NAME = 'db_name';
+    const INPUT_KEY_DB_USER = 'db_user';
+    const INPUT_KEY_DB_PASS = 'db_pass';
+    const INPUT_KEY_DB_PREFIX = 'db_prefix';
+    const INPUT_KEY_DB_MODEL = 'db_model';
+    const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
+    /**#@-*/
 
     /**
      * @var array
@@ -42,6 +52,21 @@ class ConfigOptions implements ConfigOptionsInterface
      * @var Random
      */
     private $random;
+
+    /**
+     * Maps configuration parameters to array keys in deployment config file
+     *
+     * @var array
+     */
+    public static $paramMap = [
+        self::INPUT_KEY_DB_HOST => DbConfig::KEY_HOST,
+        self::INPUT_KEY_DB_NAME => DbConfig::KEY_NAME,
+        self::INPUT_KEY_DB_USER => DbConfig::KEY_USER,
+        self::INPUT_KEY_DB_PASS => DbConfig::KEY_PASS,
+        self::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
+        self::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
+        self::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
+    ];
 
     /**
      * Constructor
@@ -85,6 +110,41 @@ class ConfigOptions implements ConfigOptionsInterface
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 DefinitionFactory::getSupportedFormats(),
                 'Type of definitions used by Object Manager'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_HOST,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Database server host'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_NAME,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Database name'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_USER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Database server username'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_PASS,
+                TextConfigOption::FRONTEND_WIZARD_PASSWORD,
+                'Database server password'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_PREFIX,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Database table prefix'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_MODEL,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Database type'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_DB_INIT_STATEMENTS,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'Database  initial set of commands'
             ),
         ];
     }
@@ -140,6 +200,26 @@ class ConfigOptions implements ConfigOptionsInterface
                 ['format' => $data[self::INPUT_KEY_DEFINITION_FORMAT]]
             );
         }
+
+        // db segment
+        $connection = [];
+        $required = [self::INPUT_KEY_DB_HOST, self::INPUT_KEY_DB_NAME, self::INPUT_KEY_DB_USER];
+        foreach ($required as $key) {
+            if (!isset($data[$key])) {
+                throw new \InvalidArgumentException("Missing value for db configuration: {$key}");
+            }
+            $connection[self::$paramMap[$key]] = $data[$key];
+        }
+        $optional = [self::INPUT_KEY_DB_INIT_STATEMENTS, self::INPUT_KEY_DB_MODEL, self::INPUT_KEY_DB_PASS];
+        foreach ($optional as $key) {
+            $connection[self::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : null;
+        }
+        $prefixKey = self::INPUT_KEY_DB_PREFIX;
+        $dbData = [
+            DeploymentConfigMapper::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
+            'connection' => ['default' => $connection],
+        ];
+        $configData['db'] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
 
         return $configData;
     }
