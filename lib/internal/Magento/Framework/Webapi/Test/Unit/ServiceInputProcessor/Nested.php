@@ -10,7 +10,7 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 class Nested extends AbstractExtensibleObject
 {
     /**
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Simple
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple
      */
     public function getDetails()
     {

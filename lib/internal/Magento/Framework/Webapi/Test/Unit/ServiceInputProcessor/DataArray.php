@@ -10,7 +10,7 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 class DataArray extends AbstractExtensibleObject
 {
     /**
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Simple[]|null
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]|null
      */
     public function getItems()
     {

@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
 
-use Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray;
-use Magento\Framework\Webapi\ServiceInputProcessor\DataArray;
-use Magento\Framework\Webapi\ServiceInputProcessor\Nested;
-use Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray;
 
 class TestService
 {
@@ -35,8 +35,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\Nested $nested
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Nested
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested $nested
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested
      */
     public function nestedData(Nested $nested)
     {
@@ -62,8 +62,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\Simple[] $dataObjects
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Simple[]
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[] $dataObjects
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]
      */
     public function dataArray(array $dataObjects)
     {
@@ -71,8 +71,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray $arrayData
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray $arrayData
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray
      */
     public function nestedSimpleArray(SimpleArray $arrayData)
     {
@@ -80,8 +80,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray $associativeArrayData
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray $associativeArrayData
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray
      */
     public function nestedAssociativeArray(AssociativeArray $associativeArrayData)
     {
@@ -89,8 +89,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\DataArray $dataObjects
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\DataArray
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray $dataObjects
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray
      */
     public function nestedDataArray(DataArray $dataObjects)
     {
@@ -98,11 +98,11 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes $param
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes $param
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes
      */
     public function objectWithCustomAttributesMethod(
-        \Magento\Framework\Webapi\ServiceInputProcessor\ObjectWithCustomAttributes $param
+        \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes $param
     ) {
         return $param;
     }

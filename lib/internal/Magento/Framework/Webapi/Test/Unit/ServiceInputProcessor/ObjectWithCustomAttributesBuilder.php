@@ -6,7 +6,6 @@
 namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
 
 use Magento\Framework\Api\ExtensibleObjectBuilder;
-use Magento\Framework\Webapi\ServiceInputProcessor\TestService;
 
 class ObjectWithCustomAttributesBuilder extends ExtensibleObjectBuilder
 {
