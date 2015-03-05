@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Xml;
+namespace Magento\Framework\Xml\Test\Unit;
 
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
