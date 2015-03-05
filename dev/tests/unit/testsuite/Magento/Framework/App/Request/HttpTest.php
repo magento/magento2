@@ -29,11 +29,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $_infoProcessorMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cookieReaderMock;
-
-    /**
      * @var \Magento\TestFramework\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
@@ -55,7 +50,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
         $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->cookieReaderMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         // Stash the $_SERVER array to protect it from modification in test
@@ -67,14 +61,20 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $_SERVER = $this->serverArray;
     }
 
+    /**
+     * @return \Magento\Framework\App\Request\Http
+     */
     private function getModel($uri = null)
     {
-        return new \Magento\Framework\App\Request\Http(
-                $this->_routerListMock,
-                $this->_infoProcessorMock,
-                $this->cookieReaderMock,
-                $this->objectManager,
-                $uri
+        $testFrameworkObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        return $testFrameworkObjectManager->getObject(
+            'Magento\Framework\App\Request\Http',
+            [
+                'routeConfig' => $this->_routerListMock,
+                'pathInfoProcessor' => $this->_infoProcessorMock,
+                'objectManager' => $this->objectManager,
+                'uri' => $uri,
+            ]
         );
     }
 
@@ -255,48 +255,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGetCookieDefault()
-    {
-        $key = "cookieName";
-        $default = "defaultValue";
-
-        $this->cookieReaderMock
-            ->expects($this->once())
-            ->method('getCookie')
-            ->with($key, $default)
-            ->will($this->returnValue($default));
-
-        $this->assertEquals($default, $this->getModel()->getCookie($key, $default));
-    }
-
-    public function testGetCookieNameExists()
-    {
-        $key = "cookieName";
-        $default = "defaultValue";
-        $value = "cookieValue";
-
-        $this->cookieReaderMock
-            ->expects($this->once())
-            ->method('getCookie')
-            ->with($key, $default)
-            ->will($this->returnValue($value));
-
-        $this->assertEquals($value, $this->getModel()->getCookie($key, $default));
-    }
-
-    public function testGetCookieNullName()
-    {
-        $nullKey = null;
-        $default = "defaultValue";
-
-        $this->cookieReaderMock
-            ->expects($this->once())
-            ->method('getCookie')
-            ->with($nullKey, $default)
-            ->will($this->returnValue($default));
-
-        $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
-    }
 
     public function serverVariablesProvider()
     {

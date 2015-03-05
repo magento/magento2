@@ -43,7 +43,7 @@
                                             </button>
                                         <?php else: ?>
                                             <?php
-                                                $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                                $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                                 $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
                                         ?>
                                             <button type="button" title="<?php echo __('Add to Cart') ?>"

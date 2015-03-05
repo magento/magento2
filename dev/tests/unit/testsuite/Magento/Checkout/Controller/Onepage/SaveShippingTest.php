@@ -81,7 +81,6 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->coreHelper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', ['getPost', 'isPost'], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);

@@ -33,7 +33,6 @@ interface CartItemRepositoryInterface
      * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Webapi\Exception
      */
     public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem);
 

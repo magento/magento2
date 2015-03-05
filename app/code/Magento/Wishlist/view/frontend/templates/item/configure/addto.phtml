@@ -29,7 +29,7 @@
     ], function(jQuery){
 
         jQuery('body').mage('addToWishlist',
-            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(['productType' => $_product->getTypeId()])?>
+            <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['productType' => $_product->getTypeId()])?>
         );
 
     });

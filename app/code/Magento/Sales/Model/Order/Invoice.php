@@ -11,47 +11,8 @@ use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 
 /**
- * @method \Magento\Sales\Model\Order\Invoice setStoreId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseGrandTotal(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setShippingTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setStoreToOrderRate(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseShippingTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseToOrderRate(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setGrandTotal(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setSubtotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseSubtotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setStoreToBaseRate(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setTotalQty(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseToGlobalRate(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setSubtotal(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseSubtotal(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBillingAddressId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setIsUsedForRefund(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setEmailSent(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setCanVoidFlag(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setState(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setShippingAddressId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice setStoreCurrencyCode(string $value)
  * @method \Magento\Sales\Model\Order\Invoice setTransactionId(string $value)
- * @method \Magento\Sales\Model\Order\Invoice setOrderCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Invoice setGlobalCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Invoice setIncrementId(string $value)
  * @method \Magento\Sales\Model\Order\Invoice setCreatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Invoice setUpdatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Invoice setHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setShippingHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseShippingHiddenTaxAmnt(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setShippingInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Invoice setBaseShippingInclTax(float $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -843,6 +804,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setItems($items)
+    {
+        return $this->setData(InvoiceInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns base_currency_code
      *
      * @return string
@@ -1258,4 +1227,342 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         }
         return $this->getData(InvoiceInterface::COMMENTS);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setComments($comments)
+    {
+        return $this->setData(InvoiceInterface::COMMENTS, $comments);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(InvoiceInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($id)
+    {
+        return $this->setData(InvoiceInterface::STORE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseGrandTotal($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_GRAND_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::SHIPPING_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreToOrderRate($rate)
+    {
+        return $this->setData(InvoiceInterface::STORE_TO_ORDER_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_SHIPPING_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseToOrderRate($rate)
+    {
+        return $this->setData(InvoiceInterface::BASE_TO_ORDER_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGrandTotal($amount)
+    {
+        return $this->setData(InvoiceInterface::GRAND_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotalInclTax($amount)
+    {
+        return $this->setData(InvoiceInterface::SUBTOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotalInclTax($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_SUBTOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreToBaseRate($rate)
+    {
+        return $this->setData(InvoiceInterface::STORE_TO_BASE_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalQty($qty)
+    {
+        return $this->setData(InvoiceInterface::TOTAL_QTY, $qty);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseToGlobalRate($rate)
+    {
+        return $this->setData(InvoiceInterface::BASE_TO_GLOBAL_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotal($amount)
+    {
+        return $this->setData(InvoiceInterface::SUBTOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotal($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_SUBTOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBillingAddressId($id)
+    {
+        return $this->setData(InvoiceInterface::BILLING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsUsedForRefund($isUsedForRefund)
+    {
+        return $this->setData(InvoiceInterface::IS_USED_FOR_REFUND, $isUsedForRefund);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(InvoiceInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmailSent($emailSent)
+    {
+        return $this->setData(InvoiceInterface::EMAIL_SENT, $emailSent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCanVoidFlag($canVoidFlag)
+    {
+        return $this->setData(InvoiceInterface::CAN_VOID_FLAG, $canVoidFlag);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setState($state)
+    {
+        return $this->setData(InvoiceInterface::STATE, $state);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAddressId($id)
+    {
+        return $this->setData(InvoiceInterface::SHIPPING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreCurrencyCode($code)
+    {
+        return $this->setData(InvoiceInterface::STORE_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderCurrencyCode($code)
+    {
+        return $this->setData(InvoiceInterface::ORDER_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseCurrencyCode($code)
+    {
+        return $this->setData(InvoiceInterface::BASE_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGlobalCurrencyCode($code)
+    {
+        return $this->setData(InvoiceInterface::GLOBAL_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIncrementId($id)
+    {
+        return $this->setData(InvoiceInterface::INCREMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingHiddenTaxAmount($amount)
+    {
+        return $this->setData(InvoiceInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingHiddenTaxAmnt($amnt)
+    {
+        return $this->setData(InvoiceInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingInclTax($amount)
+    {
+        return $this->setData(InvoiceInterface::SHIPPING_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingInclTax($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_SHIPPING_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalRefunded($amount)
+    {
+        return $this->setData(InvoiceInterface::BASE_TOTAL_REFUNDED, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountDescription($description)
+    {
+        return $this->setData(InvoiceInterface::DISCOUNT_DESCRIPTION, $description);
+    }
+    //@codeCoverageIgnoreEnd
 }

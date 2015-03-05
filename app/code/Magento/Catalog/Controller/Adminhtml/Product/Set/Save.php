@@ -93,7 +93,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                         __('This attribute set no longer exists.')
                     );
                 }
-                $data = $this->_objectManager->get('Magento\Core\Helper\Data')
+                $data = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                     ->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags

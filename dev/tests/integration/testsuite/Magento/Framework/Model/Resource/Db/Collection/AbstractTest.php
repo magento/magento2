@@ -16,9 +16,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\App\Resource');
+        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            '\Magento\Framework\Model\Resource\Db\Context',
+            ['resource' => $resourceModel]
+        );
+
         $resource = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
-            [$resourceModel],
+            [$context],
             '',
             true,
             true,
