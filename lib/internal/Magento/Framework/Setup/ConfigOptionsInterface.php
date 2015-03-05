@@ -19,7 +19,8 @@ interface ConfigOptionsInterface
     public function getOptions();
 
     /**
-     * Creates config array from user inputted data. This array will be stored in deployment config file
+     * Creates array of ConfigData objects from user inputted data.
+     * Data in these objects will be stored in array form in deployment config file.
      *
      * @param array $options
      * @return \Magento\Framework\Config\Data\ConfigData[]
