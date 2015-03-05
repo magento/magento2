@@ -220,7 +220,7 @@ class ConfigOptions implements ConfigOptionsInterface
             DeploymentConfigMapper::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
             'connection' => ['default' => $connection],
         ];
-        $configData['db'] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
 
         return $configData;
     }
