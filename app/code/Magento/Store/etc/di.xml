@@ -219,6 +219,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="confPathToMapFile" xsi:type="string">app/etc/aliases_to_classes_map.json</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Module\Setup\MigrationData">
         <arguments>
             <argument name="data" xsi:type="array">
