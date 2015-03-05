@@ -7,7 +7,9 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\GiftMessage\Model;
+namespace Magento\GiftMessage\Test\Unit\Model;
+
+use Magento\GiftMessage\Model\GiftMessageManager;
 
 class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -130,7 +132,7 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Sales\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
         $this->shippingAddressMock =
             $this->getMock('\Magento\Sales\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
-        $this->model = new GiftMessageManager($this->messageFactoryMock);
+        $this->model = new \Magento\GiftMessage\Model\GiftMessageManager($this->messageFactoryMock);
     }
 
     public function testAddWhenGiftMessagesIsNoArray()

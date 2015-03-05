@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Model\Plugin;
+namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
 class QuoteItemTest extends \PHPUnit_Framework_TestCase
 {

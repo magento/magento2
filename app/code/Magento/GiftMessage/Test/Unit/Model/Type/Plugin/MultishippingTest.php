@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+namespace Magento\GiftMessage\Test\Unit\Model\Type\Plugin;
 
-namespace Magento\GiftMessage\Model\Type\Plugin;
+use Magento\GiftMessage\Model\Type\Plugin\Multishipping;
 
-class OnepageTest extends \PHPUnit_Framework_TestCase
+class MultishippingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Onepage
+     * @var Multishipping
      */
     protected $plugin;
 
@@ -33,7 +33,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
 
         $this->plugin = $objectManager->getObject(
-            'Magento\GiftMessage\Model\Type\Plugin\Onepage',
+            'Magento\GiftMessage\Model\Type\Plugin\Multishipping',
             [
                 'message' => $this->messageMock,
                 'request' => $this->requestMock,
@@ -41,25 +41,17 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterSaveShippingMethodWithEmptyResult()
+    public function testBeforeSetShippingMethods()
     {
-        $subjectMock = $this->getMock('\Magento\Checkout\Model\Type\Onepage', [], [], '', false);
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('giftmessage')
-            ->will($this->returnValue('giftMessage'));
+            ->will($this->returnValue('Expected Value'));
+        $subjectMock = $this->getMock('\Magento\Multishipping\Model\Checkout\Type\Multishipping', [], [], '', false);
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->messageMock->expects($this->once())->method('add')->with('giftMessage', $quoteMock);
+        $this->messageMock->expects($this->once())->method('add')->with('Expected Value', $quoteMock);
 
-        $this->assertEquals([], $this->plugin->afterSaveShippingMethod($subjectMock, []));
-    }
-
-    public function testAfterSaveShippingMethodWithNotEmptyResult()
-    {
-        $subjectMock = $this->getMock('\Magento\Checkout\Model\Type\Onepage', [], [], '', false);
-        $this->assertEquals(
-            ['expected result'],
-            $this->plugin->afterSaveShippingMethod($subjectMock, ['expected result']));
+        $this->plugin->beforeSetShippingMethods($subjectMock, []);
     }
 }

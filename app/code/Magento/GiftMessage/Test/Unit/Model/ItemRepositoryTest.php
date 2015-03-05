@@ -5,8 +5,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GiftMessage\Model;
+namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\GiftMessage\Model\ItemRepository;
 
 class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,7 +106,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\GiftMessage\Helper\Message', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->itemRepository = new ItemRepository(
+        $this->itemRepository = new \Magento\GiftMessage\Model\ItemRepository(
             $this->quoteRepositoryMock,
             $this->storeManagerMock,
             $this->giftMessageManagerMock,
