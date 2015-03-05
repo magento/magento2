@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleShopping\Block;
+namespace Magento\GoogleShopping\Test\Unit\Block;
 
 class SiteVerificationTest extends \PHPUnit_Framework_TestCase
 {

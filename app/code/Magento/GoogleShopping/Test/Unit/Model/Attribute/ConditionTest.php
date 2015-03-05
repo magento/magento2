@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GoogleShopping\Model\Attribute;
+namespace Magento\GoogleShopping\Test\Unit\Model\Attribute;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 

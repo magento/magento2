@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\GoogleShopping\Model;
+namespace Magento\GoogleShopping\Test\Unit\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
