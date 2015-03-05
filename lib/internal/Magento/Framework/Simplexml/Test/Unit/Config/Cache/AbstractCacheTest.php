@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Simplexml\Config\Cache;
+namespace Magento\Framework\Simplexml\Test\Unit\Config\Cache;
+
+use Magento\Framework\Simplexml\Config\Cache\File;
 
 class AbstractCacheTest extends \PHPUnit_Framework_TestCase
 {

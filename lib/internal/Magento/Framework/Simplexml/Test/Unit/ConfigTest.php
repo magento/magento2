@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Simplexml;
+namespace Magento\Framework\Simplexml\Test\Unit;
+
+use \Magento\Framework\Simplexml\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
