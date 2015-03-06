@@ -157,16 +157,32 @@ class Files
         if (!isset(self::$_cache[$key])) {
             $files = [];
             if ($appCode) {
-                $files = array_merge($files, self::getFiles(["{$this->_path}/app/code/Magento"], '*.php'));
+                $appFiles = self::getFiles(["{$this->_path}/app/code/Magento"], '*.php');
+                $appFiles = preg_grep('#app/code/[\\w]+/[\\w]+/Test#', $appFiles, PREG_GREP_INVERT);
+                $files = array_merge($files, $appFiles);
             }
             if ($devTests) {
-                $files = array_merge($files, self::getFiles(["{$this->_path}/dev/tests"], '*.php'));
+                $testDirs = [
+                    "{$this->_path}/dev/tests",
+                    "{$this->_path}/app/code/*/*/Test",
+                    "{$this->_path}/lib/internal/*/*/Test",
+                    "{$this->_path}/lib/internal/Magento/Framework/*/Test",
+                    "{$this->_path}/dev/tools/Magento/Tools/*/Test",
+                    "{$this->_path}/setup/Test",
+
+                ];
+                $files = array_merge($files, self::getFiles($testDirs, '*.php'));
             }
             if ($devTools) {
-                $files = array_merge($files, self::getFiles(["{$this->_path}/dev/tools/Magento"], '*.php'));
+                $toolFiles = self::getFiles(["{$this->_path}/dev/tools/Magento"], '*.php');
+                $toolFiles = preg_grep('#dev/tools/Magento/Tools/[\\w]+/Test#', $toolFiles, PREG_GREP_INVERT);
+                $files = array_merge($files, $toolFiles);
             }
             if ($lib) {
-                $files = array_merge($files, self::getFiles(["{$this->_path}/lib/internal/Magento"], '*.php'));
+                $libFiles = self::getFiles(["{$this->_path}/lib/internal/Magento"], '*.php');
+                $libFiles = preg_grep('#lib/internal/Magento/Framework/[\\w]+/Test#', $libFiles, PREG_GREP_INVERT);
+                $libFiles = preg_grep('#lib/internal/[\\w]+/[\\w]+/Test#', $libFiles, PREG_GREP_INVERT);
+                $files = array_merge($files, $libFiles);
             }
             self::$_cache[$key] = $files;
         }
