@@ -19,42 +19,50 @@ define('globalNavigation', [
                 interval: 100,
                 timeout: 500 // number = milliseconds delay before onMouseOut
             },
+            overlayClass: 'admin__menu-overlay',
             categoriesConfig: {
-                '[data-ui-id="menu-mage-adminhtml-system"]': {
-                    open: 'click'
-                },
-                '[data-ui-id="menu-mage-adminhtml-stores"]': {
+                'li': {
                     open: 'click'
                 }
             }
         },
 
         _create: function () {
-            this.menu = this.element;
-            this.menuCategory = $(this.options.menuCategory, this.menu);
-            this.menuLinks = $(this.options.menuLinks, this.menuCategory);
+            this.menu           = this.element;
+            this.menuCategory   = $(this.options.menuCategory, this.menu);
+            this.menuLinks      = $(this.options.menuLinks, this.menuCategory);
+
+            this._addOverlay();
+
             this._bind();
         },
 
-        _menuCategoryBind: function (category, config) {
-            category
-                .hoverIntent($.extend({}, this.options.hoverIntentConfig, {
-                    over: !config.open ? this._hoverEffects : $.noop,
-                    out: !config.close ? this._leaveEffects : $.noop
-                }));
-            
-            if (config.open) {
-                category.on(config.open, this._hoverEffects);
-            }
+        _addOverlay: function () {
+            var wrapper = $('<div />').addClass('admin__scope');
 
-            if (config.close) {
-                category.on(config.close, this._leaveEffects);
+            this.overlay = $('<div />')
+                .addClass(this.options.overlayClass)
+                .appendTo('body')
+                .hide(0);
+
+            /**
+             * @todo fix LESS and remove next line and wrapper definition
+             */
+            this.overlay.wrap(wrapper);
+        },
+
+        _menuCategoryBind: function (category, config) {
+            var open = this._open.bind(this);
+
+            if (config.open) {
+                $('> a', category).on(config.open, open);
             }
         },
 
         _menuCategoryEvents: function () {
             this.menuCategory.each($.proxy(function (i, category) {
                 var itemConfig = {};
+
                 if (this.options.categoriesConfig) {
                     $.each(this.options.categoriesConfig, $.proxy(function (selector, conf) {
                         if ($(category).is(selector)) {
@@ -77,61 +85,50 @@ define('globalNavigation', [
                 });
         },
 
-        _hoverEffects: function (e) {
+        _open: function (e) {
+            var menuItem = $(e.target).closest('.level-0'),
+                subMenu = $('> .submenu', menuItem);
 
-            // Disable current active class while hover is on level 0
-            $(this).siblings('._active').addClass('_current').removeClass('_active');
+            e.preventDefault();
 
-            $(this)
+            menuItem
                 .addClass('_hover _recent')
-                .siblings('.level-0').each(function () {
-                    clearTimeout($(this).prop('hoverIntent_t'));
-                    $(this).prop('hoverIntent_s', 0);
-                    $(this).removeClass('_recent _hover');
-                });
+                .siblings('._active')
+                .addClass('_current')
+                .removeClass('_active');
 
-            var targetSubmenu = $(e.target).closest('.submenu');
-            if (targetSubmenu.length && targetSubmenu.is(':visible')) {
-                return;
-            }
-            var availableWidth = parseInt($(this).parent().css('width')) - $(this).position().left,
-                submenu = $('> .submenu', this),
-                colsWidth = 0;
+            menuItem
+                .siblings('.level-0')
+                .removeClass('_hover _recent');
 
-            submenu.addClass('_show');
+            subMenu
+                .attr('aria-expanded', 'true');
 
-            $.each($('> .submenu > ul li.column', this), function () {
-                colsWidth = colsWidth + parseInt($(this).css('width'));
-            });
+            subMenu.find('button._close').on('click', this._close.bind(this));
 
-            var containerPaddings = parseInt(submenu.css('padding-left')) + parseInt(submenu.css('padding-right'));
-
-            $(this).toggleClass('reverse', (containerPaddings + colsWidth) > availableWidth);
-
-            submenu.removeClass('_show');
+            this.overlay
+                .on('click', this._close.bind(this))
+                .show(0);
         },
 
-        _leaveEffects: function (e) {
+        _close: function (e) {
+            var navigation  = this.element,
+                menuItem    = $('.level-0._hover', navigation),
+                subMenu     = $('> submenu', menuItem);
 
-            // Disable current active class while hover is on level 0
-            $(this).siblings('._current').addClass('_active').removeClass('_current');
+            e.preventDefault();
 
-            var targetSubmenu = $(e.target).closest('.submenu'),
-                self = $(this),
-                submenu = $('> .submenu', this);
+            this.overlay.off('click').hide(0);
 
-            if (targetSubmenu.length && targetSubmenu.is(':hidden')) {
-                return;
-            }
+            subMenu.find('button._close').off('click');
 
-            if (submenu.length) {
-                submenu.removeClass('_show', function () {
-                    self.removeClass('_hover');
-                });
-            } else {
-                self.removeClass('_hover');
-            }
+            menuItem.addClass('_active').removeClass('_current');
 
+            subMenu
+                .removeClass('_show')
+                .attr('aria-expanded', 'false');
+
+            menuItem.removeClass('_hover _active');
         }
     });
 
