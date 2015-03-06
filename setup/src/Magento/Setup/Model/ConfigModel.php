@@ -7,6 +7,8 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\ConfigOptionsInterface;
+use Magento\Framework\Config\Data\ConfigData;
 
 class ConfigModel
 {
@@ -39,9 +41,7 @@ class ConfigModel
 
         foreach ($options as $option) {
             // TODO: we need to get rid of keys here
-            if ($option['enabled']) {
-                $optionCollection = array_merge($optionCollection, $option['options']);
-            }
+            $optionCollection = array_merge($optionCollection, $option->getOptions());
         }
 
         return $optionCollection;
@@ -54,26 +54,47 @@ class ConfigModel
      */
     public function process($inputOptions)
     {
+        // TODO: add error processing and refactor
         $fileConfigStorage = [];
 
         $options = $this->collector->collectOptions();
-        foreach ($options as $option) {
-            if ($option['enabled']) {
-                // TODO: add isset and check of instance here
-                $conf = $option['configOption']->createConfig($inputOptions);
 
-                // TODO: this file should be returned by ConfigOption
-                $defaultConfigFile = ConfigFilePool::APP_CONFIG;
+        foreach ($options as $moduleName => $option) {
 
-                if (isset($fileConfigStorage[$defaultConfigFile])) {
-                    $fileConfigStorage[$defaultConfigFile] = array_merge(
-                        $fileConfigStorage[$defaultConfigFile],
-                        $conf
-                        );
+            if (!$option instanceof ConfigOptionsInterface) {
+                // TODO: ROMOVE IT!
+                echo "FIX IT!: " . 'ConfigOption for module:' . $moduleName . ' does not implement ConfigOptionsInterface' . PHP_EOL;
+                continue;
+                throw new \Exception(
+                    'ConfigOption for module:' . $moduleName . ' does not implement ConfigOptionsInterface'
+                );
+            }
+
+            $configData = $option->createConfig($inputOptions);
+            foreach ($configData as $config) {
+
+                if (!$config instanceof ConfigData) {
+                    // TODO: ROMOVE IT!
+                    echo "FIX IT!: " . 'In module : ' .$moduleName . 'ConfigOption::createConfig should return instance of ConfigData' . PHP_EOL;
+                    continue;
+                    throw new \Exception(
+                        'In module : ' .$moduleName . 'ConfigOption::createConfig should return instance of ConfigData'
+                    );
+                }
+
+                if (
+                    isset($fileConfigStorage[$config->getFileKey()])
+                    && isset($fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()])
+                ) {
+                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_merge(
+                        $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()],
+                        $config->getData()
+                    );
                 } else {
-                    $fileConfigStorage[$defaultConfigFile] = $conf;
+                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = $config->getData();
                 }
             }
+
         }
 
         var_dump($fileConfigStorage);
