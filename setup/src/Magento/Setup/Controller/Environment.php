@@ -54,19 +54,19 @@ class Environment extends AbstractActionController
     {
         try {
             $requiredVersion = $this->phpInformation->getRequiredPhpVersion();
+            $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
+            $currentPhpVersion = $this->versionParser->parseConstraints(strtok(PHP_VERSION,'-'));
         } catch (\Exception $e) {
             return new JsonModel(
                 [
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
                     'data' => [
-                        'error' => 'phpVersionError',
+                        'exception' => 'phpVersionException',
                         'message' => 'Cannot determine required PHP version: ' . $e->getMessage()
                     ],
                 ]
             );
         }
-        $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        $currentPhpVersion = $this->versionParser->parseConstraints(PHP_VERSION);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
