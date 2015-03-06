@@ -499,15 +499,15 @@ class TypeProcessor
     /**
      * Set value to a particular type
      *
-     * @param $value
-     * @param $type
+     * @param mixed $value
+     * @param string $type
      * @return true on successful type cast
      */
     protected function setType(&$value, $type)
     {
         // settype doesn't work for boolean string values.
         // ex: custom_attributes passed from SOAP client can have boolean values as string
-        if($type == 'bool' || $type == 'boolean') {
+        if ($type == 'bool' || $type == 'boolean') {
             $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
             return true;
         }

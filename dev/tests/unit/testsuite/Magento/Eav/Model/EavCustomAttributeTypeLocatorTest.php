@@ -20,17 +20,6 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeRepository = [];
 
-    /**
-     * @var array
-     */
-    private $serviceEntityTypeMap = [];
-
-    /**
-     * @var array
-     */
-    private $serviceBackendModelDataInterfaceMapMock;
-
-
     protected function setUp()
     {
         $this->attributeRepository = $this->getMock(

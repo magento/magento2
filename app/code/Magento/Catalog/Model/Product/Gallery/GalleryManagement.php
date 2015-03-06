@@ -10,10 +10,10 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface a
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -189,11 +189,15 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $entry->isDisabled()
         );
         // Update additional fields that are still empty after addImage call
-        $productMediaGallery->updateImage($product, $imageFileUri, [
-            'label' => $entry->getLabel(),
-            'position' => $entry->getPosition(),
-            'disabled' => $entry->isDisabled(),
-        ]);
+        $productMediaGallery->updateImage(
+            $product,
+            $imageFileUri,
+            [
+                'label' => $entry->getLabel(),
+                'position' => $entry->getPosition(),
+                'disabled' => $entry->isDisabled(),
+            ]
+        );
         $product->setStoreId($storeId);
 
         try {
@@ -213,7 +217,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function createUsingCustomAttribute($product) {
+    public function createUsingCustomAttribute($product)
+    {
         try {
             $this->storeManager->getStore($product->getStoreId());
         } catch (\Exception $exception) {
@@ -244,11 +249,15 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             throw new NoSuchEntityException('There is no image with provided ID.');
         }
 
-        $productMediaGallery->updateImage($product, $filePath, [
-            'label' => $entry->getLabel(),
-            'position' => $entry->getPosition(),
-            'disabled' => $entry->isDisabled(),
-        ]);
+        $productMediaGallery->updateImage(
+            $product,
+            $filePath,
+            [
+                'label' => $entry->getLabel(),
+                'position' => $entry->getPosition(),
+                'disabled' => $entry->isDisabled(),
+            ]
+        );
         $productMediaGallery->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $productMediaGallery->setMediaAttribute($product, $entry->getTypes(), $filePath);
         $product->setStoreId($storeId);
