@@ -18,28 +18,38 @@ class EngineProvider
     /**
      * @var \Magento\CatalogSearch\Model\Resource\EngineInterface
      */
-    protected $_engine;
+    protected $engine;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
+
+    /**
+     * Pool of existing engines
+     *
+     * @var array
+     */
+    private $enginePool;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param array $engines
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        array $engines
     ) {
-        $this->_scopeConfig = $scopeConfig;
-        $this->_objectManager = $objectManager;
+        $this->scopeConfig = $scopeConfig;
+        $this->objectManager = $objectManager;
+        $this->enginePool = $engines;
     }
 
     /**
@@ -49,28 +59,26 @@ class EngineProvider
      */
     public function get()
     {
-        if (!$this->_engine) {
-            $engineClassName = $this->_scopeConfig->getValue(self::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
+        if (!$this->engine) {
+            $currentEngine = $this->scopeConfig->getValue(self::CONFIG_ENGINE_PATH, ScopeInterface::SCOPE_STORE);
+            if (!isset($this->enginePool[$currentEngine])) {
+                throw new \LogicException(
+                    'There is no such engine: ' . $currentEngine
+                );
+            }
+            $engineClassName = $this->enginePool[$currentEngine];
 
-            /**
-             * This needed if there already was saved in configuration some none-default engine
-             * and module of that engine was disabled after that.
-             * Problem is in this engine in database configuration still set.
-             */
-            if ($engineClassName) {
-                $engine = $this->_objectManager->create($engineClassName);
-
-                if (false === $engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface) {
-                    throw new \LogicException(
-                        $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'
-                    );
-                }
-                if ($engine && $engine->test()) {
-                    $this->_engine = $engine;
-                }
+            $engine = $this->objectManager->create($engineClassName);
+            if (false === $engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface) {
+                throw new \LogicException(
+                    $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'
+                );
+            }
+            if ($engine && $engine->test()) {
+                $this->engine = $engine;
             }
         }
 
-        return $this->_engine;
+        return $this->engine;
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <section id="catalog">
+            <group id="search">
+                <field id="engine" translate="label" type="select" sortOrder="19" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Search Engine</label>
+                    <source_model>Magento\Search\Model\Adminhtml\System\Config\Source\Engine</source_model>
+                </field>
+                <field id="search_type">
+                    <depends>
+                        <field id="engine">mysql</field>
+                    </depends>
+                </field>
+                <field id="use_layered_navigation_count">
+                    <depends>
+                        <field id="engine">mysql</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
