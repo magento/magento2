@@ -9,7 +9,7 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class RowTest extends \PHPUnit_Framework_TestCase
 {

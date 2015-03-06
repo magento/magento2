@@ -69,7 +69,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function getBlock(array $arguments)
     {
-        return (new \Magento\TestFramework\Helper\ObjectManager($this))
+        return (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\View\Layout\Reader\Block', $arguments);
     }
 

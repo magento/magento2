@@ -12,7 +12,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 {
     public function testToHtml()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $context = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
         $httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')

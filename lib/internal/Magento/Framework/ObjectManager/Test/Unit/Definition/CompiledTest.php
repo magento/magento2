@@ -11,7 +11,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetParametersWithUndefinedDefinition()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $undefinedDefinitionSignature = new \stdClass();
         $className = 'undefinedDefinition';
         $readerMock = $this->getMock(

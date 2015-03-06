@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class BaseFactoryTest extends \Magento\Test\AbstractFactoryTestCase
+class BaseFactoryTest extends \Magento\Framework\Test\Unit\TestFramework\AbstractFactoryTestCase
 {
     protected function setUp()
     {

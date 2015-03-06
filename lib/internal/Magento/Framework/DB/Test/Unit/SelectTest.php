@@ -7,7 +7,7 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use \Magento\Framework\DB\Select;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class SelectTest extends \PHPUnit_Framework_TestCase
 {

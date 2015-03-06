@@ -43,7 +43,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->urlBuilder = $this->getMock('Magento\Framework\Url', ['getUrl'], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', ['getServer'], [], '', false);

@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Totals block test

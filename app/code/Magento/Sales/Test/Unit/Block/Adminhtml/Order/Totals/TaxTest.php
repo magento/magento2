@@ -82,7 +82,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getConstructArguments($taxHelperMock)
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         return $objectManagerHelper->getConstructArguments(
             'Magento\Sales\Block\Adminhtml\Order\Totals\Tax',
             ['taxHelper' => $taxHelperMock]

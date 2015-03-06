@@ -15,7 +15,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         $layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $layout->expects($this->once())->method('createBlock')->with('block')->will($this->returnValue($tabBlock));
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $block = $helper->getObject('Magento\Catalog\Block\Product\View\Tabs', ['layout' => $layout]);
         $block->addTab('alias', 'title', 'block', 'template', 'header');
 

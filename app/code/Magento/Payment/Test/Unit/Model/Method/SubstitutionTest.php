@@ -20,7 +20,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject('Magento\Payment\Model\Method\Substitution');
     }
 

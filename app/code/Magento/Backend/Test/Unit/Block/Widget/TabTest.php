@@ -14,7 +14,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     /**

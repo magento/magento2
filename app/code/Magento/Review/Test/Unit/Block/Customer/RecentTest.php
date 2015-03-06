@@ -5,7 +5,7 @@
  */
 namespace Magento\Review\Test\Unit\Block\Customer;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class RecentTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
 use Magento\Framework\App\Area;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
 {

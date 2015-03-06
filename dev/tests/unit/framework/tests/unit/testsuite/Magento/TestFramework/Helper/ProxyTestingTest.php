@@ -43,7 +43,7 @@ class ProxyTestingTest extends \PHPUnit_Framework_TestCase
         $builder->will($this->returnCallback($callProxy));
 
         // Test it
-        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations(
             $object,
             $proxiedObject,

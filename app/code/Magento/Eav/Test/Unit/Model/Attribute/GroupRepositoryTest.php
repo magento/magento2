@@ -69,7 +69,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Eav\Model\Attribute\GroupRepository',
             [

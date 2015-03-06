@@ -41,7 +41,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getEscaper')->will($this->returnValue($escaper));
         $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManager->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons\Save',
             ['context' => $context]

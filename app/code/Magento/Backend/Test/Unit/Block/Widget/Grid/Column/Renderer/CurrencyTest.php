@@ -82,7 +82,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
         $this->_row = new \Magento\Framework\Object(['columnIndex' => '10']);
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_blockCurrency = $helper->getObject(
             'Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency',
             [

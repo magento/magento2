@@ -86,7 +86,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->jsonHelperMock = $this->getMock(
             'Magento\Framework\Json\Helper\Data',

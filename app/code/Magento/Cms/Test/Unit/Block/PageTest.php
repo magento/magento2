@@ -22,7 +22,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject('Magento\Cms\Block\Page');
         $this->page = $objectManager->getObject('Magento\Cms\Model\Page');
         $reflection = new \ReflectionClass($this->page);

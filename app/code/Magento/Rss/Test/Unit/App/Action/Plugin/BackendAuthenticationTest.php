@@ -56,7 +56,7 @@ class BackendAuthenticationTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\Rss\App\Action\Plugin\BackendAuthentication $plugin */
-        $plugin = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $plugin = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Rss\App\Action\Plugin\BackendAuthentication',
                 [

@@ -21,7 +21,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
     public function testSetForm()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
 

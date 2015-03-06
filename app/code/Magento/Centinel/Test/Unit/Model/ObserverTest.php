@@ -85,7 +85,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($event));
 
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $this->objectManager->getObject('Magento\Centinel\Model\Observer');
 
         $this->assertEquals($model->paymentFormBlockToHtmlBefore($observer), $model);

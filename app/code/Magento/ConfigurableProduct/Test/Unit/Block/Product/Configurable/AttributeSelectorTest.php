@@ -19,7 +19,7 @@ class AttributeSelectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
         $this->attributeSelector = $helper->getObject(
             'Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector',

@@ -8,7 +8,7 @@
 
 namespace Magento\Customer\Test\Unit\Model\Resource;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {

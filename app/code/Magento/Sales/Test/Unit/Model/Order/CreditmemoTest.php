@@ -9,7 +9,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Resource\OrderFactory;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Sales\Model\Resource\Order\Creditmemo\Item\Collection as ItemCollection;
 

@@ -30,7 +30,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->paymentConfig = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
         $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false);
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', ['getLocaleDate'], [], '', false);

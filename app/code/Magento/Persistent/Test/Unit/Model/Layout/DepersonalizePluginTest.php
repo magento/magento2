@@ -47,7 +47,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->persistentSessionMock = $this->getMock(
             'Magento\Persistent\Model\Session',

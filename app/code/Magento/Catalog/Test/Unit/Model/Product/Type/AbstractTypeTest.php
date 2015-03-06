@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 {

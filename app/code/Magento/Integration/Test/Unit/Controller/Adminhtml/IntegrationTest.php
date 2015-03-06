@@ -105,7 +105,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \Magento\TestFramework\Helper\ObjectManager $objectManagerHelper */
-        $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(

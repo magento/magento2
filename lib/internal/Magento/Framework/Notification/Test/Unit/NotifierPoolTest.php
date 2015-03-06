@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Notification\Test\Unit;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class NotifierPoolTest extends \PHPUnit_Framework_TestCase
 {

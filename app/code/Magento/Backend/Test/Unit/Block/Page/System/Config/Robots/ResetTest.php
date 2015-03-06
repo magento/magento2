@@ -25,7 +25,7 @@ class ResetTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
             'Magento\Backend\Block\Template\Context',
             ['scopeConfig' => $this->configMock]

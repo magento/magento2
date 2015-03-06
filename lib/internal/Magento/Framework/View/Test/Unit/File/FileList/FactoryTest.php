@@ -26,7 +26,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helperObjectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $collator = $helperObjectManager->getObject(\Magento\Framework\View\File\FileList\Factory::FILE_LIST_COLLATOR);
         $list = $helperObjectManager->getObject('Magento\Framework\View\File\FileList');
 

@@ -22,7 +22,7 @@ class RateTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->resourceMock = $this->getMock(
             'Magento\Framework\Model\Resource\AbstractResource',
             ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName', 'beginTransaction',

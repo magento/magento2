@@ -78,7 +78,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRedirectMock);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->configureController = $objectManagerHelper->getObject(
             'Magento\Checkout\Controller\Cart\Configure',

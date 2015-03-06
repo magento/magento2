@@ -11,7 +11,7 @@ namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\AttributeValue;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

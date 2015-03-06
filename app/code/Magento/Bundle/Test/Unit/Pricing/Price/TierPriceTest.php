@@ -64,7 +64,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
 
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\TierPrice', [
             'saleableItem' => $this->product,
             'calculator' => $this->calculator,

@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Test for \Magento\Downloadable\Model\Product\TypeHandler\Link

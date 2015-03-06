@@ -39,7 +39,7 @@ class LogoTest extends \PHPUnit_Framework_TestCase
         );
         $helper->expects($this->once())->method('checkDbUsage')->will($this->returnValue(false));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $arguments = [
             'scopeConfig' => $scopeConfig,

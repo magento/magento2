@@ -48,7 +48,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
             'request' => $this->_requestMock,
             'urlBuilder' => $this->_urlBuilderMock,
         ];
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_object = $helper->getObject('Magento\Config\Block\System\Config\Tabs', $data);
     }
 

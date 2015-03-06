@@ -8,7 +8,7 @@ namespace Magento\Log\Test\Unit\Model;
 
 use \Magento\Log\Model\Log;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {

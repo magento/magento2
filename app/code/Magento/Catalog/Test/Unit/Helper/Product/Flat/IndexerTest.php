@@ -91,7 +91,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $this->_objectManager->getObject(
             'Magento\Catalog\Helper\Product\Flat\Indexer',
             [

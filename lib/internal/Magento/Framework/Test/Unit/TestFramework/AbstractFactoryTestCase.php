@@ -9,7 +9,7 @@
  * of parent classes.
  *
  */
-namespace Magento\Test;
+namespace Magento\Framework\Test\Unit\TestFramework;
 
 abstract class AbstractFactoryTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +40,7 @@ abstract class AbstractFactoryTestCase extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();

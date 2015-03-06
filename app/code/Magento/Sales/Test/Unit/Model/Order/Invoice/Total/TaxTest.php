@@ -30,7 +30,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
         $this->model = $this->objectManager->getObject('Magento\Sales\Model\Order\Invoice\Total\Tax');
 

@@ -7,7 +7,7 @@ namespace Magento\Framework\Search\Test\Unit\Dynamic;
 
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\Framework\App\ScopeInterface;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
 {

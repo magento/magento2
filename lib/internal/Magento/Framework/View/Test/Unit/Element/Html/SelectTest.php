@@ -40,7 +40,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfig));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->select = $objectManagerHelper->getObject('Magento\Framework\View\Element\Html\Select', [
             'context' => $context
         ]);

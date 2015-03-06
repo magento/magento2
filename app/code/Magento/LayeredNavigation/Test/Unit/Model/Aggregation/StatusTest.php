@@ -6,7 +6,7 @@
 
 namespace Magento\LayeredNavigation\Test\Unit\Model\Aggregation;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class StatusTest extends \PHPUnit_Framework_TestCase
 {

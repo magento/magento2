@@ -51,7 +51,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
         // Test
         $object = new \Magento\Framework\Cache\Frontend\Decorator\Profiler($frontendMock, ['Zend_Cache_Backend_']);
-        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult);
         $this->assertSame($expectedResult, $result);
     }

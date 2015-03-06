@@ -31,7 +31,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $className = 'Magento\Core\Helper\File\Storage';
         $arguments = $this->objectManager->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */

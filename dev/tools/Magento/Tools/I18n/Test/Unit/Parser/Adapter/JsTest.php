@@ -5,7 +5,7 @@
  */
 namespace Magento\Tools\I18n\Test\Unit\Parser\Adapter;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use Magento\Tools\I18n\Dictionary\Phrase;
 
 class JsTest extends \PHPUnit_Framework_TestCase

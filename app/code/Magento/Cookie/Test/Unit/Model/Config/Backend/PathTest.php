@@ -11,7 +11,7 @@
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\Session\Config\Validator\CookiePathValidator;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class PathTest extends \PHPUnit_Framework_TestCase
 {

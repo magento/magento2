@@ -24,7 +24,7 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
      */
     public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams, $userId, $userType)
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $userContextMock = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();

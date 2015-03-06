@@ -58,7 +58,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Session\Config\Validator\CookieDomainValidator'
         )->disableOriginalConstructor()
             ->getMock();
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->domain = $helper->getObject(
             'Magento\Cookie\Model\Config\Backend\Domain',
             [

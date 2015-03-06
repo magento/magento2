@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class LockValidatorTest extends \PHPUnit_Framework_TestCase
 {

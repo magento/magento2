@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

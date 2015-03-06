@@ -93,7 +93,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->context = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context', [
             'layout' => $this->layout,
             'request' => $this->request,
@@ -116,7 +116,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with(['pageConfig' => $this->pageConfig])
             ->willReturn($this->pageConfigRenderer);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->page = $objectManagerHelper->getObject(
             'Magento\Framework\View\Result\Page',
             [

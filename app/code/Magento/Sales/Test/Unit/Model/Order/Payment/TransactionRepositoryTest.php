@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
 use \Magento\Sales\Model\Order\Payment\TransactionRepository;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class TransactionRepositoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -58,7 +58,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->rulesApplier = $this->getMock(
             'Magento\SalesRule\Model\RulesApplier',
             ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', '__wakeup'],

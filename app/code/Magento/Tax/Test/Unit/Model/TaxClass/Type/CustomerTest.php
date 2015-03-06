@@ -9,7 +9,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAssignedToObjects()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $searchResultsMock  = $this->getMockBuilder('Magento\Framework\Api\SearchResults')
             ->setMethods(['getItems'])

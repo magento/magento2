@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Class NewActionTest

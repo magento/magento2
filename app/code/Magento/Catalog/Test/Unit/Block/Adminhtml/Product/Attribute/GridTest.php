@@ -32,7 +32,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $data = ['context' => $context];
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid $block */
         $block = $helper->getObject('Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid', $data);
 

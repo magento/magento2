@@ -38,7 +38,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontName')
             ->will($this->returnValue('rest'));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_request = $objectManager->getObject(
             'Magento\Framework\Webapi\Rest\Request',
             [

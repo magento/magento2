@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments('Magento\Multishipping\Helper\Data');
         $this->helper = $objectManager->getObject('Magento\Multishipping\Helper\Data', $arguments);
         $this->checkoutSessionMock = $arguments['checkoutSession'];

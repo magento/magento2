@@ -93,7 +93,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('_getWriteAdapter')
             ->will($this->returnValue($dbAdapterMock));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
                 'Magento\Catalog\Model\Resource\Eav\Attribute',
                 [
@@ -135,7 +135,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScopeGlobal()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Resource\Eav\Attribute',
             [
@@ -153,7 +153,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScopeWebiste()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Resource\Eav\Attribute',
             [
@@ -171,7 +171,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScopeStore()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Resource\Eav\Attribute',
             [

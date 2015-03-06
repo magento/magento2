@@ -7,7 +7,7 @@
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
  */
-namespace Magento\TestFramework\Helper;
+namespace Magento\Framework\Test\Unit\TestFramework\Helper;
 
 class ObjectManager
 {

@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\Lists;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ListsTest extends \PHPUnit_Framework_TestCase
 {

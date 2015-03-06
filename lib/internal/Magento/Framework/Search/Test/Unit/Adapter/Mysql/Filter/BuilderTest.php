@@ -10,7 +10,7 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Query\Bool as RequestBoolQuery;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {

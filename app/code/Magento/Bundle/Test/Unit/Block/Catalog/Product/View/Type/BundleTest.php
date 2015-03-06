@@ -31,7 +31,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->bundleProductPriceFactory = $this->getMockBuilder('\Magento\Bundle\Model\Product\PriceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -235,7 +235,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     private function setupBundleBlock($options, $priceInfo, $priceType)
     {
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $optionCollection = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
             ->disableOriginalConstructor()

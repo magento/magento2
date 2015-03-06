@@ -25,7 +25,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         /** @var \Magento\Widget\Model\Template\Filter $filter */
-        $filter = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $filter = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Widget\Model\Template\Filter',
                 ['storeManager' => $storeManagerMock]

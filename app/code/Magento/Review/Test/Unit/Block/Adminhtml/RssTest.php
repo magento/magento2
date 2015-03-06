@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Unit\Block\Adminhtml;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class RssTest extends \PHPUnit_Framework_TestCase
 {

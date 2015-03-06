@@ -69,7 +69,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             ->with($mapValue)
             ->will($this->returnValue($mapValue));
 
-        $model = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $model = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 '\Magento\GoogleShopping\Model\Attribute\Content',
                 ['gsProduct' => $productHelper, 'googleShoppingHelper' => $googleShoppingHelper]

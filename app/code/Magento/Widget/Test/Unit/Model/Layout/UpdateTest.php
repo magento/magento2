@@ -40,7 +40,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(self::TEST_FORMATTED_TIME)
         );
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Widget\Model\Layout\Update */
         $model = $helper->getObject(
             'Magento\Widget\Model\Layout\Update',

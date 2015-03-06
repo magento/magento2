@@ -19,7 +19,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('soap'));
 
         /** Initialize SUT. */
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_soapRequest = $objectManager->getObject(
             'Magento\Webapi\Controller\Soap\Request',
             [

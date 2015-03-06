@@ -9,7 +9,7 @@
 namespace Magento\Shipping\Test\Unit\Model;
 
 use Magento\Sales\Model\Resource\OrderFactory;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ShipmentTest

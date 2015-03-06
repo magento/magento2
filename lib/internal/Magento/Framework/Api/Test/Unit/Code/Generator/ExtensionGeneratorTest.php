@@ -24,7 +24,7 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Framework\Api\Code\Generator\ObjectExtension',
             [
@@ -67,7 +67,7 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateException()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Framework\Api\Code\Generator\ObjectExtension $model */
         $model = $objectManager->getObject(
             'Magento\Framework\Api\Code\Generator\ObjectExtension',

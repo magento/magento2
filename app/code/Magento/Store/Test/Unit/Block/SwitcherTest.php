@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Test\Unit\Block;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class SwitcherTest extends \PHPUnit_Framework_TestCase
 {

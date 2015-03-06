@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * \Magento\Framework\Image\Adapter\Gd2 class test

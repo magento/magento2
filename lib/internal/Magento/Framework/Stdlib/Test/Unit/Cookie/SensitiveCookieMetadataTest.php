@@ -7,7 +7,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
 use \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Test SensitiveCookieMetaData

@@ -25,7 +25,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMockBuilder('Magento\\Framework\\Config\\CacheInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     public function testGet()

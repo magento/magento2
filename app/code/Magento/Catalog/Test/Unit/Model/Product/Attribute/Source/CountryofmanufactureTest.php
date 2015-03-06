@@ -32,7 +32,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->cacheConfig = $this->getMock('\Magento\Framework\App\Cache\Type\Config', [], [], '', false);
-        $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     /**

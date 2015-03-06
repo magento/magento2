@@ -13,7 +13,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $className = 'class_name';
         $data = ['data'];
 
-        $object = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject('Magento\Framework\Object');
+        $object = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject('Magento\Framework\Object');
 
         /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
@@ -21,7 +21,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($object));
 
         /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject $factory */
-        $factory = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $factory = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\View\Layout\ReaderFactory', ['objectManager' => $objectManager]);
 
         $this->setExpectedException(
@@ -45,7 +45,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($object));
 
         /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject $factory */
-        $factory = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $factory = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\View\Layout\ReaderFactory', ['objectManager' => $objectManager]);
 
         $this->assertSame($object, $factory->create($className, $data));

@@ -34,7 +34,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_readerPool = $this->getMockForAbstractClass('\Magento\Framework\App\Config\Scope\ReaderPoolInterface');
         $this->_reader = $this->getMockForAbstractClass('\Magento\Framework\App\Config\Scope\ReaderInterface');
         $this->_dataFactory = $this->getMockBuilder(

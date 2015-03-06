@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 use Magento\Framework\Object;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {

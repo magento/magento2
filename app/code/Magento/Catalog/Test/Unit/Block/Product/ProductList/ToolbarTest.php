@@ -138,7 +138,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['list' => 'List']));
 
         $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', ['encode'], [], '', false);
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Product\ProductList\Toolbar',
             [

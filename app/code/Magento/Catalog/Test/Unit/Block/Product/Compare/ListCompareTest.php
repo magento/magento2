@@ -31,7 +31,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Product\Compare\ListCompare',
             ['context' => $context]

@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type\Grouped;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class LinksTest extends \PHPUnit_Framework_TestCase
 {

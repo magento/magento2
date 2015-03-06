@@ -22,7 +22,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     {
         $this->_xsdSchema = BP . '/lib/internal/Magento/Framework/App/etc/routes.xsd';
 
-        $this->_xsdValidator = new \Magento\TestFramework\Utility\XsdValidator();
+        $this->_xsdValidator = new \Magento\Framework\Test\Unit\TestFramework\Utility\XsdValidator();
     }
 
     /**

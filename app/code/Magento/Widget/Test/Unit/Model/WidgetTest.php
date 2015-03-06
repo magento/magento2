@@ -22,7 +22,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->_storage = $this->getMockBuilder(
             'Magento\Widget\Model\Config\Data'
         )->disableOriginalConstructor()->getMock();
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $objectManagerHelper->getObject('Magento\Widget\Model\Widget', ['dataStorage' => $this->_storage]);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Widget\Model\Widget',

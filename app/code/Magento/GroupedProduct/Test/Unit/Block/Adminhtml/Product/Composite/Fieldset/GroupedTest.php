@@ -50,7 +50,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $customerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectHelper->getObject(
             'Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped',
             [

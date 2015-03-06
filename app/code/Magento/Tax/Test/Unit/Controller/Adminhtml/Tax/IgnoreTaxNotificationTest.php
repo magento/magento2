@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Tax;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
 {

@@ -96,7 +96,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $dependencies = $this->_getDependencies($entityType, [[$bunchData]]);
 
         $resource = $dependencies['resource'];
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $jsonDecoderMock = $this->getMockBuilder('Magento\Framework\Json\DecoderInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -114,7 +114,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $object = $objectManager->getObject(
             '\Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\Data',
             [

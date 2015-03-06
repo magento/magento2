@@ -36,7 +36,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);

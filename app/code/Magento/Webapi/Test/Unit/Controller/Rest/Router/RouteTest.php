@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Controller\Rest\Router;
 use \Magento\Webapi\Controller\Rest\Router\Route;
 
 use Magento\Framework\App\RequestInterface as Request;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class RouteTest extends \PHPUnit_Framework_TestCase
 {

@@ -17,7 +17,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     public function testMatch()
     {
         $request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $actionFactory = $this->getMock('Magento\Framework\App\ActionFactory', [], [], '', false);
         $actionFactory->expects($this->once())->method('create')->with(
             'Magento\Framework\App\Action\Forward',

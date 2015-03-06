@@ -77,7 +77,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->_validatorMock->expects($this->any())->method('validate');
         $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Backend\Model\Menu\Item',
             [
@@ -96,7 +96,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlWithEmptyActionReturnsHashSign()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $item = $helper->getObject(
             'Magento\Backend\Model\Menu\Item',
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
@@ -126,7 +126,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testHasClickCallbackReturnsTrueIfItemHasNoAction()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $item = $helper->getObject(
             'Magento\Backend\Model\Menu\Item',
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]
@@ -137,7 +137,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetClickCallbackReturnsStoppingJsIfItemDoesntHaveAction()
     {
         $this->_params['action'] = '';
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $item = $helper->getObject(
             'Magento\Backend\Model\Menu\Item',
             ['menuFactory' => $this->_menuFactoryMock, 'data' => $this->_params]

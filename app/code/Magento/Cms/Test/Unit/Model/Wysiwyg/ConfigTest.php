@@ -99,7 +99,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'height' => 800,
         ];
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->wysiwygConfig = $objectManager->getObject(
             'Magento\Cms\Model\Wysiwyg\Config',
             [

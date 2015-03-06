@@ -28,7 +28,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_adapter = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Parser\Adapter\Php',
             ['phraseCollector' => $this->_phraseCollectorMock]

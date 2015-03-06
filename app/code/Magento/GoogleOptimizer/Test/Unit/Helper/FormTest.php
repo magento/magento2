@@ -52,7 +52,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         );
         $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $data = ['context' => $context];
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Form', $data);
     }
 

@@ -39,7 +39,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new \Magento\Bundle\Model\Product\CopyConstructor\Bundle();
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     public function testBuildNegative()

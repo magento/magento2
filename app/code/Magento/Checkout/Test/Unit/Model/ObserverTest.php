@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\Unit\Model;
 
 use \Magento\Checkout\Model\Observer;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {

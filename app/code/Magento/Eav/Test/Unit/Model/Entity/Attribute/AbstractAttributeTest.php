@@ -103,7 +103,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [
@@ -122,7 +122,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsArray()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [
@@ -138,7 +138,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsSerialized()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $rule = 'some value';
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
@@ -155,7 +155,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsEmpty()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [

@@ -9,7 +9,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 use \Magento\Framework\Search\Adapter\Mysql\Dimensions;
 
 use Magento\Framework\Search\Adapter\Mysql\Dimensions as DimensionsBuilder;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class DimensionsTest extends \PHPUnit_Framework_TestCase
 {

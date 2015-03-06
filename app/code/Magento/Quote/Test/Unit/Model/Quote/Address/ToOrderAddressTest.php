@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Tests Address convert to order

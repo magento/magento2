@@ -88,7 +88,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->quoteValidator = $this->getMock('Magento\Quote\Model\QuoteValidator', [], [], '', false);
         $this->eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface');

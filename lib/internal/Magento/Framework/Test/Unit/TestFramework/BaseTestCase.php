@@ -9,9 +9,9 @@
  * of parent classes.
  *
  */
-namespace Magento\Test;
+namespace Magento\Framework\Test\Unit\TestFramework;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {

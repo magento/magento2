@@ -21,7 +21,7 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function assertExecute($controllerName, $blockName)
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $outPut = "data";
         $resultRawMock = $this->getMock(
             'Magento\Framework\Controller\Result\Raw',

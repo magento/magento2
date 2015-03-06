@@ -167,7 +167,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitSelect($column, $value, $expected)
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $helper->getObject('Magento\Customer\Model\Resource\Attribute\Collection',
             [
                 'entityFactory' => $this->entityFactoryMock,

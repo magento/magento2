@@ -41,7 +41,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryMock));
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Sales\Model\Order\Pdf\Invoice',
             [

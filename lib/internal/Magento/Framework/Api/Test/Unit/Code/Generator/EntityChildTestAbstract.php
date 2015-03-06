@@ -6,7 +6,7 @@
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
 use Magento\Framework\Code\Generator\Io;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Class BuilderTest

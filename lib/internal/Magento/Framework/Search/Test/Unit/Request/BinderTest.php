@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Request;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class BinderTest extends \PHPUnit_Framework_TestCase
 {

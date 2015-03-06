@@ -63,7 +63,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $context = $this->getMock(
             'Magento\Backend\App\Action\Context',

@@ -227,7 +227,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
             'resultLayoutFactory' => $this->resultLayoutFactoryMock
         ];
 
-        $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helperObjectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Newsletter',
             $args

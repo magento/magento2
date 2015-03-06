@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Helper;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,7 @@
 
 namespace Magento\Rule\Test\Unit\Model\Resource\Rule\Collection;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {

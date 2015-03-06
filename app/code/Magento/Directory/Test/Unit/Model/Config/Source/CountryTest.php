@@ -19,7 +19,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_collectionMock = $this->getMock(
             'Magento\Directory\Model\Resource\Country\Collection',
             [],

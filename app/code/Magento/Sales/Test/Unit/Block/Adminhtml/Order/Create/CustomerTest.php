@@ -14,7 +14,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
         $arguments = ['context' => $contextMock];
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Customer $block */
         $block = $helper->getObject('Magento\Sales\Block\Adminhtml\Order\Create\Customer', $arguments);
 

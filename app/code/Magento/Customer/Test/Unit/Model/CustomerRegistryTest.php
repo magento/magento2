@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Test for CustomerRegistry

@@ -41,7 +41,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
         ];
 
         $attributeClass = 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute';
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $eavTypeFactory = $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false, false);
         $arguments = $objectManagerHelper->getConstructArguments(
             $attributeClass,

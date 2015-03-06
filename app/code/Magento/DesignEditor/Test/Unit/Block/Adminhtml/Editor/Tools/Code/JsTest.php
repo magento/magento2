@@ -66,7 +66,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
 
         $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js',

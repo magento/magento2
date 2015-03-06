@@ -68,7 +68,7 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
         $subject = $this->getMock('Magento\Framework\Controller\ResultInterface', [], [], '', false);
 
         /** @var \Magento\PageCache\Model\Controller\Result\BuiltinPlugin $plugin */
-        $plugin = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+        $plugin = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\PageCache\Model\Controller\Result\BuiltinPlugin',
             [
                 'registry' => $registry,

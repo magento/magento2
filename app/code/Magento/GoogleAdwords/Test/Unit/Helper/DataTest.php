@@ -25,7 +25,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $className = 'Magento\GoogleAdwords\Helper\Data';
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments($className);
         $this->_helper = $objectManager->getObject($className, $arguments);
         /** @var \Magento\Framework\App\Helper\Context $context */

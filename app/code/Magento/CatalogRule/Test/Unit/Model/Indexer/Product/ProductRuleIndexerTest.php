@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Product;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ProductRuleIndexerTest extends \PHPUnit_Framework_TestCase
 {

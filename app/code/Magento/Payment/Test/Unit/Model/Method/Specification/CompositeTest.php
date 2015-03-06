@@ -32,7 +32,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function createComposite($specifications = [])
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         return $objectManager->getObject(
             'Magento\Payment\Model\Method\Specification\Composite',

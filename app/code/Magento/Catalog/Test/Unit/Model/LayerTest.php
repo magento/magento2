@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

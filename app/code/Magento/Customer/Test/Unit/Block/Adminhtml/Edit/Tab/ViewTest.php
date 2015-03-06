@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ViewTest

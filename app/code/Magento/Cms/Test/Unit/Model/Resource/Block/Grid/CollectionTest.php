@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getReadConnection')
             ->will($this->returnValue($connection));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
             'Magento\Cms\Model\Resource\Block\Grid\Collection',
             ['resource' => $resource, 'connection' => $connection]

@@ -12,7 +12,7 @@ use Magento\Downloadable\Model\Product\Type as DownloadableProductType;
 use Magento\Downloadable\Model\Resource\Link\Purchased\Item\Collection as LinkItemCollection;
 use Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {

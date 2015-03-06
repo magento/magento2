@@ -7,7 +7,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 
 use Magento\Framework\DB\Select;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

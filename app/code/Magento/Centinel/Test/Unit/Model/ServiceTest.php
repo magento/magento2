@@ -29,7 +29,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('some value')
         );
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Centinel\Model\Service $model */
         $model = $helper->getObject(
             'Magento\Centinel\Model\Service',
@@ -118,7 +118,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         );
         $config->expects($this->once())->method('setStore')->will($this->returnValue($config));
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Centinel\Model\Service $model */
         $model = $helper->getObject(
             'Magento\Centinel\Model\Service',

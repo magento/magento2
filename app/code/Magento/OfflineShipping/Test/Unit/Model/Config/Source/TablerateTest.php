@@ -24,7 +24,7 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCode'])
             ->getMock();
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $helper->getObject('Magento\OfflineShipping\Model\Config\Source\Tablerate', [
             'carrierTablerate' => $this->carrierTablerateMock
         ]);

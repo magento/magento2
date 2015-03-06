@@ -168,7 +168,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             ->willReturn('default');
 
         /** @var \Magento\Framework\View\Layout\Generator\Block $block */
-        $block = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $block = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Framework\View\Layout\Generator\Block',
                 [

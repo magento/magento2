@@ -73,7 +73,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->sessionManager = $this->getMockForAbstractClass('Magento\Framework\Session\SessionManagerInterface');
         $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
 
-        $this->_helper = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+        $this->_helper = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\Downloadable\Helper\Download',
             [
                 'downloadableFile' => $this->_downloadableFileMock,

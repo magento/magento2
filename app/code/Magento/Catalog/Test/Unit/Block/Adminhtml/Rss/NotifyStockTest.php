@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Rss;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class NotifyStockTest

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\ProductList;
 
 use \Magento\Catalog\Model\Product\ProductList\Toolbar;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ToolbarTest extends \PHPUnit_Framework_TestCase
 {

@@ -24,7 +24,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->extensibleObjectConverter = $this->getMockBuilder('Magento\Framework\Api\ExtensibleDataObjectConverter')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->addressMapper = $this->_objectManager->getObject(
             'Magento\Customer\Model\Address\Mapper',
             [

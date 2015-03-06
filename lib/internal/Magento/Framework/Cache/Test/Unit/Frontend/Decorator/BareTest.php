@@ -18,7 +18,7 @@ class BareTest extends \PHPUnit_Framework_TestCase
         $frontendMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
 
         $object = new \Magento\Framework\Cache\Frontend\Decorator\Bare($frontendMock);
-        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult);
         $this->assertSame($expectedResult, $result);
     }

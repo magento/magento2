@@ -8,7 +8,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
 {

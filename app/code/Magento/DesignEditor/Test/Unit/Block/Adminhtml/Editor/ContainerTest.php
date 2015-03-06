@@ -18,7 +18,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     protected function tearDown()

@@ -95,7 +95,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($store));
 
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $this->objectManager
             ->getObject(
                 'Magento\Sales\Model\AdminOrder\Product\Quote\Initializer',

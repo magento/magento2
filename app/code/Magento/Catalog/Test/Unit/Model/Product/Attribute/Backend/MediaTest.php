@@ -44,7 +44,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
         $fileStorageDb = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);

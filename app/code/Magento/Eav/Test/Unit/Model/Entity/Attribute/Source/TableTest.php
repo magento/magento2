@@ -6,7 +6,7 @@
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
 use Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class TableTest extends \PHPUnit_Framework_TestCase
 {

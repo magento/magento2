@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
             'Magento\Catalog\Model\Config',
             ['setCollectionFactory' => $setCollectionFactory]
@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
             'Magento\Catalog\Model\Config',
             ['groupCollectionFactory' => $groupCollectionFactory]
@@ -136,7 +136,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testLoadProductTypes()
     {
         $productTypeFactory = $this->getMock('\Magento\Catalog\Model\Product\TypeFactory', ['create'], [], '', false);
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
             'Magento\Catalog\Model\Config',
             ['productTypeFactory' => $productTypeFactory]
@@ -183,7 +183,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->getMock('\Magento\Framework\Object', ['getAllOptions'], [], '', false);
         $object->expects($this->once())->method('getAllOptions')->will($this->returnValue($data));
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject('Magento\Catalog\Model\Config');
         $this->assertEquals($expected, $model->getSourceOptionId($object, $search));
     }
@@ -253,7 +253,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $eavConfig->expects($this->once())->method('getAttribute')->with($entityType, $attributeData['attribute_code'])
             ->will($this->returnValue($attribute));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
             'Magento\Catalog\Model\Config',
             ['configFactory' => $configFactory, 'storeManager' => $storeManager, 'eavConfig' => $eavConfig]
@@ -314,7 +314,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $scopeConfig->expects($this->once())->method('getValue')
             ->with('catalog/frontend/default_sort_by', 'store', null)->will($this->returnValue(1));
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject('Magento\Catalog\Model\Config', ['scopeConfig' => $scopeConfig]);
         $this->assertEquals(1, $model->getProductListDefaultSortBy());
     }

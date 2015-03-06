@@ -107,7 +107,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             global $mockTranslateSetCookie;
             $mockTranslateSetCookie = true;
             self::$isSetCookieInvoked = false;
-            $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+            $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
             $this->scopeMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieScopeInterface')
                 ->setMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()

@@ -156,7 +156,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(true)
         );
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Magento\Theme\Model\Theme\Domain\Virtual',
             ['theme' => $themeMock, 'customizationConfig' => $customizationConfig]

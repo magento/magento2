@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class BundleRegularPriceTest extends \PHPUnit_Framework_TestCase
 {

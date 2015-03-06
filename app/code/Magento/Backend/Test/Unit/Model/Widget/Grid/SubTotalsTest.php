@@ -55,7 +55,7 @@ class SubTotalsTest extends \PHPUnit_Framework_TestCase
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject('Magento\Backend\Model\Widget\Grid\SubTotals', $arguments);
 
         // setup columns

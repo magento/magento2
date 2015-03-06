@@ -27,7 +27,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', [], [], '', false);
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_filesTree = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree',

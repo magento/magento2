@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Resource;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

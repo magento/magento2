@@ -6,7 +6,7 @@
 namespace Magento\Msrp\Test\Unit\Model\Observer\Frontend\Quote;
 
 use Magento\Quote\Model\Quote\Address;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Tests Magento\Msrp\Model\Observer\Frontend\Quote\SetCanApplyMsrp

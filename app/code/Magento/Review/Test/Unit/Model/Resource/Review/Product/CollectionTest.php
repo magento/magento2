@@ -65,7 +65,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
-        $this->model = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $this->model = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 '\Magento\Review\Model\Resource\Review\Product\Collection',
                 [

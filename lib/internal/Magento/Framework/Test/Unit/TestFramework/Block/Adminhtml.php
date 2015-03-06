@@ -9,7 +9,7 @@
  * of parent classes.
  *
  */
-namespace Magento\Test\Block;
+namespace Magento\Framework\Test\Unit\TestFramework\Block;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

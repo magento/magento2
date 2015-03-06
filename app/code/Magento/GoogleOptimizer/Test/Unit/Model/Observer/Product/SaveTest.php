@@ -61,7 +61,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_codeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', [], [], '', false);
         $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
             'Magento\GoogleOptimizer\Model\Observer\Product\Save',
             ['helper' => $this->_helperMock, 'modelCode' => $this->_codeMock, 'request' => $this->_requestMock]

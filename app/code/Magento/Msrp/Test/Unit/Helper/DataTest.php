@@ -37,7 +37,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getMsrp', 'getPriceInfo', '__wakeup'])
             ->getMock();
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->helper = $objectManager->getObject(
             'Magento\Msrp\Helper\Data',

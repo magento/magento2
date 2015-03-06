@@ -68,7 +68,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 'isSecure',
             ]
         );
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $objectManagerHelper->getObject(
             'Magento\Framework\App\Helper\Context',

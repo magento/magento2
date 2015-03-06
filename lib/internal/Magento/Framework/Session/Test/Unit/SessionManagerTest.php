@@ -67,7 +67,7 @@ namespace Magento\Framework\Session\Test\Unit {
             )
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+            $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
             $arguments = [
                 'sessionConfig' => $this->mockSessionConfig,
                 'cookieManager' => $this->mockCookieManager,

@@ -7,7 +7,7 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 {

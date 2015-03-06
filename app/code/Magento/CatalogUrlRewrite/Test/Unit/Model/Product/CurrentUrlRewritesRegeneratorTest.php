@@ -6,7 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 

@@ -9,7 +9,7 @@
 namespace Magento\Framework\Autoload\Test\Unit;
 
 use Composer\Autoload\ClassLoader;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
 {

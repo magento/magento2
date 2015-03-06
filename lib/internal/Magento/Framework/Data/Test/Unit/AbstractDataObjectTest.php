@@ -17,7 +17,7 @@ class AbstractDataObjectTest extends \PHPUnit_Framework_TestCase
             'nestedArray' => ['nestedObject' => $nestedObjectData],
         ];
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $subObject = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Stub\DataObject');
         $subObject->setData($subObjectData);
@@ -38,7 +38,7 @@ class AbstractDataObjectTest extends \PHPUnit_Framework_TestCase
         $value = 'value';
         $data = [$key => $value];
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $dataObject = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Stub\DataObject');
         $dataObject->setData($data);
 

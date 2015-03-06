@@ -16,7 +16,7 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
             'Magento\\Backend\\Block\\Widget\\Grid\\Column\\Renderer\\Concat'
         );

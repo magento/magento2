@@ -18,7 +18,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
     {
         $frontendMock = $this->getMock('Zend_Cache_Core');
         $object = new \Magento\Framework\Cache\Frontend\Adapter\Zend($frontendMock);
-        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ProxyTesting();
         $result = $helper->invokeWithExpectations(
             $object,
             $frontendMock,

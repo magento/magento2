@@ -216,7 +216,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         if (array_key_exists('matched', $routers)) {
             $routerListMock = $this->mockIterator($routerListMock, $routers, true);
         }
-        $router = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+        $router = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\DesignEditor\Controller\Varien\Router\Standard',
             [
                 'routerId' => 'frontend',

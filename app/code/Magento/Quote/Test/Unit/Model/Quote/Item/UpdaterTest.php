@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Tests  for Magento\Quote\Model\Service\Quote\Updater

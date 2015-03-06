@@ -11,7 +11,7 @@ namespace Magento\Store\Test\Unit\Model;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class PathConfigTest extends \PHPUnit_Framework_TestCase
 {

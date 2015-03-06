@@ -10,7 +10,7 @@ namespace Magento\Checkout\Test\Unit\Helper;
 
 use \Magento\Checkout\Helper\Data;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -57,7 +57,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $className = 'Magento\Checkout\Helper\Data';
         $arguments = $objectManagerHelper->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */
@@ -295,7 +295,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testIsContextCheckout()
     {
-        $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $context = $objectManagerHelper->getObject(
             'Magento\Framework\App\Helper\Context'
         );

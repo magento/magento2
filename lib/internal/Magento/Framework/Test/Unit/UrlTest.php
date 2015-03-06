@@ -107,7 +107,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function getUrlModel($arguments = [])
     {
         $arguments = array_merge($arguments, ['scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE]);
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new TestFramework\Helper\ObjectManager($this);
         return $objectManager->getObject('Magento\Framework\Url', $arguments);
     }
 

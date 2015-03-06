@@ -8,7 +8,7 @@ namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
 use Magento\Framework\Validator\Int;
 use Magento\Framework\Validator\Regex;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {

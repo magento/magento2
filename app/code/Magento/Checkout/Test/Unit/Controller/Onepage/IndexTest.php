@@ -8,7 +8,7 @@
 
 namespace Magento\Checkout\Test\Unit\Controller\Onepage;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
