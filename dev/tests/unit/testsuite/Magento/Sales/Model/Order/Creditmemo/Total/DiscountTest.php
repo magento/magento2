@@ -7,7 +7,7 @@
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
- * Class CostTest
+ * Class DiscountTest
  */
 class DiscountTest extends \PHPUnit_Framework_TestCase
 {
