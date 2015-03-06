@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
-use Magento\Setup\ConfigOptions;
+use Magento\Setup\Model\ConfigOptions;
 
 /**
  * AdminNotification Feed model

@@ -6,7 +6,7 @@
 namespace Magento\Backend\Helper\Dashboard;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\ConfigOptions;
+use Magento\Setup\Model\ConfigOptions;
 
 /**
  * Data helper for dashboard

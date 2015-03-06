@@ -6,7 +6,7 @@
 
 namespace Magento\AdminNotification\Model;
 
-use Magento\Setup\ConfigOptions;
+use Magento\Setup\Model\ConfigOptions;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
