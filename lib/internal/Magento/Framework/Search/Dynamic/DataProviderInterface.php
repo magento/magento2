@@ -23,13 +23,6 @@ interface DataProviderInterface
     public function getAggregations(array $entityIds);
 
     /**
-     * Get all options
-     *
-     * @return array
-     */
-    public function getOptions();
-
-    /**
      * @param BucketInterface $bucket
      * @param array $dimensions
      * @param int[] $entityIds
