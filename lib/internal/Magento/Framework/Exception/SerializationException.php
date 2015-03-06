@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
  */
 class SerializationException extends LocalizedException
 {
+    const DEFAULT_MESSAGE = 'Invalid type';
     const TYPE_MISMATCH = 'Invalid type for value: "%value". Expected Type: "%type".';
 
     /**
@@ -21,7 +22,7 @@ class SerializationException extends LocalizedException
     public function __construct(Phrase $phrase = null, \Exception $cause = null)
     {
         if (is_null($phrase)) {
-            $phrase = new Phrase(self::TYPE_MISMATCH);
+            $phrase = new Phrase(self::DEFAULT_MESSAGE);
         }
         parent::__construct($phrase, $cause);
     }
