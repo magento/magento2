@@ -75,5 +75,4 @@ $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 \Magento\Framework\Test\Utility\Files::setInstance(new \Magento\Framework\Test\Utility\Files(BP));
-\Magento\Framework\Phrase::setRenderer(new \Magento\Framework\Phrase\Renderer\Placeholder());
 unset($bootstrap, $application, $settings, $shell);

@@ -192,7 +192,7 @@ class CurlClient
         foreach ($curlOpts as $opt => $val) {
             curl_setopt($curl, $opt, $val);
         }
-
+        curl_setopt($curl, CURLOPT_COOKIE, 'XDEBUG_SESSION=PHPSTORM');
         $response = curl_exec($curl);
         if ($response === false) {
             throw new \Exception(curl_error($curl));

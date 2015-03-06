@@ -14,7 +14,7 @@ class AuthorizationExceptionTest extends \PHPUnit_Framework_TestCase
         $authorizationException = new AuthorizationException(
             new Phrase(
                 AuthorizationException::NOT_AUTHORIZED,
-                ['record2']
+                ['resources' => 'record2']
             )
         );
         $this->assertSame('Consumer is not authorized to access record2', $authorizationException->getMessage());
