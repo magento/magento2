@@ -314,8 +314,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->structureMock->expects($this->once())
             ->method('createStructuralElement')
-            ->with('block_name', \Magento\Framework\View\Layout\Element::TYPE_BLOCK, 'type')
-            ->willReturn('block_name');
+            ->with(
+                'block_name',
+                \Magento\Framework\View\Layout\Element::TYPE_BLOCK,
+                'Magento\Framework\View\Element\AbstractBlock'
+            )->willReturn('block_name');
         $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
 
         $this->assertSame(
