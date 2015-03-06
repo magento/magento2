@@ -8,19 +8,11 @@ namespace Magento\Framework\ObjectManager\Environment;
 
 use Magento\Framework\ObjectManager\EnvironmentInterface;
 use Magento\Framework\ObjectManager\FactoryInterface;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
 
 class Compiled extends AbstractEnvironment implements EnvironmentInterface
 {
-    /**
-     * File name with compiled data
-     */
-    const FILE_NAME = 'global.ser';
-
-    /**
-     * Relative path to file with compiled data
-     */
-    const RELATIVE_FILE_PATH = '/var/di/';
-
     /**#@+
      * Mode name
      */
@@ -30,16 +22,14 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
     /**#@- */
 
     /**
-     * Global config
-     *
-     * @var array
-     */
-    private $globalConfig = [];
-
-    /**
      * @var string
      */
     protected $configPreference = 'Magento\Framework\ObjectManager\Factory\Compiled';
+
+    /**
+     * @var ConfigLoader\Compiled
+     */
+    private $configLoader;
 
     /**
      * Creates factory
@@ -81,30 +71,21 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      */
     protected function getConfigData()
     {
-        if (empty($this->globalConfig)) {
-            $this->globalConfig = \unserialize(\file_get_contents(self::getFilePath()));
-        }
-
-        return $this->globalConfig;
-    }
-
-    /**
-     * Returns file path
-     *
-     * @return string
-     */
-    public static function getFilePath()
-    {
-        return BP . self::RELATIVE_FILE_PATH . self::FILE_NAME;
+        $this->getObjectManagerConfigLoader()->load(Area::AREA_GLOBAL);
     }
 
     /**
      * Returns new instance of compiled config loader
      *
-     * @return \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
+     * @return ConfigLoader\Compiled
      */
     public function getObjectManagerConfigLoader()
     {
-        return new \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled($this->getConfigData());
+        if ($this->configLoader) {
+            return $this->configLoader;
+        }
+
+        $this->configLoader = new ConfigLoader\Compiled();
+        return $this->configLoader;
     }
 }

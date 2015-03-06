@@ -6,8 +6,6 @@
  */
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
-use Magento\Framework\App\Area;
-
 class Compiled extends \Magento\Framework\App\ObjectManager\ConfigLoader
 {
     /**
@@ -15,16 +13,13 @@ class Compiled extends \Magento\Framework\App\ObjectManager\ConfigLoader
      *
      * @var array
      */
-    private $globalConfig = [];
+    private $configCache = [];
 
     /**
      * Compiled construct
-     *
-     * @param array $globalConfig
      */
-    public function __construct(array $globalConfig = [])
+    public function __construct()
     {
-        $this->globalConfig = $globalConfig;
     }
 
     /**
@@ -35,9 +30,10 @@ class Compiled extends \Magento\Framework\App\ObjectManager\ConfigLoader
      */
     public function load($area)
     {
-        if ($area == Area::AREA_GLOBAL) {
-            return $this->globalConfig;
+        if (isset($this->configCache[$area])) {
+            return $this->configCache[$area];
         }
-        return \unserialize(\file_get_contents(BP . '/var/di/' . $area . '.ser'));
+        $this->configCache[$area] = \unserialize(\file_get_contents(BP . '/var/di/' . $area . '.ser'));
+        return $this->configCache[$area];
     }
 }
