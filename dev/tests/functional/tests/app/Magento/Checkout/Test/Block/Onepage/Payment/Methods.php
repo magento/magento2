@@ -62,11 +62,11 @@ class Methods extends Form
      * Select payment method
      *
      * @param array $payment
-     * @param CreditCard|null $creditCard
+     * @param CreditCard $creditCard
      * @throws \Exception
      * @return void
      */
-    public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
+    public function selectPaymentMethod(array $payment, CreditCard $creditCard)
     {
         $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodInput, $payment['method']));
         if ($paymentSelector->isVisible()) {

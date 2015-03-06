@@ -63,7 +63,10 @@ class Curl extends AbstractCurl implements ConfigDataInterface
                 $field = end($path);
                 $path = array_slice($path, 1, -1);
                 $groupName = implode('][groups][', $path);
-                parse_str($scope . '[groups][' . $groupName . '][fields][' . $field . '][value]='. $itemSection['value'], $partialResult);
+                parse_str(
+                    $scope . '[groups][' . $groupName . '][fields][' . $field . '][value]='. $itemSection['value'],
+                    $partialResult
+                );
                 $result = array_merge_recursive($result, $partialResult);
             }
         }
