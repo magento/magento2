@@ -1,0 +1,24 @@
+{
+    "backend": {
+        "files": [
+            "<%= combo.autopath(\"backend\",\"pub\") %>/**/*.less"
+        ],
+        "tasks": "less:backend"
+    },
+    "blank": {
+        "files": [
+            "<%= combo.autopath(\"blank\",\"pub\") %>/**/*.less"
+        ],
+        "tasks": "less:blank"
+    },
+    "luma": {
+        "files": [
+            "<%= combo.autopath(\"luma\",\"pub\") %>/**/*.less"
+        ],
+        "tasks": "less:luma"
+    },
+    "setup": {
+        "files": "<%= path.less.setup %>/**/*.less",
+        "tasks": "less:setup"
+    }
+}
