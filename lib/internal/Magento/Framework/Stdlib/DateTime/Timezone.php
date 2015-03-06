@@ -181,17 +181,13 @@ class Timezone implements TimezoneInterface
      */
     public function formatDate($date = null, $format = \IntlDateFormatter::SHORT, $showTime = false)
     {
-        if ($showTime) {
-            $format = $this->getDateTimeFormat($format);
-        } else {
-            $format = $this->getDateFormat($format);
+        $formatTime = $showTime ? $format : \IntlDateFormatter::NONE;
+
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date);
         }
 
-        if ($date instanceof \DateTime) {
-            return $date->format($format);
-        } else {
-            return (new \DateTime($date))->format($format);
-        }
+        return $this->formatDateTime($date, $format, $formatTime);
     }
 
     /**
@@ -235,6 +231,7 @@ class Timezone implements TimezoneInterface
      * @param int $timeType
      * @param null $locale
      * @param null $timezone
+     * @param string|null $pattern
      * @return mixed
      */
     public function formatDateTime(
@@ -242,13 +239,16 @@ class Timezone implements TimezoneInterface
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
-        $timezone = null
+        $timezone = null,
+        $pattern = null
     ) {
         $formatter = new \IntlDateFormatter(
             $locale ?: $this->_localeResolver->getLocale(),
             $dateType,
             $timeType,
-            $timezone ?: 'UTC'
+            $timezone ?: $date->getTimezone(),
+            null,
+            $pattern
         );
         return $formatter->format($date);
     }

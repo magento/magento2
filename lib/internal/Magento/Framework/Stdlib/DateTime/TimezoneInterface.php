@@ -121,6 +121,7 @@ interface TimezoneInterface
      * @param int $timeType
      * @param null $locale
      * @param null $timezone
+     * @param string|null $pattern
      * @return mixed
      */
     public function formatDateTime(
@@ -128,6 +129,7 @@ interface TimezoneInterface
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
-        $timezone = null
+        $timezone = null,
+        $pattern = null
     );
 }

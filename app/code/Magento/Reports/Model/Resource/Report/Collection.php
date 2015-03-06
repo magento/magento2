@@ -169,7 +169,11 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getDayInterval(\DateTime $dateStart)
     {
         $interval = [
-            'period' => $dateStart->format($this->_localeDate->getDateFormat()),
+            'period' => $this->_localeDate->formatDateTime(
+                $dateStart,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::NONE
+            ),
             'start' => $dateStart->format('Y-m-d H:i:s'),
             'end' => $dateStart->format('Y-m-d 23:59:59'),
         ];

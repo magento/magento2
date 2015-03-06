@@ -13,6 +13,7 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class Date extends AbstractElement
 {
@@ -22,15 +23,22 @@ class Date extends AbstractElement
     protected $_value;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $localeDate;
+
+    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
+     * @param TimezoneInterface $localeDate
      * @param array $data
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
+        TimezoneInterface $localeDate,
         $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
@@ -39,6 +47,7 @@ class Date extends AbstractElement
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         }
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -104,7 +113,7 @@ class Date extends AbstractElement
             $format .= ($format && $this->getTimeFormat()) ? ' ' : '';
             $format .= $this->getTimeFormat() ? $this->getTimeFormat() : '';
         }
-        return $this->_value->format($format);
+        return $this->localeDate->formatDateTime($this->_value, null, null, null, null, $format);
     }
 
     /**

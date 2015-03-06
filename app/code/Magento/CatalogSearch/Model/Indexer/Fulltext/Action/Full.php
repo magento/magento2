@@ -773,11 +773,7 @@ class Full
 
             $dateObj = new \DateTime();
             $dateObj->setTimezone(new \DateTimeZone($timezone));
-            $format = (new \ResourceBundle(
-                $this->localeResolver->getLocale(),
-                'ICUDATA'
-            ))['calendar']['gregorian']['availableFormats']['yMMMd'];
-            $this->dates[$storeId] = [$dateObj, $format];
+            $this->dates[$storeId] = $dateObj;
 
             $this->localeResolver->revert();
         }
@@ -785,7 +781,7 @@ class Full
         if (!$this->dateTime->isEmptyDate($date)) {
             list($dateObj, $format) = $this->dates[$storeId];
             /** @var \DateTime $dateObj */
-            return $dateObj->format($format);
+            return $this->localeDate->formatDateTime($dateObj, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE);
         }
 
         return null;

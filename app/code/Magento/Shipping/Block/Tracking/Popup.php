@@ -65,7 +65,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     public function formatDeliveryDate($date)
     {
         $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
-        return \IntlDateFormatter::formatObject($this->_localeDate->date($date), $format);
+        return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($date)), $format);
     }
 
     /**
@@ -82,7 +82,7 @@ class Popup extends \Magento\Framework\View\Element\Template
         }
 
         $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
-        return \IntlDateFormatter::formatObject(new \DateTime($time), $format);
+        return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($time)), $format);
     }
 
     /**

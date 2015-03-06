@@ -73,7 +73,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
      */
     public function getCreatedAtDate()
     {
-        return $this->_localeDate->date($this->getCreatedAt());
+        return $this->_localeDate->date(new \DateTime($this->getCreatedAt()));
     }
 
     /**

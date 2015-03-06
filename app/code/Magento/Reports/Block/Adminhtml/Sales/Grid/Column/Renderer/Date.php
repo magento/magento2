@@ -89,12 +89,12 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             try {
                 $data = $this->getColumn()->getGmtoffset()
                     ? \IntlDateFormatter::formatObject(
-                        $this->_localeDate->date($data),
+                        $this->_localeDate->date(new \DateTime($data)),
                         $format
                     )
                     : \IntlDateFormatter::formatObject(
                         $this->_localeDate->date(
-                            $data,
+                            new \DateTime($data),
                             null,
                             false
                         ),
@@ -103,12 +103,12 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             } catch (\Exception $e) {
                 $data = $this->getColumn()->getTimezone()
                     ? \IntlDateFormatter::formatObject(
-                        $this->_localeDate->date($data),
+                        $this->_localeDate->date(new \DateTime($data)),
                         $format
                     )
                     : \IntlDateFormatter::formatObject(
                         $this->_localeDate->date(
-                            $data,
+                            new \DateTime($data),
                             null,
                             false
                         ),

@@ -37,10 +37,13 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
     {
         $data = '';
         $value = parent::getValue($object);
-        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
 
         if ($value) {
-            $data = \IntlDateFormatter::formatObject($this->_localeDate->date($value), $format);
+            $data = $this->_localeDate->formatDateTime(
+                $this->_localeDate->date(new \DateTime($value)),
+                \IntlDateFormatter::MEDIUM,
+                \IntlDateFormatter::NONE
+            );
         }
 
         return $data;
