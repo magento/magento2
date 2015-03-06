@@ -288,10 +288,10 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         if ($this->displayTotalsIncludeTax()) {
             return $address->getSubtotal()
                 + $address->getTaxAmount()
-                + $this->getDiscountAmount()
+                + $address->getDiscountAmount()
                 + $address->getHiddenTaxAmount();
         } else {
-            return $address->getSubtotal() + $this->getDiscountAmount();
+            return $address->getSubtotal() + $address->getDiscountAmount();
         }
     }
 
