@@ -8,55 +8,6 @@ namespace Magento\Framework\Image\Test\Unit\Adapter;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
- * Mocking global functions crucial for this adapter
- */
-
-/**
- * @param $paramName
- * @throws \InvalidArgumentException
- * @return string
- */
-function ini_get($paramName)
-{
-    if ('memory_limit' == $paramName) {
-        return Gd2Test::$memoryLimit;
-    }
-
-    throw new \InvalidArgumentException('Unexpected parameter ' . $paramName);
-}
-
-/**
- * @param $file
- * @return mixed
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function getimagesize($file)
-{
-    return Gd2Test::$imageData;
-}
-
-/**
- * @param $real
- * @return int
- *
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function memory_get_usage($real)
-{
-    return 1000000;
-}
-
-/**
- * @param $callable
- * @param $param
- * @return bool
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function call_user_func($callable, $param)
-{
-    return false;
-}
-/**
  * \Magento\Framework\Image\Adapter\Gd2 class test
  */
 class Gd2Test extends \PHPUnit_Framework_TestCase
@@ -89,6 +40,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        require_once __DIR__ . '/_files/global_php_mock.php';
         $this->objectManager = new ObjectManager($this);
         $this->adapter = $this->objectManager->getObject('Magento\Framework\Image\Adapter\Gd2');
     }
@@ -111,7 +63,6 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
      */
     public function testOpen($fileData, $exception, $limit)
     {
-        $this->markTestSkipped('To be fixed in MAGETWO-34765');
         self::$memoryLimit = $limit;
         self::$imageData = $fileData;
 
