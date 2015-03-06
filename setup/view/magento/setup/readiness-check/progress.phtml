@@ -60,26 +60,45 @@
 
         <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(version)">
 
+
+
+            <div ng-show="version.data.exception" ng-switch="version.data.exception">
+                <div ng-switch-when="phpVersionException" class="alert alert-warning">
+                    <span class="alert-icon icon-failed-round"></span>
+                    <p class="alert-text">
+                        {{version.data.message}}
+                    </p>
+                </div>
+
+                <span class="readiness-check-icon icon-failed-round"></span>
+
+                <div class="readiness-check-content">
+                    <h3 class="readiness-check-title">PHP Version Check</h3>
+                </div>
+            </div>
+
+            <div ng-show="version.data.required">
+                <span class="readiness-check-icon icon-failed-round"></span>
+
+                <div class="readiness-check-content">
+                    <h3 class="readiness-check-title">PHP Version Check</h3>
+                    <p>
+                        Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
+                        <a href="#php-version" ng-click="updateOnExpand(version)">
+                            <span ng-hide="version.expanded">Show detail</span>
+                            <span ng-show="version.expanded">Hide detail</span>
+                        </a>
+                    </p>
+                    <p ng-show="version.expanded">
+                        Donwload and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
+                    </p>
+                    <p ng-show="version.expanded">If you need more help please call your hosting provider.</p>
+                </div>
+            </div>
+            
             <div class="rediness-check-side">
                 <p class="side-title">Need Help?</p>
                 <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>
-            </div>
-
-            <span class="readiness-check-icon icon-failed-round"></span>
-
-            <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Version Check</h3>
-                <p>
-                    Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
-                    <a href="#php-version" ng-click="updateOnExpand(version)">
-                        <span ng-hide="version.expanded">Show detail</span>
-                        <span ng-show="version.expanded">Hide detail</span>
-                    </a>
-                </p>
-                <p ng-show="version.expanded">
-                    Donwload and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
-                </p>
-                <p ng-show="version.expanded">If you need more help please call your hosting provider.</p>
             </div>
 
         </div>
