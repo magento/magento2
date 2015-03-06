@@ -12,7 +12,7 @@ interface ProductAttributeMediaGalleryEntryInterface
     const ID = 'id';
     const LABEL = 'label';
     const POSITION = 'position';
-    const DISABLED = 'is_disabled';
+    const DISABLED = 'disabled';
     const TYPES = 'types';
     const FILE = 'file';
     const CONTENT = 'content';
@@ -42,9 +42,8 @@ interface ProductAttributeMediaGalleryEntryInterface
      * Check if gallery entry is hidden from product page
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsDisabled();
+    public function isDisabled();
 
     /**
      * Retrieve gallery entry image types (thumbnail, image, small_image etc)

@@ -176,13 +176,13 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $absoluteFilePath,
             $entry->getTypes(),
             true,
-            $entry->getIsDisabled()
+            $entry->isDisabled()
         );
         // Update additional fields that are still empty after addImage call
         $productMediaGallery->updateImage($product, $imageFileUri, [
             'label' => $entry->getLabel(),
             'position' => $entry->getPosition(),
-            'disabled' => $entry->getIsDisabled(),
+            'disabled' => $entry->isDisabled(),
         ]);
         $product->setStoreId($storeId);
 
@@ -237,7 +237,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $productMediaGallery->updateImage($product, $filePath, [
             'label' => $entry->getLabel(),
             'position' => $entry->getPosition(),
-            'disabled' => $entry->getIsDisabled(),
+            'disabled' => $entry->isDisabled(),
         ]);
         $productMediaGallery->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $productMediaGallery->setMediaAttribute($product, $entry->getTypes(), $filePath);
@@ -317,7 +317,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $this->entryBuilder->setId($image['value_id']);
             $this->entryBuilder->setLabel($image['label_default']);
             $this->entryBuilder->setTypes(array_keys($productImages, $image['file']));
-            $this->entryBuilder->setIsDisabled($image['disabled_default']);
+            $this->entryBuilder->setDisabled($image['disabled_default']);
             $this->entryBuilder->setPosition($image['position_default']);
             $this->entryBuilder->setFile($image['file']);
             $result[] = $this->entryBuilder->create();

@@ -46,9 +46,8 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Check if gallery entry is hidden from product page
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsDisabled()
+    public function isDisabled()
     {
         return $this->getData(self::DISABLED);
     }
