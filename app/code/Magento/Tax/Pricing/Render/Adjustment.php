@@ -54,6 +54,7 @@ class Adjustment extends AbstractAdjustment
             $this->amountRender->setDisplayValue(
                 $this->amountRender->getAmount()->getValue($this->getAdjustmentCode())
             );
+            $this->amountRender->addAdjustmentsForPriceAmount([$this->getAdjustmentCode()]);
         }
         return $this->toHtml();
     }

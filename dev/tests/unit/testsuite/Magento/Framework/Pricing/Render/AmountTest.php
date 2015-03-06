@@ -237,4 +237,38 @@ class AmountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($code));
         return $adjustmentRender;
     }
+
+    public function testAdjustmentsForPriceAmounts()
+    {
+        // test that there are no initial adjustments
+        $this->assertEmpty($this->model->getAdjustmentsForPriceAmount());
+
+        // add 1st adjustment
+        $adjustment1 = ['tax'];
+        $this->model->addAdjustmentsForPriceAmount($adjustment1);
+        $this->assertEquals($adjustment1, $this->model->getAdjustmentsForPriceAmount());
+
+        // add 2nd adjustment
+        $adjustment2 = ['weee'];
+        $expected = ['tax', 'weee'];
+        $this->model->addAdjustmentsForPriceAmount($adjustment2);
+        $this->assertEquals($expected, $this->model->getAdjustmentsForPriceAmount());
+
+        // attempt to add a null.  Should have no effect.
+        $expected = $this->model->getAdjustmentsForPriceAmount();
+        $this->model->addAdjustmentsForPriceAmount(null);
+        $this->assertEquals($expected, $this->model->getAdjustmentsForPriceAmount());
+
+        // set the adjustments.  Overrides any previous adjustments.
+        $adjustment3 = ['kiwi', 'fruit'];
+        $this->model->setAdjustmentsForPriceAmount($adjustment3);
+        $this->assertEquals($adjustment3, $this->model->getAdjustmentsForPriceAmount());
+
+        // attempt to set a null.  Then add an adjustment.
+        $this->model->setAdjustmentsForPriceAmount(null);
+        $this->assertEmpty($this->model->getAdjustmentsForPriceAmount());
+
+        $this->model->addAdjustmentsForPriceAmount($adjustment1);
+        $this->assertEquals($adjustment1, $this->model->getAdjustmentsForPriceAmount());
+    }
 }

@@ -64,6 +64,11 @@ class Amount extends Template implements AmountRenderInterface
     protected $adjustmentsHtml = [];
 
     /**
+     * @var null|string[]
+     */
+    protected $adjustmentsForPriceAmount = [];
+
+    /**
      * @param Template\Context $context
      * @param AmountInterface $amount
      * @param PriceCurrencyInterface $priceCurrency
@@ -232,6 +237,46 @@ class Amount extends Template implements AmountRenderInterface
         $cssClasses = $this->hasData('css_classes') ? explode(' ', $this->getData('css_classes')) : [];
         $cssClasses = array_merge($cssClasses, array_keys($adjustmentRenders));
         $this->setData('adjustment_css_classes', join(' ', $cssClasses));
+        return $this;
+    }
+
+    /**
+     * Gets the adjustments that should be applied when computing the price amount
+     *
+     * @return string[]|null
+     */
+    public function getAdjustmentsForPriceAmount()
+    {
+        return $this->adjustmentsForPriceAmount;
+    }
+
+    /**
+     * Sets the adjustments that should be applied when computing the price amount
+     *
+     * @param string[]|null $adjustments
+     * @return $this
+     */
+    public function setAdjustmentsForPriceAmount(array $adjustments = null)
+    {
+        if (empty($adjustments)) {
+            $adjustments = [];
+        }
+        $this->adjustmentsForPriceAmount = $adjustments;
+        return $this;
+    }
+
+    /**
+     * Appends the adjustments that should be applied when computing the price amount
+     *
+     * @param string[]|null $adjustments
+     * @return $this
+     */
+    public function addAdjustmentsForPriceAmount(array $adjustments = null)
+    {
+        // check that $adjustments is not null
+        if ($adjustments) {
+            $this->adjustmentsForPriceAmount = array_merge($this->adjustmentsForPriceAmount, $adjustments);
+        }
         return $this;
     }
 }
