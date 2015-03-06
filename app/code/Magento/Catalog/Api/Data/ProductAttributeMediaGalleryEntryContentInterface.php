@@ -21,6 +21,14 @@ interface ProductAttributeMediaGalleryEntryContentInterface
     public function getEntryData();
 
     /**
+     * Set media data (base64 encoded content)
+     *
+     * @param string $entryData
+     * @return $this
+     */
+    public function setEntryData($entryData);
+
+    /**
      * Retrieve MIME type
      *
      * @return string
@@ -28,9 +36,25 @@ interface ProductAttributeMediaGalleryEntryContentInterface
     public function getMimeType();
 
     /**
+     * Set MIME type
+     *
+     * @param string $mimeType
+     * @return $this
+     */
+    public function setMimeType($mimeType);
+
+    /**
      * Retrieve image name
      *
      * @return string
      */
     public function getName();
+
+    /**
+     * Set image name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
 }

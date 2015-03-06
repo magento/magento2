@@ -90,8 +90,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 $existingUserData,
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id',
-                ['user_id' => 1],
+                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                ['user_id' => 1, 'user_type' => 2],
                 null,
                 $existingAdminRoleData,
             ],
@@ -137,8 +137,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 $existingUserData,
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id',
-                ['user_id' => 1],
+                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                ['user_id' => 1, 'user_type' => 2],
                 null,
                 [],
             ],
@@ -193,8 +193,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 [],
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id',
-                ['user_id' => 1],
+                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                ['user_id' => 1, 'user_type' => 2],
                 null,
                 $existingAdminRoleData,
             ],
@@ -233,8 +233,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 [],
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id',
-                ['user_id' => 1],
+                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                ['user_id' => 1, 'user_type' => 2],
                 null,
                 [],
             ],

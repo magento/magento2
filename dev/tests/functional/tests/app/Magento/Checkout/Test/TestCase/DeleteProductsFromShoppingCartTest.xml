@@ -6,38 +6,38 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteProductsFromShoppingCartTest">
-    <variation name="DeleteProductsFromShoppingCartTestVariation1" firstConstraint="assertCartIsEmpty" method="test">
+  <testCase name="Magento\Checkout\Test\TestCase\DeleteProductsFromShoppingCartTest">
+    <variation name="DeleteProductsFromShoppingCartTestVariation1" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
       <data name="productsData" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation2" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation2" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
       <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation3" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation3" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
       <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation4" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation4" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
       <data name="productsData" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation5" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation5" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">configurableProduct::default</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation6" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation6" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">downloadableProduct::with_two_separately_links</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation7" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation7" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">groupedProduct::three_simple_products</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
-    <variation name="DeleteProductsFromShoppingCartTestVariation8" firstConstraint="assertCartIsEmpty" method="test">
+    <variation name="DeleteProductsFromShoppingCartTestVariation8" firstConstraint="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" method="test">
       <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
-      <constraint name="assertCartIsEmpty"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
     </variation>
   </testCase>
 </config>
