@@ -393,4 +393,5 @@ return [
     ['_aliases', 'Magento\Framework\App\Request\Http', 'Magento\Framework\HTTP\PhpEnvironment\Request::aliases'],
     ['_route', 'Magento\Framework\App\Request\Http', 'route'],
     ['_collectionAttributes', 'Magento\Eav\Model\Config'],
+    ['_attributeFactory', '\Magento\Customer\Model\Customer'],
 ];
