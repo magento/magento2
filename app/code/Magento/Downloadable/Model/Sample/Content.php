@@ -62,4 +62,59 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->getData(self::SAMPLE_URL);
     }
+
+    /**
+     * Set sample title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::TITLE, $title);
+    }
+
+    /**
+     * Set sample type ('url' or 'file')
+     *
+     * @param string $sampleType
+     * @return $this
+     */
+    public function setSampleType($sampleType)
+    {
+        return $this->setData(self::SAMPLE_TYPE, $sampleType);
+    }
+
+    /**
+     * Set sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFile
+     * @return $this
+     */
+    public function setSampleFile(\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFile = null)
+    {
+        return $this->setData(self::SAMPLE_FILE, $sampleFile);
+    }
+
+    /**
+     * Set sample sort order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set sample URL
+     *
+     * @param string $sampleUrl
+     * @return $this
+     */
+    public function setSampleUrl($sampleUrl)
+    {
+        return $this->setData(self::SAMPLE_URL, $sampleUrl);
+    }
 }

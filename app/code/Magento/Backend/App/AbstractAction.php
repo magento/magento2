@@ -263,7 +263,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
             if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
                 $this->getResponse()->representJson(
                     $this->_objectManager->get(
-                        'Magento\Core\Helper\Data'
+                        'Magento\Framework\Json\Helper\Data'
                     )->jsonEncode(
                         ['error' => true, 'message' => $_keyErrorMsg]
                     )

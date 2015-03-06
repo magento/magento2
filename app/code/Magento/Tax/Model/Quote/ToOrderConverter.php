@@ -43,8 +43,8 @@ class ToOrderConverter
             if (is_array($order->getAppliedTaxes())) {
                 $taxes = array_merge($order->getAppliedTaxes(), $taxes);
             }
-            $order->setAppliedTaxes($taxes);
-            $order->setConvertingFromQuote(true);
+            $order->setCustomAttribute('applied_taxes', $taxes);
+            $order->setCustomAttribute('converting_from_quote', true);
         }
 
         $itemAppliedTaxes = $this->quoteAddress->getItemsAppliedTaxes();
@@ -52,7 +52,7 @@ class ToOrderConverter
             if (is_array($order->getItemAppliedTaxes())) {
                 $itemAppliedTaxes = array_merge($order->getItemAppliedTaxes(), $itemAppliedTaxes);
             }
-            $order->setItemAppliedTaxes($itemAppliedTaxes);
+            $order->setCustomAttribute('item_applied_taxes', $itemAppliedTaxes);
         }
         return $order;
     }

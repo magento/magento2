@@ -93,14 +93,14 @@ class Fault extends \RuntimeException
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Server $soapServer
-     * @param \Magento\Webapi\Exception $previousException
+     * @param \Magento\Framework\Webapi\Exception $previousException
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param State $appState
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         Server $soapServer,
-        \Magento\Webapi\Exception $previousException,
+        \Magento\Framework\Webapi\Exception $previousException,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState
     ) {

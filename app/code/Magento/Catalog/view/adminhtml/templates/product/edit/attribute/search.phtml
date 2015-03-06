@@ -51,7 +51,7 @@
             });
         });
         
-        $suggest.mage('suggest', <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
+        $suggest.mage('suggest', <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
             .on('suggestselect', function (e, ui) {
                 $(this).val('');
                 var templateId = $('#attribute_set_id').val();

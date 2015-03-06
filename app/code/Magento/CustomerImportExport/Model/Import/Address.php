@@ -213,7 +213,6 @@ class Address extends AbstractCustomer
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -234,7 +233,6 @@ class Address extends AbstractCustomer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
@@ -265,7 +263,6 @@ class Address extends AbstractCustomer
             $data['attribute_collection'] = $attributeCollection;
         }
         parent::__construct(
-            $coreData,
             $string,
             $scopeConfig,
             $importFactory,

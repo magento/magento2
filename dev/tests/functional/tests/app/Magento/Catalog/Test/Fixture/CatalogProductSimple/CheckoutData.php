@@ -173,7 +173,10 @@ class CheckoutData implements FixtureInterface
             ],
             'order_default' => [
                 'qty' => 1,
-                'cartItem' => [],
+                'cartItem' => [
+                    'price' => 560,
+                    'subtotal' => 560,
+                ],
             ],
             'two_products' => [
                 'qty' => 2,
@@ -193,6 +196,20 @@ class CheckoutData implements FixtureInterface
                 ],
                 'cartItem' => [],
             ],
+            'order_special_price' => [
+                'qty' => 1,
+                'cartItem' => [
+                    'price' => 9,
+                    'subtotal' => 9,
+                ],
+            ],
+            'order_10_dollar_product' => [
+                'qty' => 1,
+                'cartItem' => [
+                    'price' => 10,
+                    'subtotal' => 10,
+                ],
+            ]
         ];
         return isset($presets[$name]) ? $presets[$name] : [];
     }

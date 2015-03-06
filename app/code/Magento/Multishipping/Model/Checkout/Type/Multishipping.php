@@ -634,7 +634,7 @@ class Multishipping extends \Magento\Framework\Object
             )->setProductOptions(
                 $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
             );
-            $orderItem = $this->quoteItemToOrderItem->convert($_quoteItem);
+            $orderItem = $this->quoteItemToOrderItem->convert($item);
             if ($item->getParentItem()) {
                 $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
             }

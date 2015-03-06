@@ -38,10 +38,10 @@ class FaultTest extends \PHPUnit_Framework_TestCase
         $message = "Soap fault reason.";
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
-        $webapiException = new \Magento\Webapi\Exception(
+        $webapiException = new \Magento\Framework\Webapi\Exception(
             $message,
             $code,
-            \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR,
+            \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR,
             $details
         );
         $this->_soapServerMock = $this->getMockBuilder(
@@ -208,10 +208,10 @@ XML;
         $message = "Soap fault reason.";
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
-        $webapiException = new \Magento\Webapi\Exception(
+        $webapiException = new \Magento\Framework\Webapi\Exception(
             $message,
             $code,
-            \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR,
+            \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR,
             $details
         );
         $soapFault = new \Magento\Webapi\Model\Soap\Fault(

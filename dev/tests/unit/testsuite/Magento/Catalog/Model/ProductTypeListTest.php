@@ -20,21 +20,21 @@ class ProductTypeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $builderMock;
+    private $factoryMock;
 
     protected function setUp()
     {
         $this->typeConfigMock = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
-        $this->builderMock = $this->getMock(
-            'Magento\Catalog\Api\Data\ProductTypeDataBuilder',
-            ['create', 'populateWithArray'],
+        $this->factoryMock = $this->getMock(
+            'Magento\Catalog\Api\Data\ProductTypeInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
         $this->model = new ProductTypeList(
             $this->typeConfigMock,
-            $this->builderMock
+            $this->factoryMock
         );
     }
 
@@ -49,14 +49,16 @@ class ProductTypeListTest extends \PHPUnit_Framework_TestCase
         ];
         $productTypeMock = $this->getMock('Magento\Catalog\Api\Data\ProductTypeInterface');
         $this->typeConfigMock->expects($this->any())->method('getAll')->will($this->returnValue($productTypeData));
-        $this->builderMock->expects($this->once())
-            ->method('populateWithArray')
-            ->with([
-                'name' => $simpleProductType['name'],
-                'label' => $simpleProductType['label'],
-            ])->willReturnSelf();
 
-        $this->builderMock->expects($this->once())->method('create')->willReturn($productTypeMock);
+        $this->factoryMock->expects($this->once())->method('create')->willReturn($productTypeMock);
+        $productTypeMock->expects($this->once())
+            ->method('setName')
+            ->with($simpleProductType['name'])
+            ->willReturnSelf();
+        $productTypeMock->expects($this->once())
+            ->method('setLabel')
+            ->with($simpleProductType['label'])
+            ->willReturnSelf();
         $productTypes = $this->model->getProductTypes();
         $this->assertCount(1, $productTypes);
         $this->assertContains($productTypeMock, $productTypes);
