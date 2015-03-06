@@ -34,11 +34,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $attributeValueFactoryMock;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $coreHelperMock;
-
-    /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
@@ -62,11 +57,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $universalFactoryMock;
-
-    /**
-     * @var \Magento\Eav\Api\Data\AttributeOptionDataBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $attributeOptionDataBuilderMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -98,6 +88,20 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private $eventDispatcher;
 
+    /**
+     * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeOptionFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataObjectProcessorMock;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataObjectHelperMock;
 
     protected function setUp()
     {
@@ -109,9 +113,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->metadataServiceMock = $this->getMockBuilder('Magento\Framework\Api\MetadataServiceInterface')
             ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->coreHelperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configMock = $this->getMockBuilder('Magento\Eav\Model\Config')
@@ -128,7 +129,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->universalFactoryMock = $this->getMockBuilder('Magento\Framework\Validator\UniversalFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeOptionDataBuilderMock = $this->getMockBuilder('Magento\Eav\Api\Data\AttributeOptionDataBuilder')
+        $this->attributeOptionFactoryMock =
+            $this->getMockBuilder('Magento\Eav\Api\Data\AttributeOptionInterfaceFactory')
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
@@ -161,13 +169,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $this->registryMock,
             $this->metadataServiceMock,
             $this->attributeValueFactoryMock,
-            $this->coreHelperMock,
             $this->configMock,
             $this->typeFactoryMock,
             $this->storeManagerMock,
             $this->helperMock,
             $this->universalFactoryMock,
-            $this->attributeOptionDataBuilderMock,
+            $this->attributeOptionFactoryMock,
+            $this->dataObjectProcessorMock,
+            $this->dataObjectHelperMock,
             $this->timezoneMock,
             $this->reservedAttributeListMock,
             $this->resolverMock,
