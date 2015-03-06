@@ -18,7 +18,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped('To be fixed in MAGETWO-34765');
+        require_once __DIR__ . '/_files/curl_exec_mock.php';
         $this->model = new \Magento\Framework\HTTP\Adapter\Curl();
     }
 
@@ -43,14 +43,3 @@ class CurlTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-/**
- * Override global PHP function
- *
- * @SuppressWarnings("unused")
- * @param mixed $resource
- * @return string
- */
-function curl_exec($resource)
-{
-    return call_user_func(CurlTest::$curlExectClosure);
-}
