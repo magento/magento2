@@ -81,6 +81,7 @@
     max-width: @user-menu__min-width - @user-account__padding-left - @user-account__padding-right - 2rem;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .admin-user-menu {
@@ -112,5 +113,13 @@
                 position: relative;
             }
         }
+    }
+    .admin-user-name {
+        display: inline-block;
+        max-width: @user-menu__min-width;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: text-top;
     }
 }

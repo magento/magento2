@@ -2599,6 +2599,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   max-width: 11.2rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .admin-user-menu {
   line-height: 1.4;
@@ -2625,6 +2626,14 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background-color: #c7effd;
   bottom: -1px;
   position: relative;
+}
+.admin-user-menu .admin-user-name {
+  display: inline-block;
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: text-top;
 }
 .search-global {
   float: right;
@@ -2767,7 +2776,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: relative;
   top: 1px;
 }
-.notifications-counter {
+.notifications-action .notifications-counter {
   background-color: #e22626;
   border-radius: 1em;
   color: #ffffff;
@@ -2799,13 +2808,16 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background-color: #e0f6fe;
 }
 .notifications-entry.notifications-entry-last {
-  border-top: 1px solid #dddddd;
   margin: 0 2rem;
-  padding: .3rem 0 .6rem;
+  padding: .3rem 0 1.3rem;
   text-align: center;
 }
 .notifications-entry.notifications-entry-last:hover {
   background-color: transparent;
+}
+.notifications-entry + .notifications-entry-last {
+  padding-bottom: .6rem;
+  border-top: 1px solid #dddddd;
 }
 .notifications-entry ._cutted {
   cursor: pointer;
@@ -2827,6 +2839,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .notifications-entry-description-end {
   display: none;
+}
+.notifications-entry-description-end._show {
+  display: inline;
 }
 .notifications-entry-time {
   color: #777777;
