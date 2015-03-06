@@ -134,4 +134,15 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->setData(self::FILE, $file);
     }
+
+    /**
+     * Set media gallery content
+     *
+     * @param $content \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
 }
