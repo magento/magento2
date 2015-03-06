@@ -16,6 +16,7 @@ use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\DbConfig;
 use Magento\Framework\App\DeploymentConfig\EncryptConfig;
+use Magento\Framework\App\DeploymentConfig\InstallConfig;
 use Magento\Framework\App\DeploymentConfig\SessionConfig;
 
 /**
@@ -72,6 +73,8 @@ class ConfigOptions implements ConfigOptionsInterface
         self::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
         self::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
         self::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
+        self::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
+        self::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
     ];
 
     /**
@@ -157,11 +160,7 @@ class ConfigOptions implements ConfigOptionsInterface
     {
         $configData = [];
         // install segment
-        $configData[] = new ConfigData(
-            ConfigFilePool::APP_CONFIG,
-            'install',
-            [DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DATE] => date('r')]
-        );
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'install', [InstallConfig::KEY_DATE => date('r')]);
 
         // crypt segment
         if (isset($data[self::INPUT_KEY_CRYPT_KEY]) && !$data[self::INPUT_KEY_CRYPT_KEY]) {
@@ -169,10 +168,9 @@ class ConfigOptions implements ConfigOptionsInterface
         }
         $cryptData = [];
         if (!isset($data[self::INPUT_KEY_CRYPT_KEY])) {
-            $cryptData[DeploymentConfigMapper::$paramMap[self::INPUT_KEY_CRYPT_KEY]] =
-                md5($this->random->getRandomString(10));
+            $cryptData[self::$paramMap[self::INPUT_KEY_CRYPT_KEY]] = md5($this->random->getRandomString(10));
         } else {
-            $cryptData[DeploymentConfigMapper::$paramMap[self::INPUT_KEY_CRYPT_KEY]] = $data[self::INPUT_KEY_CRYPT_KEY];
+            $cryptData[self::$paramMap[self::INPUT_KEY_CRYPT_KEY]] = $data[self::INPUT_KEY_CRYPT_KEY];
         }
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
 
@@ -193,10 +191,10 @@ class ConfigOptions implements ConfigOptionsInterface
             if ($data[self::INPUT_KEY_SESSION_SAVE] != 'files' && $data[self::INPUT_KEY_SESSION_SAVE] != 'db') {
                 throw new \InvalidArgumentException('Invalid session save location.');
             }
-            $sessionData[DeploymentConfigMapper::$paramMap[self::INPUT_KEY_SESSION_SAVE]] =
+            $sessionData[self::$paramMap[self::INPUT_KEY_SESSION_SAVE]] =
                 $data[self::INPUT_KEY_SESSION_SAVE];
         } else {
-            $sessionData[DeploymentConfigMapper::$paramMap[self::INPUT_KEY_SESSION_SAVE]] = 'files';
+            $sessionData[self::$paramMap[self::INPUT_KEY_SESSION_SAVE]] = 'files';
         }
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
 
