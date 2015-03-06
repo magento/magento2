@@ -33,7 +33,18 @@ class Compiled extends \Magento\Framework\App\ObjectManager\ConfigLoader
         if (isset($this->configCache[$area])) {
             return $this->configCache[$area];
         }
-        $this->configCache[$area] = \unserialize(\file_get_contents(BP . '/var/di/' . $area . '.ser'));
+        $this->configCache[$area] = \unserialize(\file_get_contents(self::getFilePath($area)));
         return $this->configCache[$area];
+    }
+
+    /**
+     * Returns path to cached configuration
+     *
+     * @param string $area
+     * @return string
+     */
+    public static function getFilePath($area)
+    {
+        return BP . '/var/di/' . $area . '.ser';
     }
 }

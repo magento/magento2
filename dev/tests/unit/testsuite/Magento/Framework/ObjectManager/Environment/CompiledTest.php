@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager\Environment;
 
-require 'CompiledTesting.php';
-
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,11 +16,6 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         $envFactoryMock = $this->getMock('Magento\Framework\ObjectManager\EnvironmentFactory', [], [], '', false);
         $this->_compiled = new \Magento\Framework\ObjectManager\Environment\CompiledTesting($envFactoryMock);
-    }
-
-    public function testGetFilePath()
-    {
-        $this->assertContains('/var/di/global.ser', $this->_compiled->getFilePath());
     }
 
     public function testGetMode()

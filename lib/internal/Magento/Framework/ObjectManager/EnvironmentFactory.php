@@ -5,8 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\ObjectManager\Environment\Compiled;
 use Magento\Framework\ObjectManager\Environment\Developer;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
 
 class EnvironmentFactory
 {
@@ -55,7 +57,7 @@ class EnvironmentFactory
      */
     private function getMode()
     {
-        if (file_exists(Compiled::getFilePath())) {
+        if (file_exists(ConfigLoader\Compiled::getFilePath(Area::AREA_GLOBAL))) {
             return Compiled::MODE;
         }
 
