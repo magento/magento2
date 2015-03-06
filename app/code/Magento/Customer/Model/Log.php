@@ -6,40 +6,83 @@
 namespace Magento\Customer\Model;
 
 /**
- * Class Log
+ * Customer log model.
+ *
+ * Contains customer log data.
  */
 class Log
 {
+    /**
+     * Customer ID.
+     *
+     * @var int
+     */
     protected $customerId;
+
+    /**
+     * Date and time of customer's last login.
+     *
+     * @var string
+     */
     protected $lastLoginAt;
-    protected $lastLogoutAt;
+
+    /**
+     * Date and time of customer's last logout.
+     *
+     * @var string
+     */
     protected $lastVisitAt;
 
-    public function __construct($customerId, $lastLoginAt, $lastLogoutAt, $lastVisitAt)
+    /**
+     * Date and time of customer's last visit.
+     *
+     * @var string
+     */
+    protected $lastLogoutAt;
+
+    /**
+     * @param int $customerId
+     * @param string $lastLoginAt
+     * @param string $lastVisitAt
+     * @param string $lastLogoutAt
+     */
+    public function __construct($customerId=null, $lastLoginAt, $lastVisitAt, $lastLogoutAt)
     {
         $this->customerId = $customerId;
         $this->lastLoginAt = $lastLoginAt;
-        $this->lastLogoutAt = $lastLogoutAt;
         $this->lastVisitAt = $lastVisitAt;
+        $this->lastLogoutAt = $lastLogoutAt;
     }
 
+    /**
+     * @return int
+     */
     public function getCustomerId()
     {
         return $this->customerId;
     }
 
+    /**
+     * @return string
+     */
     public function getLastLoginAt()
     {
         return $this->lastLoginAt;
     }
 
-    public function getLastLogoutAt()
-    {
-        return $this->lastLogoutAt;
-    }
-
+    /**
+     * @return string
+     */
     public function getLastVisitAt()
     {
         return $this->lastVisitAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastLogoutAt()
+    {
+        return $this->lastLogoutAt;
     }
 }

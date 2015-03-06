@@ -25,9 +25,9 @@
         <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteDestroy" />
     </event>
     <event name="customer_login">
-        <observer name="customer_log" instance="Magento\Customer\Model\Log" method="saveLastLoginAt" />
+        <observer name="customer_log" instance="Magento\Customer\Model\Observer\Log" method="logLastLoginAt" />
     </event>
     <event name="customer_logout">
-        <observer name="customer_log" instance="Magento\Customer\Model\Log" method="saveLastLogoutAt" />
+        <observer name="customer_log" instance="Magento\Customer\Model\Observer\Log" method="logLastLogoutAt" />
     </event>
 </config>
