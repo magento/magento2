@@ -17,6 +17,11 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  */
 class PersonalInfo extends \Magento\Backend\Block\Template
 {
+    /**
+     * Interval in minutes that shows how long customer will be marked 'Online'
+     * since his last activity. Used only if it's impossible to get such setting
+     * from configuration.
+     */
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
 
     /**
@@ -109,7 +114,9 @@ class PersonalInfo extends \Magento\Backend\Block\Template
 
         parent::__construct($context, $data);
 
-        $this->customerLog = $customerLogger->get($this->getCustomer()->getId());
+        $this->customerLog = $customerLogger->get(
+            $this->getCustomer()->getId()
+        );
     }
 
     /**
