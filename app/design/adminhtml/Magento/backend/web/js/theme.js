@@ -89,7 +89,9 @@ define('globalNavigation', [
             var menuItem = $(e.target).closest('.level-0'),
                 subMenu = $('> .submenu', menuItem);
 
-            e.preventDefault();
+            if (subMenu.length) {
+                e.preventDefault();
+            }
 
             menuItem
                 .addClass('_hover _recent')
