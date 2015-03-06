@@ -449,7 +449,7 @@ class Menu extends \Magento\Backend\Block\Template
                 $output .= '</ul></li><li class="column"><ul>';
             }
 
-            $id = uniqid();
+            $id = $this->getJsId($menuItem->getId());
             $output .= '<li ' . $this->getUiId(
                 $menuItem->getId()
             ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
