@@ -31,7 +31,7 @@ class SelectConfigOption extends AbstractConfigOption
      * @param string $frontendType
      * @param array $selectOptions
      * @param string $description
-     * @param string $defaultValue
+     * @param string|null $defaultValue
      * @param string|null $shortCut
      * @throws \InvalidArgumentException
      */
