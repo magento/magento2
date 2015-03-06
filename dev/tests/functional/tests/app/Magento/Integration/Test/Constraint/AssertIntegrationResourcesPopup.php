@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertIntegrationResourcesPopup extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that pop-up with resources, that were specified for integration are shown
      * after starting activation of integration

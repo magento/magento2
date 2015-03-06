@@ -23,7 +23,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Item'],
         ];
@@ -45,7 +45,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Items'],
         ];
@@ -72,7 +72,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $restFilter,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => $this->_soapService,
@@ -114,7 +114,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Update'],
         ];
@@ -132,7 +132,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $this->_restResourcePath . $itemId,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Delete'],
         ];

@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta9",
+    "version": "0.42.0-beta10",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -38,6 +38,7 @@
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
+        "pdepend/pdepend": "2.0.4",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",

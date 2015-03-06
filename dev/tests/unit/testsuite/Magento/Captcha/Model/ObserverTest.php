@@ -58,11 +58,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_actionFlag;
 
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData;
-
-    /**
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
@@ -97,7 +92,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->_session = $this->getMock('Magento\Framework\Session\SessionManager', [], [], '', false);
         $this->_typeOnepage = $this->getMock('Magento\Checkout\Model\Type\Onepage', [], [], '', false);
-        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->_customerUrl = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
         $this->_urlManager = $this->getMock('Magento\Framework\Url', [], [], '', false);
@@ -122,7 +116,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'resLogFactory' => $this->_resLogFactory,
                 'session' => $this->_session,
                 'typeOnepage' => $this->_typeOnepage,
-                'coreData' => $this->_coreData,
                 'customerUrl' => $this->_customerUrl,
                 'helper' => $this->_helper,
                 'urlManager' => $this->_urlManager,

@@ -11,7 +11,7 @@
 $_item = $block->getItem();
 ?>
 <?php if ($block->displayPriceWithWeeeDetails()): ?>
-    <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
+    <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
 <?php else: ?>
     <span class="cart-price">
 <?php endif; ?>
@@ -29,7 +29,7 @@ $_item = $block->getItem();
     </span>
 
     <?php if ($block->displayFinalPrice()): ?>
-        <span class="cart-tax-total" data-mage-init='{"taxtToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
+        <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}}'>
             <span class="weee" data-label="<?php echo __('Total'); ?>">
                 <?php echo $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()); ?>
             </span>

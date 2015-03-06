@@ -6,13 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="dhl_setup" xsi:type="string">Magento\Dhl\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Checkout\Block\Cart\Shipping">
         <plugin name="checkout_cart_shipping_dhl" type="Magento\Dhl\Model\Plugin\Checkout\Block\Cart\Shipping"/>
     </type>

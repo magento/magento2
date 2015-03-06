@@ -95,11 +95,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_customBehaviour = ['update_id' => 1, 'delete_id' => 2];
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_coreDataMock;
-
-    /**
      * @var \Magento\Framework\Stdlib\String
      */
     protected $_stringLib;
@@ -115,7 +110,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManagerMock = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->_stringLib = new \Magento\Framework\Stdlib\String();
         $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManager')
             ->disableOriginalConstructor()
@@ -198,7 +192,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 [
                     $this->getMock('Magento\Framework\Model\Context', [], [], '', false, false),
                     $this->getMock('Magento\Framework\Registry'),
-                    $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false),
                     $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
@@ -426,7 +419,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $modelMock = new Address(
-            $this->_coreDataMock,
             $this->_stringLib,
             $scopeConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false),

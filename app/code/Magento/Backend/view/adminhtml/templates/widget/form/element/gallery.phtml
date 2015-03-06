@@ -75,7 +75,7 @@ window.addNewImage = function()
     new_row_input.value = '0';
 
     // Delete button
-    new_row_button = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
+    new_row_button = <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
 
     table = document.getElementById( "gallery" );
 

@@ -20,24 +20,24 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
     /**
      * Helper to encode/decode json
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_jsonHelper;
+    protected $jsonHelper;
 
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Core\Helper\Data $coreHelper
-     * @param array $arguments
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Core\Helper\Data $coreHelper,
-        array $arguments = []
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
-        $this->_jsonHelper = $coreHelper;
+        parent::__construct($context, $resourcePrefix);
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -136,7 +136,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
         }
         if ($this->_iterator->valid()) {
             $dataRow = $this->_iterator->current();
-            $dataRow = $this->_jsonHelper->jsonDecode($dataRow[0]);
+            $dataRow = $this->jsonHelper->jsonDecode($dataRow[0]);
             $this->_iterator->next();
         } else {
             $this->_iterator = null;
@@ -157,7 +157,7 @@ class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb implements \I
     {
         return $this->_getWriteAdapter()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $this->_jsonHelper->jsonEncode($data)]
+            ['behavior' => $behavior, 'entity' => $entity, 'data' => $this->jsonHelper->jsonEncode($data)]
         );
     }
 }
