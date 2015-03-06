@@ -19,7 +19,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
@@ -85,28 +85,8 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $this->_redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface', [], [], '', false);
-        $this->_requestMock = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
-                'getFullActionName',
-                'getRouteName',
-                'isDispatched',
-                'initForward',
-                'setParams',
-                'setControllerName',
-                'setDispatched',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie',
-                'isSecure',
-            ],
-            [],
-            '',
-            false
-        );
+        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->_responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
 
         $this->pageConfigMock = $this->getMock('Magento\Framework\View\Page\Config', ['getConfig'], [], '', false);

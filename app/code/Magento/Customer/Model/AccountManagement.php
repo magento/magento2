@@ -21,9 +21,11 @@ use Magento\Customer\Model\Metadata\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
@@ -66,11 +68,6 @@ class AccountManagement implements AccountManagementInterface
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
-
-    /**
-     * Codes of exceptions related to customer model
-     */
-    const EXCEPTION_EMAIL_EXISTS = 3;
 
     // Constants for the type of new account email to be sent
     const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
@@ -511,10 +508,9 @@ class AccountManagement implements AccountManagementInterface
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
-        } catch (\Magento\Customer\Exception $e) {
-            if ($e->getCode() === CustomerModel::EXCEPTION_EMAIL_EXISTS) {
-                throw new InputMismatchException('Customer with the same email already exists in associated website.');
-            }
+        } catch (AlreadyExistsException $e) {
+            throw new InputMismatchException('Customer with the same email already exists in associated website.');
+        } catch (LocalizedException $e) {
             throw $e;
         }
 
@@ -789,7 +785,7 @@ class AccountManagement implements AccountManagementInterface
      * @param string $storeId
      * @param string $sendemailStoreId
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function sendNewAccountEmail(
         $customer,
@@ -801,7 +797,7 @@ class AccountManagement implements AccountManagementInterface
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {

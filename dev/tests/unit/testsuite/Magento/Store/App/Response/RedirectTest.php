@@ -46,19 +46,8 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
-                'getServer',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie',
-                'isSecure',
-            ]
-        );
+        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->_urlCoderMock = $this->getMock(
             '\Magento\Framework\Encryption\UrlCoder',

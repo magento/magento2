@@ -12,46 +12,25 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Item getResource()
- * @method \Magento\Sales\Model\Order\Invoice\Item setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBasePrice(float $value)
  * @method float getBaseWeeeTaxRowDisposition()
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseWeeeTaxRowDisposition(float $value)
  * @method float getWeeeTaxAppliedRowAmount()
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxAppliedRowAmount(float $value)
  * @method float getBaseWeeeTaxAppliedAmount()
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseWeeeTaxAppliedAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBaseRowTotal(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setRowTotal(float $value)
  * @method float getWeeeTaxRowDisposition()
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxRowDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBaseDiscountAmount(float $value)
  * @method float getBaseWeeeTaxDisposition()
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseWeeeTaxDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setPriceInclTax(float $value)
  * @method float getWeeeTaxAppliedAmount()
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxAppliedAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBaseTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBasePriceInclTax(float $value)
  * @method float getWeeeTaxDisposition()
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxDisposition(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBaseCost(float $value)
  * @method float getBaseWeeeTaxAppliedRowAmnt()
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseWeeeTaxAppliedRowAmnt(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setPrice(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBaseRowTotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setRowTotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setProductId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setOrderItemId(int $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setAdditionalData(string $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setDescription(string $value)
  * @method string getWeeeTaxApplied()
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxApplied(string $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setSku(string $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setName(string $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Invoice\Item setBaseHiddenTaxAmount(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Item extends AbstractExtensibleModel implements InvoiceItemInterface
 {
@@ -179,7 +158,7 @@ class Item extends AbstractExtensibleModel implements InvoiceItemInterface
      *
      * @param float $qty
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
@@ -197,7 +176,7 @@ class Item extends AbstractExtensibleModel implements InvoiceItemInterface
         if ($qty <= $qtyToInvoice || $this->getOrderItem()->isDummy()) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid quantity to invoice item "%1".', $this->getName())
             );
         }
@@ -528,4 +507,182 @@ class Item extends AbstractExtensibleModel implements InvoiceItemInterface
     {
         return $this->getData(InvoiceItemInterface::TAX_AMOUNT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(InvoiceItemInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBasePrice($price)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxAmount($amount)
+    {
+        return $this->setData(InvoiceItemInterface::TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseRowTotal($amount)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountAmount($amount)
+    {
+        return $this->setData(InvoiceItemInterface::DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotal($amount)
+    {
+        return $this->setData(InvoiceItemInterface::ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountAmount($amount)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPriceInclTax($amount)
+    {
+        return $this->setData(InvoiceItemInterface::PRICE_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxAmount($amount)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBasePriceInclTax($amount)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_PRICE_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseCost($baseCost)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_COST, $baseCost);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(InvoiceItemInterface::PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseRowTotalInclTax($amount)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_ROW_TOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotalInclTax($amount)
+    {
+        return $this->setData(InvoiceItemInterface::ROW_TOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($id)
+    {
+        return $this->setData(InvoiceItemInterface::PRODUCT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderItemId($id)
+    {
+        return $this->setData(InvoiceItemInterface::ORDER_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(InvoiceItemInterface::ADDITIONAL_DATA, $additionalData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(InvoiceItemInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(InvoiceItemInterface::SKU, $sku);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(InvoiceItemInterface::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxAmount($amount)
+    {
+        return $this->setData(InvoiceItemInterface::HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxAmount($amount)
+    {
+        return $this->setData(InvoiceItemInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+    }
+    //@codeCoverageIgnoreEnd
 }

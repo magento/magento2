@@ -23,13 +23,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="bundle_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product\CatalogPrice">
         <arguments>
             <argument name="priceModelPool" xsi:type="array">

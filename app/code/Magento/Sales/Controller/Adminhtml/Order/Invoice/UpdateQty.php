@@ -6,7 +6,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\JSONFactory;
 use Magento\Framework\View\Result\PageFactory;
@@ -90,7 +90,7 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
             $resultPage = $this->resultPageFactory->create();
             $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
             $response = $resultPage->getLayout()->getBlock('order_items')->toHtml();
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot update item quantity.')];

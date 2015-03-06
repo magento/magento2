@@ -15,7 +15,7 @@ use Magento\Store\Model\Store;
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Core\Helper\Url
+class Product extends \Magento\Framework\Url\Helper\Data
 {
     const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
 
@@ -93,6 +93,9 @@ class Product extends \Magento\Core\Helper\Url
      */
     protected $categoryRepository;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    protected $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -129,7 +132,8 @@ class Product extends \Magento\Core\Helper\Url
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->_reindexProductCategoryIndexerData = $reindexProductCategoryIndexerData;
-        parent::__construct($context, $storeManager);
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -462,7 +466,7 @@ class Product extends \Magento\Core\Helper\Url
                 'catalog_controller_product_init_after',
                 ['product' => $product, 'controller_action' => $controller]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_logger->critical($e);
             return false;
         }

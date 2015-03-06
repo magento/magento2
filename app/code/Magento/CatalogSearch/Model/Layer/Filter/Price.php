@@ -193,6 +193,8 @@ class Price extends AbstractFilter
      * Get data array for building attribute filter items
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getItemsData()
     {
@@ -207,26 +209,10 @@ class Price extends AbstractFilter
         if (count($facets) > 1) { // two range minimum
             foreach ($facets as $key => $aggregation) {
                 $count = $aggregation['count'];
-                list($from, $to) = explode('_', $key);
-                if ($from == '*') {
-                    $from = $this->getFrom($to);
+                if (strpos($key, '_') === false) {
+                    continue;
                 }
-                if ($to == '*') {
-                    $to = $this->getTo($to);
-                }
-                $label = $this->_renderRangeLabel(
-                    empty($from) ? 0 : $from * $this->getCurrencyRate(),
-                    empty($to) ? $to : $to * $this->getCurrencyRate()
-                );
-                $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
-
-                $data[] = [
-                    'label' => $label,
-                    'value' => $value,
-                    'count' => $count,
-                    'from' => $from,
-                    'to' => $to,
-                ];
+                $data[] = $this->prepareData($key, $count, $data);
             }
         }
 
@@ -259,5 +245,36 @@ class Price extends AbstractFilter
             $to = $interval[0];
         }
         return $to;
+    }
+
+    /**
+     * @param string $key
+     * @param int $count
+     * @return array
+     */
+    private function prepareData($key, $count)
+    {
+        list($from, $to) = explode('_', $key);
+        if ($from == '*') {
+            $from = $this->getFrom($to);
+        }
+        if ($to == '*') {
+            $to = $this->getTo($to);
+        }
+        $label = $this->_renderRangeLabel(
+            empty($from) ? 0 : $from * $this->getCurrencyRate(),
+            empty($to) ? $to : $to * $this->getCurrencyRate()
+        );
+        $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
+
+        $data = [
+            'label' => $label,
+            'value' => $value,
+            'count' => $count,
+            'from' => $from,
+            'to' => $to,
+        ];
+
+        return $data;
     }
 }

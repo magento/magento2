@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertOrderTotalOnReviewPage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that Order Grand Total is correct on checkoutOnePage
      *
@@ -32,7 +28,7 @@ class AssertOrderTotalOnReviewPage extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             $checkoutReviewGrandTotal,
-            $grandTotal,
+            number_format($grandTotal, 2),
             'Grand Total price: \'' . $checkoutReviewGrandTotal
             . '\' not equals with price from data set: \'' . $grandTotal . '\''
         );

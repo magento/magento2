@@ -55,7 +55,9 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('shipment_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Model\Exception(__("The comment text field cannot be empty."));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("The comment text field cannot be empty.")
+                );
             }
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
@@ -74,13 +76,13 @@ class AddComment extends \Magento\Backend\App\Action
             $this->_view->loadLayout(false);
             $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
             $response = $this->_view->getLayout()->getBlock('shipment_comments')->toHtml();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
+            $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

@@ -33,12 +33,15 @@ try {
             'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
             'generation=s'         => 'absolute path to generated classes, <magento_root>/var/generation by default',
             'di=s'                 => 'absolute path to DI definitions directory, <magento_root>/var/di by default',
+            'exclude-pattern=s'    => 'allows to exclude Paths from compilation (default is #[\\\\/]m1[\\\\/]#i)',
         ]
     );
     $opt->parse();
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
+    $fileExcludePatterns = $opt->getOption('exclude-pattern') ?
+        [$opt->getOption('exclude-pattern')] : ['#[\\\\/]M1[\\\\/]#i'];
     $relationsFile = $diDir . '/relations.ser';
     $pluginDefFile = $diDir . '/plugins.ser';
 
@@ -61,7 +64,7 @@ try {
     $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
     $codeScanDir = realpath($rootDir . '/app');
     $directoryScanner = new Scanner\DirectoryScanner();
-    $files = $directoryScanner->scan($codeScanDir, $filePatterns);
+    $files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
     $files['additional'] = [$opt->getOption('extra-classes-file')];
     $entities = [];
 
@@ -147,11 +150,13 @@ try {
     $validator = new \Magento\Framework\Code\Validator();
     $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
     $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
+    $classesScanner = new \Magento\Tools\Di\Code\Reader\ClassesScanner();
+    $classesScanner->addExcludePatterns($fileExcludePatterns);
 
     $directoryInstancesNamesList = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory(
         $log,
         new \Magento\Framework\Code\Reader\ClassReader(),
-        new \Magento\Tools\Di\Code\Reader\ClassesScanner(),
+        $classesScanner,
         $validator,
         $generationDir
     );

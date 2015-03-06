@@ -83,7 +83,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonDecode(
                 $body
             );

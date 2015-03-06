@@ -12,7 +12,7 @@ use Magento\Store\Model\Store;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Helper\Url
+class Data extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Current product instance (override registry one)
@@ -33,6 +33,9 @@ class Data extends \Magento\Core\Helper\Url
      */
     protected $_layout;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    private $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -47,7 +50,8 @@ class Data extends \Magento\Core\Helper\Url
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_layout = $layout;
-        parent::__construct($context, $storeManager);
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -103,7 +107,7 @@ class Data extends \Magento\Core\Helper\Url
      *
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createBlock($block)
     {
@@ -113,7 +117,7 @@ class Data extends \Magento\Core\Helper\Url
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid block type: %1', $block));
         }
         return $block;
     }

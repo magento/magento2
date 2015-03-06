@@ -295,7 +295,7 @@ class Create extends \Magento\Backend\App\Action
          */
         if ($data = $this->getRequest()->getPost('add_products')) {
             $this->_getGiftmessageSaveModel()->importAllowQuoteItemsFromProducts(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonDecode($data)
+                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonDecode($data)
             );
         }
 
