@@ -47,36 +47,32 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $customer = $this->getMock(
             'Magento\Customer\Api\Data\CustomerInterface', [], [], '', false
         );
-
         $customer->expects($this->any())->method('getId')->willReturn(1);
         $customer->expects($this->any())->method('getStoreId')->willReturn(1);
 
         $customerDataFactory = $this->getMock(
             'Magento\Customer\Api\Data\CustomerInterfaceFactory', ['create'], [], '', false
         );
-
         $customerDataFactory->expects($this->any())->method('create')->willReturn($customer);
 
         $backendSession = $this->getMock(
             'Magento\Backend\Model\Session', ['getCustomerData'], [], '', false
         );
-
         $backendSession->expects($this->any())->method('getCustomerData')->willReturn(['account' => []]);
 
         $this->customerLog = $this->getMock(
-            'Magento\Customer\Model\Log',
-            ['loadByCustomer', 'getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'],
-            [],
-            '',
-            false
+            'Magento\Customer\Model\Log', ['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'], [], '', false
         );
-
         $this->customerLog->expects($this->any())->method('loadByCustomer')->willReturnSelf();
+
+        $customerLogger = $this->getMock(
+            'Magento\Customer\Model\Logger', ['get'], [], '', false
+        );
+        $customerLogger->expects($this->any())->method('get')->willReturn($this->customerLog);
 
         $dateTime = $this->getMock(
             'Magento\Framework\Stdlib\DateTime', ['now'], [], '', false
         );
-
         $dateTime->expects($this->any())->method('now')->willReturn('2015-03-04 12:00:00');
 
         $this->localeDate = $this->getMock(
@@ -86,7 +82,6 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->localeDate
             ->expects($this->any())
             ->method('getDefaultTimezonePath')
@@ -103,7 +98,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             [
                 'customerDataFactory' => $customerDataFactory,
                 'dateTime' => $dateTime,
-                'customerLog' => $this->customerLog,
+                'customerLogger' => $customerLogger,
                 'localeDate' => $this->localeDate,
                 'scopeConfig' => $this->scopeConfig,
                 'backendSession' => $backendSession,
