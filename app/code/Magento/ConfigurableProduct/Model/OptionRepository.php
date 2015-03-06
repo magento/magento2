@@ -253,7 +253,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $product = $this->productRepository->get($productSku);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
             throw new InputException(
-                sprintf('Only implemented for configurable product: %s', $productSku)
+                __('Only implemented for configurable product: %1', $productSku)
             );
         }
         return $product;

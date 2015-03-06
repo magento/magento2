@@ -114,7 +114,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(
-                __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
+                __('Product with specified sku: "%1" is not a bundle product', $product->getSku())
             );
         }
 
@@ -175,7 +175,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         try {
             $selectionModel->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save child: "%1"', [$e->getMessage()]), $e);
+            throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
 
         return $selectionModel->getId();
