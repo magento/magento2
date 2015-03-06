@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig\ResourceConfig;
-
 class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
