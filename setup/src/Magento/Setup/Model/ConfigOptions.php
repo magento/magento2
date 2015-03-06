@@ -240,7 +240,10 @@ class ConfigOptions implements ConfigOptionsInterface
                 : 'SET NAMES utf8;';
         $connection[self::$paramMap[self::INPUT_KEY_ACTIVE]] = '1';
         $prefixKey = isset($data[self::INPUT_KEY_DB_PREFIX]) ? $data[self::INPUT_KEY_DB_PREFIX] : '';
-        $dbData = [ $prefixKey, 'connection' => ['default' => $connection]];
+        $dbData = [
+            self::$paramMap[self::INPUT_KEY_DB_PREFIX] => $prefixKey,
+            'connection' => ['default' => $connection]
+        ];
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
 
         //resource segment
