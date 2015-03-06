@@ -10,7 +10,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Phrase\RendererInterface
      */
-    private $defaultRenderer;
+    protected $defaultRenderer;
 
     /**
      * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
