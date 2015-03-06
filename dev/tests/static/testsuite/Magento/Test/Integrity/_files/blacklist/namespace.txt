@@ -12,6 +12,13 @@ lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/Six/Test.php
 lib/internal/Magento/Framework/ObjectManager/Test/Unit/Config/Reader/_files/ConfigDomMock.php
 lib/internal/Magento/Framework/ObjectManager/Test/Unit/Code/Generator/_files/Sample.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/DiParent.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Child.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Child/Circular.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Child/Interceptor.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Aggregate/WithOptional.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Aggregate/AggregateParent.php
+lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Aggregate/Child.php
 lib/internal/Magento/Framework/Api/Test/Unit/Code/Generator/_files/Sample.php
 lib/internal/Magento/Framework/Api/Test/Unit/Code/Generator/_files/ExtensibleSample.php
 dev/tools/Magento/Tools/I18n/Zend/Exception.php
