@@ -128,7 +128,7 @@ class Add extends \Magento\Checkout\Controller\Cart
                 }
                 return $this->goBack(null, $product);
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice(
                     $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
@@ -193,7 +193,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         }
 
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
         );
     }
 }

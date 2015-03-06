@@ -44,18 +44,20 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
     }
 
     /**
-     * @param AppResource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param ShipmentGrid $gridAggregator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        AppResource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        ShipmentGrid $gridAggregator
+        ShipmentGrid $gridAggregator,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**
@@ -63,13 +65,13 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Shipment $object */
         if ((!$object->getId() || null !== $object->getItems()) && !count($object->getAllItems())) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot create an empty shipment.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create an empty shipment.'));
         }
 
         if (!$object->getOrderId() && $object->getOrder()) {

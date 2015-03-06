@@ -7,46 +7,51 @@
  */
 namespace Magento\Framework\Module;
 
-class Setup
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SetupInterface;
+
+class Setup implements SetupInterface
 {
     /**
      * Setup Connection
      *
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected $_connection = null;
+    private $connection = null;
 
     /**
      * Tables cache array
      *
      * @var array
      */
-    protected $_tables = [];
+    private $tables = [];
 
     /**
      * Modules configuration
      *
      * @var \Magento\Framework\App\Resource
      */
-    protected $_resourceModel;
+    private $resourceModel;
 
     /**
      * Connection instance name
      *
      * @var string
      */
-    protected $_connectionName;
+    private $connectionName;
 
     /**
+     * Init
+     *
      * @param \Magento\Framework\App\Resource $resource
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        $this->_resourceModel = $resource;
-        $this->_connectionName = $connectionName;
+        $this->resourceModel = $resource;
+        $this->connectionName = $connectionName;
     }
 
     /**
@@ -56,10 +61,10 @@ class Setup
      */
     public function getConnection()
     {
-        if (null === $this->_connection) {
-            $this->_connection = $this->_resourceModel->getConnection($this->_connectionName);
+        if (null === $this->connection) {
+            $this->connection = $this->resourceModel->getConnection($this->connectionName);
         }
-        return $this->_connection;
+        return $this->connection;
     }
 
     /**
@@ -71,7 +76,7 @@ class Setup
      */
     public function setTable($tableName, $realTableName)
     {
-        $this->_tables[$tableName] = $realTableName;
+        $this->tables[$tableName] = $realTableName;
         return $this;
     }
 
@@ -84,10 +89,10 @@ class Setup
     public function getTable($tableName)
     {
         $cacheKey = $this->_getTableCacheName($tableName);
-        if (!isset($this->_tables[$cacheKey])) {
-            $this->_tables[$cacheKey] = $this->_resourceModel->getTableName($tableName);
+        if (!isset($this->tables[$cacheKey])) {
+            $this->tables[$cacheKey] = $this->resourceModel->getTableName($tableName);
         }
-        return $this->_tables[$cacheKey];
+        return $this->tables[$cacheKey];
     }
 
     /**
@@ -96,7 +101,7 @@ class Setup
      * @param string|array $tableName
      * @return string
      */
-    protected function _getTableCacheName($tableName)
+    private function _getTableCacheName($tableName)
     {
         if (is_array($tableName)) {
             return join('_', $tableName);

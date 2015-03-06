@@ -1,3 +1,30 @@
+0.42.0-beta10
+=============
+* Framework
+    * Replaced \Magento\Framework\Model\Exception with LocalizedException
+    * Replaced obsolete exceptions
+    * Config components are moved to new Magento_Config module
+    * Variables components are moved to new Magento_Variable module
+    * Preferences, shared instance creation and compiled factory accelerated by 3%
+    * Fixed "HEADERS ALREADY SENT" error when controller action outputs directly
+* Setup
+    * Added ability to install and upgrade components in Setup Tool (CLI)
+    * Added ability to manage list of modules in Setup Wizard
+    * Fixed error after "Start Readiness Check" button press in Setup Wizard
+    * Fixed error with Base URL change after "Previous" button press on Step 4 in Setup Wizard
+    * Fixed error with HTTPS options related to auto-filled Base URL on Step 3 of Setup Wizard
+    * Fixed error in "app\design\frontend\Magento\luma\composer.json"
+* LESS Compiler
+    * Added automatic update in "pub/static" of changed "css/js/images" after materialization
+    * Variable names are renamed to meet Magento Code Standards
+    * Added client-side LESS files compilation to reduce page load time in developer mode
+* Widgets
+    * Fixed fatal error on page which contain a widget with a condition based on "Category"
+* GitHub requests
+    * [#899](https://github.com/magento/magento2/issues/899) -- When accessing any category - error report generated
+    * [#986](https://github.com/magento/magento2/pull/986) -- Make it possible to exclude classes (directories) for compilation
+    * [#1054](https://github.com/magento/magento2/pull/1054) -- Fix typo in MAGE_MODE
+
 0.42.0-beta9
 =============
 * Framework Improvements:
@@ -30,7 +57,7 @@
     * Increased unit test coverage for Magento/Indexer module
     * Version number info became accessible at a public URL
 * GitHub requests:
-    * [#1027](https://github.com/magento/magento2/issues/1027) -- Can't add new subctegory
+    * [#1027](https://github.com/magento/magento2/issues/1027) -- Can't add new subcategory
     * [#921](https://github.com/magento/magento2/issues/921) -- Change resource ids from Magento_Adminhtml::* to Magento_Backend
 
 0.42.0-beta8

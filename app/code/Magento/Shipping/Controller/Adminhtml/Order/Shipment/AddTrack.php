@@ -39,7 +39,7 @@ class AddTrack extends \Magento\Backend\App\Action
      * Add new tracking number action
      *
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -48,10 +48,10 @@ class AddTrack extends \Magento\Backend\App\Action
             $number = $this->getRequest()->getPost('number');
             $title = $this->getRequest()->getPost('title');
             if (empty($carrier)) {
-                throw new \Magento\Framework\Model\Exception(__('Please specify a carrier.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a carrier.'));
             }
             if (empty($number)) {
-                throw new \Magento\Framework\Model\Exception(__('Please enter a tracking number.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a tracking number.'));
             }
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
@@ -79,13 +79,13 @@ class AddTrack extends \Magento\Backend\App\Action
                     'message' => __('Cannot initialize shipment for adding tracking number.'),
                 ];
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add tracking number.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
+            $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

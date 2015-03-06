@@ -180,7 +180,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      * @expectedExceptionMessage Code already exists.
      * @magentoDbIsolation enabled
      */

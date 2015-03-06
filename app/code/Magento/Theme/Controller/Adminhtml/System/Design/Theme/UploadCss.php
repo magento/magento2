@@ -20,14 +20,14 @@ class UploadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         try {
             $cssFileContent = $serviceModel->uploadCssFile('css_file_uploader');
             $result = ['error' => false, 'content' => $cssFileContent['content']];
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => __('We cannot upload the CSS file.')];
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
         );
     }
 }

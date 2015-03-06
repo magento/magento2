@@ -24,18 +24,18 @@ class Sample extends AbstractTypeHandler
     private $sampleResourceFactory;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResourceFactory
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Downloadable\Model\Resource\SampleFactory $sampleResourceFactory
     ) {
-        parent::__construct($coreData, $downloadableFile);
+        parent::__construct($jsonHelper, $downloadableFile);
         $this->sampleFactory = $sampleFactory;
         $this->sampleResourceFactory = $sampleResourceFactory;
     }
@@ -97,7 +97,7 @@ class Sample extends AbstractTypeHandler
      * @param ComponentInterface $model
      * @param array $files
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function setFiles(ComponentInterface $model, array $files)
     {

@@ -122,7 +122,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_filesystem;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -130,18 +130,20 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
         $this->_coreConfig = $coreConfig;
         $this->_logger = $logger;
         $this->_storeManager = $storeManager;
@@ -241,7 +243,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Upload table rate file and import data from it
      *
      * @param \Magento\Framework\Object $object
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
@@ -270,7 +272,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $headers = $stream->readCsv();
         if ($headers === false || count($headers) < 5) {
             $stream->close();
-            throw new \Magento\Framework\Model\Exception(__('Please correct Table Rates File Format.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct Table Rates File Format.'));
         }
 
         if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
@@ -316,15 +318,17 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
             $this->_saveImportData($importData);
             $stream->close();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $adapter->rollback();
             $stream->close();
-            throw new \Magento\Framework\Model\Exception($e->getMessage());
+            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
         } catch (\Exception $e) {
             $adapter->rollback();
             $stream->close();
             $this->_logger->critical($e);
-            throw new \Magento\Framework\Model\Exception(__('Something went wrong while importing table rates.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Something went wrong while importing table rates.')
+            );
         }
 
         $adapter->commit();
@@ -334,7 +338,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'We couldn\'t import this file because of these errors: %1',
                 implode(" \n", $this->_importErrors)
             );
-            throw new \Magento\Framework\Model\Exception($error);
+            throw new \Magento\Framework\Exception\LocalizedException($error);
         }
 
         return $this;

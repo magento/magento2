@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Review\Test\Repository\Rating">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Review\Test\Repository\Rating">
         <dataset name="default">
             <field name="rating_code" xsi:type="string">Rating %isolation%</field>
             <field name="stores" xsi:type="array">
@@ -22,5 +22,5 @@
             </field>
             <field name="is_active" xsi:type="string">Yes</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

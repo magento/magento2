@@ -13,6 +13,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertMultishippingOrderSuccessPlacedMessage extends AbstractConstraint
 {
+
     /* tags */
     const SEVERITY = 'high';
     /* end tags */

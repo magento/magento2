@@ -17,7 +17,7 @@ interface IntegrationInterface
      *
      * @param array $integrationData
      * @return IntegrationModel
-     * @throws \Magento\Integration\Exception
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function create(array $integrationData);
 
@@ -26,7 +26,7 @@ interface IntegrationInterface
      *
      * @param int $integrationId
      * @return IntegrationModel
-     * @throws \Magento\Integration\Exception
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function get($integrationId);
 
@@ -59,7 +59,7 @@ interface IntegrationInterface
      *
      * @param array $integrationData
      * @return IntegrationModel
-     * @throws \Magento\Integration\Exception
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function update(array $integrationData);
 
@@ -68,7 +68,15 @@ interface IntegrationInterface
      *
      * @param int $integrationId
      * @return array Integration data
-     * @throws \Magento\Integration\Exception If the integration does not exist or cannot be deleted
+     * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function delete($integrationId);
+
+    /**
+     * Return an array of selected resources  for an integration.
+     *
+     * @param int $integrationId
+     * @return array
+     */
+    public function getSelectedResources($integrationId);
 }

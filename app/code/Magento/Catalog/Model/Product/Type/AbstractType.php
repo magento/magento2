@@ -356,7 +356,7 @@ abstract class AbstractType
         // try to add custom options
         try {
             $options = $this->_prepareOptions($buyRequest, $product, $processMode);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return $e->getMessage();
         }
 
@@ -462,7 +462,7 @@ abstract class AbstractType
      * Process File Queue
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -489,7 +489,7 @@ abstract class AbstractType
                             );
                             $rootDir->create($rootDir->getRelativePath($path));
                         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
-                            throw new \Magento\Framework\Model\Exception(
+                            throw new \Magento\Framework\Exception\LocalizedException(
                                 __('We can\'t create writeable directory "%1".', $path)
                             );
                         }
@@ -503,7 +503,7 @@ abstract class AbstractType
                             if (isset($queueOptions['option'])) {
                                 $queueOptions['option']->setIsValid(false);
                             }
-                            throw new \Magento\Framework\Model\Exception(__("The file upload failed."));
+                            throw new \Magento\Framework\Exception\LocalizedException(__("The file upload failed."));
                         }
                         $this->_fileStorageDb->saveFile($dst);
                         break;
@@ -591,7 +591,7 @@ abstract class AbstractType
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function checkProductBuyState($product)
     {
@@ -601,7 +601,9 @@ abstract class AbstractType
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
                         $product->setSkipCheckRequiredOption(true);
-                        throw new \Magento\Framework\Model\Exception(__('The product has required options.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('The product has required options.')
+                        );
                     }
                 }
             }
@@ -1013,8 +1015,8 @@ abstract class AbstractType
             if (is_string($result)) {
                 $errors[] = $result;
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $errors[] = $e->getMessages();
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $errors[] = $e->getMessage();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $errors[] = __('Something went wrong while processing the request.');

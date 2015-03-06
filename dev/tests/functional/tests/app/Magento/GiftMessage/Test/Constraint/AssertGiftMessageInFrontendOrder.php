@@ -18,10 +18,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertGiftMessageInFrontendOrder extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that message from dataSet is displayed on order(s) view page on frontend.
      *

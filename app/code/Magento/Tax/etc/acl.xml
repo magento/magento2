@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Tax::manage_tax" title="Taxes" sortOrder="20" />
                     <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Backend::config">
+                        <resource id="Magento_Config::config">
                             <resource id="Magento_Tax::config_tax" title="Tax Section" sortOrder="55" />
                         </resource>
                     </resource>
