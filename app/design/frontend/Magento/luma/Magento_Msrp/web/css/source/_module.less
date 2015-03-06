@@ -49,7 +49,6 @@
         margin-bottom: @indent__s;
     }
     .actual-price {
-        font-size: @font-size__l;
         margin: 3px 0 15px;
     }
     .popup-header {
@@ -57,15 +56,9 @@
     }
 }
 
-.map-old-price {
+.map-old-price,
+.product-info-price .map-show-info {
     margin-right: @indent__s;
-}
-
-.product-info-price {
-    .map-show-info {
-        display: inline-block;
-        margin-right: @indent__s;
-    }
 }
 
 }
@@ -76,5 +69,12 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .map-popup {
         max-width: 100%; 
+    }
+    .map-old-price,
+    .product-info-price .map-show-info {
+        display: inline-block;
+        &:not(:last-child) {
+            margin-bottom: @indent__s;
+        }
     }
 }

@@ -42,15 +42,9 @@
     }
 }
 
-.map-old-price {
+.map-old-price,
+.product-info-price .map-show-info {
     margin-right: @indent__s;
-}
-
-.product-info-price {
-    .map-show-info {
-        display: inline-block;
-        margin-right: @indent__s;
-    }
 }
 
 }
@@ -62,7 +56,11 @@
     .map-popup {
         max-width: 100%; 
     }
-    .map-show-info {
+    .map-old-price,
+    .product-info-price .map-show-info {
         display: inline-block;
+        &:not(:last-child) {
+            margin-bottom: @indent__s;
+        }
     }
 }
