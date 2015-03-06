@@ -31,6 +31,11 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     protected $escaperMock;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeDateMock;
+
     protected function setUp()
     {
         $this->factoryMock = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
@@ -42,10 +47,18 @@ class DateTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $this->localeDateMock = $this->getMock(
+            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new Date(
             $this->factoryMock,
             $this->collectionFactoryMock,
-            $this->escaperMock
+            $this->escaperMock,
+            $this->localeDateMock
         );
     }
 

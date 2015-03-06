@@ -55,17 +55,17 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
     public function testGetValue()
     {
         $attributeValue = '11-11-2011';
-        $dateFormat = 'dd-MM-yyyy';
+        $date = new \DateTime($attributeValue);
         $object = new \Magento\Framework\Object(['datetime' => $attributeValue]);
         $this->attributeMock->expects($this->any())->method('getData')->with('frontend_input')
             ->will($this->returnValue('text'));
 
-        $this->localeDateMock->expects($this->once())->method('getDateFormat')
-            ->with(\IntlDateFormatter::MEDIUM)
-            ->will($this->returnValue($dateFormat));
+        $this->localeDateMock->expects($this->once())->method('formatDateTime')
+            ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE, null, null, null)
+            ->willReturn($attributeValue);
         $this->localeDateMock->expects($this->once())->method('date')
-            ->with($attributeValue)
-            ->willReturn(new \DateTime($attributeValue));
+            ->with($date)
+            ->willReturn($date);
 
         $this->assertEquals($attributeValue, $this->model->getValue($object));
     }
