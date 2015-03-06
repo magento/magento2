@@ -25,7 +25,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
             $taxClassId = $this->taxClassRepository->save($taxClass);
 
             $responseContent = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
                 [
                     'success' => true,
@@ -35,11 +35,11 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
+            $responseContent = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode(
                 ['success' => false, 'error_message' => $e->getMessage(), 'class_id' => '', 'class_name' => '']
             );
         } catch (\Exception $e) {
-            $responseContent = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
+            $responseContent = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode(
                 [
                     'success' => false,
                     'error_message' => __('Something went wrong saving this tax class.'),

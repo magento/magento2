@@ -8,7 +8,6 @@ namespace Magento\Quote\Api;
 
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ShippingAddressManagementTest extends WebapiAbstract
 {
@@ -41,9 +40,9 @@ class ShippingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
             AddressInterface::KEY_ID => (int)$address->getId(),
             AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
-            AddressInterface::REGION => $address->getRegion(),
-            AddressInterface::REGION_ID => $address->getRegionId(),
-            AddressInterface::REGION_CODE => $address->getRegionCode(),
+            AddressInterface::KEY_REGION => $address->getRegion(),
+            AddressInterface::KEY_REGION_ID => $address->getRegionId(),
+            AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
             AddressInterface::KEY_STREET => $address->getStreet(),
             AddressInterface::KEY_COMPANY => $address->getCompany(),
             AddressInterface::KEY_TELEPHONE => $address->getTelephone(),
@@ -59,7 +58,7 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/shipping-address',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -86,7 +85,7 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/shipping-address',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -110,7 +109,7 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/shipping-address',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -177,7 +176,7 @@ class ShippingAddressManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/shipping-address',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

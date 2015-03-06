@@ -37,8 +37,8 @@ class Integration extends Action
     /** @var IntegrationOauthService */
     protected $_oauthService;
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_coreHelper;
+    /** @var \Magento\Framework\Json\Helper\Data */
+    protected $jsonHelper;
 
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
@@ -57,7 +57,7 @@ class Integration extends Action
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
      * @param IntegrationOauthService $oauthService
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
@@ -68,7 +68,7 @@ class Integration extends Action
         \Psr\Log\LoggerInterface $logger,
         \Magento\Integration\Service\V1\IntegrationInterface $integrationService,
         IntegrationOauthService $oauthService,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
         \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
@@ -78,7 +78,7 @@ class Integration extends Action
         $this->_logger = $logger;
         $this->_integrationService = $integrationService;
         $this->_oauthService = $oauthService;
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         $this->_integrationData = $integrationData;
         $this->escaper = $escaper;
         $this->_integrationCollection = $integrationCollection;
@@ -106,7 +106,7 @@ class Integration extends Action
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->getResponse()->representJson(
-                $this->_coreHelper->jsonEncode(['_redirect' => $this->getUrl($path, $arguments)])
+                $this->jsonHelper->jsonEncode(['_redirect' => $this->getUrl($path, $arguments)])
             );
             return $this;
         } else {

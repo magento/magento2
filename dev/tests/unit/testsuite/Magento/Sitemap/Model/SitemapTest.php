@@ -11,11 +11,6 @@ namespace Magento\Sitemap\Model;
 class SitemapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_helperMockCore;
-
-    /**
      * @var \Magento\Sitemap\Helper\Data
      */
     protected $_helperMockSitemap;
@@ -60,7 +55,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperMockCore = $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false);
         $this->_sitemapCategoryMock = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Catalog\Category'
         )->disableOriginalConstructor()->getMock();
@@ -624,7 +618,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'categoryFactory' => $categoryFactory,
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
-                'coreData' => $this->_helperMockCore,
                 'sitemapData' => $this->_helperMockSitemap,
                 'filesystem' => $this->_filesystemMock
             ]

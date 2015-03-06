@@ -1,48 +1,24 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
-         class="Magento\Tax\Test\Fixture\TaxClass">
-    <module>Magento_Tax</module>
-    <type>flat</type>
-    <entity_type>tax_class</entity_type>
-    <collection>Magento\Tax\Model\Resource\TaxClass\Collection</collection>
-    <identifier />
-    <repository_class>Magento\Tax\Test\Repository\TaxClass</repository_class>
-    <handler_interface>Magento\Tax\Test\Handler\TaxClass\TaxClassInterface</handler_interface>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="taxClass" module="Magento_Tax" type="flat" entity_type="tax_class" collection="Magento\Tax\Model\Resource\TaxClass\Collection" identifier="" repository_class="Magento\Tax\Test\Repository\TaxClass" handler_interface="Magento\Tax\Test\Handler\TaxClass\TaxClassInterface" class="Magento\Tax\Test\Fixture\TaxClass">
     <dataset name="default">
         <field name="class_name" xsi:type="string">Tax Class %isolation%</field>
     </dataset>
-    <fields>
-        <field name="class_id">
-            <attribute_code>class_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value xsi:type="null" />
-            <input />
-        </field>
-        <field name="class_name">
-            <attribute_code>class_name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">Tax Class %isolation%</default_value>
-            <input />
-        </field>
-        <field name="class_type">
-           <attribute_code>class_type</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value xsi:type="string">CUSTOMER</default_value>
-            <input />
-        </field>
-        <field name="id">
-            <attribute_code>id</attribute_code>
-            <backend_type>virtual</backend_type>
-        </field>
-    </fields>
-</fixture>
+    <field name="class_id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="class_name" is_required="">
+      <default_value xsi:type="string">Tax Class %isolation%</default_value>
+    </field>
+    <field name="class_type" is_required="">
+      <default_value xsi:type="string">CUSTOMER</default_value>
+    </field>
+    <field name="id"/>
+  </fixture>
+</config>

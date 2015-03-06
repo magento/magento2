@@ -1,4 +1,4 @@
-namespace \Magento\Framework\ObjectManager\Code\Generator;
+namespace Magento\Framework\ObjectManager\Code\Generator;
 
 /**
  * Repository class for
