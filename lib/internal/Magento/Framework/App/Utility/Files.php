@@ -919,7 +919,6 @@ class Files
             '/dev/tests/static/testsuite/',
             '/dev/tests/functional/tests/app/',
             '/dev/tests/unit/framework/',
-            '/dev/tests/unit/testsuite/',
             '/setup/src/'
         ];
 
