@@ -30,7 +30,7 @@ class Config
      */
     public function __construct($dictionaryEnabled = false, $dictionaryFileName = null)
     {
-        $this->dictionaryEnabled = $dictionaryFileName;
+        $this->dictionaryEnabled = $dictionaryEnabled;
         $this->dictionaryFileName = $dictionaryFileName;
     }
 
