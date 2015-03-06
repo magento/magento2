@@ -8,6 +8,9 @@ namespace Magento\Translation\Model\Js;
 
 use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * DataProvider for js translation
@@ -36,13 +39,23 @@ class DataProvider implements DataProviderInterface
     protected $filesUtility;
 
     /**
-     * @param State $appState
+     * Filesystem
+     *
+     * @var ReadInterface
      */
-    public function __construct(State $appState, Config $config)
+    protected $rootDirectory;
+
+    /**
+     * @param State $appState
+     * @param Config $config
+     * @param Files $filesUtility
+     */
+    public function __construct(State $appState, Config $config, Filesystem $filesystem, Files $filesUtility = null)
     {
         $this->appState = $appState;
         $this->config = $config;
-        $this->filesUtility = new Files(BP);
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(BP);
     }
 
     /**
@@ -59,7 +72,8 @@ class DataProvider implements DataProviderInterface
 
         $files = $this->filesUtility->getJsFiles($this->appState->getAreaCode(), $themePath);
         foreach ($files as $filePath) {
-            foreach ($this->getPhrases(file_get_contents($filePath[0])) as $phrase) {
+            $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
+            foreach ($this->getPhrases($content) as $phrase) {
                 $translatedPhrase = (string) __($phrase);
                 if ($phrase != $translatedPhrase) {
                     $dictionary[$phrase] = $translatedPhrase;
