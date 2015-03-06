@@ -143,7 +143,15 @@ class ServiceInputProcessor
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                try {
+                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                } catch (\Exception $e) {
+                    if (empty($value)) {
+                        continue;
+                    } else {
+                        throw $e;
+                    }
+                }
                 if ($camelCaseProperty === 'CustomAttributes') {
                     $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
                 } else {

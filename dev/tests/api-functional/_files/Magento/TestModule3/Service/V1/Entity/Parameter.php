@@ -18,6 +18,17 @@ class Parameter extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * Set Name.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
+    }
+
+    /**
      * Get value.
      *
      * @return string $value
@@ -25,5 +36,16 @@ class Parameter extends \Magento\Framework\Api\AbstractExtensibleObject
     public function getValue()
     {
         return $this->_data['value'];
+    }
+
+    /**
+     * Set value.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        return $this->setData('value', $value);
     }
 }

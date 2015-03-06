@@ -67,7 +67,6 @@ class ShipmentCreateTest extends WebapiAbstract
         ];
         $data = [
             'order_id' => $order->getId(),
-            'entity_id' => null,
             'store_id' => null,
             'total_weight' => null,
             'total_qty' => null,
@@ -77,7 +76,6 @@ class ShipmentCreateTest extends WebapiAbstract
             'billing_address_id' => null,
             'shipment_status' => null,
             'increment_id' => null,
-            'created_at' => null,
             'updated_at' => null,
 //            'packages' => null,
             'shipping_label' => null,

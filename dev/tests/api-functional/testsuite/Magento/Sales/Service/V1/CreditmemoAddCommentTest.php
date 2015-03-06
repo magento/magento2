@@ -56,8 +56,6 @@ class CreditmemoAddCommentTest extends WebapiAbstract
 
         $commentData = [
             Comment::COMMENT => 'Hello world!',
-            Comment::ENTITY_ID => null,
-            Comment::CREATED_AT => null,
             Comment::PARENT_ID => $creditmemo->getId(),
             Comment::IS_VISIBLE_ON_FRONT => true,
             Comment::IS_CUSTOMER_NOTIFIED => true,
