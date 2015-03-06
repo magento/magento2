@@ -49,4 +49,11 @@
             <resource ref="Magento_TestModuleMSC::resource3" />
         </resources>
     </route>
+    <route method="GET" url="/V2/testmoduleMSC/itemPreconfigured">
+        <service class="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" method="getPreconfiguredItem" />
+        <resources>
+            <resource ref="Magento_TestModuleMSC::resource1" />
+            <resource ref="Magento_TestModuleMSC::resource2" />
+        </resources>
+    </route>
 </routes>

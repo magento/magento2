@@ -163,25 +163,27 @@ class Config
     protected function initServicesMetadata()
     {
         $soapServices = [];
-        foreach ($this->config->getServices()[Converter::KEY_SERVICES] as $serviceClass => $serviceData) {
-            $serviceName = $this->getServiceName($serviceClass, $serviceData[Converter::KEY_VERSION]);
-            foreach ($serviceData[Converter::KEY_METHODS] as $methodName => $methodMetadata) {
-                $soapServices[$serviceName][self::KEY_SERVICE_METHODS][$methodName] = [
-                    self::KEY_METHOD => $methodName,
-                    self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
-                    self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
-                    self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
-                ];
-                $soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
+        foreach ($this->config->getServices()[Converter::KEY_SERVICES] as $serviceClass => $serviceVersionData) {
+            foreach ($serviceVersionData as $version => $serviceData) {
+                $serviceName = $this->getServiceName($serviceClass, $version);
+                foreach ($serviceData[Converter::KEY_METHODS] as $methodName => $methodMetadata) {
+                    $soapServices[$serviceName][self::KEY_SERVICE_METHODS][$methodName] = [
+                        self::KEY_METHOD => $methodName,
+                        self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
+                        self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
+                        self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
+                    ];
+                    $soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
+                }
+                $reflectedMethodsMetadata = $this->classReflector->reflectClassMethods(
+                    $serviceClass,
+                    $soapServices[$serviceName][self::KEY_SERVICE_METHODS]
+                );
+                $soapServices[$serviceName][self::KEY_SERVICE_METHODS] = array_merge_recursive(
+                    $soapServices[$serviceName][self::KEY_SERVICE_METHODS],
+                    $reflectedMethodsMetadata
+                );
             }
-            $reflectedMethodsMetadata = $this->classReflector->reflectClassMethods(
-                $serviceClass,
-                $soapServices[$serviceName][self::KEY_SERVICE_METHODS]
-            );
-            $soapServices[$serviceName][self::KEY_SERVICE_METHODS] = array_merge_recursive(
-                $soapServices[$serviceName][self::KEY_SERVICE_METHODS],
-                $reflectedMethodsMetadata
-            );
         }
 
         return $soapServices;

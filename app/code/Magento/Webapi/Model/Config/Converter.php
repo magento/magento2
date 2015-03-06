@@ -27,7 +27,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_SOURCE = 'source';
     const KEY_METHOD = 'method';
     const KEY_METHODS = 'methods';
-    const KEY_VERSION = 'version';
     /**#@-*/
 
     /**
@@ -47,10 +46,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $service = $route->getElementsByTagName('service')->item(0);
             $serviceClass = $service->attributes->getNamedItem('class')->nodeValue;
             $serviceMethod = $service->attributes->getNamedItem('method')->nodeValue;
+            $url = trim($route->attributes->getNamedItem('url')->nodeValue);
+            $version = $this->convertVersion($url);
 
             $serviceClassData = [];
-            if (isset($result[self::KEY_SERVICES][$serviceClass])) {
-                $serviceClassData = $result[self::KEY_SERVICES][$serviceClass];
+            if (isset($result[self::KEY_SERVICES][$serviceClass][$version])) {
+                $serviceClassData = $result[self::KEY_SERVICES][$serviceClass][$version];
             }
 
             $resources = $route->getElementsByTagName('resource');
@@ -66,6 +67,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 // For SOAP
                 $resourcePermissionSet[] = $ref;
             }
+
             if (!isset($serviceClassData[self::KEY_METHODS][$serviceMethod])) {
                 $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] = $resourcePermissionSet;
             } else {
@@ -79,7 +81,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             $method = $route->attributes->getNamedItem('method')->nodeValue;
-            $url = trim($route->attributes->getNamedItem('url')->nodeValue);
             $secureNode = $route->attributes->getNamedItem('secure');
             $secure = $secureNode ? (bool)trim($secureNode->nodeValue) : false;
             $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
@@ -101,11 +102,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE] = $serviceSecure || $secure;
 
-            if (!isset($serviceClassData[self::KEY_VERSION])) {
-                $serviceClassData[self::KEY_VERSION] = $this->convertVersion($url);
-            }
-
-            $result[self::KEY_SERVICES][$serviceClass] = $serviceClassData;
+            $result[self::KEY_SERVICES][$serviceClass][$version] = $serviceClassData;
         }
         return $result;
     }

@@ -6,71 +6,85 @@
 return [
     'services' => [
         'Magento\TestModuleMSC\Api\AllSoapAndRestInterface' => [
-            'methods' => [
-                'item' => [
-                    'resources' => [
-                        'Magento_TestModuleMSC::resource1',
+            'V1' => [
+                'methods' => [
+                    'item' => [
+                        'resources' => [
+                            'Magento_TestModuleMSC::resource1',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
-                ],
-                'create' => [
-                    'resources' => [
-                        'Magento_TestModuleMSC::resource3',
+                    'create' => [
+                        'resources' => [
+                            'Magento_TestModuleMSC::resource3',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
                 ],
             ],
-            'version' => 'V1',
+            'V2' => [
+                'methods' => [
+                    'getPreconfiguredItem' => [
+                        'resources' => [
+                            'Magento_TestModuleMSC::resource1',
+                            'Magento_TestModuleMSC::resource2',
+                        ],
+                        'secure' => false,
+                    ],
+                ],
+            ],
         ],
         'Magento\TestModule1\Service\V1\AllSoapAndRestInterface' => [
-            'methods' => [
-                'item' => [
-                    'resources' => [
-                        'Magento_Test1::resource1',
+            'V1' => [
+                'methods' => [
+                    'item' => [
+                        'resources' => [
+                            'Magento_Test1::resource1',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
-                ],
-                'create' => [
-                    'resources' => [
-                        'Magento_Test1::resource1',
+                    'create' => [
+                        'resources' => [
+                            'Magento_Test1::resource1',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
                 ],
             ],
-            'version' => 'V1',
         ],
         'Magento\TestModule1\Service\V2\AllSoapAndRestInterface' => [
-            'methods' => [
-                'item' => [
-                    'resources' => [
-                        'Magento_Test1::resource1',
-                        'Magento_Test1::resource2',
+            'V2' => [
+                'methods' => [
+                    'item' => [
+                        'resources' => [
+                            'Magento_Test1::resource1',
+                            'Magento_Test1::resource2',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
-                ],
-                'create' => [
-                    'resources' => [
-                        'Magento_Test1::resource1',
-                        'Magento_Test1::resource2',
+                    'create' => [
+                        'resources' => [
+                            'Magento_Test1::resource1',
+                            'Magento_Test1::resource2',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
-                ],
-                'delete' => [
-                    'resources' => [
-                        'Magento_Test1::resource1',
-                        'Magento_Test1::resource2',
+                    'delete' => [
+                        'resources' => [
+                            'Magento_Test1::resource1',
+                            'Magento_Test1::resource2',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
-                ],
-                'update' => [
-                    'resources' => [
-                        'Magento_Test1::resource1',
-                        'Magento_Test1::resource2',
+                    'update' => [
+                        'resources' => [
+                            'Magento_Test1::resource1',
+                            'Magento_Test1::resource2',
+                        ],
+                        'secure' => false,
                     ],
-                    'secure' => false,
                 ],
             ],
-            'version' => 'V2',
         ],
     ],
     'routes' => [
@@ -194,5 +208,19 @@ return [
                 ],
             ],
         ],
+        '/V2/testmoduleMSC/itemPreconfigured' => [
+            'GET' => [
+                'secure' => false,
+                'service' => [
+                    'class' => 'Magento\TestModuleMSC\Api\AllSoapAndRestInterface',
+                    'method' => 'getPreconfiguredItem',
+                ],
+                'resources' => [
+                    'Magento_TestModuleMSC::resource1' => true,
+                    'Magento_TestModuleMSC::resource2' => true,
+                ],
+                'parameters' => [],
+            ]
+        ]
     ],
 ];

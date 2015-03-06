@@ -39,30 +39,32 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $servicesConfig = [
             'services' => [
                 'Magento\Customer\Api\AccountManagementInterface' => [
-                    'methods' => [
-                        'activate' => [
-                            'resources' => [
-                                [
-                                    'Magento_Customer::manage',
+                    'V1' => [
+                        'methods' => [
+                            'activate' => [
+                                'resources' => [
+                                    [
+                                        'Magento_Customer::manage',
+                                    ],
                                 ],
+                                'secure' => false,
                             ],
-                            'secure' => false,
                         ],
                     ],
-                    'version' => 'V1',
                 ],
                 'Magento\Customer\Api\CustomerRepositoryInterface' => [
-                    'methods' => [
-                        'getById' => [
-                            'resources' => [
-                                [
-                                    'Magento_Customer::customer',
+                    'V1' => [
+                        'methods' => [
+                            'getById' => [
+                                'resources' => [
+                                    [
+                                        'Magento_Customer::customer',
+                                    ],
                                 ],
+                                'secure' => false,
                             ],
-                            'secure' => false,
                         ],
                     ],
-                    'version' => 'V1',
                 ],
             ],
         ];
