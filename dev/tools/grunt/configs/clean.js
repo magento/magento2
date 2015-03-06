@@ -1,4 +1,34 @@
-{
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+'use strict';
+
+var themes = require('./themes'),
+    _      = require('underscore');
+
+var themeOptions = {};
+
+_.each(themes, function(theme, name) {
+    themeOptions[name] = {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= combo.autopath(\""+name+"\", \"pub\") %>**/*",
+                    "<%= combo.autopath(\""+name+"\", \"tmpLess\") %>**/*",
+                    "<%= combo.autopath(\""+name+"\", \"tmpSource\") %>**/*"
+                ]
+            }
+        ]
+    };
+});
+
+var cleanOptions = {
     "var": {
         "force": true,
         "files": [
@@ -75,50 +105,8 @@
                 ]
             }
         ]
-    },
-    "blank": {
-        "force": true,
-        "files": [
-            {
-                "force": true,
-                "dot": true,
-                "src": [
-                    "<%= path.tmp %>/cache/**/*",
-                    "<%= combo.autopath(\"blank\", \"pub\") %>**/*",
-                    "<%= combo.autopath(\"blank\", \"tmpLess\") %>**/*",
-                    "<%= combo.autopath(\"blank\", \"tmpSource\") %>**/*"
-                ]
-            }
-        ]
-    },
-    "backend": {
-        "force": true,
-        "files": [
-            {
-                "force": true,
-                "dot": true,
-                "src": [
-                    "<%= path.tmp %>/cache/**/*",
-                    "<%= combo.autopath(\"backend\", \"pub\") %>**/*",
-                    "<%= combo.autopath(\"backend\", \"tmpLess\") %>**/*",
-                    "<%= combo.autopath(\"backend\", \"tmpSource\") %>**/*"
-                ]
-            }
-        ]
-    },
-    "luma": {
-        "force": true,
-        "files": [
-            {
-                "force": true,
-                "dot": true,
-                "src": [
-                    "<%= path.tmp %>/cache/**/*",
-                    "<%= combo.autopath(\"luma\", \"pub\") %>**/*",
-                    "<%= combo.autopath(\"luma\", \"tmpLess\") %>**/*",
-                    "<%= combo.autopath(\"luma\", \"tmpSource\") %>**/*"
-                ]
-            }
-        ]
     }
-}
+};
+
+module.exports = _.extend(cleanOptions, themeOptions);
+

@@ -5,27 +5,25 @@
 
 'use strict';
 
-var combo = require('./combo');
+var combo  = require('./combo'),
+    themes = require('./themes'),
+    _      = require('underscore');
 
-/**
- * Compiles Less to CSS and generates necessary files if requested.
- */
-module.exports = {
+var themeOptions = {};
+
+_.each(themes, function(theme, name) {
+    themeOptions[name] = {
+        files: combo.lessFiles(name)
+    };
+});
+
+var lessOptions = {
     options: {
         sourceMap: true,
         strictImports: false,
         sourceMapRootpath: '/',
         dumpLineNumbers: false, // use 'comments' instead false to output line comments for source
         ieCompat: false
-    },
-    backend: {
-        files: combo.lessFiles('backend')
-    },
-    blank: {
-        files: combo.lessFiles('blank')
-    },
-    luma: {
-        files: combo.lessFiles('luma')
     },
     setup: {
         files: {
@@ -38,3 +36,8 @@ module.exports = {
         }
     }
 };
+
+/**
+ * Compiles Less to CSS and generates necessary files if requested.
+ */
+module.exports = _.extend(themeOptions, lessOptions);
