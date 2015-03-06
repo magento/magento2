@@ -945,8 +945,8 @@ option:empty {
 }
 .actions-split.active .dropdown-menu,
 .actions-split._active .dropdown-menu {
-  visibility: visible;
   opacity: 1;
+  visibility: visible;
 }
 .actions-split .action-toggle,
 .actions-split .action-default {
@@ -967,12 +967,12 @@ option:empty {
 }
 .actions-split .action-toggle {
   padding-right: 4rem;
+  border-left-color: rgba(0, 0, 0, 0.2);
   bottom: 0;
   padding-left: 0;
   position: absolute;
   right: 0;
   top: 0;
-  border-left-color: rgba(0, 0, 0, 0.2);
 }
 .actions-split .action-toggle._active:after,
 .actions-split .action-toggle.active:after {
@@ -1015,25 +1015,25 @@ option:empty {
   width: 1px;
 }
 .actions-split .dropdown-menu {
-  display: block;
-  visibility: hidden;
-  position: absolute;
-  list-style: none;
-  min-width: 0;
-  margin: 2px 0 0;
-  padding: 0;
-  right: 0;
-  left: 0;
-  top: 100%;
-  border: 1px solid #007bdb;
   background-color: #ffffff;
+  border: 1px solid #007bdb;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  display: block;
+  left: 0;
+  list-style: none;
+  margin: 2px 0 0;
+  min-width: 0;
   opacity: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 100%;
   transition: opacity 0.15s ease;
+  visibility: hidden;
 }
 .actions-split .dropdown-menu > li {
-  padding: .6875em;
   border: none;
+  padding: .6875em;
 }
 .actions-split .dropdown-menu > li:hover {
   background-color: #e0f6fe;
@@ -2945,11 +2945,16 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   color: #fd6e23;
 }
 .copyright .link-copyright:before {
+  transition: color 0.1s linear;
   color: #eb5202;
   content: '\e606';
+  display: block;
   font-size: 2.5rem;
   position: relative;
   top: -0.2rem;
+}
+.copyright .link-copyright:active:before {
+  transform: scale(0.9);
 }
 .footer-legal {
   padding-top: 1rem;

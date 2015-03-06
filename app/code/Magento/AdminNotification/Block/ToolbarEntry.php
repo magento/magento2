@@ -21,6 +21,11 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     const NOTIFICATIONS_NUMBER = 3;
 
     /**
+     * Number of notifications showed on icon
+     */
+    const NOTIFICATIONS_COUNTER_MAX = 99;
+
+    /**
      * Length of notification description showed by default
      */
     const NOTIFICATION_DESCRIPTION_LENGTH = 150;
@@ -54,6 +59,16 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     public function getNotificationDescriptionLength()
     {
         return self::NOTIFICATION_DESCRIPTION_LENGTH;
+    }
+
+    /**
+     * Retrieve notification counter max value
+     *
+     * @return int
+     */
+    public function getNotificationCounterMax()
+    {
+        return self::NOTIFICATIONS_COUNTER_MAX;
     }
 
     /**

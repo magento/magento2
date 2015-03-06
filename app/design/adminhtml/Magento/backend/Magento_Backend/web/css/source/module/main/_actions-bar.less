@@ -5,10 +5,13 @@
 //
 //  Main elements -> Actions bar
 //  _____________________________________________
+
 //  ToDo UI: Consist old styles, should be changed with new design
+
 //
 //  Components
 //  ---------------------------------------------
+
 @import 'actions_bar/_store-switcher';
 
 //
@@ -23,10 +26,10 @@
 
 .page-main-actions,
 .page-actions.fixed {
+    .extend__clearfix();
     background: @page-main-actions__background-color;
     border-bottom: 1px solid @page-main-actions__border-color;
     border-top: 1px solid @page-main-actions__border-color;
-    .extend__clearfix();
     padding: @page-main-actions__padding-side;
 }
 

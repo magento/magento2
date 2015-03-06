@@ -63,11 +63,18 @@
         }
         &:before {
             &:extend(.abs-icon all);
+            .transition(color);
             color: @primary__color;
             content: @icon-logo__content;
+            display: block;
             font-size: 2.5rem;
             position: relative;
             top: -.2rem;
+        }
+        &:active {
+            &:before {
+                .scale();
+            }
         }
     }
 }
