@@ -14,6 +14,9 @@ use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxRateRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = "taxTaxRateRepositoryV1";
