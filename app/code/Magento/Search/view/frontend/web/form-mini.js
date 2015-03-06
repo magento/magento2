@@ -34,7 +34,7 @@ define([
                        ' <%- data.title %>' +
                     '</span>' +
                     '<span aria-hidden="true" class="amount">' +
-                        '<%- data.num_of_results %>' +
+                        '<%- data.num_results %>' +
                     '</span>' +
                 '</li>',
             submitBtn: 'button[type="submit"]',
