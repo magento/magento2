@@ -43,9 +43,9 @@ $table = $this->getConnection()->newTable(
     'Value'
 )->addColumn(
     'state',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
     255,
-    ['nullable' => false, 'default' => '*'],
+    ['nullable' => false, 'default' => '0'],
     'State'
 )->addColumn(
     'attribute_id',
@@ -53,12 +53,6 @@ $table = $this->getConnection()->newTable(
     null,
     ['unsigned' => true, 'nullable' => false],
     'Attribute Id'
-)->addColumn(
-    'entity_type_id',
-    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-    null,
-    ['unsigned' => true, 'nullable' => false],
-    'Entity Type Id'
 )->addIndex(
     $this->getIdxName('weee_tax', ['website_id']),
     ['website_id']

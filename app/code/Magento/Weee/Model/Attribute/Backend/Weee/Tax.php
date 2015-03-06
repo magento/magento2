@@ -74,7 +74,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
                 continue;
             }
 
-            $state = isset($tax['state']) ? $tax['state'] : '*';
+            $state = isset($tax['state']) ? $tax['state'] : '0';
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
 
             if (!empty($dup[$key1])) {

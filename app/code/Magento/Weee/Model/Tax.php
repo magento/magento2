@@ -263,7 +263,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     $rateRequest->getCountryId()
                 )->where(
                     'state IN(?)',
-                    [$rateRequest->getRegionId(), '*']
+                    [$rateRequest->getRegionId(), '0']
                 )->where(
                     'entity_id = ?',
                     (int)$product->getId()
