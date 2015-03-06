@@ -18,7 +18,7 @@ $customerAddress->setData(
         'country_id' => 'US',
         'city' => 'CityM',
         'company' => 'CompanyName',
-        'street' => ['Green str, 67'],
+        'street' => 'Green str, 67',
         'lastname' => 'Smith',
         'firstname' => 'John',
         'parent_id' => 1,

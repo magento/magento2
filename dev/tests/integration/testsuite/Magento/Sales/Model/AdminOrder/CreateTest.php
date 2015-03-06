@@ -40,14 +40,14 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** @var $order \Magento\Sales\Model\Order */
         $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->loadByIncrementId('100000001');
-        $this->assertFalse($order->getShippingAddress());
+        $this->assertNull($order->getShippingAddress());
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
         $this->_model->initFromOrder($order);
 
-        $this->assertFalse($order->getShippingAddress());
+        $this->assertNull($order->getShippingAddress());
     }
 
     /**

@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\Quote\Address;
 
 use Magento\Framework\Object\Copy;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Api\Data\OrderAddressDataBuilder as OrderAddressBuilder;
+use Magento\Sales\Api\Data\OrderAddressInterfaceFactory as OrderAddressFactory;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
@@ -22,20 +22,28 @@ class ToOrderAddress
     protected $objectCopyService;
 
     /**
-     * @var OrderAddressBuilder|\Magento\Framework\Api\Builder
+     * @var OrderAddressFactory
      */
-    protected $orderAddressBuilder;
+    protected $orderAddressFactory;
 
     /**
-     * @param OrderAddressBuilder $orderAddressBuilder
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @param OrderAddressFactory $orderAddressFactory
      * @param Copy $objectCopyService
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OrderAddressBuilder $orderAddressBuilder,
-        Copy $objectCopyService
+        OrderAddressFactory $orderAddressFactory,
+        Copy $objectCopyService,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->orderAddressBuilder = $orderAddressBuilder;
+        $this->orderAddressFactory = $orderAddressFactory;
         $this->objectCopyService = $objectCopyService;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -51,8 +59,13 @@ class ToOrderAddress
             $object
         );
 
-        return $this->orderAddressBuilder
-            ->populateWithArray(array_merge($orderAddressData, $data))
-            ->create();
+        $orderAddress = $this->orderAddressFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $orderAddress,
+            array_merge($orderAddressData, $data),
+            '\Magento\Sales\Api\Data\OrderAddressInterface'
+        );
+
+        return $orderAddress;
     }
 }

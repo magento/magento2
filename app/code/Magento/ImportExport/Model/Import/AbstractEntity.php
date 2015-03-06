@@ -112,13 +112,6 @@ abstract class AbstractEntity
     protected $_notices = [];
 
     /**
-     * Helper to encode/decode json
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_jsonHelper;
-
-    /**
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\String
@@ -239,7 +232,6 @@ abstract class AbstractEntity
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -249,7 +241,6 @@ abstract class AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
@@ -262,7 +253,6 @@ abstract class AbstractEntity
             $data['data_source_model']
         ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
         $this->_connection = isset($data['connection']) ? $data['connection'] : $resource->getConnection('write');
-        $this->_jsonHelper = $coreData;
         $this->string = $string;
         $this->_pageSize = isset(
             $data['page_size']

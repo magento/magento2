@@ -8,7 +8,9 @@
 ?>
 <script>
 require(["jquery","mage/mage","mage/backend/suggest"], function($){
-    var options = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSuggestWidgetOptions())?>;
+    var options = <?php
+        echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSuggestWidgetOptions())
+    ?>;
     $('#configurable-attribute-selector')
         .mage('suggest', options)
         .on('suggestselect', function (event, ui) {

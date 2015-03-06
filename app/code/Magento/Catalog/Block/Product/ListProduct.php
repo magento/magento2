@@ -41,9 +41,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $_catalogLayer;
 
     /**
-     * @var \Magento\Core\Helper\PostData
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
+
+    /**
+     * @var \Magento\Framework\Url\Helper\Data
+     */
+    protected $urlHelper;
 
     /**
      * @var CategoryRepositoryInterface
@@ -52,21 +57,24 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
     /**
      * @param Context $context
-     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Core\Helper\PostData $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
+        $this->urlHelper = $urlHelper;
         parent::__construct(
             $context,
             $data
@@ -334,7 +342,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             'data' => [
                 'product' => $product->getEntityId(),
                 \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
-                    $this->_postDataHelper->getEncodedUrl($url),
+                    $this->urlHelper->getEncodedUrl($url),
             ]
         ];
     }

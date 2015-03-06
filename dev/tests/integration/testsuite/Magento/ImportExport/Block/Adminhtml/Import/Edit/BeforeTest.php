@@ -54,15 +54,6 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $coreHelper = $this->getMock('Magento\Core\Helper\Data', ['jsonEncode'], [], '', false, false);
-        $coreHelper->expects(
-            $this->any()
-        )->method(
-            'jsonEncode'
-        )->will(
-            $this->returnCallback([$this, 'jsonEncodeCallback'])
-        );
-
         $importModel = $this->getMock(
             'Magento\ImportExport\Model\Import',
             ['getEntityBehaviors', 'getUniqueEntityBehaviors'],
@@ -85,29 +76,13 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_sourceBehaviors)
         );
 
-        $arguments = [
-            'coreData' => $coreHelper,
-            'importModel' => $importModel,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
-        ];
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $objectManager->create('Magento\ImportExport\Block\Adminhtml\Import\Edit\Before', $arguments);
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_model);
-    }
-
-    /**
-     * Callback method for \Magento\Core\Helper\Data::jsonEncode
-     *
-     * @param mixed $data
-     * @return string
-     */
-    public function jsonEncodeCallback($data)
-    {
-        return \Zend_Json::encode($data);
+        $this->_model = $objectManager->create(
+            'Magento\ImportExport\Block\Adminhtml\Import\Edit\Before',
+            [
+                'importModel' => $importModel,
+            ]
+        );
     }
 
     /**

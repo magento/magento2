@@ -51,8 +51,8 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
         $themeId = (int)$this->getRequest()->getParam('theme_id');
         $reportToSession = (bool)$this->getRequest()->getParam('reportToSession');
 
-        /** @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
+        /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */
+        $jsonHelper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
 
         $hadThemeAssigned = $this->_customizationConfig->hasThemeAssigned();
 
@@ -81,6 +81,6 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => true, 'message' => __('This theme is not assigned.')];
         }
-        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($jsonHelper->jsonEncode($response));
     }
 }

@@ -47,11 +47,12 @@ class IntervalFactory
     /**
      * Create interval
      *
+     * @param array $data
      * @return IntervalInterface
      */
-    public function create()
+    public function create(array $data = [])
     {
-        $interval = $this->objectManager->create($this->interval);
+        $interval = $this->objectManager->create($this->interval, $data);
         if (!$interval instanceof IntervalInterface) {
             throw new \LogicException(
                 'Interval not instance of interface \Magento\Framework\Search\Dynamic\IntervalInterface'
