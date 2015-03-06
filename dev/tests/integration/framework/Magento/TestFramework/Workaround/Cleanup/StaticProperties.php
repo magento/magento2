@@ -12,11 +12,17 @@ namespace Magento\TestFramework\Workaround\Cleanup;
 class StaticProperties
 {
     /**
-     * Directories to clear static variables
+     * Directories to clear static variables.
+     *
+     * Format: ['cleanableFolder' => ['pseudo-globs to match uncleanable subfolders']]
      *
      * @var array
      */
-    protected static $_cleanableFolders = ['/app/code/', '/dev/tests/integration/framework', '/lib/internal/'];
+    protected static $_cleanableFolders = [
+        '/app/code/' => ['/app/code/*/*/Test/Unit/'],
+        '/dev/tests/integration/framework' => [],
+        '/lib/internal/' => ['/lib/internal/*/*/Test/Unit/', '/lib/internal/Magento/Framework/*/Test/Unit/']
+    ];
 
     protected static $backupStaticVariables = [];
 
@@ -66,12 +72,18 @@ class StaticProperties
     protected static function _isClassInCleanableFolders($classFile)
     {
         $classFile = str_replace('\\', '/', $classFile);
-        foreach (self::$_cleanableFolders as $directory) {
-            if (stripos($classFile, $directory) !== false) {
-                return true;
+        foreach (self::$_cleanableFolders as $include => $excludeSet) {
+            if (stripos($classFile, $include) !== false) {
+                foreach ($excludeSet as $exclude) {
+                    $excludeExp = '#' . str_replace('*', '[\w]+', $exclude) . '#';
+                    if (preg_match($excludeExp, $classFile)) {
+                        return false; // File is in an "include" directory, but also an "exclude" subdirectory of it
+                    }
+                }
+                return true; // File is in an "include" directory, and not in an "exclude" subdirectory of it
             }
         }
-        return false;
+        return false; // File is not in an "include" directory
     }
 
 
@@ -102,6 +114,7 @@ class StaticProperties
         $classPattern = '/\nclass [a-zA-Z0-9_]+/';
         foreach ($classFiles as $classFile) {
             if (self::_isClassInCleanableFolders($classFile)) {
+                echo "$classFile is cleanable\n";
                 $file = @fopen($classFile, 'r');
                 $code = fread($file, 4096);
                 preg_match($namespacePattern, $code, $namespace);
@@ -132,6 +145,7 @@ class StaticProperties
                 fclose($file);
             }
         }
+        $x = null;
     }
 
     /**
