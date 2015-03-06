@@ -24,8 +24,8 @@
         <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config\Modules\PluginAdvanced" />
         <plugin name="overridden_plugin" sortOrder="30" disabled="true" />
     </type>
-    <!--Shared type-->
-    <type name="Magento\Framework\HTTP\Handler\Composite" shared="false">
+    <!--Unshared type-->
+    <type name="Magento\SomeComponent\UnsharedType" shared="false">
         <arguments>
             <argument name="test name" xsi:type="string">test value</argument>
         </arguments>

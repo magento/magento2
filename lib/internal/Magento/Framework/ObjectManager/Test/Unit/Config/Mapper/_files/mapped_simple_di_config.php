@@ -24,7 +24,7 @@ return [
             'overridden_plugin' => ['sortOrder' => 30, 'disabled' => true],
         ],
     ],
-    'Magento\Framework\HTTP\Handler\Composite' => [
+    'Magento\SomeComponent\UnsharedType' => [
         'shared' => false,
         'arguments' => ['test name' => 'test value'],
     ],
