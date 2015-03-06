@@ -13,7 +13,7 @@ use \Magento\Framework\Interception\Code\InterfaceValidator;
 class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $argumentsReaderMock;
 
@@ -86,9 +86,8 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateIncompatibleMethodArgumentsCount()
     {
-        $this->markTestSkipped('To be fixed in MAGETWO-34765');
         $this->model->validate(
-            '\Magento\Framework\Interception\Custom\Module\Model'
+            '\Magento\Framework\Interception\Test\Unit\Custom\Module\Model'
                 . '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsCount',
             '\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item'
         );
@@ -102,9 +101,8 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateIncompatibleMethodArgumentsType()
     {
-        $this->markTestSkipped('To be fixed in MAGETWO-34765');
         $this->model->validate(
-            '\Magento\Framework\Interception\Custom\Module\Model'
+            '\Magento\Framework\Interception\Test\Unit\Custom\Module\Model'
                 . '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsType',
             '\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments'
         );
