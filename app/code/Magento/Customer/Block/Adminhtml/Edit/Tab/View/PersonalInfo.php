@@ -95,7 +95,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         \Magento\Framework\Registry $registry,
         Mapper $addressMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Customer\Model\Log $customerLog,
+        \Magento\Customer\Model\Logger $customerLogger,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -109,9 +109,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
 
         parent::__construct($context, $data);
 
-        $this->customerLog = $customerLog->loadByCustomer(
-            $this->getCustomer()->getId()
-        );
+        $this->customerLog = $customerLogger->get($this->getCustomer()->getId());
     }
 
     /**
