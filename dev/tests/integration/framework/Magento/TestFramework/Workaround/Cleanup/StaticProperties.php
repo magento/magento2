@@ -66,6 +66,13 @@ class StaticProperties
     protected static function _isClassInCleanableFolders($classFile)
     {
         $classFile = str_replace('\\', '/', $classFile);
+        $testClassPattern = '/.\/Test\/./';
+        if ($classFile == '/Users/johe/Code/magento/m2ce/lib/internal/Magento/Framework/Backup/Test/Unit/MediaTest.php') {
+            $yes = 1;
+        }
+        if (preg_match($testClassPattern, $classFile)) {
+            return false;
+        }
         foreach (self::$_cleanableFolders as $directory) {
             if (stripos($classFile, $directory) !== false) {
                 return true;
