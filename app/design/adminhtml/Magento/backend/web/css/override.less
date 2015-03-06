@@ -345,6 +345,36 @@ nav ol {
   opacity: .5;
   cursor: not-allowed;
 }
+.address-item-edit-content .admin__field[class] > .admin__field-control,
+.page-layout-admin-login .admin__field[class] > .admin__field-control {
+  float: none;
+  clear: left;
+  text-align: left;
+  width: auto;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label {
+  text-align: left;
+  width: auto;
+  display: block;
+  line-height: 1.4rem;
+  margin-bottom: 0.86rem;
+  margin-top: -0.14rem;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label:before,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label:before {
+  content: '';
+  display: none;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span {
+  padding-left: 1.5rem;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after {
+  left: 0;
+  margin-left: 30px;
+}
 .admin__control-text {
   line-height: 3.3rem;
   width: 100%;
@@ -596,7 +626,7 @@ option:empty {
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 3.2rem;
-  padding-top: 0;
+  padding: 0;
   white-space: nowrap;
 }
 [class]:not(.admin__field-option) > .admin__field-label:before {
@@ -665,7 +695,8 @@ option:empty {
 .admin__field._error .admin__field-control > [class*='admin__control-'] {
   border-color: #e22626;
 }
-.admin__field-error {
+.admin__field-error,
+.admin__field-control label.mage-error {
   background: #fffbbb;
   border: 1px solid #ee7d7d;
   box-sizing: border-box;
@@ -844,28 +875,6 @@ option:empty {
 .address-item-edit-content {
   padding: 15px 30px;
 }
-.address-item-edit-content .admin__field > .admin__field-control,
-.address-item-edit-content .admin__field > .admin__field-label {
-  float: none;
-  width: auto;
-  text-align: left;
-}
-.address-item-edit-content .admin__field > .admin__field-control {
-  float: none;
-  width: auto;
-}
-.address-item-edit-content .admin__field-label {
-  float: none;
-  margin-top: -16px;
-  width: auto;
-}
-.address-item-edit-content ._required .admin__field-label span {
-  padding-left: 15px;
-}
-.address-item-edit-content ._required .admin__field-label span:after {
-  left: 0;
-  margin-left: 30px;
-}
 .address-list {
   float: left;
   list-style-type: none;
@@ -877,18 +886,99 @@ option:empty {
   margin-bottom: 30px;
 }
 .address-list .action-delete {
-  background-color: transparent;
+  background-image: none;
+  background: none;
+  border: 0;
+  margin: 0;
   padding: 0;
+  -moz-box-sizing: content-box;
+  box-shadow: none;
+  text-shadow: none;
+  line-height: inherit;
+  font-weight: 400;
+  display: inline-block;
+  text-decoration: none;
+}
+.address-list .action-delete:focus,
+.address-list .action-delete:active {
+  background: none;
+  border: none;
 }
 .address-list .action-delete:hover {
+  background: none;
+  border: none;
+}
+.address-list .action-delete.disabled,
+.address-list .action-delete[disabled],
+fieldset[disabled] .address-list .action-delete {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.address-list .action-delete > span {
   border: 0;
-  box-shadow: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.address-list .action-delete:after {
+  font-family: 'Admin Icons';
+  content: '\e620';
+  font-size: 1.6rem;
+  line-height: 16px;
+  color: #41362f;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.address-list .action-delete:hover:after {
+  color: #060504;
 }
 .address-item-edit {
   margin-left: 359px;
+  max-width: 500px;
 }
 .address-item-edit .admin__legend {
   display: none;
+}
+[class*='admin__control-'].mage-error ~ [class*='admin__addon-']:before,
+.admin__field-control > [class*='admin__control-'].mage-error {
+  border-color: #e22626;
+}
+.page-layout-admin-login .loading-mask {
+  background: rgba(255, 255, 255, 0.2);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.page-layout-admin-login .popup-loading {
+  height: 149px;
+  left: 50%;
+  margin-left: -109px;
+  margin-top: -74.5px;
+  position: absolute;
+  top: 50%;
+  overflow: hidden;
+  width: 218px;
+}
+.page-layout-admin-login .field-captcha {
+  padding-left: 30px;
+  vertical-align: middle;
+}
+.page-layout-admin-login .field-captcha .captcha-reload {
+  float: right;
+  vertical-align: middle;
 }
 .admin__action-dropdown {
   background-color: transparent;
@@ -1166,6 +1256,7 @@ button.tertiary.disabled,
 .ui-dialog .ui-button,
 .ui-dialog .action-primary,
 .attribute-popup-actions .page-actions-buttons > button.action-default.primary,
+.page-layout-admin-login .action-primary,
 .page-actions button,
 .page-actions .page-actions-buttons > button,
 .page-actions > button.action-primary,
@@ -1923,18 +2014,29 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   display: none;
 }
 .ui-datepicker {
-  background: #ffffff;
-  border: 1px solid #007dbd;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   display: none;
-  padding: 20px;
+  padding: 23px 20px;
   width: auto;
   z-index: 999999 !important;
+}
+.ui-datepicker:before {
+  background: #ffffff;
+  border: 1px solid #007dbd;
+  bottom: 3px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+  content: '';
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 3px;
+  z-index: 0;
 }
 .ui-datepicker-header {
   padding: 0 0 10px;
   position: relative;
+  z-index: 1;
 }
 .ui-datepicker-prev,
 .ui-datepicker-next {
@@ -1991,6 +2093,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background: #FFFFFF;
   border-collapse: collapse;
   border: 0;
+  position: relative;
+  z-index: 1;
 }
 .ui-datepicker table.ui-datepicker-calendar thead {
   background: transparent;
@@ -2040,7 +2144,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-datepicker .ui-datepicker-buttonpane {
   overflow: hidden;
   padding-top: 15px;
+  position: relative;
   white-space: nowrap;
+  z-index: 1;
 }
 .ui-datepicker .ui-datepicker-buttonpane button {
   background: #fff;
@@ -2564,6 +2670,89 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .fade .actions .cancel:hover {
   box-shadow: none;
+}
+.login-header {
+  margin: 0 0 3rem;
+}
+.page-layout-admin-login {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #373330;
+  padding: 2rem 0 20rem;
+}
+.page-layout-admin-login .page-wrapper {
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  -webkit-flex-grow: 0;
+  flex-grow: 0;
+  background-color: #ffffff;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0 5px 30px 0 #000000;
+  margin: auto;
+  max-width: 450px;
+  min-height: 300px;
+  padding: 40px 80px 50px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+.page-layout-admin-login :-ms-input-placeholder {
+  color: transparent;
+}
+.page-layout-admin-login ::-webkit-input-placeholder {
+  color: transparent;
+}
+.page-layout-admin-login ::-moz-placeholder {
+  color: transparent;
+}
+.page-layout-admin-login .admin__legend {
+  color: #eb5202;
+  font-size: 2.6rem;
+  font-weight: 300;
+  line-height: 1.2;
+  margin: -1rem 0 0.5rem;
+}
+.page-layout-admin-login .admin__field-info {
+  margin-bottom: 3rem;
+}
+.page-layout-admin-login .messages {
+  margin-top: -1rem;
+}
+.page-layout-admin-login .messages + form .admin__legend {
+  display: none;
+}
+.page-layout-admin-login .actions {
+  padding: 0 0 3rem;
+}
+.admin__control-dummy {
+  display: none;
+}
+.login-footer {
+  left: 0;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+.login-footer .copyright {
+  color: #989287;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 5rem 0 2rem;
+  text-align: center;
+}
+.login-footer .copyright .link-copyright:before {
+  display: none;
+}
+.adminhtml-auth-login .form-actions {
+  display: table;
+  margin-top: -2rem;
+}
+.adminhtml-auth-login .form-actions .links {
+  display: table-header-group;
+}
+.adminhtml-auth-login .form-actions .actions {
+  padding: 3rem 0 0;
 }
 .spinner {
   display: inline-block;
