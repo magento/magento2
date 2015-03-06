@@ -19,10 +19,6 @@ use Magento\Sales\Api\Data\TransactionInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
- * @method \Magento\Sales\Model\Order\Payment\Transaction setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Payment\Transaction setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Payment\Transaction setPaymentId(int $value)
- * @method \Magento\Sales\Model\Order\Payment\Transaction setIsClosed(int $value)
  * @method \Magento\Sales\Model\Order\Payment\Transaction setCreatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -1015,4 +1011,38 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     {
         return $this->getData(TransactionInterface::CREATED_AT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(TransactionInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(TransactionInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPaymentId($id)
+    {
+        return $this->setData(TransactionInterface::PAYMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsClosed($isClosed)
+    {
+        return $this->setData(TransactionInterface::IS_CLOSED, $isClosed);
+    }
+    //@codeCoverageIgnoreEnd
 }

@@ -17,10 +17,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertProductReviewNotInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Filter params
      *

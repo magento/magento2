@@ -6,10 +6,10 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="DeleteIntegrationEntityTest">
-    <variation name="DeleteIntegrationEntityTestVariation1" firstConstraint="assertIntegrationSuccessDeleteMessage" method="test">
-      <constraint name="assertIntegrationSuccessDeleteMessage" next="assertIntegrationNotInGrid"/>
-      <constraint name="assertIntegrationNotInGrid" prev="assertIntegrationSuccessDeleteMessage"/>
+  <testCase name="Magento\Integration\Test\TestCase\DeleteIntegrationEntityTest">
+    <variation name="DeleteIntegrationEntityTestVariation1">
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessDeleteMessage"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid"/>
     </variation>
   </testCase>
 </config>

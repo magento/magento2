@@ -122,4 +122,125 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->getData(self::SAMPLE_TYPE);
     }
+
+    /**
+     * Set sample title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::TITLE, $title);
+    }
+
+    /**
+     * Set sample sort order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set link price
+     *
+     * @param string $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::PRICE, $price);
+    }
+
+    /**
+     * Set number of allowed downloads of the link
+     *
+     * @param int $numberOfDownloads
+     * @return $this
+     */
+    public function setNumberOfDownloads($numberOfDownloads)
+    {
+        return $this->setData(self::NUMBER_OF_DOWNLOADS, $numberOfDownloads);
+    }
+
+    /**
+     * Set whether link is shareable
+     *
+     * @param bool $shareable
+     * @return $this
+     */
+    public function setShareable($shareable)
+    {
+        return $this->setData(self::SHAREABLE, $shareable);
+    }
+
+    /**
+     * Set link file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $linkFile
+     * @return $this
+     */
+    public function setLinkFile(\Magento\Downloadable\Api\Data\File\ContentInterface $linkFile = null)
+    {
+        return $this->setData(self::LINK_FILE, $linkFile);
+    }
+
+    /**
+     * Set link URL
+     *
+     * @param string $linkUrl
+     * @return $this
+     */
+    public function setLinkUrl($linkUrl)
+    {
+        return $this->setData(self::LINK_URL, $linkUrl);
+    }
+
+    /**
+     * Set link type ('url' or 'file')
+     *
+     * @param string $linkType
+     * @return $this
+     */
+    public function setLinkType($linkType)
+    {
+        return $this->setData(self::LINK_TYPE, $linkType);
+    }
+
+    /**
+     * Retrieve sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFile
+     * @return $this
+     */
+    public function setSampleFile(\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFile = null)
+    {
+        return $this->setData(self::SAMPLE_FILE, $sampleFile);
+    }
+
+    /**
+     * Set sample URL
+     *
+     * @param string $sampleUrl
+     * @return $this
+     */
+    public function setSampleUrl($sampleUrl)
+    {
+        return $this->setData(self::SAMPLE_URL, $sampleUrl);
+    }
+
+    /**
+     * Set sample type ('url' or 'file')
+     *
+     * @param string $sampleType
+     * @return $this
+     */
+    public function setSampleType($sampleType)
+    {
+        return $this->setData(self::SAMPLE_TYPE, $sampleType);
+    }
 }

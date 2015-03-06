@@ -29,18 +29,18 @@ class Link extends AbstractTypeHandler
     private $linkResource;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\ComponentInterfaceFactory $linkFactory
      * @param \Magento\Downloadable\Model\Resource\Link $linkResource
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Resource\Link $linkResource
     ) {
-        parent::__construct($coreData, $downloadableFile);
+        parent::__construct($jsonHelper, $downloadableFile);
         $this->linkFactory = $linkFactory;
         $this->linkResource = $linkResource;
     }
@@ -164,7 +164,7 @@ class Link extends AbstractTypeHandler
             }
             $model->setSampleType($this->sampleItem['type']);
             if (isset($this->sampleItem['file'])) {
-                $sampleFile = $this->coreData->jsonDecode($this->sampleItem['file']);
+                $sampleFile = $this->jsonHelper->jsonDecode($this->sampleItem['file']);
             }
         }
         if ($model->getLinkType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {

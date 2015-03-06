@@ -6,13 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="checkout_setup" xsi:type="string">Magento\Checkout\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">checkout</argument>

@@ -8,7 +8,6 @@
 namespace Magento\Quote\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class CouponManagementTest extends WebapiAbstract
 {
@@ -39,7 +38,7 @@ class CouponManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' ,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -64,7 +63,7 @@ class CouponManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons',
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -95,7 +94,7 @@ class CouponManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -128,7 +127,7 @@ class CouponManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

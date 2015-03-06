@@ -19,18 +19,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function __construct(array $parameters = [])
     {
-        $this->setParams($parameters);
-    }
-
-    /**
-     * Initialize console parameters
-     *
-     * @param array $parameters
-     * @return void
-     */
-    public function setParams(array $parameters)
-    {
-        $this->params = getopt(null, $parameters);
+        $this->setParams(getopt(null, $parameters));
     }
 
     /**
@@ -86,6 +75,28 @@ class Request implements \Magento\Framework\App\RequestInterface
             return $this->params[$key];
         }
         return $defaultValue;
+    }
+
+    /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set params from key value array
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setParams(array $data)
+    {
+        $this->params = $data;
+        return $this;
     }
 
     /**

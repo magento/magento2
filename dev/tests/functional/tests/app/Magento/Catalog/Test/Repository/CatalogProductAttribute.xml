@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Catalog\Test\Repository\CatalogProductAttribute">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductAttribute">
         <dataset name="attribute_type_text_field">
             <field name="frontend_label" xsi:type="string">attribute_text%isolation%</field>
             <field name="attribute_code" xsi:type="string">attribute_text%isolation%</field>
@@ -19,7 +19,6 @@
             <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">No</field>
-            <field name="is_configurable" xsi:type="string">Yes</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="is_default" xsi:type="string">Yes</item>
@@ -44,7 +43,6 @@
             <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">No</field>
-            <field name="is_configurable" xsi:type="string">Yes</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="is_default" xsi:type="string">Yes</item>
@@ -64,7 +62,6 @@
             <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">No</field>
-            <field name="is_configurable" xsi:type="string">Yes</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="is_default" xsi:type="string">Yes</item>
@@ -79,7 +76,6 @@
             <field name="attribute_code" xsi:type="string">color_%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">No</field>
-            <field name="is_configurable" xsi:type="string">Yes</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="is_default" xsi:type="string">Yes</item>
@@ -99,7 +95,6 @@
             <field name="attribute_code" xsi:type="string">size_%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">No</field>
-            <field name="is_configurable" xsi:type="string">Yes</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="is_default" xsi:type="string">Yes</item>
@@ -124,7 +119,6 @@
             <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">Yes</field>
-            <field name="is_configurable" xsi:type="string">Yes</field>
             <field name="is_filterable" xsi:type="string">Filterable (with results)</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">
@@ -139,5 +133,5 @@
                 </item>
             </field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>
