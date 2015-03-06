@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
+use Magento\Framework\Pricing\Render\RendererPool;
+
 /**
  * Test class for \Magento\Framework\Pricing\Render\RendererPool
  */

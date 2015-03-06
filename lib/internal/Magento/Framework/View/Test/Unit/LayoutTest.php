@@ -168,11 +168,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->structureMock->expects($this->once())
             ->method('createStructuralElement')
-            ->with('blockname', \Magento\Framework\View\Layout\Element::TYPE_BLOCK, 'type')
-            ->willReturn('blockname');
+            ->with(
+                'blockname',
+                \Magento\Framework\View\Layout\Element::TYPE_BLOCK,
+                'Magento\Framework\View\Element\AbstractBlock'
+            )->willReturn('blockname');
         $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
 
-        $this->model->createBlock('type', 'blockname', []);
+        $this->model->createBlock('Magento\Framework\View\Element\AbstractBlock', 'blockname', []);
         $this->assertInstanceOf('Magento\Framework\View\Element\AbstractBlock', $this->model->getBlock('blockname'));
         $this->assertFalse($this->model->getBlock('not_exist'));
     }
@@ -315,7 +318,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->willReturn('block_name');
         $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
 
-        $this->assertSame($blockMock, $this->model->createBlock('type', 'block_name', []));
+        $this->assertSame(
+            $blockMock,
+            $this->model->createBlock('Magento\Framework\View\Element\AbstractBlock', 'block_name', [])
+        );
         $this->assertSame(['value1' => $blockMock], $this->model->getChildBlocks($parentName));
     }
 

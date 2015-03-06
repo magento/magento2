@@ -5,8 +5,9 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation;
 
-use \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
-
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase

@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\ObjectManager;
 class ConfigCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento\Framework\App\ObjectManager\ConfigCache
+     * @var \Magento\Framework\App\ObjectManager\ConfigCache
      */
     protected $_configCache;
 

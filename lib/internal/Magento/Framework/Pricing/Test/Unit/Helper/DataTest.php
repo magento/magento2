@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Helper;
 
+use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class DataTest extends \PHPUnit_Framework_TestCase

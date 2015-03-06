@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Amount;
 
+use Magento\Framework\Pricing\Amount\Base;
+
 /**
  * Class BaseTest
  *

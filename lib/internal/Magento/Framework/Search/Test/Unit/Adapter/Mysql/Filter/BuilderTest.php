@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter;
 
+use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Query\Bool as RequestBoolQuery;
