@@ -304,7 +304,10 @@ FAULT_MESSAGE;
 
         $paramsXml = '';
         foreach ($parameters as $parameterName => $parameterValue) {
-            if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {
+            if ((is_string($parameterName) || is_numeric($parameterName))
+                &&
+                (is_string($parameterValue) || is_numeric($parameterValue))
+            ) {
                 $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
                 $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
                 $parameterNode = self::NODE_DETAIL_PARAMETER;
