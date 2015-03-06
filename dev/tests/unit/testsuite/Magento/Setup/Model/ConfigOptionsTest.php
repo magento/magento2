@@ -38,9 +38,9 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
             ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db',
             ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
             ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
         ]);
-        $this->assertEquals(5, count($config));
+        $this->assertEquals(6, count($config));
         $this->assertNotEmpty($config[0]->getData()['date']);
         $this->assertNotEmpty($config[1]->getData()['key']);
         $this->assertEquals('key', $config[1]->getData()['key']);
@@ -55,7 +55,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
             ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key',
             ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
             ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
         ]);
         $this->assertNotEmpty($config[3]);
         $this->assertEquals('files', $config[3]->getData()['save']);
@@ -71,7 +71,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
             ConfigOptions::INPUT_KEY_SESSION_SAVE => 'invalid',
             ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
             ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
         ]);
     }
 
@@ -94,13 +94,13 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
             'no key data' => [[
                 ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
                 ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-                ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+                ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
             ]],
             'no frontName' => [[
                 'something_else' => 'something',
                 ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
                 ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-                ConfigOptions::INPUT_KEY_DB_USER => 'dbPass',
+                ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
             ]],
         ];
     }
@@ -143,9 +143,12 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateResourceConfig()
     {
-        $options = [];
+        $options = [
+            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
+            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
+            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser'
+        ];
         $expected = [ConfigOptions::INPUT_KEY_RESOURCE =>['default_setup' => ['connection' => 'default']]];
         $this->assertSame($expected, $this->object->createConfig($options));
     }
-
 }

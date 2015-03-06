@@ -44,6 +44,7 @@ class ConfigOptions implements ConfigOptionsInterface
     const INPUT_KEY_DB_PREFIX = 'db_prefix';
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
+    const INPUT_KEY_ACTIVE = 'active';
     const INPUT_KEY_RESOURCE = 'resource';
     /**#@-*/
 
@@ -82,6 +83,7 @@ class ConfigOptions implements ConfigOptionsInterface
         self::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
         self::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
         self::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
+        self::INPUT_KEY_ACTIVE => DbConfig::KEY_ACTIVE,
         self::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
         self::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
         self::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
@@ -229,15 +231,16 @@ class ConfigOptions implements ConfigOptionsInterface
             }
             $connection[self::$paramMap[$key]] = $data[$key];
         }
-        $optional = [self::INPUT_KEY_DB_INIT_STATEMENTS, self::INPUT_KEY_DB_MODEL, self::INPUT_KEY_DB_PASS];
-        foreach ($optional as $key) {
-            $connection[self::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : null;
-        }
-        $prefixKey = self::INPUT_KEY_DB_PREFIX;
-        $dbData = [
-            self::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
-            'connection' => ['default' => $connection],
-        ];
+        $connection[self::$paramMap[self::INPUT_KEY_DB_PASS]] = isset($data[self::INPUT_KEY_DB_PASS]) ?
+            $data[self::INPUT_KEY_DB_PASS] : '';
+        $connection[self::$paramMap[self::INPUT_KEY_DB_MODEL]] = isset($data[self::INPUT_KEY_DB_MODEL]) ?
+            $data[self::INPUT_KEY_DB_MODEL] : 'mysql4';
+        $connection[self::$paramMap[self::INPUT_KEY_DB_INIT_STATEMENTS]] =
+            isset($data[self::INPUT_KEY_DB_INIT_STATEMENTS]) ? $data[self::INPUT_KEY_DB_INIT_STATEMENTS]
+                : 'SET NAMES utf8;';
+        $connection[self::$paramMap[self::INPUT_KEY_ACTIVE]] = '1';
+        $prefixKey = isset($data[self::INPUT_KEY_DB_PREFIX]) ? $data[self::INPUT_KEY_DB_PREFIX] : '';
+        $dbData = [ $prefixKey, 'connection' => ['default' => $connection]];
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
 
         //resource segment
