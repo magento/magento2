@@ -223,7 +223,7 @@ class ConfigOptions implements ConfigOptionsInterface
         }
         $prefixKey = self::INPUT_KEY_DB_PREFIX;
         $dbData = [
-            DeploymentConfigMapper::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
+            self::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
             'connection' => ['default' => $connection],
         ];
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
