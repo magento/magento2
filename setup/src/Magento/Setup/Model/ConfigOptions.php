@@ -47,6 +47,13 @@ class ConfigOptions implements ConfigOptionsInterface
     const INPUT_KEY_RESOURCE = 'resource';
     /**#@-*/
 
+    /**#@+
+     * Values for session_save
+     */
+    const SESSION_SAVE_FILES = 'files';
+    const SESSION_SAVE_DB = 'db';
+    /**#@-*/
+
     /**
      * @var DeploymentConfig
      */
@@ -108,9 +115,9 @@ class ConfigOptions implements ConfigOptionsInterface
             new SelectConfigOption(
                 self::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                ['files', 'db'],
+                [self::SESSION_SAVE_FILES, self::SESSION_SAVE_DB],
                 'Session save location',
-                'files'
+                self::SESSION_SAVE_FILES
             ),
             new SelectConfigOption(
                 self::INPUT_KEY_DEFINITION_FORMAT,
@@ -191,13 +198,15 @@ class ConfigOptions implements ConfigOptionsInterface
         // session segment
         $sessionData = [];
         if (isset($data[self::INPUT_KEY_SESSION_SAVE])) {
-            if ($data[self::INPUT_KEY_SESSION_SAVE] != 'files' && $data[self::INPUT_KEY_SESSION_SAVE] != 'db') {
+            if ($data[self::INPUT_KEY_SESSION_SAVE] != self::SESSION_SAVE_FILES &&
+                $data[self::INPUT_KEY_SESSION_SAVE] != self::SESSION_SAVE_DB
+            ) {
                 throw new \InvalidArgumentException('Invalid session save location.');
             }
             $sessionData[self::$paramMap[self::INPUT_KEY_SESSION_SAVE]] =
                 $data[self::INPUT_KEY_SESSION_SAVE];
         } else {
-            $sessionData[self::$paramMap[self::INPUT_KEY_SESSION_SAVE]] = 'files';
+            $sessionData[self::$paramMap[self::INPUT_KEY_SESSION_SAVE]] = self::SESSION_SAVE_FILES;
         }
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
 
