@@ -16,11 +16,6 @@ class CollectionFilter implements CollectionFilterInterface
     protected $catalogConfig;
 
     /**
-     * @var \Magento\CatalogSearch\Helper\Data
-     */
-    protected $helper;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -32,20 +27,17 @@ class CollectionFilter implements CollectionFilterInterface
 
     /**
      * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\CatalogSearch\Helper\Data $helper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\CatalogSearch\Helper\Data $helper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Registry $registry
     ) {
         $this->catalogConfig = $catalogConfig;
-        $this->helper = $helper;
         $this->storeManager = $storeManager;
         $this->productVisibility = $productVisibility;
         $this->_registry = $registry;
