@@ -32,7 +32,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * @param array $selectOptions
      * @param string $description
      * @param array $defaultValue
-     * @param string|null $shortCut
+     * @param string|array|null $shortCut
      * @throws \InvalidArgumentException
      */
     public function __construct(

@@ -27,7 +27,7 @@ abstract class AbstractConfigOption extends InputOption
      * @param string $description
      * @param int $mode
      * @param string|array|null $defaultValue
-     * @param string|null $shortcut
+     * @param string|array|null $shortcut
      */
     public function __construct(
         $name,

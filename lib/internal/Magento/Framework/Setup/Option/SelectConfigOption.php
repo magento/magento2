@@ -32,7 +32,7 @@ class SelectConfigOption extends AbstractConfigOption
      * @param array $selectOptions
      * @param string $description
      * @param string|null $defaultValue
-     * @param string|null $shortCut
+     * @param string|array|null $shortCut
      * @throws \InvalidArgumentException
      */
     public function __construct(

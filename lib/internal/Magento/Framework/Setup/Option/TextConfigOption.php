@@ -25,7 +25,7 @@ class TextConfigOption extends AbstractConfigOption
      * @param string $frontendType
      * @param string $description
      * @param string|null $defaultValue
-     * @param string|null $shortCut
+     * @param string|array|null $shortCut
      * @throws \InvalidArgumentException
      */
     public function __construct(

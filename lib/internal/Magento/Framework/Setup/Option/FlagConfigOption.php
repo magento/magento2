@@ -20,7 +20,7 @@ class FlagConfigOption extends AbstractConfigOption
      *
      * @param string $name
      * @param string $description
-     * @param string|null $shortCut
+     * @param string|array|null $shortCut
      */
     public function __construct(
         $name,
