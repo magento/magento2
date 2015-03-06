@@ -407,6 +407,7 @@ class Bootstrap
             echo $e;
         } else {
             $message = "An error has happened during application run. See debug log for details.\n";
+            echo $e;
             try {
                 if (!$this->objectManager) {
                     throw new \DomainException();

@@ -18,6 +18,7 @@ use Magento\Framework\App\DeploymentConfig\DbConfig;
 use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Framework\App\DeploymentConfig\InstallConfig;
 use Magento\Framework\App\DeploymentConfig\SessionConfig;
+use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -43,6 +44,7 @@ class ConfigOptions implements ConfigOptionsInterface
     const INPUT_KEY_DB_PREFIX = 'db_prefix';
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
+    const INPUT_KEY_RESOURCE = 'resource';
     /**#@-*/
 
     /**
@@ -75,6 +77,7 @@ class ConfigOptions implements ConfigOptionsInterface
         self::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
         self::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
         self::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
+        self::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
     ];
 
     /**
@@ -227,6 +230,10 @@ class ConfigOptions implements ConfigOptionsInterface
             'connection' => ['default' => $connection],
         ];
         $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
+
+        //resource segment
+        $resourceData[self::$paramMap[self::INPUT_KEY_RESOURCE]] = ['default_setup' => ['connection' => 'default']];
+        $configData[] = new ConfigData(ConfigFilePool::APP_CONFIG, 'resource', $resourceData);
 
         return $configData;
     }

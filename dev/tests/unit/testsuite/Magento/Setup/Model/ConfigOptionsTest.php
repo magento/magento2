@@ -5,6 +5,8 @@
  */
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\DeploymentConfig\ResourceConfig;
+
 class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -140,4 +142,12 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         ];
         $this->object->createConfig($data);
     }
+
+    public function testCreateResourceConfig()
+    {
+        $options = [];
+        $expected = [ConfigOptions::INPUT_KEY_RESOURCE =>['default_setup' => ['connection' => 'default']]];
+        $this->assertSame($expected, $this->object->createConfig($options));
+    }
+
 }
