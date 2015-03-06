@@ -252,7 +252,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['media_gallery' => $attributeMock]);
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($productMediaGalleryMock);
         $entryMock->expects($this->once())->method('getTypes')->willReturn(['jpg']);
-        $entryMock->expects($this->exactly(2))->method('getIsDisabled')->willReturn(false);
+        $entryMock->expects($this->exactly(2))->method('isDisabled')->willReturn(false);
         $entryMock->expects($this->once())->method('getPosition')->willReturn($entryPosition);
         $entryMock->expects($this->once())->method('getLabel')->willReturn('entryLabel');
         $productMediaGalleryMock->expects($this->once())->method('addImage')->with(
@@ -323,7 +323,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['media_gallery' => $attributeMock]);
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($productMediaGalleryMock);
         $entryMock->expects($this->once())->method('getTypes')->willReturn(['jpg']);
-        $entryMock->expects($this->exactly(2))->method('getIsDisabled')->willReturn(false);
+        $entryMock->expects($this->exactly(2))->method('isDisabled')->willReturn(false);
         $entryMock->expects($this->once())->method('getPosition')->willReturn($entryPosition);
         $entryMock->expects($this->once())->method('getLabel')->willReturn('entryLabel');
         $productMediaGalleryMock->expects($this->once())->method('addImage')->with(
@@ -430,7 +430,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
         $this->entryResolverMock->expects($this->once())->method('getEntryFilePathById')
             ->with($this->productMock, $entryId)->willReturn($filePath);
-        $entryMock->expects($this->once())->method('getIsDisabled')->willReturn(false);
+        $entryMock->expects($this->once())->method('isDisabled')->willReturn(false);
         $entryMock->expects($this->once())->method('getPosition')->willReturn($entryPosition);
         $entryMock->expects($this->once())->method('getLabel')->willReturn('entryLabel');
         $productMediaGalleryMock->expects($this->once())->method('updateImage')->with(
@@ -485,7 +485,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
         $this->entryResolverMock->expects($this->once())->method('getEntryFilePathById')
             ->with($this->productMock, $entryId)->willReturn($filePath);
-        $entryMock->expects($this->once())->method('getIsDisabled')->willReturn(false);
+        $entryMock->expects($this->once())->method('isDisabled')->willReturn(false);
         $entryMock->expects($this->once())->method('getPosition')->willReturn($entryPosition);
         $entryMock->expects($this->once())->method('getLabel')->willReturn('entryLabel');
         $productMediaGalleryMock->expects($this->once())->method('updateImage')->with(
@@ -640,7 +640,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
             ->with($gallery[0]['label_default'])->willReturnSelf();
         $entryMock->expects($this->once())->method('setTypes')
             ->with([])->willReturnSelf();
-        $entryMock->expects($this->once())->method('setIsDisabled')
+        $entryMock->expects($this->once())->method('setDisabled')
             ->with($gallery[0]['disabled_default'])->willReturnSelf();
         $entryMock->expects($this->once())->method('setPosition')
             ->with($gallery[0]['position_default'])->willReturnSelf();

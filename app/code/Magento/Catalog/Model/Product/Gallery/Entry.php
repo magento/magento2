@@ -105,12 +105,12 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Set whether gallery entry is hidden from product page
      *
-     * @param bool $isDisabled
+     * @param bool $disabled
      * @return $this
      */
-    public function setIsDisabled($isDisabled)
+    public function setDisabled($disabled)
     {
-        return $this->setData(self::DISABLED, $isDisabled);
+        return $this->setData(self::DISABLED, $disabled);
     }
 
     /**
