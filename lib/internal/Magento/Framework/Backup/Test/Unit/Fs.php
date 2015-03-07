@@ -7,7 +7,7 @@
 /**
  * Mock rollback worker for rolling back via local filesystem
  */
-namespace Magento\Framework\Backup\Filesystem\Rollback;
+namespace Magento\Framework\Backup\Test\Unit\Filesystem\Rollback;
 
 class Fs extends \Magento\Framework\Backup\Filesystem\Rollback\AbstractRollback
 {

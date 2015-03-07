@@ -35,7 +35,7 @@ class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerate()
     {
-        require_once __DIR__ . '/_files/Sample.php';
+        require_once __DIR__ . '/Sample.php';
         /** @var \Magento\Framework\Api\Code\Generator\SearchResultsBuilder $model */
         $model = $this->getMock(
             'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
