@@ -53,4 +53,10 @@ class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('error', $variables);
         $this->assertFalse($variables['success']);
     }
+
+    public function testIndexActionCheckPrefix()
+    {
+        $this->installer->expects($this->once())->method('checkDatabaseTablePrefix');
+        $this->controller->indexAction();
+    }
 }

@@ -29,19 +29,9 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
-
-    /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $moduleManagerMock;
-
-    /**
-     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cacheConfigMock;
+    protected $depersonalizeCheckerMock;
 
     /**
      * SetUp
@@ -65,12 +55,17 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
         $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
+        $this->depersonalizeCheckerMock = $this->getMock(
+            'Magento\PageCache\Model\DepersonalizeChecker',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->plugin = new \Magento\Checkout\Model\Layout\DepersonalizePlugin(
-            $this->checkoutSessionMock,
-            $this->moduleManagerMock,
-            $this->requestMock,
-            $this->cacheConfigMock
+            $this->depersonalizeCheckerMock,
+            $this->checkoutSessionMock
         );
     }
 
@@ -80,21 +75,24 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterGenerateXml()
     {
         $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->moduleManagerMock->expects($this->once())
-            ->method('isEnabled')
-            ->with($this->equalTo('Magento_PageCache'))
-            ->will($this->returnValue(true));
-        $this->cacheConfigMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->requestMock->expects($this->once($this->once()))
-            ->method('isAjax')
-            ->will($this->returnValue(false));
-        $this->layoutMock->expects($this->once())
-            ->method('isCacheable')
-            ->will($this->returnValue(true));
 
-        $this->checkoutSessionMock->expects($this->once())
+        $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
+        $this->checkoutSessionMock
+            ->expects($this->once())
+            ->method('clearStorage')
+            ->will($this->returnValue($expectedResult));
+
+        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    public function testAfterGenerateXmlNoDepersonalize()
+    {
+        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+
+        $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
+        $this->checkoutSessionMock
+            ->expects($this->never())
             ->method('clearStorage')
             ->will($this->returnValue($expectedResult));
 
