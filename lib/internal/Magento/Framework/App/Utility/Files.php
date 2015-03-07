@@ -944,8 +944,11 @@ class Files
              * Use realpath() instead of file_exists() to avoid incorrect work on Windows because of case insensitivity
              * of file names
              * Note that realpath() automatically changes directory separator to the OS-native
+             * Since realpath won't work with symlinks we also check file_exists if realpath failed
              */
-            if (realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)) {
+            if (realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)
+                || file_exists($fullPath)
+            ) {
                 $fileContent = file_get_contents($fullPath);
                 if (strpos(
                     $fileContent,
