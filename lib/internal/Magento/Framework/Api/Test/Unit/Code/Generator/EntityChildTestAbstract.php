@@ -41,7 +41,7 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        require_once __DIR__ . '/_files/Sample.php';
+        require_once __DIR__ . '/Sample.php';
 
         $this->ioObjectMock = $this->getMock(
             'Magento\Framework\Code\Generator\Io',
