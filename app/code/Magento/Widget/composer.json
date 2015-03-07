@@ -8,7 +8,6 @@
         "magento/module-backend": "0.42.0-beta10",
         "magento/module-catalog": "0.42.0-beta10",
         "magento/module-theme": "0.42.0-beta10",
-        "magento/module-gift-registry": "0.42.0-beta10",
         "magento/module-sales": "0.42.0-beta10",
         "magento/module-config": "0.42.0-beta10",
         "magento/module-catalog-widget": "0.42.0-beta10",
