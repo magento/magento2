@@ -32,7 +32,7 @@ class ValidatePaymentData extends \Magento\Centinel\Controller\Adminhtml\Centine
             $result['message'] = __('Validation failed.');
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
         );
     }
 }

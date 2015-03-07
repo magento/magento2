@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerInvalidEmail extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     const ERROR_EMAIL_MESSAGE = 'Please correct this email address: "%email%".';
 
     /**

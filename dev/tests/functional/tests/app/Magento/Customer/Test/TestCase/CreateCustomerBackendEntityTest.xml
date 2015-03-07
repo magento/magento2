@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="CreateCustomerBackendEntityTest">
-    <variation name="CreateCustomerBackendEntityTestVariation1" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+  <testCase name="Magento\Customer\Test\TestCase\CreateCustomerBackendEntityTest">
+    <variation name="CreateCustomerBackendEntityTestVariation1" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">General customer without address</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
@@ -29,11 +29,11 @@
       <data name="address/data/region_id" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">-</data>
       <data name="address/data/telephone" xsi:type="string">-</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
-      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
     </variation>
-    <variation name="CreateCustomerBackendEntityTestVariation2" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+    <variation name="CreateCustomerBackendEntityTestVariation2" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">Customer with prefix</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Admin</data>
@@ -55,11 +55,11 @@
       <data name="address/data/region_id" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">-</data>
       <data name="address/data/telephone" xsi:type="string">-</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
-      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
     </variation>
-    <variation name="CreateCustomerBackendEntityTestVariation3" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+    <variation name="CreateCustomerBackendEntityTestVariation3" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">General customer from USA</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
@@ -81,11 +81,11 @@
       <data name="address/data/region_id" xsi:type="string">California</data>
       <data name="address/data/postcode" xsi:type="string">90230</data>
       <data name="address/data/telephone" xsi:type="string">3109450345</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
-      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
     </variation>
-    <variation name="CreateCustomerBackendEntityTestVariation4" firstConstraint="assertCustomerInvalidEmail" method="test">
+    <variation name="CreateCustomerBackendEntityTestVariation4" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail" method="test">
       <data name="description" xsi:type="string">Retailer customer without address</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
@@ -107,9 +107,9 @@
       <data name="address/data/region_id" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">-</data>
       <data name="address/data/telephone" xsi:type="string">-</data>
-      <constraint name="assertCustomerInvalidEmail"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail"/>
     </variation>
-    <variation name="CreateCustomerBackendEntityTestVariation5" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+    <variation name="CreateCustomerBackendEntityTestVariation5" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">General customer from Poland</data>
       <data name="customerAction" xsi:type="string">save</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
@@ -131,11 +131,11 @@
       <data name="address/data/region_id" xsi:type="string">-</data>
       <data name="address/data/postcode" xsi:type="string">43-310 </data>
       <data name="address/data/telephone" xsi:type="string">799885616</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerInGrid"/>
-      <constraint name="assertCustomerInGrid" next="assertCustomerForm" prev="assertCustomerSuccessSaveMessage"/>
-      <constraint name="assertCustomerForm" prev="assertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
     </variation>
-    <variation name="CreateCustomerBackendEntityTestVariation6" firstConstraint="assertCustomerSuccessSaveMessage" method="test">
+    <variation name="CreateCustomerBackendEntityTestVariation6" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
       <data name="description" xsi:type="string">MAGETWO-12516: Create New Customer on Backend</data>
       <data name="customerAction" xsi:type="string">saveAndContinue</data>
       <data name="customer/data/website_id" xsi:type="string">Main Website</data>
@@ -158,8 +158,8 @@
       <data name="address/data/postcode" xsi:type="string">-</data>
       <data name="address/data/telephone" xsi:type="string">-</data>
       <data name="tag" xsi:type="string">test_type:acceptance_test</data>
-      <constraint name="assertCustomerSuccessSaveMessage" next="assertCustomerBackendFormTitle"/>
-      <constraint name="assertCustomerBackendFormTitle" prev="assertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" next="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle" prev="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
     </variation>
   </testCase>
 </config>

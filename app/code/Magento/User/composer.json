@@ -6,7 +6,6 @@
         "magento/module-store": "0.42.0-beta10",
         "magento/module-authorization": "0.42.0-beta10",
         "magento/module-backend": "0.42.0-beta10",
-        "magento/module-core": "0.42.0-beta10",
         "magento/module-integration": "0.42.0-beta10",
         "magento/module-theme": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",

@@ -14,6 +14,7 @@ use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -208,19 +209,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $replacements = ['', '', ''];
 
         /** Convert file names into class name format */
-        $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
         $classes = [];
         foreach ($files as $file) {
             $file = str_replace($basePath . '/', '', $file);
-            if (!in_array($file, $blackList)) {
-                $file = str_replace('/', '\\', $file);
-                $filePath = preg_replace($patterns, $replacements, $file);
-                $className = substr($filePath, 0, -4);
-                $phpClassFile = !preg_match('/\\\\[A-Za-z0-9_]*\\\\[A-Za-z0-9_]*\\\\(data|sql)\\\\.*/', $className);
-                if ($phpClassFile && class_exists($className)) {
-                    $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
-                    $classes[$file] = $className;
-                }
+            $file = str_replace('/', '\\', $file);
+            $filePath = preg_replace($patterns, $replacements, $file);
+            $className = substr($filePath, 0, -4);
+            if (class_exists($className)) {
+                $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
+                $classes[$file] = $className;
             }
         }
 
@@ -326,7 +323,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
                 Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
                 Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults'
+                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+                ObjectExtensionInterface::ENTITY_TYPE =>
+                    'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

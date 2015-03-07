@@ -12,7 +12,6 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class CartRepositoryTest extends WebapiAbstract
 {
@@ -90,7 +89,7 @@ class CartRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
@@ -139,7 +138,7 @@ class CartRepositoryTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 
@@ -157,7 +156,7 @@ class CartRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/carts',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
@@ -225,7 +224,7 @@ class CartRepositoryTest extends WebapiAbstract
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
 

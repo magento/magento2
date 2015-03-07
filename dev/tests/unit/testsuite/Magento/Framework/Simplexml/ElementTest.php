@@ -72,12 +72,12 @@ XML;
         $baseXml = simplexml_load_string('<root/>', 'Magento\Framework\Simplexml\Element');
         /** @var \Magento\Framework\Simplexml\Element $appendXml */
         $appendXml = simplexml_load_string(
-            '<node_a attr="abc"><node_b>text</node_b></node_a>',
+            '<node_a attr="abc"><node_b innerAttribute="xyz">text</node_b></node_a>',
             'Magento\Framework\Simplexml\Element'
         );
         $baseXml->appendChild($appendXml);
 
-        $expectedXml = '<root><node_a attr="abc"><node_b>text</node_b></node_a></root>';
+        $expectedXml = '<root><node_a attr="abc"><node_b innerAttribute="xyz">text</node_b></node_a></root>';
         $this->assertXmlStringEqualsXmlString($expectedXml, $baseXml->asNiceXml());
     }
 
