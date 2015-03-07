@@ -50,7 +50,9 @@ class ShipmentAddTrackTest extends WebapiAbstract
         $shipment = $shipmentCollection->getFirstItem();
 
         $trackData = [
+            ShipmentTrackInterface::ENTITY_ID => null,
             ShipmentTrackInterface::ORDER_ID => $shipment->getOrderId(),
+            ShipmentTrackInterface::CREATED_AT => null,
             ShipmentTrackInterface::PARENT_ID => $shipment->getId(),
             ShipmentTrackInterface::WEIGHT => 20,
             ShipmentTrackInterface::QTY => 5,

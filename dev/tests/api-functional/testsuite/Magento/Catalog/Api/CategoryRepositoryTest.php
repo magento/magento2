@@ -250,6 +250,8 @@ class CategoryRepositoryTest extends WebapiAbstract
             $data['id'] = $id;
             return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
         } else {
+            $data['id'] = $id;
+            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
             return $this->_webApiCall($serviceInfo, ['category' => $data]);
         }
     }

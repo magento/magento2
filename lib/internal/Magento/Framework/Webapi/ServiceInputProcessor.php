@@ -177,7 +177,12 @@ class ServiceInputProcessor
         $allAttributes = $this->serviceConfigReader->read();
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
         if (!isset($allAttributes[$dataObjectClassName])) {
-            return $this->_convertValue($customAttributesValueArray, $returnType);
+            $attributes = $this->_convertValue($customAttributesValueArray, $returnType);
+            $attributesByName = [];
+            foreach ($attributes as $attribute) {
+                $attributesByName[$attribute->getAttributeCode()] = $attribute;
+            }
+            return $attributesByName;
         }
         $dataObjectAttributes = $allAttributes[$dataObjectClassName];
         $camelCaseAttributeCodeKey = lcfirst(

@@ -51,6 +51,8 @@ class ShipmentAddCommentTest extends WebapiAbstract
 
         $commentData = [
             ShipmentCommentInterface::COMMENT => 'Hello world!',
+            ShipmentCommentInterface::ENTITY_ID => null,
+            ShipmentCommentInterface::CREATED_AT => null,
             ShipmentCommentInterface::PARENT_ID => $shipment->getId(),
             ShipmentCommentInterface::IS_VISIBLE_ON_FRONT => true,
             ShipmentCommentInterface::IS_CUSTOMER_NOTIFIED => true,

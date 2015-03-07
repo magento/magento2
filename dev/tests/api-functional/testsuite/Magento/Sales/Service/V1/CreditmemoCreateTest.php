@@ -44,7 +44,7 @@ class CreditmemoCreateTest extends WebapiAbstract
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
         $orderItem = current($order->getAllItems());
         $items = [
-            $orderItem->getId() => ['qty' => $orderItem->getQtyInvoiced(), 'order_item_id' => $orderItem->getId()],
+            $orderItem->getId() => ['order_item_id' => $orderItem->getId(), 'qty' => $orderItem->getQtyInvoiced()],
         ];
         $serviceInfo = [
             'rest' => [
@@ -78,10 +78,12 @@ class CreditmemoCreateTest extends WebapiAbstract
             'base_to_global_rate' => null,
             'base_to_order_rate' => null,
             'billing_address_id' => null,
+            'created_at' => null,
             'creditmemo_status' => null,
             'discount_amount' => null,
             'discount_description' => null,
             'email_sent' => null,
+            'entity_id' => null,
             'global_currency_code' => null,
             'grand_total' => null,
             'hidden_tax_amount' => null,

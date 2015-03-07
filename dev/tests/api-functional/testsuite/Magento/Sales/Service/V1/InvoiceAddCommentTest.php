@@ -37,6 +37,8 @@ class InvoiceAddCommentTest extends WebapiAbstract
 
         $commentData = [
             InvoiceCommentInterface::COMMENT => 'Hello world!',
+            InvoiceCommentInterface::ENTITY_ID => null,
+            InvoiceCommentInterface::CREATED_AT => null,
             InvoiceCommentInterface::PARENT_ID => $invoice->getId(),
             InvoiceCommentInterface::IS_VISIBLE_ON_FRONT => true,
             InvoiceCommentInterface::IS_CUSTOMER_NOTIFIED => true,
