@@ -272,7 +272,7 @@ function _renderNewTree(config, scopeParams) {
     //updateContent(url); //commented since ajax requests replaced with http ones to load a category
 }
 
-Ext.onReady(function () {
+jQuery(function () {
     categoryLoader = new Ext.tree.TreeLoader({
         dataUrl:'<?php echo $block->getLoadTreeUrl() ?>'
     });
