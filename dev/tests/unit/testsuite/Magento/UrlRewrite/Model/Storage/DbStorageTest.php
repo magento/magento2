@@ -15,9 +15,14 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class DbStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlRewriteBuilder;
+    protected $urlRewriteFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -41,7 +46,9 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlRewriteBuilder = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder', [], [], '',
+        $this->urlRewriteFactory = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory', [], [], '',
+            false);
+        $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '',
             false);
         $this->adapter = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where', 'deleteFromSelect'], [], '',
@@ -59,7 +66,8 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
         $this->storage = (new ObjectManager($this))->getObject(
             'Magento\UrlRewrite\Model\Storage\DbStorage',
             [
-                'urlRewriteBuilder' => $this->urlRewriteBuilder,
+                'urlRewriteFactory' => $this->urlRewriteFactory,
+                'dataObjectHelper' => $this->dataObjectHelper,
                 'resource' => $this->resource,
             ]
         );
@@ -86,21 +94,21 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->with($this->select)
             ->will($this->returnValue([['row1'], ['row2']]));
 
-        $this->urlRewriteBuilder->expects($this->at(0))
+        $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['row1'])
+            ->with(['urlRewrite1'], ['row1'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->will($this->returnSelf());
 
-        $this->urlRewriteBuilder->expects($this->at(1))
+        $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
-        $this->urlRewriteBuilder->expects($this->at(2))
+        $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with(['row2'])
+            ->with(['urlRewrite2'], ['row2'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->will($this->returnSelf());
 
-        $this->urlRewriteBuilder->expects($this->at(3))
+        $this->urlRewriteFactory->expects($this->at(1))
             ->method('create')
             ->will($this->returnValue(['urlRewrite2']));
 
@@ -128,12 +136,12 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->with($this->select)
             ->will($this->returnValue(['row1']));
 
-        $this->urlRewriteBuilder->expects($this->at(0))
+        $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['row1'])
+            ->with(['urlRewrite1'], ['row1'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->will($this->returnSelf());
 
-        $this->urlRewriteBuilder->expects($this->at(1))
+        $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
             ->will($this->returnValue(['urlRewrite1']));
 
