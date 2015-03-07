@@ -15,10 +15,11 @@ $passwordWizard = sprintf(
             <div class=\'password-strength-item\'></div>
             <div class=\'password-strength-item\'></div>
             <div class=\'password-strength-item\'></div>
+            <div class=\'password-strength-item\'></div>
         </div>
     <p>%s</p>',
     'Password Strength:',
-    'Must be a mix of at least 7 alpha and numeric characters.(Ex.: BuyIt54).'
+    'Enter a mix of 6 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol (Ex: BuyIt$54).'
 );
 ?>
 
@@ -144,7 +145,7 @@ $passwordWizard = sprintf(
                 >
             <div class="error-container">
                 <span ng-show="account.adminPassword.$error.checkPassword">
-                    Please enter at least 7 alpha-numeric characters.
+                    Please enter a mix of at least 6 alpha-numeric characters.
                 </span>
                 <span ng-show="account.adminPassword.$error.required">
                     Please enter your new password.
