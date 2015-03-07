@@ -52,7 +52,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test __() with more than one parameter passed
+     * Test translation with more than one parameter passed
      */
     public function testUnderscoresTranslation()
     {

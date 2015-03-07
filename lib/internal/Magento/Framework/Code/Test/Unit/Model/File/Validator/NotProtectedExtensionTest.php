@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Model\File\Validator;
 
+use Magento\Framework\Phrase;
+
 class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,7 +56,7 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
         );
         $property->setAccessible(true);
         $defaultMess = [
-            'protectedExtension' => __('File with an extension "%value%" is protected and cannot be uploaded'),
+            'protectedExtension' => new Phrase('File with an extension "%value%" is protected and cannot be uploaded'),
         ];
         $this->assertEquals($defaultMess, $property->getValue($this->_model));
 

@@ -175,7 +175,7 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Return the English text passed into the __() translate method
+     * Return the English text passed into the translate method
      *
      * @param $args
      * @return mixed
