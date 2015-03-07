@@ -12,15 +12,15 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var ConfigDataGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generator;
+
     protected function setUp()
     {
-        $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
-        $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $loader->expects($this->any())->method('load')->willReturn(['module1', 'module2']);
-        $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-        $this->object = new ConfigOptions($random, $loader, $deployConfig);
+        $this->generator = $this->getMock('\Magento\Setup\Model\ConfigDataGenerator', [], [], '', false);
+        $this->object = new ConfigOptions($this->generator);
     }
 
     public function testGetOptions()
@@ -28,127 +28,26 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         $options = $this->object->getOptions();
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[0]);
         $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[1]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[2]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[3]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[4]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[5]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[6]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[7]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[8]);
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[9]);
         $this->assertEquals(10, count($options));
     }
 
-    public function testCreateConfig()
+    public function testCreateOptions()
     {
-        $config = $this->object->createConfig([
-            ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key',
-            ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db',
-            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
-        ]);
-        $this->assertEquals(6, count($config));
-        $this->assertNotEmpty($config[0]->getData()['date']);
-        $this->assertNotEmpty($config[1]->getData()['key']);
-        $this->assertEquals('key', $config[1]->getData()['key']);
-        $this->assertEquals(2, count($config[2]->getData()));
-        $this->assertNotEmpty($config[3]->getData()['save']);
-        $this->assertEquals('db', $config[3]->getData()['save']);
-    }
-
-    public function testCreateConfigNoSessionSave()
-    {
-        $config = $this->object->createConfig([
-            ConfigOptions::INPUT_KEY_CRYPT_KEY => 'key',
-            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
-        ]);
-        $this->assertNotEmpty($config[3]);
-        $this->assertEquals('files', $config[3]->getData()['save']);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid session save location.
-     */
-    public function testCreateConfigInvalidSessionSave()
-    {
-        $this->object->createConfig([
-            ConfigOptions::INPUT_KEY_SESSION_SAVE => 'invalid',
-            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
-        ]);
-    }
-
-    /**
-     * @param array $options
-     * @dataProvider createConfigNoKeyDataProvider
-     */
-    public function testCreateConfigNoKey(array $options)
-    {
-        $config = $this->object->createConfig($options);
-        $this->assertEquals(md5('key'), $config[1]->getData()['key']);
-    }
-
-    /**
-     * @return array
-     */
-    public function createConfigNoKeyDataProvider()
-    {
-        return [
-            'no key data' => [[
-                ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-                ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-                ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
-            ]],
-            'no frontName' => [[
-                'something_else' => 'something',
-                ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-                ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-                ConfigOptions::INPUT_KEY_DB_USER => 'dbUser',
-            ]],
-        ];
-    }
-
-    /**
-     * @param array $options
-     *
-     * @dataProvider createConfigInvalidKeyDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid encryption key.
-     */
-    public function testCreateConfigInvalidKey(array $options)
-    {
-        $this->object->createConfig($options);
-    }
-
-    /**
-     * @return array
-     */
-    public function createConfigInvalidKeyDataProvider()
-    {
-        return [
-            [[ConfigOptions::INPUT_KEY_CRYPT_KEY => '']],
-            [[ConfigOptions::INPUT_KEY_CRYPT_KEY => '0']],
-        ];
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Missing value for db configuration: db_user
-     */
-    public function testCreateConfigInvalidDB()
-    {
-        $data = [
-            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-        ];
-        $this->object->createConfig($data);
-    }
-
-    public function testCreateResourceConfig()
-    {
-        $options = [
-            ConfigOptions::INPUT_KEY_DB_HOST => 'localhost',
-            ConfigOptions::INPUT_KEY_DB_NAME => 'dbName',
-            ConfigOptions::INPUT_KEY_DB_USER => 'dbUser'
-        ];
-        $expected = [ConfigOptions::INPUT_KEY_RESOURCE =>['default_setup' => ['connection' => 'default']]];
-        $this->assertSame($expected, $this->object->createConfig($options));
+        $this->generator->expects($this->once())->method('createInstallConfig');
+        $this->generator->expects($this->once())->method('createCryptConfig');
+        $this->generator->expects($this->once())->method('createModuleConfig');
+        $this->generator->expects($this->once())->method('createSessionConfig');
+        $this->generator->expects($this->once())->method('createDefinitionsConfig');
+        $this->generator->expects($this->once())->method('createDbConfig');
+        $this->generator->expects($this->once())->method('createResourceConfig');
+        $this->object->createConfig([]);
     }
 }
