@@ -31,7 +31,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     protected $response;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 

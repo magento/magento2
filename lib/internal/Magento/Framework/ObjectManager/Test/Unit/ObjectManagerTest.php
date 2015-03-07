@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit;
 
-use Magento\Framework\ObjectManager\Factory;
+use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 
 require __DIR__ . '/_files/ChildInterface.php';
 require __DIR__ . '/_files/DiParent.php';
@@ -29,7 +29,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Framework\ObjectManager\Config\Config(
             new \Magento\Framework\ObjectManager\Relations\Runtime()
         );
-        $factory = new Factory\Dynamic\Developer($config, null, null, [
+        $factory = new Developer($config, null, null, [
             'first_param' => 'first_param_value',
             'second_param' => 'second_param_value'
         ]);

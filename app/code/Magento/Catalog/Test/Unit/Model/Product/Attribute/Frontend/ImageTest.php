@@ -16,7 +16,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUrl()
     {
-        $this->assertEquals('catalog/product/image.jpg', $this->model->getUrl($this->getMockedProduct()));
+        $this->assertEquals('catalog/product/img.jpg', $this->model->getUrl($this->getMockedProduct()));
     }
 
     protected function setUp()
@@ -41,7 +41,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
         $mock->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue('image.jpg'));
+            ->will($this->returnValue('img.jpg'));
 
         $mock->expects($this->any())
             ->method('getStore');

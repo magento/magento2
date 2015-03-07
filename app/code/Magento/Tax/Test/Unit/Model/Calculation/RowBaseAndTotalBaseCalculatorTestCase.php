@@ -8,6 +8,8 @@
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
+use Magento\Tax\Model\Calculation\RowbaseCalculator;
+use Magento\Tax\Model\Calculation\TotalBaseCalculator;
 use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
@@ -122,7 +124,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
         $this->mockAppliedTax = $this->getMockBuilder('Magento\Tax\Api\Data\AppliedTaxInterface')->getMock();
 
         $this->mockAppliedTax->expects($this->any())->method('getTaxRateKey')->will($this->returnValue('taxKey'));
-        //Magento\Tax\Service\V1\Data\TaxDetails
+        //Magento\Tax\Service\V1\Data\TaxDetailsInterface
         $this->addressRateRequest = new \Magento\Framework\Object();
     }
 

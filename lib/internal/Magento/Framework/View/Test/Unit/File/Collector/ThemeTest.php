@@ -15,22 +15,22 @@ use Magento\Framework\View\File\Factory;
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themesDirectoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeMock;
 
@@ -73,8 +73,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             ->with('file')
             ->will($this->returnValue($filePath));
 
-        $fileMock = $this->getMockBuilder('Magento\Framework\View\Layout\File')
-            ->getMock();
+        $fileMock = $this->getMockBuilder('Magento\Framework\View\File')
+            ->disableOriginalConstructor()->getMock();
 
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
@@ -110,8 +110,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $fileMock = $this->getMockBuilder('Magento\Framework\View\Layout\File')
-            ->getMock();
+        $fileMock = $this->getMockBuilder('Magento\Framework\View\File')
+            ->disableOriginalConstructor()->getMock();
 
         // Verifies correct files are searched for
         $this->themesDirectoryMock->expects($this->once())

@@ -216,12 +216,12 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         foreach (self::$_namespaces as $row) {
             list($namespace, , $replacement) = $row;
             $this->_assertNotRegExp(
-                '/namespace\s+' . preg_quote($namespace, '/') . ';/iS',
+                '/namespace\s+' . preg_quote($namespace, '/') . ';/S',
                 $content,
                 $this->_suggestReplacement(sprintf("Namespace '%s' is obsolete.", $namespace), $replacement)
             );
             $this->_assertNotRegExp(
-                '/[^a-z\d_]' . preg_quote($namespace . '\\', '/') . '/iS',
+                '/[^a-zA-Z\d_]' . preg_quote($namespace . '\\', '/') . '/S',
                 $content,
                 $this->_suggestReplacement(sprintf("Namespace '%s' is obsolete.", $namespace), $replacement)
             );

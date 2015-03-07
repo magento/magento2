@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Test\Unit\Asset\Minified;
 
 use \Magento\Framework\View\Asset\Minified\MutablePathAsset;
 use \Magento\Framework\View\Asset\Minified\AbstractAsset;
-use \Magento\Framework\View\Asset\Minified;
 
 class MutablePathAssetTest extends AbstractAssetTestCase
 {

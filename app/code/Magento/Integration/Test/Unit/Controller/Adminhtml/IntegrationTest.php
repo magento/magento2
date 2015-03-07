@@ -257,7 +257,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * Common mock 'expect' pattern.
      * Calls that need to be mocked out when
-     * \Magento\Backend\Controller\AbstractAction loadLayout() and renderLayout() are called.
+     * \Magento\Backend\App\AbstractAction loadLayout() and renderLayout() are called.
      */
     protected function _verifyLoadAndRenderLayout()
     {

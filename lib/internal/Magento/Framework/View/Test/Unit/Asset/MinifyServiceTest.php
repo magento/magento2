@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Test\Unit\Asset;
 
 use \Magento\Framework\View\Asset\MinifyService;
-use \Magento\Framework\View\Asset\Minified;
+use \Magento\Framework\View\Asset\Minified\AbstractAsset;
 
 class MinifyServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,15 +94,15 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
         return [
             'production' => [
                 \Magento\Framework\App\State::MODE_PRODUCTION,
-                Minified\AbstractAsset::FILE_EXISTS,
+                AbstractAsset::FILE_EXISTS,
             ],
             'default'    => [
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                Minified\AbstractAsset::MTIME,
+                AbstractAsset::MTIME,
             ],
             'developer'  => [
                 \Magento\Framework\App\State::MODE_DEVELOPER,
-                Minified\AbstractAsset::MTIME,
+                AbstractAsset::MTIME,
             ],
         ];
     }

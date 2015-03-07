@@ -45,7 +45,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     protected $_appStateMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookie;
 

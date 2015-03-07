@@ -304,7 +304,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_areaEmulator->expects($this->once())->method('emulateLayoutArea')->with(self::AREA_CODE);
-        $controller = $this->getMock('Magento\Backend\Controller\Adminhtml\Action', [], [], '', false);
+        $controller = $this->getMock('Magento\Backend\App\Action', [], [], '', false);
 
         $this->_model->update(self::AREA_CODE, $request, $controller);
     }

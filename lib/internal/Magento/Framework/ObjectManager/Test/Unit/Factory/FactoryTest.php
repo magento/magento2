@@ -5,18 +5,13 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
+use Magento\Framework\ObjectManager\Factory;
 use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ObjectManager;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Expected exception message
-     */
-    const EXCEPTION_MESSAGE =
-        'Invalid parameter configuration provided for $firstParam argument of Magento\Framework\ObjectManager';
-
     /**
      * @var Factory
      */
@@ -47,7 +42,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage \Magento\Framework\ObjectManager\Test\Unit\Factory\FactoryTest::EXCEPTION_MESSAGE
+     * @expectedExceptionMessage Invalid parameter configuration provided for $firstParam argument
      */
     public function testResolveArgumentsException()
     {

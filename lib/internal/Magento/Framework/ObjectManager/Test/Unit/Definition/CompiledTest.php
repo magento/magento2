@@ -37,7 +37,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
 }
 
 /**
- * Stub class for abstract Magento\Framework\ObjectManager\Definition
+ * Stub class for abstract Magento\Framework\ObjectManager\DefinitionInterface
  */
 class CompiledStub extends Compiled
 {

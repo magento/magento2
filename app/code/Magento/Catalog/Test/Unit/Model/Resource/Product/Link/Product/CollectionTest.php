@@ -26,10 +26,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $fetchStrategyMock;
 
-    /** @var \Magento\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $managerInterfaceMock;
 
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $helperMock;
 
-    /** @var \Magento\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $universalFactoryMock;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -65,13 +65,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Resource\Url|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlMock;
 
-    /** @var \Magento\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $timezoneInterfaceMock;
 
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject */
     protected $dateTimeMock;
 
     protected function setUp()
