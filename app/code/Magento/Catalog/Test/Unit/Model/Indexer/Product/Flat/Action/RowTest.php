@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class RowTest extends \PHPUnit_Framework_TestCase
 {

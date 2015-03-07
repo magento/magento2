@@ -5,7 +5,7 @@
  */
 namespace Magento\Cookie\Test\Unit\Controller\Index;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class NoCookiesTest extends \PHPUnit_Framework_TestCase
 {

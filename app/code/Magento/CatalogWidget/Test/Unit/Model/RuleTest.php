@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Model;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class RuleTest extends \PHPUnit_Framework_TestCase
 {

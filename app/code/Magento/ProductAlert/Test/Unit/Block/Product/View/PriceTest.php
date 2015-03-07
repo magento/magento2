@@ -37,7 +37,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $this->getMock(
             'Magento\ProductAlert\Helper\Data',
             ['isPriceAlertAllowed', 'getSaveUrl'],

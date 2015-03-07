@@ -44,7 +44,7 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
 
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->action = $this->objectManager->getObject(
             'Magento\GroupedProduct\Controller\Adminhtml\Edit\Popup',
             [

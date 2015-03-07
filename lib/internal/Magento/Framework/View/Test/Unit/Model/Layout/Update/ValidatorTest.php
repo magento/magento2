@@ -16,7 +16,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     /**

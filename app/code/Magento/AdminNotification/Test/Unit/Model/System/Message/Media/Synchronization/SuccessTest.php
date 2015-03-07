@@ -35,7 +35,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $this->_fileStorage = $this->getMock('Magento\Core\Model\File\Storage\Flag', [], [], '', false);
         $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = ['fileStorage' => $this->_fileStorage];
         $this->_model = $objectManagerHelper->getObject(
             'Magento\AdminNotification\Model\System\Message\Media\Synchronization\Success',
@@ -60,7 +60,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     public function testIsDisplayed($expectedFirstRun, $data, $state)
     {
         $arguments = ['fileStorage' => $this->_fileStorage];
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_syncFlagMock->expects($this->any())->method('getState')->will($this->returnValue($state));
         $this->_syncFlagMock->expects($this->any())->method('getFlagData')->will($this->returnValue($data));

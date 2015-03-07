@@ -22,14 +22,14 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->dataObjectProcessor = $objectManager->getObject('Magento\Framework\Reflection\DataObjectProcessor');
         parent::setUp();
     }
 
     public function testDataObjectProcessor()
     {
-        $objectManager =  new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager =  new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Webapi\Test\Unit\Model\Files\TestDataObject $testDataObject */
         $testDataObject = $objectManager->getObject('Magento\Webapi\Test\Unit\Model\Files\TestDataObject');
 

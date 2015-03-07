@@ -36,7 +36,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $className = 'Magento\Core\Helper\File\Storage\Database';
         $arguments = $this->objectManager->getConstructArguments(
             $className,

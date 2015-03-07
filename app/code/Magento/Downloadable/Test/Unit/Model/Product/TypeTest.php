@@ -32,7 +32,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $fileStorageDb = $this->getMockBuilder(
             'Magento\Core\Helper\File\Storage\Database'

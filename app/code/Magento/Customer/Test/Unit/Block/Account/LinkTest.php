@@ -9,7 +9,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetHref()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $helper = $this->getMockBuilder(
             'Magento\Customer\Model\Url'
         )->disableOriginalConstructor()->setMethods(

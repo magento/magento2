@@ -10,7 +10,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class NoRouteHandlerTest extends \Magento\Test\BaseTestCase
+class NoRouteHandlerTest extends \Magento\Framework\Test\Unit\TestFramework\BaseTestCase
 {
     /**
      * @var \Magento\Framework\App\Router\NoRouteHandler

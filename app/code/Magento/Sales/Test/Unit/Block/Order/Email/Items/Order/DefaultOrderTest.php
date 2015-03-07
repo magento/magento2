@@ -38,7 +38,7 @@ class DefaultOrderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->layoutMock = $this->getMockBuilder('\Magento\Framework\View\Layout')
             ->disableOriginalConstructor()

@@ -10,7 +10,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilter()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Framework\Filter\Template $templateFilter */
         $templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
         $templateFilter->setVariables(

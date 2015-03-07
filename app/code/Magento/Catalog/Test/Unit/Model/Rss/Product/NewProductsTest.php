@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Rss\Product;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class NewProductsTest

@@ -26,7 +26,7 @@ class MultistoreTest extends \PHPUnit_Framework_TestCase
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
         ];
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Backend\Block\Widget\Grid\Column\Multistore',
             $arguments

@@ -29,7 +29,7 @@ class RendererListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
             ->setMethods(['setRenderedBlock', 'getTemplate', 'setTemplate'])->disableOriginalConstructor()

@@ -19,7 +19,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->model = $this->objectHelper->getObject('Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice');
     }

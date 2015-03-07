@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Calculation;
 use \Magento\Tax\Model\Calculation\RateRepository;
 
 use Magento\Framework\Api\SearchCriteria;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
 

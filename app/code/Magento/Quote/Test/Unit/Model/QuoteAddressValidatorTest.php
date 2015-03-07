@@ -45,7 +45,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->addressFactoryMock = $this->getMock(
             '\Magento\Quote\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false

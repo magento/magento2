@@ -14,7 +14,7 @@ class TranslitUrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject('Magento\Framework\Filter\TranslitUrl');
     }
 

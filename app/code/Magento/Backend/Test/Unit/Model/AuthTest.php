@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Class AuthTest

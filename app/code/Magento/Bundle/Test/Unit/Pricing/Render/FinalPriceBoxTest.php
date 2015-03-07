@@ -25,7 +25,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $this->saleableItem = $this->getMock('Magento\Framework\Pricing\Object\SaleableInterface');
 
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Render\FinalPriceBox', [
             'saleableItem' => $this->saleableItem
         ]);

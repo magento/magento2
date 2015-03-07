@@ -44,7 +44,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()->getMock();

@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesRule\Test\Unit\Block\Rss;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class DiscountsTest

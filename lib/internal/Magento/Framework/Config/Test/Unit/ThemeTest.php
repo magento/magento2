@@ -26,7 +26,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();

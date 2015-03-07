@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
 use \Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class BundleSelectionFactoryTest extends \PHPUnit_Framework_TestCase
 {

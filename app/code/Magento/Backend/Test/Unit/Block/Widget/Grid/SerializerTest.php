@@ -19,7 +19,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareLayout()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $grid = $this->getMock(
             'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',

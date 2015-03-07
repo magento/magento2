@@ -49,7 +49,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->contextMock->expects($this->once())->method('getSession')->will($this->returnValue($this->sessionMock));
         $this->contextMock->expects($this->once())
             ->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));

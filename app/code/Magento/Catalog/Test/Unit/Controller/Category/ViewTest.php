@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Category;
 
 use Magento\Framework\App\Action\Action;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

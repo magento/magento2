@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
 {

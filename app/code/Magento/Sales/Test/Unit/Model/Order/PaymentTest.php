@@ -93,7 +93,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->payment = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+        $this->payment = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\Sales\Model\Order\Payment',
             [
                 'context'       => $context,

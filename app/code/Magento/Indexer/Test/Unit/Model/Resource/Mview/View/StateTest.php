@@ -21,7 +21,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
             '\Magento\Indexer\Model\Resource\Mview\View\State',
             ['resource' => $resourceMock]

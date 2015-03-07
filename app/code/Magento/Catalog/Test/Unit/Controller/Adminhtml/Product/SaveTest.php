@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {

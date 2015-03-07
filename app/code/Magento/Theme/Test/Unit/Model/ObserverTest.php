@@ -112,7 +112,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
             'Magento\Theme\Model\Observer',
             [

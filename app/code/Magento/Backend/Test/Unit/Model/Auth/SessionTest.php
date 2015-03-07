@@ -6,7 +6,7 @@
 namespace Magento\Backend\Test\Unit\Model\Auth;
 
 use Magento\Backend\Model\Auth\Session;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Class SessionTest tests Magento\Backend\Model\Auth\Session

@@ -10,7 +10,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testGetHtmlAttributes()
     {
         /** @var $fileBlock \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File */
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $collectionFactory = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',
             [],

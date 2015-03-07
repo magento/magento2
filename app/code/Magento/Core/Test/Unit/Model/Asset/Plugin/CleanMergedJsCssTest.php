@@ -12,7 +12,7 @@ namespace Magento\Core\Test\Unit\Model\Asset\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
+class CleanMergedJsCssTest extends \Magento\Framework\Test\Unit\TestFramework\BaseTestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Helper\File\Storage\Database

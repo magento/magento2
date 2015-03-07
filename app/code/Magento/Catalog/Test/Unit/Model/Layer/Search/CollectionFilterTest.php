@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Search;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class CollectionFilterTest extends \PHPUnit_Framework_TestCase
 {

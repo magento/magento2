@@ -8,7 +8,7 @@ namespace Magento\CatalogWidget\Test\Unit\Block\Product;
 
 use \Magento\CatalogWidget\Block\Product\ProductsList;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;
 
 /**

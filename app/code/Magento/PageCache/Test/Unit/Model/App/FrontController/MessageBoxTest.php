@@ -6,7 +6,7 @@
 namespace Magento\PageCache\Test\Unit\Model\App\FrontController;
 
 use Magento\PageCache\Model\App\FrontController\MessageBox;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Class MessageBoxTest

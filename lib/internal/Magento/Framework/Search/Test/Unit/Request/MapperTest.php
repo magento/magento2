@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Request;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class MapperTest extends \PHPUnit_Framework_TestCase
 {

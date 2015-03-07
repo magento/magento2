@@ -24,7 +24,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()

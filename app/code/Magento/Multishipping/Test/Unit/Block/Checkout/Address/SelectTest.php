@@ -8,7 +8,7 @@
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout\Address;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class SelectTest extends \PHPUnit_Framework_TestCase

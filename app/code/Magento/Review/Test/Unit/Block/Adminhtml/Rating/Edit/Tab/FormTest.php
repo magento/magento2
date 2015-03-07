@@ -5,7 +5,7 @@
  */
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

@@ -65,7 +65,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             'registry' => $this->coreRegistryMock,
         ];
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $block */
         $this->block = $helper->getObject('Magento\Sales\Block\Adminhtml\Order\View\Info', $arguments);
     }
@@ -77,7 +77,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
         $arguments = ['context' => $contextMock];
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $block */
         $block = $helper->getObject('Magento\Sales\Block\Adminhtml\Order\View\Info', $arguments);
 

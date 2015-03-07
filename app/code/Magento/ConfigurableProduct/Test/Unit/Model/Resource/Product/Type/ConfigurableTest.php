@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Resource\Product\Type;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {

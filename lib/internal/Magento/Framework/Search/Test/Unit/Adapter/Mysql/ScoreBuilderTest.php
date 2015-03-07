@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ScoreBuilderTest extends \PHPUnit_Framework_TestCase
 {

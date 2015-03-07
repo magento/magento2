@@ -10,7 +10,7 @@ namespace Magento\Checkout\Test\Unit\Model\Type;
 
 use \Magento\Checkout\Model\Type\Onepage;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

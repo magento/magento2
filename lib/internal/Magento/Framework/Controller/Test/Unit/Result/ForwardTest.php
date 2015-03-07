@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ForwardTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,7 +8,7 @@
 
 namespace Magento\UrlRewrite\Test\Unit\Block\Catalog\Edit;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {

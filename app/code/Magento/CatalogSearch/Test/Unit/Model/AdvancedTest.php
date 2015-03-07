@@ -130,7 +130,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->any())->method('getBackendType')->will($this->returnValue('static'));
         $this->dataCollection->expects($this->any())->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator([$this->attribute])));
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\CatalogSearch\Model\Advanced $instance */
         $instance = $objectManager->getObject(
             'Magento\CatalogSearch\Model\Advanced',

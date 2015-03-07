@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Page\Config;
 use \Magento\Framework\View\Page\Config\Renderer;
 use \Magento\Framework\View\Page\Config\Generator;
 use Magento\Framework\View\Asset\GroupedCollection;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Test for page config renderer model

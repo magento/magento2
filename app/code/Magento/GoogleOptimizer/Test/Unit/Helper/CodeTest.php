@@ -21,7 +21,7 @@ class CodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_codeModelMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $objectManagerHelper->getObject(
             'Magento\GoogleOptimizer\Helper\Code',
             ['code' => $this->_codeModelMock]

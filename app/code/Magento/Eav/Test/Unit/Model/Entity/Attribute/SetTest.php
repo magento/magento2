@@ -33,7 +33,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
             'attributeFactory' => $attrFactory,
             'resource' => $resource,
         ];
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject('Magento\Eav\Model\Entity\Attribute\Set', $arguments);
     }
 

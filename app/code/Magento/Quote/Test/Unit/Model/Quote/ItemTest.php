@@ -68,7 +68,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->localeFormat = $this->getMockBuilder('Magento\Framework\Locale\FormatInterface')
             ->disableOriginalConstructor()

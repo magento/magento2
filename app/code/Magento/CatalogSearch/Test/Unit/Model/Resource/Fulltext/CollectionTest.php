@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Resource\Fulltext;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use PHPUnit_Framework_TestCase;
 
 class CollectionTest extends PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $storeManager = $this->getStoreManager();
         $universalFactory = $this->getUniversalFactory();

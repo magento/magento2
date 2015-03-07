@@ -29,7 +29,7 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_indexerMock = $this->getMock(
             'Magento\Indexer\Model\Indexer',

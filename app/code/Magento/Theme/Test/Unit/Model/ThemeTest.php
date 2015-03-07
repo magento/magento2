@@ -50,7 +50,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
             'Magento\Theme\Model\Theme',
             [

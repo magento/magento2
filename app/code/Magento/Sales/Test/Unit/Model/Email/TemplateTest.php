@@ -29,7 +29,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->once())
@@ -51,7 +51,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->mockViewFilesystem->expects($this->once())
             ->method('getTemplateFileName')
             ->with('template')
-            ->will($this->returnValue(__DIR__ . '/_files/test_include.php'));
+            ->will($this->returnValue(__DIR__ . '/_files/test_include.phtml'));
         $include = $this->template->getInclude('template', ['one' => 1, 'two' => 2]);
         $this->assertEquals('Number One = 1. Number Two = 2', $include);
     }

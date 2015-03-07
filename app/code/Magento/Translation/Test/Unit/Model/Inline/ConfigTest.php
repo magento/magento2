@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($result)
         );
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $config = $objectManager->getObject(
             'Magento\Translation\Model\Inline\Config',
             ['scopeConfig' => $scopeConfig]

@@ -34,7 +34,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\GoogleOptimizer\Model\Observer\CmsPage\Delete',
             ['modelCode' => $this->_codeMock]

@@ -49,7 +49,7 @@ abstract class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMock('\Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Theme\Controller\Adminhtml\System\Design\Theme\\' . $this->name,
             [

@@ -10,7 +10,7 @@ use \Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\ActionValidator\RemoveAction;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ValueTest extends \PHPUnit_Framework_TestCase
 {

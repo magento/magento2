@@ -21,7 +21,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->finalPriceModel = $helper->getObject(
             'Magento\GroupedProduct\Model\Product\Type\Grouped\Price',
             []

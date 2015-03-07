@@ -8,7 +8,7 @@
 
 namespace Magento\Multishipping\Test\Unit\Controller\Checkout\Address;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class EditAddressTest extends \PHPUnit_Framework_TestCase
 {

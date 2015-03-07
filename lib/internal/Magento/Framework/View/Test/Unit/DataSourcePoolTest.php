@@ -31,7 +31,7 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->dataSourcePool = $objectManager->getObject('Magento\Framework\View\DataSourcePool', [
             'blockFactory' => $this->blockFactory
         ]);

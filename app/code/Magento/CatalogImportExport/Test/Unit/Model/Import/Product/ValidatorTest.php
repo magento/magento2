@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase

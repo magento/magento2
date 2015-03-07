@@ -134,7 +134,7 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /**
          * This test can be unskipped when the Unit test object manager helper is enabled to return correct DataBuilders
          * For now the \Magento\Customer\Test\Unit\Controller\AccountTest sufficiently covers the SUT

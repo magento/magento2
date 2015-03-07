@@ -193,7 +193,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\View',
             [

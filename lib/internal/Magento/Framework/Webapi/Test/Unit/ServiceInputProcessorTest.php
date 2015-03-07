@@ -32,7 +32,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $objectFactory = new WebapiBuilderFactory($objectManager);
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
@@ -432,7 +432,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getObjectWithCustomAttributes($type, $value = [])
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $customAttributeValue = null;
         switch($type) {
             case 'integer':

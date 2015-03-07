@@ -40,7 +40,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBlock()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var $template \Magento\Framework\View\Element\Template */
         $template = $objectManager->getObject('Magento\Framework\View\Element\Template');
         $this->assertInstanceOf('Magento\Framework\View\Element\Template', $template);
@@ -68,7 +68,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModel()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\App\Config\ValueInterface */
         $model = $objectManager->getObject('Magento\Framework\App\Config\Value');
         $this->assertInstanceOf('Magento\Framework\App\Config\Value', $model);

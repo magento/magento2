@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class LinkTest extends \PHPUnit_Framework_TestCase
 {

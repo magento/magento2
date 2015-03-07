@@ -19,7 +19,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $indexerMock = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $flatIndexerHelperMock = $this->getMock(

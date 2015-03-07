@@ -7,7 +7,7 @@
 /**
  * Mock Rollback worker for rolling back via ftp
  */
-namespace Magento\Framework\Backup\Filesystem\Rollback;
+namespace Magento\Framework\Backup\Test\Unit\Filesystem\Rollback;
 
 class Ftp extends \Magento\Framework\Backup\Filesystem\Rollback\AbstractRollback
 {

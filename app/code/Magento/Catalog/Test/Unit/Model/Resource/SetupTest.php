@@ -12,7 +12,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->unit = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+        $this->unit = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Model\Resource\Setup'
         );
     }

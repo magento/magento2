@@ -28,7 +28,7 @@ class FirstEntranceTest extends \PHPUnit_Framework_TestCase
         $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $request->expects($this->any())->method('setActionName')->will($this->returnSelf());
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         /** @var $layoutMock \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject */
         $layoutMock = $this->getMock(

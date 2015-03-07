@@ -21,7 +21,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_xsdSchema = BP . '/lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd';
-        $this->_xsdValidator = new \Magento\TestFramework\Utility\XsdValidator();
+        $this->_xsdValidator = new \Magento\Framework\Test\Unit\TestFramework\Utility\XsdValidator();
     }
 
     /**

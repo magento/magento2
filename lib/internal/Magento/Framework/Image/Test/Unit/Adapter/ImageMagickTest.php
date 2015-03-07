@@ -6,7 +6,7 @@
 namespace Magento\Framework\Image\Test\Unit\Adapter;
 
 use Magento\Framework\Filesystem\FilesystemException;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ImageMagickTest extends \PHPUnit_Framework_TestCase
 {

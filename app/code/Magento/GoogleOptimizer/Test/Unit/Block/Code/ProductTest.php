@@ -19,7 +19,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->block = $objectManager->getObject(
             'Magento\GoogleOptimizer\Block\Code\Product',

@@ -104,7 +104,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('id'));
         $this->registryMock = $this->getMock('Magento\Framework\Registry', ['registry'], [], '', false);
         $this->_encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Customer\Model\Customer',
             [

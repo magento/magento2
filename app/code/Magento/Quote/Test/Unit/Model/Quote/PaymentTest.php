@@ -7,7 +7,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use \Magento\Quote\Model\Quote\Payment;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {

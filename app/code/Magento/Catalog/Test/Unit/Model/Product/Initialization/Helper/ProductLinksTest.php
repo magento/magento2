@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Initialization\Helper;
 
 use Magento\Catalog\Model\Product;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ProductLinksTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->model = $helper->getObject('Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks');
     }
 

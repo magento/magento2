@@ -19,7 +19,7 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);

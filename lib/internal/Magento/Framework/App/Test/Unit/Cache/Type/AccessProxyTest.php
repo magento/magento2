@@ -25,7 +25,7 @@ class AccessProxyTest extends \PHPUnit_Framework_TestCase
         $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->will($this->returnValue(true));
 
         $object = new \Magento\Framework\App\Cache\Type\AccessProxy($frontendMock, $cacheEnabler, $identifier);
-        $helper = new \Magento\TestFramework\Helper\ProxyTesting();
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ProxyTesting();
 
         // For the first call the cache is disabled - so fake default result is returned
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $enabledResult);

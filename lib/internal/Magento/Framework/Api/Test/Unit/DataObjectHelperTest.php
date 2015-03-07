@@ -42,7 +42,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->objectFactoryMock = $this->getMockBuilder('\Magento\Framework\Api\ObjectFactory')
             ->disableOriginalConstructor()

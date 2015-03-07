@@ -73,11 +73,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->_responseMock->headersSentThrowsException = false;
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
             'Magento\Backend\Model\Session',
             ['storage' => new \Magento\Framework\Session\Storage()]

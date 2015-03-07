@@ -10,7 +10,7 @@ namespace Magento\Framework\App\Test\Unit\Action;
 
 use \Magento\Framework\App\Action\Action;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ActionTest extends \PHPUnit_Framework_TestCase
 {

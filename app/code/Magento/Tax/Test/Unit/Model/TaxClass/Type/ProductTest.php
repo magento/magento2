@@ -21,7 +21,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $productMock->expects($this->once())->method('getCollection')->will($this->returnValue($collectionMock));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Product */
         $model = $objectManagerHelper->getObject(
             'Magento\Tax\Model\TaxClass\Type\Product',

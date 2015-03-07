@@ -158,7 +158,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManagerMock));
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->model = $objectManagerHelper->getObject(
             'Magento\Customer\Controller\Account\Confirm',

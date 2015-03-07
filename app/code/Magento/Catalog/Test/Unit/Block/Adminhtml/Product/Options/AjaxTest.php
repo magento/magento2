@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Options;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class AjaxTest extends \PHPUnit_Framework_TestCase
 {

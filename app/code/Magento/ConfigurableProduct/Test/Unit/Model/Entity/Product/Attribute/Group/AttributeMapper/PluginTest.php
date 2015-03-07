@@ -6,7 +6,7 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Entity\Product\Attribute\Group\AttributeMapper;
 
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class PluginTest extends \PHPUnit_Framework_TestCase
 {

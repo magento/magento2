@@ -4,5 +4,5 @@
  * See COPYING.txt for license details.
  */
 
-$objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+$objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 $bootstrapFactory = $objectManager->getObject('Magento\Bootstrap\ModelFactory');

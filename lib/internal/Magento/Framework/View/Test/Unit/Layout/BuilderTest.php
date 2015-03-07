@@ -6,7 +6,11 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use Magento\Framework;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\ProcessorInterface;
 
 /**
  * Class BuilderTest
@@ -23,15 +27,15 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $fullActionName = 'route_controller_action';
 
-        /** @var Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var Http|\PHPUnit_Framework_MockObject_MockObject */
         $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $request->expects($this->exactly(3))->method('getFullActionName')->will($this->returnValue($fullActionName));
 
-        /** @var Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $processor */
+        /** @var ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $processor */
         $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
         $processor->expects($this->once())->method('load');
 
-        /** @var Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var Layout|\PHPUnit_Framework_MockObject_MockObject */
         $layout = $this->getMock(
             'Magento\Framework\View\Layout',
             $this->getLayoutMockMethods(),
@@ -44,7 +48,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->atLeastOnce())->method('generateElements')->will($this->returnValue($processor));
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
-        /** @var Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject $eventManager */
+        /** @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject $eventManager */
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $eventManager->expects($this->at(0))->method('dispatch')->with('layout_load_before', $data);
         $eventManager->expects($this->at(1))->method('dispatch')->with('layout_generate_blocks_before', $data);
@@ -67,6 +71,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getBuilder($arguments)
     {
-        return (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(static::CLASS_NAME, $arguments);
+        return (new ObjectManager($this))->getObject(static::CLASS_NAME, $arguments);
     }
 }

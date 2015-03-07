@@ -5,7 +5,7 @@
  */
 namespace Magento\Log\Test\Unit\Block\Adminhtml\Customer\Edit\Tab\View;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class StatusTest

@@ -26,7 +26,7 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 

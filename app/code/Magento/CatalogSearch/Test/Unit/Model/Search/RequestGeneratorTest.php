@@ -26,7 +26,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
             'Magento\\CatalogSearch\\Model\\Search\\RequestGenerator',
             ['productAttributeCollectionFactory' => $this->productAttributeCollectionFactory]

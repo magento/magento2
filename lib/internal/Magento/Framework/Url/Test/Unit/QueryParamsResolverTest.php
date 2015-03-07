@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Url\Test\Unit;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class QueryParamsResolverTest extends \PHPUnit_Framework_TestCase
 {

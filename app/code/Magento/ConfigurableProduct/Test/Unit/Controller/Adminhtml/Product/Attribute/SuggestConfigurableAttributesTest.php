@@ -34,7 +34,7 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);

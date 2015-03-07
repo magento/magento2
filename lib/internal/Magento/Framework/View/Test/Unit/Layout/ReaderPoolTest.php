@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ReaderPoolTest extends \PHPUnit_Framework_TestCase
 {

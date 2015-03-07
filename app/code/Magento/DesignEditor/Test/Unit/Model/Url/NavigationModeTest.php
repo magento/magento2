@@ -48,7 +48,7 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_designHelperMock = $this->getMock('Magento\DesignEditor\Helper\Data', [], [], '', false);
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);

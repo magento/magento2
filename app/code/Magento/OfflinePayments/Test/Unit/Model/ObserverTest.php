@@ -14,7 +14,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject('Magento\OfflinePayments\Model\Observer');
     }
 

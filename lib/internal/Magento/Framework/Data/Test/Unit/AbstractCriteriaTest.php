@@ -24,7 +24,7 @@ class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->criteria = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Criteria\Sample');
     }
 
@@ -367,7 +367,7 @@ class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderAddFilter()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         return [
             [
                 'name' => 'test-filter-name',

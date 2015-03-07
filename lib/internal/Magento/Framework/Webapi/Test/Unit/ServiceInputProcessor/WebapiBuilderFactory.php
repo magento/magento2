@@ -10,7 +10,7 @@ class WebapiBuilderFactory extends \Magento\Framework\Serialization\DataBuilderF
     /**
      * @param \Magento\TestFramework\Helper\ObjectManager $objectManager
      */
-    public function __construct(\Magento\TestFramework\Helper\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }

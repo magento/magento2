@@ -34,7 +34,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             false
         );
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
-        $testHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $testHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
             'Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import',
             ['data' => $testData]

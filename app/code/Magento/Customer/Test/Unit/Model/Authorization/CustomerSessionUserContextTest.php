@@ -30,7 +30,7 @@ class CustomerSessionUserContextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()

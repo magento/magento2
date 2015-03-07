@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\Backup\Test\Unit;
 
-
-require_once __DIR__ . '/_files/Fs.php';
-require_once __DIR__ . '/_files/Helper.php';
 require_once __DIR__ . '/_files/io.php';
 
 class MediaTest extends \PHPUnit_Framework_TestCase

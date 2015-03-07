@@ -20,7 +20,7 @@ class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->ruleResource = $this->getMock('Magento\SalesRule\Model\Resource\Rule', [], [], '', false);
 
         $this->plugin = $objectManager->getObject(

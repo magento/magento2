@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Service\V1;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
 {

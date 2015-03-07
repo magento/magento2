@@ -11,7 +11,7 @@ namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 /**
  * Test class for \Magento\Tax\Model\Sales\Total\Quote\Tax
  */
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
 {

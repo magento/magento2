@@ -9,7 +9,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();

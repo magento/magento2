@@ -9,7 +9,7 @@ namespace Magento\Authorization\Test\Unit\Model;
 use \Magento\Authorization\Model\CompositeUserContext;
 
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class CompositeUserContextTest extends \PHPUnit_Framework_TestCase
 {

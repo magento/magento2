@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Result;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class PageFactoryTest extends \PHPUnit_Framework_TestCase
 {

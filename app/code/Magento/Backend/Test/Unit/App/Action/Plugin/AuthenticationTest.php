@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 use Magento\Backend\App\Action\Plugin\Authentication;
 
 /**

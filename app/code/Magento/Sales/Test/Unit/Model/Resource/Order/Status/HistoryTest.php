@@ -62,7 +62,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->adapterMock->expects($this->any())
             ->method('describeTable')
             ->will($this->returnValue([]));

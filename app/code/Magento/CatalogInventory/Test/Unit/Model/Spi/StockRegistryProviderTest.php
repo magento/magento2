@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class StockRegistryProviderTest

@@ -127,7 +127,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');

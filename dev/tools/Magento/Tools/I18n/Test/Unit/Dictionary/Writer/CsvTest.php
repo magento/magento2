@@ -55,7 +55,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     public function testWrongOutputFile()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Writer\Csv',
             ['outputFilename' => 'wrong/path']
@@ -122,7 +122,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
             $this->returnValue("content_value2_quote\\'")
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Dictionary\Writer\Csv $writer */
         $writer = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Writer\Csv',
@@ -175,7 +175,7 @@ EXPECTED;
             $this->returnValue('')
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Dictionary\Writer\Csv $writer */
         $writer = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Writer\Csv',

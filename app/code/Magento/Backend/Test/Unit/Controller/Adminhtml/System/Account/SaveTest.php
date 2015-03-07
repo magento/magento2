@@ -124,7 +124,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $args = ['context' => $contextMock, 'resultRedirectFactory' => $resultRedirectFactory];
 
-        $testHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $testHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_controller = $testHelper->getObject('Magento\Backend\Controller\Adminhtml\System\Account\Save', $args);
     }
 

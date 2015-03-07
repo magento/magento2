@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
 {

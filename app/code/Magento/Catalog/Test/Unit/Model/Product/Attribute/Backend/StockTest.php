@@ -29,7 +29,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])

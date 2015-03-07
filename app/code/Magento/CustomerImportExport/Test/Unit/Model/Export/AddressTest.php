@@ -75,7 +75,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'getWebsites'])
         );
 
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = new \Magento\CustomerImportExport\Model\Export\Address(
             $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $storeManager,

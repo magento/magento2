@@ -91,7 +91,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['populateWithArray'])
             ->getMock();
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = [
             'taxData' => $this->mockTaxHelper,
             'taxRateManagement' => $this->mockTaxRateManagement,

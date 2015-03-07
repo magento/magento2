@@ -60,7 +60,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $fulltextResource = $this->getMockBuilder('Magento\CatalogSearch\Model\Resource\Fulltext')
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->object = $objectManagerHelper->getObject(
             'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full',
             [

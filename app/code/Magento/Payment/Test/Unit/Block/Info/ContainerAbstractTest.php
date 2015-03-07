@@ -20,7 +20,7 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $paymentInfo = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
         $methodInstance = $objectManagerHelper->getObject('Magento\OfflinePayments\Model\Checkmo');
         $paymentInfo->setMethodInstance($methodInstance);

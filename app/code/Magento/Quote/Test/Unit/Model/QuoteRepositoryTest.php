@@ -50,7 +50,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');

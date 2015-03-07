@@ -7,7 +7,7 @@
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Test for TaxRuleRegistry

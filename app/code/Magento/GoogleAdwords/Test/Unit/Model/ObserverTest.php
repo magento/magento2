@@ -51,7 +51,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $this->_eventMock = $this->getMock('Magento\Framework\Event', ['getOrderIds'], [], '', false);
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
             'Magento\GoogleAdwords\Model\Observer',
             [

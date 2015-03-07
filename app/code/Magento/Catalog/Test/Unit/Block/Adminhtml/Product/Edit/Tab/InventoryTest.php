@@ -62,7 +62,7 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->contextMock = $this->getMock(
             'Magento\Backend\Block\Template\Context',

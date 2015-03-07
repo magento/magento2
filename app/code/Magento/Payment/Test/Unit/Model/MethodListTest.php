@@ -34,7 +34,7 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->paymentHelperMock = $this->getMock('\Magento\Payment\Helper\Data', [], [], '', false);
         $this->specificationFactoryMock = $this->getMock(
             '\Magento\Payment\Model\Checks\SpecificationFactory', [], [], '', false

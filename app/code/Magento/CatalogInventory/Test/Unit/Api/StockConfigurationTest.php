@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Api;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class StockConfigurationTest

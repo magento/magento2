@@ -9,7 +9,7 @@ class SplitTest extends \PHPUnit_Framework_TestCase
 {
     public function testHasSplit()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Backend\Block\Widget\Button\SplitButton $block */
         $block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Button\SplitButton');
         $this->assertSame(true, $block->hasSplit());

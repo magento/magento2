@@ -14,7 +14,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $formKeyMock = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey')
             ->setMethods(['getFormKey'])->disableOriginalConstructor()->getMock();

@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\Matcher;
 
+use Magento\Framework\Test\Unit\TestFramework\Matcher\MethodInvokedAtIndex;
+
 class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
 {
     public function testMatches()

@@ -14,7 +14,7 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helperManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helperManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $arguments = [];
         $this->shipmentModel = $helperManager->getObject('Magento\Sales\Model\Order\Shipment', $arguments);
     }

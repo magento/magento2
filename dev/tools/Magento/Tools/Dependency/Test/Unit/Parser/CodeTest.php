@@ -5,7 +5,7 @@
  */
 namespace Magento\Tools\Dependency\Test\Unit\Parser;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class CodeTest extends \PHPUnit_Framework_TestCase
 {

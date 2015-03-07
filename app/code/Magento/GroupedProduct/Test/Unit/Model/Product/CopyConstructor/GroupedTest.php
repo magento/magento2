@@ -80,7 +80,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $expectedData = ['100500' => ['some' => 'data']];
 
         $this->_productMock->expects(

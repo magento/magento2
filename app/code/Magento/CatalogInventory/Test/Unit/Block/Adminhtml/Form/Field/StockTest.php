@@ -68,7 +68,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(
             'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
             [
@@ -90,7 +90,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             $this->isInstanceOf('Magento\Framework\Data\Form\Element\AbstractElement')
         );
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_block->setForm(
             $objectManager->getObject(
                 'Magento\Framework\Data\Form\Element\Text',

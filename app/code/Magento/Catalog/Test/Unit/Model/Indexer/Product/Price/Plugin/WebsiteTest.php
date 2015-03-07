@@ -24,7 +24,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->_priceProcessorMock = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Price\Processor',

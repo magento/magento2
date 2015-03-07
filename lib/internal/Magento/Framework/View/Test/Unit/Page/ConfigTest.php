@@ -66,7 +66,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->remoteAsset = $this->getMock('\Magento\Framework\View\Asset\Remote', [], [], '', false);
         $this->title = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
-        $this->model = (new \Magento\TestFramework\Helper\ObjectManager($this))
+        $this->model = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Framework\View\Page\Config',
                 [

@@ -29,7 +29,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_optionResource = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Option',
             [],

@@ -60,7 +60,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
         $this->optionBuilderMock = $this->getMock(

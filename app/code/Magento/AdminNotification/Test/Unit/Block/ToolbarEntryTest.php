@@ -21,7 +21,7 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getBlockInstance($unreadNotifications)
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         // mock collection of unread notifications
         $notificationList = $this->getMock(
             'Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread',
@@ -49,7 +49,7 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLatestUnreadNotifications()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         // 1. Create mocks
         $notificationList = $this->getMockBuilder('Magento\AdminNotification\Model\Resource\Inbox\Collection\Unread')

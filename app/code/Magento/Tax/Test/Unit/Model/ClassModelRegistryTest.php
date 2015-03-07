@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 /**
  * Test for TaxRuleRegistry

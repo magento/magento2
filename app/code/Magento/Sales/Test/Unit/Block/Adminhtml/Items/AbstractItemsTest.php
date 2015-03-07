@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class AbstractItemsTest

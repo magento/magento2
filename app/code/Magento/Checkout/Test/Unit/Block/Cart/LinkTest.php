@@ -14,7 +14,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
     }
 
     public function testGetUrl()

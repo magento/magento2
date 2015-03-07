@@ -19,7 +19,7 @@ class BlockFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
 
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 

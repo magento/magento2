@@ -59,7 +59,7 @@ class CustomTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_theme)
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom',
             [
