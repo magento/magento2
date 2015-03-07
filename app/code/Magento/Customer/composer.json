@@ -23,6 +23,7 @@
         "magento/module-integration": "0.42.0-beta10",
         "magento/module-ui": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
+        "magento/module-bundle": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {

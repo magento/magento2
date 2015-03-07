@@ -9,13 +9,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     public function testPaymentFormBlockToHtmlBefore()
     {
-        $method = $this->getMock(
-            'Magento\Paypal\Model\Payflowpro',
-            ['getIsCentinelValidationEnabled', 'getCode'],
-            [],
-            '',
-            false
-        );
+        $method = $this->getMockBuilder('Magento\Framework\Model\AbstractExtensibleModel')
+            ->disableOriginalConstructor()
+            ->setMethods(['getIsCentinelValidationEnabled', 'getCode'])
+            ->getMockForAbstractClass();
         $method->expects($this->once())
             ->method('getIsCentinelValidationEnabled')
             ->will($this->returnValue(true));
@@ -47,7 +44,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($blockLogo));
 
         $block = $this->getMock(
-            'Magento\Payment\Block\Form\Cc',
+            'Magento\Framework\View\Element\Template',
             ['getMethod', 'getLayout', 'setChild'],
             [],
             '',
@@ -86,6 +83,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($event));
 
         $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        /** @var \Magento\Centinel\Model\Observer $model */
         $model = $this->objectManager->getObject('Magento\Centinel\Model\Observer');
 
         $this->assertEquals($model->paymentFormBlockToHtmlBefore($observer), $model);

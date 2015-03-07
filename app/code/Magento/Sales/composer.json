@@ -24,6 +24,7 @@
         "magento/module-wishlist": "0.42.0-beta10",
         "magento/module-email": "0.42.0-beta10",
         "magento/module-shipping": "0.42.0-beta10",
+        "magento/module-offline-payments": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",
         "magento/module-ui": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",

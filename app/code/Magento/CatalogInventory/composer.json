@@ -10,6 +10,7 @@
         "magento/module-indexer": "0.42.0-beta10",
         "magento/module-eav": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
+        "magento/module-sales": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"
     },

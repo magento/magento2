@@ -124,7 +124,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->coreWebsiteMock = $this->getMock('\Magento\Core\Model\Website', [], [], '', false);
+        $this->coreWebsiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
 
         $this->priceInfoMock->expects($this->any())
             ->method('getAdjustments')

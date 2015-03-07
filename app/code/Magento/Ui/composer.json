@@ -5,6 +5,7 @@
         "php": "~5.5.0|~5.6.0",
         "magento/module-store": "0.42.0-beta10",
         "magento/module-backend": "0.42.0-beta10",
+        "magento/module-cms": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",
         "magento/module-eav": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"
