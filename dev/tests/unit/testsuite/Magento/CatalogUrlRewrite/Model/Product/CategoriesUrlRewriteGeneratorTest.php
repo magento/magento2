@@ -32,6 +32,7 @@ class CategoriesUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urlRewriteFactory = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->disableOriginalConstructor()->getMock();

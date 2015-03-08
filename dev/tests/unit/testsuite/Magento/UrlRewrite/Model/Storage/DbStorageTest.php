@@ -46,8 +46,9 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlRewriteFactory = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory', [], [], '',
-            false);
+        $this->urlRewriteFactory = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '',
             false);
         $this->adapter = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');

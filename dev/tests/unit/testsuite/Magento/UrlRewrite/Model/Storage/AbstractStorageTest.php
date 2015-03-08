@@ -25,6 +25,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urlRewriteFactory = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()->getMock();
