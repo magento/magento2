@@ -150,8 +150,3 @@ Magento/Theme/Model/Resource/Design
 Magento/Integration/Block/Adminhtml/Integration/Edit/Tab
 Magento/Config/Model/Config/Backend
 Magento/Backup/Model/Config/Backend
-app/code/Magento/*/*/Test
-lib/internal/Magento/Framework/Test
-lib/internal/Magento/Framework/*/Test
-dev/tools/Magento/Tools/*/Test
-setup/Test

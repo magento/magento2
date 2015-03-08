@@ -204,7 +204,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $copyPasteDetector->setBlackList($blackList);
 
         $this->assertTrue(
-            $copyPasteDetector->run([BP]),
+            $copyPasteDetector->run(self::getWhitelist(['php'])),
             "PHP Copy/Paste Detector has found error(s): See detailed report in {$reportFile}"
         );
     }
