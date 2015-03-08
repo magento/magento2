@@ -75,6 +75,15 @@ class UrlRewrite extends AbstractExtensibleObject
     }
 
     /**
+     * @param int $urlRewriteId
+     * @return int
+     */
+    public function setUrlRewriteId($urlRewriteId)
+    {
+        return $this->setData(self::URL_REWRITE_ID, $urlRewriteId);
+    }
+
+    /**
      * @return int
      */
     public function getEntityId()
@@ -228,13 +237,15 @@ class UrlRewrite extends AbstractExtensibleObject
     }
 
     /**
-     * @param array $metadata
+     * @param array|string $metadata
      *
      * @return $this
      */
-    public function setMetadata(array $metadata = null)
+    public function setMetadata($metadata)
     {
-        $metadata = $metadata ? serialize($metadata) : null;
+        if (is_array($metadata)) {
+            $metadata = serialize($metadata);
+        }
         return $this->setData(UrlRewrite::METADATA, $metadata);
     }
 
