@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
-use Magento\Framework\ObjectManager\Factory;
+use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ObjectManager;
@@ -13,7 +13,7 @@ use Magento\Framework\ObjectManager\ObjectManager;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Factory
+     * @var FactoryInterface
      */
     private $factory;
 
