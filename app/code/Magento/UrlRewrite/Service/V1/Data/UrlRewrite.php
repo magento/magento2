@@ -232,7 +232,7 @@ class UrlRewrite extends AbstractExtensibleObject
      *
      * @return $this
      */
-    public function setMetadata(array $metadata)
+    public function setMetadata(array $metadata = null)
     {
         $metadata = $metadata ? serialize($metadata) : null;
         return $this->setData(UrlRewrite::METADATA, $metadata);
