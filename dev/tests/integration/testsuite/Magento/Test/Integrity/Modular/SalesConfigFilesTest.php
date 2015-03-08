@@ -41,5 +41,4 @@ class SalesConfigFilesTest extends AbstractMergedConfigTest
     {
         return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('sales.xml');
     }
-
 }
