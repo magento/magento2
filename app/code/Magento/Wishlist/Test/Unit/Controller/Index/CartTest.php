@@ -629,7 +629,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())
             ->method('addToCart')
             ->with($this->checkoutCartMock, true)
-            ->willThrowException(new ProductException(__('')));
+            ->willThrowException(new ProductException(__('Test Phrase')));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError')

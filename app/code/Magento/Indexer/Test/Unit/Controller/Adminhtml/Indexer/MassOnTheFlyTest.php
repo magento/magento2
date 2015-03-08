@@ -256,7 +256,7 @@ class MassOnTheFlyTest extends \PHPUnit_Framework_TestCase
             ],
             'set3' => [
                 'idexers' => [1],
-                "exception" => new \Magento\Framework\Exception\LocalizedException(__('')),
+                "exception" => new \Magento\Framework\Exception\LocalizedException(__('Test Phrase')),
                 "expectsException" => [0, 0, 1]
             ],
             'set4' => [
