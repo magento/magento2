@@ -117,20 +117,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMockObjects()
     {
-        $requestMethods = [
-            'getPostValue',
-            'getModuleName',
-            'setModuleName',
-            'getActionName',
-            'setActionName',
-            'getParam',
-            'getCookie',
-            'isSecure',
-        ];
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->_requestMock = $this->getMock(
-            '\Magento\Framework\App\RequestInterface', $requestMethods
-        );
+        $this->_requestMock = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->_responseMock = $this->getMock(
             '\Magento\Framework\App\ResponseInterface', ['setRedirect', 'sendResponse']
         );

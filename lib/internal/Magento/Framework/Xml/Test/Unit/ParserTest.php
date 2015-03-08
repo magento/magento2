@@ -31,4 +31,15 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             $this->parser->load(__DIR__ . '/_files/data.xml')->xmlToArray()
         );
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception
+     * @expectedExceptionMessage DOMDocument::loadXML(): Opening and ending tag mismatch
+     */
+    public function testLoadXmlInvalid()
+    {
+        $sampleInvalidXml = '<?xml version="1.0"?><config></onfig>';
+        $this->parser->initErrorHandler();
+        $this->parser->loadXML($sampleInvalidXml);
+    }
 }

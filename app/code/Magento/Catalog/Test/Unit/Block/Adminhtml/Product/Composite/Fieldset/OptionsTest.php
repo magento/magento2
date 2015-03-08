@@ -90,7 +90,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $stockItemFactoryMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\ItemFactory',
+            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
             ['create'],
             [],
             '',

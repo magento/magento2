@@ -21,7 +21,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
@@ -62,20 +62,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
-            ->setMethods(
-                [
-                    'getQuery',
-                    'getModuleName',
-                    'setModuleName',
-                    'getActionName',
-                    'setActionName',
-                    'getParam',
-                    'getCookie',
-                    'isSecure',
-                ]
-            )
-            ->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])

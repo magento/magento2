@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Module\Updater\SetupInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Class DbVersionInfo
@@ -33,46 +33,36 @@ class DbVersionInfo
     private $moduleResource;
 
     /**
-     * @var ResourceResolverInterface
-     */
-    private $resourceResolver;
-
-    /**
      * @param ModuleListInterface $moduleList
      * @param ResourceInterface $moduleResource
-     * @param ResourceResolverInterface $resourceResolver
      */
     public function __construct(
         ModuleListInterface $moduleList,
-        ResourceInterface $moduleResource,
-        ResourceResolverInterface $resourceResolver
+        ResourceInterface $moduleResource
     ) {
         $this->moduleList = $moduleList;
         $this->moduleResource = $moduleResource;
-        $this->resourceResolver = $resourceResolver;
     }
 
     /**
      * Check if DB schema is up to date
      *
      * @param string $moduleName
-     * @param string $resourceName
      * @return bool
      */
-    public function isSchemaUpToDate($moduleName, $resourceName)
+    public function isSchemaUpToDate($moduleName)
     {
-        $dbVer = $this->moduleResource->getDbVersion($resourceName);
+        $dbVer = $this->moduleResource->getDbVersion($moduleName);
         return $this->isModuleVersionEqual($moduleName, $dbVer);
     }
 
     /**
      * @param string $moduleName
-     * @param string $resourceName
      * @return bool
      */
-    public function isDataUpToDate($moduleName, $resourceName)
+    public function isDataUpToDate($moduleName)
     {
-        $dataVer = $this->moduleResource->getDataVersion($resourceName);
+        $dataVer = $this->moduleResource->getDataVersion($moduleName);
         return $this->isModuleVersionEqual($moduleName, $dataVer);
     }
 
@@ -86,14 +76,12 @@ class DbVersionInfo
     {
         $errors = [];
         foreach ($this->moduleList->getNames() as $moduleName) {
-            foreach ($this->resourceResolver->getResourceList($moduleName) as $resourceName) {
-                if (!$this->isSchemaUpToDate($moduleName, $resourceName)) {
-                    $errors[] = $this->getSchemaInfo($moduleName, $resourceName);
-                }
+            if (!$this->isSchemaUpToDate($moduleName)) {
+                $errors[] = $this->getSchemaInfo($moduleName);
+            }
 
-                if (!$this->isDataUpToDate($moduleName, $resourceName)) {
-                    $errors[] = $this->getDataInfo($moduleName, $resourceName);
-                }
+            if (!$this->isDataUpToDate($moduleName)) {
+                $errors[] = $this->getDataInfo($moduleName);
             }
         }
         return $errors;
@@ -103,14 +91,13 @@ class DbVersionInfo
      * Check if DB schema is up to date, version info if it is not.
      *
      * @param string $moduleName
-     * @param string $resourceName
      * @return string[] Contains current and needed version strings
      */
-    private function getSchemaInfo($moduleName, $resourceName)
+    private function getSchemaInfo($moduleName)
     {
-        $dbVer = $this->moduleResource->getDbVersion($resourceName); // version saved in DB
+        $dbVer = $this->moduleResource->getDbVersion($moduleName); // version saved in DB
         $module = $this->moduleList->getOne($moduleName);
-        $configVer = $module['schema_version'];
+        $configVer = $module['setup_version'];
         $dbVer = $dbVer ?: 'none';
         return [
             self::KEY_CURRENT => $dbVer,
@@ -124,14 +111,13 @@ class DbVersionInfo
      * Get error data for an out-of-date schema or data.
      *
      * @param string $moduleName
-     * @param string $resourceName
      * @return string[]
      */
-    private function getDataInfo($moduleName, $resourceName)
+    private function getDataInfo($moduleName)
     {
-        $dataVer = $this->moduleResource->getDataVersion($resourceName);
+        $dataVer = $this->moduleResource->getDataVersion($moduleName);
         $module = $this->moduleList->getOne($moduleName);
-        $configVer = $module['schema_version'];
+        $configVer = $module['setup_version'];
         $dataVer = $dataVer ?: 'none';
         return [
             self::KEY_CURRENT => $dataVer,
@@ -152,12 +138,12 @@ class DbVersionInfo
     private function isModuleVersionEqual($moduleName, $version)
     {
         $module = $this->moduleList->getOne($moduleName);
-        if (empty($module['schema_version'])) {
-            throw new \UnexpectedValueException("Schema version for module '$moduleName' is not specified");
+        if (empty($module['setup_version'])) {
+            throw new \UnexpectedValueException("Setup version for module '$moduleName' is not specified");
         }
-        $configVer = $module['schema_version'];
+        $configVer = $module['setup_version'];
 
         return ($version !== false
-            && version_compare($configVer, $version) === SetupInterface::VERSION_COMPARE_EQUAL);
+            && version_compare($configVer, $version) === ModuleDataSetupInterface::VERSION_COMPARE_EQUAL);
     }
 }

@@ -29,7 +29,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceBuilderMock;
+    protected $priceFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -65,9 +65,9 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->priceBuilderMock = $this->getMock(
-            'Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->priceFactoryMock = $this->getMock(
+            'Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -97,7 +97,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->groupPriceManagement = new GroupPriceManagement(
             $this->productRepositoryMock,
-            $this->priceBuilderMock,
+            $this->priceFactoryMock,
             $this->groupServiceMock,
             $this->priceModifierMock,
             $this->configMock,
@@ -125,17 +125,22 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue($configValue));
-        $this->priceBuilderMock
-            ->expects($this->once())
-            ->method('populateWithArray')
-            ->with($expected);
-        $this->priceBuilderMock
+        $priceMock = $this->getMock('\Magento\Catalog\Api\Data\ProductGroupPriceInterface');
+        $priceMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with($expected['customer_group_id'])
+            ->willReturnSelf();
+        $priceMock->expects($this->once())
+            ->method('setValue')
+            ->with($expected['value'])
+            ->willReturnSelf();
+        $this->priceFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue('data'));
+            ->will($this->returnValue($priceMock));
         $prices = $this->groupPriceManagement->getList('product_sku');
         $this->assertCount(1, $prices);
-        $this->assertEquals('data', $prices[0]);
+        $this->assertEquals($priceMock, $prices[0]);
     }
 
     public function getListDataProvider()

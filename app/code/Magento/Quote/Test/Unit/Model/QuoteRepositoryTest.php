@@ -41,7 +41,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultsBuilderMock;
+    protected $searchResultsDataFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -63,9 +63,9 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->searchResultsBuilderMock = $this->getMock(
-            '\Magento\Quote\Api\Data\CartSearchResultsDataBuilder',
-            ['setSearchCriteria', 'setTotalCount', 'setItems', 'create'],
+        $this->searchResultsDataFactory = $this->getMock(
+            '\Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -78,7 +78,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'quoteFactory' => $this->quoteFactoryMock,
                 'storeManager' => $this->storeManagerMock,
-                'searchResultsBuilder' => $this->searchResultsBuilderMock,
+                'searchResultsDataFactory' => $this->searchResultsDataFactory,
                 'quoteCollection' => $this->quoteCollectionMock,
             ]
         );
@@ -318,7 +318,12 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $pageSize = 10;
 
-        $this->searchResultsBuilderMock
+        $this->searchResultsDataFactory
+            ->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($searchResult));
+
+        $searchResult
             ->expects($this->once())
             ->method('setSearchCriteria');
 
@@ -336,7 +341,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         //back in getList()
         $this->quoteCollectionMock->expects($this->once())->method('getSize')->willReturn($pageSize);
-        $this->searchResultsBuilderMock->expects($this->once())->method('setTotalCount')->with($pageSize);
+        $searchResult->expects($this->once())->method('setTotalCount')->with($pageSize);
         $sortOrderMock = $this->getMockBuilder('Magento\Framework\Api\SortOrder')
             ->setMethods(['getField', 'getDirection'])
             ->disableOriginalConstructor()
@@ -359,11 +364,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
 
         $this->quoteCollectionMock->expects($this->once())->method('getItems')->willReturn([$cartMock]);
-        $this->searchResultsBuilderMock->expects($this->once())->method('setItems')->with([$cartMock]);
-        $this->searchResultsBuilderMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($searchResult));
+        $searchResult->expects($this->once())->method('setItems')->with([$cartMock]);
+
         $this->assertEquals($searchResult, $this->model->getList($searchCriteriaMock));
     }
 

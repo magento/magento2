@@ -47,7 +47,7 @@ class Dir
     {
         $path = $this->_string->upperCaseWords($moduleName, '_', '/');
         if ($type) {
-            if (!in_array($type, ['etc', 'sql', 'data', 'i18n', 'view', 'Controller'])) {
+            if (!in_array($type, ['etc', 'i18n', 'view', 'Controller'])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
             $path .= '/' . $type;

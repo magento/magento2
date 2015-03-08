@@ -11,24 +11,57 @@ namespace Magento\CatalogSearch\Test\Unit\Helper;
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Helper\Data
+     * @var \Magento\CatalogSearch\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_contextMock;
+
+    /**
+     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_stringMock;
+
+    /**
+     * @var \Magento\Search\Model\QueryFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_queryFactoryMock;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfigMock;
 
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_escaperMock;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_storeManagerMock;
+
     public function setUp()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
-        $className = 'Magento\CatalogSearch\Helper\Data';
-        $arguments = $objectManagerHelper->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
-        $context = $arguments['context'];
-        $this->_scopeConfigMock = $context->getScopeConfig();
-        $this->_model = $objectManagerHelper->getObject($className, $arguments);
+        $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String');
+        $this->_queryFactoryMock = $this->getMock('Magento\Search\Model\QueryFactory', [], [], '', false);
+        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->_contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->_scopeConfigMock);
+
+        $this->_model = new \Magento\CatalogSearch\Helper\Data(
+            $this->_contextMock,
+            $this->_stringMock,
+            $this->_queryFactoryMock,
+            $this->_escaperMock,
+            $this->_storeManagerMock
+        );
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Magento\Framework\Module\Test\Unit\ModuleList;
 use \Magento\Framework\Module\ModuleList\Loader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Xml\Parser;
 
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,6 +35,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $converter;
 
+    /*
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $parser;
+
     protected function setUp()
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
@@ -43,6 +49,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::MODULES)
             ->willReturn($this->dir);
         $this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
+        $this->parser = $this->getMock('Magento\Framework\Xml\Parser', [], [], '', false);
     }
 
     public function testLoad()
@@ -59,11 +66,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['b', null, null, self::$sampleXml],
             ['c', null, null, self::$sampleXml],
         ]));
-        $dom = new \PHPUnit_Framework_Constraint_IsInstanceOf('DOMDocument');
-        $this->converter->expects($this->at(0))->method('convert')->with($dom)->willReturn(['a' => $fixture['a']]);
-        $this->converter->expects($this->at(1))->method('convert')->with($dom)->willReturn(['b' => $fixture['b']]);
-        $this->converter->expects($this->at(2))->method('convert')->with($dom)->willReturn(['c' => $fixture['c']]);
-        $object = new Loader($this->filesystem, $this->converter);
+        $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
+        $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
+        $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
+        $this->parser->expects($this->once())->method('initErrorHandler');
+        $this->parser->expects($this->atLeastOnce())->method('loadXML');
+        $this->parser->expects($this->atLeastOnce())->method('getDom');
+        $object = new Loader($this->filesystem, $this->converter, $this->parser);
         $result = $object->load();
         $this->assertSame(['a', 'c', 'b'], array_keys($result));
         $this->assertSame($fixture['a'], $result['a']);
@@ -86,10 +95,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['a', null, null, self::$sampleXml],
             ['b', null, null, self::$sampleXml],
         ]));
-        $dom = new \PHPUnit_Framework_Constraint_IsInstanceOf('DOMDocument');
-        $this->converter->expects($this->at(0))->method('convert')->with($dom)->willReturn(['a' => $fixture['a']]);
-        $this->converter->expects($this->at(1))->method('convert')->with($dom)->willReturn(['b' => $fixture['b']]);
-        $object = new Loader($this->filesystem, $this->converter);
+        $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
+        $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
+        $object = new Loader($this->filesystem, $this->converter, $this->parser);
         $object->load();
     }
 }

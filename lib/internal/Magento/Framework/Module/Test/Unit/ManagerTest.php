@@ -35,8 +35,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->_moduleList->expects($this->any())
             ->method('getOne')
             ->will($this->returnValueMap([
-                ['Module_One', ['name' => 'One_Module', 'schema_version' => '1']],
-                ['Module_Two', ['name' => 'Two_Module', 'schema_version' => '2']],
+                ['Module_One', ['name' => 'One_Module', 'setup_version' => '1']],
+                ['Module_Two', ['name' => 'Two_Module', 'setup_version' => '2']],
                 ['Module_Three', ['name' => 'Two_Three']],
             ]));
         $this->_outputConfig = $this->getMockForAbstractClass('Magento\Framework\Module\Output\ConfigInterface');

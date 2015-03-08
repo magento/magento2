@@ -96,28 +96,35 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertToObjects()
     {
-        $dataBuilderMock = $this->getMock(
-            'Magento\Eav\Api\Data\AttributeOptionDataBuilder',
-            ['populateWithArray', 'create'],
+        $attributeOptionMock = $this->getMock('\Magento\Eav\Api\Data\AttributeOptionInterface');
+        $dataFactoryMock = $this->getMock(
+            'Magento\Eav\Api\Data\AttributeOptionInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
+        $dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [
-                'optionDataBuilder' => $dataBuilderMock,
+                'optionDataFactory' => $dataFactoryMock,
+                'dataObjectHelper' => $dataObjectHelperMock,
                 'data' => [
                     \Magento\Eav\Api\Data\AttributeInterface::OPTIONS => [['some value']]
                 ]
 
             ]
         );
-        $dataBuilderMock->expects($this->once())->method('populateWithArray')->with(['some value'])->willReturnSelf();
-        $dataBuilderMock->expects($this->once())->method('create')->willReturn('Expected value');
+        $dataObjectHelperMock->expects($this->once())->method('populateWithArray')
+            ->with($attributeOptionMock, ['some value'], '\Magento\Eav\Api\Data\AttributeOptionInterface')
+            ->willReturnSelf();
+        $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 
-        $this->assertEquals(['Expected value'], $model->getOptions());
+        $this->assertEquals([$attributeOptionMock], $model->getOptions());
     }
 
     public function testGetValidationRulesWhenRuleIsArray()

@@ -22,7 +22,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $builderMock;
+    protected $shippingMethodDataFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -52,17 +52,29 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
-        $this->builderMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ShippingMethodDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->shippingMethodDataFactoryMock = $this->getMock(
+            '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->currencyMock = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
-        $this->shippingMethodMock =
-            $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterface');
+        $this->shippingMethodMock = $this->getMock('\Magento\Quote\Model\Cart\ShippingMethod',
+            [
+                'create',
+                'setCarrierCode',
+                'setMethodCode',
+                'setCarrierTitle',
+                'setMethodTitle',
+                'setAmount',
+                'setBaseAmount',
+                'setAvailable',
+            ],
+            [],
+            '',
+            false);
         $this->rateModelMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate',
             [
                 'getPrice',
@@ -80,7 +92,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Cart\ShippingMethodConverter',
             [
-                'builder' => $this->builderMock,
+                'shippingMethodDataFactory' => $this->shippingMethodDataFactoryMock,
                 'storeManager' => $this->storeManagerMock,
             ]
         );
@@ -92,15 +104,6 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())
             ->method('getBaseCurrency')
             ->will($this->returnValue($this->currencyMock));
-        $data = [
-            ShippingMethod::CARRIER_CODE => 'CARRIER_CODE',
-            ShippingMethod::METHOD_CODE => 'METHOD_CODE',
-            ShippingMethod::CARRIER_TITLE => 'CARRIER_TITLE',
-            ShippingMethod::METHOD_TITLE => 'METHOD_TITLE',
-            ShippingMethod::SHIPPING_AMOUNT => '100.12',
-            ShippingMethod::BASE_SHIPPING_AMOUNT => '90.12',
-            ShippingMethod::AVAILABLE => true,
-        ];
 
         $this->rateModelMock->expects($this->once())->method('getCarrier')->will($this->returnValue('CARRIER_CODE'));
         $this->rateModelMock->expects($this->once())->method('getMethod')->will($this->returnValue('METHOD_CODE'));
@@ -111,10 +114,38 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
             ->method('getCarrierTitle')->will($this->returnValue('CARRIER_TITLE'));
         $this->rateModelMock->expects($this->once())
             ->method('getMethodTitle')->will($this->returnValue('METHOD_TITLE'));
-        $this->builderMock->expects($this->once())
-            ->method('populateWithArray')->with($data)->will($this->returnValue($this->builderMock));
-        $this->builderMock->expects($this->once())
+        $this->shippingMethodDataFactoryMock->expects($this->once())
             ->method('create')
+            ->will($this->returnValue($this->shippingMethodMock));
+
+
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setCarrierCode')
+            ->with('CARRIER_CODE')
+            ->will($this->returnValue($this->shippingMethodMock));
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setMethodCode')
+            ->with('METHOD_CODE')
+            ->will($this->returnValue($this->shippingMethodMock));
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setCarrierTitle')
+            ->with('CARRIER_TITLE')
+            ->will($this->returnValue($this->shippingMethodMock));
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setMethodTitle')
+            ->with('METHOD_TITLE')
+            ->will($this->returnValue($this->shippingMethodMock));
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setAmount')
+            ->with('100.12')
+            ->will($this->returnValue($this->shippingMethodMock));
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setBaseAmount')
+            ->with('90.12')
+            ->will($this->returnValue($this->shippingMethodMock));
+        $this->shippingMethodMock->expects($this->once())
+            ->method('setAvailable')
+            ->with(true)
             ->will($this->returnValue($this->shippingMethodMock));
 
         $this->assertEquals(

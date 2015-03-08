@@ -26,9 +26,9 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     protected $categoryCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Api\Data\CategoryTreeInterfaceDataBuilder
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory
      */
-    protected $treeBuilderMock;
+    protected $treeFactoryMock;
 
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -64,10 +64,9 @@ class TreeTest extends \PHPUnit_Framework_TestCase
             )->disableOriginalConstructor()
             ->getMock();
 
-        $methods = ['setId', 'setParentId', 'setName', 'setPosition', 'setLevel',
-            'setIsActive', 'setProductCount', 'setChildrenData', 'create', ];
-        $this->treeBuilderMock =
-            $this->getMock('\Magento\Catalog\Api\Data\CategoryTreeDataBuilder', $methods, [], '', false);
+        $methods = ['create'];
+        $this->treeFactoryMock =
+            $this->getMock('\Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory', $methods, [], '', false);
 
         $this->tree = $this->objectManager
             ->getObject(
@@ -76,7 +75,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
                     'categoryCollection' => $this->categoryCollection,
                     'categoryTree' => $this->categoryTreeMock,
                     'storeManager' => $this->storeManagerMock,
-                    'treeBuilder' => $this->treeBuilderMock
+                    'treeFactory' => $this->treeFactoryMock
                 ]
             );
     }
@@ -142,23 +141,43 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $depth = 2;
         $currentLevel = 1;
 
-        $this->treeBuilderMock->expects($this->any())->method('setId')->with($this->equalTo($currentLevel))
+        $treeNodeMock1 = $this->getMock('\Magento\Catalog\Api\Data\CategoryTreeInterface');
+        $treeNodeMock1->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setParentId')->with($this->equalTo($currentLevel - 1))
+        $treeNodeMock1->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setName')->with($this->equalTo('Name' . $currentLevel))
+        $treeNodeMock1->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setPosition')->with($this->equalTo($currentLevel))
+        $treeNodeMock1->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setLevel')->with($this->equalTo($currentLevel))
+        $treeNodeMock1->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setIsActive')->with($this->equalTo(true))
+        $treeNodeMock1->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setProductCount')->with(4)
+        $treeNodeMock1->expects($this->once())->method('setProductCount')->with(4)
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('setChildrenData')->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->any())->method('create')->will($this->returnValue([]));
+        $treeNodeMock1->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
 
+        $treeNodeMock2 = $this->getMock('\Magento\Catalog\Api\Data\CategoryTreeInterface');
+        $treeNodeMock2->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setProductCount')->with(4)
+            ->will($this->returnSelf());
+        $treeNodeMock2->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
+
+        $this->treeFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->will($this->onConsecutiveCalls($treeNodeMock1, $treeNodeMock2));
         $node = $this->getMockBuilder('Magento\Framework\Data\Tree\Node')->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -190,22 +209,23 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     public function testGetTreeWhenChildrenAreNotExist()
     {
         $currentLevel = 1;
-        $this->treeBuilderMock->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
+        $treeNodeMock = $this->getMock('\Magento\Catalog\Api\Data\CategoryTreeInterface');
+        $this->treeFactoryMock->expects($this->any())->method('create')->will($this->returnValue($treeNodeMock));
+        $treeNodeMock->expects($this->once())->method('setId')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
+        $treeNodeMock->expects($this->once())->method('setParentId')->with($this->equalTo($currentLevel - 1))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
+        $treeNodeMock->expects($this->once())->method('setName')->with($this->equalTo('Name' . $currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
+        $treeNodeMock->expects($this->once())->method('setPosition')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
+        $treeNodeMock->expects($this->once())->method('setLevel')->with($this->equalTo($currentLevel))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
+        $treeNodeMock->expects($this->once())->method('setIsActive')->with($this->equalTo(true))
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setProductCount')->with(4)
+        $treeNodeMock->expects($this->once())->method('setProductCount')->with(4)
             ->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
-        $this->treeBuilderMock->expects($this->once())->method('create')->will($this->returnValue([]));
+        $treeNodeMock->expects($this->once())->method('setChildrenData')->will($this->returnSelf());
 
         $node = $this->getMockBuilder('Magento\Framework\Data\Tree\Node')->disableOriginalConstructor()
             ->setMethods(

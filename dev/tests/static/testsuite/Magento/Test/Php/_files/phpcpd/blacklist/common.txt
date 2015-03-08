@@ -150,4 +150,13 @@ Magento/Theme/Model/Resource/Design
 Magento/Integration/Block/Adminhtml/Integration/Edit/Tab
 Magento/Config/Model/Config/Backend
 Magento/Backup/Model/Config/Backend
-dev/tests/static/framework/Magento/TestFramework/Dependency
+Magento/Catalog/Setup
+Magento/CatalogInventory/Setup
+Magento/Checkout/Setup
+Magento/Customer/Setup
+Magento/Eav/Setup
+Magento/Quote/Setup
+Magento/Reports/Setup
+Magento/Sales/Setup
+Magento/SalesRule/Setup
+Magento/Eav/Setup

@@ -31,32 +31,19 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $zeroTotalMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $paymentMethodBuilder;
-
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->methodListMock = $this->getMock('\Magento\Payment\Model\MethodList', [], [], '', false);
         $this->zeroTotalMock = $this->getMock('\Magento\Payment\Model\Checks\ZeroTotal', [], [], '', false);
-        $this->paymentMethodBuilder = $this->getMock(
-            '\Magento\Quote\Api\Data\PaymentMethodDataBuilder',
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->model = $this->objectManager->getObject(
             '\Magento\Quote\Model\PaymentMethodManagement',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'methodList' => $this->methodListMock,
-                'zeroTotalValidator' => $this->zeroTotalMock,
-                'paymentMethodBuilder' => $this->paymentMethodBuilder,
+                'zeroTotalValidator' => $this->zeroTotalMock
             ]
         );
     }
