@@ -114,7 +114,6 @@ class StaticProperties
         $classPattern = '/\nclass [a-zA-Z0-9_]+/';
         foreach ($classFiles as $classFile) {
             if (self::_isClassInCleanableFolders($classFile)) {
-                echo "$classFile is cleanable\n";
                 $file = @fopen($classFile, 'r');
                 $code = fread($file, 4096);
                 preg_match($namespacePattern, $code, $namespace);
@@ -145,7 +144,6 @@ class StaticProperties
                 fclose($file);
             }
         }
-        $x = null;
     }
 
     /**
