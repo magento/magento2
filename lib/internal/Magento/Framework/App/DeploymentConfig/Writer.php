@@ -8,6 +8,7 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Deployment configuration writer
@@ -36,17 +37,28 @@ class Writer
     private $formatter;
 
     /**
+     * @var ConfigFilePool
+     */
+    private $configFilePool;
+
+    /**
      * Constructor
      *
      * @param Reader $reader
      * @param Filesystem $filesystem
+     * @param ConfigFilePool $configFilePool
      * @param Writer\FormatterInterface $formatter
      */
-    public function __construct(Reader $reader, Filesystem $filesystem, Writer\FormatterInterface $formatter = null)
-    {
+    public function __construct(
+        Reader $reader,
+        Filesystem $filesystem,
+        ConfigFilePool $configFilePool,
+        Writer\FormatterInterface $formatter = null
+    ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
         $this->formatter = $formatter ?: new Writer\PhpFormatter();
+        $this->configFilePool = $configFilePool;
     }
 
     /**
@@ -96,6 +108,24 @@ class Writer
             return true;
         }
         return false;
+    }
+
+    /**
+     * Saves config
+     *
+     * @param array $data
+     * @return void
+     */
+    public function saveConfig(array $data)
+    {
+        $paths = $this->configFilePool->getPaths();
+
+        foreach ($data as $fileKey => $config) {
+            if (isset($paths[$fileKey])) {
+                $contents = $this->formatter->format($config);
+                $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+            }
+        }
     }
 
     /**

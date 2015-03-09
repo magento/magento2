@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\ConfigModel;
+use Magento\Framework\Module\ModuleList;
 
 class ConfigInstallCommand extends Command
 {
@@ -24,18 +25,22 @@ class ConfigInstallCommand extends Command
     protected $configFilePool;
 
     /**
-     * @var array
+     * Enabled module list
+     *
+     * @var ModuleList
      */
-    protected $errors;
+    private $moduleList;
 
     /**
      * Constructor
-     *s
+     *
      * @param \Magento\Setup\Model\ConfigModel $configModel
+     * @param ModuleList $moduleList
      */
-    public function __construct(ConfigModel $configModel)
+    public function __construct(ConfigModel $configModel, ModuleList $moduleList)
     {
         $this->configModel = $configModel;
+        $this->moduleList = $moduleList;
         parent::__construct();
     }
 
@@ -62,6 +67,7 @@ class ConfigInstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->configModel->process($input->getOptions());
+        $output->writeln('<info>Deployment config has been saved.</info>');
     }
 
     /**
@@ -69,6 +75,12 @@ class ConfigInstallCommand extends Command
      */
     public function initialize(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->moduleList->isModuleInfoAvailable()) {
+            $output->writeln(
+                '<info>There is no module configuration settings available, so all modules are enabled.</info>'
+            );
+        }
+
         $inputOptions = $input->getOptions();
 
         $errors = $this->configModel->validate($inputOptions);

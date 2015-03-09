@@ -27,15 +27,13 @@ class ConfigFilePool
     /**
      * Constructor
      *
-     * @param DirectoryList $directoryList
      * @param array $additionalConfigFiles
      */
-    public function __construct(DirectoryList $directoryList, $additionalConfigFiles = [])
+    public function __construct($additionalConfigFiles = [])
     {
         $this->applicationConfigFiles = array_merge($this->applicationConfigFiles, $additionalConfigFiles);
-        $configurationDirectory = $directoryList->getPath(DirectoryList::CONFIG);
         foreach ($this->applicationConfigFiles as $fileKey=>$filePath) {
-            $this->applicationConfigFiles[$fileKey] = $configurationDirectory . '/' . $filePath;
+            $this->applicationConfigFiles[$fileKey] = $filePath;
         }
 
     }

@@ -7,8 +7,8 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Setup\ConfigOptionsInterface;
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\App\DeploymentConfig\Writer;
 
 class ConfigModel
 {
@@ -18,15 +18,22 @@ class ConfigModel
     protected $collector;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig\Writer
+     */
+    protected $writer;
+
+    /**
      * Constructor
      *
      * @param ConfigOptionsCollector $collector
-     * @param \Magento\Framework\Config\File\ConfigFilePool $configFilePool
+     * @param Writer $writer
      */
-    public function __construct(ConfigOptionsCollector $collector, ConfigFilePool $configFilePool)
-    {
-        $this->configFilePool = $configFilePool;
+    public function __construct(
+        ConfigOptionsCollector $collector,
+        Writer $writer
+    ) {
         $this->collector = $collector;
+        $this->writer = $writer;
     }
 
     /**
@@ -50,6 +57,7 @@ class ConfigModel
      * Process input options
      *
      * @param array $inputOptions
+     * @throws \Exception
      */
     public function process($inputOptions)
     {
@@ -84,7 +92,8 @@ class ConfigModel
 
         }
 
-        var_dump($fileConfigStorage);
+        $this->writer->saveConfig($fileConfigStorage);
+
     }
 
     /**
