@@ -6,10 +6,8 @@
 require __DIR__ . '/../../../bootstrap.php';
 
 $rootDir = realpath(__DIR__ . '/../../../../../');
-use Magento\Framework\Api\Code\Generator\DataBuilder;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
-use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
@@ -88,10 +86,7 @@ try {
     $generator = new \Magento\Framework\Code\Generator(
         $generatorIo,
         [
-            DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
             Interceptor::ENTITY_TYPE => 'Magento\Framework\Interception\Code\Generator\Interceptor',
-            SearchResultsBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
-            DataBuilder::ENTITY_TYPE_BUILDER  => 'Magento\Framework\Api\Code\Generator\DataBuilder',
             Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
             Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
             Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
