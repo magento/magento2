@@ -91,7 +91,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
      */
     private function addChild($productSku, $optionId, $linkedProduct)
     {
-        $resourcePath = self::RESOURCE_PATH . '/:productSku/links/:optionId';
+        $resourcePath = self::RESOURCE_PATH . '/:sku/links/:optionId';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => str_replace(
@@ -125,7 +125,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
 
     protected function removeChild($productSku, $optionId, $childSku)
     {
-        $resourcePath = self::RESOURCE_PATH . '/%s/option/%s/child/%s';
+        $resourcePath = self::RESOURCE_PATH . '/%s/options/%s/children/%s';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf($resourcePath, $productSku, $optionId, $childSku),

@@ -18,10 +18,10 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Set product SKU
      *
-     * @param string $productSku
+     * @param string $sku
      * @return $this
      */
-    public function setProductSku($productSku);
+    public function setProductSku($sku);
 
     /**
      * Get link type

@@ -77,7 +77,7 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     protected function removeChild($productSku, $childSku)
     {
-        $resourcePath = self::RESOURCE_PATH . '/%s/child/%s';
+        $resourcePath = self::RESOURCE_PATH . '/%s/children/%s';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf($resourcePath, $productSku, $childSku),

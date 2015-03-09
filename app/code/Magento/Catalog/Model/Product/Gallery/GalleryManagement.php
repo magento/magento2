@@ -155,7 +155,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * {@inheritdoc}
      */
     public function create(
-        $productSku,
+        $sku,
         ProductAttributeMediaGalleryEntryInterface $entry,
         ContentInterface $entryContent,
         $storeId = 0
@@ -168,7 +168,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         if (!$this->contentValidator->isValid($entryContent)) {
             throw new InputException('The image content is not valid.');
         }
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
 
         $fileContent = @base64_decode($entryContent->getEntryData(), true);
         $mediaTmpPath = $this->mediaConfig->getBaseTmpMediaPath();
@@ -213,14 +213,14 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function update($productSku, ProductAttributeMediaGalleryEntryInterface $entry, $storeId = 0)
+    public function update($sku, ProductAttributeMediaGalleryEntryInterface $entry, $storeId = 0)
     {
         try {
             $this->storeManager->getStore($storeId);
         } catch (\Exception $exception) {
             throw new NoSuchEntityException('There is no store with provided ID.');
         }
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         /** @var $productMediaGallery \Magento\Catalog\Model\Product\Attribute\Backend\Media */
         $productMediaGallery = $this->getGalleryAttributeBackend($product);
         $filePath = $this->entryResolver->getEntryFilePathById($product, $entry->getId());
@@ -248,9 +248,9 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function remove($productSku, $entryId)
+    public function remove($sku, $entryId)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         /** @var $productMediaGallery \Magento\Catalog\Model\Product\Attribute\Backend\Media */
         $productMediaGallery = $this->getGalleryAttributeBackend($product);
         $filePath = $this->entryResolver->getEntryFilePathById($product, $entryId);
@@ -266,10 +266,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function get($productSku, $imageId)
+    public function get($sku, $imageId)
     {
         try {
-            $product = $this->productRepository->get($productSku);
+            $product = $this->productRepository->get($sku);
         } catch (\Exception $exception) {
             throw new NoSuchEntityException("Such product doesn't exist");
         }
@@ -298,11 +298,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku)
+    public function getList($sku)
     {
         $result = [];
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
 
         /** @var \Magento\Catalog\Api\Data\ProductAttributeInterface $galleryAttribute */
         $galleryAttribute = $this->attributeRepository->get('media_gallery');
