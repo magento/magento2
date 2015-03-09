@@ -37,7 +37,8 @@ class AssertOrderCommentsHistory extends AbstractConstraint
         $expectedAuthorizedAmount = 'Authorized amount of $' . $grandTotal;
 
         \PHPUnit_Framework_Assert::assertContains(
-            $expectedAuthorizedAmount, $actualAuthorizedAmount,
+            $expectedAuthorizedAmount,
+            $actualAuthorizedAmount,
             'Incorrect authorized amount value for the order #' . $orderId
         );
     }

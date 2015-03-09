@@ -80,7 +80,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
             if ($position === 0) {
                 $resultArray.= $subPath;
                 continue;
-            }elseif ($position === (count($path) - 1)) {
+            } elseif ($position === (count($path) - 1)) {
                 $resultArray.= '[fields]';
             } else {
                 $resultArray.= '[groups]';
