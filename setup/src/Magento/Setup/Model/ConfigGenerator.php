@@ -151,7 +151,7 @@ class ConfigGenerator
         ];
 
         foreach ($required as $key) {
-            $connection[ConfigDataGenerator::$paramMap[$key]] = $data[$key];
+            $connection[ConfigGenerator::$paramMap[$key]] = $data[$key];
         }
 
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_PASS]] =

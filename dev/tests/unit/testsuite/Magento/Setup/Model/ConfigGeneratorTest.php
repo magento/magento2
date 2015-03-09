@@ -7,7 +7,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
+class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ConfigGenerator
