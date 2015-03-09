@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\PageCache\Model\Observer;
+namespace Magento\PageCache\Test\Unit\Model\Observer;
 
 class InvalidateCacheIfChangedTest extends \PHPUnit_Framework_TestCase
 {

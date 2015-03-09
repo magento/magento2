@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Module\Setup;
+namespace Magento\Setup\Test\Unit\Module\Setup;
+
+use Magento\Setup\Module\Setup\SetupCache;
 
 class SetupCacheTest extends \PHPUnit_Framework_TestCase
 {

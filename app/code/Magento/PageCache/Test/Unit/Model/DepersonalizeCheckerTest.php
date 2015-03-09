@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\PageCache\Model;
+namespace Magento\PageCache\Test\Unit\Model;
+
+use Magento\PageCache\Model\DepersonalizeChecker;
 
 class DepersonalizeCheckerTest extends \PHPUnit_Framework_TestCase
 {

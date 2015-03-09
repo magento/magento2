@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Setup;
+namespace Magento\Catalog\Test\Unit\Setup;
 
 class CategorySetupTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ class CategorySetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->unit = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+        $this->unit = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Setup\CategorySetup'
         );
     }

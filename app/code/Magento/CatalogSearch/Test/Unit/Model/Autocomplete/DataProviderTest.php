@@ -3,9 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Model\Autocomplete;
+namespace Magento\CatalogSearch\Test\Unit\Model\Autocomplete;
 
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\CatalogSearch\Model\Autocomplete\DataProvider;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {

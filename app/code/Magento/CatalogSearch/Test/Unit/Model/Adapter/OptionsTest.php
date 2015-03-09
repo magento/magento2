@@ -3,10 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Model\Adapter;
+namespace Magento\CatalogSearch\Test\Unit\Model\Adapter;
 
+use Magento\CatalogSearch\Model\Adapter\Options;
 use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {

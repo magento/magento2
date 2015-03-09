@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tax\Setup;
+namespace Magento\Tax\Test\Unit\Setup;
 
 class TaxSetupTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class TaxSetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
         $this->typeConfigMock = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
         $this->taxSetup = $helper->getObject(
             'Magento\Tax\Setup\TaxSetup',
