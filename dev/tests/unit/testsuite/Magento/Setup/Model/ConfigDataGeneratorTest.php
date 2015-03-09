@@ -10,24 +10,28 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigDataGenerator
+     * @var ConfigGenerator
      */
-    private $object;
+    private $configGeneratorObject;
 
     protected function setUp()
     {
         $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
         $random->expects($this->any())->method('getRandomString')->willReturn('key');
         $loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $loader->expects($this->any())->method('load')->willReturn(['module1', 'module2']);
+        $loader->expects($this->any())->method('load')->willReturn([
+                'module1' => ['name' => 'module_one', 'version' => '1.0.0'],
+                'module2' => ['name' => 'module_two', 'version' => '1.0.0']
+            ]
+        );
         $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-        $this->object = new ConfigDataGenerator($random, $loader, $deployConfig);
+        $this->configGeneratorObject = new ConfigGenerator($random, $loader, $deployConfig);
     }
 
     public function testCreateInstallConfig()
     {
-        $returnValue = $this->object->createInstallConfig();
+        $returnValue = $this->configGeneratorObject->createInstallConfig();
         $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
         $this->assertEquals('install', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
@@ -36,7 +40,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCreateCryptConfigWithInput()
     {
         $testData = [ConfigOptions::INPUT_KEY_CRYPT_KEY => 'some-test_key'];
-        $returnValue = $this->object->createCryptConfig($testData);
+        $returnValue = $this->configGeneratorObject->createCryptConfig($testData);
         $this->assertEquals('crypt', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['key' => 'some-test_key'], $returnValue->getData());
@@ -44,7 +48,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCryptConfigWithoutInput()
     {
-        $returnValue = $this->object->createCryptConfig([]);
+        $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals('crypt', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['key' => md5('key')], $returnValue->getData());
@@ -52,7 +56,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateModuleConfig()
     {
-        $returnValue = $this->object->createModuleConfig();
+        $returnValue = $this->configGeneratorObject->createModuleConfig();
         $this->assertEquals('modules', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['module1' => 1, 'module2' => 1], $returnValue->getData());
@@ -61,13 +65,13 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCreateSessionConfigWithInput()
     {
         $testData = [ConfigOptions::INPUT_KEY_SESSION_SAVE => 'files'];
-        $returnValue = $this->object->createSessionConfig($testData);
+        $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals('session', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['save' => ConfigOptions::SESSION_SAVE_FILES], $returnValue->getData());
 
         $testData = [ConfigOptions::INPUT_KEY_SESSION_SAVE => 'db'];
-        $returnValue = $this->object->createSessionConfig($testData);
+        $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals('session', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['save' => ConfigOptions::SESSION_SAVE_DB], $returnValue->getData());
@@ -75,7 +79,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateSessionConfigWithoutInput()
     {
-        $returnValue = $this->object->createSessionConfig([]);
+        $returnValue = $this->configGeneratorObject->createSessionConfig([]);
         $this->assertEquals('session', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['save' => ConfigOptions::SESSION_SAVE_FILES], $returnValue->getData());
@@ -84,7 +88,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCreateDefinitionsConfig()
     {
         $testData = [ConfigOptions::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
-        $returnValue = $this->object->createDefinitionsConfig($testData);
+        $returnValue = $this->configGeneratorObject->createDefinitionsConfig($testData);
         $this->assertEquals('definition', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['format' => 'test-format'], $returnValue->getData());
@@ -98,7 +102,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
             ConfigOptions::INPUT_KEY_DB_USER => 'testDbUser',
             ConfigOptions::INPUT_KEY_DB_PREFIX => 'testSomePrefix',
         ];
-        $returnValue = $this->object->createDbConfig($testData);
+        $returnValue = $this->configGeneratorObject->createDbConfig($testData);
         $this->assertEquals('db', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $dbData = $returnValue->getData();
@@ -124,7 +128,7 @@ class ConfigDataGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateResourceConfig()
     {
-        $returnValue = $this->object->createResourceConfig();
+        $returnValue = $this->configGeneratorObject->createResourceConfig();
         $this->assertEquals('resource', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());

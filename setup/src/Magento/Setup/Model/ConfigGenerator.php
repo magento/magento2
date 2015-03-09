@@ -16,7 +16,10 @@ use Magento\Framework\App\DeploymentConfig\InstallConfig;
 use Magento\Framework\App\DeploymentConfig\SessionConfig;
 use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 
-class ConfigDataGenerator
+/**
+ * Creates deployment config data based on user input array
+ */
+class ConfigGenerator
 {
     /**
      * Maps configuration parameters to array keys in deployment config file
@@ -37,6 +40,13 @@ class ConfigDataGenerator
         ConfigOptions::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
     ];
 
+    /**
+     * Constructor
+     *
+     * @param Random $random
+     * @param Loader $moduleLoader
+     * @param DeploymentConfig $deploymentConfig
+     */
     public function __construct(Random $random, Loader $moduleLoader, DeploymentConfig $deploymentConfig)
     {
         $this->random = $random;
@@ -80,7 +90,7 @@ class ConfigDataGenerator
         if (!$this->deploymentConfig->isAvailable()) {
             $modulesData = [];
             if (isset($this->moduleList)) {
-                foreach (array_values($this->moduleList) as $key) {
+                foreach ($this->moduleList as $key) {
                     $modulesData[$key] = 1;
                 }
             }
@@ -114,7 +124,6 @@ class ConfigDataGenerator
      */
     public function createDefinitionsConfig(array $data)
     {
-        // definitions segment
         if (!empty($data[ConfigOptions::INPUT_KEY_DEFINITION_FORMAT])) {
             $config['definition']['format'] = $data[ConfigOptions::INPUT_KEY_DEFINITION_FORMAT];
             return new ConfigData(
@@ -133,7 +142,6 @@ class ConfigDataGenerator
      */
     public function createDbConfig(array $data)
     {
-        // db segment
         $connection = [];
 
         $required = [

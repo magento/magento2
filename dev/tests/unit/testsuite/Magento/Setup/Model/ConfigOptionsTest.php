@@ -13,7 +13,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var ConfigDataGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $generator;
 
@@ -60,7 +60,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([]);
-        $this->assertEquals(7 ,count($configData));
+        $this->assertEquals(7, count($configData));
     }
 
     public function testCreateOptionsWithOptionalNull()
@@ -74,6 +74,6 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([]);
-        $this->assertEquals(5 ,count($configData));
+        $this->assertEquals(5, count($configData));
     }
 }
