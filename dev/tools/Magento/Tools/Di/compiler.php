@@ -44,7 +44,7 @@ try {
     $testExcludePatterns = [
         "#^$rootDir/app/code/[\\w]+/[\\w]+/Test#",
         "#^$rootDir/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
-        "#^$rootDir/setup/Test#",
+        "#^$rootDir/setup/src/Magento/Setup/Test#",
         "#^$rootDir/dev/tools/Magento/Tools/[\\w]+/Test#"
     ];
     $fileExcludePatterns = $opt->getOption('exclude-pattern') ?
