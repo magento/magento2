@@ -32,9 +32,9 @@ class FillShippingMethodStep implements TestStepInterface
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param array|null $shipping
+     * @param array $shipping
      */
-    public function __construct(CheckoutOnepage $checkoutOnepage, array $shipping = null)
+    public function __construct(CheckoutOnepage $checkoutOnepage, $shipping = [])
     {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->shipping = $shipping;
@@ -47,7 +47,7 @@ class FillShippingMethodStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->shipping) {
+        if (!empty($this->shipping)) {
             $this->checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($this->shipping);
             $this->checkoutOnepage->getShippingMethodBlock()->clickContinue();
         }
