@@ -51,21 +51,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(
-            '\Magento\Framework\App\RequestInterface',
-            [
-                'getRouteName',
-                'getControllerName',
-                'getParam',
-                'setActionName',
-                'getActionName',
-                'setModuleName',
-                'getModuleName',
-                'getCookie',
-                'isAjax',
-                'isSecure',
-            ]
-        );
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $objectManagerHelper->getObject(

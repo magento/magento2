@@ -27,7 +27,7 @@ class TaxTest extends \Magento\Backend\Utility\Controller
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Helper\Data'
+            'Magento\Framework\Json\Helper\Data'
         )->jsonDecode(
             $jsonBody
         );

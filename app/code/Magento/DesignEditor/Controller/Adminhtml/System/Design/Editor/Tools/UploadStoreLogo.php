@@ -55,7 +55,7 @@ class UploadStoreLogo extends \Magento\DesignEditor\Controller\Adminhtml\System\
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response)
         );
     }
 }

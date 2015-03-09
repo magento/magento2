@@ -165,7 +165,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected function exceptionResponse()
     {
         $dataMock = $this->getMock(
-            'Magento\Core\Helper\Data',
+            'Magento\Framework\Json\Helper\Data',
             ['jsonEncode'],
             [],
             '',

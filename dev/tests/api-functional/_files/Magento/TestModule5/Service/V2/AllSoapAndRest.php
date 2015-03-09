@@ -61,7 +61,7 @@ class AllSoapAndRest implements AllSoapAndRestInterface
     /**
      * @param string $id
      * @return AllSoapAndRestEntity
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function delete($id)
     {

@@ -49,11 +49,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_soapRequest->getRequestedServices();
             $this->fail("Exception is expected to be raised");
-        } catch (\Magento\Webapi\Exception $e) {
-            $this->assertInstanceOf('Magento\Webapi\Exception', $e, 'Exception type is invalid');
+        } catch (\Magento\Framework\Webapi\Exception $e) {
+            $this->assertInstanceOf('Magento\Framework\Webapi\Exception', $e, 'Exception type is invalid');
             $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
-                \Magento\Webapi\Exception::HTTP_BAD_REQUEST,
+                \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),
                 'HTTP code is invalid'
             );
@@ -70,11 +70,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         try {
             $this->_soapRequest->getRequestedServices();
             $this->fail("Exception is expected to be raised");
-        } catch (\Magento\Webapi\Exception $e) {
-            $this->assertInstanceOf('Magento\Webapi\Exception', $e, 'Exception type is invalid');
+        } catch (\Magento\Framework\Webapi\Exception $e) {
+            $this->assertInstanceOf('Magento\Framework\Webapi\Exception', $e, 'Exception type is invalid');
             $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(
-                \Magento\Webapi\Exception::HTTP_BAD_REQUEST,
+                \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST,
                 $e->getHttpCode(),
                 'HTTP code is invalid'
             );

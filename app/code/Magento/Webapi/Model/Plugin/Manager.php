@@ -5,12 +5,12 @@
  */
 namespace Magento\Webapi\Model\Plugin;
 
-use Magento\Integration\Model\Integration;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Service\V1\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
-use Magento\Webapi\Model\IntegrationConfig;
+use Magento\Integration\Model\IntegrationConfig;
 
 /**
- * Plugin for \Magento\Integration\Model\Manager model to manage resource permissions of
+ * Plugin for ConfigBasedIntegrationManager model to manage resource permissions of
  * integration installed from config file
  */
 class Manager
@@ -54,14 +54,14 @@ class Manager
     /**
      * Process integration resource permissions after the integration is created
      *
-     * @param \Magento\Integration\Model\Manager $subject
+     * @param ConfigBasedIntegrationManager $subject
      * @param string[] $integrationNames Name of integrations passed as array from the invocation chain
      *
      * @return string[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterProcessIntegrationConfig(
-        \Magento\Integration\Model\Manager $subject,
+        ConfigBasedIntegrationManager $subject,
         $integrationNames
     ) {
         if (empty($integrationNames)) {

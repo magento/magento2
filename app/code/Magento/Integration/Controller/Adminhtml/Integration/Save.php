@@ -75,7 +75,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                 if ($this->getRequest()->isXmlHttpRequest()) {
                     $isTokenExchange = $integration->getEndpoint() && $integration->getIdentityLinkUrl() ? '1' : '0';
                     $this->getResponse()->representJson(
-                        $this->_coreHelper->jsonEncode(
+                        $this->jsonHelper->jsonEncode(
                             ['integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange]
                         )
                     );

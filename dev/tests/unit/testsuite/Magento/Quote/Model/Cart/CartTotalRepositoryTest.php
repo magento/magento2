@@ -26,18 +26,23 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $totalsBuilderMock;
+    private $totalsFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressMock;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataObjectHelperMock;
+
     public function setUp()
     {
-        $this->totalsBuilderMock = $this->getMock(
-            'Magento\Quote\Api\Data\TotalsDataBuilder',
-            ['populateWithArray', 'setItems', 'create'],
+        $this->totalsFactoryMock = $this->getMock(
+            'Magento\Quote\Api\Data\TotalsInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -45,10 +50,14 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new CartTotalRepository(
-            $this->totalsBuilderMock,
-            $this->quoteRepositoryMock
+            $this->totalsFactoryMock,
+            $this->quoteRepositoryMock,
+            $this->dataObjectHelperMock
         );
     }
 
@@ -63,6 +72,12 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $this->quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$item]));
+
+        $totals = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
+        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totals);
+        $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
+        $totals->expects($this->once())->method('setItems');
+
         $this->model->get($cartId);
     }
 }

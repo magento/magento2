@@ -33,7 +33,8 @@ interface AdapterInterface
      * </pre>
      * @param array $arguments
      * @param string|null $storeCode if store code not provided, default store code will be used
+     * @param \Magento\Integration\Model\Integration|null $integration
      * @return array|string|int|float|bool
      */
-    public function call($serviceInfo, $arguments = [], $storeCode = null);
+    public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null);
 }

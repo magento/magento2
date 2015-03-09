@@ -1368,6 +1368,8 @@ return [
     ['Magento\Core\Model\Module\Declaration\FileResolver'],
     ['Magento\Core\Model\Module\Declaration\SchemaLocator'],
     ['Magento\Core\Model\Module\Dir\ReverseResolver'],
+    ['Magento\Core\Model\Module\ResourceResolver'],
+    ['Magento\Core\Model\Module\ResourceResolverInterface'],
     ['Magento\Core\Model\Resource\SetupInterface'],
     ['Magento\Core\Model\Db\UpdaterInterface'],
     ['Magento\Core\Model\Router\NoRouteHandlerInterface'],
@@ -1659,7 +1661,7 @@ return [
     ['Magento\Core\Block\Text\TextList\Link', 'Magento\Framework\View\Element\Text\TextList\Link'],
     ['Magento\Core\Block\Messages', 'Magento\Framework\View\Element\Messages'],
     ['Magento\Core\Model\Message', 'Magento\Framework\Message\Factory'],
-    ['Magento\Core\Model\Resource\Setup'],
+    ['Magento\Core\Model\Resource\Setup', 'Magento\Theme\Model\Resource\Setup'],
     ['Magento\Core\Model\Message\AbstractMessage', 'Magento\Framework\Message\AbstractMessage'],
     ['Magento\Core\Model\Message\Collection', 'Magento\Framework\Message\Collection'],
     ['Magento\Core\Model\Message\CollectionFactory', 'Magento\Framework\Message\CollectionFactory'],
@@ -3008,6 +3010,70 @@ return [
     ['Zend_Controller_Router_Route_Interface'],
     ['Zend_Controller_Response_Abstract', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
     ['Zend_Controller_Response_Http', 'Magento\Framework\HTTP\PhpEnvironment\Response'],
+    ['Magento\Integration\Model\Oauth\Consumer\Factory', 'Magento\Integration\Model\Oauth\ConsumerFactory'],
+    ['Magento\Integration\Model\Oauth\Nonce\Factory', 'Magento\Integration\Model\Oauth\NonceFactory'],
+    ['Magento\Integration\Model\Manager', 'Magento\Integration\Model\ConfigBasedIntegrationManager'],
+    ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
+    ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
+    ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
+    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
+    ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
+    ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Json',
+        'Magento\Framework\Webapi\Rest\Request\Deserializer\Json'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Xml',
+        'Magento\Framework\Webapi\Rest\Request\Deserializer\Xml'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\Deserializer\Factory',
+        'Magento\Framework\Webapi\Rest\Request\DeserializerFactory'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Request\DeserializerInterface',
+        'Magento\Framework\Webapi\Rest\Request\DeserializerInterface'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Json',
+        'Magento\Framework\Webapi\Rest\Response\Renderer\Json'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Xml',
+        'Magento\Framework\Webapi\Rest\Response\Renderer\Xml'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor',
+        'Magento\Framework\Webapi\Rest\Response\FieldsFilter'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\Renderer\Factory',
+        'Magento\Framework\Webapi\Rest\Response\RendererFactory'
+    ],
+    [
+        'Magento\Webapi\Controller\Rest\Response\RendererInterface',
+        'Magento\Framework\Webapi\Rest\Response\RendererInterface'
+    ],
+    ['Magento\Webapi\Controller\Rest\Request', 'Magento\Framework\Webapi\Rest\Request'],
+    ['Magento\Webapi\Controller\Rest\Response', 'Magento\Framework\Webapi\Rest\Response'],
+    ['Magento\Webapi\Controller\ErrorProcessor', 'Magento\Framework\Webapi\ErrorProcessor'],
+    ['Magento\Webapi\Exception', 'Magento\Framework\Webapi\Exception'],
+    ['Magento\Webapi\Controller\Request', 'Magento\Framework\Webapi\Request'],
+    ['Magento\Webapi\Controller\Response', 'Magento\Framework\Webapi\Response'],
+    ['Magento\Webapi\Controller\ServiceArgsSerializer', 'Magento\Framework\Webapi\ServiceInputProcessor'],
+    ['Magento\Webapi\Controller\Rest\Response\DataObjectConverter', 'Magento\Framework\Webapi\ServiceOutputProcessor'],
+    ['Magento\Webapi\Model\Config\Integration\Converter', 'Magento\Integration\Model\Config\Integration\Converter'],
+    ['Magento\Webapi\Model\Config\Integration\Reader', 'Magento\Integration\Model\Config\Integration\Reader'],
+    [
+        'Magento\Webapi\Model\Config\Integration\SchemaLocator',
+        'Magento\Integration\Model\Config\Integration\SchemaLocator'
+    ],
+    ['Magento\Webapi\Model\IntegrationConfig', 'Magento\Integration\Model\IntegrationConfig'],
+    ['Magento\Webapi\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Service\V1\Integration'],
+    ['Magento\Webapi\Model\Plugin\Setup', 'Magento\Integration\Model\Plugin\Setup'],
+    ['Magento\Webapi\Model\Cache\Type', 'Magento\Framework\App\Cache\Type\Webapi'],
+
     ['Magento\Framework\Module\DataSetup', 'Magento\Setup\Module\DataSetup'],
     ['Magento\Authorization\Model\Resource\Setup', 'Magento\Authorization\Setup\AuthorizationFactory'],
     ['Magento\Catalog\Model\Resource\Setup', 'Magento\Catalog\Setup\CategorySetup'],
@@ -3024,11 +3090,13 @@ return [
     ['Magento\Tax\Model\Resource\Setup', 'Magento\Tax\Setup\TaxSetup'],
     ['Magento\Theme\Model\Resource\Setup', 'Magento\Theme\Setup\InstallData'],
     ['Magento\Weee\Model\Resource\Setup', 'Magento\Weee\Setup\InstallData'],
-    ['Magento\Integration\Model\Resource\Setup', 'Magento\Integration\Model\Manager::processIntegrationConfig()'],
+    ['Magento\Integration\Model\Resource\Setup'],
     ['Magento\Framework\Module\ResourceResolver'],
     ['Magento\Framework\Module\ResourceResolverInterface'],
     ['Magento\Setup\Module\SetupModule'],
     ['Magento\Setup\Module\Setup\FileResolver'],
     ['Magento\Framework\Module\Updater'],
     ['Magento\Setup\Module\SetupFactory'],
+    ['Magento\Framework\Module\Updater\SetupFactory'],
+    ['Magento\Backend\Model\Config\Source\Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
 ];

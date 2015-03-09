@@ -110,9 +110,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceMock;
+    private $contextMock;
 
     protected function setUp()
     {
@@ -142,7 +142,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->sampleData = $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -178,7 +178,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->sampleData,
             $objectManagerProvider,
-            $this->resourceMock
+            $this->contextMock
         );
     }
 
@@ -204,7 +204,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $table->expects($this->any())->method('addColumn')->willReturn($table);
         $table->expects($this->any())->method('setComment')->willReturn($table);
         $connection->expects($this->any())->method('newTable')->willReturn($table);
-        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connection);
+        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
+        $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
@@ -212,7 +214,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Setup\Module\Setup', ['resource' => $this->resourceMock], $setup],
+                ['Magento\Setup\Module\Setup', ['resource' => $resource], $setup],
                 ['Magento\Setup\Module\DataSetup', [], $dataSetup],
                 ['Magento\Framework\App\Cache\Manager', [], $cacheManager],
             ]));

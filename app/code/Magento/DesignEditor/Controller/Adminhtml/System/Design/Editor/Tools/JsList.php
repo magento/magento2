@@ -25,7 +25,7 @@ class JsList extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             $customJsFiles = $customization->getFilesByType(\Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE);
             $result = ['error' => false, 'files' => $customization->generateFileInfo($customJsFiles)];
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
