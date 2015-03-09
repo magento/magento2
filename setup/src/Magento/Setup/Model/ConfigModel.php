@@ -103,4 +103,9 @@ class ConfigModel
 
     }
 
+    public function validate()
+    {
+
+    }
+
 }

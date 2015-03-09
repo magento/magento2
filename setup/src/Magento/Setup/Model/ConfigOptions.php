@@ -152,6 +152,33 @@ class ConfigOptions implements ConfigOptionsInterface
      */
     public function validate(array $options)
     {
-        return [];
+        $errors = [];
+
+        $required = [
+            ConfigOptions::INPUT_KEY_DB_HOST,
+            ConfigOptions::INPUT_KEY_DB_NAME,
+            ConfigOptions::INPUT_KEY_DB_USER
+        ];
+
+        foreach ($required as $key) {
+            if (!isset($options[$key]) || empty($options[$key])) {
+                $errors[] = "Missing value for db configuration: {$key}";
+            }
+            $connection[ConfigDataGenerator::$paramMap[$key]] = $options[$key];
+        }
+
+        if (isset($options[ConfigOptions::INPUT_KEY_CRYPT_KEY]) && !$options[ConfigOptions::INPUT_KEY_CRYPT_KEY]) {
+            $errors[] = 'Invalid encryption key.';
+        }
+
+        if (isset($options[ConfigOptions::INPUT_KEY_SESSION_SAVE])) {
+            if ($options[ConfigOptions::INPUT_KEY_SESSION_SAVE] != ConfigOptions::SESSION_SAVE_FILES &&
+                $options[ConfigOptions::INPUT_KEY_SESSION_SAVE] != ConfigOptions::SESSION_SAVE_DB
+            ) {
+                $errors[] = 'Invalid session save location.';
+            }
+        }
+
+        return $errors;
     }
 }

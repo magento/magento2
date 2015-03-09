@@ -58,13 +58,9 @@ class ConfigDataGenerator
      * Creates encryption key config data
      * @param array $data
      * @return ConfigData
-     * @throws \InvalidArgumentException
      */
     public function createCryptConfig(array $data)
     {
-        if (isset($data[ConfigOptions::INPUT_KEY_CRYPT_KEY]) && !$data[ConfigOptions::INPUT_KEY_CRYPT_KEY]) {
-            throw new \InvalidArgumentException('Invalid encryption key.');
-        }
         $cryptData = [];
         if (!isset($data[ConfigOptions::INPUT_KEY_CRYPT_KEY])) {
             $cryptData[self::$paramMap[ConfigOptions::INPUT_KEY_CRYPT_KEY]] = md5($this->random->getRandomString(10));
@@ -97,17 +93,11 @@ class ConfigDataGenerator
      *
      * @param array $data
      * @return ConfigData
-     * @throws \InvalidArgumentException
      */
     public function createSessionConfig(array $data)
     {
         $sessionData = [];
         if (isset($data[ConfigOptions::INPUT_KEY_SESSION_SAVE])) {
-            if ($data[ConfigOptions::INPUT_KEY_SESSION_SAVE] != ConfigOptions::SESSION_SAVE_FILES &&
-                $data[ConfigOptions::INPUT_KEY_SESSION_SAVE] != ConfigOptions::SESSION_SAVE_DB
-            ) {
-                throw new \InvalidArgumentException('Invalid session save location.');
-            }
             $sessionData[self::$paramMap[ConfigOptions::INPUT_KEY_SESSION_SAVE]] =
                 $data[ConfigOptions::INPUT_KEY_SESSION_SAVE];
         } else {
@@ -140,23 +130,12 @@ class ConfigDataGenerator
      *
      * @param array $data
      * @return ConfigData
-     * @throws \InvalidArgumentException
      */
     public function createDbConfig(array $data)
     {
         // db segment
         $connection = [];
-        $required = [
-            ConfigOptions::INPUT_KEY_DB_HOST,
-            ConfigOptions::INPUT_KEY_DB_NAME,
-            ConfigOptions::INPUT_KEY_DB_USER
-        ];
-        foreach ($required as $key) {
-            if (!isset($data[$key])) {
-                throw new \InvalidArgumentException("Missing value for db configuration: {$key}");
-            }
-            $connection[self::$paramMap[$key]] = $data[$key];
-        }
+
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_PASS]] =
             isset($data[ConfigOptions::INPUT_KEY_DB_PASS]) ? $data[ConfigOptions::INPUT_KEY_DB_PASS] : '';
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_MODEL]] =
