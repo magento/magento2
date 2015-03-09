@@ -72,7 +72,9 @@ class ConfigModel
             foreach ($configData as $config) {
                 if (!$config instanceof ConfigData) {
                     throw new \Exception(
-                        'In module : ' .$moduleName . 'ConfigOption::createConfig should return instance of ConfigData'
+                        'In module : '
+                        . $moduleName
+                        . 'ConfigOption::createConfig should return an array of ConfigData instances'
                     );
                 }
 
