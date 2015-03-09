@@ -44,10 +44,10 @@
 </div>
 <div
     class="alert alert-info"
-    ng-show="testConnection.result.success === undefined && testConnection.result !== undefined"
+    ng-show="testConnection.failed !== undefined"
     >
     <span class="alert-icon icon-failed-round"></span>
-    <span class="alert-text">Unknown Database Server Host.</span>
+    <span class="alert-text">{{testConnection.failed}}</span>
 </div>
 
 <form

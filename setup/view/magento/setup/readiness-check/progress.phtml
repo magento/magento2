@@ -88,6 +88,58 @@
 
 </div>
 
+<div id="php-rawpost" class="rediness-check-item" ng-show="rawpost.visible">
+
+    <h3 class="readiness-check-title" ng-hide="version.processed">
+        Checking PHP Settings...
+    </h3>
+
+    <div ng-show="rawpost.processed" ng-switch="rawpost.responseType">
+
+        <div ng-switch-when="success" ng-init="updateOnSuccess(rawpost)">
+
+            <span class="readiness-check-icon icon-success-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <p>
+                    Your PHP setting is correct.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(rawpost)">
+
+            <div class="rediness-check-side">
+                <p class="side-title">Need Help?</p>
+                <a href="http://php.net/manual/en/ini.core.php#ini.always-populate-raw-post-data" target="_blank">PHP Documentation</a>
+            </div>
+
+            <span class="readiness-check-icon icon-failed-round"></span>
+
+            <div class="readiness-check-content">
+                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <p>
+                    Your PHP Version is {{rawpost.data.version}}, but always_populate_raw_post_data = {{rawpost.data.ini}}.
+                    <a href="#php-rawpost" ng-click="updateOnExpand(rawpost)">
+                        <span ng-hide="rawpost.expanded">Show detail</span>
+                        <span ng-show="rawpost.expanded">Hide detail</span>
+                    </a>
+                </p>
+                <p ng-show="rawpost.expanded">
+                    $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
+                    Please open your php.ini file and set always_populate_raw_post_data to -1.
+                </p>
+                <p ng-show="rawpost.expanded">If you need more help please call your hosting provider.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <div id="php-extensions" class="rediness-check-item" ng-show="extensions.visible">
 
     <h3 ng-hide="extensions.processed" class="readiness-check-title">

@@ -317,6 +317,8 @@ class ConsoleController extends AbstractActionController
         $this->installer = $installerFactory->create($consoleLogger);
         $this->maintenanceMode = $maintenanceMode;
         $this->objectManagerProvider = $objectManagerProvider;
+        // By default we use our customized error handler, but for CLI we want to display all errors
+        restore_error_handler();
     }
 
     /**
