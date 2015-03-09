@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +38,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->formatter = $this->getMockForAbstractClass(
             'Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface'
         );
-        $this->object = new Writer($this->reader, $filesystem, $this->formatter);
+        $configFilePool = new ConfigFilePool();
+        $this->object = new Writer($this->reader, $filesystem, $configFilePool, $this->formatter);
         $this->reader->expects($this->any())->method('getFile')->willReturn('test.php');
         $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $filesystem->expects($this->any())
