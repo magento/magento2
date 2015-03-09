@@ -14,10 +14,8 @@ use \Magento\Framework\App\Bootstrap;
 
 class TestPlacementTest extends \PHPUnit_Framework_TestCase
 {
-    const SCAN_LIST_FILE = '_files/placement_test/scan_list.txt';
-
     /** @var array */
-    private $scanList = [];
+    private $scanList = ['dev/tests/unit/testsuite/Magento'];
 
     /**
      * @var string Path to project root
@@ -27,7 +25,6 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->root = Files::init()->getPathToSource();
-        $this->scanList = $this->getScanListFromFile();
     }
 
     public function testUnitTestFilesPlacement()
@@ -37,37 +34,29 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
         $filesystem = $objectManager->get('Magento\Framework\Data\Collection\Filesystem');
         $filesystem->setCollectDirs(false)
             ->setCollectFiles(true)
-            ->setCollectRecursively(true)
-            ->setFilesFilter('/\Test.(php)$/i');
+            ->setCollectRecursively(true);
 
+        $targetsExist = false;
         foreach ($this->scanList as $dir) {
-            $filesystem->addTargetDir($this->root . '/' . $dir);
+            if (realpath($this->root . DIRECTORY_SEPARATOR . $dir)) {
+                $filesystem->addTargetDir($this->root . DIRECTORY_SEPARATOR . $dir);
+                $targetsExist = true;
+            }
         }
 
-        $files = $filesystem->load()->toArray();
-        $fileList = '';
-        foreach ($files['items'] as $file) {
-            $fileList.= "\n" . $file['filename'];
-        }
-        $fileList.= "\n";
-        $this->assertEquals(
-            0,
-            $files['totalRecords'],
-            "Unit tests has been found in directories: \n" . implode("\n", $this->scanList)
-            . "\nUnit test list:" . $fileList
-        );
-    }
+        if ($targetsExist) {
+            $files = $filesystem->load()->toArray();
+            $fileList = [];
+            foreach ($files['items'] as $file) {
+                $fileList[] = $file['filename'];
+            }
 
-    /**
-     * @return array
-     */
-    private function getScanListFromFile()
-    {
-        $patterns = [];
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . self::SCAN_LIST_FILE;
-        foreach (file($filename) as $pattern) {
-            $patterns[] = trim($pattern);
+            $this->assertEquals(
+                0,
+                $files['totalRecords'],
+                "The following files have been found in obsolete test directories: \n"
+                . implode("\n", $fileList)
+            );
         }
-        return $patterns;
     }
 }
