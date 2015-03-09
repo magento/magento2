@@ -531,7 +531,17 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     {
         $files = \Magento\Framework\App\Utility\Files::init();
         $errors = [];
-        foreach ($files->getFiles([BP . '/dev/tests/{integration,unit}'], '*') as $file) {
+        $fileList = $files->getFiles(
+            [
+                BP . '/dev/tests/integration',
+                BP . '/app/code/*/*/Test/Unit',
+                BP . '/lib/internal/*/*/*/Test/Unit',
+                BP . '/dev/tools/Magento/Tools/*/Test/Unit',
+                BP . '/setup/src/Magento/Setup/Test/Unit',
+            ],
+            '*.php'
+        );
+        foreach ($fileList as $file) {
             $code = file_get_contents($file);
             if (preg_match('/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/', $code, $matches)) {
                 if ($this->isNonexistentEntityCovered($matches)) {
