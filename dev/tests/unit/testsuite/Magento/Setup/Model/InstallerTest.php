@@ -178,7 +178,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerProvider
      * @return Installer
      */
-    private function createObject($connectionFactory = false, $objectManagerProvider = false) {
+    private function createObject($connectionFactory = false, $objectManagerProvider = false)
+    {
         if (!$connectionFactory) {
             $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
             $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
