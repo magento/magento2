@@ -18,9 +18,9 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
     protected $serviceConfigReaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\AttributeMetadataBuilderInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\MetadataObjectInterfaceFactory
      */
-    protected $attributeMetadataBuilderMock;
+    protected $attributeMetadataFactoryMock;
 
     /**
      * Prepare parameters
@@ -30,13 +30,13 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
         $this->serviceConfigReaderMock = $this->getMockBuilder('\Magento\Framework\Api\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeMetadataBuilderMock = $this->getMockBuilder(
-            '\Magento\Framework\Api\AttributeMetadataBuilderInterface'
-        )->disableOriginalConstructor()->getMock();
+        $this->attributeMetadataFactoryMock = $this->getMockBuilder(
+            '\Magento\Framework\Api\MetadataObjectInterfaceFactory'
+        )->setMethods(['create'])->disableOriginalConstructor()->getMock();
 
         $this->metadataConfig = new \Magento\Framework\Api\Config\MetadataConfig(
             $this->serviceConfigReaderMock,
-            $this->attributeMetadataBuilderMock
+            $this->attributeMetadataFactoryMock
         );
     }
 
@@ -57,10 +57,11 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn($allAttributes);
 
         $attributeMock = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
-        $this->attributeMetadataBuilderMock->expects($this->exactly(2))
+        $attributeMock->expects($this->exactly(2))
             ->method('setAttributeCode')
-            ->with($attributeCode);
-        $this->attributeMetadataBuilderMock->expects($this->exactly(2))
+            ->with($attributeCode)
+            ->will($this->returnSelf());
+        $this->attributeMetadataFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($attributeMock);
 

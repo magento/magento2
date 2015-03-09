@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Api\Config;
 
-use Magento\Framework\Api\AttributeMetadataBuilderInterface;
+use Magento\Framework\Api\MetadataObjectInterfaceFactory;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\MetadataServiceInterface;
 
@@ -21,9 +21,9 @@ class MetadataConfig implements MetadataServiceInterface
     private $serviceConfigReader;
 
     /**
-     * @var AttributeMetadataBuilderInterface
+     * @var MetadataObjectInterfaceFactory
      */
-    private $attributeMetadataBuilder;
+    private $attributeMetadataFactory;
 
     /**
      * @var array
@@ -34,14 +34,14 @@ class MetadataConfig implements MetadataServiceInterface
      * Initialize dependencies.
      *
      * @param ServiceConfigReader $serviceConfigReader
-     * @param AttributeMetadataBuilderInterface $attributeMetadataBuilder
+     * @param MetadataObjectInterfaceFactory $attributeMetadataFactory
      */
     public function __construct(
         ServiceConfigReader $serviceConfigReader,
-        AttributeMetadataBuilderInterface $attributeMetadataBuilder
+        MetadataObjectInterfaceFactory $attributeMetadataFactory
     ) {
         $this->serviceConfigReader = $serviceConfigReader;
-        $this->attributeMetadataBuilder = $attributeMetadataBuilder;
+        $this->attributeMetadataFactory = $attributeMetadataFactory;
     }
 
     /**
@@ -50,7 +50,7 @@ class MetadataConfig implements MetadataServiceInterface
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
         $attributes = [];
-        if (!is_null($this->attributeMetadataBuilder) && !is_null($dataObjectClassName)) {
+        if (!is_null($this->attributeMetadataFactory) && !is_null($dataObjectClassName)) {
             /**
              * Attribute metadata builder and data object class name are expected to be configured
              * via DI using virtual types. If configuration is missing, empty array should be returned.
@@ -82,8 +82,8 @@ class MetadataConfig implements MetadataServiceInterface
         ) {
             $attributeCodes = array_keys($this->allAttributes[$dataObjectClassName]);
             foreach ($attributeCodes as $attributeCode) {
-                $this->attributeMetadataBuilder->setAttributeCode($attributeCode);
-                $attributes[$attributeCode] = $this->attributeMetadataBuilder->create();
+                $attributes[$attributeCode] = $this->attributeMetadataFactory->create()
+                    ->setAttributeCode($attributeCode);
             }
         }
         return $attributes;
