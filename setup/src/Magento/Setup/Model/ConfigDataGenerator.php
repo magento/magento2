@@ -136,6 +136,16 @@ class ConfigDataGenerator
         // db segment
         $connection = [];
 
+        $required = [
+            ConfigOptions::INPUT_KEY_DB_HOST,
+            ConfigOptions::INPUT_KEY_DB_NAME,
+            ConfigOptions::INPUT_KEY_DB_USER
+        ];
+
+        foreach ($required as $key) {
+            $connection[ConfigDataGenerator::$paramMap[$key]] = $data[$key];
+        }
+
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_PASS]] =
             isset($data[ConfigOptions::INPUT_KEY_DB_PASS]) ? $data[ConfigOptions::INPUT_KEY_DB_PASS] : '';
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_MODEL]] =
