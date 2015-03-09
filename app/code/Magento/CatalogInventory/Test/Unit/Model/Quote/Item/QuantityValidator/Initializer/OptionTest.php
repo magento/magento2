@@ -53,7 +53,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $stockState;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -154,7 +154,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ['checkQuoteItemQty']
         );
 
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validator = $this->objectManager->getObject(
             'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option',
             [

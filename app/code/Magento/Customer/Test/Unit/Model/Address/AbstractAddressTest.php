@@ -85,7 +85,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Customer\Model\Address\AbstractAddress',
             [

@@ -138,7 +138,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_encryptor = $this->getMock('Magento\Framework\Encryption\Encryptor', null, [], '', false);
         $this->_paramsResolverMock = $this->getMock(
             'Magento\Framework\Url\RouteParamsResolverFactory',
@@ -253,7 +253,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_areaFrontName)
         );
 
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $urlModel = $helper->getObject(
             'Magento\Backend\Model\Url',
             [

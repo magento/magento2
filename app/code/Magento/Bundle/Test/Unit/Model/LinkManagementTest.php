@@ -9,7 +9,7 @@
 
 namespace Magento\Bundle\Test\Unit\Model;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class LinkManagementTest

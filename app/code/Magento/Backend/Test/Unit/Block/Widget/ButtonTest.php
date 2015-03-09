@@ -40,7 +40,7 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
             'layout' => $this->_layoutMock,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_blockMock = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Button', $arguments);
     }
 

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price;
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManager;
 
@@ -49,7 +49,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_storeManagerMock = $this->getMock(
             'Magento\Store\Model\StoreManagerInterface',

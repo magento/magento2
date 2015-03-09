@@ -11,7 +11,7 @@ namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 use \Magento\UrlRewrite\Model\Storage\DbStorage;
 
 use Magento\Framework\App\Resource;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 class DbStorageTest extends \PHPUnit_Framework_TestCase

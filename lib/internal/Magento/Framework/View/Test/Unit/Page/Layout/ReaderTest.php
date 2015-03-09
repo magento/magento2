@@ -84,7 +84,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getScheduledStructure'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Framework\View\Page\Layout\Reader',
                 [

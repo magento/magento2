@@ -12,7 +12,7 @@ use \Magento\Bundle\Pricing\Adjustment\Calculator;
 
 use Magento\Bundle\Model\Product\Price as ProductPrice;
 use Magento\Bundle\Pricing\Price;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test for \Magento\Bundle\Pricing\Adjustment\Calculator

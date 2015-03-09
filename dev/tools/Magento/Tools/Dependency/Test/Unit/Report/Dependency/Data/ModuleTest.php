@@ -5,7 +5,7 @@
  */
 namespace Magento\Tools\Dependency\Test\Unit\Report\Dependency\Data;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ModuleTest extends \PHPUnit_Framework_TestCase
 {

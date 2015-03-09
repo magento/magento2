@@ -56,7 +56,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfigMock));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
             'Magento\Catalog\Pricing\Render',
             [

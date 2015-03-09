@@ -17,7 +17,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $backendUrl = $this->getMock('Magento\Backend\Model\UrlInterface', [], [], '', false, false);
         $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $objectManager->getObject(
             'Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export',
             ['backendUrl' => $backendUrl]

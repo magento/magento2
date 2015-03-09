@@ -16,7 +16,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     const SCOPE_ID = '1';
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -76,7 +76,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class DataFactoryTest extends \Magento\Framework\Test\Unit\TestFramework\AbstractFactoryTestCase
+class DataFactoryTest extends \Magento\TestFramework\Unit\AbstractFactoryTestCase
 {
     protected function setUp()
     {

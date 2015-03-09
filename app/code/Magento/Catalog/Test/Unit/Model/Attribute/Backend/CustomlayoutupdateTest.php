@@ -9,7 +9,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend;
 
 use Magento\Framework\Object;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
 {

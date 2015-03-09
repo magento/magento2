@@ -53,7 +53,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($cacheFrontendMock)
         );
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /**
          * @var \Magento\Backend\Model\Observer
          */

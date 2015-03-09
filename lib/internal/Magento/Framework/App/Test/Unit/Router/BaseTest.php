@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class BaseTest extends \Magento\Framework\Test\Unit\TestFramework\BaseTestCase
+class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
 {
     /**
      * @var \Magento\Framework\App\Router\Base

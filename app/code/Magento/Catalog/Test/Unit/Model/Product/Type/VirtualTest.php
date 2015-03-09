@@ -14,7 +14,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $coreRegistryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Action;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test Forward

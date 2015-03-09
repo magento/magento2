@@ -8,7 +8,7 @@ namespace Magento\Review\Test\Unit\Model;
 
 use \Magento\Review\Model\Review;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ReviewTest extends \PHPUnit_Framework_TestCase
 {

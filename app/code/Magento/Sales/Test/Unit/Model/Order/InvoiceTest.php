@@ -39,7 +39,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helperManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helperManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->orderMock = $this->getMockBuilder(
             'Magento\Sales\Model\Order'
         )->disableOriginalConstructor()->setMethods(

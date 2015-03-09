@@ -11,7 +11,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $interface = 'Magento\Framework\Api\CriteriaInterface';
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $factory = $this->getMock('Magento\Framework\Data\ObjectFactory', [], [], '', false);
         $builder = $objectManager->getObject(
             'Magento\Framework\Data\Test\Unit\Stub\SearchCriteriaBuilder',

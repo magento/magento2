@@ -287,7 +287,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function getCategoryModel()
     {
-        return (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
+        return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Model\Category',
             [
                 'context' => $this->context,

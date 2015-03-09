@@ -58,7 +58,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerSession = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
         $this->registrationMock = $this->getMock('\Magento\Customer\Model\Registration', [], [], '', false);
         $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');

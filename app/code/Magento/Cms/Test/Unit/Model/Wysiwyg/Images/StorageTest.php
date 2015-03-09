@@ -195,7 +195,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_sessionMock = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
         $this->_backendUrlMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Cms\Model\Wysiwyg\Images\Storage',
             [

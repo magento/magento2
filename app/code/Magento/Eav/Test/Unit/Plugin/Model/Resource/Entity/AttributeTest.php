@@ -8,7 +8,7 @@
 
 namespace Magento\Eav\Test\Unit\Plugin\Model\Resource\Entity;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {

@@ -10,7 +10,7 @@ use \Magento\Bundle\Model\Plugin\PriceBackend;
 
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PriceBackendTest extends \PHPUnit_Framework_TestCase
 {

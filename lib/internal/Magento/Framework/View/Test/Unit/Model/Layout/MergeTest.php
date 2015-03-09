@@ -99,7 +99,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->_theme->expects($this->any())->method('getArea')->will($this->returnValue('area'));
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(100));
 
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false, false);
         $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false, false);

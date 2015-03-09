@@ -76,7 +76,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
         $params = ['viewConfig' => $configManager];
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\AbstractBlock',
             $helper->getConstructArguments('Magento\Framework\View\Element\AbstractBlock', $params),

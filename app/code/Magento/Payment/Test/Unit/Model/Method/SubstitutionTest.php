@@ -9,7 +9,7 @@ namespace Magento\Payment\Test\Unit\Model\Method;
 class SubstitutionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -20,7 +20,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject('Magento\Payment\Model\Method\Substitution');
     }
 

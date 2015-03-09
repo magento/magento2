@@ -9,7 +9,7 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 use \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class EmailTest

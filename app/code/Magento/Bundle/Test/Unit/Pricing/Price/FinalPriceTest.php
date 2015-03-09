@@ -7,7 +7,7 @@
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class FinalPriceTest extends \PHPUnit_Framework_TestCase
 {

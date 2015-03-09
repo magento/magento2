@@ -45,7 +45,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
         $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false, false);

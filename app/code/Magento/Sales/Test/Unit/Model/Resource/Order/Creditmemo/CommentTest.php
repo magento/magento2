@@ -93,7 +93,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->commentResource = $objectManager->getObject(
             'Magento\Sales\Model\Resource\Order\Creditmemo\Comment',
             [

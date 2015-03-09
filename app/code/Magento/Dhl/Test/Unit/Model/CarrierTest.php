@@ -8,7 +8,7 @@ namespace Magento\Dhl\Test\Unit\Model;
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_helper;
 
@@ -28,7 +28,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->_helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $scopeConfig = $this->getMockBuilder(
             '\Magento\Framework\App\Config\ScopeConfigInterface'
         )->setMethods(
@@ -52,7 +52,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $xmlElFactory->expects($this->any())->method('create')->will(
             $this->returnCallback(
                 function ($data) {
-                    $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+                    $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
                     return $helper->getObject(
                         '\Magento\Shipping\Model\Simplexml\Element',
                         ['data' => $data['data']]

@@ -39,7 +39,7 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->getMock();
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->priceCurrency = $objectManager->getObject('Magento\Directory\Model\PriceCurrency', [
             'storeManager' => $this->storeManager,
             'currencyFactory' => $this->currencyFactory

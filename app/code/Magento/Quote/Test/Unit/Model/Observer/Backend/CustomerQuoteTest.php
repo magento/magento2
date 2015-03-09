@@ -60,7 +60,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getOrigCustomerDataObject', 'getCustomerDataObject'])
             ->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerQuote = $objectManager->getObject(
             'Magento\Quote\Model\Observer\Backend\CustomerQuote',
             [

@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Layout;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ProcessorInterface;
 

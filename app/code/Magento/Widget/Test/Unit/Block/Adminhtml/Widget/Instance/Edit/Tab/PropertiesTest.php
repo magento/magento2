@@ -27,7 +27,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
         $this->widget = $this->getMock('Magento\Widget\Model\Widget\Instance', [], [], '', false);
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->propertiesBlock = $objectManager->getObject(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties',
             [

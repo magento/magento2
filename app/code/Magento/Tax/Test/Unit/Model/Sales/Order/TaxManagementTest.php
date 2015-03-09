@@ -7,7 +7,7 @@ namespace Magento\Tax\Test\Unit\Model\Sales\Order;
 
 use \Magento\Tax\Model\Sales\Order\TaxManagement;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TaxManagementTest extends \PHPUnit_Framework_TestCase
 {

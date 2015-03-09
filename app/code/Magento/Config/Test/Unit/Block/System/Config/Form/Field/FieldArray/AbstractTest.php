@@ -21,7 +21,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
         $block->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $element = $objectManager->getObject('Magento\Framework\Data\Form\Element\Multiselect');
         $element->setValue([['test' => 'test', 'data1' => 'data1']]);
         $block->setElement($element);

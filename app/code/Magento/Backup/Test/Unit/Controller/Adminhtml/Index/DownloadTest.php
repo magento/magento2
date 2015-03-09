@@ -5,7 +5,7 @@
  */
 namespace Magento\Backup\Test\Unit\Controller\Adminhtml\Index;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class DownloadTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Renderer\Attribute;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SendemailTest extends \PHPUnit_Framework_TestCase
 {

@@ -62,7 +62,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
             'sales' => 'Magento\Sales\Model\Resource\Report\Order'
         ];
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->resultRedirectFactory = $this->getMock(
             'Magento\Backend\Model\View\Result\RedirectFactory',

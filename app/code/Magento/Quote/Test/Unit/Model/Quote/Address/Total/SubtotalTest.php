@@ -13,7 +13,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 class SubtotalTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -32,7 +32,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->subtotalModel = $this->objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Subtotal');
     }
 

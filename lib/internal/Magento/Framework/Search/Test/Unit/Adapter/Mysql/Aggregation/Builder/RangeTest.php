@@ -7,7 +7,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation\Builder;
 
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class RangeTest extends \PHPUnit_Framework_TestCase
 {

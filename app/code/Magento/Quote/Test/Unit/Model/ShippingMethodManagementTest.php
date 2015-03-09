@@ -10,7 +10,7 @@ namespace Magento\Quote\Test\Unit\Model;
 use \Magento\Quote\Model\ShippingMethodManagement;
 
 use Magento\Quote\Api\Data\ShippingMethodInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +50,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     protected $converterMock;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 

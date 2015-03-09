@@ -101,7 +101,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_stringLib;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManagerMock;
 
@@ -110,7 +110,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectManagerMock = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManagerMock = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_stringLib = new \Magento\Framework\Stdlib\String();
         $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManager')
             ->disableOriginalConstructor()

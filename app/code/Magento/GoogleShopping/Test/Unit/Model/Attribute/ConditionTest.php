@@ -5,7 +5,7 @@
  */
 namespace Magento\GoogleShopping\Test\Unit\Model\Attribute;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConditionTest extends \PHPUnit_Framework_TestCase
 {

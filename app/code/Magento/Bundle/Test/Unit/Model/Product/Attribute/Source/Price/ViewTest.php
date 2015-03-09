@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Product\Attribute\Source\Price;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {

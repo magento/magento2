@@ -50,7 +50,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(['cacheable' => $isCacheable]))
             ->will($this->returnValue($this->layout));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Framework\Pricing\Render\Layout',
             [

@@ -10,7 +10,7 @@
 
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
 {

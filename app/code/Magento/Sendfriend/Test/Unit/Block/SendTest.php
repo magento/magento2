@@ -6,7 +6,7 @@
 
 namespace Magento\Sendfriend\Test\Unit\Block;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SendTest extends \PHPUnit_Framework_TestCase
 {

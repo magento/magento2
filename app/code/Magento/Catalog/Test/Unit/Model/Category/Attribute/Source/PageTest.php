@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
 use Magento\Cms\Model\Resource\Block\CollectionFactory;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class PageTest extends \PHPUnit_Framework_TestCase
 {

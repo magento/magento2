@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Plugin;
 class CustomerGroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManager;
 
@@ -32,7 +32,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_subjectMock = $this->getMock(
             '\Magento\Customer\Api\GroupRepositoryInterface', [], [], '', false

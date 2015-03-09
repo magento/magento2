@@ -50,7 +50,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManagerHelper->getObject(
             '\Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option',
             ['registry' => $registry, 'context' => $context]

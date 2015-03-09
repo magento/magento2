@@ -18,7 +18,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         );
         $attributeModel->expects($this->once())->method('getAttributeCode')->will($this->returnValue('price1'));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $dataProviderFactory = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory')
             ->disableOriginalConstructor()

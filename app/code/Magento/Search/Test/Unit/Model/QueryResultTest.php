@@ -6,7 +6,7 @@
 
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class QueryResultTest extends \PHPUnit_Framework_TestCase
 {

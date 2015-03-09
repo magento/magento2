@@ -32,7 +32,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $select = $this->getMock('Zend_Db_Select', [], [], '', false);
         $select->expects($this->once())->method('from')->with('catalog_category_entity');
         $connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
@@ -130,7 +130,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddCollectionData()
     {
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $select = $this->getMock('Zend_Db_Select', [], [], '', false);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('join')->will($this->returnSelf());

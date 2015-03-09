@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * \Magento\Framework\Image\Adapter\Gd2 class test
@@ -31,7 +31,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
     protected $adapter;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 

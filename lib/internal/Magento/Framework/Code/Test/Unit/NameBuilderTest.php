@@ -14,7 +14,7 @@ class NameBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $nelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $nelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->nameBuilder = $nelper->getObject('Magento\Framework\Code\NameBuilder');
     }
 

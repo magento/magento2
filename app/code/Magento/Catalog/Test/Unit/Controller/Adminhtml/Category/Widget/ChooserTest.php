@@ -42,7 +42,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -63,7 +63,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $context = $this->getMock(
             'Magento\Backend\App\Action\Context',

@@ -19,7 +19,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->wishlistHelper = $this->getMock('Magento\Wishlist\Helper\Data', ['getItemCount'], [], '', false);
         $this->block = $objectManager->getObject(
             'Magento\Wishlist\Block\Customer\Sidebar',

@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Totals block test
@@ -16,7 +16,7 @@ use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 class TotalsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 

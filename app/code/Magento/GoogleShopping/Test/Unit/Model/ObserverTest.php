@@ -8,7 +8,7 @@
 
 namespace Magento\GoogleShopping\Test\Unit\Model;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {

@@ -82,7 +82,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($event));
 
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Centinel\Model\Observer $model */
         $model = $this->objectManager->getObject('Magento\Centinel\Model\Observer');
 

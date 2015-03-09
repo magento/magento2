@@ -31,7 +31,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', ['jsonEncode'], [], '', false);
         $this->mathRandom = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
             'Magento\Catalog\Pricing\Render\PriceBox',
             [

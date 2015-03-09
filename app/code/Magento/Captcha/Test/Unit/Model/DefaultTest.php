@@ -239,7 +239,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSessionStub()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $sessionArgs = $helper->getConstructArguments(
             'Magento\Customer\Model\Session',
             ['storage' => new \Magento\Framework\Session\Storage()]

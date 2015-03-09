@@ -6,7 +6,7 @@
 
 namespace Magento\Rule\Test\Unit\Model\Condition\Sql;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {

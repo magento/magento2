@@ -18,7 +18,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $session = $this->getMock(
             'Magento\Backend\Model\Session',

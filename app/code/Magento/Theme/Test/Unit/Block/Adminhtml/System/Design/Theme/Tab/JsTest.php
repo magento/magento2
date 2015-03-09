@@ -21,7 +21,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js',
             [

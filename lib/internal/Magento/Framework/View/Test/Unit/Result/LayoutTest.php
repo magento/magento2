@@ -51,7 +51,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
 
-        $this->resultLayout = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $this->resultLayout = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Framework\View\Result\Layout',
                 ['context' => $context, 'translateInline' => $this->translateInline]

@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class CombineTest

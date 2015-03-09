@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab;
 class TransactionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -42,7 +42,7 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->authorizationMock = $this->getMock('\Magento\Framework\Authorization', [], [], '', false);
         $this->coreRegistryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);

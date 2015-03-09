@@ -70,7 +70,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
         $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('frontend'));
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $helper->getObject(
             'Magento\Framework\View\Element\Template',
             [

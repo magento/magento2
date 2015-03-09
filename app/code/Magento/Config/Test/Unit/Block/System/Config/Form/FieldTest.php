@@ -47,7 +47,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             'storeManager' => $this->_storeManagerMock,
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
         ];
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $helper->getObject('Magento\Config\Block\System\Config\Form\Field', $data);
 
         $this->_testData = [

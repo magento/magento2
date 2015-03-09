@@ -24,7 +24,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $store;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 
@@ -50,7 +50,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [
             'getRequestString',
             'getModuleName',

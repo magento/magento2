@@ -20,7 +20,7 @@ class XsdValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_validator = new \Magento\Framework\Test\Unit\TestFramework\Utility\XsdValidator();
+        $this->_validator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
         $this->_xsdSchema = realpath(__DIR__ . '/_files/valid.xsd');
     }
 

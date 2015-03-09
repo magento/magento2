@@ -41,7 +41,7 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messages = $objectManager->getObject('Magento\Framework\View\Element\Messages', [
             'collectionFactory' => $this->collectionFactory,
             'messageFactory' => $this->messageFactory

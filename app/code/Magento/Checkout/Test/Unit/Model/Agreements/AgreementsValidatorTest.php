@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\Unit\Model\Agreements;
 
 use \Magento\Checkout\Model\Agreements\AgreementsValidator;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AgreementsValidatorTest extends \PHPUnit_Framework_TestCase
 {

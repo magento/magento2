@@ -8,9 +8,9 @@ namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
 class WebapiBuilderFactory extends \Magento\Framework\Serialization\DataBuilderFactory
 {
     /**
-     * @param \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  $objectManager
+     * @param \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  $objectManager
      */
-    public function __construct(\Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }

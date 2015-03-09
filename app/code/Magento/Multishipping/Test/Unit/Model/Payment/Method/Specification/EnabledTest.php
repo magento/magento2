@@ -13,7 +13,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     /**
      * Object Manager helper
      *
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -27,7 +27,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->paymentConfigMock = $this->getMock('\Magento\Payment\Model\Config', [], [], '', false);
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     /**

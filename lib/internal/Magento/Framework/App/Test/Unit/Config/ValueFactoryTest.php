@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class ValueFactoryTest extends \Magento\Framework\Test\Unit\TestFramework\AbstractFactoryTestCase
+class ValueFactoryTest extends \Magento\TestFramework\Unit\AbstractFactoryTestCase
 {
     protected function setUp()
     {

@@ -9,7 +9,7 @@
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Sales\Model\AdminOrder\Product;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

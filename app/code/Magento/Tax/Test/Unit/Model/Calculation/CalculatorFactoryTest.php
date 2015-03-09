@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Calculation;
 use \Magento\Tax\Model\Calculation\CalculatorFactory;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Tax\Model\CalculatorFactory
@@ -16,7 +16,7 @@ use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     public $objectManager;
 

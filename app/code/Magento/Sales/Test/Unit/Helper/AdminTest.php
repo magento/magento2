@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Helper;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AdminTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->priceCurrency = $this->getMockBuilder('\Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
-        $this->adminHelper = (new ObjectManager($this))->getObject(
+        $this->adminHelper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Sales\Helper\Admin',
             [
                 'context' => $this->contextMock,

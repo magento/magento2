@@ -10,7 +10,7 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Quote\Model

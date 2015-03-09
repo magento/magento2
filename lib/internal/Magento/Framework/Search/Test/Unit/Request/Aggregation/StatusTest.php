@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Search\Test\Unit\Request\Aggregation;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class StatusTest extends \PHPUnit_Framework_TestCase
 {

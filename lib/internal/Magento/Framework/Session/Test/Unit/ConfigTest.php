@@ -16,7 +16,7 @@ use \Magento\Framework\Session\Config;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $helper;
 
@@ -52,7 +52,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
             ->disableOriginalConstructor()

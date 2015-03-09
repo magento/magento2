@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Autocomplete;
 
 use Magento\CatalogSearch\Model\Autocomplete\DataProvider;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {

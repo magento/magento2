@@ -37,7 +37,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helper = $this->getMock(
             'Magento\ProductAlert\Helper\Data',
             ['isStockAlertAllowed', 'getSaveUrl'],

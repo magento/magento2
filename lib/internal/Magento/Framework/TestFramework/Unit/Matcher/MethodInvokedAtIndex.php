@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\TestFramework\Matcher;
+namespace Magento\Framework\TestFramework\Unit\Matcher;
 
 /**
  * Class MethodInvokedAtIndex

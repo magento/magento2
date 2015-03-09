@@ -9,13 +9,13 @@ namespace Magento\Framework\App\Test\Unit;
 class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_helper;
 
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     public function testGet()

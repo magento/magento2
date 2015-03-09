@@ -77,7 +77,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $_stockConfiguration;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectHelper;
 
@@ -86,7 +86,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->jsonHelperMock = $this->getMock(
             'Magento\Framework\Json\Helper\Data',

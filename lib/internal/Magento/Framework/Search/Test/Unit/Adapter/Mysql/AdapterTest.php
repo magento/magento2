@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     private $adapter;
 
     /**
-     * @var ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
 

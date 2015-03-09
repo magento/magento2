@@ -8,7 +8,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CronTest extends \PHPUnit_Framework_TestCase
 {

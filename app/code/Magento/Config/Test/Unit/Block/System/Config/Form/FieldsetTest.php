@@ -38,7 +38,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     protected $_layoutMock;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_testHelper;
 
@@ -77,7 +77,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
             'jsHelper' => $this->_helperMock,
             'data' => ['group' => $groupMock],
         ];
-        $this->_testHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $this->_testHelper->getObject('Magento\Config\Block\System\Config\Form\Fieldset', $data);
 
         $this->_testData = [
@@ -158,7 +158,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         $fieldMock->expects($this->any())->method('getTooltip')->will($this->returnValue('test_field_tootip'));
         $fieldMock->expects($this->any())->method('toHtml')->will($this->returnValue('test_field_toHTML'));
 
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
         $factoryColl = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',

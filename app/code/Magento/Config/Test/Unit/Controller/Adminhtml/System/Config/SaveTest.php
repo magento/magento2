@@ -128,7 +128,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
 
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'request' => $this->_requestMock,
             'response' => $this->_responseMock,

@@ -31,7 +31,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_appConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->stockRegistryMock = $this->getMockForAbstractClass(
             'Magento\CatalogInventory\Api\StockRegistryInterface',
@@ -55,7 +55,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'stockRegistry' => $this->stockRegistryMock,
         ];
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $helper->getObject('Magento\Config\Block\System\Config\Form', $data);
         $this->_block = $helper->getObject(
             'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',

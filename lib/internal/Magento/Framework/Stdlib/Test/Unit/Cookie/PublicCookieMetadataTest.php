@@ -8,7 +8,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
 use \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test PublicCookieMetadata

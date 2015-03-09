@@ -7,7 +7,7 @@
 /**
  * Listener of PHPUnit built-in events that enforces cleanup of cyclic object references
  */
-namespace Magento\Framework\Test\Unit\TestFramework\Listener;
+namespace Magento\Framework\TestFramework\Unit\Listener;
 
 class GarbageCleanup implements \PHPUnit_Framework_TestListener
 {

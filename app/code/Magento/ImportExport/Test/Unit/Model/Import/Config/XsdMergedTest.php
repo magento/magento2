@@ -23,7 +23,7 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
         $this->_xsdSchema = realpath(
             __DIR__ . '/../../../../../../../../../app/code/Magento/ImportExport/etc/import_merged.xsd'
         );
-        $this->_xsdValidator = new \Magento\Framework\Test\Unit\TestFramework\Utility\XsdValidator();
+        $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
     /**

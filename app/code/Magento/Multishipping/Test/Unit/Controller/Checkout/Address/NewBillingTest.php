@@ -8,7 +8,7 @@
 
 namespace Magento\Multishipping\Test\Unit\Controller\Checkout\Address;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class NewBillingTest extends \PHPUnit_Framework_TestCase
 {

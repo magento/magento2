@@ -52,7 +52,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
         );
         $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
             'Magento\GoogleOptimizer\Model\Observer\Block\Category\Tab',
             ['helper' => $this->_helperMock, 'layout' => $this->_layoutMock]

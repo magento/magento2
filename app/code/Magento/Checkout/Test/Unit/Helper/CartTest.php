@@ -55,7 +55,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()->getMock();
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $objectManagerHelper->getObject(
             'Magento\Framework\App\Helper\Context',

@@ -44,7 +44,7 @@ class AbstractSearchResultTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->criteria = $this->getMockForAbstractClass('Magento\Framework\Api\CriteriaInterface');
         $this->query = $this->getMockForAbstractClass('Magento\Framework\DB\QueryInterface');

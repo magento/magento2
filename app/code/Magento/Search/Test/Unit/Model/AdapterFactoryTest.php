@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $helper;
 

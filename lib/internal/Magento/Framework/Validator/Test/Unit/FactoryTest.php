@@ -130,7 +130,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateValidatorBuilder()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_validatorConfig->expects(
             $this->once()
         )->method(

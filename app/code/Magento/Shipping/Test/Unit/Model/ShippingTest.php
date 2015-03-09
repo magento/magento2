@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Unit\Model;
 use \Magento\Shipping\Model\Shipping;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {

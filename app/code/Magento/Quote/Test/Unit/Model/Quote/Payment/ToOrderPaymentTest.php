@@ -7,7 +7,7 @@
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
 use Magento\Payment\Model\Method\Substitution;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class ToOrderPaymentTest tests converter to order payment

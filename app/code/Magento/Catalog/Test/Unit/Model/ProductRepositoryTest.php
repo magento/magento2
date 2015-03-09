@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,7 +69,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 

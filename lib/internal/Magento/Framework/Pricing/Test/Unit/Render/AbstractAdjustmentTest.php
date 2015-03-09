@@ -32,7 +32,7 @@ class AbstractAdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
         $this->data = ['argument_one' => 1];
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructorArgs = $objectManager->getConstructArguments(
             'Magento\Framework\Pricing\Render\AbstractAdjustment',
             [

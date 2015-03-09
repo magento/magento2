@@ -32,7 +32,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->formKey = $objectManager->getObject(
             'Magento\Framework\App\PageCache\FormKey',

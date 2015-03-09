@@ -27,7 +27,7 @@ class IncrementTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', ['getEntityType'], [], '', false);
         $this->model = $objectManager->getObject('Magento\Sales\Model\Increment', ['eavConfig' => $this->eavConfig]);
         $this->type = $this->getMock('Magento\Eav\Model\Entity\Type', ['fetchNewIncrementId'], [], '', false);

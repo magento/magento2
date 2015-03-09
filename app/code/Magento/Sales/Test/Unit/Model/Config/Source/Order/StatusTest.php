@@ -5,14 +5,14 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Config\Source\Order;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class StatusTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Sales\Model\Config\Source\Order\Status */
     protected $object;
 
-    /** @var ObjectManager */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
     /** @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject */

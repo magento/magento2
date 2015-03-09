@@ -122,7 +122,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validateHash'])
             ->getMockForAbstractClass();
 
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\User\Model\User',
             [

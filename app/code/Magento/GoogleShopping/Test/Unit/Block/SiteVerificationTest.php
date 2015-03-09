@@ -15,7 +15,7 @@ class SiteVerificationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $escaper = $this->getMockBuilder(
             'Magento\Framework\Escaper'

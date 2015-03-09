@@ -42,7 +42,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
         $event->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\GoogleOptimizer\Model\Observer\Product\Delete',
             ['modelCode' => $this->_codeMock]

@@ -34,7 +34,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_responseMock = $this->getMock(
             'Magento\Framework\App\Response\Http',
             ['setRedirect', '__wakeup'],

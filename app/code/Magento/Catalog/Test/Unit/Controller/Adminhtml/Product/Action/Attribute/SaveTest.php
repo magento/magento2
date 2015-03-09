@@ -129,7 +129,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($resultRedirect);
 
-        $this->object = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
+        $this->object = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save',
             [
                 'context' => $this->context,

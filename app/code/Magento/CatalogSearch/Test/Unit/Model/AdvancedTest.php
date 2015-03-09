@@ -197,7 +197,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('entity_id'));
         $this->dataCollection->expects($this->any())->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator($attributes)));
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $advancedFactory = $this->getMockBuilder('Magento\CatalogSearch\Model\Resource\AdvancedFactory')
             ->setMethods(['create'])

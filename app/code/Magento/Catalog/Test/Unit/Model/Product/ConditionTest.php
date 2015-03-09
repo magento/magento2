@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConditionTest extends \PHPUnit_Framework_TestCase
 {

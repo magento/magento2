@@ -5,7 +5,7 @@
  */
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rss\Grid;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class LinkTest

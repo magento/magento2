@@ -150,7 +150,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
         $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
-        $this->model = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
                 '\Magento\Review\Controller\Product\Post',
                 [

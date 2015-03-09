@@ -108,7 +108,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $objectManager->getObject(
             'Magento\Backend\Block\Template\Context',
             [

@@ -10,7 +10,7 @@ use Magento\Core\Helper\File\Storage;
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -31,7 +31,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = 'Magento\Core\Helper\File\Storage';
         $arguments = $this->objectManager->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */

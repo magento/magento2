@@ -46,7 +46,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('America/Los_Angeles'));
         $this->locale->expects($this->any())->method('toString')->will($this->returnValue('en_US'));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->timezone = $objectManager->getObject(
             'Magento\Framework\Stdlib\DateTime\Timezone',
             [

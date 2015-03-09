@@ -11,7 +11,7 @@ namespace Magento\Payment\Test\Unit\Model;
 use \Magento\Payment\Model\Config;
 
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

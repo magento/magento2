@@ -21,7 +21,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $productFactory;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 
@@ -43,7 +43,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->productFactory = $this->getMock(
             '\Magento\Catalog\Api\Data\ProductInterfaceFactory',
             ['create'],

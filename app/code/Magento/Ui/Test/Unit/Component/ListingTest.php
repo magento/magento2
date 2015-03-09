@@ -60,7 +60,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
     protected $renderContext;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 
@@ -86,7 +86,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->actionPool = $this->getMock('\Magento\Ui\Component\Control\ActionPool', [], [], '', false);
         $this->optionsFactory = $this->getMock('\Magento\Ui\Component\Listing\OptionsFactory', [], [], '', false);
         $this->rowPool = $this->getMock('\Magento\Ui\Component\Listing\RowPool', [], [], '', false);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Source;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,7 +8,7 @@
 
 namespace Magento\Checkout\Test\Unit\Controller\Onepage;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -16,7 +16,7 @@ use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectMana
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
 

@@ -29,7 +29,7 @@ class TitleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->title = $objectManagerHelper->getObject(
             'Magento\Framework\View\Page\Title',
             ['scopeConfig' => $this->scopeConfigMock]

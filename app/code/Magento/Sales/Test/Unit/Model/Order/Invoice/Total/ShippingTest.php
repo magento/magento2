@@ -22,7 +22,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $result = new \Magento\Framework\Data\Collection(
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'orderFactory' => $this->getMock('Magento\Sales\Model\OrderFactory', [], [], '', false),
             'orderResourceFactory' => $this->getMock(
@@ -80,7 +80,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect(array $prevInvoicesData, $orderShipping, $invoiceShipping, $expectedShipping)
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'orderItemCollectionFactory' => $this->getMock(

@@ -6,7 +6,7 @@
 
 namespace Magento\GoogleShopping\Test\Unit\Controller\Adminhtml\Googleshopping\Items;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class RefreshTest extends \PHPUnit_Framework_TestCase
 {

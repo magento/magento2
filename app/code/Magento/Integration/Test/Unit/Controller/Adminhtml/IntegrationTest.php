@@ -19,7 +19,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Controller\Adminhtml\Integration */
     protected $_controller;
 
-    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  $objectManagerHelper */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  $objectManagerHelper */
     protected $_objectManagerHelper;
 
     /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -104,8 +104,8 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  $objectManagerHelper */
-        $this->_objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  $objectManagerHelper */
+        $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(

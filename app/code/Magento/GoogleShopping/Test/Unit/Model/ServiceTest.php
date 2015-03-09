@@ -8,7 +8,7 @@ namespace Magento\GoogleShopping\Test\Unit\Model;
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_helper;
 
@@ -24,7 +24,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_contentMock = $this->getMockBuilder(
             'Magento\Framework\Gdata\Gshopping\Content'

@@ -29,7 +29,7 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $this->_fileStorage = $this->getMock('Magento\Core\Model\File\Storage\Flag', [], [], '', false);
         $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = ['fileStorage' => $this->_fileStorage];
         $this->_model = $objectManagerHelper->getObject(
             'Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error',
@@ -52,7 +52,7 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
     public function testIsDisplayed($expectedFirstRun, $data)
     {
         $arguments = ['fileStorage' => $this->_fileStorage];
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // create new instance to ensure that it hasn't been displayed yet (var $this->_isDisplayed is unset)
         /** @var $model \Magento\AdminNotification\Model\System\Message\Media\Synchronization\Error */
         $model = $objectManagerHelper->getObject(

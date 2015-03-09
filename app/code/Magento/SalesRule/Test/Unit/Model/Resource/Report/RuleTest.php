@@ -82,7 +82,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectHelper->getObject(
             'Magento\SalesRule\Model\Resource\Report\Rule',
             [

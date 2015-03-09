@@ -10,7 +10,7 @@ namespace Magento\Framework\App\Test\Unit\Router;
 class ActionListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -31,7 +31,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cacheMock = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')
             ->disableOriginalConstructor()
             ->getMock();

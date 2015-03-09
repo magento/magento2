@@ -100,7 +100,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->wishlistHelper = $objectManager->getObject(
             'Magento\Wishlist\Helper\Data',

@@ -7,12 +7,12 @@
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Directory\Model\Observer;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
+    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManager;
 
     /** @var Observer */

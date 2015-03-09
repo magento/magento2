@@ -91,7 +91,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id'],
         ];
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Massaction', $arguments);
         $this->_block->setNameInLayout('test_grid_massaction');
     }

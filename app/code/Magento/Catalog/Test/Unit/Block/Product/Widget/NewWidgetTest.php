@@ -24,7 +24,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $contextMock = $this->getMock('Magento\Catalog\Block\Product\Context', [], [], '', false, false);
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')

@@ -5,7 +5,7 @@
  */
 namespace Magento\Tools\I18n\Test\Unit\Parser\Adapter\Php\Tokenizer;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Token;
 
 /**
@@ -14,7 +14,7 @@ use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Token;
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 

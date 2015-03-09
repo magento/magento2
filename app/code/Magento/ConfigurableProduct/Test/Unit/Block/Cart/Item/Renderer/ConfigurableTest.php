@@ -28,7 +28,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_configManager = $this->getMock('Magento\Framework\View\ConfigInterface', [], [], '', false);
         $this->_imageHelper = $this->getMock(
             'Magento\Catalog\Helper\Image',
@@ -59,7 +59,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetProductThumbnailUrl()
     {
         $url = 'pub/media/catalog/product/cache/1/thumbnail/75x/9df78eab33525d08d6e5fb8d27136e95/_/_/__green.gif';
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $configView = $this->getMock('Magento\Framework\Config\View', ['getVarValue'], [], '', false);
         $configView->expects($this->any())->method('getVarValue')->will($this->returnValue(75));

@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Test\Unit\Helper\Catalog\Product;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

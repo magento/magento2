@@ -39,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 return $dir;
             }));
 
-        $this->helper = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $this->helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject('Magento\Backup\Helper\Data', [
                 'filesystem' => $this->filesystem,
             ]);

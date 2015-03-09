@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Block\Widget;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 class LinkTest extends \PHPUnit_Framework_TestCase

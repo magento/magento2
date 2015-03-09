@@ -24,7 +24,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
             ->setMethods(['getAllCustomersGroup'])

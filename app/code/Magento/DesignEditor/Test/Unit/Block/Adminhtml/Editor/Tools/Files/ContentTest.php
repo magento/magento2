@@ -33,7 +33,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
         $this->_request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content',
             [

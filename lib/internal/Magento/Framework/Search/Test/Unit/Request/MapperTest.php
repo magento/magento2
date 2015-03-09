@@ -8,14 +8,14 @@ namespace Magento\Framework\Search\Test\Unit\Request;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
     const ROOT_QUERY = 'someQuery';
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $helper;
 

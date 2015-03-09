@@ -63,7 +63,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $parentNode = new \Magento\Framework\View\Layout\Element('<' . $block . ' name="' . $parentNodeName . '"/>');
 
         /** @var Layout\ScheduledStructure\Helper $helper */
-        $helper = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\View\Layout\ScheduledStructure\Helper');
         $result = $helper->scheduleStructure($scheduledStructure, $currentNode, $parentNode);
         $this->assertEquals($actualNodeName, $result);
@@ -95,7 +95,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $dataStructure = $this->getMock('Magento\Framework\View\Layout\Data\Structure', [], [], '', false);
 
         /** @var Layout\ScheduledStructure\Helper $helper */
-        $helper = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\View\Layout\ScheduledStructure\Helper');
         $helper->scheduleElement($scheduledStructure, $dataStructure, $key);
     }
@@ -146,7 +146,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         /** @var Layout\ScheduledStructure\Helper $helper */
-        $helper = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\View\Layout\ScheduledStructure\Helper');
         $helper->scheduleElement($scheduledStructure, $dataStructure, $key);
     }

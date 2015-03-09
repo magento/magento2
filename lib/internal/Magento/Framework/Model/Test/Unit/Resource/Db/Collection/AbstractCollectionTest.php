@@ -10,7 +10,7 @@ namespace Magento\Framework\Model\Test\Unit\Resource\Db\Collection;
 
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Framework\Object as MagentoObject;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {

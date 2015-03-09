@@ -94,7 +94,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     {
         $this->_prepareMockObjects();
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Review\Controller\Adminhtml\Product\Post',

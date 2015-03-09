@@ -21,7 +21,7 @@ namespace Magento\Framework\Session\Test\Unit {
         const SESSION_USE_ONLY_COOKIES_ENABLE = '1';
 
         /**
-         * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+         * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
          */
         private $objectManager;
 
@@ -67,7 +67,7 @@ namespace Magento\Framework\Session\Test\Unit {
             )
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+            $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
             $arguments = [
                 'sessionConfig' => $this->mockSessionConfig,
                 'cookieManager' => $this->mockCookieManager,

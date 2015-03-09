@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\GroupedImportExport;
 
 class GroupedTest extends \PHPUnit_Framework_TestCase

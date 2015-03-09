@@ -73,7 +73,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         );
         $this->_directoryMock->expects($this->any())->method('isReadable')->will($this->returnArgument(0));
         $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $args = $objectManagerHelper->getConstructArguments(
             'Magento\Widget\Model\Widget\Instance',
             [

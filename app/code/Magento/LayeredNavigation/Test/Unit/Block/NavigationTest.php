@@ -54,7 +54,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
             ->method($this->anything())
             ->will($this->returnValue($this->catalogLayerMock));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\LayeredNavigation\Block\Navigation',
             [

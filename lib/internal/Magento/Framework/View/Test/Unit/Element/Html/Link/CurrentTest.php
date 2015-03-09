@@ -23,13 +23,13 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
     protected $_defaultPathMock;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface');
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->_defaultPathMock = $this->getMock('\Magento\Framework\App\DefaultPathInterface');

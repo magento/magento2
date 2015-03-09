@@ -68,7 +68,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAuthenticationFailed()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $request = $objectManager->getObject('Magento\Framework\App\Request\Http');
         $response = $objectManager->getObject('Magento\Framework\App\Response\Http');

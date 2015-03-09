@@ -7,7 +7,7 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\CheckoutAgreements\Model\CheckoutAgreementsRepository;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
 {

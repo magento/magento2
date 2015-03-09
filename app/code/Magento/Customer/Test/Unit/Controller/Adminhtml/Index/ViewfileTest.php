@@ -100,7 +100,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
     public function testExecuteNoParamsShouldThrowException()
     {
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
-        $controller = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $controller = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject('Magento\Customer\Controller\Adminhtml\Index\Viewfile');
         $controller->execute();
     }
@@ -141,7 +141,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         )->willReturn($fileResponse);
 
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
-        $controller = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
+        $controller = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Viewfile',
             [
                 'context' => $this->contextMock,
@@ -204,7 +204,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         $this->resultRawFactoryMock->expects($this->once())->method('create')->willReturn($this->resultRawMock);
 
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
-        $controller = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
+        $controller = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Viewfile',
             [
                 'context' => $this->contextMock,

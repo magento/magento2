@@ -34,7 +34,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'is_unique' => 0,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $arguments['data'] = $attributeData;
@@ -102,7 +102,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'is_unique' => 0,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $arguments['data'] = $attributeData;
@@ -182,7 +182,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $resourceModel \Magento\Eav\Model\Resource\Entity\Attribute */
         list($adapter, $resourceModel) = $this->_prepareResourceModel();
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);

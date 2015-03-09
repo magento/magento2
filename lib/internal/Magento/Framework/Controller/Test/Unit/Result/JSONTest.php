@@ -30,7 +30,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
         $response->expects($this->atLeastOnce())->method('representJson')->with($json)->will($this->returnSelf());
 
         /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
-        $resultJson = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))
+        $resultJson = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject('Magento\Framework\Controller\Result\JSON', ['translateInline' => $translateInline]);
         $resultJson->setJsonData($json);
         $this->assertSame($resultJson, $resultJson->renderResult($response));

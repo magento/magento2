@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Page\Config;
 
 use \Magento\Framework\View\Page\Config\Structure;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Test for page config structure model

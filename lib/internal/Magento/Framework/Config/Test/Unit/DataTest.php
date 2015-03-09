@@ -14,7 +14,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $reader;
     /** @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cache;
-    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
 
     public function setUp()
@@ -25,7 +25,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMockBuilder('Magento\\Framework\\Config\\CacheInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     public function testGet()

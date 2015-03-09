@@ -9,7 +9,7 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator|\PHPUnit_Framework_MockObject_MockObject */
     protected $requestGenerator;
-    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
     /** @var \Magento\CatalogSearch\Model\Search\ReaderPlugin */
     protected $object;
@@ -20,7 +20,7 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
             'Magento\\CatalogSearch\\Model\\Search\\ReaderPlugin',
             ['requestGenerator' => $this->requestGenerator]

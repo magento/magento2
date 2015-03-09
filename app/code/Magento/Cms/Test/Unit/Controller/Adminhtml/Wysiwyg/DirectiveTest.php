@@ -145,7 +145,7 @@ class DirectiveTest extends \PHPUnit_Framework_TestCase
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->wysiwygDirective = $objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive',
             [

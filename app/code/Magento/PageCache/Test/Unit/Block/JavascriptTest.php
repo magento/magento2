@@ -70,7 +70,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock->expects($this->any())
             ->method('getUpdate')
             ->willReturn($this->layoutUpdateMock);
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->blockJavascript = $objectManager->getObject(
             'Magento\PageCache\Block\Javascript',
             [

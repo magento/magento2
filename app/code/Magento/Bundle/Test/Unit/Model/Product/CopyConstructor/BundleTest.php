@@ -23,7 +23,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -39,7 +39,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->model = new \Magento\Bundle\Model\Product\CopyConstructor\Bundle();
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     public function testBuildNegative()

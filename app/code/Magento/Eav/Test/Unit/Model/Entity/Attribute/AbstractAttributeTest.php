@@ -107,7 +107,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
         $dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [
@@ -129,7 +129,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsArray()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [
@@ -145,7 +145,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsSerialized()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $rule = 'some value';
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
@@ -162,7 +162,7 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsEmpty()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManagerHelper->getObject(
             '\Magento\Catalog\Model\Entity\Attribute',
             [

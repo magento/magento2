@@ -21,7 +21,7 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $eventDispatcherMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);

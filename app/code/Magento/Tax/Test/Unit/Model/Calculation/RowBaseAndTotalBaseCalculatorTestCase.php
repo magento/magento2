@@ -10,7 +10,7 @@ namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Tax\Model\Calculation\RowbaseCalculator;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
 {

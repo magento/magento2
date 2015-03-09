@@ -9,7 +9,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsCanDelete()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $websiteCollection = $this->getMock(
             'Magento\Store\Model\Resource\Website\Collection',

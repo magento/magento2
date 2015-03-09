@@ -12,7 +12,7 @@ class ResolverFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper
             ->getObject('Magento\Tools\I18n\Dictionary\Options\ResolverFactory');
@@ -28,7 +28,7 @@ class ResolverFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateException()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Options\ResolverFactory',

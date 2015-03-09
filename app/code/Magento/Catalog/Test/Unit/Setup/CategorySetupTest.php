@@ -12,7 +12,7 @@ class CategorySetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->unit = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
+        $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Setup\CategorySetup'
         );
     }

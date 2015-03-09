@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product\Flat;
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManager;
 
@@ -91,7 +91,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $this->_objectManager->getObject(
             'Magento\Catalog\Helper\Product\Flat\Indexer',
             [

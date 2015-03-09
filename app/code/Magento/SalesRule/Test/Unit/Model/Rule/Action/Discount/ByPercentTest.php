@@ -24,7 +24,7 @@ class ByPercentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->validator = $this->getMockBuilder(
             'Magento\SalesRule\Model\Validator'

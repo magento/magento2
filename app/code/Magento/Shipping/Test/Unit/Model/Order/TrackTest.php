@@ -9,7 +9,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
 {
     public function testLookup()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $carrier = $this->getMock(
             'Magento\OfflineShipping\Model\Carrier\Freeshipping',

@@ -18,7 +18,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions($directory, $withContext, $result)
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Dictionary\Options\Resolver $resolver */
         $resolver = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Options\Resolver',
@@ -84,7 +84,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptionsWrongDir($directory, $withContext, $message)
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Dictionary\Options\Resolver $resolver */
         $resolver = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Options\Resolver',

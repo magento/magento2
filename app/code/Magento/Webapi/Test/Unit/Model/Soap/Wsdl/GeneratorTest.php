@@ -91,7 +91,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->will($this->returnValue('store_code'));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->customAttributeMap = $objectManager->getObject('Magento\Framework\Object');
         $this->_wsdlGenerator = $objectManager->getObject(

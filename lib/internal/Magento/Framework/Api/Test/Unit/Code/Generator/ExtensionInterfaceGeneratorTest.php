@@ -10,7 +10,7 @@ class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testGenerate()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $configReaderMock = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();
@@ -48,7 +48,7 @@ class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateException()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Framework\Api\Code\Generator\ObjectExtensionInterface $model */
         $model = $objectManager->getObject(
             'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface',

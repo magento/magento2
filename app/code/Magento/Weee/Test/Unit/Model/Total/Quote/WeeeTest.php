@@ -193,7 +193,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             'priceCurrency' => $this->priceCurrency,
         ];
 
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->weeeCollector = $helper->getObject('Magento\Weee\Model\Total\Quote\Weee', $arguments);
 
         $this->weeeCollector->collect($addressMock);

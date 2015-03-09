@@ -14,7 +14,7 @@ use \Magento\Tax\Model\Sales\Total\Quote\Tax;
  * Test class for \Magento\Tax\Model\Sales\Total\Quote\Tax
  */
 use Magento\Tax\Model\Calculation;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TaxTest extends \PHPUnit_Framework_TestCase
 {

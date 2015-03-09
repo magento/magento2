@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
 use \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ProcessDataTest

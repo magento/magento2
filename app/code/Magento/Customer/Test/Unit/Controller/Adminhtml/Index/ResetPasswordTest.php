@@ -225,7 +225,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'resultRedirectFactory' => $this->resultRedirectFactoryMock
         ];
 
-        $helperObjectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\ResetPassword',
             $args

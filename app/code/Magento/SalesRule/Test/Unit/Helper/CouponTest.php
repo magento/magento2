@@ -41,7 +41,7 @@ class CouponTest extends \PHPUnit_Framework_TestCase
                 'format' => 'abc',
             ],
         ];
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = 'Magento\SalesRule\Helper\Coupon';
         $arguments = $objectManager->getConstructArguments(
             $className,

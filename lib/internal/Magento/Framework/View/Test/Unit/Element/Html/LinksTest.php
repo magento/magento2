@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Element\Html;
 class LinksTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectManagerHelper;
 
@@ -20,7 +20,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         /** @var  \Magento\Framework\View\Element\Template\Context $context */
         $this->_context = $this->_objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');

@@ -51,7 +51,7 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
         $version->expects($processCount)->method('process');
 
         /** @var \Magento\PageCache\Model\Controller\Result\VarnishPlugin $plugin */
-        $plugin = (new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this))->getObject(
+        $plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\PageCache\Model\Controller\Result\VarnishPlugin',
             [
                 'registry' => $registry,

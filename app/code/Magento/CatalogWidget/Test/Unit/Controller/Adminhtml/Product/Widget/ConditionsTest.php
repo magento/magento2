@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogWidget\Test\Unit\Controller\Adminhtml\Product\Widget;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConditionsTest extends \PHPUnit_Framework_TestCase
 {

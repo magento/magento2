@@ -181,7 +181,7 @@ class TunnelTest extends \PHPUnit_Framework_TestCase
             $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
             $response->headersSentThrowsException = false;
         }
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $varienFront = $helper->getObject('Magento\Framework\App\FrontController');
 
         $arguments = [

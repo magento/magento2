@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Unit\Model\Carrier;
 use \Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
 {

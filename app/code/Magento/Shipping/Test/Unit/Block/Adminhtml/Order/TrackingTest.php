@@ -9,7 +9,7 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
 {
     public function testLookup()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $shipment = new \Magento\Framework\Object(['store_id' => 1]);
 

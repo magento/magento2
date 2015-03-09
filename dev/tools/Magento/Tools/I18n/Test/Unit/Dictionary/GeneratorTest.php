@@ -64,7 +64,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->generator = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Dictionary\Generator',
             [

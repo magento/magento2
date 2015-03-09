@@ -42,7 +42,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             'layout' => $this->_layoutMock,
             'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
         ];
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column', $arguments);
         $this->_block->setId('id');
     }
@@ -374,7 +374,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             'data' => $groupedData,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column', $arguments);
         $this->assertEquals($expected, $block->isGrouped());
     }

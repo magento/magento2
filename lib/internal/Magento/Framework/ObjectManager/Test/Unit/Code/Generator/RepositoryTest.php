@@ -6,7 +6,7 @@
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 
 use Magento\Framework\Api\Test\Unit\Code\Generator\EntityChildTestAbstract;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class RepositoryTest

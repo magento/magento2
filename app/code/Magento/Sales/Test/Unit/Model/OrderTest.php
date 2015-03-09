@@ -51,7 +51,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentCollectionFactoryMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\CollectionFactory',
             ['create'],
@@ -339,7 +339,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanVoidPayment($actionFlags, $orderState)
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var Order $order */
         $order = $helper->getObject('Magento\Sales\Model\Order');
         foreach ($actionFlags as $action => $flag) {

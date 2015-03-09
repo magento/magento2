@@ -65,7 +65,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $cache = $this->getMock('Magento\Framework\App\CacheInterface');
         $cache->expects($this->any())->method('getFrontend')->will($this->returnValue($frontendCache));
 
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $locale = $objectManager->getObject(
             'Magento\Framework\Locale',
             ['locale' => \Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE]

@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Matcher;
 
-use Magento\Framework\Test\Unit\TestFramework\Matcher\MethodInvokedAtIndex;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
 class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
             [],
             new \StdClass()
         );
-        $matcher = new MethodInvokedAtIndex(0);
+        $matcher = new \Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex(0);
         $this->assertTrue($matcher->matches($invocationObject));
 
         $matcher = new MethodInvokedAtIndex(1);

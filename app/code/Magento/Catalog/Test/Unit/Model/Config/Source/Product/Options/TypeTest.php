@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\Source\Product\Options;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TypeTest extends \PHPUnit_Framework_TestCase
 {

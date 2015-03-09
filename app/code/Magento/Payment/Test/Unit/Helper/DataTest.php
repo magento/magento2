@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Helper;
 
 use \Magento\Payment\Helper\Data;
 
-use Magento\Framework\Test\Unit\TestFramework\Matcher\MethodInvokedAtIndex;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = 'Magento\Payment\Helper\Data';
         $arguments = $objectManagerHelper->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */

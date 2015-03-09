@@ -6,7 +6,7 @@
 
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Ajax;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SuggestTest extends \PHPUnit_Framework_TestCase
 {

@@ -16,7 +16,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_helper;
 
@@ -205,7 +205,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $addExpectations = false;
         $deleteBehavior = false;
         $testName = $this->getName(true);

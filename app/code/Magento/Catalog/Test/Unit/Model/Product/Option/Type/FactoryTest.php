@@ -21,7 +21,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product\Option\Type\Factory',
             ['objectManager' => $this->_objectManagerMock]

@@ -86,7 +86,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(
             'Magento\Framework\App\Cache\TypeList',
             [

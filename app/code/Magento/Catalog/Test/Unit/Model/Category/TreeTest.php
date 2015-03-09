@@ -31,7 +31,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     protected $treeFactoryMock;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -47,7 +47,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->categoryTreeMock = $this->getMockBuilder(
                 '\Magento\Catalog\Model\Resource\Category\Tree'

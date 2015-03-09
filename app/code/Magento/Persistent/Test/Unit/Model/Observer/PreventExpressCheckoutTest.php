@@ -56,7 +56,7 @@ class PreventExpressCheckoutTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $helper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_event = new \Magento\Framework\Event();
         $this->_observer = new \Magento\Framework\Event\Observer();

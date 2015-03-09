@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Unit\Block\Rss;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class LinkTest extends \PHPUnit_Framework_TestCase
 {

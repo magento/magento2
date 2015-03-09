@@ -18,7 +18,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectHelper;
 
@@ -34,7 +34,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_model = $this->_objectHelper->getObject(
             'Magento\Catalog\Model\Category\Attribute\Backend\Sortby',

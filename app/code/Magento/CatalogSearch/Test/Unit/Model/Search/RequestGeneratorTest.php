@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 
 class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
 
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator */
@@ -26,7 +26,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
             'Magento\\CatalogSearch\\Model\\Search\\RequestGenerator',
             ['productAttributeCollectionFactory' => $this->productAttributeCollectionFactory]

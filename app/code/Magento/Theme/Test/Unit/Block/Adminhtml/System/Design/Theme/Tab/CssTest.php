@@ -36,7 +36,7 @@ class CssTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
         $this->urlCoder = $this->getMock('Magento\Framework\Encryption\UrlCoder', [], [], '', false);
 
-        $objectManagerHelper = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css',
             [

@@ -40,7 +40,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $contextMock = $this->getMock('Magento\Catalog\Block\Product\Context', [], [], '', false, false);
         $contextMock->expects($this->once())

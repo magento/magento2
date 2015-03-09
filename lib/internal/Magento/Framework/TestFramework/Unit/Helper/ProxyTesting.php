@@ -7,7 +7,7 @@
 /**
  * Helper class for testing the proxy objects
  */
-namespace Magento\Framework\Test\Unit\TestFramework\Helper;
+namespace Magento\Framework\TestFramework\Unit\Helper;
 
 class ProxyTesting
 {

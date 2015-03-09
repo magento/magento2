@@ -9,7 +9,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Helper;
 use \Magento\Framework\ObjectManager\Helper\Composite;
 
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,13 +19,13 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     protected $compositeHelper;
 
     /**
-     * @var ObjectManager
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->compositeHelper = $this->objectManager->getObject('Magento\Framework\ObjectManager\Helper\Composite');
     }
 

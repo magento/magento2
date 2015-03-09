@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Unit\Block\Onepage;
 
-use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ProgressTest extends \PHPUnit_Framework_TestCase
 {
