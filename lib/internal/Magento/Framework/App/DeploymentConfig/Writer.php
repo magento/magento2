@@ -125,7 +125,7 @@ class Writer
 
                 if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
                     $currentData = $this->reader->load($paths[$fileKey]);
-                    $config = array_merge($currentData, $config);
+                    $config = array_merge_recursive($currentData, $config);
                 }
 
                 $contents = $this->formatter->format($config);
