@@ -536,6 +536,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 BP . '/dev/tests/integration',
                 BP . '/app/code/*/*/Test/Unit',
                 BP . '/lib/internal/*/*/*/Test/Unit',
+                BP . '/lib/internal/Magento/Framework/Test/Unit',
                 BP . '/dev/tools/Magento/Tools/*/Test/Unit',
                 BP . '/setup/src/Magento/Setup/Test/Unit',
             ],
