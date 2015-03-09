@@ -533,7 +533,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $errors = [];
         $fileList = $files->getFiles(
             [
-                BP . '/dev/tests/{integration,unit}',
+                BP . '/dev/tests/integration',
                 BP . '/app/code/*/*/Test/Unit',
                 BP . '/lib/internal/*/*/*/Test/Unit',
                 BP . '/dev/tools/Magento/Tools/*/Test/Unit',
