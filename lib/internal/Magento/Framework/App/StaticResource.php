@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
@@ -50,9 +50,10 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $objectManager;
 
     /**
-     * @var ObjectManager\ConfigLoader
+     * @var ConfigLoaderInterface
      */
     private $configLoader;
+
     /**
      * @var \Magento\Framework\View\Asset\MinifyService
      */
@@ -66,7 +67,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Module\ModuleList $moduleList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param ObjectManager\ConfigLoader $configLoader
+     * @param ConfigLoaderInterface $configLoader
      * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      */
     public function __construct(
@@ -77,7 +78,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        ObjectManager\ConfigLoader $configLoader,
+        ConfigLoaderInterface $configLoader,
         \Magento\Framework\View\Asset\MinifyService $minifyService
     ) {
         $this->state = $state;
@@ -120,7 +121,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     /**
      * {@inheritdoc}
      */
-    public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
+    public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
         $this->response->setHttpResponseCode(404);
         $this->response->setHeader('Content-Type', 'text/plain');

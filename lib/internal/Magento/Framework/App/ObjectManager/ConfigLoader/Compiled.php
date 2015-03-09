@@ -6,7 +6,9 @@
  */
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
-class Compiled extends \Magento\Framework\App\ObjectManager\ConfigLoader
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+
+class Compiled implements ConfigLoaderInterface
 {
     /**
      * Global config
@@ -16,17 +18,7 @@ class Compiled extends \Magento\Framework\App\ObjectManager\ConfigLoader
     private $configCache = [];
 
     /**
-     * Compiled construct
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Load modules DI configuration
-     *
-     * @param string $area
-     * @return array|mixed
+     * {inheritdoc}
      */
     public function load($area)
     {

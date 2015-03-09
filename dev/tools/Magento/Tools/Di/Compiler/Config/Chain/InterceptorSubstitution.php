@@ -27,9 +27,22 @@ class InterceptorSubstitution implements ModificationInterface
         }
 
         $interceptors = $this->getInterceptorsList($config['arguments']);
+
         $config['arguments'] = array_diff_key($config['arguments'], array_flip($interceptors));
+
+        foreach ($interceptors as $originalName => $interceptor) {
+            if (isset($config['arguments'][$originalName])) {
+                $config['arguments'][$interceptor] = $config['arguments'][$originalName];
+                unset($config['arguments'][$originalName]);
+            }
+        }
+
+        $config['preferences'] = $this->resolvePreferences($config['preferences'], $interceptors);
+
+        $config['preferences'] = array_merge($config['preferences'], $interceptors);
         $config['instanceTypes'] = $this->resolvePreferences($config['instanceTypes'], $interceptors);
-        $config['instanceTypes'] = array_merge($config['instanceTypes'], $interceptors);
+
+
 
         return $config;
     }

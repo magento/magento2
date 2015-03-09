@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\ObjectManager\Environment;
+namespace Magento\Framework\App\ObjectManager\Environment;
 
 require 'ConfigTesting.php';
 

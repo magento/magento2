@@ -66,12 +66,14 @@ class Compiler implements \Magento\Framework\AppInterface
                 'Magento\Tools\Di\Compiler\Config\ModificationChain' => [
                     'arguments' => [
                         'modificationsList' => [
-                            'PreferencesResolving' =>
-                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                             'BackslashTrim' =>
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim'],
+                            'PreferencesResolving' =>
+                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                             'InterceptorSubstitution' =>
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\InterceptorSubstitution'],
+                            'PreferencesResolving2' =>
+                                ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                             'ArgumentsSerialization' =>
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                         ]
@@ -81,6 +83,7 @@ class Compiler implements \Magento\Framework\AppInterface
         );
 
         $operations = [
+            /**
             Task\OperationFactory::REPOSITORY_GENERATOR => [
                 'path' => BP . '/' . 'app/code',
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
@@ -90,12 +93,14 @@ class Compiler implements \Magento\Framework\AppInterface
             ],
             Task\OperationFactory::INTERCEPTION =>
                 BP . '/var/generation',
+             */
             Task\OperationFactory::AREA_CONFIG_GENERATOR => [
                 BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
+            /**
             Task\OperationFactory::INTERCEPTION_CACHE => [
                 BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
-            ]
+            ]*/
         ];
 
         $responseCode = Response::SUCCESS;

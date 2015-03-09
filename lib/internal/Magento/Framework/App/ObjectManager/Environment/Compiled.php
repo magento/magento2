@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\ObjectManager\Environment;
+namespace Magento\Framework\App\ObjectManager\Environment;
 
-use Magento\Framework\ObjectManager\EnvironmentInterface;
+use Magento\Framework\App\EnvironmentInterface;
 use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 class Compiled extends AbstractEnvironment implements EnvironmentInterface
 {
@@ -87,5 +89,22 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
 
         $this->configLoader = new ConfigLoader\Compiled();
         return $this->configLoader;
+    }
+
+    /**
+     * {inheritdoc}
+     */
+    public function configureObjectManager(ConfigInterface $diConfig)
+    {
+        ObjectManager::getInstance()->configure(
+            ObjectManager::getInstance()
+                ->get('Magento\Framework\ObjectManager\ConfigLoaderInterface')
+                ->load(Area::AREA_GLOBAL)
+        );
+        ObjectManager::getInstance()->get('Magento\Framework\Config\ScopeInterface')
+            ->setCurrentScope('global');
+        $diConfig->setInterceptionConfig(
+            ObjectManager::getInstance()->get('Magento\Framework\Interception\Config\Config')
+        );
     }
 }

@@ -4,7 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\ObjectManager;
+namespace Magento\Framework\App;
+
+use Magento\Framework\ObjectManager\FactoryInterface;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * Interface for ObjectManager Environment
@@ -21,7 +25,7 @@ interface EnvironmentInterface
     /**
      * Return config object
      *
-     * @return \Magento\Framework\Interception\ObjectManager\ConfigInterface
+     * @return ConfigInterface
      */
     public function getDiConfig();
 
@@ -29,14 +33,22 @@ interface EnvironmentInterface
      * Return factory object
      *
      * @param array $arguments
-     * @return Factory\AbstractFactory
+     * @return FactoryInterface
      */
     public function getObjectManagerFactory($arguments);
 
     /**
      * Return ConfigLoader object
      *
-     * @return \Magento\Framework\App\ObjectManager\ConfigLoader | null
+     * @return ConfigLoaderInterface
      */
     public function getObjectManagerConfigLoader();
+
+    /**
+     * Configures an existing object manager
+     *
+     * @param ConfigInterface $diConfig
+     * @return void
+     */
+    public function configureObjectManager(ConfigInterface $diConfig);
 }

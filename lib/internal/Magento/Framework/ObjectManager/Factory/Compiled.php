@@ -55,7 +55,7 @@ class Compiled extends AbstractFactory
     {
         $args = $this->config->getArguments($requestedType);
         $type = $this->config->getInstanceType($requestedType);
-        if ($args === null) {
+        if (!$args) {
             return new $type();
         }
 

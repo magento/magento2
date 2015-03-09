@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\ObjectManager\Environment;
+namespace Magento\Framework\App\ObjectManager\Environment;
 
-use Magento\Framework\ObjectManager\EnvironmentInterface;
+use Magento\Framework\App\EnvironmentInterface;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Area;
 
 class Developer extends AbstractEnvironment implements EnvironmentInterface
 {
@@ -18,7 +21,7 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     /**#@- */
 
     /**
-     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
+     * @var ConfigInterface
      */
     protected $config;
 
@@ -30,7 +33,7 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     /**
      * Returns initialized di config entity
      *
-     * @return \Magento\Framework\Interception\ObjectManager\ConfigInterface
+     * @return ConfigInterface
      */
     public function getDiConfig()
     {
@@ -52,5 +55,26 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     public function getObjectManagerConfigLoader()
     {
         return null;
+    }
+
+    /**
+     * {inheritdoc}
+     */
+    public function configureObjectManager(ConfigInterface $diConfig)
+    {
+        $diConfig->setCache(
+            ObjectManager::getInstance()->get('Magento\Framework\App\ObjectManager\ConfigCache')
+        );
+
+        ObjectManager::getInstance()->configure(
+            ObjectManager::getInstance()
+                ->get('Magento\Framework\App\ObjectManager\ConfigLoader')
+                ->load(Area::AREA_GLOBAL)
+        );
+        ObjectManager::getInstance()->get('Magento\Framework\Config\ScopeInterface')
+            ->setCurrentScope('global');
+        $diConfig->setInterceptionConfig(
+            ObjectManager::getInstance()->get('Magento\Framework\Interception\Config\Config')
+        );
     }
 }

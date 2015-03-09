@@ -8,12 +8,12 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
-use Magento\Framework\ObjectManager\Environment;
-use Magento\Framework\ObjectManager\EnvironmentFactory;
-use Magento\Framework\ObjectManager\EnvironmentInterface;
+use Magento\Framework\App\ObjectManager\Environment;
+use Magento\Framework\App\EnvironmentFactory;
+use Magento\Framework\App\EnvironmentInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +50,7 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $envFactoryClassName = 'Magento\Framework\ObjectManager\EnvironmentFactory';
+    protected $envFactoryClassName = 'Magento\Framework\App\EnvironmentFactory';
 
     /**
      * Filesystem directory list
@@ -107,12 +107,12 @@ class ObjectManagerFactory
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
-        /** @var \Magento\Framework\ObjectManager\EnvironmentFactory $enFactory */
+        /** @var EnvironmentFactory $enFactory */
         $enFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
         $env =  $enFactory->createEnvironment();
 
-        /** @var \Magento\Framework\Interception\ObjectManager\ConfigInterface $diConfig */
+        /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
 
         $appMode = isset($arguments[State::PARAM_MODE]) ? $arguments[State::PARAM_MODE] : State::MODE_DEFAULT;
@@ -139,7 +139,7 @@ class ObjectManagerFactory
             'Magento\Framework\ObjectManager\DefinitionInterface' => $definitions,
             'Magento\Framework\Stdlib\BooleanUtils' => $booleanUtils,
             'Magento\Framework\ObjectManager\Config\Mapper\Dom' => $argumentMapper,
-            'Magento\Framework\App\ObjectManager\ConfigLoader' => $env->getObjectManagerConfigLoader(),
+            'Magento\Framework\ObjectManager\ConfigLoaderInterface' => $env->getObjectManagerConfigLoader(),
             $this->_configClassName => $diConfig,
         ];
         $arguments['shared_instances'] = &$sharedInstances;
@@ -150,19 +150,13 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
+        if (!$sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface']) {
+            $sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface'] = $objectManager->get(
+                'Magento\Framework\App\ObjectManager\ConfigLoader'
+            );
+        }
+        $env->configureObjectManager($diConfig);
 
-        $diConfig->setCache(
-            $objectManager->get('Magento\Framework\App\ObjectManager\ConfigCache')
-        );
-
-        $objectManager->configure(
-            $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load('global')
-        );
-        $objectManager->get('Magento\Framework\Config\ScopeInterface')
-            ->setCurrentScope('global');
-        $diConfig->setInterceptionConfig(
-            $objectManager->get('Magento\Framework\Interception\Config\Config')
-        );
         return $objectManager;
     }
 

@@ -76,7 +76,7 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'arguments' => [
-                'Class' => [
+                'Class\Interceptor' => [
                     'argument_type' => ['_i_' => 'Class\Dependency'],
                     'argument_not_shared' => ['_ins_' => 'Class\Dependency'],
                     'array_configured' => [
@@ -93,15 +93,15 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
                     'argument_not_shared' => ['_ins_' => 'Class\Dependency'],
                     'array_configured' => ['banana']
                 ],
-                'Class\DependencyIntercepted' => []
+                'Class\DependencyIntercepted\Interceptor' => []
             ],
             'preferences' => [
-                'ClassInterface' => 'Class',
+                'ClassInterface' => 'Class\Interceptor',
+                'Class' => 'Class\Interceptor',
+                'Class\DependencyIntercepted' => 'Class\DependencyIntercepted\Interceptor'
             ],
             'instanceTypes' => [
                 'virtualType' => 'Class\Interceptor',
-                'Class' => 'Class\Interceptor',
-                'Class\DependencyIntercepted' => 'Class\DependencyIntercepted\Interceptor'
             ]
         ];
     }
