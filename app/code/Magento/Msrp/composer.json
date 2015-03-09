@@ -11,7 +11,6 @@
         "magento/module-grouped-product": "0.42.0-beta10",
         "magento/module-tax": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
-        "magento/module-customer": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",
         "magento/magento-composer-installer": "*"
     },

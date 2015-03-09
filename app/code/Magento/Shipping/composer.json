@@ -14,7 +14,6 @@
         "magento/module-tax": "0.42.0-beta10",
         "magento/module-catalog-inventory": "0.42.0-beta10",
         "magento/module-quote": "0.42.0-beta10",
-        "magento/module-offline-shipping": "0.42.0-beta10",
         "magento/framework": "0.42.0-beta10",
         "ext-gd": "*",
         "magento/magento-composer-installer": "*"
