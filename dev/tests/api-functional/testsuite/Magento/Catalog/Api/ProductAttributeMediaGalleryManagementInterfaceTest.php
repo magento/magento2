@@ -18,13 +18,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     protected $createServiceInfo;
 
     /**
-     * Default create service request information (product with SKU 'simple' is used) with custom attributes
-     *
-     * @var array
-     */
-    protected $createServiceInfoWithCustomAttributes;
-
-    /**
      * Default update service request information (product with SKU 'simple' is used)
      *
      * @var array
@@ -54,18 +47,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
                 'serviceVersion' => 'V1',
                 'operation' => 'catalogProductAttributeMediaGalleryManagementV1Create',
-            ],
-        ];
-
-        $this->createServiceInfoWithCustomAttributes = [
-            'rest' => [
-                'resourcePath' => '/V1/products/simple/media-as-custom-attribute',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => 'catalogProductAttributeMediaGalleryManagementV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'catalogProductAttributeMediaGalleryManagementV1CreateUsingCustomAttribute',
             ],
         ];
 
@@ -123,45 +104,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     public function testCreate()
     {
         $requestData = [
-            'productSku' => 'simple',
-            'entry' => [
-                'id' => null,
-                'label' => 'Image Text',
-                'position' => 1,
-                'types' => ['image'],
-                'disabled' => false,
-            ],
-            'entryContent' => [
-                'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                'mime_type' => 'image/jpeg',
-                'name' => 'test_image',
-            ],
-            // Store ID is not provided so the default one must be used
-        ];
-
-        $actualResult = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $targetProduct = $this->getTargetSimpleProduct();
-        $mediaGallery = $targetProduct->getData('media_gallery');
-
-        $this->assertCount(1, $mediaGallery['images']);
-        $updatedImage = $mediaGallery['images'][0];
-        $this->assertEquals($actualResult, $updatedImage['value_id']);
-        $this->assertEquals('Image Text', $updatedImage['label']);
-        $this->assertEquals(1, $updatedImage['position']);
-        $this->assertEquals(0, $updatedImage['disabled']);
-        $this->assertEquals('Image Text', $updatedImage['label_default']);
-        $this->assertEquals(1, $updatedImage['position_default']);
-        $this->assertEquals(0, $updatedImage['disabled_default']);
-        $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
-        $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     */
-    public function testCreateWithCustomAttributes()
-    {
-        $requestData = [
             "sku" => 'simple',
             "custom_attributes" => [
                 "media_gallery" => [
@@ -182,7 +124,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ],
         ];
 
-        $actualResult = $this->_webApiCall($this->createServiceInfoWithCustomAttributes, ['product' => $requestData]);
+        $actualResult = $this->_webApiCall($this->createServiceInfo, ['product' => $requestData]);
         $targetProduct = $this->getTargetSimpleProduct();
         $mediaGallery = $targetProduct->getData('media_gallery');
 
@@ -192,9 +134,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->assertEquals('Image Text', $updatedImage['label']);
         $this->assertEquals(1, $updatedImage['position']);
         $this->assertEquals(0, $updatedImage['disabled']);
-        $this->assertEquals('Image Text', $updatedImage['label_default']);
-        $this->assertEquals(1, $updatedImage['position_default']);
-        $this->assertEquals(0, $updatedImage['disabled_default']);
         $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
         $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
     }

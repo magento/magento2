@@ -154,21 +154,21 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function create(
-        $productSku,
-        ProductAttributeMediaGalleryEntryInterface $entry,
-        ContentInterface $entryContent,
-        $storeId = 0
-    ) {
+    public function create($product)
+    {
         try {
-            $this->storeManager->getStore($storeId);
+            $this->storeManager->getStore($product->getStoreId());
         } catch (\Exception $exception) {
             throw new NoSuchEntityException('There is no store with provided ID.');
         }
+        /** @var $entry ProductAttributeMediaGalleryEntryInterface */
+        $entry = $product->getCustomAttribute('media_gallery')->getValue();
+        $entryContent = $entry->getContent();
+
         if (!$this->contentValidator->isValid($entryContent)) {
             throw new InputException('The image content is not valid.');
         }
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($product->getSku());
 
         $fileContent = @base64_decode($entryContent->getEntryData(), true);
         $mediaTmpPath = $this->mediaConfig->getBaseTmpMediaPath();
@@ -198,7 +198,6 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
                 'disabled' => $entry->isDisabled(),
             ]
         );
-        $product->setStoreId($storeId);
 
         try {
             $this->productRepository->save($product);
@@ -212,23 +211,6 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $product,
             $productMediaGallery->getRenamedImage($imageFileUri)
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createUsingCustomAttribute($product)
-    {
-        try {
-            $this->storeManager->getStore($product->getStoreId());
-        } catch (\Exception $exception) {
-            throw new NoSuchEntityException('There is no store with provided ID.');
-        }
-        /** @var $entry ProductAttributeMediaGalleryEntryInterface */
-        $entry = $product->getCustomAttribute('media_gallery')->getValue();
-        $entryContent = $entry->getContent();
-
-        return $this->create($product->getSku(), $entry, $entryContent);
     }
 
     /**

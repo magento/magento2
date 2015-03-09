@@ -16,35 +16,13 @@ interface ProductAttributeMediaGalleryManagementInterface
     /**
      * Create new gallery entry
      *
-     * @param string $productSku
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface $entryContent
-     * @param int $storeId
-     * @return int gallery entry ID
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\StateException
-     */
-    public function create(
-        $productSku,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface $entryContent,
-        $storeId = 0
-    );
-
-    /**
-     * Create new gallery entry
-     *
-     * This is a POC method to show use of custom_attributes. Eventually create should be
-     * replaced by this method.
-     *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return int gallery entry ID
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function createUsingCustomAttribute($product);
+    public function create($product);
 
     /**
      * Update gallery entry
