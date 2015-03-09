@@ -45,50 +45,35 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testValidate()
+    {
+        $options = [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
+        $errors = $this->object->validate($options);
+        $this->assertEmpty($errors);
+    }
+
     /**
      * @param array $options
-     *
-     * @dataProvider createConfigNoFrontnameDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage No backend frontname provided
+     * @param string $expectedError
+     * @dataProvider validateInvalidDataProvider
      */
-    public function testCreateConfigNoFrontname(array $options)
+    public function testValidateInvalid(array $options, $expectedError)
     {
-        $this->object->createConfig($options);
+        $errors = $this->object->validate($options);
+        $this->assertSame([$expectedError], $errors);
     }
 
     /**
      * @return array
      */
-    public function createConfigNoFrontnameDataProvider()
+    public function validateInvalidDataProvider()
     {
         return [
-            'no data' => [[]],
-            'no frontName' => [['something_else' => 'something']],
-            'empty frontName' => [[ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => '']],
-        ];
-    }
-
-    /**
-     * @param array $options
-     *
-     * @dataProvider createConfigInvalidFrontnameDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid backend frontname
-     */
-    public function testCreateConfigInvalidFrontname(array $options)
-    {
-        $this->object->createConfig($options);
-    }
-
-    /**
-     * @return array
-     */
-    public function createConfigInvalidFrontnameDataProvider()
-    {
-        return [
-            [[ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => '**']],
-            [[ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'invalid frontname']],
+            [[ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => '**'], "Invalid backend frontname '**'"],
+            [
+                [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'invalid frontname'],
+                "Invalid backend frontname 'invalid frontname'"
+            ],
         ];
     }
 }

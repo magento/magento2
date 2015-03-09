@@ -59,7 +59,7 @@ class ConfigOptions implements ConfigOptionsInterface
     {
         $errors = [];
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
-            $errors[] = "Invalid backend frontname {$options[self::INPUT_KEY_BACKEND_FRONTNAME]}";
+            $errors[] = "Invalid backend frontname '{$options[self::INPUT_KEY_BACKEND_FRONTNAME]}'";
         }
 
         return $errors;
