@@ -51,16 +51,16 @@ class ConfigOptions implements ConfigOptionsInterface
      *
      * @var ConfigGenerator
      */
-    private $configDataGenerator;
+    private $configGenerator;
 
     /**
      * Constructor
      *
-     * @param ConfigGenerator $configDataGenerator
+     * @param ConfigGenerator $configGenerator
      */
-    public function __construct(ConfigGenerator $configDataGenerator)
+    public function __construct(ConfigGenerator $configGenerator)
     {
-        $this->configDataGenerator = $configDataGenerator;
+        $this->configGenerator = $configGenerator;
     }
 
     /**
@@ -131,19 +131,19 @@ class ConfigOptions implements ConfigOptionsInterface
     public function createConfig(array $data)
     {
         $configData = [];
-        $configData[] = $this->configDataGenerator->createInstallConfig();
-        $configData[] = $this->configDataGenerator->createCryptConfig($data);
-        $modulesConfig = $this->configDataGenerator->createModuleConfig();
+        $configData[] = $this->configGenerator->createInstallConfig();
+        $configData[] = $this->configGenerator->createCryptConfig($data);
+        $modulesConfig = $this->configGenerator->createModuleConfig();
         if (isset($modulesConfig)) {
             $configData[] = $modulesConfig;
         }
-        $configData[] = $this->configDataGenerator->createSessionConfig($data);
-        $definitionConfig = $this->configDataGenerator->createDefinitionsConfig($data);
+        $configData[] = $this->configGenerator->createSessionConfig($data);
+        $definitionConfig = $this->configGenerator->createDefinitionsConfig($data);
         if (isset($definitionConfig)) {
             $configData[] = $definitionConfig;
         }
-        $configData[] = $this->configDataGenerator->createDbConfig($data);
-        $configData[] = $this->configDataGenerator->createResourceConfig();
+        $configData[] = $this->configGenerator->createDbConfig($data);
+        $configData[] = $this->configGenerator->createResourceConfig();
         return $configData;
     }
 
