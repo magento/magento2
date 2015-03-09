@@ -56,7 +56,7 @@ class Compiled extends AbstractFactory
         /** @TODO get rid of ltrim() usage and place it to client code */
         $args = $this->config->getArguments($requestedType);
         $type = $this->config->getInstanceType($requestedType);
-        echo $type . "\n\n\n";
+
         if ($args === null) {
             return new $type();
         }
