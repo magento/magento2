@@ -27,7 +27,6 @@ class JsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        // dev/tests/unit/testsuite/tools/I18n/Parser/Adapter/_files/file.js
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/file.js';
         $this->_stringsCount = count(file($this->_testFile));
 

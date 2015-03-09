@@ -184,7 +184,7 @@ class Files
                     "{$this->_path}/dev/tests",
                     "{$this->_path}/app/code/*/*/Test",
                     "{$this->_path}/lib/internal/*/*/Test",
-                    "{$this->_path}/lib/internal/Magento/Framework/*/Test",
+                    "{$this->_path}/lib/internal/*/*/*/Test",
                     "{$this->_path}/dev/tools/Magento/Tools/*/Test",
                     "{$this->_path}/setup/src/Magento/Setup/Test",
 
@@ -954,7 +954,6 @@ class Files
             '/dev/tests/static/framework/',
             '/dev/tests/static/testsuite/',
             '/dev/tests/functional/tests/app/',
-            '/dev/tests/unit/framework/',
             '/setup/src/'
         ];
 

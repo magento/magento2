@@ -479,7 +479,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 '/dev/tests/performance/framework/',
                 '/dev/tests/static/framework/',
                 '/dev/tests/static/testsuite/',
-                '/dev/tests/unit/framework/',
                 '/setup/src/',
             ];
             // Full list of directories where there may be namespace classes
