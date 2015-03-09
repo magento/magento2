@@ -39,7 +39,7 @@ class ConfigData
      * @param string $segmentKey
      * @param array $data
      */
-    public function __construct($fileKey, $segmentKey, $data)
+    public function __construct($fileKey, $segmentKey, array $data)
     {
         $this->fileKey = $fileKey;
         $this->segmentKey = $segmentKey;
@@ -69,7 +69,7 @@ class ConfigData
     /**
      * Gets Data
      *
-     * @return string
+     * @return array
      */
     public function getData()
     {

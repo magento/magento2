@@ -31,7 +31,7 @@ interface ConfigOptionsInterface
      * Validates user input option values and returns error messages
      *
      * @param array $options
-     * @return array
+     * @return string[]
      */
     public function validate(array $options);
 }

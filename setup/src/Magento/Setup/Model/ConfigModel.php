@@ -70,15 +70,13 @@ class ConfigModel
             $configData = $option->createConfig($inputOptions);
 
             foreach ($configData as $config) {
-
                 if (!$config instanceof ConfigData) {
                     throw new \Exception(
                         'In module : ' .$moduleName . 'ConfigOption::createConfig should return instance of ConfigData'
                     );
                 }
 
-                if (
-                    isset($fileConfigStorage[$config->getFileKey()])
+                if (isset($fileConfigStorage[$config->getFileKey()])
                     && isset($fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()])
                 ) {
                     $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_merge(

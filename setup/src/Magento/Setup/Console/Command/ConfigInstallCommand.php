@@ -77,7 +77,7 @@ class ConfigInstallCommand extends Command
     {
         if (!$this->moduleList->isModuleInfoAvailable()) {
             $output->writeln(
-                '<info>There is no module configuration settings available, so all modules are enabled.</info>'
+                '<info>There is no module configuration available, so all modules are enabled.</info>'
             );
         }
 
