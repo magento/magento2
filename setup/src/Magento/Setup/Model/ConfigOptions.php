@@ -133,9 +133,15 @@ class ConfigOptions implements ConfigOptionsInterface
         $configData = [];
         $configData[] = $this->configDataGenerator->createInstallConfig();
         $configData[] = $this->configDataGenerator->createCryptConfig($data);
-        $configData[] = $this->configDataGenerator->createModuleConfig();
+        $modulesConfig = $this->configDataGenerator->createModuleConfig();
+        if (isset($modulesConfig)) {
+            $configData[] = $modulesConfig;
+        }
         $configData[] = $this->configDataGenerator->createSessionConfig($data);
-        $configData[] = $this->configDataGenerator->createDefinitionsConfig($data);
+        $definitionConfig = $this->configDataGenerator->createDefinitionsConfig($data);
+        if (isset($definitionConfig)) {
+            $configData[] = $definitionConfig;
+        }
         $configData[] = $this->configDataGenerator->createDbConfig($data);
         $configData[] = $this->configDataGenerator->createResourceConfig();
         return $configData;
