@@ -29,7 +29,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     protected $rootTestsDir = '#dev/tests/#';
 
     /** @var string */
-    protected $setupTestsDir = '#setup/Test/#';
+    protected $setupTestsDir = '#setup/src/Magento/Setup/Test#';
 
     public function setUp()
     {

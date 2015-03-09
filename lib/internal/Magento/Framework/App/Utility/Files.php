@@ -186,7 +186,7 @@ class Files
                     "{$this->_path}/lib/internal/*/*/Test",
                     "{$this->_path}/lib/internal/Magento/Framework/*/Test",
                     "{$this->_path}/dev/tools/Magento/Tools/*/Test",
-                    "{$this->_path}/setup/Test",
+                    "{$this->_path}/setup/src/Magento/Setup/Test",
 
                 ];
                 $files = array_merge($files, self::getFiles($testDirs, '*.php'));
