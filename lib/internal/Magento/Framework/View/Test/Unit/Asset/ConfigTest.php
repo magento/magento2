@@ -12,7 +12,7 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 
 use \Magento\Framework\View\Asset\Config;
 
-class ConfigTest extends \Magento\TestFramework\Unit\BaseTestCase
+class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
