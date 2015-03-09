@@ -407,6 +407,7 @@ class ConsoleController extends AbstractActionController
      */
     public function updateAction()
     {
+        $this->installer->updateModulesSequence();
         $this->installer->installSchema();
         $this->installer->installDataFixtures();
     }
