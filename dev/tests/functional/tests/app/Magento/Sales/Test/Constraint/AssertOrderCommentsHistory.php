@@ -36,7 +36,7 @@ class AssertOrderCommentsHistory extends AbstractConstraint
         $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
         $expectedAuthorizedAmount = 'Authorized amount of $' . $grandTotal;
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertContains(
             $expectedAuthorizedAmount, $actualAuthorizedAmount,
             'Incorrect authorized amount value for the order #' . $orderId
         );
