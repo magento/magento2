@@ -6,8 +6,28 @@
  */
 namespace Magento\Search\Controller\Ajax;
 
+use Magento\Search\Model\AutocompleteInterface;
+use Magento\Framework\App\Action\Context;
+
 class Suggest extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * @var  AutocompleteInterface
+     */
+    private $autocomplete;
+
+    /**
+     * @param Context $context
+     * @param AutocompleteInterface $autocomplete
+     */
+    public function __construct(
+        Context $context,
+        AutocompleteInterface $autocomplete
+    ) {
+        parent::__construct($context);
+        $this->autocomplete = $autocomplete;
+    }
+
     /**
      * @return void
      */
@@ -15,9 +35,14 @@ class Suggest extends \Magento\Framework\App\Action\Action
     {
         if (!$this->getRequest()->getParam('q', false)) {
             $this->getResponse()->setRedirect($this->_url->getBaseUrl());
+            return;
         }
 
-        $suggestData = $this->_objectManager->get('Magento\Search\Helper\Data')->getSuggestData();
-        $this->getResponse()->representJson(json_encode($suggestData));
+        $autocompleteData = $this->autocomplete->getItems();
+        $responseData = [];
+        foreach ($autocompleteData as $resultItem) {
+            $responseData[] = $resultItem->toArray();
+        }
+        $this->getResponse()->representJson(json_encode($responseData));
     }
 }

@@ -9,7 +9,7 @@
 /* @var $block \Magento\Framework\View\Element\Template */
 ?>
 <script data-template-for="configurable-attribute" type="text/x-magento-template">
-    <div class="entry-edit" data-role="configurable-attribute" data-attribute="<%= JSON.stringify(data.attribute) %>">
+    <div class="entry-edit" data-role="configurable-attribute" data-attribute="<%- JSON.stringify(data.attribute) %>">
         <input name="attributes[]" id="configurable_attribute_<%= data.attribute.id %>"
             value="<%= data.attribute.id %>" type="hidden">
         <input value="new" type="hidden"

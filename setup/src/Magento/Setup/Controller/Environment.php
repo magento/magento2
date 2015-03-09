@@ -66,7 +66,13 @@ class Environment extends AbstractActionController
             );
         }
         $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        $currentPhpVersion = $this->versionParser->parseConstraints(PHP_VERSION);
+        try {
+            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
+        } catch (\UnexpectedValueException $e) {
+            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
+            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
+        }
+        $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;

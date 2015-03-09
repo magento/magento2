@@ -74,7 +74,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
                 continue;
             }
 
-            $state = isset($tax['state']) ? $tax['state'] : '0';
+            $state = (isset($tax['state']) && is_int($tax['state'])) ? $tax['state'] : '0';
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
 
             if (!empty($dup[$key1])) {
@@ -139,7 +139,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
                 continue;
             }
 
-            if (isset($tax['state']) && $tax['state']) {
+            if (isset($tax['state']) && is_int($tax['state'])) {
                 $state = $tax['state'];
             } else {
                 $state = '0';

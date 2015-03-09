@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Setup',
-    ['resourceName' => 'catalog_setup']
-);
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
