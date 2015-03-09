@@ -61,10 +61,7 @@ class ConfigInstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: wrap into try catch
-        // TODO: think about error and log message processing
         $this->configModel->process($input->getOptions());
-
     }
 
     /**
@@ -74,18 +71,13 @@ class ConfigInstallCommand extends Command
     {
         $inputOptions = $input->getOptions();
 
-        $errors = [];
+        $errors = $this->configModel->validate($inputOptions);
 
-        $options = $this->configModel->getAvailableOptions();
-        foreach ($options as $option) {
-            try {
-                $option->validate($inputOptions[$option->getName()]);
-            } catch (\InvalidArgumentException $e) {
-                $errors[] = $e->getMessage();
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $output->writeln("<error>$error</error>");
             }
-
+            exit(1);
         }
-
-        $this->errors = $errors;
     }
 }

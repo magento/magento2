@@ -53,28 +53,13 @@ class ConfigModel
      */
     public function process($inputOptions)
     {
-        // TODO: add error processing and refactor
         $fileConfigStorage = [];
 
         $options = $this->collector->collectOptions();
 
         foreach ($options as $moduleName => $option) {
 
-            if (!$option instanceof ConfigOptionsInterface) {
-                throw new \Exception(
-                    'ConfigOption for module:' . $moduleName . ' does not implement ConfigOptionsInterface'
-                );
-            }
-
-            $errors = $option->validate($inputOptions);
-            if ($errors) {
-                var_dump($errors);
-                die('______');
-            } else {
-                $configData = $option->createConfig($inputOptions);
-            }
-
-
+            $configData = $option->createConfig($inputOptions);
 
             foreach ($configData as $config) {
 
@@ -100,12 +85,37 @@ class ConfigModel
         }
 
         var_dump($fileConfigStorage);
-
     }
 
-    public function validate()
+    /**
+     * Validates Input Options
+     *
+     * @param array $inputOptions
+     * @return array
+     */
+    public function validate(array $inputOptions)
     {
+        $errors = [];
 
+        //Basic types validation
+        $options = $this->getAvailableOptions();
+        foreach ($options as $option) {
+            try {
+                if ($inputOptions[$option->getName()] !== NULL) {
+                    $option->validate($inputOptions[$option->getName()]);
+                }
+            } catch (\InvalidArgumentException $e) {
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        // validate ConfigOptions
+        $options = $this->collector->collectOptions();
+
+        foreach ($options as $moduleName => $option) {
+            $errors = array_merge($errors, $option->validate($inputOptions));
+        }
+
+        return $errors;
     }
-
 }
