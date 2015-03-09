@@ -11,7 +11,7 @@
          bootstrap="./framework/bootstrap.php"
 >
     <testsuite name="Magento Unit Tests">
-        <directory suffix="Test.php">../../../setup/Test/Unit</directory>
+        <directory suffix="Test.php">../../../setup/src/Magento/Setup/Test/Unit</directory>
         <directory suffix="Test.php">../../../app/code/Magento/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/Magento/Framework/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/Magento/Framework/*/Test/Unit</directory>

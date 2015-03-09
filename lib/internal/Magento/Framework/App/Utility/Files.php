@@ -31,6 +31,18 @@ class Files
      */
     protected $_path = '';
 
+    /** @var string regex for test directories in app/code */
+    protected $moduleTestDirs = '#app/code/[\\w]+/[\\w]+/Test#';
+
+    /** @var string regex for test directories in tools */
+    protected $toolsTestDirs = '#dev/tools/Magento/Tools/[\\w]+/Test#';
+
+    /** @var string regex for test directories in framework */
+    protected $frameworkTestDirs = '#lib/internal/Magento/Framework/[\\w]+/Test#';
+
+    /** @var string regex for test directories in lib/internal */
+    protected $libTestDirs = '#lib/internal/[\\w]+/[\\w]+/Test#';
+
     /**
      * Setter for an instance of self
      *
@@ -112,15 +124,20 @@ class Files
             if ($appCode) {
                 $files = array_merge(
                     glob($this->_path . '/app/*.php', GLOB_NOSORT),
-                    self::getFiles(["{$this->_path}/app/code/{$namespace}/{$module}"], '*.php')
+                    $this->getFilesSubset(
+                        ["{$this->_path}/app/code/{$namespace}/{$module}"],
+                        '*.php',
+                        $this->moduleTestDirs
+                    )
                 );
             }
             if ($otherCode) {
+                $exclude = [$this->libTestDirs, $this->frameworkTestDirs];
                 $files = array_merge(
                     $files,
                     glob($this->_path . '/*.php', GLOB_NOSORT),
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
-                    self::getFiles(["{$this->_path}/lib/internal/Magento"], '*.php'),
+                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $exclude),
                     self::getFiles(["{$this->_path}/dev/tools/Magento/Tools/SampleData"], '*.php')
                 );
             }
@@ -140,7 +157,7 @@ class Files
      * Returns list of files, where expected to have class declarations
      *
      * @param bool $appCode   application PHP-code
-     * @param bool $devTests
+     * @param bool $tests
      * @param bool $devTools
      * @param bool $lib
      * @param bool $asDataSet
@@ -148,41 +165,44 @@ class Files
      */
     public function getClassFiles(
         $appCode = true,
-        $devTests = true,
+        $tests = true,
         $devTools = true,
         $lib = true,
         $asDataSet = true
     ) {
-        $key = __METHOD__ . "/{$this->_path}/{$appCode}/{$devTests}/{$devTools}/{$lib}";
+        $key = __METHOD__ . "/{$this->_path}/{$appCode}/{$tests}/{$devTools}/{$lib}";
         if (!isset(self::$_cache[$key])) {
             $files = [];
             if ($appCode) {
-                $appFiles = self::getFiles(["{$this->_path}/app/code/Magento"], '*.php');
-                $appFiles = preg_grep('#app/code/[\\w]+/[\\w]+/Test#', $appFiles, PREG_GREP_INVERT);
-                $files = array_merge($files, $appFiles);
+                $files = array_merge(
+                    $files,
+                    $this->getFilesSubset(["{$this->_path}/app/code/Magento"], '*.php', $this->moduleTestDirs)
+                );
             }
-            if ($devTests) {
+            if ($tests) {
                 $testDirs = [
                     "{$this->_path}/dev/tests",
                     "{$this->_path}/app/code/*/*/Test",
                     "{$this->_path}/lib/internal/*/*/Test",
                     "{$this->_path}/lib/internal/Magento/Framework/*/Test",
                     "{$this->_path}/dev/tools/Magento/Tools/*/Test",
-                    "{$this->_path}/setup/Test",
+                    "{$this->_path}/setup/src/Magento/Setup/Test",
 
                 ];
                 $files = array_merge($files, self::getFiles($testDirs, '*.php'));
             }
             if ($devTools) {
-                $toolFiles = self::getFiles(["{$this->_path}/dev/tools/Magento"], '*.php');
-                $toolFiles = preg_grep('#dev/tools/Magento/Tools/[\\w]+/Test#', $toolFiles, PREG_GREP_INVERT);
-                $files = array_merge($files, $toolFiles);
+                $files = array_merge(
+                    $files,
+                    $this->getFilesSubset(["{$this->_path}/dev/tools/Magento"], '*.php', $this->toolsTestDirs)
+                );
             }
             if ($lib) {
-                $libFiles = self::getFiles(["{$this->_path}/lib/internal/Magento"], '*.php');
-                $libFiles = preg_grep('#lib/internal/Magento/Framework/[\\w]+/Test#', $libFiles, PREG_GREP_INVERT);
-                $libFiles = preg_grep('#lib/internal/[\\w]+/[\\w]+/Test#', $libFiles, PREG_GREP_INVERT);
-                $files = array_merge($files, $libFiles);
+                $exclude = [$this->libTestDirs, $this->frameworkTestDirs];
+                $files = array_merge(
+                    $files,
+                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $exclude)
+                );
             }
             self::$_cache[$key] = $files;
         }
@@ -1049,7 +1069,7 @@ class Files
     {
         $key = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$key])) {
-            $files = self::getFiles(["{$this->_path}/app/{$appDir}"], 'composer.json');
+            $files = $this->getFilesSubset(["{$this->_path}/app/{$appDir}"], 'composer.json', $this->moduleTestDirs);
             self::$_cache[$key] = $files;
         }
 
@@ -1110,5 +1130,25 @@ class Files
         }
 
         return self::$_cache[$key];
+    }
+
+    /**
+     * Returns list of files in a given directory, minus files in specifically excluded directories.
+     *
+     * @param array $dirPatterns Directories to search in
+     * @param string $fileNamePattern Pattern for filename
+     * @param string|array $excludes Subdirectories to exlude, represented as regex
+     * @return array Files in $dirPatterns but not in $excludes
+     */
+    protected function getFilesSubset(array $dirPatterns, $fileNamePattern, $excludes)
+    {
+        if (!is_array($excludes)) {
+            $excludes = [$excludes];
+        }
+        $fileSet = self::getFiles($dirPatterns, $fileNamePattern);
+        foreach ($excludes as $excludeRegex) {
+            $fileSet = preg_grep($excludeRegex, $fileSet, PREG_GREP_INVERT);
+        }
+        return $fileSet;
     }
 }
