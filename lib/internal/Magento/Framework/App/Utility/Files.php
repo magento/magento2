@@ -37,11 +37,8 @@ class Files
     /** @var string regex for test directories in tools */
     protected $toolsTestDirs = '#dev/tools/Magento/Tools/[\\w]+/Test#';
 
-    /** @var string regex for test directories in framework */
-    protected $frameworkTestDirs = '#lib/internal/Magento/Framework/[\\w]+/Test#';
-
     /** @var string regex for test directories in lib/internal */
-    protected $libTestDirs = '#lib/internal/[\\w]+/[\\w]+/Test#';
+    protected $libTestDirs = '#lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#';
 
     /**
      * Setter for an instance of self
@@ -132,12 +129,11 @@ class Files
                 );
             }
             if ($otherCode) {
-                $exclude = [$this->libTestDirs, $this->frameworkTestDirs];
                 $files = array_merge(
                     $files,
                     glob($this->_path . '/*.php', GLOB_NOSORT),
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
-                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $exclude),
+                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $this->libTestDirs),
                     self::getFiles(["{$this->_path}/dev/tools/Magento/Tools/SampleData"], '*.php')
                 );
             }
@@ -184,7 +180,7 @@ class Files
                     "{$this->_path}/dev/tests",
                     "{$this->_path}/app/code/*/*/Test",
                     "{$this->_path}/lib/internal/*/*/Test",
-                    "{$this->_path}/lib/internal/Magento/Framework/*/Test",
+                    "{$this->_path}/lib/internal/*/*/*/Test",
                     "{$this->_path}/dev/tools/Magento/Tools/*/Test",
                     "{$this->_path}/setup/src/Magento/Setup/Test",
 
@@ -198,10 +194,9 @@ class Files
                 );
             }
             if ($lib) {
-                $exclude = [$this->libTestDirs, $this->frameworkTestDirs];
                 $files = array_merge(
                     $files,
-                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $exclude)
+                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $this->libTestDirs)
                 );
             }
             self::$_cache[$key] = $files;
