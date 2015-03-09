@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\TestFramework\Helper;
+namespace Magento\Framework\TestFramework\Test\Unit\Unit\Helper;
 
 class ProxyTestingTest extends \PHPUnit_Framework_TestCase
 {

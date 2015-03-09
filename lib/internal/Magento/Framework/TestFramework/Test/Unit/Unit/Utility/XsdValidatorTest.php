@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\TestFramework\Utility;
+namespace Magento\Framework\TestFramework\Test\Unit\Unit\Utility;
 
 class XsdValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Utility\XsdValidator
+     * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */
     protected $_validator;
 
