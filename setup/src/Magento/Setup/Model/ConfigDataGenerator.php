@@ -41,7 +41,7 @@ class ConfigDataGenerator
     {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
-        $this->moduleList = array_values($moduleLoader->load());
+        $this->moduleList = array_keys($moduleLoader->load());
     }
 
     /**

@@ -140,4 +140,12 @@ class ConfigOptions implements ConfigOptionsInterface
         $configData[] = $this->configDataGenerator->createResourceConfig();
         return $configData;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(array $options)
+    {
+        return [];
+    }
 }

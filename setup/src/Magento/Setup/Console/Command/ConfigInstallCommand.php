@@ -24,6 +24,11 @@ class ConfigInstallCommand extends Command
     protected $configFilePool;
 
     /**
+     * @var array
+     */
+    protected $errors;
+
+    /**
      * Constructor
      *s
      * @param \Magento\Setup\Model\ConfigModel $configModel
@@ -47,6 +52,8 @@ class ConfigInstallCommand extends Command
             ->setName('config:install')
             ->setDescription('Install deployment configuration')
             ->setDefinition($options);
+
+        $this->ignoreValidationErrors();
     }
 
     /**
@@ -60,5 +67,25 @@ class ConfigInstallCommand extends Command
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $inputOptions = $input->getOptions();
 
+        $errors = [];
+
+        $options = $this->configModel->getAvailableOptions();
+        foreach ($options as $option) {
+            try {
+                $option->validate($inputOptions[$option->getName()]);
+            } catch (\InvalidArgumentException $e) {
+                $errors[] = $e->getMessage();
+            }
+
+        }
+
+        $this->errors = $errors;
+    }
 }

@@ -24,7 +24,14 @@ interface ConfigOptionsInterface
      *
      * @param array $options
      * @return \Magento\Framework\Config\Data\ConfigData[]
-     * @throws \InvalidArgumentException
      */
     public function createConfig(array $options);
+
+    /**
+     * Validates user input option values and returns error messages
+     *
+     * @param array $options
+     * @return array
+     */
+    public function validate(array $options);
 }

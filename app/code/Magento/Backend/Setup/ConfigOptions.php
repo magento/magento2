@@ -45,18 +45,23 @@ class ConfigOptions implements ConfigOptionsInterface
      */
     public function createConfig(array $options)
     {
-        if (empty($options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
-            throw new \InvalidArgumentException('No backend frontname provided.');
-        }
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
-            throw new \InvalidArgumentException(
-                "Invalid backend frontname {$options[self::INPUT_KEY_BACKEND_FRONTNAME]}"
-            );
-        }
         return [new ConfigData(
             ConfigFilePool::APP_CONFIG,
             'backend',
             ['frontName' => $options[self::INPUT_KEY_BACKEND_FRONTNAME]]
         )];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(array $options)
+    {
+        $errors = [];
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
+            $errors[] = "Invalid backend frontname {$options[self::INPUT_KEY_BACKEND_FRONTNAME]}";
+        }
+
+        return $errors;
     }
 }

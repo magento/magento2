@@ -40,7 +40,6 @@ class ConfigModel
         $options = $this->collector->collectOptions();
 
         foreach ($options as $option) {
-            // TODO: we need to get rid of keys here
             $optionCollection = array_merge($optionCollection, $option->getOptions());
         }
 
@@ -62,21 +61,24 @@ class ConfigModel
         foreach ($options as $moduleName => $option) {
 
             if (!$option instanceof ConfigOptionsInterface) {
-                // TODO: ROMOVE IT!
-                echo "FIX IT!: " . 'ConfigOption for module:' . $moduleName . ' does not implement ConfigOptionsInterface' . PHP_EOL;
-                continue;
                 throw new \Exception(
                     'ConfigOption for module:' . $moduleName . ' does not implement ConfigOptionsInterface'
                 );
             }
 
-            $configData = $option->createConfig($inputOptions);
+            $errors = $option->validate($inputOptions);
+            if ($errors) {
+                var_dump($errors);
+                die('______');
+            } else {
+                $configData = $option->createConfig($inputOptions);
+            }
+
+
+
             foreach ($configData as $config) {
 
                 if (!$config instanceof ConfigData) {
-                    // TODO: ROMOVE IT!
-                    echo "FIX IT!: " . 'In module : ' .$moduleName . 'ConfigOption::createConfig should return instance of ConfigData' . PHP_EOL;
-                    continue;
                     throw new \Exception(
                         'In module : ' .$moduleName . 'ConfigOption::createConfig should return instance of ConfigData'
                     );
