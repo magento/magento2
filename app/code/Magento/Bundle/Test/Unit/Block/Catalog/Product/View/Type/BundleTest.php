@@ -17,7 +17,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     private $bundleProductPriceFactory;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectHelper;
 

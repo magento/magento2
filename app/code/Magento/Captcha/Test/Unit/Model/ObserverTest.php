@@ -48,7 +48,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_resLogFactory;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

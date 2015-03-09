@@ -13,7 +13,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Composite\Fieldset;
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectHelper;
 

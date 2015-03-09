@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\System\Config\Source;
 class InputtypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_helper;
 

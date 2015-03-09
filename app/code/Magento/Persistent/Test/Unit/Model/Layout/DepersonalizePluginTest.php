@@ -16,7 +16,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

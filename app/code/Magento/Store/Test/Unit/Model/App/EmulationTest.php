@@ -58,7 +58,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
     private $storeMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     private $objectManager;
 

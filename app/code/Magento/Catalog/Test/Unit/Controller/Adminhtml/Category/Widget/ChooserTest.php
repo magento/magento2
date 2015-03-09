@@ -42,7 +42,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 

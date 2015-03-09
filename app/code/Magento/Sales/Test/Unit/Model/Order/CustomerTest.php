@@ -11,7 +11,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

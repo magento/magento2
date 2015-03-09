@@ -53,7 +53,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * ObjectManager helper
      *
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

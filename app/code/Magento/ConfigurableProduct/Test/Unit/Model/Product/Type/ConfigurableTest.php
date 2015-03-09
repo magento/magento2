@@ -77,7 +77,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $_stockConfiguration;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectHelper;
 

@@ -65,7 +65,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         ];
 
         /**
-         * @var \Magento\TestFramework\Helper\ObjectManager
+         * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
          */
         protected $objectManager;
 

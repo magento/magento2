@@ -41,7 +41,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     private $itemOptionFactory;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     private $objectManagerHelper;
 

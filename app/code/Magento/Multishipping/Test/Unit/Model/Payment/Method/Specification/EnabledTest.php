@@ -13,7 +13,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     /**
      * Object Manager helper
      *
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

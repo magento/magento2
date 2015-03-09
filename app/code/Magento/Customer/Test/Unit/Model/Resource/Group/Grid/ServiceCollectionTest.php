@@ -14,7 +14,7 @@ use Magento\Customer\Model\Resource\Group\Grid\ServiceCollection;
  */
 class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\TestFramework\Helper\ObjectManager */
+    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
     protected $objectManager;
 
     /** @var \Magento\Framework\Api\FilterBuilder */

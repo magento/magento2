@@ -12,7 +12,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * Object manager helper
      *
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_helper;
 

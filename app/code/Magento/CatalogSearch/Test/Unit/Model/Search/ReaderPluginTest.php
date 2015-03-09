@@ -9,7 +9,7 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator|\PHPUnit_Framework_MockObject_MockObject */
     protected $requestGenerator;
-    /** @var \Magento\TestFramework\Helper\ObjectManager */
+    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
     protected $objectManagerHelper;
     /** @var \Magento\CatalogSearch\Model\Search\ReaderPlugin */
     protected $object;

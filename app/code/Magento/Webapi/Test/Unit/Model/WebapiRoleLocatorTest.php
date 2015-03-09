@@ -19,7 +19,7 @@ class WebapiRoleLocatorTest extends \PHPUnit_Framework_TestCase
     protected $locator;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

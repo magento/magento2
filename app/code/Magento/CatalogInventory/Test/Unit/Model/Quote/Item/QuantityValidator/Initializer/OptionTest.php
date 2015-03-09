@@ -53,7 +53,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     protected $stockState;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

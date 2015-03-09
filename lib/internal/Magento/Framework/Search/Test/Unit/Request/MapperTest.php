@@ -15,7 +15,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     const ROOT_QUERY = 'someQuery';
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     private $helper;
 

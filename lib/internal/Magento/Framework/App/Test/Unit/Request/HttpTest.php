@@ -31,7 +31,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $_infoProcessorMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
@@ -68,7 +68,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     private function getModel($uri = null)
     {
-        $testFrameworkObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $testFrameworkObjectManager = new \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager ($this);
         return $testFrameworkObjectManager->getObject(
             'Magento\Framework\App\Request\Http',
             [

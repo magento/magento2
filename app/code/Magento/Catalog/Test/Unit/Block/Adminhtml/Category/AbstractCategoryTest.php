@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Category;
 class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

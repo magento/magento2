@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Unit\Block\Cart;
 class LinkTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManagerHelper;
 

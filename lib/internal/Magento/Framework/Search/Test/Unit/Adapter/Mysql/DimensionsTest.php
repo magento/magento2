@@ -13,7 +13,7 @@ use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager;
 
 class DimensionsTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\TestFramework\Helper\ObjectManager */
+    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
     private $objectManager;
 
     /** @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject */

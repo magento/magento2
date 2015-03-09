@@ -18,7 +18,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
     protected $discount;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

@@ -16,7 +16,7 @@ use \Magento\Checkout\Model\Session;
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_helper;
 

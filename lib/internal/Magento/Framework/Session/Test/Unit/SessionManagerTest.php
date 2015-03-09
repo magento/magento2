@@ -21,7 +21,7 @@ namespace Magento\Framework\Session\Test\Unit {
         const SESSION_USE_ONLY_COOKIES_ENABLE = '1';
 
         /**
-         * @var \Magento\TestFramework\Helper\ObjectManager
+         * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
          */
         private $objectManager;
 

@@ -64,7 +64,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
     protected $customerDataFactoryMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

@@ -15,7 +15,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectHelper;
 

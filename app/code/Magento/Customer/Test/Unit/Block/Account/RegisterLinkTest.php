@@ -13,7 +13,7 @@ use Magento\Customer\Model\Context;
 class RegisterLinkTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

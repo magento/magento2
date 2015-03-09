@@ -11,7 +11,7 @@ namespace Magento\Customer\Test\Unit\Block\Account;
 class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

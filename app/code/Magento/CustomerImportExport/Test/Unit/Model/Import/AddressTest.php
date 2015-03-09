@@ -101,7 +101,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_stringLib;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManagerMock;
 

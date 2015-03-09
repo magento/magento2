@@ -79,7 +79,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
     protected $additional;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

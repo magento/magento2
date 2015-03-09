@@ -30,7 +30,7 @@ class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
     private $interval;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     private $helper;
 

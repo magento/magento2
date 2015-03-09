@@ -24,7 +24,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     private $validatorFactory;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     private $objectManager;
 

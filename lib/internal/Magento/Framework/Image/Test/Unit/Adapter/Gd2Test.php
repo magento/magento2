@@ -31,7 +31,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
     protected $adapter;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

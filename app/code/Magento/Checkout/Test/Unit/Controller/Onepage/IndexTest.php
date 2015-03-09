@@ -16,7 +16,7 @@ use Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager as ObjectMana
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     private $objectManager;
 

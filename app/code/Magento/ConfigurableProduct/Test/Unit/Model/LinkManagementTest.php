@@ -21,7 +21,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $productFactory;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 

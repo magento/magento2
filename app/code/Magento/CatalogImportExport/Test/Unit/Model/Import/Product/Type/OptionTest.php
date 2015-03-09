@@ -16,7 +16,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_helper;
 

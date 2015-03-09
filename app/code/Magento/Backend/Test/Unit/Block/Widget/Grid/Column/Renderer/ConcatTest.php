@@ -9,7 +9,7 @@ use Magento\Framework\Object;
 
 class ConcatTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\TestFramework\Helper\ObjectManager */
+    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
     protected $objectManagerHelper;
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat */
     protected $renderer;

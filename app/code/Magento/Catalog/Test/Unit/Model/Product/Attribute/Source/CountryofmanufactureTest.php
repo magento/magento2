@@ -23,7 +23,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
     protected $cacheConfig;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 

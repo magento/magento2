@@ -13,7 +13,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     const UPDATE_TIME = 'update_time';
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

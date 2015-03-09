@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget;
 class TabTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $helper;
 

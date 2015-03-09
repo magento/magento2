@@ -67,7 +67,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

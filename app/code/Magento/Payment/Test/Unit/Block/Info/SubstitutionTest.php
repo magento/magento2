@@ -21,7 +21,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

@@ -18,7 +18,7 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
     protected $methodList;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

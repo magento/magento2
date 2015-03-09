@@ -14,7 +14,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $reader;
     /** @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cache;
-    /** @var \Magento\TestFramework\Helper\ObjectManager */
+    /** @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager  */
     protected $objectManagerHelper;
 
     public function setUp()

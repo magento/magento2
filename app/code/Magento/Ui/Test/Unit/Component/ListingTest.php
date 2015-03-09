@@ -60,7 +60,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
     protected $renderContext;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 

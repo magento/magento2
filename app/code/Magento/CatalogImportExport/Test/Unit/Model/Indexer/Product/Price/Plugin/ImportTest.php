@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Price\Plug
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

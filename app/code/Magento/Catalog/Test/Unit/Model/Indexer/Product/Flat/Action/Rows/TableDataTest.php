@@ -18,7 +18,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     protected $_productIndexerHelper;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
 

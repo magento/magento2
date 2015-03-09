@@ -18,7 +18,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     protected $order;
 
     /**
-     * @var  \Magento\TestFramework\Helper\ObjectManager
+     * @var  \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 

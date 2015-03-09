@@ -12,7 +12,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     const ORIG_PARENT_ID = 2;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\Framework\Test\Unit\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
 
