@@ -38,7 +38,8 @@ class Application extends SymfonyApplication
     {
         $commandsList = [];
 
-        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')->getServiceManager();
+        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+            ->getServiceManager();
         $setupFiles = glob(BP . '/setup/src/Magento/Setup/Console/Command/*Command.php');
         if ($setupFiles) {
             foreach ($setupFiles as $file) {
