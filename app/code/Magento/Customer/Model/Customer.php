@@ -295,7 +295,11 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
             $addressesData[] = $address->getDataModel();
         }
         $customerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerDataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $customerDataObject->setAddresses($addressesData)
             ->setId($this->getId());
         return $customerDataObject;
@@ -421,11 +425,19 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         $customerData = (array)$this->getData();
         $customerData[CustomerData::ID] = $this->getId();
         $dataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($dataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $dataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $customerOrigData = (array)$this->getOrigData();
         $customerOrigData[CustomerData::ID] = $this->getId();
         $origDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($origDataObject, $customerOrigData);
+        $this->dataObjectHelper->populateWithArray(
+            $origDataObject,
+            $customerOrigData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->_eventManager->dispatch(
             'customer_save_after_data_object',
             ['customer_data_object' => $dataObject, 'orig_customer_data_object' => $origDataObject]
