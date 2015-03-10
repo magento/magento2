@@ -96,10 +96,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
     public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {
         $objectManager = ObjectManager::getInstance();
-        $sharedInstances['Magento\Framework\Interception\PluginListInterface'] = $objectManager->create(
-            'Magento\Framework\Interception\PluginListInterface',
-            ['cache' => $objectManager->get('Magento\Framework\App\Interception\Cache\CompiledConfig')]
-        );
+
         $objectManager->configure(
             $objectManager
                 ->get('Magento\Framework\ObjectManager\ConfigLoaderInterface')
@@ -110,5 +107,10 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
         $diConfig->setInterceptionConfig(
             $objectManager->get('Magento\Framework\Interception\Config\Config')
         );
+        $sharedInstances['Magento\Framework\Interception\PluginList\PluginList'] = $objectManager->create(
+            'Magento\Framework\Interception\PluginListInterface',
+            ['cache' => $objectManager->get('Magento\Framework\App\Interception\Cache\CompiledConfig')]
+        );
+        $objectManager->get('Magento\Framework\App\Cache\Manager')->setEnabled(['compiled_config'], true);
     }
 }

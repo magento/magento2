@@ -80,8 +80,10 @@ class Compiler implements \Magento\Framework\AppInterface
                     ]
                 ],
                 'Magento\Tools\Di\Code\Generator\PluginList' => [
-                    'cache' => [
-                        'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                    'arguments' => [
+                        'cache' => [
+                            'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                        ]
                     ]
                 ]
             ]
