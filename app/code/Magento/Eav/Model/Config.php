@@ -390,7 +390,7 @@ class Config
             $attributeObject = $this->_createAttribute($entityType, $attribute);
             $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->load(
                 $attributeObject->getId()
-            )->toArray();;
+            )->toArray();
         }
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
