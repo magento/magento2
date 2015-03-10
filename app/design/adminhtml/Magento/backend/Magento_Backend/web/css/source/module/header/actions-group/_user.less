@@ -12,11 +12,14 @@
 //  ---------------------------------------------
 
 @user__font-size: round(@font-size__base - .1rem, 1);
+
 @user-account__padding-bottom: .4rem;
 @user-account__padding-left: 4rem;
 @user-account__padding-top: .7rem;
 @user-account__padding-right: 2.8rem;
-@user-menu__min-width: 20rem;
+
+@user-account-menu__min-width: 20rem;
+@user-account-menu__z-index: @notifications-action-menu__z-index - 10; // Should be lower than notifications
 
 //
 
@@ -78,7 +81,7 @@
 
 .admin-user-account-text {
     display: inline-block;
-    max-width: @user-menu__min-width - @user-account__padding-left - @user-account__padding-right - 2rem;
+    max-width: @user-account-menu__min-width - @user-account__padding-left - @user-account__padding-right - 2rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -89,7 +92,7 @@
     
     &:extend(.abs-page-header-action-menu all);
     line-height: @line-height__base;
-    min-width: @user-menu__min-width;
+    min-width: @user-account-menu__min-width;
     padding: .5em @_user-menu__inden-side;
     z-index: 1;
     &:before {
@@ -116,7 +119,7 @@
     }
     .admin-user-name {
         display: inline-block;
-        max-width: @user-menu__min-width;
+        max-width: @user-account-menu__min-width;
         overflow: hidden;
         text-overflow: ellipsis;
         vertical-align: text-top;

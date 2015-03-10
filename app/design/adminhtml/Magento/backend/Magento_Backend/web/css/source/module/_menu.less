@@ -11,6 +11,8 @@
 //  Variables
 //  ---------------------------------------------
 
+@menu-wrapper__z-index: @menu__z-index - 1;
+
 @menu__background-color: @color-very-dark-grayish-orange;
 
 @menu-logo__margin-bottom: 2.2rem;
@@ -28,9 +30,12 @@
 @menu-line-before__background-color: @color-brownie-vanilla;
 @menu-line-before__height: 1px;
 
+@menu-overlay__z-index: @menu__z-index - 3;
+
 @submenu__background-color: @menu-item__active__background-color;
 @submenu__padding-horizontal: 1.5rem;
 @submenu__padding-vertical: 2rem;
+@submenu__z-index: @menu__z-index - 2;
 @submenu-column__width: 23.8rem;
 @submenu-column__width__l: 19.8rem;
 @submenu-title__color: @color-white;

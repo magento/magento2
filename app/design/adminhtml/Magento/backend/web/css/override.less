@@ -1021,12 +1021,19 @@ fieldset[disabled] .address-list .action-delete {
 }
 .actions-split {
   position: relative;
-  z-index: 200;
+  z-index: 300;
 }
 .actions-split.active,
 .actions-split._active,
 .actions-split:hover {
   box-shadow: 0 0 0 1px #007bdb;
+}
+.actions-split.active .action-toggle.action-primary,
+.actions-split._active .action-toggle.action-primary,
+.actions-split.active .action-toggle.primary,
+.actions-split._active .action-toggle.primary {
+  background-color: #ba4000;
+  border-color: #ba4000;
 }
 .actions-split.active .dropdown-menu,
 .actions-split._active .dropdown-menu {
@@ -1083,6 +1090,10 @@ fieldset[disabled] .address-list .action-delete {
 .actions-split .action-toggle:hover:after {
   border-color: #000000 transparent transparent transparent;
 }
+.actions-split .action-toggle._active:after,
+.actions-split .action-toggle.active:after {
+  transform: none;
+}
 .actions-split .action-toggle.action-secondary:after,
 .actions-split .action-toggle.secondary:after,
 .actions-split .action-toggle.action-primary:after,
@@ -1102,6 +1113,7 @@ fieldset[disabled] .address-list .action-delete {
 .actions-split .dropdown-menu {
   background-color: #ffffff;
   border: 1px solid #007bdb;
+  border-radius: 1px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   display: block;
   left: 0;
@@ -1121,10 +1133,10 @@ fieldset[disabled] .address-list .action-delete {
   padding: .6875em;
 }
 .actions-split .dropdown-menu > li:hover {
-  background-color: #e0f6fe;
+  background-color: #e3e3e3;
 }
 .actions-split .dropdown-menu > li:active {
-  background-color: #c7effd;
+  background-color: #cacaca;
 }
 .abs-action-reset,
 .admin__menu .submenu-close,
@@ -2952,7 +2964,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 600;
+  z-index: 699;
 }
 .menu-wrapper .logo {
   display: block;
@@ -3040,7 +3052,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   top: -7.5rem;
   transition: all .7s linear;
   visibility: hidden;
-  z-index: 500;
+  z-index: 698;
 }
 .admin__menu .level-0 > .submenu._show {
   left: 100%;
@@ -3164,14 +3176,14 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 500;
+  z-index: 697;
 }
 .admin-user {
   float: right;
   line-height: 1.4;
   margin-left: .3rem;
   position: relative;
-  z-index: 300;
+  z-index: 390;
 }
 .admin-user.active .admin-user-account {
   border-color: #007bdb;
@@ -3276,7 +3288,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   float: right;
   margin-right: -0.3rem;
   position: relative;
-  z-index: 200;
+  z-index: 380;
 }
 .search-global-field {
   min-width: 5rem;

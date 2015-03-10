@@ -9,6 +9,7 @@
 
 .actions-split {
     @_action-split__min-width: @_action-toggle__width + @_action-default__min-width;
+    @_action-split-dropdown__hover__background-color: @color-gray89;
     @_action-default__min-width: 9.3rem;
     @_action-toggle__width: 4rem;
 
@@ -22,6 +23,13 @@
     }
     &.active,
     &._active {
+        .action-toggle {
+            &.action-primary,
+            &.primary {
+                background-color: @button-primary__hover__background-color;
+                border-color: @button-primary__hover__background-color;
+            }
+        }
         .dropdown-menu {
             opacity: 1;
             visibility: visible;
@@ -53,6 +61,13 @@
         position: absolute;
         right: 0;
         top: 0;
+        //  Disable triangle rotation
+        &._active,
+        &.active {
+            &:after {
+                transform: none;
+            }
+        }
         &.action-secondary,
         &.secondary,
         &.action-primary,
@@ -68,6 +83,7 @@
     .dropdown-menu {
         background-color: @page-wrapper__background-color;
         border: 1px solid @button__hover__border-color;
+        border-radius: 1px;
         box-shadow: @component__box-shadow__base;
         display: block; // ToDo UI: Should be deleted with old styles
         left: 0;
@@ -85,10 +101,10 @@
             border: none; // ToDo UI: Should be deleted with old styles
             padding: .6875em;
             &:hover {
-                background-color: @dropdown-menu__hover__background-color;
+                background-color: @_action-split-dropdown__hover__background-color;
             }
             &:active {
-                background-color: @dropdown-menu__active__background-color;
+                background-color: darken(@_action-split-dropdown__hover__background-color, 10%);
             }
         }
     }
