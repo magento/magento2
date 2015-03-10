@@ -709,6 +709,6 @@ return [
     [
         'PARAM_BACKEND_FRONT_NAME',
         'Magento\Backend\App\Area\FrontNameResolver',
-        'Magento\Backend\Setup\ConfigOptions::CONFIG_PATH_BACKEND_FRONTNAME'
+        'Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME'
     ],
 ];
