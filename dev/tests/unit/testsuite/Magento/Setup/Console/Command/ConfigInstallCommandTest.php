@@ -27,12 +27,7 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList
      */
     private $moduleList;
-
-    /**
-     * @var ConfigInstallCommand
-     */
-    private $configInstallCommand;
-
+    
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|InputInterface
      */
