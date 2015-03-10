@@ -119,7 +119,6 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
         ];
         $this->collector->expects($this->once())->method('collectOptions')->will($this->returnValue($configOptions));
 
-
         $this->writer->expects($this->once())->method('saveConfig')->with($testSetExpected);
 
         $this->configModel->process([]);
