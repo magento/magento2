@@ -315,18 +315,6 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->getConnection()->createTable($table);
 
-        $table = $installer->getConnection()
-            ->addColumn(
-                $installer->getTable('catalog_eav_attribute'),
-                'is_configurable',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                    'unsigned' => true,
-                    'default' => null,
-                    'comment' => 'Can be used to create configurable product'
-                ]
-            );
-
         $installer->endSetup();
 
     }
