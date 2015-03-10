@@ -72,9 +72,7 @@ class Logger
      */
     public function get($customerId = null)
     {
-        if (null !== $customerId) {
-            $data = $this->loadLogData($customerId);
-        }
+        $data = (null !== $customerId) ? $this->loadLogData($customerId) : [];
 
         return $this->logFactory->create(
             [
