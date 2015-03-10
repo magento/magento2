@@ -63,7 +63,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             ->method('collectOptions')
             ->will($this->returnValue([$configOption]));
 
-        $this->configModel->validate(['Fake'=>null]);
+        $this->configModel->validate(['Fake' => null]);
     }
 
     public function testProcess()

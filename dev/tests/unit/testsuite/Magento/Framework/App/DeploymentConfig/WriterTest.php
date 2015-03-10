@@ -92,21 +92,45 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             'test_key' => 'test2_conf.php'
         ];
 
-        $testSet = [
-            ConfigFilePool::APP_CONFIG => ['foo' => 'bar', 'key' => 'value', 'baz' => 1],
+        $testSetExisting = [
+            ConfigFilePool::APP_CONFIG => [
+                'foo' => 'bar',
+                'key' => 'value',
+                'baz' => [
+                    'test' => 'value'
+                ]
+            ],
+        ];
+
+        $testSetUpdate = [
+            ConfigFilePool::APP_CONFIG => [
+                'baz' => [
+                    'test' => 'value2'
+                ]
+            ],
+        ];
+
+        $testSetExpected = [
+            ConfigFilePool::APP_CONFIG => [
+                'foo' => 'bar',
+                'key' => 'value',
+                'baz' => [
+                    'test' => 'value2'
+                ]
+            ],
         ];
 
         $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
         $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->reader->expects($this->once())->method('load')->willReturn($testSet[ConfigFilePool::APP_CONFIG]);
+        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
         $this->formatter
             ->expects($this->once())
             ->method('format')
-            ->with($testSet[ConfigFilePool::APP_CONFIG])
+            ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
         $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
 
-        $this->object->saveConfig($testSet);
+        $this->object->saveConfig($testSetUpdate);
     }
 
     /**
