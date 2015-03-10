@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Model;
 
+use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Store\Model\ScopeInterface;
 
@@ -140,10 +141,9 @@ class Config
     public function getMonths()
     {
         $data = [];
-        $months = (new \ResourceBundle(
-            $this->localeResolver->getLocale(),
-            'ICUDATA'
-        ))['calendar']['gregorian']['monthNames']['format']['wide'];
+        $months = (new DataBundle())->get(
+            $this->localeResolver->getLocale()
+        )['calendar']['gregorian']['monthNames']['format']['wide'];
         foreach ($months as $key => $value) {
             $monthNum = ++$key < 10 ? '0' . $key : $key;
             $data[$key] = $monthNum . ' - ' . $value;

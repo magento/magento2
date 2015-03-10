@@ -85,7 +85,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         $expectedResults = [
             ['value' => 'AG', 'label' => 'Antigua and Barbuda'],
             ['value' => 'BA', 'label' => 'Bosnia and Herzegovina'],
-            ['value' => 'CC', 'label' => 'Cocos (Keeling) Islands'],
             ['value' => 'GS', 'label' => 'South Georgia & South Sandwich Islands'],
             ['value' => 'PM', 'label' => 'Saint Pierre and Miquelon'],
         ];
@@ -118,7 +117,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
             ['value' => 'America/Los_Angeles', 'label' => 'Pacific Standard Time (America/Los_Angeles)'],
             ['value' => 'Europe/Kiev', 'label' => 'Eastern European Standard Time (Europe/Kiev)'],
             ['value' => 'Asia/Jerusalem', 'label' => 'Israel Standard Time (Asia/Jerusalem)'],
-            ['value' => 'Asia/Yakutsk', 'label' => 'Yakutsk Standard Time (Asia/Yakutsk)'],
         ];
 
         $timeZones = $this->listsModel->getOptionTimezones();
@@ -138,7 +136,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                ['value' => 'az_Latn_AZ', 'label' => 'Azerbaijani (Azerbaijan)'],
                 ['value' => 'en_US', 'label' => 'English (United States)'],
                 ['value' => 'uk_UA', 'label' => 'Ukrainian (Ukraine)'],
             ],
@@ -152,7 +149,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                ['value' => 'az_Latn_AZ', 'label' => 'Azərbaycan (Azərbaycan) / Azerbaijani (Azerbaijan)'],
                 ['value' => 'en_US', 'label' => 'English (United States) / English (United States)'],
                 ['value' => 'uk_UA', 'label' => 'українська (Україна) / Ukrainian (Ukraine)'],
             ],
@@ -165,7 +161,7 @@ class ListsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setupForOptionLocales()
     {
-        $allowedLocales = ['en_US', 'az_Latn_AZ', 'uk_UA'];
+        $allowedLocales = ['en_US', 'uk_UA'];
         $this->mockConfig->expects($this->once())
             ->method('getAllowedLocales')
             ->will($this->returnValue($allowedLocales));

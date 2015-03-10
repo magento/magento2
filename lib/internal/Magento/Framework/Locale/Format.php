@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Locale;
 
+use Magento\Framework\Locale\Bundle\DataBundle;
+
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
@@ -83,7 +85,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      */
     public function getPriceFormat()
     {
-        $numberElements = (new \ResourceBundle($this->_localeResolver->getLocale(), 'ICUDATA'))['NumberElements'];
+        $numberElements = (new DataBundle())->get($this->_localeResolver->getLocale())['NumberElements'];
         $format = $numberElements['latn']['patterns']['currencyFormat'];
         $symbols = $numberElements['latn']['symbols'];
 

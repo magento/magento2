@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element\Html;
 
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Locale\Bundle\DataBundle;
 
 /**
  * Calendar block for page header
@@ -62,7 +62,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        $localeData = (new \ResourceBundle($this->_localeResolver->getLocale(), 'ICUDATA'));
+        $localeData = (new DataBundle())->get($this->_localeResolver->getLocale());
 
         // get days names
         $daysData = $localeData['calendar']['gregorian']['dayNames'];
@@ -127,7 +127,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
         );
 
         // get days and months for en_US locale - calendar will parse exactly in this locale
-        $englishMonths = (new \ResourceBundle('en_US', 'ICUDATA'))['calendar']['gregorian']['monthNames'];
+        $englishMonths = (new DataBundle())->get('en_US')['calendar']['gregorian']['monthNames'];
         $enUS = new \stdClass();
         $enUS->m = new \stdClass();
         $enUS->m->wide = array_values(iterator_to_array($englishMonths['format']['wide']));

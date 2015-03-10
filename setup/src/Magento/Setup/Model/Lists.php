@@ -6,6 +6,9 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Locale\Bundle\CurrencyBundle;
+use Magento\Framework\Locale\Bundle\LanguageBundle;
+use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 
@@ -53,7 +56,7 @@ class Lists
      */
     public function getCurrencyList()
     {
-        $currencies = (new \ResourceBundle(ResolverInterface::DEFAULT_LOCALE, 'ICUDATA-curr'))['Currencies'];
+        $currencies = (new CurrencyBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Currencies'];
         $list = [];
         foreach ($currencies as $code => $data) {
             $list[$code] = $data[1] . ' (' . $code . ')';
@@ -69,8 +72,8 @@ class Lists
      */
     public function getLocaleList()
     {
-        $languages = (new \ResourceBundle(ResolverInterface::DEFAULT_LOCALE, 'ICUDATA-lang'))['Languages'];
-        $countries = (new \ResourceBundle(ResolverInterface::DEFAULT_LOCALE, 'ICUDATA-region'))['Countries'];
+        $languages = (new LanguageBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Languages'];
+        $countries = (new RegionBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Countries'];
         $locales = \ResourceBundle::getLocales(null);
 
         $list = [];

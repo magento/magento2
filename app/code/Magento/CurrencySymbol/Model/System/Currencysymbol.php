@@ -5,6 +5,7 @@
  */
 
 namespace Magento\CurrencySymbol\Model\System;
+use Magento\Framework\Locale\Bundle\CurrencyBundle;
 
 /**
  * Custom currency symbol model
@@ -196,7 +197,7 @@ class Currencysymbol
         $currentSymbols = $this->_unserializeStoreConfig(self::XML_PATH_CUSTOM_CURRENCY_SYMBOL);
 
         foreach ($allowedCurrencies as $code) {
-            $currencies = (new \ResourceBundle($this->localeResolver->getLocale(), 'ICUDATA-curr'))['Currencies'];
+            $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'];
             $symbol = $currencies[$code][0] ?: $code;
             $name = $currencies[$code][1] ?: $code;
             $this->_symbolsData[$code] = ['parentSymbol' => $symbol, 'displayName' => $name];

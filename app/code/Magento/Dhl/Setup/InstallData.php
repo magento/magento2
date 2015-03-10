@@ -6,6 +6,7 @@
 
 namespace Magento\Dhl\Setup;
 
+use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -38,10 +39,9 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $days = (new \ResourceBundle(
-            $this->localeResolver->getLocale(),
-            'ICUDATA'
-        ))['calendar']['gregorian']['dayNames']['format']['abbreviated'];
+        $days = (new DataBundle())->get(
+            $this->localeResolver->getLocale()
+        )['calendar']['gregorian']['dayNames']['format']['abbreviated'];
 
         $select = $setup->getConnection()->select()->from(
             $setup->getTable('core_config_data'),

@@ -8,6 +8,11 @@
 
 namespace Magento\Framework\Locale;
 
+use Magento\Framework\Locale\Bundle\CurrencyBundle;
+use Magento\Framework\Locale\Bundle\DataBundle;
+use Magento\Framework\Locale\Bundle\LanguageBundle;
+use Magento\Framework\Locale\Bundle\RegionBundle;
+
 class Lists implements ListsInterface
 {
     /**
@@ -63,8 +68,8 @@ class Lists implements ListsInterface
     {
         $currentLocale = $this->localeResolver->getLocale();
         $locales = \ResourceBundle::getLocales(null);
-        $languages = (new \ResourceBundle($currentLocale, 'ICUDATA-lang'))['Languages'];
-        $countries = (new \ResourceBundle($currentLocale, 'ICUDATA-region'))['Countries'];
+        $languages = (new LanguageBundle())->get($currentLocale)['Languages'];
+        $countries = (new RegionBundle())->get($currentLocale)['Countries'];
 
         $options = [];
         $allowedLocales = $this->_config->getAllowedLocales();
@@ -118,14 +123,13 @@ class Lists implements ListsInterface
     public function getOptionWeekdays($preserveCodes = false, $ucFirstCode = false)
     {
         $options = [];
-        $days = (new \ResourceBundle(
-            $this->localeResolver->getLocale(),
+        $days = (new DataBundle())->get(
+            $this->localeResolver->getLocale()
+        )['calendar']['gregorian']['dayNames']['format']['wide'];
+        $englishDays = (new DataBundle())->get(
+            'en_US',
             'ICUDATA'
-        ))['calendar']['gregorian']['dayNames']['format']['wide'];
-        $englishDays = (new \ResourceBundle(
-            'en',
-            'ICUDATA'
-        ))['calendar']['gregorian']['dayNames']['format']['abbreviated'];
+        )['calendar']['gregorian']['dayNames']['format']['abbreviated'];
         foreach ($days as $code => $name) {
             $code = $preserveCodes ? $englishDays[$code] : $code;
             $options[] = ['label' => $name, 'value' => $ucFirstCode ? ucfirst($code) : $code];
@@ -139,7 +143,7 @@ class Lists implements ListsInterface
     public function getOptionCountries()
     {
         $options = [];
-        $countries = (new \ResourceBundle($this->localeResolver->getLocale(), 'ICUDATA-region'))['Countries'];
+        $countries = (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'];
         foreach ($countries as $code => $name) {
             $options[] = ['label' => $name, 'value' => $code];
         }
@@ -151,7 +155,7 @@ class Lists implements ListsInterface
      */
     public function getOptionCurrencies()
     {
-        $currencies = (new \ResourceBundle($this->localeResolver->getLocale(), 'ICUDATA-curr'))['Currencies'];
+        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'];
         $options = [];
         $allowed = $this->_config->getAllowedCurrencies();
         foreach ($currencies as $code => $data) {
@@ -168,7 +172,7 @@ class Lists implements ListsInterface
      */
     public function getOptionAllCurrencies()
     {
-        $currencies = (new \ResourceBundle($this->localeResolver->getLocale(), 'ICUDATA-curr'))['Currencies'];
+        $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'];
         $options = [];
         foreach ($currencies as $code => $data) {
             $options[] = ['label' => $data[1], 'value' => $code];
@@ -199,6 +203,6 @@ class Lists implements ListsInterface
      */
     public function getCountryTranslation($value)
     {
-        return (new \ResourceBundle($this->localeResolver->getLocale(), 'ICUDATA-region'))['Countries'][$value];
+        return (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'][$value];
     }
 }

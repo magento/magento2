@@ -9,6 +9,8 @@
  */
 namespace Magento\Directory\Block;
 
+use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
+
 class Currency extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -78,9 +80,9 @@ class Currency extends \Magento\Framework\View\Element\Template
 
                 foreach ($codes as $code) {
                     if (isset($rates[$code])) {
-                        $allCurrencies = (new \ResourceBundle(
-                            $this->localeResolver->getLocale(), 'ICUDATA-curr'
-                        ))['Currencies'];
+                        $allCurrencies = (new CurrencyBundle())->get(
+                            $this->localeResolver->getLocale()
+                        )['Currencies'];
                         $currencies[$code] = $allCurrencies[$code][1] ?: $code;
                     }
                 }

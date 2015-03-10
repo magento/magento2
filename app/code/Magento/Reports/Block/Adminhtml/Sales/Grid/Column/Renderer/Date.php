@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
+use Magento\Framework\Locale\Bundle\DataBundle;
 
 /**
  * Adminhtml grid item renderer date
@@ -35,10 +36,9 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
         if (!$format) {
             if (is_null(self::$_format)) {
                 try {
-                    $formats = (new \ResourceBundle(
-                        $this->_localeResolver->getLocale(),
-                        'ICUDATA'
-                    ))['calendar']['gregorian']['availableFormats'];
+                    $formats = (new DataBundle())->get(
+                        $this->_localeResolver->getLocale()
+                    )['calendar']['gregorian']['availableFormats'];
 
                     switch ($this->getColumn()->getPeriodType()) {
                         case 'month':
