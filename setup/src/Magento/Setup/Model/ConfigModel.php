@@ -80,7 +80,7 @@ class ConfigModel
                 if (isset($fileConfigStorage[$config->getFileKey()])
                     && isset($fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()])
                 ) {
-                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_merge(
+                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_replace_recursive(
                         $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()],
                         $config->getData()
                     );
