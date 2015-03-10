@@ -56,6 +56,7 @@ class ConfigModel
      * Process input options
      *
      * @param array $inputOptions
+     * @returns void
      * @throws \Exception
      */
     public function process($inputOptions)
@@ -108,7 +109,7 @@ class ConfigModel
         $options = $this->getAvailableOptions();
         foreach ($options as $option) {
             try {
-                if ($inputOptions[$option->getName()] !== NULL) {
+                if ($inputOptions[$option->getName()] !== null) {
                     $option->validate($inputOptions[$option->getName()]);
                 }
             } catch (\InvalidArgumentException $e) {
@@ -119,7 +120,7 @@ class ConfigModel
         // validate ConfigOptions
         $options = $this->collector->collectOptions();
 
-        foreach ($options as $moduleName => $option) {
+        foreach (array_values($options) as $option) {
             $errors = array_merge($errors, $option->validate($inputOptions));
         }
 

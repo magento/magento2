@@ -40,7 +40,7 @@ class TextConfigOption extends AbstractConfigOption
         ) {
             throw new \InvalidArgumentException("Frontend input type has to be 'text', 'textarea' or 'password'.");
         }
-        parent::__construct($name, $frontendType, $description, self::VALUE_REQUIRED, $defaultValue, $shortCut);
+        parent::__construct($name, $frontendType, self::VALUE_REQUIRED, $description, $defaultValue, $shortCut);
     }
 
     /**

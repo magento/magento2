@@ -32,8 +32,8 @@ abstract class AbstractConfigOption extends InputOption
     public function __construct(
         $name,
         $frontendType,
-        $description = '',
         $mode,
+        $description = '',
         $defaultValue = null,
         $shortcut = null
     ) {

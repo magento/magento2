@@ -76,4 +76,3 @@ class ConfigData
         return $this->data;
     }
 }
-

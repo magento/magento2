@@ -125,7 +125,6 @@ class ConfigGenerator
     public function createDefinitionsConfig(array $data)
     {
         if (!empty($data[ConfigOptions::INPUT_KEY_DEFINITION_FORMAT])) {
-            $config['definition']['format'] = $data[ConfigOptions::INPUT_KEY_DEFINITION_FORMAT];
             return new ConfigData(
                 ConfigFilePool::APP_CONFIG,
                 'definition',
@@ -154,13 +153,16 @@ class ConfigGenerator
             $connection[ConfigGenerator::$paramMap[$key]] = $data[$key];
         }
 
-        $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_PASS]] =
-            isset($data[ConfigOptions::INPUT_KEY_DB_PASS]) ? $data[ConfigOptions::INPUT_KEY_DB_PASS] : '';
-        $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_MODEL]] =
-            isset($data[ConfigOptions::INPUT_KEY_DB_MODEL]) ? $data[ConfigOptions::INPUT_KEY_DB_MODEL] : 'mysql4';
-        $connection[self::$paramMap[ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS]] =
-            isset($data[ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS]) ?
-                $data[ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS] : 'SET NAMES utf8;';
+        $optional = [
+            [ConfigOptions::INPUT_KEY_DB_PASS => ''],
+            [ConfigOptions::INPUT_KEY_DB_MODEL => 'mysql4'],
+            [ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;']
+        ];
+
+        foreach ($optional as $key => $value) {
+            $connection[ConfigGenerator::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : $value;
+        }
+
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_ACTIVE]] = '1';
         $prefixKey = isset($data[ConfigOptions::INPUT_KEY_DB_PREFIX]) ? $data[ConfigOptions::INPUT_KEY_DB_PREFIX] : '';
         $dbData = [

@@ -34,8 +34,8 @@ class ConfigOptions implements ConfigOptionsInterface
             new TextConfigOption(
                 self::INPUT_KEY_BACKEND_FRONTNAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'Backend frontname',
-                'admin'
+                'admin',
+                'Backend frontname'
             )
         ];
     }

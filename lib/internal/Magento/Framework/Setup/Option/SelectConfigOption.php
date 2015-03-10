@@ -53,8 +53,8 @@ class SelectConfigOption extends AbstractConfigOption
         parent::__construct(
             $name,
             $frontendType,
-            $description,
             self::VALUE_REQUIRED,
+            $description,
             $defaultValue,
             $shortCut
         );

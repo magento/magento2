@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
+
 use Magento\Setup\Model\ConfigOptions;
 
 /**

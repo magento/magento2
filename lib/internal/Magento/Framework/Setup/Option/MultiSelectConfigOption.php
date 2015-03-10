@@ -55,8 +55,8 @@ class MultiSelectConfigOption extends AbstractConfigOption
         parent::__construct(
             $name,
             $frontendType,
-            $description,
             self::VALUE_REQUIRED | self::VALUE_IS_ARRAY,
+            $description,
             $defaultValue,
             $shortCut
         );
