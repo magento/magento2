@@ -143,12 +143,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($data, $expected)
     {
-        $this->attributeFactoryMock->expects($this->exactly(3))
-            ->method('create')
+        $this->_config->expects($this->exactly(3))
+            ->method('getAttribute')
             ->will($this->returnValue($this->attributeCustomerMock));
-        $this->attributeCustomerMock->expects($this->exactly(3))
-            ->method('loadByCode')
-            ->will($this->returnSelf());
         $this->attributeCustomerMock->expects($this->exactly(3))
             ->method('getIsRequired')
             ->will($this->returnValue(true));

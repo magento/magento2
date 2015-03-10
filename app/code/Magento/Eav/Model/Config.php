@@ -386,8 +386,11 @@ class Config
             if (empty($attribute['attribute_model'])) {
                 $attribute['attribute_model'] = $entityType->getAttributeModel();
             }
-            $this->_createAttribute($entityType, $attribute);
-            $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attribute;
+            // attributes should be reloaded via model to be processed by custom resource model
+            $attributeObject = $this->_createAttribute($entityType, $attribute);
+            $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->load(
+                $attributeObject->getId()
+            )->toArray();
         }
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
@@ -542,6 +545,7 @@ class Config
         } else {
             $model = $entityType->getAttributeModel();
         }
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $attribute = $this->_universalFactory->create($model)->setData($attributeData);
         $this->_addAttributeReference(
             $attributeData['attribute_id'],
