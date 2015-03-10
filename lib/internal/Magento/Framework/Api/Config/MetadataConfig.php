@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Api\Config;
 
-use Magento\Framework\Api\MetadataObjectInterfaceFactory;
+use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\MetadataServiceInterface;
 
@@ -21,9 +21,9 @@ class MetadataConfig implements MetadataServiceInterface
     private $serviceConfigReader;
 
     /**
-     * @var MetadataObjectInterfaceFactory
+     * @var ObjectFactory
      */
-    private $attributeMetadataFactory;
+    private $objectFactory;
 
     /**
      * @var array
@@ -34,14 +34,14 @@ class MetadataConfig implements MetadataServiceInterface
      * Initialize dependencies.
      *
      * @param ServiceConfigReader $serviceConfigReader
-     * @param MetadataObjectInterfaceFactory $attributeMetadataFactory
+     * @param ObjectFactory $objectFactory
      */
     public function __construct(
         ServiceConfigReader $serviceConfigReader,
-        MetadataObjectInterfaceFactory $attributeMetadataFactory
+        ObjectFactory $objectFactory
     ) {
         $this->serviceConfigReader = $serviceConfigReader;
-        $this->attributeMetadataFactory = $attributeMetadataFactory;
+        $this->objectFactory = $objectFactory;
     }
 
     /**
@@ -50,7 +50,7 @@ class MetadataConfig implements MetadataServiceInterface
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
         $attributes = [];
-        if (!is_null($this->attributeMetadataFactory) && !is_null($dataObjectClassName)) {
+        if (!is_null($this->objectFactory) && !is_null($dataObjectClassName)) {
             /**
              * Attribute metadata builder and data object class name are expected to be configured
              * via DI using virtual types. If configuration is missing, empty array should be returned.
@@ -82,7 +82,8 @@ class MetadataConfig implements MetadataServiceInterface
         ) {
             $attributeCodes = array_keys($this->allAttributes[$dataObjectClassName]);
             foreach ($attributeCodes as $attributeCode) {
-                $attributes[$attributeCode] = $this->attributeMetadataFactory->create()
+                $attributes[$attributeCode] = $this->objectFactory
+                    ->create('\Magento\Framework\Api\MetadataObjectInterface', [])
                     ->setAttributeCode($attributeCode);
             }
         }
