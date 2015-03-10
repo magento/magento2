@@ -6,8 +6,11 @@
 
 try {
     require __DIR__ . '/../app/bootstrap.php';
-    $application = new Magento\Setup\Console\Application('Magento CLI');
-    $application->run();
+    if (PHP_SAPI == 'cli') {
+        $application = new Magento\Setup\Console\Application('Magento CLI');
+        $application->run();
+    }
+
 } catch (\Exception $e) {
     if (PHP_SAPI == 'cli') {
         echo 'Autoload error: ' . $e->getMessage();
