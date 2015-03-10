@@ -71,6 +71,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
                     'filterBuilder' => $this->filterBuilder,
                     'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
                     'groupRepository' => $this->groupRepositoryMock,
+                    'sortOrderBuilder' => $this->sortOrderBuilder,
                 ]
             );
     }

@@ -10,7 +10,7 @@ use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 class AttributeRepository implements CategoryAttributeRepositoryInterface
 {
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     * @var \Magento\Framework\Api\searchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -26,13 +26,13 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\Config\MetadataConfig $metadataConfig
-     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\searchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
      */
     public function __construct(
         \Magento\Framework\Api\Config\MetadataConfig $metadataConfig,
-        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\searchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
     ) {

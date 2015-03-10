@@ -86,7 +86,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->metadataConfigMock =
             $this->getMock('Magento\Framework\Api\Config\MetadataConfig', [], [], '', false);
         $this->searchCriteriaBuilderMock =
-            $this->getMock('Magento\Framework\Api\SearchCriteriaDataBuilder', [], [], '', false);
+            $this->getMock('Magento\Framework\Api\SearchCriteriaBuilder', [], [], '', false);
         $this->filterBuilderMock =
             $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
         $this->searchResultMock =

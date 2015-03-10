@@ -93,7 +93,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaDataBuilder',
+            '\Magento\Framework\Api\SearchCriteriaBuilder',
             [],
             [],
             '',
