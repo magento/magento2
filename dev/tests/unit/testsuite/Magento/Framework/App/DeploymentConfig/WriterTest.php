@@ -31,6 +31,11 @@ class WriterTest extends \PHPUnit_Framework_TestCase
      */
     protected $formatter;
 
+    /**
+     * @var ConfigFilePool
+     */
+    private $configFilePool;
+
     protected function setUp()
     {
         $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
@@ -38,8 +43,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->formatter = $this->getMockForAbstractClass(
             'Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface'
         );
-        $configFilePool = new ConfigFilePool();
-        $this->object = new Writer($this->reader, $filesystem, $configFilePool, $this->formatter);
+        $this->configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
+        $this->object = new Writer($this->reader, $filesystem, $this->configFilePool, $this->formatter);
         $this->reader->expects($this->any())->method('getFile')->willReturn('test.php');
         $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $filesystem->expects($this->any())
@@ -78,6 +83,30 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->formatter->expects($this->once())->method('format')->with($expected)->willReturn('formatted');
         $this->dirWrite->expects($this->once())->method('writeFile')->with('test.php', 'formatted');
         $this->object->update($segment);
+    }
+
+    public function testSaveConfig()
+    {
+        $configFiles = [
+            ConfigFilePool::APP_CONFIG => 'test_conf.php',
+            'test_key' => 'test2_conf.php'
+        ];
+
+        $testSet = [
+            ConfigFilePool::APP_CONFIG => ['foo' => 'bar', 'key' => 'value', 'baz' => 1],
+        ];
+
+        $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
+        $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
+        $this->reader->expects($this->once())->method('load')->willReturn($testSet[ConfigFilePool::APP_CONFIG]);
+        $this->formatter
+            ->expects($this->once())
+            ->method('format')
+            ->with($testSet[ConfigFilePool::APP_CONFIG])
+            ->willReturn([]);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+
+        $this->object->saveConfig($testSet);
     }
 
     /**

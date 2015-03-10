@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
 
@@ -81,7 +80,7 @@ class ConfigModel
                 if (isset($fileConfigStorage[$config->getFileKey()])
                     && isset($fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()])
                 ) {
-                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_merge_recursive(
+                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_merge(
                         $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()],
                         $config->getData()
                     );
@@ -93,7 +92,6 @@ class ConfigModel
         }
 
         $this->writer->saveConfig($fileConfigStorage);
-
     }
 
     /**
