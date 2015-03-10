@@ -10,17 +10,6 @@ namespace Magento\DesignEditor\Controller\Adminhtml\System\Design;
  */
 class EditorTest extends \Magento\Backend\Utility\Controller
 {
-    /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_dataHelper;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->_dataHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
-    }
-
     public function testIndexAction()
     {
         $this->dispatch('backend/admin/system_design_editor/index');

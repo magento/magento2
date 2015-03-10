@@ -40,7 +40,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_encoderMock;
+    protected $jsonHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,8 +49,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_encoderMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
-        $this->_model = new \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable($this->_encoderMock);
+        $this->jsonHelperMock = $this->getMock('\Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $this->_model = new \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable($this->jsonHelperMock);
 
         $this->_productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
 
@@ -74,7 +74,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_encoderMock->expects($this->any())->method('jsonEncode')->will($this->returnArgument(0));
+        $this->jsonHelperMock->expects($this->any())->method('jsonEncode')->will($this->returnArgument(0));
     }
 
     public function testBuildWithNonDownloadableProductType()

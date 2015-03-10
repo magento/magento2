@@ -37,7 +37,8 @@ if ($product->isSaleable()) {
     $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
         $product,
         ['_query' => [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->helper('Magento\Core\Helper\PostData')->getEncodedUrl(
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                $this->helper('Magento\Framework\Url\Helper\Data')->getEncodedUrl(
                     $addToCartUrlGenerator->getAddToCartUrl($product)
                 ),
         ]]
@@ -72,7 +73,7 @@ if ($product->isSaleable()) {
     <a href="#"
        id="<?php echo($popupId);?>"
        class="action map-show-info"
-       data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
+       data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp-message">

@@ -37,17 +37,17 @@ class Js extends \Magento\Backend\Block\Template
     protected $currentCustomer;
 
     /**
-     * Core data
+     * Json helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param CurrentCustomer $currentCustomer
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param TaxCalculationInterface $calculationService
      * @param ProductTaxClassSource $productTaxClassSource
      * @param array $data
@@ -56,14 +56,14 @@ class Js extends \Magento\Backend\Block\Template
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         CurrentCustomer $currentCustomer,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         TaxCalculationInterface $calculationService,
         ProductTaxClassSource $productTaxClassSource,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
         $this->currentCustomer = $currentCustomer;
-        $this->coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         $this->calculationService = $calculationService;
         $this->productTaxClassSource = $productTaxClassSource;
         parent::__construct($context, $data);
@@ -110,6 +110,6 @@ class Js extends \Magento\Backend\Block\Template
             );
             $result["value_{$taxClassId}"] = $taxRate;
         }
-        return $this->coreHelper->jsonEncode($result);
+        return $this->jsonHelper->jsonEncode($result);
     }
 }

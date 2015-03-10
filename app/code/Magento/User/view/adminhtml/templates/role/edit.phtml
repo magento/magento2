@@ -35,7 +35,7 @@
 
         <div class="control">
             <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?php
-            echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode([
+            echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
                 'rolesTree' => [
                     "treeInitData" => $block->getTree(),
                     "treeInitSelectedData" => $block->getSelectedResources(),
