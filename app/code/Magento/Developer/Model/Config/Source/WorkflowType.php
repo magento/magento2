@@ -31,11 +31,6 @@ class WorkflowType implements ArrayInterface
     const CLIENT_SIDE_COMPILATION = 'client_side_compilation';
 
     /**
-     * Constant for advanced compilation workflow
-     */
-    const ADVANCED_COMPILATION = 'advanced_compilation';
-
-    /**
      * Return list of Workflow types
      *
      * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
@@ -44,8 +39,7 @@ class WorkflowType implements ArrayInterface
     {
         return [
             ['value' => self::CLIENT_SIDE_COMPILATION, 'label' => __('Client side less compilation')],
-            ['value' => self::SERVER_SIDE_COMPILATION, 'label' => __('Server side less compilation')],
-            ['value' => self::ADVANCED_COMPILATION, 'label' => __('Advanced less compilation')]
+            ['value' => self::SERVER_SIDE_COMPILATION, 'label' => __('Server side less compilation')]
         ];
     }
 }
