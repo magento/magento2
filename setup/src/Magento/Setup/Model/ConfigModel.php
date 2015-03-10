@@ -56,7 +56,7 @@ class ConfigModel
      * Process input options
      *
      * @param array $inputOptions
-     * @returns void
+     * @return void
      * @throws \Exception
      */
     public function process($inputOptions)
