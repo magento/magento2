@@ -876,6 +876,24 @@ class Installer
     }
 
     /**
+     * Check if database table prefix is valid
+     *
+     * @param string $prefix
+     * @return boolean
+     * @throws \InvalidArgumentException
+     */
+    public function checkDatabaseTablePrefix($prefix)
+    {
+        //The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_);
+        // the first character should be a letter.
+        if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]_]+)$/', $prefix)) {
+            throw new \InvalidArgumentException('Please correct the table prefix format.');
+        }
+
+        return true;
+    }
+
+    /**
      * Return messages
      *
      * @return array
@@ -994,6 +1012,9 @@ class Installer
             $config[DbConfig::KEY_USER],
             $config[DbConfig::KEY_PASS]
         );
+        if (isset($config[DbConfig::KEY_PREFIX])) {
+            $this->checkDatabaseTablePrefix($config[DbConfig::KEY_PREFIX]);
+        }
     }
 
     /**

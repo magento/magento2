@@ -39,7 +39,10 @@ define([
                 notificationIcon.off('click.dropdown');
                 $('.notifications-action .notifications-counter').text('').hide();
             } else {
-                $('.notifications-action .notifications-counter').text(notificationCount);
+                // Change top counter only for allowable range
+                if (notificationCount <= 99) {
+                    $('.notifications-action .notifications-counter').text(notificationCount);
+                }
                 $('.notifications-entry-last .notifications-counter').text(notificationCount);
                 // Modify caption of the 'See All' link
                 var actionElement = $('.notifications-wrapper .notifications-list .last .action-more');

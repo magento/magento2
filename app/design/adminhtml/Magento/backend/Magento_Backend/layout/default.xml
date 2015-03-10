@@ -22,8 +22,8 @@
         </referenceContainer>
 
         <referenceContainer name="header" htmlClass="page-header row">
-            <container name="header.inner.left" before="-" htmlTag="div" htmlClass="page-header-hgroup col-m-8"/>
-            <container name="header.inner.right" after="header.inner.left" htmlTag="div" htmlClass="page-header-actions col-m-4"/>
+            <container name="header.inner.left" before="-" htmlTag="div" htmlClass="page-header-hgroup col-l-8 col-m-6"/>
+            <container name="header.inner.right" after="header.inner.left" htmlTag="div" htmlClass="page-header-actions col-l-4 col-m-6"/>
         </referenceContainer>
 
         <move element="page.menu" destination="menu.wrapper" />
