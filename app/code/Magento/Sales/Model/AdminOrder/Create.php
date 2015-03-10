@@ -1425,7 +1425,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
             $billingAddress->setData('save_in_address_book', $saveInAddressBook);
 
-            if ($this->getShippingAddress()->getSameAsBilling()) {
+            if (!$this->getQuote()->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
                 $shippingAddress = clone $billingAddress;
                 $shippingAddress->setSameAsBilling(true);
                 $shippingAddress->setSaveInAddressBook(false);
