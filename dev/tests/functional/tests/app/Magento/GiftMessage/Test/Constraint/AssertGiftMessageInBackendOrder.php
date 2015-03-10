@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Skipped fields for verify data.
      *

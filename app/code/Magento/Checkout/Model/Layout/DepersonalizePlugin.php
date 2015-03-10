@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Checkout\Model\Layout;
+
+use Magento\PageCache\Model\DepersonalizeChecker;
 
 /**
  * Class DepersonalizePlugin
@@ -12,41 +13,25 @@ namespace Magento\Checkout\Model\Layout;
 class DepersonalizePlugin
 {
     /**
+     * @var DepersonalizeChecker
+     */
+    protected $depersonalizeChecker;
+
+    /**
      * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Framework\Module\Manager
-     */
-    protected $moduleManager;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \Magento\PageCache\Model\Config
-     */
-    protected $cacheConfig;
-
-    /**
+     * @param DepersonalizeChecker $depersonalizeChecker
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\PageCache\Model\Config $cacheConfig
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\PageCache\Model\Config $cacheConfig
+        DepersonalizeChecker $depersonalizeChecker,
+        \Magento\Checkout\Model\Session $checkoutSession
     ) {
         $this->checkoutSession = $checkoutSession;
-        $this->moduleManager = $moduleManager;
-        $this->request = $request;
-        $this->cacheConfig = $cacheConfig;
+        $this->depersonalizeChecker = $depersonalizeChecker;
     }
 
     /**
@@ -58,11 +43,7 @@ class DepersonalizePlugin
      */
     public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
     {
-        if ($this->moduleManager->isEnabled('Magento_PageCache')
-            && $this->cacheConfig->isEnabled()
-            && !$this->request->isAjax()
-            && $subject->isCacheable()
-        ) {
+        if ($this->depersonalizeChecker->checkIfDepersonalize($subject)) {
             $this->checkoutSession->clearStorage();
         }
         return $result;
