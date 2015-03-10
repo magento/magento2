@@ -9,9 +9,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
-use \Magento\Catalog\Model\Category\AttributeRepository;
-
-use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Catalog\Model\Category\AttributeRepository;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 {

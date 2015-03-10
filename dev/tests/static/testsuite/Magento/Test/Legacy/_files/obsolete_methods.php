@@ -2127,4 +2127,6 @@ return [
     ['count', 'Magento\Review\Block\Customer\Recent'],
     ['_getCollection', 'Magento\Review\Block\Customer\Recent'],
     ['getCollection', 'Magento\Review\Block\Customer\Recent', 'Magento\Review\Block\Customer\Recent::getReviews'],
+    ['getProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['setProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
 ];

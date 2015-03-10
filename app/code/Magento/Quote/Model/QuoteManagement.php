@@ -236,8 +236,15 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     public function placeOrder($cartId)
     {
         $quote = $this->quoteRepository->getActive($cartId);
-        $order = $this->submit($quote);
-        return $order->getId();
+
+        if ($quote->getCheckoutMethod() === 'guest') {
+            $quote->setCustomerId(null);
+            $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
+            $quote->setCustomerIsGuest(true);
+            $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
+        }
+
+        return $this->submit($quote)->getId();
     }
 
     /**
