@@ -6,7 +6,7 @@
 
 namespace Magento\Dhl\Setup;
 
-use Magento\Framework\Locale\ListsInterface;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -19,18 +19,18 @@ class InstallData implements InstallDataInterface
     /**
      * Locale list
      *
-     * @var ListsInterface
+     * @var ResolverInterface
      */
-    private $localeLists;
+    private $localeResolver;
 
     /**
      * Init
      *
-     * @param ListsInterface $localeLists
+     * @param ResolverInterface $localeResolver
      */
-    public function __construct(ListsInterface $localeLists)
+    public function __construct(ResolverInterface $localeResolver)
     {
-        $this->localeLists = $localeLists;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -38,12 +38,10 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $days = $this->localeLists->getTranslationList('days');
-
-        $days = array_keys($days['format']['wide']);
-        foreach ($days as $key => $value) {
-            $days[$key] = ucfirst($value);
-        }
+        $days = (new \ResourceBundle(
+            $this->localeResolver->getLocale(),
+            'ICUDATA'
+        ))['calendar']['gregorian']['dayNames']['format']['abbreviated'];
 
         $select = $setup->getConnection()->select()->from(
             $setup->getTable('core_config_data'),
@@ -54,7 +52,12 @@ class InstallData implements InstallDataInterface
         );
 
         foreach ($setup->getConnection()->fetchAll($select) as $configRow) {
-            $row = ['value' => implode(',', array_intersect_key($days, array_flip(explode(',', $configRow['value']))))];
+            $row = [
+                'value' => implode(
+                    ',',
+                    array_intersect_key(iterator_to_array($days), array_flip(explode(',', $configRow['value'])))
+                )
+            ];
             $setup->getConnection()->update(
                 $setup->getTable('core_config_data'),
                 $row,
