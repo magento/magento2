@@ -363,7 +363,6 @@ nav ol {
 }
 .address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label:before,
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label:before {
-  content: '';
   display: none;
 }
 .address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span,
@@ -660,19 +659,19 @@ option:empty {
   margin-bottom: 0;
 }
 .admin__field + .admin__field {
-  margin-top: 15px;
+  margin-top: 1.5rem;
 }
 .admin__field:not(.admin__field-option) ~ .admin__field-option {
-  margin-top: 5px;
+  margin-top: .5rem;
 }
 .admin__field.admin__field-option ~ .admin__field-option {
-  margin-top: 9px;
+  margin-top: .9rem;
 }
 .admin__field ~ .admin__field-option:last-child {
-  margin-bottom: 8px;
+  margin-bottom: .8rem;
 }
 .admin__fieldset > .admin__field {
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
   position: relative;
   z-index: 1;
 }
@@ -939,8 +938,35 @@ fieldset[disabled] .address-list .action-delete {
   vertical-align: middle;
   text-align: center;
 }
+.address-list .action-delete span {
+  max-height: 1px;
+  max-width: 1px;
+}
+.address-list .action-delete:hover {
+  position: relative;
+  z-index: 2;
+}
 .address-list .action-delete:hover:after {
   color: #060504;
+}
+.address-list .action-delete:hover span {
+  background-color: #fcfcfc;
+  border: 1px solid #989287;
+  border-radius: .4rem;
+  bottom: 100%;
+  clip: auto;
+  font-size: 1.2rem;
+  height: auto;
+  left: auto;
+  margin: 0 auto .1rem;
+  padding: .5rem;
+  right: auto;
+  top: auto;
+  max-height: 50px;
+  max-width: 200px;
+  white-space: nowrap;
+  width: auto;
+  transition: all .01s linear .7s;
 }
 .address-item-edit {
   margin-left: 359px;
@@ -2702,8 +2728,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   border: 1px solid #e3e3e3;
   box-shadow: 0 5px 30px 0 #000000;
   margin: auto;
-  max-width: 450px;
-  min-height: 300px;
+  max-width: 45rem;
+  min-height: 30rem;
   padding: 40px 80px 50px;
   position: relative;
   width: 100%;

@@ -61,7 +61,7 @@
     }
 }
 
-// @todo Move to other place:
+// @todo ui Move to other place:
 .address-item-edit-content {
     padding: 15px 30px;
     .admin__field {
@@ -90,9 +90,36 @@
             @_icon-font-position: after,
             @_icon-font-color: @color-brown-darkie
         );
+        span {
+            max-height: 1px;
+            max-width: 1px;
+        }
         &:hover {
             &:after {
                 color: darken(@color-brown-darkie, 20%);
+            }
+            position: relative;
+            z-index: 2;
+
+            // @todo ui - testing solution to show action hint without title attribute
+            span {
+                background-color: @color-very-light-gray;
+                border: 1px solid @color-heathered-grey;
+                border-radius: .4rem;
+                bottom: 100%;
+                clip: auto;
+                font-size: @font-size__s;
+                height: auto;
+                left: auto;
+                margin: 0 auto .1rem;
+                padding: .5rem;
+                right: auto;
+                top: auto;
+                max-height: 50px;
+                max-width: 200px;
+                white-space: nowrap;
+                width: auto;
+                transition: all .01s linear .7s;
             }
         }
     }
