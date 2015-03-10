@@ -82,6 +82,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->pageId);
         $this->cmsHelperMock->expects($this->once())
             ->method('prepareResultPage')
+            ->with($this->controller, $this->pageId)
             ->willReturn($this->resultPageMock);
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
