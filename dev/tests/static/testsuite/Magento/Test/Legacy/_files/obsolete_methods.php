@@ -2047,7 +2047,6 @@ return [
     ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
-    ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
     ['_getSendfriendModel', 'Magento\Sendfriend\Block\Send'],
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
