@@ -6,7 +6,6 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface as ContentInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
