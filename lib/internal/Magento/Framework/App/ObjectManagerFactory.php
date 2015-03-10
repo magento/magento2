@@ -163,12 +163,8 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
-        if (!$sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface']) {
-            $sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface'] = $objectManager->get(
-                'Magento\Framework\App\ObjectManager\ConfigLoader'
-            );
-        }
-        $env->configureObjectManager($diConfig);
+
+        $env->configureObjectManager($diConfig, $sharedInstances);
 
         return $objectManager;
     }

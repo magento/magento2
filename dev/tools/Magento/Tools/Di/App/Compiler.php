@@ -78,6 +78,11 @@ class Compiler implements \Magento\Framework\AppInterface
                                 ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                         ]
                     ]
+                ],
+                'Magento\Tools\Di\Code\Generator\PluginList' => [
+                    'cache' => [
+                        'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                    ]
                 ]
             ]
         );

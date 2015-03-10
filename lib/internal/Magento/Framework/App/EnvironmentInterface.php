@@ -45,10 +45,9 @@ interface EnvironmentInterface
     public function getObjectManagerConfigLoader();
 
     /**
-     * Configures an existing object manager
-     *
      * @param ConfigInterface $diConfig
+     * @param array &$sharedInstances
      * @return void
      */
-    public function configureObjectManager(ConfigInterface $diConfig);
+    public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances);
 }

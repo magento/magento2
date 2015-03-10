@@ -122,6 +122,11 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                     ]
                 ]
+            ],
+            'Magento\Tools\Di\Code\Generator\PluginList' => [
+                'cache' => [
+                    'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                ]
             ]
         ];
     }

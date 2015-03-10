@@ -60,21 +60,25 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     /**
      * {inheritdoc}
      */
-    public function configureObjectManager(ConfigInterface $diConfig)
+    public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {
+        $objectManager = ObjectManager::getInstance();
+        $sharedInstances['Magento\Framework\ObjectManager\ConfigLoaderInterface'] = $objectManager
+            ->get('Magento\Framework\App\ObjectManager\ConfigLoader');
+
         $diConfig->setCache(
-            ObjectManager::getInstance()->get('Magento\Framework\App\ObjectManager\ConfigCache')
+            $objectManager->get('Magento\Framework\App\ObjectManager\ConfigCache')
         );
 
-        ObjectManager::getInstance()->configure(
-            ObjectManager::getInstance()
+        $objectManager->configure(
+            $objectManager
                 ->get('Magento\Framework\App\ObjectManager\ConfigLoader')
                 ->load(Area::AREA_GLOBAL)
         );
-        ObjectManager::getInstance()->get('Magento\Framework\Config\ScopeInterface')
+        $objectManager->get('Magento\Framework\Config\ScopeInterface')
             ->setCurrentScope('global');
         $diConfig->setInterceptionConfig(
-            ObjectManager::getInstance()->get('Magento\Framework\Interception\Config\Config')
+            $objectManager->get('Magento\Framework\Interception\Config\Config')
         );
     }
 }

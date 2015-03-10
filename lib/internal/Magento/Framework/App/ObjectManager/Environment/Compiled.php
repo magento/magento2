@@ -94,17 +94,22 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
     /**
      * {inheritdoc}
      */
-    public function configureObjectManager(ConfigInterface $diConfig)
+    public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {
-        ObjectManager::getInstance()->configure(
-            ObjectManager::getInstance()
+        $objectManager = ObjectManager::getInstance();
+        $sharedInstances['Magento\Framework\Interception\PluginListInterface'] = $objectManager->create(
+            'Magento\Framework\Interception\PluginListInterface',
+            ['cache' => $objectManager->get('Magento\Framework\App\Interception\Cache\CompiledConfig')]
+        );
+        $objectManager->configure(
+            $objectManager
                 ->get('Magento\Framework\ObjectManager\ConfigLoaderInterface')
                 ->load(Area::AREA_GLOBAL)
         );
-        ObjectManager::getInstance()->get('Magento\Framework\Config\ScopeInterface')
+        $objectManager->get('Magento\Framework\Config\ScopeInterface')
             ->setCurrentScope('global');
         $diConfig->setInterceptionConfig(
-            ObjectManager::getInstance()->get('Magento\Framework\Interception\Config\Config')
+            $objectManager->get('Magento\Framework\Interception\Config\Config')
         );
     }
 }
