@@ -159,8 +159,18 @@ GiftOptionsPopup.prototype = {
             autoOpen:   false,
             modal:      true,
             resizable:  false,
+            dialogClass: 'gift-options-popup',
             minWidth:   500,
-            dialogClass: 'gift-options-popup'
+            width:      '75%',
+            position: {
+                my: "left+12.5% bottom+110"
+            },
+            open: function () {
+                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
+            },
+            close: function() {
+                jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+            }
         });
     },
 

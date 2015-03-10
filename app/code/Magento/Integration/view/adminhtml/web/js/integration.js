@@ -232,15 +232,23 @@ define([
                             autoOpen: true,
                             minHeight: 450,
                             minWidth: 600,
+                            width: '75%',
                             dialogClass: dialog == 'permissions' ? 'integration-dialog' : 'integration-dialog no-close',
                             position: {at: 'center'},
-                            closeOnEscape: false
+                            closeOnEscape: false,
+                            open: function () {
+                                $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                            },
+                            close: function () {
+                                $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                            }
                         };
                     if (dialog == 'permissions') {
                         // We don't need this button in 'tokens' dialog, since if you got there - integration is
                         // already activated and have necessary tokens
                         buttons.push({
                             text: $.mage.__('Cancel'),
+                            'class': 'action-close',
                             click: function () {
                                 $(this).dialog('close');
                             }
@@ -306,7 +314,7 @@ define([
                     var okButton = {
                         permissions: {
                             text: (isReauthorize == '1') ? $.mage.__('Reauthorize') : $.mage.__('Allow'),
-                            'class': 'primary',
+                            'class': 'action-primary',
                             // This data is going to be used in the next dialog
                             'data-row-id': integrationId,
                             'data-row-name': integrationName,
@@ -324,7 +332,7 @@ define([
                         },
                         tokens: {
                             text: $.mage.__('Done'),
-                            'class': 'primary',
+                            'class': 'action-primary',
                             click: function () {
                                 // Integration has been activated at the point of generating tokens
                                 window.location.href = url.grid;

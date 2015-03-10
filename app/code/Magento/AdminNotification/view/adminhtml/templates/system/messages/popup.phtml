@@ -8,7 +8,8 @@
 
 ?>
 <?php /** @var $block \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup */ ?>
-<div id="system_messages_list" title="<?php echo $block->escapeHtml($block->getPopupTitle()); ?>">
+
+<div id="system_messages_list" class="admin__scope" title="<?php echo $block->escapeHtml($block->getPopupTitle()); ?>">
     <ul class="message-system-list">
         <?php foreach ($block->getUnreadMessages() as $message): ?>
             <li class="message message-warning <?php echo $block->getItemClass($message);?>">
@@ -17,6 +18,7 @@
         <?php endforeach;?>
     </ul>
 </div>
+
 <script>
 require([
     "jquery",
@@ -27,18 +29,19 @@ require([
         $("#system_messages_list").dialog({
             autoOpen: true,
             resizable: false,
-            width: 650,
+            width: '75%',
+            modal: true,
+            dialogClass: 'ui-dialog-active',
             position: {
                 using: function(pos) {
                     $(this).css({
                         "position": "absolute",
                         "top": Math.ceil($(window).height()/2 - $(this).height()/2),
-                        "left": pos.left
+                        "left": "12.5%"
                     });
                 }
             }
         });
     });
-
 });
 </script>

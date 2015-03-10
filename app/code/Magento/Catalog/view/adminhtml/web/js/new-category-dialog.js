@@ -55,7 +55,7 @@ define([
             this.element.dialog({
                 title: $.mage.__('Create Category'),
                 autoOpen: false,
-                minWidth: 560,
+                width: '75%',
                 dialogClass: 'mage-new-category-dialog form-inline',
                 modal: true,
                 multiselect: true,
@@ -69,6 +69,7 @@ define([
                         $('#new_category_name').focus();
                     }
                     $('#new_category_messages').html('');
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
                 },
                 close: function () {
                     $('#new_category_name, #new_category_parent-suggest').val('');
@@ -77,10 +78,11 @@ define([
                         validationOptions.errorClass, validationOptions.validClass || '');
                     newCategoryForm.validation('clearError');
                     $('#category_ids-suggest').focus();
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 },
                 buttons: [{
                     text: $.mage.__('Create Category'),
-                    'class': 'action-create primary',
+                    'class': 'action-primary',
                     'data-action': 'save',
                     click: function (event) {
                         if (!newCategoryForm.valid()) {

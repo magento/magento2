@@ -37,20 +37,27 @@
                 title: '<?php echo __('Choose Affected Attribute Set'); ?>',
                 autoOpen: false,
                 id: '<?php echo $block->getJsId() ?>',
-                minWidth: 700,
+                width: '75%',
                 modal: true,
                 resizable: false,
-                close: resetValidation,
+                open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                },
+                close: function () {
+                    resetValidation();
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                },
                 buttons: [{
                     text: '<?php echo __('Cancel'); ?>',
                     id: '<?php echo $block->getJsId('close-button') ?>',
+                    'class': 'action-close',
                     click: function() {
                         $form.dialog('close');
                     }
                 }, {
                     text: '<?php echo __('Confirm'); ?>',
                     id: '<?php echo $block->getJsId('confirm-button') ?>',
-                    'class': 'primary',
+                    'class': 'action-primary',
                     click: function() {
                         if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
                             $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());

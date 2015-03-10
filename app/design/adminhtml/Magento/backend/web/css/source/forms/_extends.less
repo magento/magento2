@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Extend common form control styles
+//  ---------------------------------------------
+
 .extend__form-control-styles() {
     &:extend(.__form-control-styles);
     &:focus {
@@ -20,5 +24,46 @@
     }
     &[disabled] {
         .__form-control-styles__disabled();
+    }
+}
+
+//
+//  Transformation to rows form layout
+//  ---------------------------------------------
+
+.extend__field-rows() {
+    &:extend(.abs-field-rows all);
+}
+.abs-field-rows[class] {
+    > .admin__field-control {
+        float: none;
+        clear: left;
+        text-align: left;
+        width: auto;
+    }
+    &:not(.admin__field-option) {
+        > .admin__field-label {
+            text-align: left;
+            width: auto;
+            display: block;
+            line-height: @field-label__font-size;
+            margin-bottom: 1rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2 , 2); // Try to Calculate margin offset considering line-height;
+            margin-top: 0rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2, 2);
+            &:before {
+                content: '';
+                display: none;
+            }
+        }
+        &._required {
+            > .admin__field-label {
+                span {
+                    padding-left: 1.5rem;
+                    &:after {
+                        left: 0;
+                        margin-left: 30px;
+                    }
+                }
+            }
+        }
     }
 }

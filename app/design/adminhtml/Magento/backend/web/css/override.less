@@ -2,11 +2,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/**
- * @category    design
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -350,6 +345,36 @@ nav ol {
   opacity: .5;
   cursor: not-allowed;
 }
+.address-item-edit-content .admin__field[class] > .admin__field-control,
+.page-layout-admin-login .admin__field[class] > .admin__field-control {
+  float: none;
+  clear: left;
+  text-align: left;
+  width: auto;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label {
+  text-align: left;
+  width: auto;
+  display: block;
+  line-height: 1.4rem;
+  margin-bottom: 0.86rem;
+  margin-top: -0.14rem;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label:before,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label:before {
+  content: '';
+  display: none;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span {
+  padding-left: 1.5rem;
+}
+.address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after,
+.page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after {
+  left: 0;
+  margin-left: 30px;
+}
 .admin__control-text {
   line-height: 3.3rem;
   width: 100%;
@@ -601,7 +626,7 @@ option:empty {
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 3.2rem;
-  padding-top: 0;
+  padding: 0;
   white-space: nowrap;
 }
 [class]:not(.admin__field-option) > .admin__field-label:before {
@@ -670,7 +695,8 @@ option:empty {
 .admin__field._error .admin__field-control > [class*='admin__control-'] {
   border-color: #e22626;
 }
-.admin__field-error {
+.admin__field-error,
+.admin__field-control label.mage-error {
   background: #fffbbb;
   border: 1px solid #ee7d7d;
   box-sizing: border-box;
@@ -849,28 +875,6 @@ option:empty {
 .address-item-edit-content {
   padding: 15px 30px;
 }
-.address-item-edit-content .admin__field > .admin__field-control,
-.address-item-edit-content .admin__field > .admin__field-label {
-  float: none;
-  width: auto;
-  text-align: left;
-}
-.address-item-edit-content .admin__field > .admin__field-control {
-  float: none;
-  width: auto;
-}
-.address-item-edit-content .admin__field-label {
-  float: none;
-  margin-top: -16px;
-  width: auto;
-}
-.address-item-edit-content ._required .admin__field-label span {
-  padding-left: 15px;
-}
-.address-item-edit-content ._required .admin__field-label span:after {
-  left: 0;
-  margin-left: 30px;
-}
 .address-list {
   float: left;
   list-style-type: none;
@@ -882,18 +886,99 @@ option:empty {
   margin-bottom: 30px;
 }
 .address-list .action-delete {
-  background-color: transparent;
+  background-image: none;
+  background: none;
+  border: 0;
+  margin: 0;
   padding: 0;
+  -moz-box-sizing: content-box;
+  box-shadow: none;
+  text-shadow: none;
+  line-height: inherit;
+  font-weight: 400;
+  display: inline-block;
+  text-decoration: none;
+}
+.address-list .action-delete:focus,
+.address-list .action-delete:active {
+  background: none;
+  border: none;
 }
 .address-list .action-delete:hover {
+  background: none;
+  border: none;
+}
+.address-list .action-delete.disabled,
+.address-list .action-delete[disabled],
+fieldset[disabled] .address-list .action-delete {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.address-list .action-delete > span {
   border: 0;
-  box-shadow: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.address-list .action-delete:after {
+  font-family: 'Admin Icons';
+  content: '\e620';
+  font-size: 1.6rem;
+  line-height: 16px;
+  color: #41362f;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.address-list .action-delete:hover:after {
+  color: #060504;
 }
 .address-item-edit {
   margin-left: 359px;
+  max-width: 500px;
 }
 .address-item-edit .admin__legend {
   display: none;
+}
+[class*='admin__control-'].mage-error ~ [class*='admin__addon-']:before,
+.admin__field-control > [class*='admin__control-'].mage-error {
+  border-color: #e22626;
+}
+.page-layout-admin-login .loading-mask {
+  background: rgba(255, 255, 255, 0.2);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.page-layout-admin-login .popup-loading {
+  height: 149px;
+  left: 50%;
+  margin-left: -109px;
+  margin-top: -74.5px;
+  position: absolute;
+  top: 50%;
+  overflow: hidden;
+  width: 218px;
+}
+.page-layout-admin-login .field-captcha {
+  padding-left: 30px;
+  vertical-align: middle;
+}
+.page-layout-admin-login .field-captcha .captcha-reload {
+  float: right;
+  vertical-align: middle;
 }
 .admin__action-dropdown {
   background-color: transparent;
@@ -1076,12 +1161,21 @@ button,
 button.primary,
 button.secondary,
 button.tertiary,
+.ui-dialog .action-close,
+.ui-dialog .ui-button,
+.ui-dialog .action-primary,
+.attribute-popup-actions .action-default.reset,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary,
 .page-actions > button,
 .page-actions .page-actions-buttons > button,
 .page-actions > button.action-primary,
 .page-actions .page-actions-buttons > button.action-primary,
 .page-actions > button.primary,
-.page-actions .page-actions-buttons > button.primary {
+.page-actions .page-actions-buttons > button.primary,
+.popup-window .magento_buttons .ok_button,
+.popup-window .magento_buttons .cancel_button,
+.fade .actions .primary,
+.fade .actions .cancel {
   border: 1px solid;
   border-radius: 0;
   display: inline-block;
@@ -1124,6 +1218,16 @@ button.secondary[disabled],
 button.secondary.disabled,
 button.tertiary[disabled],
 button.tertiary.disabled,
+.ui-dialog .action-close[disabled],
+.ui-dialog .action-close.disabled,
+.ui-dialog .ui-button[disabled],
+.ui-dialog .ui-button.disabled,
+.ui-dialog .action-primary[disabled],
+.ui-dialog .action-primary.disabled,
+.attribute-popup-actions .action-default.reset[disabled],
+.attribute-popup-actions .action-default.reset.disabled,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary[disabled],
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary.disabled,
 .page-actions > button[disabled],
 .page-actions > button.disabled,
 .page-actions .page-actions-buttons > button[disabled],
@@ -1135,18 +1239,32 @@ button.tertiary.disabled,
 .page-actions > button.primary[disabled],
 .page-actions > button.primary.disabled,
 .page-actions .page-actions-buttons > button.primary[disabled],
-.page-actions .page-actions-buttons > button.primary.disabled {
+.page-actions .page-actions-buttons > button.primary.disabled,
+.popup-window .magento_buttons .ok_button[disabled],
+.popup-window .magento_buttons .ok_button.disabled,
+.popup-window .magento_buttons .cancel_button[disabled],
+.popup-window .magento_buttons .cancel_button.disabled,
+.fade .actions .primary[disabled],
+.fade .actions .primary.disabled,
+.fade .actions .cancel[disabled],
+.fade .actions .cancel.disabled {
   cursor: default;
   opacity: 0.7;
   pointer-events: none;
 }
 .abs-action-l,
+.ui-dialog .ui-button,
+.ui-dialog .action-primary,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary,
+.page-layout-admin-login .action-primary,
 .page-actions button,
 .page-actions .page-actions-buttons > button,
 .page-actions > button.action-primary,
 .page-actions .page-actions-buttons > button.action-primary,
 .page-actions > button.primary,
-.page-actions .page-actions-buttons > button.primary {
+.page-actions .page-actions-buttons > button.primary,
+.popup-window .magento_buttons .ok_button,
+.fade .actions .primary {
   font-size: 1.6rem;
   letter-spacing: .025em;
   padding-bottom: 0.6875em;
@@ -1210,7 +1328,12 @@ button.primary[disabled],
   pointer-events: none;
 }
 .abs-action-secondary,
-button.secondary {
+button.secondary,
+.ui-dialog .ui-button,
+.ui-dialog .action-primary,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary,
+.popup-window .magento_buttons .ok_button,
+.fade .actions .primary {
   background-color: #514943;
   border-color: #514943;
   color: #ffffff;
@@ -1219,26 +1342,54 @@ button.secondary {
 .abs-action-secondary:hover,
 .abs-action-secondary:active,
 button.secondary:hover,
-button.secondary:active {
+button.secondary:active,
+.ui-dialog .ui-button:hover,
+.ui-dialog .ui-button:active,
+.ui-dialog .action-primary:hover,
+.ui-dialog .action-primary:active,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary:hover,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary:active,
+.popup-window .magento_buttons .ok_button:hover,
+.popup-window .magento_buttons .ok_button:active,
+.fade .actions .primary:hover,
+.fade .actions .primary:active {
   background-color: #35302c;
   box-shadow: 0 0 0 1px #007bdb;
   color: #ffffff;
   text-decoration: none;
 }
 .abs-action-secondary:active,
-button.secondary:active {
+button.secondary:active,
+.ui-dialog .ui-button:active,
+.ui-dialog .action-primary:active,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary:active,
+.popup-window .magento_buttons .ok_button:active,
+.fade .actions .primary:active {
   background-color: #35302c;
 }
 .abs-action-tertiary,
-button.tertiary {
+button.tertiary,
+.ui-dialog .action-close,
+.attribute-popup-actions .action-default.reset,
+.popup-window .magento_buttons .cancel_button,
+.fade .actions .cancel {
   background-color: transparent;
   border-color: transparent;
+  text-shadow: none;
   color: #007bdb;
 }
 .abs-action-tertiary:active,
 .abs-action-tertiary:hover,
 button.tertiary:active,
-button.tertiary:hover {
+button.tertiary:hover,
+.ui-dialog .action-close:active,
+.ui-dialog .action-close:hover,
+.attribute-popup-actions .action-default.reset:active,
+.attribute-popup-actions .action-default.reset:hover,
+.popup-window .magento_buttons .cancel_button:active,
+.popup-window .magento_buttons .cancel_button:hover,
+.fade .actions .cancel:active,
+.fade .actions .cancel:hover {
   background-color: transparent;
   border-color: transparent;
   box-shadow: none;
@@ -1246,7 +1397,15 @@ button.tertiary:hover {
 .abs-action-tertiary:active,
 .abs-action-tertiary:hover,
 button.tertiary:active,
-button.tertiary:hover {
+button.tertiary:hover,
+.ui-dialog .action-close:active,
+.ui-dialog .action-close:hover,
+.attribute-popup-actions .action-default.reset:active,
+.attribute-popup-actions .action-default.reset:hover,
+.popup-window .magento_buttons .cancel_button:active,
+.popup-window .magento_buttons .cancel_button:hover,
+.fade .actions .cancel:active,
+.fade .actions .cancel:hover {
   color: #007bdb;
   text-decoration: underline;
 }
@@ -1255,6 +1414,7 @@ button.tertiary:hover {
 .page-actions .page-actions-buttons > button {
   background-color: transparent;
   border-color: transparent;
+  text-shadow: none;
   color: #41362f;
 }
 .abs-action-quaternary:active,
@@ -1327,6 +1487,7 @@ button:hover {
 .action-quaternary {
   background-color: transparent;
   border-color: transparent;
+  text-shadow: none;
 }
 .action-tertiary:active,
 .action-quaternary:active,
@@ -1432,7 +1593,7 @@ table.table tbody tr:last-child td {
   content: '\e632';
   font-size: 1.5rem;
   left: 2.2rem;
-  margin-top: -0.9rem;
+  margin-top: -1rem;
 }
 .message-success:before {
   color: #79a22e;
@@ -1677,6 +1838,16 @@ table.table th.required:after {
 .actions-split:after,
 .tabs-horiz:before,
 .tabs-horiz:after,
+.ui-dialog .ui-dialog-buttonset:before,
+.ui-dialog .ui-dialog-buttonset:after,
+.magento_message #contents-uploader:before,
+.magento_message #contents-uploader:after,
+.popup-window .magento_buttons:before,
+.popup-window .magento_buttons:after,
+.fade .popup-content:before,
+.fade .popup-content:after,
+.fade .actions:before,
+.fade .actions:after,
 .message-system-inner:before,
 .message-system-inner:after,
 .page-header-actions:before,
@@ -1695,6 +1866,11 @@ table.table th.required:after {
 .abs-clearfix:after,
 .actions-split:after,
 .tabs-horiz:after,
+.ui-dialog .ui-dialog-buttonset:after,
+.magento_message #contents-uploader:after,
+.popup-window .magento_buttons:after,
+.fade .popup-content:after,
+.fade .actions:after,
 .message-system-inner:after,
 .page-header-actions:after,
 .page-main-actions:after,
@@ -1758,8 +1934,10 @@ body {
   background-color: #f5f5f5;
 }
 .page-wrapper {
-  padding-left: 8.8rem;
   background-color: #ffffff;
+  padding-left: 8.8rem;
+  position: relative;
+  z-index: 1;
 }
 .page-content {
   padding-left: 3rem;
@@ -1836,18 +2014,29 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   display: none;
 }
 .ui-datepicker {
-  background: #ffffff;
-  border: 1px solid #007dbd;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   display: none;
-  padding: 20px;
+  padding: 23px 20px;
   width: auto;
   z-index: 999999 !important;
+}
+.ui-datepicker:before {
+  background: #ffffff;
+  border: 1px solid #007dbd;
+  bottom: 3px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+  content: '';
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 3px;
+  z-index: 0;
 }
 .ui-datepicker-header {
   padding: 0 0 10px;
   position: relative;
+  z-index: 1;
 }
 .ui-datepicker-prev,
 .ui-datepicker-next {
@@ -1904,6 +2093,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background: #FFFFFF;
   border-collapse: collapse;
   border: 0;
+  position: relative;
+  z-index: 1;
 }
 .ui-datepicker table.ui-datepicker-calendar thead {
   background: transparent;
@@ -1953,7 +2144,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-datepicker .ui-datepicker-buttonpane {
   overflow: hidden;
   padding-top: 15px;
+  position: relative;
   white-space: nowrap;
+  z-index: 1;
 }
 .ui-datepicker .ui-datepicker-buttonpane button {
   background: #fff;
@@ -2112,11 +2305,455 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   height: 200px;
   /*must have*/
 }
-/**
- * @category    design
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+.ui-dialog {
+  background: #ffffff;
+  min-width: 40%;
+  margin-top: 10rem;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: all 0.3s;
+  visibility: hidden;
+  width: 75%;
+}
+.ui-dialog.ui-dialog-active {
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+.ui-dialog.ui-draggable .ui-dialog-titlebar {
+  cursor: move;
+}
+.ui-dialog .ui-dialog-titlebar,
+.popup-window .magento_title,
+.fade .popup-title {
+  color: #333333;
+  font-size: 2.4rem;
+  line-height: 2.4rem;
+  padding: 3rem 6rem 3rem 3rem;
+}
+.ui-dialog .ui-dialog-titlebar-close,
+.popup-window .magento_close,
+.fade .popup .close {
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  position: absolute;
+  right: 3rem;
+  top: 2.7rem;
+}
+.ui-dialog .ui-dialog-titlebar-close:before,
+.popup-window .magento_close:before,
+.fade .popup .close:before {
+  font-family: 'Admin Icons';
+  content: '\e62f';
+  font-size: 2rem;
+  line-height: inherit;
+  color: #736963;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.ui-dialog .ui-dialog-titlebar-close:hover:before,
+.popup-window .magento_close:hover:before,
+.fade .popup .close:hover:before {
+  color: #adadad;
+}
+.ui-dialog .ui-dialog-titlebar-close .ui-icon,
+.popup-window .magento_close .ui-icon,
+.fade .popup .close .ui-icon {
+  display: none;
+}
+.ui-dialog .ui-dialog-titlebar-close.ui-state-hover,
+.popup-window .magento_close.ui-state-hover,
+.fade .popup .close.ui-state-hover {
+  border: none;
+}
+.ui-dialog .ui-dialog-content {
+  overflow: auto;
+  padding: 0 3rem 3rem;
+}
+.ui-dialog .ui-dialog-content .fieldset {
+  padding-left: 0;
+  padding-right: 0;
+}
+.ui-dialog .ui-dialog-buttonpane {
+  padding: 0 3rem 3rem;
+}
+.ui-dialog .content + .ui-dialog-buttonset {
+  padding-top: 3rem;
+  text-align: right;
+}
+.ui-dialog .action-close,
+.popup-window .magento_buttons .cancel_button,
+.fade .actions .cancel {
+  font-size: 1.6rem;
+  margin: 0 0 0 3rem;
+  padding: 0.7em 0;
+}
+.ui-dialog .ui-button,
+.ui-dialog .action-primary,
+.popup-window .magento_buttons .ok_button,
+.fade .actions .primary {
+  float: right;
+  margin: 0 0 0 3rem;
+}
+.ui-dialog .fieldset:last-child {
+  padding-bottom: 0;
+}
+.ui-dialog .main-col,
+.ui-dialog .side-col {
+  float: left;
+  padding-bottom: 0;
+}
+.ui-dialog .main-col:after,
+.ui-dialog .side-col:after {
+  display: none;
+}
+.ui-dialog .main-col {
+  padding-right: 0;
+}
+.ui-dialog .grid,
+.ui-dialog .pager {
+  padding-bottom: 0;
+}
+.ui-dialog .ui-resizable {
+  position: relative;
+}
+.ui-dialog .ui-resizable-handle {
+  position: absolute;
+  font-size: 0.1px;
+  display: block;
+}
+.ui-dialog .ui-resizable-disabled .ui-resizable-handle,
+.ui-dialog .ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+.ui-dialog .ui-resizable-n {
+  cursor: n-resize;
+  height: 7px;
+  width: 100%;
+  top: -5px;
+  left: 0;
+}
+.ui-dialog .ui-resizable-s {
+  cursor: s-resize;
+  height: 7px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+.ui-dialog .ui-resizable-e {
+  cursor: e-resize;
+  width: 7px;
+  right: 0;
+  top: 0;
+  height: 100%;
+}
+.ui-dialog .ui-resizable-w {
+  cursor: w-resize;
+  width: 7px;
+  left: -7px;
+  top: 0;
+  height: 100%;
+}
+.ui-dialog .ui-resizable-se {
+  cursor: se-resize;
+  width: 12px;
+  height: 12px;
+  right: 1px;
+  bottom: 1px;
+}
+.ui-dialog .ui-resizable-sw {
+  cursor: sw-resize;
+  width: 9px;
+  height: 9px;
+  left: -5px;
+  bottom: 0;
+}
+.ui-dialog .ui-resizable-nw {
+  cursor: nw-resize;
+  width: 9px;
+  height: 9px;
+  left: -5px;
+  top: -5px;
+}
+.ui-dialog .ui-resizable-ne {
+  cursor: ne-resize;
+  width: 9px;
+  height: 9px;
+  right: 0;
+  top: -5px;
+}
+.ui-widget-overlay,
+.overlay_magento,
+.fade {
+  background: rgba(0, 0, 0, 0.35);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+.insert-variable {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.insert-variable li {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+.insert-variable li b {
+  margin-left: -1rem;
+  display: inline-block;
+}
+.magento_message .insert-title-inner {
+  border-bottom: 1px solid #adadad;
+  margin: 0 0 2rem;
+}
+.magento_message .insert-actions {
+  float: right;
+}
+.magento_message .title {
+  font-size: 1.6rem;
+}
+.magento_message .main-col-inner .uploader {
+  border: 1px solid #adadad;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+}
+.magento_message .breadcrumbs {
+  padding-left: 0;
+}
+.magento_message .breadcrumbs li:after {
+  content: "";
+  margin: 0 0.5rem 0 0;
+}
+.magento_message #contents-uploader {
+  margin: 0 0 2rem;
+}
+.magento_message .fileinput-button {
+  display: inline-block;
+  cursor: pointer;
+  float: none;
+  vertical-align: middle;
+}
+.magento_message .fileinput-button span {
+  display: none;
+}
+.magento_message .fileinput-button input {
+  position: static;
+  border: none;
+  opacity: 1;
+}
+.magento_message .file-row {
+  border: 1px solid #adadad;
+  margin: 0.5rem 0;
+  padding: 2px;
+}
+.magento_message .filecnt {
+  border: 1px solid #adadad;
+  display: inline-block;
+  margin: 0 0.5rem 15px 0;
+  padding: 3px;
+  width: 100px;
+  overflow: hidden;
+}
+.magento_message .filecnt.selected {
+  border-color: #008bdb;
+}
+.magento_message .filecnt p {
+  text-align: center;
+}
+.magento_message .x-tree {
+  margin-bottom: 2rem;
+}
+.attribute-popup-actions {
+  background: #ffffff;
+  border-top: 1px solid #adadad;
+  bottom: 0;
+  left: 0;
+  padding: 3rem;
+  position: fixed;
+  right: 0;
+  top: auto !important;
+}
+.attribute-popup-actions.fixed {
+  background: #ffffff !important;
+  left: 0 !important;
+  padding: 3rem !important;
+}
+.attribute-popup-actions.fixed .page-actions-buttons {
+  padding-right: 0;
+}
+.attribute-popup-actions .action-default.reset {
+  font-size: 1.6rem;
+  padding: 0.7em 0;
+}
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary {
+  float: right;
+}
+.attribute-popup-actions .page-actions-inner:before {
+  display: none;
+}
+.popup-window {
+  background: #ffffff;
+}
+.popup-window .table_window > tbody > tr > td {
+  background: #ffffff;
+  border: 0;
+  padding: 0;
+}
+.popup-window .magento_message {
+  padding: 0 3rem 3rem;
+  position: relative;
+}
+.popup-window .magento_content {
+  height: auto !important;
+}
+.popup-window .magento_buttons {
+  padding: 0 3rem 3rem;
+  text-align: right;
+}
+.popup-window .magento_buttons .ok_button {
+  float: right;
+  margin: 0 0 0 3rem;
+}
+.fade {
+  z-index: 1000;
+}
+.fade .popup {
+  background: #ffffff;
+  border: 0;
+  border-radius: 0;
+  display: inline-block;
+  left: 12.5%;
+  position: absolute;
+  top: 5rem;
+  text-align: left;
+  width: 75%;
+}
+.fade .popup-inner {
+  padding: 0;
+}
+.fade .popup-content {
+  padding: 0 3rem 3rem;
+}
+.fade .popup-content p {
+  margin-top: 0;
+}
+.fade .fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.fade .maintenance-checkbox-container {
+  padding-left: 20%;
+}
+.fade .messages {
+  margin-top: 0 !important;
+}
+.fade .actions {
+  margin: 3rem 0 0;
+  text-align: right;
+}
+.fade .actions .primary {
+  float: right;
+  margin: 0 0 0 3rem;
+}
+.fade .actions .primary:hover {
+  box-shadow: none;
+}
+.fade .actions .cancel:hover {
+  box-shadow: none;
+}
+.login-header {
+  margin: 0 0 3rem;
+}
+.page-layout-admin-login {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #373330;
+  padding: 2rem 0 20rem;
+}
+.page-layout-admin-login .page-wrapper {
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  -webkit-flex-grow: 0;
+  flex-grow: 0;
+  background-color: #ffffff;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0 5px 30px 0 #000000;
+  margin: auto;
+  max-width: 450px;
+  min-height: 300px;
+  padding: 40px 80px 50px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+.page-layout-admin-login :-ms-input-placeholder {
+  color: transparent;
+}
+.page-layout-admin-login ::-webkit-input-placeholder {
+  color: transparent;
+}
+.page-layout-admin-login ::-moz-placeholder {
+  color: transparent;
+}
+.page-layout-admin-login .admin__legend {
+  color: #eb5202;
+  font-size: 2.6rem;
+  font-weight: 300;
+  line-height: 1.2;
+  margin: -1rem 0 0.5rem;
+}
+.page-layout-admin-login .admin__field-info {
+  margin-bottom: 3rem;
+}
+.page-layout-admin-login .messages {
+  margin-top: -1rem;
+}
+.page-layout-admin-login .messages + form .admin__legend {
+  display: none;
+}
+.page-layout-admin-login .actions {
+  padding: 0 0 3rem;
+}
+.admin__control-dummy {
+  display: none;
+}
+.login-footer {
+  left: 0;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+.login-footer .copyright {
+  color: #989287;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 5rem 0 2rem;
+  text-align: center;
+}
+.login-footer .copyright .link-copyright:before {
+  display: none;
+}
+.adminhtml-auth-login .form-actions {
+  display: table;
+  margin-top: -2rem;
+}
+.adminhtml-auth-login .form-actions .links {
+  display: table-header-group;
+}
+.adminhtml-auth-login .form-actions .actions {
+  padding: 3rem 0 0;
+}
 .spinner {
   display: inline-block;
   font-size: 4rem;
@@ -2531,7 +3168,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .admin-user {
   float: right;
-  line-height: 1;
+  line-height: 1.4;
   margin-left: .3rem;
   position: relative;
   z-index: 300;
@@ -2557,9 +3194,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   padding-right: 2.8rem;
   font-size: 1.3rem;
   letter-spacing: .05em;
-  padding-bottom: 1rem;
+  padding-bottom: 0.4rem;
   padding-left: 4rem;
-  padding-top: 1.1rem;
+  padding-top: 0.7rem;
   z-index: 2;
 }
 .admin-user-account._active:after,
@@ -2599,6 +3236,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   max-width: 11.2rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .admin-user-menu {
   line-height: 1.4;
@@ -2625,6 +3263,14 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background-color: #c7effd;
   bottom: -1px;
   position: relative;
+}
+.admin-user-menu .admin-user-name {
+  display: inline-block;
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: text-top;
+  white-space: nowrap;
 }
 .search-global {
   float: right;
@@ -2767,7 +3413,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: relative;
   top: 1px;
 }
-.notifications-counter {
+.notifications-action .notifications-counter {
   background-color: #e22626;
   border-radius: 1em;
   color: #ffffff;
@@ -2799,13 +3445,16 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background-color: #e0f6fe;
 }
 .notifications-entry.notifications-entry-last {
-  border-top: 1px solid #dddddd;
   margin: 0 2rem;
-  padding: .3rem 0 .6rem;
+  padding: .3rem 0 1.3rem;
   text-align: center;
 }
 .notifications-entry.notifications-entry-last:hover {
   background-color: transparent;
+}
+.notifications-entry + .notifications-entry-last {
+  border-top: 1px solid #dddddd;
+  padding-bottom: .6rem;
 }
 .notifications-entry ._cutted {
   cursor: pointer;
@@ -2819,6 +3468,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: .7rem;
+  margin-right: 1em;
 }
 .notifications-entry-description {
   color: #333333;
@@ -2827,6 +3477,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .notifications-entry-description-end {
   display: none;
+}
+.notifications-entry-description-end._show {
+  display: inline;
 }
 .notifications-entry-time {
   color: #777777;
@@ -2942,7 +3595,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   vertical-align: top;
 }
 .copyright .link-copyright:hover:before {
-  color: #fd6e23;
+  color: #f38a5e;
 }
 .copyright .link-copyright:before {
   transition: color 0.1s linear;

@@ -64,29 +64,11 @@
 // @todo Move to other place:
 .address-item-edit-content {
     padding: 15px 30px;
-    .admin__field > .admin__field-control,
-    .admin__field > .admin__field-label {
-        float: none;
-        width: auto;
-        text-align: left;
-    }
-    .admin__field > .admin__field-control {
-        float: none;
-        width: auto;
-    }
-    .admin__field-label {
-        float: none;
-        margin-top: -16px;
-        width: auto;
-    }
-    ._required .admin__field-label span {
-        padding-left: 15px;
-        &:after {
-            left: 0;
-            margin-left: 30px;
-        }
+    .admin__field {
+        .extend__field-rows();
     }
 }
+
 
 .address-list {
     float: left;
@@ -98,11 +80,20 @@
         margin-bottom: 30px;
     }
     .action-delete {
-        background-color: transparent;
-        padding: 0;
+        .button-reset();
+        .icon-font(
+            @icon-remove-small__content,
+            @icons-admin__font-name,
+            @_icon-font-size: 1.6rem,
+            @_icon-font-line-height: 16px,
+            @_icon-font-text-hide: true,
+            @_icon-font-position: after,
+            @_icon-font-color: @color-brown-darkie
+        );
         &:hover {
-            border: 0;
-            box-shadow: 0;
+            &:after {
+                color: darken(@color-brown-darkie, 20%);
+            }
         }
     }
 }
@@ -112,4 +103,59 @@
     .admin__legend {
         display: none;
     }
+    max-width: 500px;
 }
+
+//
+//  Login page form errors @todo ui - remove after validation consistency
+//  _____________________________________________
+
+[class*='admin__control-'].mage-error ~ [class*='admin__addon-']:before,
+.admin__field-control > [class*='admin__control-'].mage-error {
+    border-color: @field-error-control__border-color;
+}
+.admin__field-control label.mage-error {
+    &:extend(.admin__field-error);
+}
+
+
+//
+//  Login page captcha reload @todo ui - remove after loader consistency
+//  _____________________________________________
+
+.page-layout-admin-login {
+    .loading-mask {
+        background: rgba(255,255,255,0.2);
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: @z-index-10;
+    }
+    .popup-loading {
+        height: 149px;
+        left: 50%;
+        margin-left: -218px/2;
+        margin-top: -149px/2;
+        position: absolute;
+        top: 50%;
+        overflow: hidden;
+        width: 218px;
+    }
+}
+
+//
+//  Login page captcha field @todo ui - Create new captcha markup - Change reload button
+//  _____________________________________________
+.page-layout-admin-login {
+    .field-captcha {
+        padding-left: 30px;
+        vertical-align: middle;
+        .captcha-reload {
+            float: right;
+            vertical-align: middle;
+        }
+    }
+}
+

@@ -40,13 +40,14 @@ define([
                 $('.notifications-action .notifications-counter').text('').hide();
             } else {
                 $('.notifications-action .notifications-counter').text(notificationCount);
+                $('.notifications-entry-last .notifications-counter').text(notificationCount);
                 // Modify caption of the 'See All' link
                 var actionElement = $('.notifications-wrapper .notifications-list .last .action-more');
                 actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
             }
         },
 
-        // Show popup with notification details
+        // Show notification details
         showNotificationDetails = function (notificationEntry) {
             var notificationDescription = notificationEntry.find('.notifications-entry-description'),
                 notificationDescriptionEnd = notificationEntry.find('.notifications-entry-description-end');
@@ -74,8 +75,16 @@ define([
     $('.notifications-close').on('click.removeNotification', function (event) {
         var notificationEntry = $(this).closest('.notifications-entry'),
             notificationId = notificationEntry.attr('data-notification-id');
+
         markNotificationAsRead(notificationId);
         removeNotificationFromList(notificationEntry);
+
+        // Checking for last unread notification to hide dropdown
+        if (notificationCount == 0) {
+            $('.notifications-wrapper').removeClass('active')
+                                       .find('.notifications-action').removeAttr('data-toggle')
+                                                                     .off('click.dropdown');
+        }
         event.stopPropagation();
     });
 

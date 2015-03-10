@@ -48,20 +48,27 @@ ProductConfigure.prototype = {
             title: jQuery.mage.__('Configure Product'),
             modal: true,
             minWidth: 500,
+            width: '75%',
             dialogClass: 'popup-window',
             open: function () {
                 jQuery(this).addClass('magento_message').css('max-height', '500px');
+                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
+            },
+            close: function() {
+                jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
             },
             buttons: [{
-                id: "product_composite_configure_form_cancel",
-                text: "Cancel",
-                click: function() {
-                    jQuery(this).dialog("close");
-                }
-            }, {
                 text: jQuery.mage.__('OK'),
+                'class': 'action-primary',
                 click: function() {
                     self.onConfirmBtn();
+                }
+            }, {
+                id: "product_composite_configure_form_cancel",
+                text: "Cancel",
+                'class': 'action-close',
+                click: function() {
+                    jQuery(this).dialog("close");
                 }
             }]
         });

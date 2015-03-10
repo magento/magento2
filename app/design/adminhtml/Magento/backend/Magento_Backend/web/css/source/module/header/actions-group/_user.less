@@ -12,9 +12,9 @@
 //  ---------------------------------------------
 
 @user__font-size: round(@font-size__base - .1rem, 1);
-@user-account__padding-bottom: (@page-header-action__height - @user__font-size) / 2 - .05rem;
+@user-account__padding-bottom: .4rem;
 @user-account__padding-left: 4rem;
-@user-account__padding-top: (@page-header-action__height - @user__font-size) / 2 + .05rem;
+@user-account__padding-top: .7rem;
 @user-account__padding-right: 2.8rem;
 @user-menu__min-width: 20rem;
 
@@ -22,7 +22,7 @@
 
 .admin-user {
     float: right;
-    line-height: 1;
+    line-height: @line-height__base; // ToDo UI: Delete with admin scope
     margin-left: .3rem;
     position: relative;
     z-index: @user-account-menu__z-index;
@@ -52,10 +52,10 @@
 .admin-user-account {
     &:extend(.abs-page-header-action all);
     .dropdown-triangle(
-    @_dropdown__padding-right: @user-account__padding-right;
-    @_triangle__color: @page-header-action__color;
-    @_triangle__hover__color: @page-header-action__hover__color;
-    @_triangle__right: 1.3rem;
+        @_dropdown__padding-right: @user-account__padding-right;
+        @_triangle__color: @page-header-action__color;
+        @_triangle__hover__color: @page-header-action__hover__color;
+        @_triangle__right: 1.3rem;
     );
     font-size: @user__font-size;
     letter-spacing: .05em;
@@ -81,6 +81,7 @@
     max-width: @user-menu__min-width - @user-account__padding-left - @user-account__padding-right - 2rem;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .admin-user-menu {
@@ -112,5 +113,13 @@
                 position: relative;
             }
         }
+    }
+    .admin-user-name {
+        display: inline-block;
+        max-width: @user-menu__min-width;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: text-top;
+        white-space: nowrap;
     }
 }

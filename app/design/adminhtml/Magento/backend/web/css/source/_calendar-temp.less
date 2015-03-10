@@ -4,18 +4,19 @@
 //  */
 
 // ToDo UI Align variables after complete migration to new styles
-@import 'lib/_lib';
+@import 'lib/_lib.less';
 
 //
 //  Variables
 //  _____________________________________________
 
+@ui-datepicker-calendar__border-color: #adadad;
+@ui-datepicker-icon__color: #514943;
 @ui-datepicker__background: #fff;
 @ui-datepicker__border: 1px solid #007dbd;
+@ui-datepicker__indent: 3px;
 @ui-datepicker__padding: 20px;
 @ui-datepicker__shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-@ui-datepicker-icon__color: #514943;
-@ui-datepicker-calendar__border-color: #adadad;
 
 //
 //  Datepicker control
@@ -52,19 +53,30 @@
 //  ---------------------------------------------
 
 .ui-datepicker {
-    background: @ui-datepicker__background;
-    border: @ui-datepicker__border;
-    box-shadow: @ui-datepicker__shadow;
     box-sizing: border-box;
     display: none;
-    padding: @ui-datepicker__padding;
+    padding: @ui-datepicker__padding + @ui-datepicker__indent  @ui-datepicker__padding;
     width: auto;
     z-index: 999999 !important;
+    &:before {
+        background: @ui-datepicker__background;
+        border: @ui-datepicker__border;
+        bottom: @ui-datepicker__indent;
+        box-shadow: @ui-datepicker__shadow;
+        content: '';
+        display: block;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: @ui-datepicker__indent;
+        z-index: 0;
+    }
 }
 
 .ui-datepicker-header {
     padding: 0 0 10px;
     position: relative;
+    z-index: 1;
 }
 
 //
@@ -131,6 +143,8 @@
     background: #FFFFFF;
     border-collapse: collapse;
     border: 0;
+    position: relative;
+    z-index: 1;
     thead {
         background: transparent;
     }
@@ -185,8 +199,9 @@
 .ui-datepicker .ui-datepicker-buttonpane {
     overflow: hidden;
     padding-top: 15px;
+    position: relative;
     white-space: nowrap;
-
+    z-index: 1;
     button {
         background: #fff;
         border-radius: 1px;

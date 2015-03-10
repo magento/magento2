@@ -7,48 +7,27 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div id="page-login" class="page-login">
-    <div class="wrapper">
-        <div class="wrapper-inner">
-            <div class="form-login form-inline">
-                <header class="header">
-                    <div class="logo" title="<?php echo __('Magento Admin Panel') ?>"><span><?php echo __('Magento Admin Panel') ?></span></div>
-                </header>
-                <div class="admin__scope">
-                    <div id="messages" data-container-for="messages" >
-                        <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
-                    </div>
-                </div>
-                <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
-                    <fieldset class="fieldset">
-                        <legend class="legend"><span><?php echo __('Welcome') ?></span></legend><br/>
-                        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
-                        <div class="field field-username">
-                            <label for="username" class="label"><span><?php echo __('User Name:') ?></span></label>
-                            <div class="control">
-                                <input type="text" id="username" name="login[username]" autofocus value="" class="required-entry input-text" placeholder="<?php echo __('user name') ?>" />
-                            </div>
-                        </div>
-                        <div class="field field-password">
-                            <label for="login" class="label"><?php echo __('Password:') ?></label>
-                            <div class="control">
-                                <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
-                                <input type="text" class="input-text no-display" name="dummy" id="dummy" />
-                                <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="<?php echo __('password') ?>" />
-                            </div>
-                        </div>
-                        <?php echo $block->getChildHtml('form.additional.info'); ?>
-                        <div class="form-actions">
-                            <?php echo $block->getChildHtml('form.buttons'); ?>
-                        </div>
-                    </fieldset>
-                </form>
+<form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
+    <fieldset class="admin__fieldset">
+        <legend class="admin__legend"><span><?php echo __('Welcome, please sign in') ?></span></legend><br/>
+        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>" />
+        <div class="admin__field _required field-username">
+            <label for="username" class="admin__field-label"><span><?php echo __('Username') ?></span></label>
+            <div class="admin__field-control">
+                <input type="text" id="username" name="login[username]" autofocus value="" data-validate="{required:true}" class="admin__control-text" placeholder="<?php echo __('user name') ?>" />
             </div>
         </div>
-    </div>
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-copyright"><?php echo $block->getChildHtml('copyright');?></div>
+        <div class="admin__field _required field-password">
+            <label for="login" class="admin__field-label"><span><?php echo __('Password') ?></span></label>
+            <div class="admin__field-control">
+                <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
+                <input type="text" class="admin__control-dummy" name="dummy" id="dummy" />
+                <input type="password" id="login" name="login[password]" data-validate="{required:true}" class="admin__control-text" value="" placeholder="<?php echo __('password') ?>" />
+            </div>
         </div>
-    </footer>
-</div>
+        <?php echo $block->getChildHtml('form.additional.info'); ?>
+        <div class="form-actions">
+            <?php echo $block->getChildHtml('form.buttons'); ?>
+        </div>
+    </fieldset>
+</form>

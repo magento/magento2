@@ -112,8 +112,15 @@ require([
         title: 'Select Associated Product',
         autoOpen: false,
         minWidth: 980,
+        width: '75%',
         modal: true,
-        resizable: true
+        resizable: true,
+        open: function () {
+            $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+        },
+        close: function() {
+            $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+        }
     });
 
     $('[data-panel=product-variations]')

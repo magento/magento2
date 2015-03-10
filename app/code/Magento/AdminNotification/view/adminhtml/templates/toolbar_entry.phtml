@@ -69,7 +69,9 @@
             <li class="notifications-entry notifications-entry-last">
                 <a
                     href="<?php echo $block->getUrl('adminhtml/notification/index'); ?>"
-                    class="action-tertiary action-more"><?php echo __('See All (%1 unread)', $notificationCount); ?></a>
+                    class="action-tertiary action-more">
+                    <?php echo __('See All (') ?><span class="notifications-counter"><?php echo $notificationCount ?></span><?php echo __(' unread)'); ?>
+                </a>
             </li>
         </ul>
     <?php else : ?>

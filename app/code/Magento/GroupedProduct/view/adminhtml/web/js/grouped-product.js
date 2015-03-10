@@ -107,19 +107,20 @@ define([
                 title: $.mage.__('Add Products to Group'),
                 autoOpen: false,
                 minWidth: 980,
+                width: '75%',
                 modal: true,
                 resizable: true,
                 dialogClass: 'grouped',
+                open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                },
+                close: function () {
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                },
                 buttons: [{
-                    id: 'grouped-product-dialog-cancel-button',
-                    text: $.mage.__('Cancel'),
-                    click: function () {
-                        $(this).dialog('close');
-                    }
-                }, {
                     id: 'grouped-product-dialog-apply-button',
                     text: $.mage.__('Add Selected Products'),
-                    'class': 'add primary',
+                    'class': 'action-primary action-add',
                     click: function () {
                         $.each(selectedProductList, function (index, product) {
                             widget._add(null, product);
@@ -128,7 +129,19 @@ define([
                         widget._updateGridVisibility();
                         $(this).dialog('close');
                     }
-                }]
+                },
+                {
+                    id: 'grouped-product-dialog-cancel-button',
+                    text: $.mage.__('Cancel'),
+                    'class': 'action-close',
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                }],
+                position: {
+                    my: "left+12.5% top",
+                    of: "body"
+                }
             });
 
             popup.on('click', '[data-role=row]', function (event) {

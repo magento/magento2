@@ -7,18 +7,20 @@
 //  Variables
 //  _____________________________________________
 
-@field-scope__color: @color-dark-gray;
 @field-divider__background-color: @color-lighter-grayish;
 @field-label__color: @color-very-dark-gray-black;
 @field-label__disabled__color: @color-gray65-almost;
+@field-label__font-size: @font-size__base;
+@field-label__line-height: 1.2;
 @field-label__required__color: @color-phoenix;
 @field-note__color: @color-very-dark-gray-black;
 @field-note__font-size: @font-size__s;
+@field-scope__color: @color-dark-gray;
 
-@field-error-message__background-color: @color-lazy-sun;
-@field-error-message__color: @color-very-dark-gray2;
-@field-error-message__border-color: @color-apricot;
 @field-error-control__border-color: @color-tomato-brick;
+@field-error-message__background-color: @color-lazy-sun;
+@field-error-message__border-color: @color-apricot;
+@field-error-message__color: @color-very-dark-gray2;
 
 //
 //  Form Fields
@@ -59,10 +61,10 @@
 
     [class]:not(.admin__field-option) > & {
         font-family: @font-family__base;
-        font-size: @font-size__base;
+        font-size: @field-label__font-size;
         font-weight: @font-weight__semibold;
         line-height: 3.2rem;
-        padding-top: 0;
+        padding: 0;
         white-space: nowrap;
 
         &:before {
@@ -75,7 +77,7 @@
 
         span {
             display: inline-block;
-            line-height: 1.2;
+            line-height: @field-label__line-height;
             vertical-align: middle;
             white-space: normal;
         }
