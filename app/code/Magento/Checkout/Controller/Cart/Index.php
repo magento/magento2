@@ -89,16 +89,15 @@ class Index extends \Magento\Checkout\Controller\Cart
         }
 
         // Compose array of messages to add
-        $messages = [];
-        /** @var \Magento\Framework\Message\MessageInterface $message  */
         foreach ($this->cart->getQuote()->getMessages() as $message) {
-            if ($message) {
-                // Escape HTML entities in quote message to prevent XSS
-                $message->setText($this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($message->getText()));
-                $messages[] = $message;
+            if (!$message) {
+                continue;
             }
+            if ($message instanceof \Magento\Framework\Phrase) {
+                $message = $message->__toString();
+            }
+            $this->messageManager->addError($message);
         }
-        $this->messageManager->addUniqueMessages($messages);
 
         /**
          * if customer enteres shopping cart we should mark quote
