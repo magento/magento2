@@ -9,7 +9,6 @@ namespace Magento\Framework\App\ObjectManager\Environment;
 use Magento\Framework\App\EnvironmentInterface;
 use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -29,7 +28,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
     protected $configPreference = 'Magento\Framework\ObjectManager\Factory\Compiled';
 
     /**
-     * @var ConfigLoader\Compiled
+     * @var \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
      */
     private $configLoader;
 
@@ -79,7 +78,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
     /**
      * Returns new instance of compiled config loader
      *
-     * @return ConfigLoader\Compiled
+     * @return \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled
      */
     public function getObjectManagerConfigLoader()
     {
@@ -87,7 +86,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
             return $this->configLoader;
         }
 
-        $this->configLoader = new ConfigLoader\Compiled();
+        $this->configLoader = new \Magento\Framework\App\ObjectManager\ConfigLoader\Compiled();
         return $this->configLoader;
     }
 

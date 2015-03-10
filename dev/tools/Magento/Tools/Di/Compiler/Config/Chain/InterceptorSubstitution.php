@@ -76,7 +76,7 @@ class InterceptorSubstitution implements ModificationInterface
      */
     private function resolvePreferences(array $preferences, array $interceptors)
     {
-        foreach ($preferences as $type => &$preference) {
+        foreach ($preferences as &$preference) {
             if (isset($interceptors[$preference])) {
                 $preference = $interceptors[$preference];
             }
