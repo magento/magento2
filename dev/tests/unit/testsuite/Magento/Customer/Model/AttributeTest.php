@@ -192,4 +192,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->attribute->afterSave();
     }
+
+    public function testAfterDeleteEavCache()
+    {
+        $this->configMock
+            ->expects($this->once())
+            ->method('clear');
+
+        $this->attribute->afterDelete();
+    }
 }

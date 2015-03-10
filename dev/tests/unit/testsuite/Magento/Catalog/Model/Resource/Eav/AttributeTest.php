@@ -203,4 +203,12 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('store', $this->_model->getScope());
     }
+
+    public function testAfterDeleteEavCache()
+    {
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('clear');
+        $this->_model->afterDelete();
+    }
 }
