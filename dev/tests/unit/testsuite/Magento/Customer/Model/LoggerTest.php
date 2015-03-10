@@ -48,7 +48,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', [], [], '', false);
+        $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', ['create'], [], '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
