@@ -13,13 +13,6 @@ namespace Magento\Customer\Model;
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Customer log model.
-     *
-     * @var \Magento\Customer\Model\Log|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $log;
-
-    /**
      * Customer log data logger.
      *
      * @var \Magento\Customer\Model\Logger
@@ -45,53 +38,17 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected $adapter;
 
-    /**
-     * @var array
-     */
-    protected $logData = [
-        'customer_id' => 369,
-        'last_login_at' => '2015-03-04 12:00:00',
-        'last_visit_at' => '2015-03-04 12:01:00',
-        'last_logout_at' => '2015-03-04 12:05:00',
-    ];
-
     protected function setUp()
     {
-        $select = $this->getMock(
-            'Magento\Framework\DB\Select', [], [], '', false
-        );
-        $select->expects($this->any())->method('from')->willReturnSelf();
-        $select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $select->expects($this->any())->method('where')->willReturnSelf();
-        $select->expects($this->any())->method('order')->willReturnSelf();
-        $select->expects($this->any())->method('limit')->willReturnSelf();
-
         $this->adapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo', ['select', 'insertOnDuplicate', 'fetchRow'], [], '', false
-        );
-        $this->adapter->expects($this->any())->method('select')->willReturn($select);
-
-        $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource', ['getConnection', 'getTableName'], [], '', false
-        );
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->adapter);
-        $this->resource->expects($this->any())->method('getConnection')->willReturnArgument(0);
-
-        $this->log = $this->getMock(
-            'Magento\Customer\Model\Log',
+            'Magento\Framework\DB\Adapter\Pdo',
+            ['select', 'insertOnDuplicate', 'fetchRow'],
             [],
-            [
-                'customerId' => $this->logData['customer_id'],
-                'lastLoginAt' => $this->logData['last_login_at'],
-                'lastLogoutAt' => $this->logData['last_logout_at'],
-                'lastVisitAt' => $this->logData['last_visit_at']
-            ]
+            '',
+            false
         );
-
-        $this->logFactory = $this->getMock(
-            '\Magento\Customer\Model\LogFactory', ['create'], [], '', false
-        );
-        $this->logFactory->expects($this->any())->method('create')->willReturn($this->log);
+        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', [], [], '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
@@ -111,20 +68,26 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testLog($customerId, $data)
     {
+        $tableName = 'customer_log_table_name';
         $data = array_filter($data);
 
         if (!$data) {
-            try {
-                $this->logger->log($customerId, $data);
-            }
-            catch (\InvalidArgumentException $expected) {
-                return;
-            }
-            $this->fail('An expected exception has not been raised');
+            $this->setExpectedException('\InvalidArgumentException', 'Log data is empty');
+            $this->logger->log($customerId, $data);
+            return;
         }
 
-        $this->resource->expects($this->once())->method('getConnection');
-        $this->adapter->expects($this->once())->method('insertOnDuplicate');
+        $this->resource->expects($this->once())
+            ->method('getConnection')
+            ->with('write')
+            ->willReturn($this->adapter);
+        $this->resource->expects($this->once())
+            ->method('getTableName')
+            ->with('customer_log')
+            ->willReturn($tableName);
+        $this->adapter->expects($this->once())
+            ->method('insertOnDuplicate')
+            ->with($tableName, array_merge(['customer_id' => $customerId], $data), array_keys($data));
 
         $this->assertEquals($this->logger, $this->logger->log($customerId, $data));
     }
@@ -147,19 +110,46 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($customerId, $data)
     {
-        $this->adapter->expects($this->any())->method('fetchRow')->willReturn($data);
+        $logArguments = [
+            'customerId' => $data['customer_id'],
+            'lastLoginAt' => $data['last_login_at'],
+            'lastLogoutAt' => $data['last_logout_at'],
+            'lastVisitAt' => $data['last_visit_at']
+        ];
 
-        if (!$data) {
-            try {
-                $this->logger->get($customerId);
-            }
-            catch (\LogicException $expected) {
-                return;
-            }
-            $this->fail('An expected exception has not been raised');
-        }
+        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
 
-        $this->assertEquals($this->log, $this->logger->get($customerId));
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $select->expects($this->any())->method('order')->willReturnSelf();
+        $select->expects($this->any())->method('limit')->willReturnSelf();
+
+        $this->adapter->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
+
+        $this->resource->expects($this->once())
+            ->method('getConnection')
+            ->with('read')
+            ->willReturn($this->adapter);
+        $this->adapter->expects($this->any())
+            ->method('fetchRow')
+            ->with($select)
+            ->willReturn($data);
+
+        $log = $this->getMock(
+            'Magento\Customer\Model\Log',
+            [],
+            $logArguments
+        );
+
+        $this->logFactory->expects($this->any())
+            ->method('create')
+            ->with($logArguments)
+            ->willReturn($log);
+
+        $this->assertEquals($log, $this->logger->get($customerId));
     }
 
     /**
@@ -168,8 +158,33 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testGetDataProvider()
     {
         return [
-            [235, $this->logData],
-            [235, null],
+            [
+                235,
+                [
+                    'customer_id' => 369,
+                    'last_login_at' => '2015-03-04 12:00:00',
+                    'last_visit_at' => '2015-03-04 12:01:00',
+                    'last_logout_at' => '2015-03-04 12:05:00',
+                ]
+            ],
+            [
+                235,
+                [
+                    'customer_id' => 369,
+                    'last_login_at' => '2015-03-04 12:00:00',
+                    'last_visit_at' => '2015-03-04 12:01:00',
+                    'last_logout_at' => null,
+                ]
+            ],
+            [
+                235,
+                [
+                    'customer_id' => null,
+                    'last_login_at' => null,
+                    'last_visit_at' => null,
+                    'last_logout_at' => null,
+                ]
+            ],
         ];
     }
 }
