@@ -10,17 +10,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Cms\Controller\Index\Index
      */
-    protected $_controller;
+    protected $controller;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cmsHelperMock;
+    protected $cmsHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    protected $requestMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -36,6 +36,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageMock;
+
+    /**
+     * @var string
+     */
+    protected $pageId = 'home';
 
     protected function setUp()
     {
@@ -57,26 +62,29 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->forwardMock);
 
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->_cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false);
         $valueMap = [
             [
                 'Magento\Framework\App\Config\ScopeConfigInterface',
                 $scopeConfigMock,
             ],
-            ['Magento\Cms\Helper\Page', $this->_cmsHelperMock],
+            ['Magento\Cms\Helper\Page', $this->cmsHelperMock],
         ];
         $objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE)
-            ->willReturn('home');
-        $this->_controller = $helper->getObject(
+            ->with(
+                \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+            ->willReturn($this->pageId);
+        $this->controller = $helper->getObject(
             'Magento\Cms\Controller\Index\Index',
             [
                 'response' => $responseMock,
                 'objectManager' => $objectManagerMock,
-                'request' => $this->_requestMock,
+                'request' => $this->requestMock,
                 'resultForwardFactory' => $this->forwardFactoryMock
             ]
         );
@@ -84,10 +92,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteResultPage()
     {
-        $this->_cmsHelperMock->expects($this->once())
+        $this->cmsHelperMock->expects($this->once())
             ->method('prepareResultPage')
+            ->with($this->controller, $this->pageId)
             ->willReturn($this->resultPageMock);
-        $this->assertSame($this->resultPageMock, $this->_controller->execute());
+        $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteResultForward()
@@ -96,6 +105,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('forward')
             ->with('defaultIndex')
             ->willReturnSelf();
-        $this->assertSame($this->forwardMock, $this->_controller->execute());
+        $this->assertSame($this->forwardMock, $this->controller->execute());
     }
 }

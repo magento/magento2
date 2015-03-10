@@ -79,7 +79,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->willReturn($this->pageId);
+            ->willReturnMap(
+                [
+                    ['page_id', $this->pageId, $this->pageId],
+                    ['id', false, $this->pageId]
+                ]
+            );
         $this->cmsHelperMock->expects($this->once())
             ->method('prepareResultPage')
             ->with($this->controller, $this->pageId)
@@ -91,7 +96,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->willReturn($this->pageId);
+            ->willReturnMap(
+                [
+                    ['page_id', $this->pageId, $this->pageId],
+                    ['id', false, $this->pageId]
+                ]
+            );
         $this->forwardMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
