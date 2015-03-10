@@ -19,7 +19,6 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        // dev/tests/unit/testsuite/tools/I18n/Parser/Adapter/_files/layout.xml
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/default.xml';
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

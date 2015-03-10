@@ -19,7 +19,6 @@ class FilesCollectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        // dev/tests/unit/testsuite/tools/I18n/_files/files_collector
         $this->_testDir = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/files_collector/';
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

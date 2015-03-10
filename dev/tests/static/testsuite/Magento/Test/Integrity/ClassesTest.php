@@ -479,7 +479,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 '/dev/tests/performance/framework/',
                 '/dev/tests/static/framework/',
                 '/dev/tests/static/testsuite/',
-                '/dev/tests/unit/framework/',
                 '/setup/src/',
             ];
             // Full list of directories where there may be namespace classes
@@ -536,6 +535,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 BP . '/dev/tests/integration',
                 BP . '/app/code/*/*/Test/Unit',
                 BP . '/lib/internal/*/*/*/Test/Unit',
+                BP . '/lib/internal/Magento/Framework/Test/Unit',
                 BP . '/dev/tools/Magento/Tools/*/Test/Unit',
                 BP . '/setup/src/Magento/Setup/Test/Unit',
             ],
