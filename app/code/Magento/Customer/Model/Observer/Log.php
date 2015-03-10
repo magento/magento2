@@ -5,6 +5,10 @@
  */
 namespace Magento\Customer\Model\Observer;
 
+use Magento\Customer\Model\Logger;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Event\Observer;
+
 /**
  * Customer log observer.
  */
@@ -13,25 +17,23 @@ class Log
     /**
      * Logger of customer's log data.
      *
-     * @var \Magento\Customer\Model\Logger
+     * @var Logger
      */
     protected $logger;
 
     /**
      * Date formats converter.
      *
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Customer\Model\Logger $logger
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Logger $logger
+     * @param DateTime $dateTime
      */
-    public function __construct(
-        \Magento\Customer\Model\Logger $logger,
-        \Magento\Framework\Stdlib\DateTime $dateTime
-    ) {
+    public function __construct(Logger $logger, DateTime $dateTime)
+    {
         $this->logger = $logger;
         $this->dateTime = $dateTime;
     }
@@ -39,10 +41,10 @@ class Log
     /**
      * Handler for 'customer_login' event.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function logLastLoginAt(\Magento\Framework\Event\Observer $observer)
+    public function logLastLoginAt(Observer $observer)
     {
         $this->logger->log(
             $observer->getEvent()->getCustomer()->getId(),
@@ -53,10 +55,10 @@ class Log
     /**
      * Handler for 'customer_logout' event.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function logLastLogoutAt(\Magento\Framework\Event\Observer $observer)
+    public function logLastLogoutAt(Observer $observer)
     {
         $this->logger->log(
             $observer->getEvent()->getCustomer()->getId(),
