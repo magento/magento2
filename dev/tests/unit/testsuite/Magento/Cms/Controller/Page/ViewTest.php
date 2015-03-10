@@ -10,17 +10,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Cms\Controller\Page\View
      */
-    protected $_controller;
+    protected $controller;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cmsHelperMock;
+    protected $cmsHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    protected $requestMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -61,15 +61,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->_cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false);
-        $objectManagerMock->expects($this->once())->method('get')->willReturn($this->_cmsHelperMock);
-        $this->_controller = $helper->getObject(
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false);
+        $objectManagerMock->expects($this->once())->method('get')->willReturn($this->cmsHelperMock);
+        $this->controller = $helper->getObject(
             'Magento\Cms\Controller\Page\View',
             [
                 'response' => $responseMock,
                 'objectManager' => $objectManagerMock,
-                'request' => $this->_requestMock,
+                'request' => $this->requestMock,
                 'resultForwardFactory' => $this->forwardFactoryMock
             ]
         );
@@ -77,24 +77,24 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteResultPage()
     {
-        $this->_requestMock->expects($this->atLeastOnce())
+        $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturn($this->pageId);
-        $this->_cmsHelperMock->expects($this->once())
+        $this->cmsHelperMock->expects($this->once())
             ->method('prepareResultPage')
             ->willReturn($this->resultPageMock);
-        $this->assertSame($this->resultPageMock, $this->_controller->execute());
+        $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteResultForward()
     {
-        $this->_requestMock->expects($this->atLeastOnce())
+        $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturn($this->pageId);
         $this->forwardMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
             ->willReturnSelf();
-        $this->assertSame($this->forwardMock, $this->_controller->execute());
+        $this->assertSame($this->forwardMock, $this->controller->execute());
     }
 }
