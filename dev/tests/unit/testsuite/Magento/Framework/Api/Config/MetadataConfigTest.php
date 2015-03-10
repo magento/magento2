@@ -18,9 +18,9 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
     protected $serviceConfigReaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\MetadataObjectInterfaceFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ObjectFactory
      */
-    protected $attributeMetadataFactoryMock;
+    protected $objectFactoryMock;
 
     /**
      * Prepare parameters
@@ -30,13 +30,13 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
         $this->serviceConfigReaderMock = $this->getMockBuilder('\Magento\Framework\Api\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeMetadataFactoryMock = $this->getMockBuilder(
-            '\Magento\Framework\Api\MetadataObjectInterfaceFactory'
+        $this->objectFactoryMock = $this->getMockBuilder(
+            '\Magento\Framework\Api\ObjectFactory'
         )->setMethods(['create'])->disableOriginalConstructor()->getMock();
 
         $this->metadataConfig = new \Magento\Framework\Api\Config\MetadataConfig(
             $this->serviceConfigReaderMock,
-            $this->attributeMetadataFactoryMock
+            $this->objectFactoryMock
         );
     }
 
@@ -61,7 +61,7 @@ class MetadataConfigTest extends \PHPUnit_Framework_TestCase
             ->method('setAttributeCode')
             ->with($attributeCode)
             ->will($this->returnSelf());
-        $this->attributeMetadataFactoryMock->expects($this->exactly(2))
+        $this->objectFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($attributeMock);
 
