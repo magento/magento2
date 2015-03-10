@@ -193,7 +193,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Magento\\Framework\\": "lib/internal/Magento/Framework/"
+            "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+            "Magento\\Setup\\": "setup/src/Magento/Setup/"
         }
     },
     "autoload-dev": {
@@ -203,8 +204,7 @@
             "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
             "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
-            "Magento\\ToolkitFramework\\": "dev/tools/performance-toolkit/framework/Magento/ToolkitFramework/",
-            "Magento\\Setup\\": "setup/src/Magento/Setup/"
+            "Magento\\ToolkitFramework\\": "dev/tools/performance-toolkit/framework/Magento/ToolkitFramework/"
         }
     }
 }
