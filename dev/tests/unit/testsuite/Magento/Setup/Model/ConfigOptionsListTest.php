@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
-class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
+class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ConfigOptionsList

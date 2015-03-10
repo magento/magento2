@@ -7,7 +7,7 @@ namespace Magento\Backend\Setup;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 
-class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
+class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ConfigOptionsList

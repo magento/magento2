@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
-class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
+class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +31,7 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
         $fullModuleListMock->expects($this->never())->method('getNames');
         /** @var \Magento\Setup\Model\ConfigOptionsListCollector $object */
         $object = $objectManager->create(
-            'Magento\Setup\Model\ConfigOptionsCollector',
+            'Magento\Setup\Model\ConfigOptionsListCollector',
             [
                 'objectManagerProvider' => $this->objectManagerProvider,
                 'moduleList' => $moduleListMock,
@@ -41,7 +41,7 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
         $result = $object->collectOptions();
 
         $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Setup\Model\ConfigOptions');
+            ->get('Magento\Setup\Model\ConfigOptionsList');
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => $setupOptions,
@@ -59,7 +59,7 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
         $moduleListMock->expects($this->once())->method('isModuleInfoAvailable')->willReturn(false);
         $moduleListMock->expects($this->never())->method('getNames');
         $object = $objectManager->create(
-            'Magento\Setup\Model\ConfigOptionsCollector',
+            'Magento\Setup\Model\ConfigOptionsListCollector',
             [
                 'objectManagerProvider' => $this->objectManagerProvider,
                 'moduleList' => $moduleListMock,
@@ -70,7 +70,7 @@ class ConfigOptionsCollectorTest extends \PHPUnit_Framework_TestCase
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Setup\Model\ConfigOptions'),
+                ->get('Magento\Setup\Model\ConfigOptionsList'),
             'Magento_Backend' => $backendOptions,
         ];
 
