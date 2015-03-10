@@ -154,13 +154,13 @@ class ConfigGenerator
         }
 
         $optional = [
-            [ConfigOptions::INPUT_KEY_DB_PASS => ''],
-            [ConfigOptions::INPUT_KEY_DB_MODEL => 'mysql4'],
-            [ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;']
+            ConfigOptions::INPUT_KEY_DB_PASS => '',
+            ConfigOptions::INPUT_KEY_DB_MODEL => 'mysql4',
+            ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;'
         ];
 
         foreach ($optional as $key => $value) {
-            $connection[ConfigGenerator::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : $value;
+            $connection[self::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : $value;
         }
 
         $connection[self::$paramMap[ConfigOptions::INPUT_KEY_ACTIVE]] = '1';
