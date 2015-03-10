@@ -110,7 +110,7 @@ class Handler
             throw new AuthorizationException(
                 __(
                     AuthorizationException::NOT_AUTHORIZED,
-                    implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])
+                    ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
                 )
             );
         }

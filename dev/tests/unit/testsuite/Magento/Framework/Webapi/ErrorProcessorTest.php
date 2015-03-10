@@ -244,12 +244,12 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                 new AuthorizationException(
                     __(
                         AuthorizationException::NOT_AUTHORIZED,
-                        '4'
+                        ['resources' => '4']
                     )
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
                 AuthorizationException::NOT_AUTHORIZED,
-                ['4'],
+                ['resources' => '4'],
             ],
             'Exception' => [
                 new \Exception('Non service exception', 5678),
