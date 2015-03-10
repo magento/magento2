@@ -1878,8 +1878,14 @@ table.table th.required:after {
 .tabs-horiz:after,
 .ui-dialog .ui-dialog-buttonset:before,
 .ui-dialog .ui-dialog-buttonset:after,
-.magento_message #contents-uploader:before,
-.magento_message #contents-uploader:after,
+.ui-dialog .main-col .insert-title-inner:before,
+.ui-dialog .main-col .insert-title-inner:after,
+.ui-dialog .magento_message .insert-title-inner:before,
+.ui-dialog .magento_message .insert-title-inner:after,
+.ui-dialog .main-col #contents-uploader:before,
+.ui-dialog .main-col #contents-uploader:after,
+.ui-dialog .magento_message #contents-uploader:before,
+.ui-dialog .magento_message #contents-uploader:after,
 .popup-window .magento_buttons:before,
 .popup-window .magento_buttons:after,
 .fade .popup-content:before,
@@ -1905,7 +1911,10 @@ table.table th.required:after {
 .actions-split:after,
 .tabs-horiz:after,
 .ui-dialog .ui-dialog-buttonset:after,
-.magento_message #contents-uploader:after,
+.ui-dialog .main-col .insert-title-inner:after,
+.ui-dialog .magento_message .insert-title-inner:after,
+.ui-dialog .main-col #contents-uploader:after,
+.ui-dialog .magento_message #contents-uploader:after,
 .popup-window .magento_buttons:after,
 .fade .popup-content:after,
 .fade .actions:after,
@@ -2346,7 +2355,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-dialog {
   background: #ffffff;
   min-width: 40%;
-  margin-top: 10rem;
   opacity: 0;
   transform: scale(0.7);
   transition: all 0.3s;
@@ -2458,6 +2466,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-dialog .pager {
   padding-bottom: 0;
 }
+.ui-dialog .grid-actions {
+  padding-top: 0;
+}
 .ui-dialog .ui-resizable {
   position: relative;
 }
@@ -2526,6 +2537,84 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   right: 0;
   top: -5px;
 }
+.ui-dialog .main-col .insert-title-inner,
+.ui-dialog .magento_message .insert-title-inner {
+  border-bottom: 1px solid #adadad;
+  margin: 0 0 2rem;
+  padding-bottom: 0.5rem;
+}
+.ui-dialog .main-col .insert-actions,
+.ui-dialog .magento_message .insert-actions {
+  float: right;
+}
+.ui-dialog .main-col .title,
+.ui-dialog .magento_message .title {
+  font-size: 1.6rem;
+  padding-top: 0.5rem;
+}
+.ui-dialog .main-col .main-col-inner .uploader,
+.ui-dialog .magento_message .main-col-inner .uploader {
+  border: 1px solid #adadad;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+}
+.ui-dialog .main-col .breadcrumbs,
+.ui-dialog .magento_message .breadcrumbs {
+  padding-left: 0;
+}
+.ui-dialog .main-col .breadcrumbs li:after,
+.ui-dialog .magento_message .breadcrumbs li:after {
+  content: "";
+  margin: 0 0.5rem 0 0;
+}
+.ui-dialog .main-col #contents-uploader,
+.ui-dialog .magento_message #contents-uploader {
+  margin: 0 0 2rem;
+}
+.ui-dialog .main-col .fileinput-button,
+.ui-dialog .magento_message .fileinput-button {
+  display: inline-block;
+  cursor: pointer;
+  float: none;
+  vertical-align: middle;
+}
+.ui-dialog .main-col .fileinput-button span,
+.ui-dialog .magento_message .fileinput-button span {
+  display: none;
+}
+.ui-dialog .main-col .fileinput-button input,
+.ui-dialog .magento_message .fileinput-button input {
+  position: static;
+  border: none;
+  opacity: 1;
+}
+.ui-dialog .main-col .file-row,
+.ui-dialog .magento_message .file-row {
+  border: 1px solid #adadad;
+  margin: 0.5rem 0;
+  padding: 2px;
+}
+.ui-dialog .main-col .filecnt,
+.ui-dialog .magento_message .filecnt {
+  border: 1px solid #adadad;
+  display: inline-block;
+  margin: 0 0.5rem 15px 0;
+  padding: 3px;
+  width: 100px;
+  overflow: hidden;
+}
+.ui-dialog .main-col .filecnt.selected,
+.ui-dialog .magento_message .filecnt.selected {
+  border-color: #008bdb;
+}
+.ui-dialog .main-col .filecnt p,
+.ui-dialog .magento_message .filecnt p {
+  text-align: center;
+}
+.ui-dialog .main-col .x-tree,
+.ui-dialog .magento_message .x-tree {
+  margin-bottom: 2rem;
+}
 .ui-widget-overlay,
 .overlay_magento,
 .fade {
@@ -2549,67 +2638,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   margin-left: -1rem;
   display: inline-block;
 }
-.magento_message .insert-title-inner {
-  border-bottom: 1px solid #adadad;
-  margin: 0 0 2rem;
-}
-.magento_message .insert-actions {
-  float: right;
-}
-.magento_message .title {
-  font-size: 1.6rem;
-}
-.magento_message .main-col-inner .uploader {
-  border: 1px solid #adadad;
-  margin: 0 0 1rem;
-  padding: 0.5rem;
-}
-.magento_message .breadcrumbs {
-  padding-left: 0;
-}
-.magento_message .breadcrumbs li:after {
-  content: "";
-  margin: 0 0.5rem 0 0;
-}
-.magento_message #contents-uploader {
-  margin: 0 0 2rem;
-}
-.magento_message .fileinput-button {
-  display: inline-block;
-  cursor: pointer;
-  float: none;
-  vertical-align: middle;
-}
-.magento_message .fileinput-button span {
-  display: none;
-}
-.magento_message .fileinput-button input {
-  position: static;
-  border: none;
-  opacity: 1;
-}
-.magento_message .file-row {
-  border: 1px solid #adadad;
-  margin: 0.5rem 0;
-  padding: 2px;
-}
-.magento_message .filecnt {
-  border: 1px solid #adadad;
-  display: inline-block;
-  margin: 0 0.5rem 15px 0;
-  padding: 3px;
-  width: 100px;
-  overflow: hidden;
-}
-.magento_message .filecnt.selected {
-  border-color: #008bdb;
-}
-.magento_message .filecnt p {
-  text-align: center;
-}
-.magento_message .x-tree {
-  margin-bottom: 2rem;
-}
 .attribute-popup-actions {
   background: #ffffff;
   border-top: 1px solid #adadad;
@@ -2622,6 +2650,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .attribute-popup-actions.fixed {
   background: #ffffff !important;
+  border-bottom: 0 !important;
   left: 0 !important;
   padding: 3rem !important;
 }
@@ -2660,6 +2689,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .popup-window .magento_buttons .ok_button {
   float: right;
   margin: 0 0 0 3rem;
+}
+.overlay_magento {
+  z-index: 1000;
 }
 .fade {
   z-index: 1000;

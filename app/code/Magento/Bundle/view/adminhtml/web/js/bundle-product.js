@@ -149,16 +149,20 @@ define([
                             $selectionGrid.dialog('close');
                         }
                     }],
+                    position: {
+                        my: 'left top',
+                        at: 'center top',
+                        of: 'body'
+                    },
                     open: function () {
                         $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                        var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 45;
+                        $(this).closest('.ui-dialog').css('margin-top', topMargin);
                     },
                     close: function() {
                         $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                         $(this).dialog('destroy');
-                    },
-                    position: {
-                        my: "left+12.5% top",
-                        of: "body"
                     }
                 });
 

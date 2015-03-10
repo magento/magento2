@@ -60,10 +60,18 @@ window.Variables = {
             resizable:  false,
             minWidth:   500,
             width:      '75%',
-            open:       function () {
-                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
+            position: {
+                my: 'left top',
+                at: 'center top',
+                of: 'body'
             },
-            close:      function(event, ui) {
+            open: function () {
+                jQuery(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                var topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+                jQuery(this).closest('.ui-dialog').css('margin-top', topMargin);
+            },
+            close: function(event, ui) {
                 jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 jQuery(this).dialog('destroy');
                 jQuery('#' + windowId).remove();

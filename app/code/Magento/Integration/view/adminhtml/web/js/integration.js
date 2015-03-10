@@ -234,10 +234,17 @@ define([
                             minWidth: 600,
                             width: '75%',
                             dialogClass: dialog == 'permissions' ? 'integration-dialog' : 'integration-dialog no-close',
-                            position: {at: 'center'},
                             closeOnEscape: false,
+                            position: {
+                                my: 'left top',
+                                at: 'center top',
+                                of: 'body'
+                            },
                             open: function () {
                                 $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                                var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+                                $(this).closest('.ui-dialog').css('margin-top', topMargin);
                             },
                             close: function () {
                                 $(this).closest('.ui-dialog').removeClass('ui-dialog-active');

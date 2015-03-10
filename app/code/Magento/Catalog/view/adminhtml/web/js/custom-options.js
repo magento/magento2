@@ -127,8 +127,16 @@ define([
                         width: '75%',
                         modal: true,
                         resizable: true,
+                        position: {
+                            my: 'left top',
+                            at: 'center top',
+                            of: 'body'
+                        },
                         open: function () {
                             $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+"
+                            var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
+                            $(this).closest('.ui-dialog').css('margin-top', topMargin);
                         },
                         close: function () {
                             $(this).closest('.ui-dialog').removeClass('ui-dialog-active');

@@ -68,7 +68,7 @@ define([
             var buttons = {
                 text: $.mage.__('OK'),
                 click: callback,
-                'class': 'primary'
+                'class': 'action-primary'
             };
 
             dialog.title.set(this.options.eventData.confirm.title);
