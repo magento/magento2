@@ -86,7 +86,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param Mapper $addressMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Customer\Model\Log $customerLog
+     * @param \Magento\Customer\Model\Logger $customerLogger
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -286,9 +286,6 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getCurrentStatus()
     {
-        if (!$this->customerLog->getCustomerId()) {
-            return __('Offline');
-        }
         if (!$this->customerLog->getLastLoginAt()) {
             return __('Offline');
         }

@@ -68,10 +68,29 @@ class Logger
      * Load log by Customer Id.
      *
      * @param int $customerId
-     * @return \Magento\Customer\Model\Log
-     * @throws \LogicException
+     * @return Log
      */
-    public function get($customerId)
+    public function get($customerId = null)
+    {
+        if (null !== $customerId) {
+            $data = $this->loadLogData($customerId);
+        }
+
+        return $this->logFactory->create(
+            [
+                'customerId' => isset($data['customer_id']) ? $data['customer_id'] : null,
+                'lastLoginAt' => isset($data['last_login_at']) ? $data['last_login_at'] : null,
+                'lastLogoutAt' => isset($data['last_logout_at']) ? $data['last_logout_at'] : null,
+                'lastVisitAt' => isset($data['last_visit_at']) ? $data['last_visit_at'] : null
+            ]
+        );
+    }
+
+    /**
+     * @param int $customerId
+     * @return array
+     */
+    protected function loadLogData($customerId)
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
         $adapter = $this->resource->getConnection('read');
@@ -93,20 +112,6 @@ class Logger
             )
             ->limit(1);
 
-        $data = $adapter->fetchRow($select);
-
-        if (!$data) {
-            //throw new \LogicException('Unable to load customer log');
-            return $this->logFactory->create([]);
-        }
-
-        return $this->logFactory->create(
-            [
-                'customerId' => $data['customer_id'],
-                'lastLoginAt' => $data['last_login_at'],
-                'lastLogoutAt' => $data['last_logout_at'],
-                'lastVisitAt' => $data['last_visit_at'],
-            ]
-        );
+        return $adapter->fetchRow($select);
     }
 }
