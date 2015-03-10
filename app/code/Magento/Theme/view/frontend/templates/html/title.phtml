@@ -12,12 +12,18 @@
 $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
 $title = '';
 if (trim($block->getPageTitle())) {
-    $title = '<span class="base" data-ui-id="page-title" ' .  $block->getAddBaseAttribute() . '>' . $block->escapeHtml($block->getPageTitle()) . '</span>';
+    $title = '<span class="base" data-ui-id="page-title" ' .  $block->getAddBaseAttribute() . '>'
+        . $block->escapeHtml($block->getPageTitle()) . '</span>';
 }
 ?>
 <?php if ($title): ?>
 <div class="page-title<?php echo $cssClass; ?>">
-    <h1 class="title"><?php echo $title ?></h1>
+    <h1 class="title" <?php if ($block->getId()): ?> id="<?php echo $block->getId();?>" <?php endif; ?>
+        <?php if ($block->getAddBaseAttributeAria()): ?>
+            aria-labelledby="<?php echo $block->getAddBaseAttributeAria(); ?>"
+        <?php endif; ?>>
+        <?php echo $title ?>
+    </h1>
     <?php echo $block->getChildHtml(); ?>
 </div>
 <?php endif; ?>
