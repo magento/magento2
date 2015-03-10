@@ -16,7 +16,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     private $configModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigOptionsCollector
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigOptionsListCollector
      */
     private $collector;
 
@@ -31,15 +31,15 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     private $configData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Setup\ConfigOptions
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Setup\ConfigOptionsList
      */
-    private $configOptions;
+    private $configOptionsList;
 
     public function setUp()
     {
-        $this->collector = $this->getMock('Magento\Setup\Model\ConfigOptionsCollector', [], [], '', false);
+        $this->collector = $this->getMock('Magento\Setup\Model\ConfigOptionsListCollector', [], [], '', false);
         $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->configOptions = $this->getMock('Magento\Backend\Setup\ConfigOptions', [], [], '', false);
+        $this->configOptionsList = $this->getMock('Magento\Backend\Setup\ConfigOptionsList', [], [], '', false);
         $this->configData = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
 
         $this->configModel = new ConfigModel($this->collector, $this->writer);
@@ -54,7 +54,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             $option,
             $option
         ];
-        $configOption = $this->configOptions;
+        $configOption = $this->configOptionsList;
         $configOption->expects($this->once())->method('getOptions')->will($this->returnValue($optionsSet));
         $configOption->expects($this->once())->method('validate')->will($this->returnValue([]));
 
@@ -109,15 +109,17 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
         $configData2->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
         $configData2->expects($this->any())->method('getSegmentKey')->will($this->returnValue('segment'));
 
-        $configOption = $this->configOptions;
+        $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
             ->method('createConfig')
             ->will($this->returnValue([$configData1, $configData2]));
 
-        $configOptions = [
+        $configOptionsList = [
             'Fake_Module' => $configOption
         ];
-        $this->collector->expects($this->once())->method('collectOptions')->will($this->returnValue($configOptions));
+        $this->collector->expects($this->once())
+            ->method('collectOptions')
+            ->will($this->returnValue($configOptionsList));
 
         $this->writer->expects($this->once())->method('saveConfig')->with($testSetExpected);
 
@@ -130,7 +132,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessException()
     {
-        $configOption = $this->configOptions;
+        $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
             ->method('createConfig')
             ->will($this->returnValue([null]));

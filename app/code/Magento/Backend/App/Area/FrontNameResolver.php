@@ -7,7 +7,7 @@
  */
 namespace Magento\Backend\App\Area;
 
-use Magento\Backend\Setup\ConfigOptions;
+use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\App\DeploymentConfig;
 
 class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
@@ -45,7 +45,7 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     public function __construct(\Magento\Backend\App\Config $config, DeploymentConfig $deploymentConfig)
     {
         $this->config = $config;
-        $this->defaultFrontName = $deploymentConfig->get(ConfigOptions::CONFIG_PATH_BACKEND_FRONTNAME);
+        $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
     }
 
     /**

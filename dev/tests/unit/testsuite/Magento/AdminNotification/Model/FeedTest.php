@@ -6,7 +6,7 @@
 
 namespace Magento\AdminNotification\Model;
 
-use Magento\Setup\Model\ConfigOptions;
+use Magento\Setup\Model\ConfigOptionsList;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -141,7 +141,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
         $this->backendConfig->expects($this->at(1))->method('getValue')
             ->will($this->returnValue('http://feed.magento.com'));
         $this->deploymentConfig->expects($this->once())->method('get')
-            ->with(ConfigOptions::CONFIG_PATH_INSTALL_DATE)
+            ->with(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE)
             ->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')

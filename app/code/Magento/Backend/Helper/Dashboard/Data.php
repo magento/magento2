@@ -6,7 +6,7 @@
 namespace Magento\Backend\Helper\Dashboard;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\ConfigOptions;
+use Magento\Setup\Model\ConfigOptionsList;
 
 /**
  * Data helper for dashboard
@@ -41,7 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct(
             $context
         );
-        $this->_installDate = $deploymentConfig->get(ConfigOptions::CONFIG_PATH_INSTALL_DATE);
+        $this->_installDate = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE);
         $this->_storeManager = $storeManager;
     }
 

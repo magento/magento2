@@ -6,7 +6,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\ObjectManager\DefinitionFactory;
-use Magento\Framework\Setup\ConfigOptionsInterface;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\App\DeploymentConfig;
@@ -14,7 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Deployment configuration options needed for Setup application
  */
-class ConfigOptions implements ConfigOptionsInterface
+class ConfigOptionsList implements ConfigOptionsListInterface
 {
     /**#@+
      * Path to the values in the deployment config
@@ -155,9 +155,9 @@ class ConfigOptions implements ConfigOptionsInterface
         $errors = [];
 
         $required = [
-            ConfigOptions::INPUT_KEY_DB_HOST,
-            ConfigOptions::INPUT_KEY_DB_NAME,
-            ConfigOptions::INPUT_KEY_DB_USER
+            ConfigOptionsList::INPUT_KEY_DB_HOST,
+            ConfigOptionsList::INPUT_KEY_DB_NAME,
+            ConfigOptionsList::INPUT_KEY_DB_USER
         ];
 
         foreach ($required as $key) {
@@ -166,13 +166,13 @@ class ConfigOptions implements ConfigOptionsInterface
             }
         }
 
-        if (isset($options[ConfigOptions::INPUT_KEY_CRYPT_KEY]) && !$options[ConfigOptions::INPUT_KEY_CRYPT_KEY]) {
+        if (isset($options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) && !$options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) {
             $errors[] = 'Invalid encryption key.';
         }
 
-        if (isset($options[ConfigOptions::INPUT_KEY_SESSION_SAVE])) {
-            if ($options[ConfigOptions::INPUT_KEY_SESSION_SAVE] != ConfigOptions::SESSION_SAVE_FILES &&
-                $options[ConfigOptions::INPUT_KEY_SESSION_SAVE] != ConfigOptions::SESSION_SAVE_DB
+        if (isset($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
+            if ($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_FILES &&
+                $options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_DB
             ) {
                 $errors[] = 'Invalid session save location.';
             }

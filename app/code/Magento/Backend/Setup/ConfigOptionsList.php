@@ -7,13 +7,13 @@ namespace Magento\Backend\Setup;
 
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Setup\ConfigOptionsInterface;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
 /*
  * Deployment configuration options needed for Backend module
  */
-class ConfigOptions implements ConfigOptionsInterface
+class ConfigOptionsList implements ConfigOptionsListInterface
 {
     /**
      * Input key for the options

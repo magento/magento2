@@ -11,9 +11,9 @@ use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
 
 /**
- * Collects all ConfigOptions class in modules and setup
+ * Collects all ConfigOptionsList class in modules and setup
  */
-class ConfigOptionsCollector
+class ConfigOptionsListCollector
 {
     /**
      * Directory List
@@ -74,11 +74,11 @@ class ConfigOptionsCollector
     }
 
     /**
-     * Auto discover ConfigOptions class and collect them. These classes should reside in <module>/Setup directories.
+     * Auto discover ConfigOptionsList class and collect them. These classes should reside in <module>/Setup directories.
      * If deployment config is not available, all modules will be searched. Otherwise, only enabled modules
      * will be searched.
      *
-     * @return \Magento\Framework\Setup\ConfigOptionsInterface[]
+     * @return \Magento\Framework\Setup\ConfigOptionsListInterface[]
      */
     public function collectOptions()
     {
@@ -87,20 +87,20 @@ class ConfigOptionsCollector
         $moduleList = $this->moduleList->isModuleInfoAvailable() ? $this->moduleList : $this->fullModuleList;
         // go through modules
         foreach ($moduleList->getNames() as $moduleName) {
-            $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptions';
+            $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptionsList';
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
-                if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
+                if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsListInterface) {
                     $optionsList[$moduleName] = $optionsClass;
                 }
             }
         }
 
         // check setup
-        $setupOptionsClassName = 'Magento\Setup\Model\ConfigOptions';
+        $setupOptionsClassName = 'Magento\Setup\Model\ConfigOptionsList';
         if (class_exists($setupOptionsClassName)) {
             $setupOptionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
-            if ($setupOptionsClass instanceof \Magento\Framework\Setup\ConfigOptionsInterface) {
+            if ($setupOptionsClass instanceof \Magento\Framework\Setup\ConfigOptionsListInterface) {
                 $optionsList['setup'] = $setupOptionsClass;
             }
         }

@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 class ConfigModel
 {
     /**
-     * @var \Magento\Setup\Model\ConfigOptionsCollector
+     * @var \Magento\Setup\Model\ConfigOptionsListCollector
      */
     protected $collector;
 
@@ -24,11 +24,11 @@ class ConfigModel
     /**
      * Constructor
      *
-     * @param ConfigOptionsCollector $collector
+     * @param ConfigOptionsListCollector $collector
      * @param Writer $writer
      */
     public function __construct(
-        ConfigOptionsCollector $collector,
+        ConfigOptionsListCollector $collector,
         Writer $writer
     ) {
         $this->collector = $collector;
@@ -117,7 +117,7 @@ class ConfigModel
             }
         }
 
-        // validate ConfigOptions
+        // validate ConfigOptionsList
         $options = $this->collector->collectOptions();
 
         foreach ($options as $option) {

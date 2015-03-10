@@ -27,17 +27,17 @@ class ConfigGenerator
      * @var array
      */
     public static $paramMap = [
-        ConfigOptions::INPUT_KEY_DB_HOST => DbConfig::KEY_HOST,
-        ConfigOptions::INPUT_KEY_DB_NAME => DbConfig::KEY_NAME,
-        ConfigOptions::INPUT_KEY_DB_USER => DbConfig::KEY_USER,
-        ConfigOptions::INPUT_KEY_DB_PASS => DbConfig::KEY_PASS,
-        ConfigOptions::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
-        ConfigOptions::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
-        ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
-        ConfigOptions::INPUT_KEY_ACTIVE => DbConfig::KEY_ACTIVE,
-        ConfigOptions::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
-        ConfigOptions::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
-        ConfigOptions::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
+        ConfigOptionsList::INPUT_KEY_DB_HOST => DbConfig::KEY_HOST,
+        ConfigOptionsList::INPUT_KEY_DB_NAME => DbConfig::KEY_NAME,
+        ConfigOptionsList::INPUT_KEY_DB_USER => DbConfig::KEY_USER,
+        ConfigOptionsList::INPUT_KEY_DB_PASS => DbConfig::KEY_PASS,
+        ConfigOptionsList::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
+        ConfigOptionsList::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
+        ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
+        ConfigOptionsList::INPUT_KEY_ACTIVE => DbConfig::KEY_ACTIVE,
+        ConfigOptionsList::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
+        ConfigOptionsList::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
+        ConfigOptionsList::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
     ];
 
     /**
@@ -72,10 +72,10 @@ class ConfigGenerator
     public function createCryptConfig(array $data)
     {
         $cryptData = [];
-        if (!isset($data[ConfigOptions::INPUT_KEY_CRYPT_KEY])) {
-            $cryptData[self::$paramMap[ConfigOptions::INPUT_KEY_CRYPT_KEY]] = md5($this->random->getRandomString(10));
+        if (!isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = md5($this->random->getRandomString(10));
         } else {
-            $cryptData[self::$paramMap[ConfigOptions::INPUT_KEY_CRYPT_KEY]] = $data[ConfigOptions::INPUT_KEY_CRYPT_KEY];
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
         }
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
     }
@@ -107,11 +107,11 @@ class ConfigGenerator
     public function createSessionConfig(array $data)
     {
         $sessionData = [];
-        if (isset($data[ConfigOptions::INPUT_KEY_SESSION_SAVE])) {
-            $sessionData[self::$paramMap[ConfigOptions::INPUT_KEY_SESSION_SAVE]] =
-                $data[ConfigOptions::INPUT_KEY_SESSION_SAVE];
+        if (isset($data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
+            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
+                $data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE];
         } else {
-            $sessionData[self::$paramMap[ConfigOptions::INPUT_KEY_SESSION_SAVE]] = ConfigOptions::SESSION_SAVE_FILES;
+            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] = ConfigOptionsList::SESSION_SAVE_FILES;
         }
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
     }
@@ -124,11 +124,11 @@ class ConfigGenerator
      */
     public function createDefinitionsConfig(array $data)
     {
-        if (!empty($data[ConfigOptions::INPUT_KEY_DEFINITION_FORMAT])) {
+        if (!empty($data[ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT])) {
             return new ConfigData(
                 ConfigFilePool::APP_CONFIG,
                 'definition',
-                ['format' => $data[ConfigOptions::INPUT_KEY_DEFINITION_FORMAT]]
+                ['format' => $data[ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT]]
             );
         }
     }
@@ -144,9 +144,9 @@ class ConfigGenerator
         $connection = [];
 
         $required = [
-            ConfigOptions::INPUT_KEY_DB_HOST,
-            ConfigOptions::INPUT_KEY_DB_NAME,
-            ConfigOptions::INPUT_KEY_DB_USER
+            ConfigOptionsList::INPUT_KEY_DB_HOST,
+            ConfigOptionsList::INPUT_KEY_DB_NAME,
+            ConfigOptionsList::INPUT_KEY_DB_USER
         ];
 
         foreach ($required as $key) {
@@ -154,19 +154,19 @@ class ConfigGenerator
         }
 
         $optional = [
-            ConfigOptions::INPUT_KEY_DB_PASS => '',
-            ConfigOptions::INPUT_KEY_DB_MODEL => 'mysql4',
-            ConfigOptions::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;'
+            ConfigOptionsList::INPUT_KEY_DB_PASS => '',
+            ConfigOptionsList::INPUT_KEY_DB_MODEL => 'mysql4',
+            ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;'
         ];
 
         foreach ($optional as $key => $value) {
             $connection[self::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : $value;
         }
 
-        $connection[self::$paramMap[ConfigOptions::INPUT_KEY_ACTIVE]] = '1';
-        $prefixKey = isset($data[ConfigOptions::INPUT_KEY_DB_PREFIX]) ? $data[ConfigOptions::INPUT_KEY_DB_PREFIX] : '';
+        $connection[self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE]] = '1';
+        $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]) ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX] : '';
         $dbData = [
-            self::$paramMap[ConfigOptions::INPUT_KEY_DB_PREFIX] => $prefixKey,
+            self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX] => $prefixKey,
             'connection' => ['default' => $connection]
         ];
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
@@ -179,7 +179,7 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $resourceData[self::$paramMap[ConfigOptions::INPUT_KEY_RESOURCE]] =
+        $resourceData[self::$paramMap[ConfigOptionsList::INPUT_KEY_RESOURCE]] =
             ['default_setup' => ['connection' => 'default']];
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'resource', $resourceData);
     }

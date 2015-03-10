@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\App\Area;
 
-use Magento\Backend\Setup\ConfigOptions;
+use Magento\Backend\Setup\ConfigOptionsList;
 
 class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $deploymentConfigMock->expects($this->once())
             ->method('get')
-            ->with(ConfigOptions::CONFIG_PATH_BACKEND_FRONTNAME)
+            ->with(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME)
             ->will($this->returnValue($this->_defaultFrontName));
         $this->_configMock = $this->getMock('\Magento\Backend\App\Config', [], [], '', false);
         $this->_model = new \Magento\Backend\App\Area\FrontNameResolver($this->_configMock, $deploymentConfigMock);

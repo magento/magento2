@@ -8,7 +8,7 @@ namespace Magento\Framework\Setup;
 /**
  * Interface for handling options in deployment configuration tool
  */
-interface ConfigOptionsInterface
+interface ConfigOptionsListInterface
 {
     /**
      * Gets a list of input options so that user can provide required

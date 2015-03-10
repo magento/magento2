@@ -8,7 +8,7 @@ namespace Magento\Setup\Model;
 class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigOptions
+     * @var ConfigOptionsList
      */
     private $object;
 
@@ -20,7 +20,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->generator = $this->getMock('Magento\Setup\Model\ConfigGenerator', [], [], '', false);
-        $this->object = new ConfigOptions($this->generator);
+        $this->object = new ConfigOptionsList($this->generator);
     }
 
     public function testGetOptions()

@@ -10,13 +10,13 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigOptions
+     * @var ConfigOptionsList
      */
     private $object;
 
     protected function setUp()
     {
-        $this->object = new ConfigOptions();
+        $this->object = new ConfigOptionsList();
     }
 
     public function testGetOptions()
@@ -30,7 +30,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateConfig()
     {
-        $options = [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
+        $options = [ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
         $actualConfig = $this->object->createConfig($options);
         $expectedData = [
             ['file' => ConfigFilePool::APP_CONFIG, 'segment' => 'backend', 'data' => ['frontName' => 'admin']]
@@ -47,7 +47,7 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
-        $options = [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
+        $options = [ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
         $errors = $this->object->validate($options);
         $this->assertEmpty($errors);
     }
@@ -69,9 +69,9 @@ class ConfigOptionsTest extends \PHPUnit_Framework_TestCase
     public function validateInvalidDataProvider()
     {
         return [
-            [[ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => '**'], "Invalid backend frontname '**'"],
+            [[ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => '**'], "Invalid backend frontname '**'"],
             [
-                [ConfigOptions::INPUT_KEY_BACKEND_FRONTNAME => 'invalid frontname'],
+                [ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'invalid frontname'],
                 "Invalid backend frontname 'invalid frontname'"
             ],
         ];
