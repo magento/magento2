@@ -131,16 +131,14 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $newApplied = [];
             $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
-                $one['base_row_amount'] = $creditmemo->roundPrice($one['base_row_amount'] * $ratio, 'base');
-                $one['row_amount'] = $creditmemo->roundPrice($one['row_amount'] * $ratio, 'regular');
+                $title = (string)$one['title'];
+                $one['base_row_amount'] = $creditmemo->roundPrice($one['base_row_amount'] * $ratio, $title.'_base');
+                $one['row_amount'] = $creditmemo->roundPrice($one['row_amount'] * $ratio, $title);
                 $one['base_row_amount_incl_tax'] = $creditmemo->roundPrice(
                     $one['base_row_amount_incl_tax'] * $ratio,
-                    'including_base'
+                    $title.'_base'
                 );
-                $one['row_amount_incl_tax'] = $creditmemo->roundPrice(
-                    $one['row_amount_incl_tax'] * $ratio,
-                    'including'
-                );
+                $one['row_amount_incl_tax'] = $creditmemo->roundPrice($one['row_amount_incl_tax'] * $ratio, $title);
 
                 $newApplied[] = $one;
             }
