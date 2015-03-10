@@ -119,7 +119,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     Table::TYPE_TIMESTAMP,
                     null,
                     [
-                        'nullable' => false
+                        'nullable' => true,
+                        'default' => null
                     ],
                     'Last Login Time'
                 )
