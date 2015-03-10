@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\TestFramework\ObjectManager\Environment;
+namespace Magento\TestFramework\App\ObjectManager\Environment;
 
-class Developer extends \Magento\Framework\ObjectManager\Environment\Developer
+class Developer extends \Magento\Framework\App\ObjectManager\Environment\Developer
 {
     public function getDiConfig()
     {

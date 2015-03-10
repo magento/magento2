@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\TestFramework\ObjectManager;
+namespace Magento\TestFramework\App;
 
-use Magento\TestFramework\ObjectManager\Environment\Developer;
+use Magento\TestFramework\App\ObjectManager\Environment\Developer;
 
-class EnvironmentFactory extends \Magento\Framework\ObjectManager\EnvironmentFactory
+class EnvironmentFactory extends \Magento\Framework\App\EnvironmentFactory
 {
     public function createEnvironment()
     {

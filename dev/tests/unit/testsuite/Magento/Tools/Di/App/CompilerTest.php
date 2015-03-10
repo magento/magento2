@@ -10,7 +10,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Compiler
      */
-    private $model;
+    private $application;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -40,7 +40,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->model = new Compiler(
+        $this->application = new Compiler(
             $this->taskManagerMock,
             $this->objectManagerMock,
             $this->responseMock
@@ -64,7 +64,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             ->method('setCode')
             ->with(\Magento\Framework\App\Console\Response::SUCCESS);
 
-        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->model->launch());
+        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->application->launch());
     }
 
     public function testLaunchException()
@@ -89,7 +89,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             ->method('setCode')
             ->with(\Magento\Framework\App\Console\Response::ERROR);
 
-        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->model->launch());
+        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->application->launch());
     }
 
     /**
@@ -110,12 +110,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             'Magento\Tools\Di\Compiler\Config\ModificationChain' => [
                 'arguments' => [
                     'modificationsList' => [
-                        'PreferencesResolving' =>
-                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                         'BackslashTrim' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim'],
+                        'PreferencesResolving' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                         'InterceptorSubstitution' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\InterceptorSubstitution'],
+                        'InterceptionPreferencesResolving' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                         'ArgumentsSerialization' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
                     ]
