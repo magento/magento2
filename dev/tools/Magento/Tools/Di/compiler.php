@@ -40,8 +40,17 @@ try {
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
+
+    $testExcludePatterns = [
+        "#^$rootDir/app/code/[\\w]+/[\\w]+/Test#",
+        "#^$rootDir/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
+        "#^$rootDir/setup/src/Magento/Setup/Test#",
+        "#^$rootDir/dev/tools/Magento/Tools/[\\w]+/Test#"
+    ];
     $fileExcludePatterns = $opt->getOption('exclude-pattern') ?
         [$opt->getOption('exclude-pattern')] : ['#[\\\\/]M1[\\\\/]#i'];
+    $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
+
     $relationsFile = $diDir . '/relations.ser';
     $pluginDefFile = $diDir . '/plugins.ser';
 

@@ -13,7 +13,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testConfigFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            \Magento\Framework\Test\Utility\Files::init()->getMainConfigFiles()
+            \Magento\Framework\App\Utility\Files::init()->getMainConfigFiles()
         );
     }
 }
