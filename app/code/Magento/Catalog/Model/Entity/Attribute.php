@@ -73,13 +73,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -94,13 +95,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
+        \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -115,13 +117,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $registry,
             $metadataService,
             $customAttributeFactory,
-            $coreData,
             $eavConfig,
             $eavTypeFactory,
             $storeManager,
             $resourceHelper,
             $universalFactory,
-            $optionDataBuilder,
+            $optionDataFactory,
+            $dataObjectProcessor,
+            $dataObjectHelper,
             $localeDate,
             $reservedAttributeList,
             $localeResolver,

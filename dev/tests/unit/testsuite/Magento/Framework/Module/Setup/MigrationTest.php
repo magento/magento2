@@ -139,43 +139,13 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testAppendClassAliasReplace()
     {
-        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
-        $moduleListMock->expects($this->once())->method('getOne')->will($this->returnValue([]));
-
+        $setupMock = $this->getMockForAbstractClass('\Magento\Framework\Setup\ModuleDataSetupInterface');
         $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $modulesDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirMock));
-
-        $contextMock = $this->getMock('Magento\Framework\Module\Setup\Context', [], [], '', false);
-        $contextMock->expects($this->any())->method('getFilesystem')->will($this->returnValue($filesystemMock));
-        $contextMock->expects($this->once())
-            ->method('getEventManager')
-            ->will(
-                $this->returnValue(
-                    $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false)
-                )
-            );
-        $contextMock->expects($this->once())
-            ->method('getResourceModel')
-            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', [], [], '', false)));
-        $contextMock->expects($this->once())
-            ->method('getLogger')
-            ->will($this->returnValue($this->getMock('Psr\Log\LoggerInterface')));
-        $contextMock->expects($this->once())
-            ->method('getModulesReader')
-            ->will(
-                $this->returnValue(
-                    $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false)
-                )
-            );
-        $contextMock->expects($this->once())->method('getModuleList')->will($this->returnValue($moduleListMock));
-
         $migrationData = $this->getMock('Magento\Framework\Module\Setup\MigrationData', [], [], '', false);
 
         $setupModel = new \Magento\Framework\Module\Setup\Migration(
-            $contextMock,
-            'core_setup',
-            'Magento_Core',
+            $setupMock,
+            $filesystemMock,
             $migrationData,
             'app/etc/aliases_to_classes_map.json'
         );
@@ -201,6 +171,17 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertAttributeEquals($expectedRulesList, '_replaceRules', $setupModel);
+
+        // Check that replace for the same field is not set twice
+        $setupModel->appendClassAliasReplace(
+            'tableName',
+            'fieldName',
+            'newEntityType',
+            'newFieldContentType',
+            ['new_pk_field1', 'new_pk_field2'],
+            'newAdditionalWhere'
+        );
+        $this->assertAttributeEquals($expectedRulesList, '_replaceRules', $setupModel);
     }
 
     /**
@@ -213,25 +194,17 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $this->_actualUpdateResult = [];
         $tableRowsCount = count($tableData);
 
+        $setupMock = $this->getMockForAbstractClass('\Magento\Framework\Setup\ModuleDataSetupInterface');
+        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $migrationData = $this->getMock('Magento\Framework\Module\Setup\MigrationData', [], [], '', false);
+
         $setupModel = new \Magento\Framework\Module\Setup\Migration(
-            $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false),
-            $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
-            $this->getMock('Magento\Core\Helper\Data', [], [], '', false),
-            $this->getMock('Psr\Log\LoggerInterface'),
-            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
-            $this->getMock('Magento\Framework\Module\ModuleListInterface'),
-            $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false, false),
-            $this->getMock('Magento\Framework\Module\Resource', [], [], '', false),
-            $this->getMock('Magento\Theme\Model\Resource\Theme\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Theme\Model\Theme\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Framework\Module\Setup\MigrationFactory', [], [], '', false),
-            'core_setup',
+            $setupMock,
+            $filesystemMock,
+            $migrationData,
             'app/etc/aliases_to_classes_map.json',
             $this->_getModelDependencies($tableRowsCount, $tableData, $aliasesMap)
         );
-
-        $setupModel->setTable('table', 'table');
 
         foreach ($replaceRules as $replaceRule) {
             call_user_func_array([$setupModel, 'appendClassAliasReplace'], $replaceRule);

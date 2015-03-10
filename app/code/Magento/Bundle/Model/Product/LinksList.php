@@ -9,9 +9,9 @@ namespace Magento\Bundle\Model\Product;
 class LinksList
 {
     /**
-     * @var \Magento\Bundle\Api\Data\LinkDataBuilder
+     * @var \Magento\Bundle\Api\Data\LinkInterfaceFactory
      */
-    protected $linkBuilder;
+    protected $linkFactory;
 
     /**
      * @var Type
@@ -19,15 +19,23 @@ class LinksList
     protected $type;
 
     /**
-     * @param \Magento\Bundle\Api\Data\LinkDataBuilder $linkBuilder
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
      * @param Type $type
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        \Magento\Bundle\Api\Data\LinkDataBuilder $linkBuilder,
-        \Magento\Bundle\Model\Product\Type $type
+        \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory,
+        \Magento\Bundle\Model\Product\Type $type,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->linkBuilder = $linkBuilder;
+        $this->linkFactory = $linkFactory;
         $this->type = $type;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -45,13 +53,19 @@ class LinksList
             $selectionPriceType = $product->getPriceType() ? $selection->getSelectionPriceType() : null;
             $selectionPrice = $product->getPriceType() ? $selection->getSelectionPriceValue() : null;
 
-            $productLinks[] = $this->linkBuilder->populateWithArray($selection->getData())
-                ->setIsDefault($selection->getIsDefault())
+            /** @var \Magento\Bundle\Api\Data\LinkInterface $productLink */
+            $productLink = $this->linkFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $productLink,
+                $selection->getData(),
+                '\Magento\Bundle\Api\Data\LinkInterface'
+            );
+            $productLink->setIsDefault($selection->getIsDefault())
                 ->setQty($selection->getSelectionQty())
                 ->setIsDefined($selection->getSelectionCanChangeQty())
                 ->setPrice($selectionPrice)
-                ->setPriceType($selectionPriceType)
-                ->create();
+                ->setPriceType($selectionPriceType);
+            $productLinks[] = $productLink;
         }
         return $productLinks;
     }

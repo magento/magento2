@@ -16,11 +16,27 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getProductSku();
 
     /**
+     * Set product SKU
+     *
+     * @param string $productSku
+     * @return $this
+     */
+    public function setProductSku($productSku);
+
+    /**
      * Get link type
      *
      * @return string
      */
     public function getLinkType();
+
+    /**
+     * Set link type
+     *
+     * @param string $linkType
+     * @return $this
+     */
+    public function setLinkType($linkType);
 
     /**
      * Get linked product sku
@@ -30,6 +46,14 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getLinkedProductSku();
 
     /**
+     * Set linked product sku
+     *
+     * @param string $linkedProductSku
+     * @return $this
+     */
+    public function setLinkedProductSku($linkedProductSku);
+
+    /**
      * Get linked product type (simple, virtual, etc)
      *
      * @return string
@@ -37,9 +61,25 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getLinkedProductType();
 
     /**
+     * Set linked product type (simple, virtual, etc)
+     *
+     * @param string $linkedProductType
+     * @return $this
+     */
+    public function setLinkedProductType($linkedProductType);
+
+    /**
      * Get linked item position
      *
      * @return int
      */
     public function getPosition();
+
+    /**
+     * Set linked item position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position);
 }

@@ -24,6 +24,14 @@ interface ProductAttributeMediaGalleryEntryInterface
     public function getId();
 
     /**
+     * Set gallery entry ID
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * Retrieve gallery entry alternative text
      *
      * @return string
@@ -31,11 +39,27 @@ interface ProductAttributeMediaGalleryEntryInterface
     public function getLabel();
 
     /**
+     * Set gallery entry alternative text
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
+
+    /**
      * Retrieve gallery entry position (sort order)
      *
      * @return int
      */
     public function getPosition();
+
+    /**
+     * Set gallery entry position (sort order)
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position);
 
     /**
      * Check if gallery entry is hidden from product page
@@ -46,6 +70,14 @@ interface ProductAttributeMediaGalleryEntryInterface
     public function getIsDisabled();
 
     /**
+     * Set whether gallery entry is hidden from product page
+     *
+     * @param bool $isDisabled
+     * @return $this
+     */
+    public function setIsDisabled($isDisabled);
+
+    /**
      * Retrieve gallery entry image types (thumbnail, image, small_image etc)
      *
      * @return string[]
@@ -53,9 +85,25 @@ interface ProductAttributeMediaGalleryEntryInterface
     public function getTypes();
 
     /**
+     * Set gallery entry image types (thumbnail, image, small_image etc)
+     *
+     * @param string[] $types
+     * @return $this
+     */
+    public function setTypes(array $types = null);
+
+    /**
      * Get file path
      *
      * @return string|null
      */
     public function getFile();
+
+    /**
+     * Set file path
+     *
+     * @param string $file
+     * @return $this
+     */
+    public function setFile($file);
 }

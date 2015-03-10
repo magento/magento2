@@ -15,7 +15,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method \Magento\Eav\Model\Resource\Entity\Attribute\Option getResource()
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
- * @method \Magento\Eav\Model\Entity\Attribute\Option setSortOrder(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -70,6 +69,60 @@ class Option extends AbstractExtensibleModel implements AttributeOptionInterface
     public function getStoreLabels()
     {
         return $this->getData(AttributeOptionInterface::STORE_LABELS);
+    }
+    /**
+     * Set option label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        return $this->setData(AttributeOptionInterface::LABEL, $label);
+    }
+
+    /**
+     * Set option value
+     *
+     * @param string $value
+     * @return string
+     */
+    public function setValue($value)
+    {
+        return $this->setData(AttributeOptionInterface::VALUE, $value);
+    }
+
+    /**
+     * Set option order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(AttributeOptionInterface::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * set is default
+     *
+     * @param bool $isDefault
+     * @return $this
+     */
+    public function setIsDefault($isDefault)
+    {
+        return $this->setData(AttributeOptionInterface::IS_DEFAULT, $isDefault);
+    }
+
+    /**
+     * Set option label for store scopes
+     *
+     * @param \Magento\Eav\Api\Data\AttributeOptionLabelInterface[] $storeLabels
+     * @return $this
+     */
+    public function setStoreLabels(array $storeLabels = null)
+    {
+        return $this->setData(AttributeOptionInterface::STORE_LABELS, $storeLabels);
     }
     //@codeCoverageIgnoreEnd
 }
