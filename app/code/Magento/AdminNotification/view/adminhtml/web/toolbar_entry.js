@@ -73,21 +73,18 @@ define([
 
     // Remove corresponding notification from the list and mark it as read
     $('.notifications-close').on('click.removeNotification', function (event) {
-        var notificationsList = $(this).closest('.notifications-list'),
-            notificationEntries = notificationsList.find('.notifications-entry'),
-            notificationEntry = $(this).closest('.notifications-entry'),
+        var notificationEntry = $(this).closest('.notifications-entry'),
             notificationId = notificationEntry.attr('data-notification-id');
 
         markNotificationAsRead(notificationId);
         removeNotificationFromList(notificationEntry);
 
         // Checking for last unread notification to hide dropdown
-        if (notificationEntries.length == 2 && notificationCount == 0) {
+        if (notificationCount == 0) {
             $('.notifications-wrapper').removeClass('active')
                                        .find('.notifications-action').removeAttr('data-toggle')
                                                                      .off('click.dropdown');
         }
-
         event.stopPropagation();
     });
 
