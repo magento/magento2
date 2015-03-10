@@ -17,9 +17,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', [], [], '', false),
             $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface'),
+            $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
+            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface'),
             $this->getMock('Magento\Framework\ObjectManagerInterface')
         );
     }
@@ -27,7 +27,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testGetHttpHost()
     {
         $this->assertEquals('localhost', $this->_model->getHttpHost());
-        $this->assertEquals('localhost', $this->_model->getHttpHost(false));
+        $this->assertEquals('localhost:81', $this->_model->getHttpHost(false));
     }
 
     public function testSetGetServerValue()

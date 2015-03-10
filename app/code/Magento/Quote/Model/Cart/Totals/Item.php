@@ -16,93 +16,24 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 class Item extends AbstractExtensibleObject implements TotalsItemInterface
 {
     /**
-     * Price.
-     */
-    const PRICE = 'price';
-
-    /**
-     * Base price.
-     */
-    const BASE_PRICE = 'base_price';
-
-    /**
-     * Quantity.
-     */
-    const QTY = 'qty';
-
-    /**
-     * Row total.
-     */
-    const ROW_TOTAL = 'row_total';
-
-    /**
-     * Base row total.
-     */
-    const BASE_ROW_TOTAL = 'base_row_total';
-
-    /**
-     * Row total with discount.
-     */
-    const ROW_TOTAL_WITH_DISCOUNT = 'row_total_with_discount';
-
-    /**
-     * Discount amount.
-     */
-    const DISCOUNT_AMOUNT = 'discount_amount';
-
-    /**
-     * Base discount amount.
-     */
-    const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
-
-    /**
-     * Discount percent.
-     */
-    const DISCOUNT_PERCENT = 'discount_percent';
-
-    /**
-     * Tax amount.
-     */
-    const TAX_AMOUNT = 'tax_amount';
-
-    /**
-     * Base tax amount.
-     */
-    const BASE_TAX_AMOUNT = 'base_tax_amount';
-
-    /**
-     * Tax percent.
-     */
-    const TAX_PERCENT = 'tax_percent';
-
-    /**
-     * Price including tax.
-     */
-    const PRICE_INCL_TAX = 'price_incl_tax';
-
-    /**
-     * Base price including tax.
-     */
-    const BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
-
-    /**
-     * Row total including tax.
-     */
-    const ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
-
-    /**
-     * Base row total including tax.
-     */
-    const BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
-
-    /**
      * Returns the item price in quote currency.
      *
      * @return float Item price in quote currency.
      */
     public function getPrice()
     {
-        return $this->_get(self::PRICE);
+        return $this->_get(self::KEY_PRICE);
+    }
+
+    /**
+     * Sets the item price in quote currency.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::KEY_PRICE, $price);
     }
 
     /**
@@ -112,7 +43,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getBasePrice()
     {
-        return $this->_get(self::BASE_PRICE);
+        return $this->_get(self::KEY_BASE_PRICE);
+    }
+
+    /**
+     * Sets the item price in base currency.
+     *
+     * @param float $basePrice
+     * @return $this
+     */
+    public function setBasePrice($basePrice)
+    {
+        return $this->setData(self::KEY_BASE_PRICE, $basePrice);
     }
 
     /**
@@ -122,7 +64,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getQty()
     {
-        return $this->_get(self::QTY);
+        return $this->_get(self::KEY_QTY);
+    }
+
+    /**
+     * Sets the item quantity.
+     *
+     * @param int $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(self::KEY_QTY, $qty);
     }
 
     /**
@@ -132,7 +85,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getRowTotal()
     {
-        return $this->_get(self::ROW_TOTAL);
+        return $this->_get(self::KEY_ROW_TOTAL);
+    }
+
+    /**
+     * Sets the row total in quote currency.
+     *
+     * @param float $rowTotal
+     * @return $this
+     */
+    public function setRowTotal($rowTotal)
+    {
+        return $this->setData(self::KEY_ROW_TOTAL, $rowTotal);
     }
 
     /**
@@ -142,7 +106,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getBaseRowTotal()
     {
-        return $this->_get(self::BASE_ROW_TOTAL);
+        return $this->_get(self::KEY_BASE_ROW_TOTAL);
+    }
+
+    /**
+     * Sets the row total in base currency.
+     *
+     * @param float $baseRowTotal
+     * @return $this
+     */
+    public function setBaseRowTotal($baseRowTotal)
+    {
+        return $this->setData(self::KEY_BASE_ROW_TOTAL, $baseRowTotal);
     }
 
     /**
@@ -152,7 +127,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getRowTotalWithDiscount()
     {
-        return $this->_get(self::ROW_TOTAL_WITH_DISCOUNT);
+        return $this->_get(self::KEY_ROW_TOTAL_WITH_DISCOUNT);
+    }
+
+    /**
+     * Sets the row total with discount in quote currency.
+     *
+     * @param float $rowTotalWithDiscount
+     * @return $this
+     */
+    public function setRowTotalWithDiscount($rowTotalWithDiscount)
+    {
+        return $this->setData(self::KEY_ROW_TOTAL_WITH_DISCOUNT, $rowTotalWithDiscount);
     }
 
     /**
@@ -162,7 +148,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getTaxAmount()
     {
-        return $this->_get(self::TAX_AMOUNT);
+        return $this->_get(self::KEY_TAX_AMOUNT);
+    }
+
+    /**
+     * Sets the tax amount in quote currency.
+     *
+     * @param float $taxAmount
+     * @return $this
+     */
+    public function setTaxAmount($taxAmount)
+    {
+        return $this->setData(self::KEY_TAX_AMOUNT, $taxAmount);
     }
 
     /**
@@ -172,7 +169,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getBaseTaxAmount()
     {
-        return $this->_get(self::BASE_TAX_AMOUNT);
+        return $this->_get(self::KEY_BASE_TAX_AMOUNT);
+    }
+
+    /**
+     * Sets the tax amount in base currency.
+     *
+     * @param float $baseTaxAmount
+     * @return $this
+     */
+    public function setBaseTaxAmount($baseTaxAmount)
+    {
+        return $this->setData(self::KEY_BASE_TAX_AMOUNT, $baseTaxAmount);
     }
 
     /**
@@ -182,7 +190,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getTaxPercent()
     {
-        return $this->_get(self::TAX_PERCENT);
+        return $this->_get(self::KEY_TAX_PERCENT);
+    }
+
+    /**
+     * Sets the tax percent.
+     *
+     * @param int $taxPercent
+     * @return $this
+     */
+    public function setTaxPercent($taxPercent)
+    {
+        return $this->setData(self::KEY_TAX_PERCENT, $taxPercent);
     }
 
     /**
@@ -192,7 +211,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getDiscountAmount()
     {
-        return $this->_get(self::DISCOUNT_AMOUNT);
+        return $this->_get(self::KEY_DISCOUNT_AMOUNT);
+    }
+
+    /**
+     * Sets the discount amount in quote currency.
+     *
+     * @param float $discountAmount
+     * @return $this
+     */
+    public function setDiscountAmount($discountAmount)
+    {
+        return $this->setData(self::KEY_DISCOUNT_AMOUNT, $discountAmount);
     }
 
     /**
@@ -202,7 +232,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getBaseDiscountAmount()
     {
-        return $this->_get(self::BASE_DISCOUNT_AMOUNT);
+        return $this->_get(self::KEY_BASE_DISCOUNT_AMOUNT);
+    }
+
+    /**
+     * Sets the discount amount in base currency.
+     *
+     * @param float $baseDiscountAmount
+     * @return $this
+     */
+    public function setBaseDiscountAmount($baseDiscountAmount)
+    {
+        return $this->setData(self::KEY_BASE_DISCOUNT_AMOUNT, $baseDiscountAmount);
     }
 
     /**
@@ -212,7 +253,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getDiscountPercent()
     {
-        return $this->_get(self::DISCOUNT_PERCENT);
+        return $this->_get(self::KEY_DISCOUNT_PERCENT);
+    }
+
+    /**
+     * Sets the discount percent.
+     *
+     * @param int $discountPercent
+     * @return $this
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        return $this->setData(self::KEY_DISCOUNT_PERCENT, $discountPercent);
     }
 
     /**
@@ -222,7 +274,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getPriceInclTax()
     {
-        return $this->_get(self::PRICE_INCL_TAX);
+        return $this->_get(self::KEY_PRICE_INCL_TAX);
+    }
+
+    /**
+     * Sets the price including tax in quote currency.
+     *
+     * @param float $priceInclTax
+     * @return $this
+     */
+    public function setPriceInclTax($priceInclTax)
+    {
+        return $this->setData(self::KEY_PRICE_INCL_TAX, $priceInclTax);
     }
 
     /**
@@ -232,7 +295,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getBasePriceInclTax()
     {
-        return $this->_get(self::BASE_PRICE_INCL_TAX);
+        return $this->_get(self::KEY_BASE_PRICE_INCL_TAX);
+    }
+
+    /**
+     * Sets the price including tax in base currency.
+     *
+     * @param float $basePriceInclTax
+     * @return $this
+     */
+    public function setBasePriceInclTax($basePriceInclTax)
+    {
+        return $this->setData(self::KEY_BASE_PRICE_INCL_TAX, $basePriceInclTax);
     }
 
     /**
@@ -242,7 +316,18 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getRowTotalInclTax()
     {
-        return $this->_get(self::ROW_TOTAL_INCL_TAX);
+        return $this->_get(self::KEY_ROW_TOTAL_INCL_TAX);
+    }
+
+    /**
+     * Sets the row total including tax in quote currency.
+     *
+     * @param float $rowTotalInclTax
+     * @return $this
+     */
+    public function setRowTotalInclTax($rowTotalInclTax)
+    {
+        return $this->setData(self::KEY_ROW_TOTAL_INCL_TAX, $rowTotalInclTax);
     }
 
     /**
@@ -252,6 +337,17 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
      */
     public function getBaseRowTotalInclTax()
     {
-        return $this->_get(self::BASE_ROW_TOTAL_INCL_TAX);
+        return $this->_get(self::KEY_BASE_ROW_TOTAL_INCL_TAX);
+    }
+
+    /**
+     * Sets the row total including tax in base currency.
+     *
+     * @param float $baseRowTotalInclTax
+     * @return $this
+     */
+    public function setBaseRowTotalInclTax($baseRowTotalInclTax)
+    {
+        return $this->setData(self::KEY_BASE_ROW_TOTAL_INCL_TAX, $baseRowTotalInclTax);
     }
 }

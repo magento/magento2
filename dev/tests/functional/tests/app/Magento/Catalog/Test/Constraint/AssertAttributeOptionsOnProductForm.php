@@ -13,10 +13,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertAttributeOptionsOnProductForm extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * @return void
      */
