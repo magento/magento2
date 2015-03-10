@@ -6,6 +6,7 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -67,17 +68,17 @@ class Vat
     protected $scopeConfig;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var PsrLogger
      */
     protected $logger;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param PsrLogger $logger
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger
+        PsrLogger $logger
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->logger = $logger;
