@@ -53,8 +53,7 @@ class ConfigInstallCommand extends Command
     {
         $options = $this->configModel->getAvailableOptions();
 
-        $this
-            ->setName('config:install')
+        $this->setName('config:install')
             ->setDescription('Install deployment configuration')
             ->setDefinition($options);
 
@@ -89,7 +88,7 @@ class ConfigInstallCommand extends Command
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");
             }
-            exit(1);
+            throw new \InvalidArgumentException('Parameters validation is failed');
         }
     }
 }

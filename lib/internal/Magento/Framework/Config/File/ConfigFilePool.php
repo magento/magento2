@@ -32,10 +32,6 @@ class ConfigFilePool
     public function __construct($additionalConfigFiles = [])
     {
         $this->applicationConfigFiles = array_merge($this->applicationConfigFiles, $additionalConfigFiles);
-        foreach ($this->applicationConfigFiles as $fileKey => $filePath) {
-            $this->applicationConfigFiles[$fileKey] = $filePath;
-        }
-
     }
 
     /**

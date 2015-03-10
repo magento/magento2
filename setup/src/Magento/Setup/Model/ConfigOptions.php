@@ -164,7 +164,6 @@ class ConfigOptions implements ConfigOptionsInterface
             if (!isset($options[$key]) || empty($options[$key])) {
                 $errors[] = "Missing value for db configuration: {$key}";
             }
-            $connection[ConfigGenerator::$paramMap[$key]] = $options[$key];
         }
 
         if (isset($options[ConfigOptions::INPUT_KEY_CRYPT_KEY]) && !$options[ConfigOptions::INPUT_KEY_CRYPT_KEY]) {
