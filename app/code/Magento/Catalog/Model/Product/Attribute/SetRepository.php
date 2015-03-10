@@ -16,7 +16,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     protected $attributeSetRepository;
 
     /**
-     * @var \Magento\Framework\Api\searchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -32,13 +32,13 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository
-     * @param \Magento\Framework\Api\searchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository,
-        \Magento\Framework\Api\searchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Eav\Model\Config $eavConfig
     ) {
