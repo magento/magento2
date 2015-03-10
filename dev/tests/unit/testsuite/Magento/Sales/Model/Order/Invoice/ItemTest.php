@@ -36,29 +36,38 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->orderItemFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\ItemFactory', ['create'], [], '', false
+        $this->orderItemFactoryMock = $this->getMock('Magento\Sales\Model\Order\ItemFactory',
+            ['create'],
+            [],
+            '',
+            false
         );
-        $this->invoiceMock = $this->getMock(
-            'Magento\Sales\Model\Order\Invoice', [
-
-        ], [], '', false
+        $this->invoiceMock = $this->getMock('Magento\Sales\Model\Order\Invoice',
+            [],
+            [],
+            '',
+            false
         );
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order', [], [], '', false
+        $this->orderMock = $this->getMock('Magento\Sales\Model\Order',
+            [],
+            [],
+            '',
+            false
         );
-        $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item', [
+        $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item',
+            [
                 'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
                 'getBaseTaxInvoiced', 'getHiddenTaxInvoiced', 'getBaseHiddenTaxInvoiced', 'getDiscountInvoiced',
                 'getBaseDiscountInvoiced', 'getRowInvoiced', 'getBaseRowInvoiced', 'setQtyInvoiced', 'setTaxInvoiced',
                 'setBaseTaxInvoiced', 'setHiddenTaxInvoiced', 'setBaseHiddenTaxInvoiced', 'setDiscountInvoiced',
                 'setBaseDiscountInvoiced', 'setRowInvoiced', 'setBaseRowInvoiced', 'getQtyOrdered', 'getRowTotal',
                 'getBaseRowTotal', 'getRowTotalInclTax', 'getBaseRowTotalInclTax'
-            ], [], '', false
+            ],
+            [],
+            '',
+            false
         );
-        $this->item = $this->objectManager->getObject(
-            'Magento\Sales\Model\Order\Invoice\Item',
+        $this->item = $this->objectManager->getObject('Magento\Sales\Model\Order\Invoice\Item',
             [
                 'orderItemFactory' => $this->orderItemFactoryMock
             ]

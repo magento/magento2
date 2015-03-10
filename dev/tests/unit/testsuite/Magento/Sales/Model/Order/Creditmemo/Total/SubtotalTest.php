@@ -30,19 +30,32 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [
-            'getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount'
-        ], [], '', false);
+        $this->orderMock = $this->getMock('Magento\Sales\Model\Order',
+            ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount'],
+            [],
+            '',
+            false
+        );
         $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order',
             [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
                 'getDiscountRefunded', 'getQtyRefunded'
-            ], [], '', false);
-        $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo', [
-            'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice', 'setDiscountAmount',
-            'setBaseDiscountAmount', 'setSubtotal', 'setBaseSubtotal', 'setSubtotalInclTax', 'setBaseSubtotalInclTax',
-            'getGrandTotal', 'setGrandTotal', 'getBaseGrandTotal', 'setBaseGrandTotal'
-        ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
+        $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo',
+            [
+                'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
+                'setDiscountAmount', 'setBaseDiscountAmount', 'setSubtotal', 'setBaseSubtotal',
+                'setSubtotalInclTax', 'setBaseSubtotalInclTax', 'getGrandTotal', 'setGrandTotal',
+                'getBaseGrandTotal', 'setBaseGrandTotal'
+            ],
+            [],
+            '',
+            false
+        );
         $this->creditmemoItemMock = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo\Item',
             [
@@ -83,7 +96,6 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoItemMock->expects($this->once())
             ->method('getBaseRowTotalInclTax')
             ->willReturn(1);
-
         $this->creditmemoMock->expects($this->once())
             ->method('setSubtotal')
             ->with(1)

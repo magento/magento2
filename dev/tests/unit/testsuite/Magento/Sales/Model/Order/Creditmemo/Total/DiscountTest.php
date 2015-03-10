@@ -34,18 +34,31 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [
-            'getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount'
-        ], [], '', false);
+        $this->orderMock = $this->getMock(
+            'Magento\Sales\Model\Order',
+            ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount'],
+            [],
+            '',
+            false
+        );
         $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order',
             [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
                 'getDiscountRefunded', 'getQtyRefunded'
-            ], [], '', false);
-        $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo', [
-            'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice', 'setDiscountAmount',
-            'setBaseDiscountAmount'
-        ], [], '', false);
+            ],
+            [],
+            '',
+            false
+        );
+        $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo',
+            [
+                'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
+                'setDiscountAmount', 'setBaseDiscountAmount'
+            ],
+            [],
+            '',
+            false
+        );
         $this->creditmemoItemMock = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo\Item',
             [

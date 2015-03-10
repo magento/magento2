@@ -30,9 +30,9 @@ class UrlGeneratorTest extends  \PHPUnit_Framework_TestCase
             'Magento\Framework\AuthorizationInterface', [], '', false, false, true, []
         );
         $this->urlGenerator = new \Magento\Sales\Model\Order\Grid\Row\UrlGenerator(
-            $this->urlMock, $this->authorizationMock, [
-                'path' => 'path'
-            ]
+            $this->urlMock,
+            $this->authorizationMock,
+            ['path' => 'path']
         );
     }
 
