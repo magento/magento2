@@ -32,7 +32,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
     /**
      * @var string
      */
-    protected $envFactoryClassName = 'Magento\TestFramework\ObjectManager\EnvironmentFactory';
+    protected $envFactoryClassName = 'Magento\TestFramework\App\EnvironmentFactory';
 
     /**
      * @var array
