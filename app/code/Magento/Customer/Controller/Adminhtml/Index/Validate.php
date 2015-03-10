@@ -98,7 +98,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * AJAX customer validation action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

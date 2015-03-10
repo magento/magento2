@@ -9,19 +9,19 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context, $resultRedirectFactory);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -30,7 +30,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Build response for refresh input element 'path' in form
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -38,7 +38,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($categoryId) {
             $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
 
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData(['id' => $categoryId, 'path' => $category->getPath()]);
         }
