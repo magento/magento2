@@ -166,7 +166,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             }
         }
 
-        if (isset($options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) && !$options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) {
+        if (isset($options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])
+            && !$options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) {
             $errors[] = 'Invalid encryption key.';
         }
 

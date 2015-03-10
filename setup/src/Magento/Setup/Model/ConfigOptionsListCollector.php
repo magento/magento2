@@ -74,7 +74,8 @@ class ConfigOptionsListCollector
     }
 
     /**
-     * Auto discover ConfigOptionsList class and collect them. These classes should reside in <module>/Setup directories.
+     * Auto discover ConfigOptionsList class and collect them.
+     * These classes should reside in <module>/Setup directories.
      * If deployment config is not available, all modules will be searched. Otherwise, only enabled modules
      * will be searched.
      *

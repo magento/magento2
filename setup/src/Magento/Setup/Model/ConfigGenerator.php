@@ -73,9 +73,11 @@ class ConfigGenerator
     {
         $cryptData = [];
         if (!isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = md5($this->random->getRandomString(10));
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
+                md5($this->random->getRandomString(10));
         } else {
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
+                $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
         }
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
     }
@@ -111,7 +113,8 @@ class ConfigGenerator
             $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
                 $data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE];
         } else {
-            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] = ConfigOptionsList::SESSION_SAVE_FILES;
+            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
+                ConfigOptionsList::SESSION_SAVE_FILES;
         }
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
     }
@@ -164,7 +167,9 @@ class ConfigGenerator
         }
 
         $connection[self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE]] = '1';
-        $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]) ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX] : '';
+        $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX])
+            ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
+            : '';
         $dbData = [
             self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX] => $prefixKey,
             'connection' => ['default' => $connection]
