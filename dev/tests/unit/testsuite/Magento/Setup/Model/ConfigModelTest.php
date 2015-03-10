@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class ConfigModelTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,23 +68,59 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $dataSet = [
-            'test' => 'fake'
+        $testSet1 = [
+            ConfigFilePool::APP_CONFIG => [
+                'segment' => [
+                    'someKey' => 'value',
+                    'test' => 'value1'
+                ]
+            ]
         ];
-        $configData = $this->configData;
-        $configData->expects($this->once())->method('getData')->will($this->returnValue($dataSet));
+
+        $testSet2 = [
+            ConfigFilePool::APP_CONFIG => [
+                'segment' => [
+                    'test' => 'value2'
+                ]
+            ]
+        ];
+
+        $testSetExpected = [
+            ConfigFilePool::APP_CONFIG => [
+                'segment' => [
+                    'someKey' => 'value',
+                    'test' => 'value2'
+                ]
+            ]
+        ];
+
+        $configData1 = clone $this->configData;
+        $configData2 = clone $this->configData;
+
+        $configData1->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($testSet1[ConfigFilePool::APP_CONFIG]['segment']));
+        $configData1->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
+        $configData1->expects($this->any())->method('getSegmentKey')->will($this->returnValue('segment'));
+
+        $configData2->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($testSet2[ConfigFilePool::APP_CONFIG]['segment']));
+        $configData2->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
+        $configData2->expects($this->any())->method('getSegmentKey')->will($this->returnValue('segment'));
 
         $configOption = $this->configOptions;
         $configOption->expects($this->once())
             ->method('createConfig')
-            ->will($this->returnValue([$configData]));
+            ->will($this->returnValue([$configData1, $configData2]));
 
         $configOptions = [
             'Fake_Module' => $configOption
         ];
-
         $this->collector->expects($this->once())->method('collectOptions')->will($this->returnValue($configOptions));
-        $this->writer->expects($this->once())->method('saveConfig');
+
+
+        $this->writer->expects($this->once())->method('saveConfig')->with($testSetExpected);
 
         $this->configModel->process([]);
     }
