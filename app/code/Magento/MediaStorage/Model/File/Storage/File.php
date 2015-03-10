@@ -164,6 +164,16 @@ class File
     }
 
     /**
+     * Retrieve connection name
+     *
+     * @return null
+     */
+    public function getConnectionName()
+    {
+        return null;
+    }
+
+    /**
      * Export directories list from storage
      *
      * @param  int $offset
