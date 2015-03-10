@@ -34,7 +34,7 @@ class FillShippingMethodStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $shipping
      */
-    public function __construct(CheckoutOnepage $checkoutOnepage, $shipping = [])
+    public function __construct(CheckoutOnepage $checkoutOnepage, array $shipping = [])
     {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->shipping = $shipping;

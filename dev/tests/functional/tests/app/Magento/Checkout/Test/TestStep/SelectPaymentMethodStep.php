@@ -40,13 +40,13 @@ class SelectPaymentMethodStep implements TestStepInterface
     /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
-     * @param CreditCard $creditCard
      * @param array $payment
+     * @param CreditCard|null $creditCard
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
-        CreditCard $creditCard,
-        array $payment
+        array $payment,
+        CreditCard $creditCard = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->payment = $payment;

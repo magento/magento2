@@ -11,10 +11,15 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert  that comment about authorized amount exist in Comments History section on order page in backend
+ * Assert that comment about authorized amount exist in Comments History section on order page in backend.
  */
 class AssertOrderCommentsHistory extends AbstractConstraint
 {
+    /**
+     * Message about authorized amount in order.
+     */
+    const AUTHORIZED_AMOUNT = 'Authorized amount of $';
+
     /**
      * Assert  that comment about authorized amount exist in Comments History section on order page in backend.
      *
@@ -34,10 +39,9 @@ class AssertOrderCommentsHistory extends AbstractConstraint
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
         $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
-        $expectedAuthorizedAmount = 'Authorized amount of $' . $grandTotal;
 
         \PHPUnit_Framework_Assert::assertContains(
-            $expectedAuthorizedAmount,
+            self::AUTHORIZED_AMOUNT . $grandTotal,
             $actualAuthorizedAmount,
             'Incorrect authorized amount value for the order #' . $orderId
         );
