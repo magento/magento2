@@ -286,6 +286,9 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getCurrentStatus()
     {
+        if (!$this->customerLog->getCustomerId()) {
+            return __('Offline');
+        }
         if (!$this->customerLog->getLastLoginAt()) {
             return __('Offline');
         }

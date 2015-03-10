@@ -46,7 +46,7 @@ class Log
      * @param string $lastVisitAt
      * @param string $lastLogoutAt
      */
-    public function __construct($customerId=null, $lastLoginAt, $lastVisitAt, $lastLogoutAt)
+    public function __construct($customerId = null, $lastLoginAt = null, $lastVisitAt = null, $lastLogoutAt = null)
     {
         $this->customerId = $customerId;
         $this->lastLoginAt = $lastLoginAt;

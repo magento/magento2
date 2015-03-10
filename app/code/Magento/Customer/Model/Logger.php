@@ -96,7 +96,8 @@ class Logger
         $data = $adapter->fetchRow($select);
 
         if (!$data) {
-            throw new \LogicException('Unable to load customer log');
+            //throw new \LogicException('Unable to load customer log');
+            return $this->logFactory->create([]);
         }
 
         return $this->logFactory->create(
