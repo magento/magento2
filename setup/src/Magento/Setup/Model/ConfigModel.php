@@ -120,7 +120,7 @@ class ConfigModel
         // validate ConfigOptions
         $options = $this->collector->collectOptions();
 
-        foreach (array_values($options) as $option) {
+        foreach ($options as $option) {
             $errors = array_merge($errors, $option->validate($inputOptions));
         }
 
