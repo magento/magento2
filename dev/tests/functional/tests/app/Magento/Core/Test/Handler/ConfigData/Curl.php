@@ -59,7 +59,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
         $fields = $fixture->getData();
         if (isset($fields['section'])) {
             foreach ($fields['section'] as $itemSection) {
-                parse_str($this->modifyConfigPath($itemSection), $configPath);
+                parse_str($this->prepareConfigPath($itemSection), $configPath);
                 $result = array_merge_recursive($result, $configPath);
             }
         }
@@ -67,14 +67,14 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     }
 
     /**
-     * Modify config path.
+     * Prepare config path.
      *
      * From payment/cashondelivery/active to ['payment']['groups']['cashondelivery']['fields']['active']
      *
      * @param array $input
      * @return string
      */
-    protected function modifyConfigPath(array $input)
+    protected function prepareConfigPath(array $input)
     {
         $resultArray = '';
         $path = explode('/', $input['path']);
