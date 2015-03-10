@@ -28,7 +28,7 @@ class DataBundle
         $class = get_class($this);
         if (!isset(static::$bundles[$class][$locale])) {
             $bundle = new \ResourceBundle($locale, $this->path);
-            if ($bundle->count() == 0 && $this->path != 'ICUDATA') {
+            if (!$bundle && $this->path != 'ICUDATA') {
                 $bundle = new \ResourceBundle($locale, 'ICUDATA');
             }
             static::$bundles[$class][$locale] = $bundle;
