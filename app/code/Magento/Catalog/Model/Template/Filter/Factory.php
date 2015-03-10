@@ -43,7 +43,9 @@ class Factory
         $filter = $this->_objectManager->create($className, $data);
 
         if (!$filter instanceof \Magento\Framework\Filter\Template) {
-            throw new \Magento\Framework\Exception\LocalizedException($className . ' doesn\'t extends \Magento\Framework\Filter\Template');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('%1 doesn\'t extend \Magento\Framework\Filter\Template', $className)
+            );
         }
         return $filter;
     }

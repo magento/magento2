@@ -282,11 +282,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $exception = new InputException();
         if (!\Zend_Validate::is(trim($customer->getFirstname()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']));
         }
 
         if (!\Zend_Validate::is(trim($customer->getLastname()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']));
         }
 
         $isEmailAddress = \Zend_Validate::is(
@@ -297,24 +297,26 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
         if (!$isEmailAddress) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                ['fieldName' => 'email', 'value' => $customer->getEmail()]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName' => 'email', 'value' => $customer->getEmail()]
+                )
             );
         }
 
         $dob = $this->getAttributeMetadata('dob');
         if (!is_null($dob) && $dob->isRequired() && '' == trim($customer->getDob())) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']));
         }
 
         $taxvat = $this->getAttributeMetadata('taxvat');
         if (!is_null($taxvat) && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']));
         }
 
         $gender = $this->getAttributeMetadata('gender');
         if (!is_null($gender) && $gender->isRequired() && '' == trim($customer->getGender())) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']));
         }
 
         if ($exception->wasErrorAdded()) {

@@ -52,9 +52,9 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         // \Magento\Framework\Api\ResourceNotFoundException
         $this->_errorTest(
             $serviceInfo,
-            ['resource_id' => 'resourceY'],
+            ['resourceY'],
             WebapiException::HTTP_NOT_FOUND,
-            'Resource with ID "%resource_id" not found.'
+            'Resource with ID "%1" not found.'
         );
     }
 
@@ -72,8 +72,8 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             $serviceInfo,
             [],
             WebapiException::HTTP_UNAUTHORIZED,
-            'Consumer is not authorized to access %resources',
-            ['resources' => 'resourceN']
+            'Consumer is not authorized to access %1',
+            ['resourceN']
         );
     }
 

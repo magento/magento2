@@ -207,7 +207,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
     {
         $id = 123;
         $message = 'Model exception';
-        $e = new \Magento\Framework\Exception\LocalizedException($message);
+        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
 
         $this->requestMock->expects($this->any())
             ->method('getParam')

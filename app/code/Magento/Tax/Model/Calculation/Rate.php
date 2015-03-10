@@ -115,11 +115,15 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
             ($this->getTaxPostcode() === '' && !$this->getZipIsRange());
 
         if ($isEmptyValues || $isWrongRange) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please fill all required fields with valid information.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please fill all required fields with valid information.')
+            );
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() < 0) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Rate Percent should be a positive number.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Rate Percent should be a positive number.')
+            );
         }
 
         if ($this->getZipIsRange()) {
@@ -131,11 +135,15 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
             }
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Zip code should not contain characters other than digits.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Zip code should not contain characters other than digits.')
+                );
             }
 
             if ($zipFrom > $zipTo) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Range To should be equal or greater than Range From.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Range To should be equal or greater than Range From.')
+                );
             }
 
             $this->setTaxPostcode($zipFrom . '-' . $zipTo);
@@ -182,7 +190,9 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
     public function beforeDelete()
     {
         if ($this->_isInRule()) {
-            throw new CouldNotDeleteException('The tax rate cannot be removed. It exists in a tax rule.');
+            throw new CouldNotDeleteException(
+                __('The tax rate cannot be removed. It exists in a tax rule.')
+            );
         }
         return parent::beforeDelete();
     }

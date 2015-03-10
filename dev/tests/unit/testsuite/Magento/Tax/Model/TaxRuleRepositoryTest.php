@@ -143,11 +143,13 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\Exception\LocalizedException(__('Could not save')),
                 '\Magento\Framework\Exception\CouldNotSaveException',
                 'Could not save'
-            ], [
+            ],
+            [
                 new \Magento\Framework\Exception\AlreadyExistsException(__('Entity already exists')),
                 '\Magento\Framework\Exception\AlreadyExistsException',
                 'Entity already exists'
-            ], [
+            ],
+            [
                 new \Magento\Framework\Exception\NoSuchEntityException(__('No such entity')),
                 '\Magento\Framework\Exception\NoSuchEntityException',
                 'No such entity'

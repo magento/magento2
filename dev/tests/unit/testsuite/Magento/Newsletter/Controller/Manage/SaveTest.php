@@ -139,8 +139,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
-            ->will($this->throwException(
-                    new NoSuchEntityException(
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'customerId', 'value' => 'value']
                     )

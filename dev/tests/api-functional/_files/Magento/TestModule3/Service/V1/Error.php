@@ -42,7 +42,12 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function resourceNotFoundException()
     {
-        throw new NoSuchEntityException('Resource with ID "%resource_id" not found.', ['resource_id' => 'resourceY']);
+        throw new NoSuchEntityException(
+            __(
+                'Resource with ID "%1" not found.',
+                'resourceY'
+            )
+        );
     }
 
     /**
@@ -50,19 +55,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function serviceException()
     {
-        throw new LocalizedException('Generic service exception %param', ['param' => 3456]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parameterizedServiceException($parameters)
-    {
-        $details = [];
-        foreach ($parameters as $parameter) {
-            $details[$parameter->getName()] = $parameter->getValue();
-        }
-        throw new LocalizedException('Parameterized service exception', $details);
+        throw new LocalizedException(__('Generic service exception %1', 3456));
     }
 
     /**
@@ -70,9 +63,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function authorizationException()
     {
-        throw new AuthorizationException('Consumer is not authorized to access %resources', [
-            'resources'   => 'resourceN'
-        ]);
+        throw new AuthorizationException(__('Consumer is not authorized to access %1', 'resourceN'));
     }
 
     /**
@@ -112,8 +103,10 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
         if ($wrappedErrorParameters) {
             foreach ($wrappedErrorParameters as $error) {
                 $exception->addError(
-                    InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => $error->getFieldName(), 'value' => $error->getValue()]
+                    __(
+                        InputException::INVALID_FIELD_VALUE,
+                        ['fieldName' => $error->getFieldName(), 'value' => $error->getValue()]
+                    )
                 );
             }
         }

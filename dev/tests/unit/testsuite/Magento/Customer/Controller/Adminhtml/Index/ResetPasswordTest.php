@@ -272,20 +272,17 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($customerId)
         );
 
-        $this->_customerRepositoryMock->expects(
-            $this->once()
-        )->method(
-            'getById'
-        )->with(
-            $customerId
-        )->will(
-            $this->throwException(
+        $this->_customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willThrowException(
                 new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                    ['fieldName' => 'customerId', 'fieldValue' => $customerId]
+                    __(
+                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        ['fieldName' => 'customerId', 'fieldValue' => $customerId]
+                    )
                 )
-            )
-        );
+            );
 
         $this->_helper->expects(
             $this->any()
@@ -324,7 +321,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Validator\ValidatorException();
+        $exception = new \Magento\Framework\Validator\Exception();
         $error = new \Magento\Framework\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
@@ -357,7 +354,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerId);
 
         // Setup a core exception to return
-        $exception = new \Magento\Framework\Validator\ValidatorException($warningText);
+        $exception = new \Magento\Framework\Validator\Exception(__($warningText));
 
         $error = new \Magento\Framework\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);

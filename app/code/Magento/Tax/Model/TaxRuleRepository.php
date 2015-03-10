@@ -97,7 +97,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         } catch (NoSuchEntityException $e) {
             throw $e;
         } catch (LocalizedException $e) {
-            throw new CouldNotSaveException($e->getMessage());
+            throw new CouldNotSaveException(__($e->getMessage()));
         }
         $this->taxRuleRegistry->registerTaxRule($rule);
         return $rule;

@@ -92,7 +92,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
         $configurableAttribute = $collection->getFirstItem();
         if (!$configurableAttribute->getId()) {
-            throw new NoSuchEntityException(sprintf('Requested option doesn\'t exist: %s', $optionId));
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $optionId));
         }
         $prices = $configurableAttribute->getPrices();
         if (is_array($prices)) {
@@ -144,7 +144,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new StateException(
-                sprintf('Cannot delete option with id: %s', $option->getId())
+                __('Cannot delete option with id: %1', $option->getId())
             );
         }
         return true;
@@ -160,7 +160,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
         $option = $attributeCollection->getItemById($optionId);
         if ($option === null) {
-            throw new NoSuchEntityException('Requested option doesn\'t exist');
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
         return $this->delete($option);
     }
@@ -179,8 +179,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $configurableAttribute->load($option->getId());
             if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
                 throw new NoSuchEntityException(
-                    'Option with id "%option_id" not found',
-                    ['option_id' => $option->getId()]
+                    __(
+                        'Option with id "%1" not found',
+                        $option->getId()
+                    )
                 );
             }
             $configurableAttribute->addData($option->getData());
@@ -192,8 +194,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 $configurableAttribute->save();
             } catch (\Exception $e) {
                 throw new CouldNotSaveException(
-                    'Could not update option with id "%option_id"',
-                    ['option_id' => $option->getId()]
+                    __(
+                        'Could not update option with id "%1"',
+                        $option->getId()
+                    )
                 );
             }
         } else {
@@ -208,7 +212,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $eavAttribute = $this->productAttributeRepository->get($option->getAttributeId());
             $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
             if ($configurableAttribute->getId()) {
-                throw new CouldNotSaveException('Product already has this option');
+                throw new CouldNotSaveException(__('Product already has this option'));
             }
 
             $configurableAttributesData = [
@@ -225,14 +229,14 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
                 $product->save();
             } catch (\Exception $e) {
-                throw new CouldNotSaveException('An error occurred while saving option');
+                throw new CouldNotSaveException(__('An error occurred while saving option'));
             }
 
             $configurableAttribute = $this->configurableAttributeFactory->create();
             $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
         }
         if (!$configurableAttribute->getId()) {
-            throw new CouldNotSaveException('An error occurred while saving option');
+            throw new CouldNotSaveException(__('An error occurred while saving option'));
         }
         return $configurableAttribute->getId();
     }
@@ -249,7 +253,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $product = $this->productRepository->get($productSku);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
             throw new InputException(
-                sprintf('Only implemented for configurable product: %s', $productSku)
+                __('Only implemented for configurable product: %1', $productSku)
             );
         }
         return $product;
@@ -278,26 +282,26 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $inputException = new InputException();
         if (!$option->getAttributeId()) {
-            $inputException->addError('Option attribute ID is not specified.');
+            $inputException->addError(__('Option attribute ID is not specified.'));
         }
         if (!$option->getType()) {
-            $inputException->addError('Option type is not specified.');
+            $inputException->addError(__('Option type is not specified.'));
         }
         if (!$option->getLabel()) {
-            $inputException->addError('Option label is not specified.');
+            $inputException->addError(__('Option label is not specified.'));
         }
         if (!$option->getValues()) {
-            $inputException->addError('Option values are not specified.');
+            $inputException->addError(__('Option values are not specified.'));
         } else {
             foreach ($option->getValues() as $optionValue) {
                 if (!$optionValue->getValueIndex()) {
-                    $inputException->addError('Value index is not specified for an option.');
+                    $inputException->addError(__('Value index is not specified for an option.'));
                 }
                 if (null === $optionValue->getPricingValue()) {
-                    $inputException->addError('Price is not specified for an option.');
+                    $inputException->addError(__('Price is not specified for an option.'));
                 }
                 if (null === $optionValue->getIsPercent()) {
-                    $inputException->addError('Percent/absolute is not specified for an option.');
+                    $inputException->addError(__('Percent/absolute is not specified for an option.'));
                 }
             }
         }

@@ -103,7 +103,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')
-            ->will($this->throwException(new NoSuchEntityException()));
+            ->willThrowException(new NoSuchEntityException());
         $this->assertEquals('', $this->block->getCustomerGroupName());
     }
 

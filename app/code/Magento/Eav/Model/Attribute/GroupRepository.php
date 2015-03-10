@@ -78,14 +78,16 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
                 throw NoSuchEntityException::singleField('attributeGroupId', $existingGroup->getId());
             }
             if ($existingGroup->getAttributeSetId() != $group->getAttributeSetId()) {
-                throw new StateException('Attribute group does not belong to provided attribute set');
+                throw new StateException(
+                    __('Attribute group does not belong to provided attribute set')
+                );
             }
         }
 
         try {
             $this->groupResource->save($group);
         } catch (\Exception $e) {
-            throw new StateException('Cannot save attributeGroup');
+            throw new StateException(__('Cannot save attributeGroup'));
         }
         return $group;
     }
@@ -124,7 +126,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         $group = $this->groupFactory->create();
         $this->groupResource->load($group, $groupId);
         if (!$group->getId()) {
-            throw new NoSuchEntityException(sprintf('Group with id "%s" does not exist.', $groupId));
+            throw new NoSuchEntityException(__('Group with id "%1" does not exist.', $groupId));
         }
         return $group;
     }
@@ -138,10 +140,10 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
             $this->groupResource->delete($group);
         } catch (\Exception $e) {
             throw new StateException(
-                'Cannot delete attributeGroup with id %attribute_group_id',
-                [
-                    'attribute_group_id' => $group->getId()
-                ],
+                __(
+                    'Cannot delete attributeGroup with id %1',
+                    $group->getId()
+                ),
                 $e
             );
         }

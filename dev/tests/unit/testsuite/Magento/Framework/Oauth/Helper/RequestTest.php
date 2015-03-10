@@ -50,7 +50,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                new \Magento\Framework\Oauth\OauthInputException('msg'),
+                new \Magento\Framework\Oauth\OauthInputException(__('msg')),
                 ['msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST],
             ],
             [

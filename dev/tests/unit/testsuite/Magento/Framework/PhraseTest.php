@@ -8,25 +8,25 @@ namespace Magento\Framework;
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Phrase
+     * @var \Magento\Framework\Phrase\RendererInterface
      */
-    protected $phrase;
+    protected $defaultRenderer;
 
     /**
-     * @var \Magento\Framework\Phrase\RendererInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $renderer;
+    protected $rendererMock;
 
     protected function setUp()
     {
-        $this->renderer = $this->getMock('Magento\Framework\Phrase\RendererInterface');
-        \Magento\Framework\Phrase::setRenderer($this->renderer);
+        $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
+        $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
+            ->getMock();
     }
 
     protected function tearDown()
     {
-        $this->removeRendererFromPhrase();
-        \Magento\Framework\Phrase::setRenderer(new \Magento\Framework\Phrase\Renderer\Placeholder());
+        \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
 
     public function testRendering()
@@ -34,35 +34,23 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $this->phrase = new \Magento\Framework\Phrase($text, $arguments);
+        $phrase = new Phrase($text, $arguments);
+        Phrase::setRenderer($this->rendererMock);
 
-        $this->renderer->expects(
-            $this->once()
-        )->method(
-            'render'
-        )->with(
-            [$text],
-            $arguments
-        )->will(
-            $this->returnValue($result)
-        );
+        $this->rendererMock->expects($this->once())
+            ->method('render')
+            ->with([$text], $arguments)
+            ->willReturn($result);
 
-        $this->assertEquals($result, $this->phrase->render());
-    }
-
-    public function testRenderingWithoutRenderer()
-    {
-        $this->removeRendererFromPhrase();
-        $result = 'some text';
-        $this->phrase = new \Magento\Framework\Phrase($result);
-
-        $this->assertEquals($result, $this->phrase->render());
+        $this->assertEquals($result, $phrase->render());
     }
 
     public function testDefersRendering()
     {
-        $this->renderer->expects($this->never())->method('render');
-        $this->phrase = new \Magento\Framework\Phrase('some text');
+        $this->rendererMock->expects($this->never())
+            ->method('render');
+
+        new Phrase('some text');
     }
 
     public function testThatToStringIsAliasToRender()
@@ -70,26 +58,33 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $this->phrase = new \Magento\Framework\Phrase($text, $arguments);
+        $phrase = new Phrase($text, $arguments);
+        Phrase::setRenderer($this->rendererMock);
 
-        $this->renderer->expects(
-            $this->once()
-        )->method(
-            'render'
-        )->with(
-            [$text],
-            $arguments
-        )->will(
-            $this->returnValue($result)
-        );
+        $this->rendererMock->expects($this->once())
+            ->method('render')
+            ->with([$text], $arguments)
+            ->willReturn($result);
 
-        $this->assertEquals($result, (string) $this->phrase);
+        $this->assertEquals($result, (string)$phrase);
     }
 
-    protected function removeRendererFromPhrase()
+    public function testGetText()
     {
-        $property = new \ReflectionProperty('Magento\Framework\Phrase', '_renderer');
-        $property->setAccessible(true);
-        $property->setValue($this->phrase, null);
+        $text = 'some text';
+        $phrase = new Phrase($text);
+
+        $this->assertEquals($text, $phrase->getText());
+    }
+
+    public function testGetArguments()
+    {
+        $text = 'some text';
+        $arguments = ['arg1', 'arg2'];
+        $phrase1 = new Phrase($text);
+        $phrase2 = new Phrase($text, $arguments);
+
+        $this->assertEquals([], $phrase1->getArguments());
+        $this->assertEquals($arguments, $phrase2->getArguments());
     }
 }

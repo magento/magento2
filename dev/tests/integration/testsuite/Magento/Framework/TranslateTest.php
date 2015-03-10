@@ -79,7 +79,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
-        $actualTranslation = __($inputText);
+        $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
 

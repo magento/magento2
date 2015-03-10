@@ -99,7 +99,9 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->getEntityType($object->getEntityTypeId())
             ->getDefaultAttributeSetId();
         if ($object->getAttributeSetId() == $defaultAttributeSetId) {
-            throw new \Magento\Framework\Exception\StateException('Default attribute set can not be deleted');
+            throw new \Magento\Framework\Exception\StateException(
+                __('Default attribute set can not be deleted')
+            );
         }
         return parent::_beforeDelete($object);
     }

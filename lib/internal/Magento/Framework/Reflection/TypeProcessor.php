@@ -8,6 +8,7 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Exception\SerializationException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\ParameterReflection;
+use Magento\Framework\Phrase;
 
 /**
  * Type processor of config reader properties
@@ -424,8 +425,10 @@ class TypeProcessor
             foreach (array_keys($value) as $key) {
                 if ($value !== null && !settype($value[$key], $arrayItemType)) {
                     throw new SerializationException(
-                        SerializationException::TYPE_MISMATCH,
-                        ['value' => $value, 'type' => $type]
+                        new Phrase(
+                            SerializationException::TYPE_MISMATCH,
+                            ['value' => $value, 'type' => $type]
+                        )
                     );
                 }
             }
@@ -434,14 +437,18 @@ class TypeProcessor
         } elseif (!$isArrayType && !is_array($value)) {
             if ($value !== null && $type !== self::ANY_TYPE && !settype($value, $type)) {
                 throw new SerializationException(
-                    SerializationException::TYPE_MISMATCH,
-                    ['value' => (string)$value, 'type' => $type]
+                    new Phrase(
+                        SerializationException::TYPE_MISMATCH,
+                        ['value' => (string)$value, 'type' => $type]
+                    )
                 );
             }
         } else {
             throw new SerializationException(
-                SerializationException::TYPE_MISMATCH,
-                ['value' => (string)$value, 'type' => $type]
+                new Phrase(
+                    SerializationException::TYPE_MISMATCH,
+                    ['value' => (string)$value, 'type' => $type]
+                )
             );
         }
         return $value;

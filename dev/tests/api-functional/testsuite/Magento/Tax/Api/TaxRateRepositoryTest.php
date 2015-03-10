@@ -14,6 +14,9 @@ use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxRateRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = "taxTaxRateRepositoryV1";
@@ -97,6 +100,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
 
     public function testCreateTaxRateExistingCode()
     {
+        $expectedMessage = '%1 already exists.';
         $data = [
             'tax_rate' => [
                 'tax_country_id' => 'US',
@@ -121,14 +125,16 @@ class TaxRateRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $data);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
-            $expectedMessage = 'Code already exists.';
-
+        } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Exception does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['Code'], $errorObj['parameters']);
         }
     }
 

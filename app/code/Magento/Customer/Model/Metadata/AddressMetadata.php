@@ -87,13 +87,15 @@ class AddressMetadata implements AddressMetadataInterface
             return $attributeMetadata;
         } else {
             throw new NoSuchEntityException(
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                [
-                    'fieldName' => 'entityType',
-                    'fieldValue' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                    'field2Name' => 'attributeCode',
-                    'field2Value' => $attributeCode,
-                ]
+                __(
+                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    [
+                        'fieldName' => 'entityType',
+                        'fieldValue' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                        'field2Name' => 'attributeCode',
+                        'field2Value' => $attributeCode,
+                    ]
+                )
             );
         }
     }

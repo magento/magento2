@@ -96,7 +96,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
             /* should not be allowed to switch the tax class type */
             if ($originalTaxClassModel->getClassType() !== $taxClass->getClassType()) {
-                throw new InputException('Updating classType is not allowed.');
+                throw new InputException(__('Updating classType is not allowed.'));
             }
         }
         $this->validateTaxClassData($taxClass);
@@ -105,8 +105,10 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         } catch (ModelException $e) {
             if (strpos($e->getMessage(), (string)__('Class name and class type')) !== false) {
                 throw new InputException(
-                    'A class with the same name already exists for ClassType %classType.',
-                    ['classType' => $taxClass->getClassType()]
+                    __(
+                        'A class with the same name already exists for ClassType %1.',
+                        $taxClass->getClassType()
+                    )
                 );
             } else {
                 throw $e;
@@ -162,18 +164,20 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $exception = new InputException();
 
         if (!\Zend_Validate::is(trim($taxClass->getClassName()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]));
         }
 
         $classType = $taxClass->getClassType();
         if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]));
         } elseif ($classType !== TaxClassManagementInterface::TYPE_CUSTOMER
             && $classType !== TaxClassManagementInterface::TYPE_PRODUCT
         ) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                )
             );
         }
 

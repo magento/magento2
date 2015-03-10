@@ -117,7 +117,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
-        $exceptionMessage = 'Could not apply coupon code';
+        $exceptionMessage = __('Could not apply coupon code');
         $exception = new \Magento\Framework\Exception\CouldNotDeleteException($exceptionMessage);
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())
@@ -202,7 +202,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with('');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $exceptionMessage = 'Could not delete coupon code';
+        $exceptionMessage = __('Could not delete coupon code');
         $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())

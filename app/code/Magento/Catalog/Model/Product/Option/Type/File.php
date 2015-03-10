@@ -224,7 +224,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $this->setUserValue($value);
         } catch (\Magento\Framework\Exception\File\LargeSizeException $largeSizeException) {
             $this->setIsValid(false);
-            throw new LocalizedException($largeSizeException->getMessage());
+            throw new LocalizedException(__($largeSizeException->getMessage()));
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
@@ -234,16 +234,16 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $this->setUserValue(null);
                     break;
             }
-        } catch (\Magento\Framework\Validator\ValidatorException $e) {
+        } catch (\Magento\Framework\Validator\Exception $e) {
             $this->setUserValue(null);
         } catch (\Magento\Framework\Exception\File\ValidatorException $e) {
             $this->setIsValid(false);
-            throw new LocalizedException($e->getMessage());
+            throw new LocalizedException(__($e->getMessage()));
         } catch (\Exception $e) {
             if ($this->getSkipCheckRequiredOption()) {
                 $this->setUserValue(null);
             } else {
-                throw new LocalizedException($e->getMessage());
+                throw new LocalizedException(__($e->getMessage()));
             }
         }
         return $this;
@@ -341,7 +341,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $sizes
             );
         } catch (\Exception $e) {
-            throw new LocalizedException(__("The file options format is not valid."));
+            throw new LocalizedException(__('The file options format is not valid.'));
         }
     }
 

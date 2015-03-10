@@ -3,14 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Exception;
 
-/**
- * Class StateExceptionTest
- *
- * @package Magento\Framework\Exception
- */
+use Magento\Framework\Phrase;
+
 class StateExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testStateExceptionInstance()
@@ -22,7 +18,7 @@ class StateExceptionTest extends \PHPUnit_Framework_TestCase
             'parameter2',
         ];
         $cause = new \Exception();
-        $stateException = new StateException($message, $params, $cause);
+        $stateException = new StateException(new Phrase($message, $params), $cause);
         $this->assertInstanceOf($instanceClass, $stateException);
     }
 }

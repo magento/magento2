@@ -69,8 +69,9 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->with('cart654')
             ->will($this->returnValue($quoteMock));
 
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException('error345')));
+        $this->validatorMock->expects($this->once())
+            ->method('validate')
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('error345')));
 
         $this->service->assign('cart654', $this->quoteAddressMock);
     }

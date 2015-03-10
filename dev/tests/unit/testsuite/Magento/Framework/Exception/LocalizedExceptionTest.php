@@ -5,128 +5,80 @@
  */
 namespace Magento\Framework\Exception;
 
-/**
- * Class LocalizedExceptionTest
- *
- * @package Magento\Framework\Exception
- */
+use Magento\Framework\Phrase;
+
 class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Phrase\RendererInterface */
-    private $defaultRenderer;
-
-    /** @var string */
-    private $renderedMessage;
+    /**
+     * @var \Magento\Framework\Phrase|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $phraseMock;
 
     public function setUp()
     {
-        $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
-        $rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\Renderer\Placeholder')
+        $this->phraseMock = $this->getMockBuilder('Magento\Framework\Phrase')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->renderedMessage = 'rendered message';
-        $rendererMock->expects($this->once())
-            ->method('render')
-            ->will($this->returnValue($this->renderedMessage));
-        \Magento\Framework\Phrase::setRenderer($rendererMock);
     }
 
-    public function tearDown()
-    {
-        \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
-    }
-
-    /** @dataProvider constructorParametersDataProvider */
-    public function testConstructor($message, $params, $expectedLogMessage)
-    {
+    /**
+     * @var string $message
+     * @var array $params
+     * @var string $expectedMessage
+     * @dataProvider exceptionDataProvider
+     */
+    public function testException(
+        $message,
+        $params,
+        $expectedMessage
+    ) {
+        $this->setPhraseExpectations($message, $params, $expectedMessage);
         $cause = new \Exception();
-        $localizeException = new LocalizedException(
-            $message,
-            $params,
-            $cause
-        );
+        $exception = new LocalizedException($this->phraseMock, $cause);
 
-        $this->assertEquals(0, $localizeException->getCode());
-
-        $this->assertEquals($message, $localizeException->getRawMessage());
-        $this->assertEquals($this->renderedMessage, $localizeException->getMessage());
-        $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
-
-        $this->assertSame($cause, $localizeException->getPrevious());
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertEquals($expectedMessage, $exception->getMessage());
+        $this->assertEquals($message, $exception->getRawMessage());
+        $this->assertEquals($expectedMessage, $exception->getLogMessage());
+        $this->assertSame($cause, $exception->getPrevious());
     }
 
-    public function constructorParametersDataProvider()
+    public function exceptionDataProvider()
     {
         return [
-            'withNoNameParameters' => [
-                'message %1 %2',
-                ['parameter1',
-                 'parameter2'],
-                'message parameter1 parameter2',
+            'withoutParameters' => [
+                'message' => 'message',
+                'params' => [],
+                'expectedMessage' => 'message'
             ],
-            'withNamedParameters'  => [
-                'message %key1 %key2',
-                ['key1' => 'parameter1',
-                 'key2' => 'parameter2'],
-                'message parameter1 parameter2',
+            'withParameters' => [
+                'message' => 'message %1 %2',
+                'params' => ['parameter1', 'parameter2'],
+                'expectedMessage' => 'message parameter1 parameter2',
             ],
-            'withoutParameters'    => [
-                'message',
-                [],
-                'message',
-                'message',
-            ],
+            'withNamedParameters' => [
+                'message' => 'message %key1 %key2',
+                'params' => ['key1' => 'parameter1', 'key2' => 'parameter2'],
+                'expectedMessage' => 'message parameter1 parameter2',
+            ]
         ];
     }
 
-    public function testGetRawMessage()
+    /**
+     * @param string $text
+     * @param array $arguments
+     * @param string $renderResult
+     */
+    protected function setPhraseExpectations($text, $arguments, $renderResult)
     {
-        $message =  'message %1 %2';
-        $params = [
-            'parameter1',
-            'parameter2',
-        ];
-        $cause = new \Exception();
-        $localizeException = new LocalizedException(
-            $message,
-            $params,
-            $cause
-        );
-        $this->assertEquals($message, $localizeException->getRawMessage());
-    }
-
-    public function testGetParameters()
-    {
-        $message =  'message %1 %2';
-        $params = [
-            'parameter1',
-            'parameter2',
-        ];
-        $cause = new \Exception();
-        $localizeException = new LocalizedException(
-            $message,
-            $params,
-            $cause
-        );
-
-        $this->assertEquals($params, $localizeException->getParameters());
-    }
-
-    public function testGetLogMessage()
-    {
-        $message =  'message %1 %2';
-        $params = [
-            'parameter1',
-            'parameter2',
-        ];
-        $cause = new \Exception();
-
-        $localizeException = new LocalizedException(
-            $message,
-            $params,
-            $cause
-        );
-        $expectedLogMessage = 'message parameter1 parameter2';
-        $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
+        $this->phraseMock->expects($this->any())
+            ->method('getText')
+            ->willReturn($text);
+        $this->phraseMock->expects($this->any())
+            ->method('getArguments')
+            ->willReturn($arguments);
+        $this->phraseMock->expects($this->any())
+            ->method('render')
+            ->willReturn($renderResult);
     }
 }

@@ -42,7 +42,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
         );
         $exceptionMessage = 'Test exception message';
         $exceptionCallback = function () use ($exceptionMessage) {
-            throw new \Magento\Framework\Exception\LocalizedException($exceptionMessage);
+            throw new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage));
         };
         $ruleProcessorMock->expects($this->once())
             ->method('markIndexerAsInvalid')

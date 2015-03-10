@@ -58,7 +58,7 @@ class EditTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 
     public function testEditActionNonExistentIntegration()
     {
-        $exceptionMessage = 'This integration no longer exists.';
+        $exceptionMessage = __('This integration no longer exists.');
         // verify the error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));

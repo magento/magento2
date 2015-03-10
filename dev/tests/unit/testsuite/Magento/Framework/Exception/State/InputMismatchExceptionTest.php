@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Exception\State;
 
+use Magento\Framework\Phrase;
+
 class InputMismatchExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
@@ -18,7 +20,7 @@ class InputMismatchExceptionTest extends \PHPUnit_Framework_TestCase
             'parameter2',
         ];
         $cause = new \Exception();
-        $stateException = new InputMismatchException($message, $params, $cause);
+        $stateException = new InputMismatchException(new Phrase($message, $params), $cause);
         $this->assertInstanceOf($instanceClass, $stateException);
     }
 }

@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Exception;
+
+use Magento\Framework\Phrase;
 
 /**
  * Class AuthenticationExceptionTest
@@ -16,8 +17,9 @@ class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $authenticationException = new AuthenticationException(
-            AuthenticationException::AUTHENTICATION_ERROR,
-            ['consumer_id' => 1, 'resources' => 'record2']
+            new Phrase(
+                AuthenticationException::AUTHENTICATION_ERROR
+            )
         );
         $this->assertSame('An authentication error occurred.', $authenticationException->getMessage());
     }

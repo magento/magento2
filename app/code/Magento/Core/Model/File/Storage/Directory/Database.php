@@ -203,7 +203,9 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
                     $directory->setUploadTime($dateSingleton->date());
                     $directory->save();
                 } else {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Parent directory does not exist: %1', $dir['path']));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Parent directory does not exist: %1', $dir['path'])
+                    );
                 }
             } catch (\Exception $e) {
                 $this->_logger->critical($e);

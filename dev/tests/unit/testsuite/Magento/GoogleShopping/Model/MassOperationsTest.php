@@ -7,7 +7,11 @@
 namespace Magento\GoogleShopping\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassOperationsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\GoogleShopping\Model\MassOperations */
@@ -102,10 +106,11 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dataAddProductsExceptions
      * @param string $exception
+     * @param \Magento\Framework\Phrase|string $exceptionMessage
+     * @dataProvider dataAddProductsExceptions
      */
-    public function testAddProductsExceptions($exception)
+    public function testAddProductsExceptions($exception, $exceptionMessage)
     {
         $products = ['1'];
         $this->flag->expects($this->any())->method('isExpired')->will($this->returnValue(false));
@@ -113,7 +118,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->expects($this->once())->method('getById')->will($this->returnValue($product));
         $this->itemFactory->expects($this->once())
             ->method('create')
-            ->willThrowException(new $exception('message'));
+            ->willThrowException(new $exception($exceptionMessage));
         $this->massOperations->setFlag($this->flag);
         $this->massOperations->addProducts($products, 1);
     }
@@ -124,11 +129,11 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     public function dataAddProductsExceptions()
     {
         return [
-            ['\Magento\Framework\Exception\NoSuchEntityException'],
-            ['\Zend_Gdata_App_Exception'],
-            ['\Zend_Db_Statement_Exception'],
-            ['\Magento\Framework\Exception\LocalizedException'],
-            ['\Exception']
+            ['\Magento\Framework\Exception\NoSuchEntityException', new Phrase('message')],
+            ['\Zend_Gdata_App_Exception', 'message'],
+            ['\Zend_Db_Statement_Exception', 'message'],
+            ['\Magento\Framework\Exception\LocalizedException', new Phrase('message')],
+            ['\Exception', 'message']
         ];
     }
 

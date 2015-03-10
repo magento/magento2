@@ -68,15 +68,10 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
-        $this->_integrationSvcMock->expects(
-            $this->any()
-        )->method(
-                'get'
-            )->with(
-                self::INTEGRATION_ID
-            )->will(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException($exceptionMessage))
-            );
+        $this->_integrationSvcMock->expects($this->any())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)));
         // Verify error
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $integrationContr = $this->_createIntegrationController('Save');
@@ -88,7 +83,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
 
         // Have integration service throw an exception to test exception path
-        $exceptionMessage = 'Internal error. Check exception log for details.';
+        $exceptionMessage = __('Internal error. Check exception log for details.');
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
@@ -151,7 +146,7 @@ class SaveTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
 
     public function testSaveActionExceptionDuringServiceCreation()
     {
-        $exceptionMessage = 'Service could not be saved.';
+        $exceptionMessage = __('Service could not be saved.');
         $integration = $this->_getSampleIntegrationData();
         // No id when New Integration is Post-ed
         $integration->unsetData([IntegrationModel::ID, 'id']);
