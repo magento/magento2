@@ -66,7 +66,7 @@ class ConfigInstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->configModel->process($input->getOptions());
-        $output->writeln('<info>Deployment config has been saved.</info>');
+        $output->writeln('<info>You saved the deployment config.</info>');
     }
 
     /**
@@ -76,7 +76,7 @@ class ConfigInstallCommand extends Command
     {
         if (!$this->moduleList->isModuleInfoAvailable()) {
             $output->writeln(
-                '<info>There is no module configuration available, so all modules are enabled.</info>'
+                '<info>No module configuration is available, so all modules are enabled.</info>'
             );
         }
 

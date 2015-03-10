@@ -27,7 +27,7 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList
      */
     private $moduleList;
-    
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|InputInterface
      */
@@ -67,7 +67,7 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->output->expects($this->once())
             ->method('writeln')
-            ->with('<info>There is no module configuration available, so all modules are enabled.</info>');
+            ->with('<info>No module configuration is available, so all modules are enabled.</info>');
 
         $command = new ConfigInstallCommand($this->configModel, $this->moduleList);
         $command->initialize($this->input, $this->output);
