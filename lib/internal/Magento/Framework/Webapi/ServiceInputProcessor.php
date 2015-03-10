@@ -144,7 +144,7 @@ class ServiceInputProcessor
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 $setterName = 'set' . $camelCaseProperty;
                 if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
+                    $setterValue = $this->convertCustomAttributeValue($value, $className);
                 } else {
                     $setterValue = $this->_convertValue($value, $returnType);
                 }
@@ -158,11 +158,10 @@ class ServiceInputProcessor
      * Convert custom attribute data array to array of AttributeValue Data Object
      *
      * @param array $customAttributesValueArray
-     * @param string $returnType
      * @param string $dataObjectClassName
      * @return AttributeValue[]
      */
-    protected function convertCustomAttributeValue($customAttributesValueArray, $returnType, $dataObjectClassName)
+    protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
