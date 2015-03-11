@@ -78,7 +78,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDb;
 
@@ -111,7 +111,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param File $downloadableFile
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param Filesystem\File\ReadFactory $fileReadFactory
@@ -119,7 +119,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Downloadable\Helper\File $downloadableFile,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory

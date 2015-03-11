@@ -17,8 +17,8 @@ class ImmutablePathAsset extends AbstractAsset
     protected function fillPropertiesByMinifyingAsset()
     {
         $this->context = $this->originalAsset->getContext();
-        $this->filePath = $this->originalAsset->getPath();
-        $this->path = $this->filePath;
+        $this->filePath = $this->originalAsset->getFilePath();
+        $this->path = $this->originalAsset->getPath();
         $this->minify();
         $this->file = $this->staticViewDir->getAbsolutePath($this->path);
         $this->url = $this->context->getBaseUrl() . $this->path;

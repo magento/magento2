@@ -24,7 +24,7 @@ class Success extends \Magento\AdminNotification\Model\System\Message\Media\Abst
         $state = $this->_syncFlag->getState();
         $data = $this->_syncFlag->getFlagData();
         $hasErrors = isset($data['has_errors']) && true == $data['has_errors'] ? true : false;
-        return false == $hasErrors && \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED == $state;
+        return false == $hasErrors && \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED == $state;
     }
 
     /**
