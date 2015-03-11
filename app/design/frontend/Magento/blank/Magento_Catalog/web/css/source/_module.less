@@ -335,7 +335,6 @@
         }
         .price-box {
             display: block;
-            font-weight: @font-weight__semibold;
             margin: 7px 0;
         }
         .text {
@@ -540,38 +539,6 @@
 //--------------------------------------
 
 & when (@media-common = true) {
-
-//
-//    Minimum Advertising Price
-//--------------------------------------
-.map.popup {
-    .popup(
-        @_popup-margin-top: @indent__s,
-        @_popup-margin-left: false,
-        @_popup-content-margin: 10px 0 0,
-        @_popup-position-top: false,
-        @_popup-position-left: false,
-        @_popup-position: absolute
-    );
-    .ui-dialog & {
-        padding: 22px;
-    }
-    .map.add.form {
-        &:extend(.abs-add-clearfix all);
-        margin-bottom: 15px;
-        .price-box {
-            float: left;
-            .label {
-                &:after {
-                    content: ": ";
-                }
-            }
-        }
-    }
-    .form.map.checkout {
-        float: right;
-    }
-}
 
 //
 //    Compare Products Page

@@ -46,7 +46,7 @@ if ($product->isSaleable()) {
 }
 ?>
 <?php if ($product->getMsrp()): ?>
-    <span class="old-price msrp-price-wrapper"><?php echo $msrpPrice ?></span>
+    <span class="old-price map-old-price msrp-price-wrapper"><?php echo $msrpPrice ?></span>
 <?php endif; ?>
 
 <?php if ($priceType->isShowPriceOnGesture()): ?>
@@ -72,10 +72,11 @@ if ($product->isSaleable()) {
     <span id="<?php echo $block->getPriceId() ? $block->getPriceId() : $priceElementId ?>" style="display:none"></span>
     <a href="#"
        id="<?php echo($popupId);?>"
+       class="action map-show-info"
        data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>"><?php echo __('Click for price'); ?>
     </a>
 <?php else: ?>
-    <span class="msrp message">
+    <span class="msrp-message">
      <?php echo $priceType->getMsrpPriceMessage() ?>
     </span>
 <?php endif; ?>
@@ -84,7 +85,7 @@ if ($product->isSaleable()) {
     <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
     <a href="#"
        id="<?php echo $helpLinkId;?>"
-       class="action show map"
+       class="action map-show-info"
        data-mage-init='{"addToCart":{"helpLinkId": "#<?php echo $helpLinkId;?>",
                                      "productName": "<?php echo $product->getName() ?>",
                                      "closeButtonId": "#map-popup-close"}}'><span><?php echo __("What's this?"); ?></span>

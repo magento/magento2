@@ -196,6 +196,7 @@
         }
     }
     .product-info-stock-sku {
+        min-width: 15rem;
         text-align: right;
         display: table-cell;
         vertical-align: top;
@@ -384,7 +385,6 @@
         }
         .price-box {
             display: block;
-            font-weight: @font-weight__semibold;
             margin: 7px 0;
         }
         .text {
@@ -633,82 +633,6 @@
 //--------------------------------------
 
 & when (@media-common = true) {
-
-//
-//    Minimum Advertising Price
-//--------------------------------------
-.map.popup {
-    .popup(
-        @_popup-margin-top: 15px,
-        @_popup-margin-left: false,
-        @_popup-content-margin: false,
-        @_popup-position-top: false,
-        @_popup-position-left: false,
-        @_popup-position: absolute
-    );
-    .ui-dialog & {
-        padding: 22px;
-    }
-    &:before {
-        z-index: 99;
-        border: solid 6px;
-        border-color: transparent transparent @popup__background transparent;
-        margin-left: -4px;
-        top: -12px;
-    }
-    &:after {
-        z-index: 98;
-        border: solid 7px;
-        border-color: transparent transparent @popup__border-color transparent;
-        top: -14px;
-        margin-left: -5px;
-    }
-    &:before,
-    &:after {
-        content: "";
-        position: absolute;
-        display: block;
-        width: 0;
-        height: 0;
-        border-bottom-style: solid;
-        left: 50%;
-    }
-
-    .map.add.form {
-        &:extend(.abs-add-clearfix all);
-        margin: 0 0 20px;
-        .price-box {
-            float: left;
-            .label {
-                &:after {
-                    content: ": ";
-                }
-            }
-        }
-    }
-
-    .form.map.checkout {
-        float: right;
-    }
-
-    .additional-addtocart-box {
-        display: inline-block;
-    }
-    .action.primary {
-        float: left;
-        margin-right: 10px;
-    }
-    .map.msrp {
-        margin-bottom: 9px;
-    }
-    .actual-price {
-        font-size: @font-size__l;
-        margin: 3px 0 15px;
-    }
-    .popup-header {
-        display: none;
-    }
-}
 
 //
 //    Compare Products Page
