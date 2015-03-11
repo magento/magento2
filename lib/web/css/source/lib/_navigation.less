@@ -8,6 +8,7 @@
 //  _____________________________________________
 
 .main-navigation(
+    @_nav__indent-side: 20px,
     @_nav-background-color: @navigation__background,
     @_nav-border: @navigation__border,
     @_nav-level0-font-size: @navigation-level0-item__font-size,
@@ -23,7 +24,7 @@
     @_nav-level0-item-text-decoration: @navigation-level0-item__text-decoration,
 
     @_nav-level0-item-background-color-active: @navigation-level0-item__active__background,
-    @_nav-level0-item-border-active: @navigation-level0-item__active__border,
+    @_nav-level0-item__active__border-left: @navigation-level0-item__active__border-left,
     @_nav-level0-item-color-active: @navigation-level0-item__active__color,
     @_nav-level0-item-text-decoration-active: @navigation-level0-item__active__text-decoration,
 
@@ -40,7 +41,7 @@
     @_submenu-item-text-decoration: @submenu-item__text-decoration,
 
     @_submenu-item-background-color-active: @submenu-item__active__background,
-    @_submenu-item-border-active: @submenu-item__active__border,
+    @_submenu-item__active__border-left: @submenu-item__active__border-left,
     @_submenu-item-color-active: @submenu-item__active__color,
     @_submenu-item-text-decoration-active: @submenu-item__active__text-decoration
 ) {
@@ -69,52 +70,83 @@
                 .css(text-transform, @_nav-level0-text-transform);
                 display: block;
             }
-            &.active > a {
-                .css(background, @_nav-level0-item-background-color-active);
-                .css(border, @_nav-level0-item-border-active);
-                .css(color, @_nav-level0-item-color-active);
-                .css(text-decoration, @_nav-level0-item-text-decoration-active);
+            > .level1 {
+                font-weight: @font-weight__semibold;
+                .ui-menu {
+                    padding-left: @_nav__indent-side;
+                }
+            }
+            &.active {
+                > a:not(.ui-state-active) {
+                    .css(background, @_nav-level0-item-background-color-active);
+                    .css(border-left, @_nav-level0-item__active__border-left);
+                    .css(color, @_nav-level0-item-color-active);
+                    .css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    padding-left: @_nav__indent-side - @navigation-item__active__border-width;
+                }
             }
             &:last-child {
                 .css(border-bottom, @_nav-level0-item-border);
             }
         }
-        .ui-menu:not(:first-child) {
-            .css(background, @_submenu-background-color);
-            .css(border, @_submenu-border);
-            .css(font-size, @_submenu-font-size);
-            .css(font-weight, @_submenu-font-weight);
-            overflow-x: hidden;
-            position: relative;
-            transition: left .3s ease-out 0;
-            top: auto !important;
-            left: auto !important;
-            padding: 10px 20px;
-            > ul {
-                display: block;
-                .css(padding, @_submenu-padding);
+        .ui-menu {
+            &:not(:first-child) {
+                .css(background, @_submenu-background-color);
+                .css(border, @_submenu-border);
+                .css(font-size, @_submenu-font-size);
+                .css(font-weight, @_submenu-font-weight);
+                overflow-x: hidden;
+                position: relative;
+                transition: left .3s ease-out;
+                top: auto !important;
+                left: auto !important;
+                padding: 10px 0;
                 > li {
-                    margin: 0;
-                    a {
-                        .css(background, @_submenu-item-background-color);
-                        .css(border, @_submenu-item-border);
-                        .css(color, @_submenu-item-color);
-                        .css(text-decoration, @_submenu-item-text-decoration);
-                        display: block;
-                        line-height: normal;
-                        .css(padding, @_submenu-item-padding);
+                    > a {
+                        padding-right: @_nav__indent-side;
+                        padding-left: @_nav__indent-side;
                     }
                 }
-            }
-            &.expanded {
-              display: block !important;
-              top: 0 !important;
-            }
-            .active > a {
-                .css(background, @_submenu-item-background-color-active);
-                .css(border, @_submenu-item-border-active);
-                .css(color, @_submenu-item-color-active);
-                .css(text-decoration, @_submenu-item-text-decoration-active);
+                > ul {
+                    display: block;
+                    .css(padding, @_submenu-padding);
+                    > li {
+                        margin: 0;
+                        a {
+                            .css(background, @_submenu-item-background-color);
+                            .css(border, @_submenu-item-border);
+                            .css(color, @_submenu-item-color);
+                            display: block;
+                            line-height: normal;
+                            .css(padding, @_submenu-item-padding);
+                            .css(text-decoration, @_submenu-item-text-decoration);
+                        }
+                    }
+                }
+                &.expanded {
+                    display: block !important;
+                    top: 0 !important;
+                }
+                .active {
+                    > a {
+                        .css(background, @_submenu-item-background-color-active);
+                        .css(color, @_submenu-item-color-active);
+                        .css(text-decoration, @_submenu-item-text-decoration-active);
+                    }
+                }
+                .level1 {
+                    &.active {
+                        > a {
+                            .css(border-left, @_submenu-item__active__border-left);
+                            padding-left: @_nav__indent-side - 8px;
+                        }
+                    }
+                }
+                .level2 {
+                    &.active {
+                        font-weight: @font-weight__semibold;
+                    }
+                }
             }
         }
     }
@@ -145,7 +177,7 @@
     @_nav-level0-item-text-decoration-hover: @navigation-desktop-level0-item__hover__text-decoration,
 
     @_nav-level0-item-background-color-active: @navigation-desktop-level0-item__active__background,
-    @_nav-level0-item-border-active: @navigation-desktop-level0-item__active__border,
+    @_nav-level0-item__active__border: @navigation-desktop-level0-item__active__border,
     @_nav-level0-item-color-active: @navigation-desktop-level0-item__active__color,
     @_nav-level0-item-text-decoration-active: @navigation-desktop-level0-item__active__text-decoration,
 
@@ -175,7 +207,7 @@
     @_submenu-item-text-decoration-hover: @submenu-desktop-item__hover__text-decoration,
 
     @_submenu-item-background-color-active: @submenu-desktop-item__active__background,
-    @_submenu-item-border-active: @submenu-desktop-item__active__border,
+    @_submenu-item__active__border: @submenu-desktop-item__active__border,
     @_submenu-item-color-active: @submenu-desktop-item__active__color,
     @_submenu-item-text-decoration-active: @submenu-desktop-item__active__text-decoration
 ) {
@@ -233,7 +265,7 @@
             &.active {
                 > .level-top {
                     .css(background, @_nav-level0-item-background-color-active);
-                    .css(border, @_nav-level0-item-border-active);
+                    .css(border, @_nav-level0-item__active__border);
                     .css(color, @_nav-level0-item-color-active);
                     .css(text-decoration, @_nav-level0-item-text-decoration-active);
                 }
@@ -280,7 +312,7 @@
                 }
                 .active > a {
                     .css(background, @_submenu-item-background-color-active);
-                    .css(border, @_submenu-item-border-active);
+                    .css(border, @_submenu-item__active__border);
                     .css(color, @_submenu-item-color-active);
                     .css(text-decoration, @_submenu-item-text-decoration-active);
                 }
@@ -357,7 +389,7 @@
         .css(margin-top, -@_size);
         > ul {
             .css(margin-top, @_size);
-            &:before{
+            &:before {
                 .css(color, @_bg);
                 content: '';
                 display: block;
@@ -374,7 +406,7 @@
         .css(margin-top, -@_size);
         > ul {
             .css(margin-top, @_size);
-            &:before{
+            &:before {
                 .css(color, @_border);
                 content: '';
                 display: block;
