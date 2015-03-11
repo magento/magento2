@@ -49,6 +49,18 @@ class Observer extends \Magento\Framework\Object
     }
 
     /**
+     * Set gift message to order from address in multiple addresses checkout.
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
+     */
+    public function multishippingEventCreateOrders($observer)
+    {
+        $observer->getEvent()->getOrder()->setGiftMessageId($observer->getEvent()->getAddress()->getGiftMessageId());
+        return $this;
+    }
+
+    /**
      * Duplicates giftmessage from order to quote on import or reorder
      *
      * @param \Magento\Framework\Event\Observer $observer

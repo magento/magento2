@@ -12,4 +12,7 @@
     <event name="sales_convert_order_to_quote">
         <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="salesEventOrderToQuote" shared="false" />
     </event>
+    <event name="checkout_type_multishipping_create_orders_single">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="multishippingEventCreateOrders" shared="false" />
+    </event>
 </config>
