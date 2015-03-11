@@ -160,7 +160,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setPath'
         )->with(
-            $this->logicalOr($this->equalTo('/path/number/one'), $this->equalTo('/path/number/two'))
+            $this->logicalOr($this->equalTo('path/number/one'), $this->equalTo('path/number/two'))
         );
 
         $this->directoryDatabase->importDirectories(
