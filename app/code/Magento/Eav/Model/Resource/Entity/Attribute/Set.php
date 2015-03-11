@@ -146,32 +146,14 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getSetInfo(array $attributeIds, $setId = null)
     {
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
-        $adapter = $this->_getReadAdapter();
-        $setInfo = [];
-        $setInfoData = [];
 
         if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
             $setInfoData = unserialize($cache);
-            foreach ($attributeIds as $attributeId) {
-                $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
-            }
         } else {
-            $select = $adapter->select()->from(
-                ['entity' => $this->getTable('eav_entity_attribute')],
-                ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
-            )->joinLeft(
-                ['attribute_group' => $this->getTable('eav_attribute_group')],
-                'entity.attribute_group_id = attribute_group.attribute_group_id',
-                ['group_sort_order' => 'sort_order']
-            );
-            $bind = [];
-            if (is_numeric($setId)) {
-                $bind[':attribute_set_id'] = $setId;
-                $select->where('entity.attribute_set_id = :attribute_set_id');
-            }
-            $result = $adapter->fetchAll($select, $bind);
+            $attributeSetData = $this->fetchAttributeSetData($setId);
 
-            foreach ($result as $row) {
+            $setInfoData = [];
+            foreach ($attributeSetData as $row) {
                 $data = [
                     'group_id' => $row['attribute_group_id'],
                     'group_sort' => $row['group_sort_order'],
@@ -190,10 +172,11 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     ]
                 );
             }
+        }
 
-            foreach ($attributeIds as $attributeId) {
-                $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
-            }
+        $setInfo = [];
+        foreach ($attributeIds as $attributeId) {
+            $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
         }
 
         return $setInfo;
@@ -220,5 +203,30 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
         return $adapter->fetchOne($select, $bind);
+    }
+
+    /**
+     * Returns data from eav_entity_attribute table for given $setId (or all if $setId is null)
+     *
+     * @param int $setId
+     * @return array
+     */
+    protected function fetchAttributeSetData($setId = null)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from(
+            ['entity' => $this->getTable('eav_entity_attribute')],
+            ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
+        )->joinLeft(
+            ['attribute_group' => $this->getTable('eav_attribute_group')],
+            'entity.attribute_group_id = attribute_group.attribute_group_id',
+            ['group_sort_order' => 'sort_order']
+        );
+        $bind = [];
+        if (is_numeric($setId)) {
+            $bind[':attribute_set_id'] = $setId;
+            $select->where('entity.attribute_set_id = :attribute_set_id');
+        }
+        return $adapter->fetchAll($select, $bind);
     }
 }
