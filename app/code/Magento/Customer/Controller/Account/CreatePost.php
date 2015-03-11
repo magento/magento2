@@ -29,18 +29,13 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Url\DecoderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreatePost extends \Magento\Customer\Controller\Account
+class CreatePost extends \Magento\Customer\Controller\AccountRedirect
 {
-    /** @var ScopeConfigInterface */
-    protected $scopeConfig;
-
-    /** @var StoreManagerInterface */
-    protected $storeManager;
-
     /** @var AccountManagementInterface */
     protected $accountManagement;
 
@@ -77,9 +72,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
     /** @var \Magento\Framework\UrlInterface */
     protected $urlModel;
 
-    /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
+    /** @var \Magento\Framework\Api\DataObjectHelper  */
     protected $dataObjectHelper;
 
     /**
@@ -102,6 +95,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
      * @param Escaper $escaper
      * @param CustomerExtractor $customerExtractor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -124,10 +118,9 @@ class CreatePost extends \Magento\Customer\Controller\Account
         Registration $registration,
         Escaper $escaper,
         CustomerExtractor $customerExtractor,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        DecoderInterface $urlDecoder
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
         $this->accountManagement = $accountManagement;
         $this->addressHelper = $addressHelper;
         $this->formFactory = $formFactory;
@@ -141,7 +134,15 @@ class CreatePost extends \Magento\Customer\Controller\Account
         $this->customerExtractor = $customerExtractor;
         $this->urlModel = $urlFactory->create();
         $this->dataObjectHelper = $dataObjectHelper;
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $resultRedirectFactory,
+            $resultPageFactory,
+            $scopeConfig,
+            $storeManager,
+            $urlDecoder
+        );
     }
 
     /**
@@ -253,9 +254,8 @@ class CreatePost extends \Magento\Customer\Controller\Account
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->_getSession()->setCustomerDataAsLoggedIn($customer);
-
                 $this->messageManager->addSuccess($this->getSuccessMessage());
-                $resultRedirect->setUrl($this->getSuccessRedirect());
+                $resultRedirect = $this->loginPostRedirect();
             }
             return $resultRedirect;
         } catch (StateException $e) {
