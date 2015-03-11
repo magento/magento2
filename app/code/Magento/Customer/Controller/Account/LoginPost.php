@@ -40,8 +40,8 @@ class LoginPost extends \Magento\Customer\Controller\AccountRedirect
      * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param AccountManagementInterface $customerAccountManagement
      * @param DecoderInterface $urlDecoder
+     * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerUrl $customerHelperData
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      *
@@ -54,8 +54,8 @@ class LoginPost extends \Magento\Customer\Controller\AccountRedirect
         PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $customerAccountManagement,
         DecoderInterface $urlDecoder,
+        AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
         Validator $formKeyValidator
     ) {
