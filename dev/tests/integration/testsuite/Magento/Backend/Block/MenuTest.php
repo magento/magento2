@@ -31,7 +31,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $menuConfig = $this->prepareMenuConfig();
 
         $this->assertStringEqualsFile(
-            __DIR__ . '/_files/menu/expected.phtml',
+            __DIR__ . '/_files/menu/expected.txt',
             $this->blockMenu->renderNavigation($menuConfig->getMenu())
         );
     }
