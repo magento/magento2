@@ -9,6 +9,9 @@
  */
 namespace Magento\Checkout\Controller;
 
+/**
+ * @magentoDbIsolation enabled
+ */
 class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**

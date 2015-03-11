@@ -696,4 +696,5 @@ return [
         '\Magento\Catalog\Api\Data\ProductAttributeInterface',
         'Use \Magento\Eav\Model\Entity\Type::getDefaultAttributeSetId() method instead',
     ],
+    ['CONFIG_PATH_WSDL_CACHE_ENABLED', 'Magento\Webapi\Model\Soap\Server'],
 ];

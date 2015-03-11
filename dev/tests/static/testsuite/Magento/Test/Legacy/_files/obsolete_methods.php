@@ -2041,6 +2041,7 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['streamOpen', 'Magento\Framework\Io\File'],
     ['getPreProcessors', 'Magento\Framework\View\Asset\PreProcessor\Pool', 'process'],
     ['isPhpFile', '\Magento\Tools\Di\Code\Reader\ClassesScanner'],
     ['renderPage', 'Magento\Cms\Helper\Page'],
