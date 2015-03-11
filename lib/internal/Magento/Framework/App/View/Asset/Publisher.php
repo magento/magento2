@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\View\Asset;
+
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
+
 /**
  * A publishing service for view assets
  */
@@ -14,11 +16,14 @@ class Publisher
     /**
      * @var \Magento\Framework\Filesystem
      */
+
     protected $filesystem;
+
     /**
      * @var MaterializationStrategy\Factory
      */
     private $materializationStrategyFactory;
+
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param MaterializationStrategy\Factory $materializationStrategyFactory
@@ -30,6 +35,7 @@ class Publisher
         $this->filesystem = $filesystem;
         $this->materializationStrategyFactory = $materializationStrategyFactory;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +47,7 @@ class Publisher
         }
         return $this->publishAsset($asset);
     }
+
     /**
      * Publish the asset
      *
