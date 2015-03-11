@@ -38,7 +38,7 @@ class AttributeForm extends FormTabs
      *
      * @var string
      */
-    protected $pageTitle = '.page-title .title';
+    protected $pageTitle = '.page-title';
 
     /**
      * Get data of the tabs.

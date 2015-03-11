@@ -110,8 +110,8 @@ class Storage
      */
     public function uploadFile($targetPath)
     {
-        /** @var $uploader \Magento\Core\Model\File\Uploader */
-        $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', ['fileId' => 'file']);
+        /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
+        $uploader = $this->_objectManager->create('Magento\MediaStorage\Model\File\Uploader', ['fileId' => 'file']);
         $uploader->setAllowedExtensions($this->_helper->getAllowedExtensionsByType());
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);

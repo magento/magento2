@@ -130,11 +130,10 @@
         <div ng-show="store.advanced.expanded">
 
             <div
-                class="alert alert-info"
+                class="message message-error"
                 ng-show="store.errorMessage !== ''&& store.errorMessage !== false"
                 >
-                <span class="alert-icon icon-failed-round"></span>
-                <div class="alert-text">
+                <div class="message-text">
                     <p>
                         An error has occurred. 
                         <a href="#"
@@ -161,12 +160,12 @@
                 </div>
             </div>
 
-            <div class="alert alert-info" ng-show="loading">
+            <div class="message message-spinner" ng-show="loading">
                 <span class="spinner">
                     <span></span><span></span><span></span><span></span>
                     <span></span><span></span><span></span><span></span>
                 </span>
-                <p class="alert-text">Validating Constraints for enabling/disabling modules...</p>
+                <span class="message-text">Validating Constraints for enabling/disabling modules...</span>
             </div>
 
             <p class="advanced-modules-select">

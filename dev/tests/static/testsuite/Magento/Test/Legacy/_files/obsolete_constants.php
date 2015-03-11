@@ -54,24 +54,17 @@ return [
         'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_WRITE_CONNECTION'
     ],
-    ['DEFAULT_CURRENCY', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_CURRENCY'],
     ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_ERROR_HANDLER', 'Mage'],
-    ['DEFAULT_LOCALE', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_LOCALE'],
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\PackageInterface'],
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'],
-    ['DEFAULT_TIMEZONE', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::DEFAULT_TIMEZONE'],
     ['DEFAULT_STORE_ID', 'Magento\Catalog\Model\AbstractModel', 'Magento\Store\Model\Store::DEFAULT_STORE_ID'],
     ['DEFAULT_VALUE_TABLE_PREFIX'],
     ['DIVIDE_EPSILON', 'Magento\Core\Helper\Data'],
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
     ['FALLBACK_MAP_DIR', 'Magento\Core\Model\Design\PackageInterface'],
-    ['FORMAT_TYPE_FULL', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::FORMAT_TYPE_FULL'],
-    ['FORMAT_TYPE_LONG', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::FORMAT_TYPE_LONG'],
-    ['FORMAT_TYPE_MEDIUM', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::FORMAT_TYPE_MEDIUM'],
-    ['FORMAT_TYPE_SHORT', 'Magento\Framework\Locale', 'Magento_Core_Model_LocaleInterface::FORMAT_TYPE_SHORT'],
     ['GALLERY_IMAGE_TABLE', 'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media'],
     ['HASH_ALGO'],
     ['INIT_OPTION_DIRS', 'Magento\Core\Model\App', 'Magento_Core_Model_App::PARAM_APP_DIRS'],
@@ -148,12 +141,6 @@ return [
         'XML_NODE_ATTRIBUTE_GROUPS'
     ],
     [
-        'XML_PATH_ALLOW_CURRENCIES',
-        'Magento\Framework\Locale',
-        'Magento_Core_Model_LocaleInterface::XML_PATH_ALLOW_CURRENCIES'
-    ],
-    ['XML_PATH_ALLOW_CODES', 'Magento\Framework\LocaleInterface'],
-    [
         'XML_PATH_ALLOW_DUPLICATION',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::XML_PATH_ALLOW_DUPLICATION'
@@ -175,15 +162,8 @@ return [
         'Magento\Framework\View\Element\Template',
         'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS'
     ],
-    ['XML_PATH_DEFAULT_COUNTRY', 'Magento\Framework\Locale'],
     ['XML_PATH_DEFAULT_COUNTRY', 'Magento\Core\Helper\Data', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY'],
-    ['XML_PATH_DEFAULT_LOCALE', 'Magento\Framework\Locale', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE'],
     ['XML_PATH_DEFAULT_LOCALE', 'Magento\Core\Helper\Data', 'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE'],
-    [
-        'XML_PATH_DEFAULT_TIMEZONE',
-        'Magento\Framework\Locale',
-        'Magento\Directory\Helper\Data::XML_PATH_DEFAULT_TIMEZONE'
-    ],
     [
         'XML_PATH_DEFAULT_TIMEZONE',
         'Magento\Core\Helper\Data',
@@ -370,7 +350,7 @@ return [
     [
         'XML_PATH_PROTECTED_FILE_EXTENSIONS',
         '\Magento\Core\Helper\Data',
-        '\Magento\Core\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS'
+        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS'
     ],
     [
         'XML_PATH_PUBLIC_FILES_VALID_PATHS',

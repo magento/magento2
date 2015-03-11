@@ -6,18 +6,14 @@
 
 namespace Magento\Setup\Model;
 
-use Zend_Locale;
+use Magento\Framework\Locale\Bundle\CurrencyBundle;
+use Magento\Framework\Locale\Bundle\LanguageBundle;
+use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
+use Magento\Framework\Locale\ResolverInterface;
 
 class Lists
 {
-    /**
-     * Zend locale object
-     *
-     * @var Zend_Locale
-     */
-    protected $zendLocale;
-
     /**
      * List of allowed locales
      *
@@ -26,14 +22,10 @@ class Lists
     protected $allowedLocales;
 
     /**
-     * Constructor
-     *
-     * @param Zend_Locale $zendLocale
      * @param ConfigInterface $localeConfig
      */
-    public function __construct(Zend_Locale $zendLocale, ConfigInterface $localeConfig)
+    public function __construct(ConfigInterface $localeConfig)
     {
-        $this->zendLocale = $zendLocale;
         $this->allowedLocales = $localeConfig->getAllowedLocales();
     }
 
@@ -44,10 +36,14 @@ class Lists
      */
     public function getTimezoneList()
     {
-        $timeZone  = $this->zendLocale->getTranslationList('TimezoneToWindows');
+        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
         $list = [];
-        foreach ($timeZone as $windows => $iso) {
-            $list[$iso] = $windows . ' (' . $iso . ')';
+        foreach ($zones as $code) {
+            $list[$code] = \IntlTimeZone::createTimeZone($code)->getDisplayName(
+                false,
+                \IntlTimeZone::DISPLAY_LONG,
+                ResolverInterface::DEFAULT_LOCALE
+            ) . ' (' . $code . ')';
         }
         asort($list);
         return $list;
@@ -60,10 +56,10 @@ class Lists
      */
     public function getCurrencyList()
     {
-        $currencies = $this->zendLocale->getTranslationList('NameToCurrency');
+        $currencies = (new CurrencyBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Currencies'];
         $list = [];
-        foreach ($currencies as $code => $value) {
-            $list[$code] = $value . ' (' . $code . ')';
+        foreach ($currencies as $code => $data) {
+            $list[$code] = $data[1] . ' (' . $code . ')';
         }
         asort($list);
         return $list;
@@ -76,27 +72,21 @@ class Lists
      */
     public function getLocaleList()
     {
-        $languages = $this->zendLocale->getTranslationList('Language');
-        $countries = $this->zendLocale->getTranslationList('Territory');
-        $locales = $this->zendLocale->getLocaleList();
-
-        $allowedAliases = [];
-        foreach ($this->allowedLocales as $code) {
-            $allowedAliases[$this->zendLocale->getAlias($code)] = $code;
-        }
+        $languages = (new LanguageBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Languages'];
+        $countries = (new RegionBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Countries'];
+        $locales = \ResourceBundle::getLocales(null);
 
         $list = [];
-        foreach (array_keys($locales) as $code) {
-            if (array_key_exists($code, $allowedAliases)) {
-                $code = $allowedAliases[$code];
+        foreach ($locales as $locale) {
+            if (!in_array($locale, $this->allowedLocales)) {
+                continue;
             }
-            if (strstr($code, '_')) {
-                $data = explode('_', $code);
-                if (!isset($languages[$data[0]]) || !isset($countries[$data[1]])) {
-                    continue;
-                }
-                $list[$code] = $languages[$data[0]] . ' (' . $countries[$data[1]] . ')';
+            $language = \Locale::getPrimaryLanguage($locale);
+            $country = \Locale::getRegion($locale);
+            if (!$languages[$language] || !$countries[$country]) {
+                continue;
             }
+            $list[$locale] = $languages[$language] . ' (' . $countries[$country] . ')';
         }
         asort($list);
         return $list;

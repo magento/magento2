@@ -21,4 +21,12 @@ interface ShipmentSearchResultInterface extends SearchResultsInterface
      * @return \Magento\Sales\Api\Data\ShipmentInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

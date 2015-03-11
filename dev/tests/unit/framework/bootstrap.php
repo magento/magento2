@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../../../../app/autoload.php';
 
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');

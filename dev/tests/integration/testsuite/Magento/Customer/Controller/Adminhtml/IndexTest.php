@@ -445,7 +445,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="title">new firstname new lastname</h1>', $body);
+        $this->assertContains('<h1 class="page-title">new firstname new lastname</h1>', $body);
     }
 
     /**
@@ -458,7 +458,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="title">test firstname test lastname</h1>', $body);
+        $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
     public function testNewAction()
@@ -467,7 +467,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="title">New Customer</h1>', $body);
+        $this->assertContains('<h1 class="page-title">New Customer</h1>', $body);
     }
 
     /**

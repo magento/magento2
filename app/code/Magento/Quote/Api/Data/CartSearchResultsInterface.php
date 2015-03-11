@@ -46,7 +46,7 @@ interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResult
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null);
 
     /**
      * Get total count.

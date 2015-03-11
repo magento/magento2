@@ -8,14 +8,14 @@
 
 namespace Magento\Test\Php;
 
-use Magento\Framework\Test\Utility;
+use Magento\Framework\App\Utility;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use PHPMD\TextUI\Command;
 use PHPUnit_Framework_TestCase;
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * Set of tests for static code analysis, e.g. code style, code complexity, copy paste detecting, etc.

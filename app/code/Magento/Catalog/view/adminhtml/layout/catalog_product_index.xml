@@ -12,7 +12,7 @@
                 <argument name="itemId" xsi:type="string">Magento_Catalog::catalog_products</argument>
             </action>
         </referenceBlock>
-        <referenceBlock name="page-title">
+        <referenceBlock name="page.title">
             <action method="setTitleClass">
                 <argument name="class" xsi:type="string">complex</argument>
             </action>

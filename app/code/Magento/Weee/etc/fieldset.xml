@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Object/etc/fieldset.xsd">
     <scope id="global">
-        <fieldset id="sales_convert_quote_item">
+        <fieldset id="quote_convert_item">
             <field name="weee_tax_applied">
                 <aspect name="to_order_item" />
             </field>
@@ -35,6 +35,35 @@
             </field>
             <field name="base_weee_tax_row_disposition">
                 <aspect name="to_order_item" />
+            </field>
+        </fieldset>
+        <fieldset id="sales_convert_quote">
+            <field name="weee_tax_applied">
+                <aspect name="to_order" />
+            </field>
+            <field name="weee_tax_applied_amount">
+                <aspect name="to_order" />
+            </field>
+            <field name="weee_tax_applied_row_amount">
+                <aspect name="to_order" />
+            </field>
+            <field name="base_weee_tax_applied_amount">
+                <aspect name="to_order" />
+            </field>
+            <field name="base_weee_tax_applied_row_amnt">
+                <aspect name="to_order" />
+            </field>
+            <field name="weee_tax_disposition">
+                <aspect name="to_order" />
+            </field>
+            <field name="base_weee_tax_disposition">
+                <aspect name="to_order" />
+            </field>
+            <field name="weee_tax_row_disposition">
+                <aspect name="to_order" />
+            </field>
+            <field name="base_weee_tax_row_disposition">
+                <aspect name="to_order" />
             </field>
         </fieldset>
         <fieldset id="sales_convert_order_item">

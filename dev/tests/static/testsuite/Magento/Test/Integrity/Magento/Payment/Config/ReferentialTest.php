@@ -31,7 +31,7 @@ class ReferentialTest extends \PHPUnit_Framework_TestCase
         /**
          * @var string[] $configFiles
          */
-        $configFiles = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('config.xml', [], false);
+        $configFiles = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('config.xml', [], false);
         /**
          * @var string $file
          */
@@ -59,7 +59,7 @@ class ReferentialTest extends \PHPUnit_Framework_TestCase
         /**
          * @var string[] $configFiles
          */
-        $configFiles = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('payment.xml', [], false);
+        $configFiles = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('payment.xml', [], false);
         /**
          * @var string $file
          */

@@ -54,10 +54,35 @@ class GroupedCollection extends Collection
     public function add($identifier, AssetInterface $asset, array $properties = [])
     {
         parent::add($identifier, $asset);
+        $properties = $this->getFilteredProperties($asset, $properties);
+        $this->getGroupFor($properties)->add($identifier, $asset);
+    }
+
+    /**
+     * @param string $identifier
+     * @param AssetInterface $asset
+     * @param string $key
+     * @return void
+     */
+    public function insert($identifier, AssetInterface $asset, $key)
+    {
+        parent::insert($identifier, $asset, $key);
+        $properties = $this->getFilteredProperties($asset);
+        $this->getGroupFor($properties)->insert($identifier, $asset, $key);
+    }
+
+    /**
+     * @param AssetInterface $asset
+     * @param array $properties
+     * @return array
+     */
+    public function getFilteredProperties(AssetInterface $asset, $properties = [])
+    {
         $properties = array_filter($properties);
         $properties[self::PROPERTY_CONTENT_TYPE] = $asset->getContentType();
         $properties[self::PROPERTY_CAN_MERGE] = $asset instanceof MergeableInterface;
-        $this->getGroupFor($properties)->add($identifier, $asset);
+
+        return $properties;
     }
 
     /**
@@ -106,5 +131,22 @@ class GroupedCollection extends Collection
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    /**
+     * Get asset group by content type
+     *
+     * @param string $contentType
+     * @return bool|PropertyGroup
+     */
+    public function getGroupByContentType($contentType)
+    {
+        foreach ($this->groups as $group) {
+            if ($group->getProperty(self::PROPERTY_CONTENT_TYPE) == $contentType) {
+                return $group;
+            }
+        }
+
+        return false;
     }
 }

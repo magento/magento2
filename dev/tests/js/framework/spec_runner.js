@@ -14,10 +14,13 @@ function buildConfig(type, dir, port) {
     'use strict';
 
     var isLib           = dir === 'lib',
-        requireConfigs  = ['<%= path.spec %>/require.config.js'],
+        requireConfigs  = [
+            '<%= path.spec %>/require.config.js',
+            '<%= path.spec %>/' + type + '/config/global.js'
+        ],
         specsRoot       = '<%= path.spec %>/' + type,
         specs           =  specsRoot + (isLib ? '/lib/**/*.js' : '/**/' + dir + '/**/*.js');
-
+    
     if (!isLib) {
         requireConfigs.push('<%= path.spec %>/' + type + '/config/' + dir + '.js');
     }

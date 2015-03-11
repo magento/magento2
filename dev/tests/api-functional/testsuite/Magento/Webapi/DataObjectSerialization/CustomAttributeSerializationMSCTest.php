@@ -9,7 +9,7 @@ namespace Magento\Webapi\DataObjectSerialization;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestModuleMSC\Api\Data\ItemDataBuilder;
+use Magento\TestModuleMSC\Api\Data\ItemInterfaceFactory;
 
 /**
  * api-functional/testsuite/Magento/Webapi/DataObjectSerialization/CustomAttributeSerializationMSCTest.php
@@ -31,19 +31,19 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
     protected $_soapService = 'testModuleMSCAllSoapAndRest';
 
     /**
-     * @var ItemDataBuilder
+     * @var ItemInterfaceFactory
      */
-    protected $itemDataBuilder;
+    protected $itemDataFactory;
 
     /**
-     * @var \Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectDataBuilder
+     * @var \Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterfaceFactory
      */
-    protected $customAttributeNestedDataObjectDataBuilder;
+    protected $customAttributeNestedDataObjectDataFactory;
 
     /**
-     * @var \Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectDataBuilder
+     * @var \Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterfaceFactory
      */
-    protected $customAttributeDataObjectDataBuilder;
+    protected $customAttributeDataObjectDataFactory;
 
     /**
      * @var DataObjectProcessor $dataObjectProcessor
@@ -64,16 +64,16 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
         $this->_soapService = 'testModuleMSCAllSoapAndRestV1';
         $this->_restResourcePath = "/{$this->_version}/testmoduleMSC/";
 
-        $this->itemDataBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\TestModuleMSC\Api\Data\ItemDataBuilder'
+        $this->itemDataFactory = Bootstrap::getObjectManager()->create(
+            'Magento\TestModuleMSC\Api\Data\ItemInterfaceFactory'
         );
 
-        $this->customAttributeNestedDataObjectDataBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectDataBuilder'
+        $this->customAttributeNestedDataObjectDataFactory = Bootstrap::getObjectManager()->create(
+            'Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterfaceFactory'
         );
 
-        $this->customAttributeDataObjectDataBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectDataBuilder'
+        $this->customAttributeDataObjectDataFactory = Bootstrap::getObjectManager()->create(
+            'Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterfaceFactory'
         );
 
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
@@ -128,17 +128,15 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
 
     public function testDataObjectCustomAttributes()
     {
-        $customAttributeDataObject = $this->customAttributeDataObjectDataBuilder
+        $customAttributeDataObject = $this->customAttributeDataObjectDataFactory->create()
             ->setName('nameValue')
-            ->setCustomAttribute('custom_attribute_int', 1)
-            ->create();
+            ->setCustomAttribute('custom_attribute_int', 1);
 
-        $item = $this->itemDataBuilder
+        $item = $this->itemDataFactory->create()
             ->setItemId(1)
             ->setName('testProductAnyType')
             ->setCustomAttribute('custom_attribute_data_object', $customAttributeDataObject)
-            ->setCustomAttribute('custom_attribute_string', 'someStringValue')
-            ->create();
+            ->setCustomAttribute('custom_attribute_string', 'someStringValue');
 
         $serviceInfo = [
             'rest' => [
@@ -174,17 +172,15 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
 
         $result = $this->_webApiCall($serviceInfo, []);
 
-        $customAttributeDataObject = $this->customAttributeDataObjectDataBuilder
+        $customAttributeDataObject = $this->customAttributeDataObjectDataFactory->create()
             ->setName('nameValue')
-            ->setCustomAttribute('custom_attribute_int', 1)
-            ->create();
+            ->setCustomAttribute('custom_attribute_int', 1);
 
-        $item = $this->itemDataBuilder
+        $item = $this->itemDataFactory->create()
             ->setItemId(1)
             ->setName('testProductAnyType')
             ->setCustomAttribute('custom_attribute_data_object', $customAttributeDataObject)
-            ->setCustomAttribute('custom_attribute_string', 'someStringValue')
-            ->create();
+            ->setCustomAttribute('custom_attribute_string', 'someStringValue');
 
         $expectedResponse = $this->serviceOutputProcessor->process(
             $item,
@@ -196,22 +192,19 @@ class CustomAttributeSerializationMSCTest extends \Magento\Webapi\Routing\BaseSe
 
     public function testNestedDataObjectCustomAttributes()
     {
-        $customAttributeNestedDataObject = $this->customAttributeNestedDataObjectDataBuilder
-            ->setName('nestedNameValue')
-            ->create();
+        $customAttributeNestedDataObject = $this->customAttributeNestedDataObjectDataFactory->create()
+            ->setName('nestedNameValue');
 
-        $customAttributeDataObject = $this->customAttributeDataObjectDataBuilder
+        $customAttributeDataObject = $this->customAttributeDataObjectDataFactory->create()
             ->setName('nameValue')
             ->setCustomAttribute('custom_attribute_nested', $customAttributeNestedDataObject)
-            ->setCustomAttribute('custom_attribute_int', 1)
-            ->create();
+            ->setCustomAttribute('custom_attribute_int', 1);
 
-        $item = $this->itemDataBuilder
+        $item = $this->itemDataFactory->create()
             ->setItemId(1)
             ->setName('testProductAnyType')
             ->setCustomAttribute('custom_attribute_data_object', $customAttributeDataObject)
-            ->setCustomAttribute('custom_attribute_string', 'someStringValue')
-            ->create();
+            ->setCustomAttribute('custom_attribute_string', 'someStringValue');
 
         $serviceInfo = [
             'rest' => [

@@ -20,7 +20,7 @@ class File extends AbstractData
     /**
      * Validator for check not protected extensions
      *
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_validatorNotProtectedExtensions;
 
@@ -32,7 +32,7 @@ class File extends AbstractData
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_fileValidator;
 
@@ -55,7 +55,7 @@ class File extends AbstractData
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -69,7 +69,7 @@ class File extends AbstractData
         $entityTypeCode,
         $isAjax,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory
     ) {

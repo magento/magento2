@@ -143,10 +143,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             if ($this->_dateExists()) {
                 if ($this->useCalendar()) {
-                    $format = $this->_localeDate->getDateFormat(
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
-                    );
-                    $timestamp += $this->_localeDate->date($value['date'], $format, null, false)->getTimestamp();
+                    $timestamp += (new \DateTime($value['date']))->getTimestamp();
                 } else {
                     $timestamp += mktime(0, 0, 0, $value['month'], $value['day'], $value['year']);
                 }
@@ -168,8 +165,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $timestamp += 60 * 60 * $value['hour'] + 60 * $value['minute'];
             }
 
-            $date = new \Magento\Framework\Stdlib\DateTime\Date($timestamp);
-            $result = $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $date = new \DateTime('@' . $timestamp);
+            $result = $date->format('Y-m-d H:i:s');
 
             // Save date in internal format to avoid locale date bugs
             $this->_setInternalInRequest($result);
@@ -190,27 +187,21 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            $option = $this->getOption();
             if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
                 $format = $this->_localeDate->getDateFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                    \IntlDateFormatter::MEDIUM
                 );
-                $result = $this->_localeDate->date($optionValue, \Zend_Date::ISO_8601, null, false)->toString($format);
+                $result = \IntlDateFormatter::formatObject(new \DateTime($optionValue), $format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
                 $format = $this->_localeDate->getDateTimeFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \IntlDateFormatter::SHORT
                 );
-                $result = $this->_localeDate->date(
-                    $optionValue,
-                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT,
-                    null,
-                    false
-                )->toString(
-                    $format
-                );
+                $result = \IntlDateFormatter::formatObject(new \DateTime($optionValue), $format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
-                $date = new \Magento\Framework\Stdlib\DateTime\Date($optionValue);
-                $result = date($this->is24hTimeFormat() ? 'H:i' : 'h:i a', $date->getTimestamp());
+                $result = \IntlDateFormatter::formatObject(
+                    new \DateTime($optionValue),
+                    $this->is24hTimeFormat() ? 'H:i' : 'h:i a'
+                );
             } else {
                 $result = $optionValue;
             }
@@ -247,16 +238,16 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue
      * @param array $productOptionValues Values for product option
      * @return string|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
-        $timestamp = strtotime($optionValue);
-        if ($timestamp === false || $timestamp == -1) {
+        try {
+            $date = new \DateTime($optionValue);
+        } catch (\Exception $e) {
             return null;
         }
-
-        $date = new \Magento\Framework\Stdlib\DateTime\Date($timestamp);
-        return $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**
