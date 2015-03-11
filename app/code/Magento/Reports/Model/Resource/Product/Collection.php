@@ -402,7 +402,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             ['views' => 'COUNT(report_table_views.event_id)']
         )->join(
             ['e' => $this->getProductEntityTableName()],
-            'e.entity_id = report_table_views.object_id'
+            $this->getConnection()->quoteInto(
+                'e.entity_id = report_table_views.object_id AND e.attribute_set_id = ?',
+                $this->getProductAttributeSetId()
+            )
         )->where(
             'report_table_views.event_type_id = ?',
             $productViewEvent
