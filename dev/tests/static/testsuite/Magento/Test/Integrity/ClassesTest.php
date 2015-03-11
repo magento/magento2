@@ -534,9 +534,16 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $errors = [];
         foreach ($files->getFiles([BP . '/dev/tests/{integration,unit}'], '*') as $file) {
             $code = file_get_contents($file);
-            if (preg_match('/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/', $code, $matches)) {
-                if ($this->isNonexistentEntityCovered($matches)) {
-                    $errors[] = $file . ': ' . $matches[0];
+            if (preg_match_all(
+                '/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/',
+                $code,
+                $matchesAll,
+                PREG_SET_ORDER
+            )) {
+                foreach ($matchesAll as $matches) {
+                    if ($this->isNonexistentEntityCovered($matches)) {
+                        $errors[] = $file . ': ' . $matches[0];
+                    }
                 }
             }
         }
