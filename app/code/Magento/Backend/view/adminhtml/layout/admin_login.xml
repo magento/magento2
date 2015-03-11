@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-login" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="styles" />
+    <body>
+        <!-- @todo ui: - delete after bugfix -->
+        <remove name="legal"/>
+        <remove name="page.menu"/>
+        <remove name="header"/>
+        <remove name="page.title"/>
+        <remove name="user"/>
+        <remove name="header.wrapper.scope"/>
+
+        <remove name="global.search"/>
+        <remove name="notification.messages"/>
+        <!-- @todo ui: - end -->
+
+        <move element="messages" destination="login.content" before="-"/>
+        <move element="copyright" destination="login.footer" before="-"/>
+        <move element="logo" destination="login.header" before="-"/>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_image_src" xsi:type="string">images/magento-logo.svg</argument>
+            </arguments>
+        </referenceBlock>
+
+    </body>
+</page>

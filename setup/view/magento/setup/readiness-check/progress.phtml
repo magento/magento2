@@ -11,28 +11,26 @@
 
     <div ng-switch-when="true" ng-switch="hasErrors">
 
-        <div class="alert alert-info" ng-switch-when="true">
-            <span class="alert-icon icon-failed-round"></span>
-            <p class="alert-text">
+        <div class="message message-error" ng-switch-when="true">
+            <span class="message-text">
                 <strong>Completed!</strong> You need to resolve these issues to continue.
-            </p>
+            </span>
         </div>
 
-        <div class="alert alert-info" ng-switch-default>
-            <span class="alert-icon icon-success-round"></span>
-            <p class="alert-text">
+        <div class="message message-success" ng-switch-default>
+            <span class="message-text">
                 <strong>Completed!</strong> You can now move on to the next step.
-            </p>
+            </span>
         </div>
 
     </div>
 
-    <div class="alert alert-info" ng-switch-default>
+    <div class="message message-spinner" ng-switch-default>
         <span class="spinner">
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <p class="alert-text">We're making sure your server environment is ready for Magento to be installed.</p>
+        <span class="message-text">We're making sure your server environment is ready for Magento to be installed.</span>
     </div>
 
 </div>
@@ -122,11 +120,10 @@
 
             <div ng-switch="extensions.data.error">
 
-                <div ng-switch-when="phpExtensionError" class="alert alert-warning">
-                    <span class="alert-icon icon-failed-round"></span>
-                    <p class="alert-text">
+                <div ng-switch-when="phpExtensionError" class="message message-error">
+                    <span class="message-text">
                         {{extensions.data.message}}
-                    </p>
+                    </span>
                 </div>
 
                 <div class="rediness-check-side">
