@@ -102,6 +102,7 @@ class Deployer
      * @param ObjectManagerFactory $omFactory
      * @param array $locales
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function deploy(ObjectManagerFactory $omFactory, array $locales)
     {
@@ -223,6 +224,7 @@ class Deployer
      *
      * @param string $locale
      * @param string $area
+     * @return void
      */
     protected function emulateApplicationLocale($locale, $area)
     {

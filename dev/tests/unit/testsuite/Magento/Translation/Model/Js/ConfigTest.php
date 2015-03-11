@@ -5,7 +5,7 @@
  */
 namespace Magento\Translation\Model\Js;
 
-class StrategyTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Config

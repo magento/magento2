@@ -157,7 +157,7 @@ class Repository
             UrlInterface::URL_TYPE_STATIC,
             $isSecure,
             $params['area'],
-            $themePath ,
+            $themePath,
             $params['locale']
         );
         return new File(

@@ -48,6 +48,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @param State $appState
      * @param Config $config
+     * @param Filesystem $filesystem
      * @param Files $filesUtility
      */
     public function __construct(State $appState, Config $config, Filesystem $filesystem, Files $filesUtility = null)
