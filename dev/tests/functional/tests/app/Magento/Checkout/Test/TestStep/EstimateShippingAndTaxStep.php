@@ -106,7 +106,9 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     public function run()
     {
         $this->checkoutCart->open();
+        $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
         $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
+        $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
         if ($this->shipping['shipping_service'] !== '-') {
             $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
         }
