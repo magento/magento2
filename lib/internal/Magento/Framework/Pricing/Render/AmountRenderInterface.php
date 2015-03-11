@@ -54,27 +54,4 @@ interface AmountRenderInterface
      * @return string
      */
     public function getAdjustmentsHtml();
-
-    /**
-     * Gets the adjustments that should be applied when computing the price amount
-     *
-     * @return string[]|null
-     */
-    public function getAdjustmentsForPriceAmount();
-
-    /**
-     * Sets the adjustments that should be applied when computing the price amount
-     *
-     * @param string[]|null $adjustments
-     * @return $this
-     */
-    public function setAdjustmentsForPriceAmount(array $adjustments = null);
-
-    /**
-     * Appends the adjustments that should be applied when computing the price amount
-     *
-     * @param string[]|null $adjustments
-     * @return $this
-     */
-    public function addAdjustmentsForPriceAmount(array $adjustments = null);
 }
