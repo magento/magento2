@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Model\Entity;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
