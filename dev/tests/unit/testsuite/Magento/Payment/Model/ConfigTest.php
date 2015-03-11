@@ -179,20 +179,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMonths()
     {
-        $months = [
-            '01 - January',
-            '02 - February',
-            '03 - March',
-            '04 - April',
-            '05 - May',
-            '06 - June',
-            '07 - July',
-            '08 - August',
-            '09 - September',
-            '10 - October',
-            '11 - November',
-            '12 - December',
-        ];
         $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('en_US');
         $this->assertEquals($this->expectedMonthList, $this->config->getMonths());
     }

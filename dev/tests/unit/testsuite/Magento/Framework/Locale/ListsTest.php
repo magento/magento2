@@ -48,50 +48,49 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionAllCurrencies()
     {
-        // clearly English results
-        $expectedResults = [
-            ['value' => 'BAM', 'label' => 'Bosnia-Herzegovina Convertible Mark'],
-            ['value' => 'TTD', 'label' => 'Trinidad and Tobago Dollar'],
-            ['value' => 'USN', 'label' => 'US Dollar (Next day)'],
-            ['value' => 'USS', 'label' => 'US Dollar (Same day)'],
-        ];
+        $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $currencyList = $this->listsModel->getOptionAllCurrencies();
         foreach ($expectedResults as $value) {
-            $this->assertContains($value, $currencyList);
+            $found = false;
+            foreach ($currencyList as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
         }
     }
 
     public function testGetOptionCurrencies()
     {
-        $allowedCurrencies = ['USD', 'GBP', 'EUR'];
+        $allowedCurrencies = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $this->mockConfig->expects($this->once())
             ->method('getAllowedCurrencies')
             ->will($this->returnValue($allowedCurrencies));
 
-        $expectedArray = [
-            ['value' => 'GBP', 'label' => 'British Pound Sterling'],
-            ['value' => 'EUR', 'label' => 'Euro'],
-            ['value' => 'USD', 'label' => 'US Dollar'],
-        ];
+        $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
-        $this->assertSame($expectedArray, $this->listsModel->getOptionCurrencies());
+        $currencyList = $this->listsModel->getOptionCurrencies();
+        foreach ($expectedResults as $value) {
+            $found = false;
+            foreach ($currencyList as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
+        }
     }
 
     public function testGetOptionCountries()
     {
-        // clearly English results
-        $expectedResults = [
-            ['value' => 'AG', 'label' => 'Antigua and Barbuda'],
-            ['value' => 'BA', 'label' => 'Bosnia and Herzegovina'],
-            ['value' => 'GS', 'label' => 'South Georgia & South Sandwich Islands'],
-            ['value' => 'PM', 'label' => 'Saint Pierre and Miquelon'],
-        ];
+        $expectedResults = ['US', 'GB', 'DE', 'UA'];
 
-        $optionCountries = $this->listsModel->getOptionCountries();
+        $list = $this->listsModel->getOptionCountries();
         foreach ($expectedResults as $value) {
-            $this->assertContains($value, $optionCountries);
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
         }
     }
 
@@ -112,21 +111,15 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionTimezones()
     {
-        $expectedResults = [
-            ['value' => 'Australia/Darwin', 'label' => 'Australian Central Standard Time (Australia/Darwin)'],
-            ['value' => 'America/Los_Angeles', 'label' => 'Pacific Standard Time (America/Los_Angeles)'],
-            ['value' => 'Europe/Kiev', 'label' => 'Eastern European Standard Time (Europe/Kiev)'],
-            ['value' => 'Asia/Jerusalem', 'label' => 'Israel Standard Time (Asia/Jerusalem)'],
-        ];
+        $expectedResults = ['Australia/Darwin', 'America/Los_Angeles', 'Asia/Jerusalem'];
 
-        $timeZones = $this->listsModel->getOptionTimezones();
+        $list = $this->listsModel->getOptionTimezones();
         foreach ($expectedResults as $value) {
-            $this->assertContains($value, $timeZones);
-        }
-
-        $timeZoneList = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
-        foreach ($timeZones as $timeZone) {
-            $this->assertContains($timeZone['value'], $timeZoneList);
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
         }
     }
 
@@ -134,26 +127,32 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupForOptionLocales();
 
-        $this->assertEquals(
-            [
-                ['value' => 'en_US', 'label' => 'English (United States)'],
-                ['value' => 'uk_UA', 'label' => 'Ukrainian (Ukraine)'],
-            ],
-            $this->listsModel->getOptionLocales()
-        );
+        $expectedResults = ['en_US', 'uk_UA', 'de_DE'];
+
+        $list = $this->listsModel->getOptionLocales();
+        foreach ($expectedResults as $value) {
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
+        }
     }
 
     public function testGetTranslatedOptionLocales()
     {
         $this->setupForOptionLocales();
 
-        $this->assertEquals(
-            [
-                ['value' => 'en_US', 'label' => 'English (United States) / English (United States)'],
-                ['value' => 'uk_UA', 'label' => 'українська (Україна) / Ukrainian (Ukraine)'],
-            ],
-            $this->listsModel->getTranslatedOptionLocales()
-        );
+        $expectedResults = ['en_US', 'uk_UA', 'de_DE'];
+
+        $list = $this->listsModel->getOptionLocales();
+        foreach ($expectedResults as $value) {
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
+        }
     }
 
     /**
@@ -161,7 +160,7 @@ class ListsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setupForOptionLocales()
     {
-        $allowedLocales = ['en_US', 'uk_UA'];
+        $allowedLocales = ['en_US', 'uk_UA', 'de_DE'];
         $this->mockConfig->expects($this->once())
             ->method('getAllowedLocales')
             ->will($this->returnValue($allowedLocales));
