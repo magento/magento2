@@ -5,10 +5,10 @@
  */
 namespace Magento\Downloadable\Model\File;
 
-use Magento\Core\Helper\File\Storage;
-use Magento\Core\Helper\File\Storage\Database;
-use Magento\Core\Model\File\Uploader;
-use Magento\Core\Model\File\Validator\NotProtectedExtension;
+use Magento\MediaStorage\Helper\File\Storage;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Downloadable\Model\Link as LinkConfig;
 use Magento\Downloadable\Model\Sample as SampleConfig;

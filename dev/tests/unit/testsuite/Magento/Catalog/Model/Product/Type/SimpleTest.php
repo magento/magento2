@@ -16,7 +16,7 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);
+        $fileStorageDbMock = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();

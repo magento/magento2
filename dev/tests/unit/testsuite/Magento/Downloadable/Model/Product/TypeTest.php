@@ -35,7 +35,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $fileStorageDb = $this->getMockBuilder(
-            'Magento\Core\Helper\File\Storage\Database'
+            'Magento\MediaStorage\Helper\File\Storage\Database'
         )->disableOriginalConstructor()->getMock();
         $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
