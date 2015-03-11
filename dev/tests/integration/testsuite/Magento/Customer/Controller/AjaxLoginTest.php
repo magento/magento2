@@ -34,7 +34,7 @@ class AjaxLoginTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->login(1);
         $this->dispatch('customer/ajax/logout');
         $body = $this->getResponse()->getBody();
-        $logoutMessage = Bootstrap::getObjectManager()->get('Magento\Core\Helper\Data')->jsonDecode($body);
+        $logoutMessage = Bootstrap::getObjectManager()->get('Magento\Framework\Json\Helper\Data')->jsonDecode($body);
         $this->assertContains('Logout Successful', $logoutMessage['message']);
     }
 }

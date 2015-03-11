@@ -26,17 +26,7 @@
             <argument name="confPathToMapFile" xsi:type="string">app/etc/aliases_to_classes_map.json</argument>
             <argument name="resourceName" xsi:type="string">core_setup</argument>
             <argument name="moduleName" xsi:type="string">Magento_Core</argument>
-            <argument name="connectionName" xsi:type="string">\Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Core\Helper\File\Storage">
-        <arguments>
-            <argument name="storage" xsi:type="object">Magento\Core\Model\File\Storage\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Core\Helper\File\Storage\Database">
-        <arguments>
-            <argument name="fileStorage" xsi:type="object">Magento\Core\Model\File\Storage\File\Proxy</argument>
+            <argument name="connectionName" xsi:type="string">\Magento\Framework\Setup\ModuleDataResourceInterface::DEFAULT_SETUP_CONNECTION</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Core\Model\Session\Storage" type="Magento\Framework\Session\Storage">
@@ -48,9 +38,6 @@
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Core\Model\Session\Storage</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\View\Asset\MergeService">
-        <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
     </type>
     <type name="Magento\Framework\Stdlib\DateTime\Timezone">
         <arguments>

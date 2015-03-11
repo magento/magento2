@@ -24,8 +24,8 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false),
             ],
             [
-                'Magento\Setup\Module\SetupFactory',
-                $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false),
+                'Magento\Setup\Module\Setup',
+                $this->getMock('Magento\Setup\Module\Setup', [], [], '', false),
             ],
             [
                 'Magento\Framework\Module\ModuleList',
@@ -67,6 +67,18 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 'Magento\Setup\Model\ObjectManagerProvider',
                 $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false),
             ],
+            [
+                'Magento\Framework\App\DeploymentConfig\Reader',
+                $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false),
+            ],
+            [
+                'Magento\Framework\Model\Resource\Db\TransactionManager',
+                $this->getMock('Magento\Framework\Model\Resource\Db\TransactionManager', [], [], '', false),
+            ],
+            [
+                'Magento\Framework\Model\Resource\Db\ObjectRelationProcessor',
+                $this->getMock('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor', [], [], '', false),
+            ],
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
         $serviceLocatorMock
@@ -75,7 +87,12 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($returnValueMap));
 
         $log = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
-        $installerFactory = new InstallerFactory($serviceLocatorMock);
+        $resourceFactoryMock = $this->getMock('Magento\Setup\Module\ResourceFactory', [], [], '', false);
+        $resourceFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', [], [], '', false)));
+        $installerFactory = new InstallerFactory($serviceLocatorMock, $resourceFactoryMock);
         $installer = $installerFactory->create($log);
         $this->assertInstanceOf('Magento\Setup\Model\Installer', $installer);
     }

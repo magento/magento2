@@ -110,8 +110,6 @@ class LoginPost extends \Magento\Customer\Controller\AccountRedirect
                     $this->messageManager->addError($message);
                     $this->_getSession()->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    // PA DSS violation: this exception log can disclose customer password
-                    // $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                     $this->messageManager->addError(__('There was an error validating the login and password.'));
                 }
             } else {

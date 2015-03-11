@@ -25,6 +25,7 @@
     <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
+    <preference for="Magento\Framework\App\View\Asset\Bundle\ConfigInterface" type="\Magento\Framework\App\View\Asset\Bundle\Config" />
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\Lists" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <type name="Magento\Store\Model\Store">
@@ -91,8 +92,7 @@
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
-    <preference for="Magento\Framework\Module\Updater\SetupInterface" type="Magento\Framework\Module\DataSetup" />
-    <preference for="Magento\Framework\Module\ResourceResolverInterface" type="Magento\Framework\Module\ResourceResolver" />
+    <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
@@ -129,9 +129,15 @@
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
+    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config" />
     <preference for="Magento\Framework\Model\Resource\Db\TransactionManagerInterface" type="Magento\Framework\Model\Resource\Db\TransactionManager" />
     <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Logger\Handler\System">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
@@ -550,7 +556,7 @@
     <type name="Magento\Framework\App\View\Asset\Publisher" shared="false" />
     <type name="Magento\Framework\App\StaticResource">
         <arguments>
-            <argument name="response" xsi:type="object" shared="false">Magento\Core\Model\File\Storage\Response</argument>
+            <argument name="response" xsi:type="object" shared="false">Magento\MediaStorage\Model\File\Storage\Response</argument>
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
@@ -666,6 +672,27 @@
     <type name="CSSmin">
         <arguments>
             <argument name="raise_php_limits" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="less" xsi:type="array">
+                    <item name="css" xsi:type="array">
+                        <item name="less_css" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
+                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                    </item>
+                    <item name="less" xsi:type="array">
+                        <item name="magento_import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\MagentoImport</item>
+                        <item name="import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\Import</item>
+                    </item>
+                </item>
+                <item name="css" xsi:type="array">
+                    <item name="css" xsi:type="array">
+                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\DefaultPath\DefaultPath">

@@ -100,13 +100,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="sales_setup" xsi:type="string">Magento\Sales\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Payment\Model\Checks\SpecificationFactory">
         <arguments>
             <argument name="mapping" xsi:type="array">
