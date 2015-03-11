@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -16,7 +17,6 @@ class Publisher
     /**
      * @var \Magento\Framework\Filesystem
      */
-
     protected $filesystem;
 
     /**
@@ -45,6 +45,7 @@ class Publisher
         if ($dir->isExist($asset->getPath())) {
             return true;
         }
+
         return $this->publishAsset($asset);
     }
 
