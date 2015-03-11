@@ -41,6 +41,9 @@ class Deployer
     /** @var Publisher */
     private $assetPublisher;
 
+    /** @var \Magento\Framework\View\Asset\Bundle\Manager */
+    private $bundleManager;
+
     /** @var bool */
     private $isDryRun;
 
@@ -134,6 +137,7 @@ class Deployer
                             null
                         );
                     }
+                    $this->bundleManager->flush();
                     $this->logger->logMessage("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
@@ -210,6 +214,7 @@ class Deployer
 
         $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
         $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
+        $this->bundleManager = $this->objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
 
     }
 
@@ -259,6 +264,7 @@ class Deployer
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
+                $this->bundleManager->addAsset($asset);
             }
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {

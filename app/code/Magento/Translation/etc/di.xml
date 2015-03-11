@@ -61,4 +61,20 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="js" xsi:type="array">
+                    <item name="js" xsi:type="array">
+                        <item name="js_translation" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
+                    </item>
+                </item>
+                <item name="json" xsi:type="array">
+                    <item name="json" xsi:type="array">
+                        <item name="json_generation" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

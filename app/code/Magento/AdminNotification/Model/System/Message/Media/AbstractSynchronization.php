@@ -8,7 +8,7 @@ namespace Magento\AdminNotification\Model\System\Message\Media;
 abstract class AbstractSynchronization implements \Magento\Framework\Notification\MessageInterface
 {
     /**
-     * @var \Magento\Core\Model\File\Storage\Flag
+     * @var \Magento\MediaStorage\Model\File\Storage\Flag
      */
     protected $_syncFlag;
 
@@ -27,9 +27,9 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
     protected $_isDisplayed = null;
 
     /**
-     * @param \Magento\Core\Model\File\Storage\Flag $fileStorage
+     * @param \Magento\MediaStorage\Model\File\Storage\Flag $fileStorage
      */
-    public function __construct(\Magento\Core\Model\File\Storage\Flag $fileStorage)
+    public function __construct(\Magento\MediaStorage\Model\File\Storage\Flag $fileStorage)
     {
         $this->_syncFlag = $fileStorage->loadSelf();
     }
@@ -61,7 +61,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
         if (null === $this->_isDisplayed) {
             $output = $this->_shouldBeDisplayed();
             if ($output) {
-                $this->_syncFlag->setState(\Magento\Core\Model\File\Storage\Flag::STATE_NOTIFIED);
+                $this->_syncFlag->setState(\Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED);
                 $this->_syncFlag->save();
             }
             $this->_isDisplayed = $output;
