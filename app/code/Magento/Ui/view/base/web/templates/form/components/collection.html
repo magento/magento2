@@ -10,7 +10,7 @@
         <!-- ko foreach: { data: element.elems, as: 'element' } -->
             <li class="address-list-item" data-bind="css: { 'ui-state-active': element.active }, click: activate">
                 <div class="address-list-item-actions">
-                    <button class="action-delete" type="button" data-bind="attr: { title: $parent.removeLabel }, click: $parent.removeChild(element)">
+                    <button class="action-delete" type="button" data-bind="click: $parent.removeChild(element)">
                         <span data-bind="text: $parent.removeLabel"></span>
                     </button>
                 </div>
@@ -22,7 +22,7 @@
         <!-- /ko -->
 
         <li class="address-list-actions last">
-            <button data-bind="attr: { title: element.addLabel }, click: element.addChild" type="button" class="scalable add">
+            <button data-bind="click: element.addChild" type="button" class="scalable add">
                 <span data-bind="text: element.addLabel"></span>
             </button>
         </li>

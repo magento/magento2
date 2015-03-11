@@ -60,6 +60,11 @@ define([
                 modal: true,
                 multiselect: true,
                 resizable: false,
+                position: {
+                    my: 'left top',
+                    at: 'center top',
+                    of: 'body'
+                },
                 open: function () {
                     // fix for suggest field - overlapping dialog z-index
                     $('#new_category_parent-suggest').css('z-index', $.ui.dialog.maxZ + 1);
@@ -70,6 +75,9 @@ define([
                     }
                     $('#new_category_messages').html('');
                     $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 15;
+                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
                 },
                 close: function () {
                     $('#new_category_name, #new_category_parent-suggest').val('');

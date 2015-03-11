@@ -33,7 +33,6 @@
 .ui-dialog {
     background: @popup__background-color;
     min-width: 40%;
-    margin-top: 10rem;
     opacity: 0;
     transform: scale(0.7);
     transition: all 0.3s;
@@ -140,6 +139,10 @@
     .pager {
         padding-bottom: 0;
     }
+    
+    .grid-actions {
+        padding-top: 0;
+    }
 
     .ui-resizable {
         position: relative;
@@ -151,9 +154,11 @@
         display: block;
     }
 
-    .ui-resizable-disabled .ui-resizable-handle,
-    .ui-resizable-autohide .ui-resizable-handle {
-        display: none;
+    .ui-resizable-disabled,
+    .ui-resizable-autohide {
+        .ui-resizable-handle {
+            display: none;
+        }
     }
 
     .ui-resizable-n {
@@ -219,6 +224,91 @@
         right: 0;
         top: -5px;
     }
+
+    //
+    //  Block 'Insert File'
+    //  -----------------------------------------
+
+    .main-col,
+    .magento_message {
+        .insert-title-inner {
+            border-bottom: 1px solid @color-gray68;
+            margin: 0 0 @indent__base;
+            padding-bottom: @indent__xs;
+            .extend__clearfix();
+        }
+        .insert-actions {
+            float: right;
+        }
+        .title {
+            font-size: @font-size__l;
+            padding-top: @indent__xs;
+        }
+
+        .main-col-inner .uploader {
+            border: 1px solid @color-gray68;
+            margin: 0 0 @indent__s;
+            padding: @indent__xs;
+        }
+
+        .breadcrumbs {
+            padding-left: 0;
+            li {
+                &:after {
+                    content: '';
+                    margin: 0 @indent__xs 0 0;
+                }
+            }
+        }
+
+        #contents-uploader {
+            margin: 0 0 @indent__base;
+        }
+
+        .fileinput-button {
+            display: inline-block;
+            cursor: pointer;
+            float: none;
+            vertical-align: middle;
+            span {
+                display: none;
+            }
+            input {
+                position: static;
+                border: none;
+                opacity: 1;
+            }
+        }
+
+        .file-row {
+            border: 1px solid @color-gray68;
+            margin: @indent__xs 0;
+            padding: 2px;
+        }
+
+        .filecnt {
+            border: 1px solid @color-gray68;
+            display: inline-block;
+            margin: 0 @indent__xs 15px 0;
+            padding: 3px;
+            width: 100px;
+            overflow: hidden;
+            &.selected {
+                border-color: @color-blue-dodger;
+            }
+            p {
+                text-align: center;
+            }
+        }
+
+        #contents-uploader {
+            .extend__clearfix()
+        }
+
+        .x-tree {
+            margin-bottom: @indent__base;
+        }
+    }
 }
 
 .ui-widget-overlay {
@@ -250,87 +340,6 @@
 }
 
 //
-//  Block 'Insert File'
-//  _____________________________________________
-
-.magento_message {
-    .insert-title-inner {
-        border-bottom: 1px solid @color-gray68;
-        margin: 0 0 @indent__base;
-    }
-    .insert-actions {
-        float: right;
-    }
-    .title {
-        font-size: @font-size__l;
-    }
-
-    .main-col-inner .uploader {
-        border: 1px solid @color-gray68;
-        margin: 0 0 @indent__s;
-        padding: @indent__xs;
-    }
-
-    .breadcrumbs {
-        padding-left: 0;
-        li {
-            &:after {
-                content: "";
-                margin: 0 @indent__xs 0 0;
-            }
-        }
-    }
-
-    #contents-uploader {
-        margin: 0 0 @indent__base;
-    }
-
-    .fileinput-button {
-        display: inline-block;
-        cursor: pointer;
-        float: none;
-        vertical-align: middle;
-        span {
-            display: none;
-        }
-        input {
-            position: static;
-            border: none;
-            opacity: 1;
-        }
-    }
-
-    .file-row {
-        border: 1px solid @color-gray68;
-        margin: @indent__xs 0;
-        padding: 2px;
-    }
-
-    .filecnt {
-        border: 1px solid @color-gray68;
-        display: inline-block;
-        margin: 0 @indent__xs 15px 0;
-        padding: 3px;
-        width: 100px;
-        overflow: hidden;
-        &.selected {
-            border-color: @color-blue-dodger;
-        }
-        p {
-            text-align: center;
-        }
-    }
-
-    #contents-uploader {
-        .extend__clearfix()
-    }
-
-    .x-tree {
-        margin-bottom: @indent__base;
-    }
-}
-
-//
 //  Attribute Popup
 //  _____________________________________________
 
@@ -345,6 +354,7 @@
     top: auto !important;
     &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
         background: @color-white !important;
+        border-bottom: 0 !important;
         left: 0 !important;
         padding: @popup__padding !important;
         .page-actions-buttons {
@@ -425,6 +435,7 @@
 
 .overlay_magento {
     &:extend(.ui-widget-overlay all);
+    z-index: 1000;
 }
 
 //

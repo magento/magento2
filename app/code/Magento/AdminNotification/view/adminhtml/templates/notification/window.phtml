@@ -25,7 +25,7 @@
 
                 <a href="<?php echo $block->getNoticeMessageUrl(); ?>"><?php echo $block->getReadDetailsText(); ?></a>
             </div>
-            <span class="action close" data-dismiss="popup" title="<?php echo __('Close popup'); ?>"><?php echo __('Close'); ?></span>
+            <span class="action close" data-dismiss="popup" title="<?php echo $block->escapeHtml(__('Close popup'));?>"><?php echo __('Close'); ?></span>
         </div>
     </div>
 </div>

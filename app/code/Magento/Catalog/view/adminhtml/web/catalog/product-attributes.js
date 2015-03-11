@@ -30,6 +30,7 @@ define([
                 iframe;
 
             wrapper = $('<div id="create_new_attribute"/>').appendTo('body').dialog({
+                // ToDo: refactor to a sliding panel
                 title: 'New Attribute',
                 width: '75%',
                 minHeight: 650,
@@ -39,8 +40,16 @@ define([
                     iframe.height($(this).outerHeight() + 'px');
                     iframe.width($(this).outerWidth() + 'px');
                 },
+                position: {
+                    my: 'left top',
+                    at: 'center top',
+                    of: 'body'
+                },
                 open: function () {
                     $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                    var topMargin = jQuery(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 45;
+                    jQuery(this).closest('.ui-dialog').css('margin-top', topMargin);
                 },
                 close: function () {
                     $(this).closest('.ui-dialog').removeClass('ui-dialog-active');

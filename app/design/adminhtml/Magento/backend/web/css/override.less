@@ -363,7 +363,6 @@ nav ol {
 }
 .address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label:before,
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label:before {
-  content: '';
   display: none;
 }
 .address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span,
@@ -660,19 +659,19 @@ option:empty {
   margin-bottom: 0;
 }
 .admin__field + .admin__field {
-  margin-top: 15px;
+  margin-top: 1.5rem;
 }
 .admin__field:not(.admin__field-option) ~ .admin__field-option {
-  margin-top: 5px;
+  margin-top: .5rem;
 }
 .admin__field.admin__field-option ~ .admin__field-option {
-  margin-top: 9px;
+  margin-top: .9rem;
 }
 .admin__field ~ .admin__field-option:last-child {
-  margin-bottom: 8px;
+  margin-bottom: .8rem;
 }
 .admin__fieldset > .admin__field {
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
   position: relative;
   z-index: 1;
 }
@@ -939,8 +938,35 @@ fieldset[disabled] .address-list .action-delete {
   vertical-align: middle;
   text-align: center;
 }
+.address-list .action-delete span {
+  max-height: 1px;
+  max-width: 1px;
+}
+.address-list .action-delete:hover {
+  position: relative;
+  z-index: 2;
+}
 .address-list .action-delete:hover:after {
   color: #060504;
+}
+.address-list .action-delete:hover span {
+  background-color: #fcfcfc;
+  border: 1px solid #989287;
+  border-radius: .4rem;
+  bottom: 100%;
+  clip: auto;
+  font-size: 1.2rem;
+  height: auto;
+  left: auto;
+  margin: 0 auto .1rem;
+  padding: .5rem;
+  right: auto;
+  top: auto;
+  max-height: 50px;
+  max-width: 200px;
+  white-space: nowrap;
+  width: auto;
+  transition: all .01s linear .7s;
 }
 .address-item-edit {
   margin-left: 359px;
@@ -1852,8 +1878,14 @@ table.table th.required:after {
 .tabs-horiz:after,
 .ui-dialog .ui-dialog-buttonset:before,
 .ui-dialog .ui-dialog-buttonset:after,
-.magento_message #contents-uploader:before,
-.magento_message #contents-uploader:after,
+.ui-dialog .main-col .insert-title-inner:before,
+.ui-dialog .main-col .insert-title-inner:after,
+.ui-dialog .magento_message .insert-title-inner:before,
+.ui-dialog .magento_message .insert-title-inner:after,
+.ui-dialog .main-col #contents-uploader:before,
+.ui-dialog .main-col #contents-uploader:after,
+.ui-dialog .magento_message #contents-uploader:before,
+.ui-dialog .magento_message #contents-uploader:after,
 .popup-window .magento_buttons:before,
 .popup-window .magento_buttons:after,
 .fade .popup-content:before,
@@ -1879,7 +1911,10 @@ table.table th.required:after {
 .actions-split:after,
 .tabs-horiz:after,
 .ui-dialog .ui-dialog-buttonset:after,
-.magento_message #contents-uploader:after,
+.ui-dialog .main-col .insert-title-inner:after,
+.ui-dialog .magento_message .insert-title-inner:after,
+.ui-dialog .main-col #contents-uploader:after,
+.ui-dialog .magento_message #contents-uploader:after,
 .popup-window .magento_buttons:after,
 .fade .popup-content:after,
 .fade .actions:after,
@@ -2320,7 +2355,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-dialog {
   background: #ffffff;
   min-width: 40%;
-  margin-top: 10rem;
   opacity: 0;
   transform: scale(0.7);
   transition: all 0.3s;
@@ -2432,6 +2466,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-dialog .pager {
   padding-bottom: 0;
 }
+.ui-dialog .grid-actions {
+  padding-top: 0;
+}
 .ui-dialog .ui-resizable {
   position: relative;
 }
@@ -2500,6 +2537,84 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   right: 0;
   top: -5px;
 }
+.ui-dialog .main-col .insert-title-inner,
+.ui-dialog .magento_message .insert-title-inner {
+  border-bottom: 1px solid #adadad;
+  margin: 0 0 2rem;
+  padding-bottom: 0.5rem;
+}
+.ui-dialog .main-col .insert-actions,
+.ui-dialog .magento_message .insert-actions {
+  float: right;
+}
+.ui-dialog .main-col .title,
+.ui-dialog .magento_message .title {
+  font-size: 1.6rem;
+  padding-top: 0.5rem;
+}
+.ui-dialog .main-col .main-col-inner .uploader,
+.ui-dialog .magento_message .main-col-inner .uploader {
+  border: 1px solid #adadad;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+}
+.ui-dialog .main-col .breadcrumbs,
+.ui-dialog .magento_message .breadcrumbs {
+  padding-left: 0;
+}
+.ui-dialog .main-col .breadcrumbs li:after,
+.ui-dialog .magento_message .breadcrumbs li:after {
+  content: "";
+  margin: 0 0.5rem 0 0;
+}
+.ui-dialog .main-col #contents-uploader,
+.ui-dialog .magento_message #contents-uploader {
+  margin: 0 0 2rem;
+}
+.ui-dialog .main-col .fileinput-button,
+.ui-dialog .magento_message .fileinput-button {
+  display: inline-block;
+  cursor: pointer;
+  float: none;
+  vertical-align: middle;
+}
+.ui-dialog .main-col .fileinput-button span,
+.ui-dialog .magento_message .fileinput-button span {
+  display: none;
+}
+.ui-dialog .main-col .fileinput-button input,
+.ui-dialog .magento_message .fileinput-button input {
+  position: static;
+  border: none;
+  opacity: 1;
+}
+.ui-dialog .main-col .file-row,
+.ui-dialog .magento_message .file-row {
+  border: 1px solid #adadad;
+  margin: 0.5rem 0;
+  padding: 2px;
+}
+.ui-dialog .main-col .filecnt,
+.ui-dialog .magento_message .filecnt {
+  border: 1px solid #adadad;
+  display: inline-block;
+  margin: 0 0.5rem 15px 0;
+  padding: 3px;
+  width: 100px;
+  overflow: hidden;
+}
+.ui-dialog .main-col .filecnt.selected,
+.ui-dialog .magento_message .filecnt.selected {
+  border-color: #008bdb;
+}
+.ui-dialog .main-col .filecnt p,
+.ui-dialog .magento_message .filecnt p {
+  text-align: center;
+}
+.ui-dialog .main-col .x-tree,
+.ui-dialog .magento_message .x-tree {
+  margin-bottom: 2rem;
+}
 .ui-widget-overlay,
 .overlay_magento,
 .fade {
@@ -2523,67 +2638,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   margin-left: -1rem;
   display: inline-block;
 }
-.magento_message .insert-title-inner {
-  border-bottom: 1px solid #adadad;
-  margin: 0 0 2rem;
-}
-.magento_message .insert-actions {
-  float: right;
-}
-.magento_message .title {
-  font-size: 1.6rem;
-}
-.magento_message .main-col-inner .uploader {
-  border: 1px solid #adadad;
-  margin: 0 0 1rem;
-  padding: 0.5rem;
-}
-.magento_message .breadcrumbs {
-  padding-left: 0;
-}
-.magento_message .breadcrumbs li:after {
-  content: "";
-  margin: 0 0.5rem 0 0;
-}
-.magento_message #contents-uploader {
-  margin: 0 0 2rem;
-}
-.magento_message .fileinput-button {
-  display: inline-block;
-  cursor: pointer;
-  float: none;
-  vertical-align: middle;
-}
-.magento_message .fileinput-button span {
-  display: none;
-}
-.magento_message .fileinput-button input {
-  position: static;
-  border: none;
-  opacity: 1;
-}
-.magento_message .file-row {
-  border: 1px solid #adadad;
-  margin: 0.5rem 0;
-  padding: 2px;
-}
-.magento_message .filecnt {
-  border: 1px solid #adadad;
-  display: inline-block;
-  margin: 0 0.5rem 15px 0;
-  padding: 3px;
-  width: 100px;
-  overflow: hidden;
-}
-.magento_message .filecnt.selected {
-  border-color: #008bdb;
-}
-.magento_message .filecnt p {
-  text-align: center;
-}
-.magento_message .x-tree {
-  margin-bottom: 2rem;
-}
 .attribute-popup-actions {
   background: #ffffff;
   border-top: 1px solid #adadad;
@@ -2596,6 +2650,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .attribute-popup-actions.fixed {
   background: #ffffff !important;
+  border-bottom: 0 !important;
   left: 0 !important;
   padding: 3rem !important;
 }
@@ -2634,6 +2689,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .popup-window .magento_buttons .ok_button {
   float: right;
   margin: 0 0 0 3rem;
+}
+.overlay_magento {
+  z-index: 1000;
 }
 .fade {
   z-index: 1000;
@@ -2702,8 +2760,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   border: 1px solid #e3e3e3;
   box-shadow: 0 5px 30px 0 #000000;
   margin: auto;
-  max-width: 450px;
-  min-height: 300px;
+  max-width: 45rem;
+  min-height: 30rem;
   padding: 40px 80px 50px;
   position: relative;
   width: 100%;

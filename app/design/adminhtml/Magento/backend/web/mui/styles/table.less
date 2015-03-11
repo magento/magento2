@@ -1017,13 +1017,21 @@ td.col-type {
 //    Sales -> Create Order
 //--------------------------------------
 
-.sales-order-create-index {
+.sales-order-create-index,
+.sales-order-edit-index {
     .grid,
     .grid-actions {
         &:extend(.side-paddings-0);
-    }
-    .sales-order-create-index .grid table .action-configure {
-        float: right;
+        table .action-configure {
+            float: right;
+            &.disabled {
+                cursor: default;
+                opacity: .5;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
     }
     .data-table {
         .border td {

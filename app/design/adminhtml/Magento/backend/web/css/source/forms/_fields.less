@@ -11,7 +11,7 @@
 @field-label__color: @color-very-dark-gray-black;
 @field-label__disabled__color: @color-gray65-almost;
 @field-label__font-size: @font-size__base;
-@field-label__line-height: 1.2;
+@field-label__line-height: @line-height__s;
 @field-label__required__color: @color-phoenix;
 @field-note__color: @color-very-dark-gray-black;
 @field-note__font-size: @font-size__s;
@@ -107,23 +107,23 @@
     margin-bottom: 0;
 
     & + & {
-        margin-top: 15px;
+        margin-top: 1.5rem;
     }
 
     &:not(.admin__field-option) ~ .admin__field-option {
-        margin-top: 5px;
+        margin-top: .5rem;
     }
 
     &.admin__field-option ~ .admin__field-option {
-        margin-top: 9px;
+        margin-top: .9rem;
     }
 
     & ~ .admin__field-option:last-child {
-        margin-bottom: 8px;
+        margin-bottom: .8rem;
     }
 
     .admin__fieldset > & {
-        margin-bottom: 30px;
+        margin-bottom: 3rem;
         position: relative;
         z-index: 1;
         &:hover {

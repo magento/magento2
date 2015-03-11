@@ -111,8 +111,16 @@ define([
                 modal: true,
                 resizable: true,
                 dialogClass: 'grouped',
+                position: {
+                    my: 'left top',
+                    at: 'center top',
+                    of: 'body'
+                },
                 open: function () {
                     $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 55;
+                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
                 },
                 close: function () {
                     $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
@@ -129,19 +137,14 @@ define([
                         widget._updateGridVisibility();
                         $(this).dialog('close');
                     }
-                },
-                {
+                }, {
                     id: 'grouped-product-dialog-cancel-button',
                     text: $.mage.__('Cancel'),
                     'class': 'action-close',
                     click: function () {
                         $(this).dialog('close');
                     }
-                }],
-                position: {
-                    my: "left+12.5% top",
-                    of: "body"
-                }
+                }]
             });
 
             popup.on('click', '[data-role=row]', function (event) {
