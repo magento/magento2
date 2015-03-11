@@ -392,6 +392,9 @@
 
 .popup-window {
     background: @popup__background-color;
+    &.dialog {
+        z-index: 1010 !important;
+    }
 
     .table_window > tbody > tr > td {
         background: @popup__background-color;
@@ -435,7 +438,7 @@
 
 .overlay_magento {
     &:extend(.ui-widget-overlay all);
-    z-index: 1000;
+    z-index: 800 !important;
 }
 
 //

@@ -1983,8 +1983,6 @@ body {
 .page-wrapper {
   background-color: #ffffff;
   padding-left: 8.8rem;
-  position: relative;
-  z-index: 1;
 }
 .page-content {
   padding-left: 3rem;
@@ -2564,7 +2562,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .ui-dialog .main-col .breadcrumbs li:after,
 .ui-dialog .magento_message .breadcrumbs li:after {
-  content: "";
+  content: '';
   margin: 0 0.5rem 0 0;
 }
 .ui-dialog .main-col #contents-uploader,
@@ -2669,6 +2667,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .popup-window {
   background: #ffffff;
+  z-index: 1010 !important;
 }
 .popup-window .table_window > tbody > tr > td {
   background: #ffffff;
@@ -2691,7 +2690,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   margin: 0 0 0 3rem;
 }
 .overlay_magento {
-  z-index: 1000;
+  z-index: 800 !important;
 }
 .fade {
   z-index: 1000;
