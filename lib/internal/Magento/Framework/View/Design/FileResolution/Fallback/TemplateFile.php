@@ -80,6 +80,7 @@ class TemplateFile extends File
             case State::MODE_DEFAULT:
                 return $this->templateMinifier->getMinified($template);
             case State::MODE_DEVELOPER:
+            default:
                 return $template;
         }
     }
