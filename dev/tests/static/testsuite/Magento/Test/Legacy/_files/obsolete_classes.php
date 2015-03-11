@@ -3108,4 +3108,5 @@ return [
     ['Magento\Framework\Locale', '\Locale, \ResourceBundle'],
     ['Magento\LocaleFactory'],
     ['Magento\Framework\LocaleFactory'],
+    ['Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data'],
 ];

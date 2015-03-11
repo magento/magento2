@@ -44,25 +44,25 @@ class DateTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'date_format' => 'n/j/y',
-                    'time_format' => 'g:i A',
+                    'date_format' => 'M/d/yy',
+                    'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
-                date('n/j/y g:i A', $testTimestamp),
+                date('m/j/y g:i a', $testTimestamp),
             ],
             [
                 [
-                    'time_format' => 'g:i A',
+                    'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
-                date('g:i A', $testTimestamp)
+                date('g:i a', $testTimestamp)
             ],
             [
                 [
-                    'date_format' => 'n/j/y',
+                    'date_format' => 'M/d/yy',
                     'value' => $testTimestamp,
                 ],
-                date('n/j/y', $testTimestamp)
+                date('m/j/y', $testTimestamp)
             ]
         ];
     }
