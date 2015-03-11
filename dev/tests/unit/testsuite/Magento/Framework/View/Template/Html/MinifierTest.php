@@ -70,6 +70,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($absolutePath, $this->object->getPathToMinified($file));
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Covered method minify and test regular expressions
      * @test
@@ -113,6 +114,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     </body>
 </html>
 TEXT;
+
         $expectedContent = <<<TEXT
 <?php /** * Copyright © 2015 Magento. All rights reserved. * See COPYING.txt for license details. */ ?><?php ?><html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
             //<![CDATA[
@@ -128,6 +130,7 @@ TEXT;
             //]]>
         </script><?php echo "http://some.link.com/" ?> <em>inline text</em> </body></html>
 TEXT;
+        // @codingStandardsIgnoreEnd
 
         $this->appDirectory->expects($this->once())
             ->method('getRelativePath')

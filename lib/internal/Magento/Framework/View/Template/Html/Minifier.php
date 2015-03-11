@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Template\Html;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class   Minifier implements MinifierInterface
+class Minifier implements MinifierInterface
 {
     /**
      * @var Filesystem
@@ -96,6 +96,7 @@ class   Minifier implements MinifierInterface
      * Minify template file
      *
      * @param string $file
+     * @return void
      */
     public function minify($file)
     {
