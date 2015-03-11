@@ -115,7 +115,7 @@ EOL;
             ->willReturn('testTheme');
         $this->context
             ->expects($this->atLeastOnce())
-            ->method('getLocaleCode')
+            ->method('getLocale')
             ->willReturn('testLocale');
     }
 
