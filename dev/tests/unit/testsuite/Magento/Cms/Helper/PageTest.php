@@ -208,7 +208,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Helper\Page::renderPageExtended
+     * covers Magento\Cms\Helper\Page::renderPageExtended
      * @param integer|null $pageId
      * @param integer|null $internalPageId
      * @param integer $pageLoadResultIndex
