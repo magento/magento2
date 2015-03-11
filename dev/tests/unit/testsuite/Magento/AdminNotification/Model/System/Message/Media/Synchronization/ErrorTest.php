@@ -24,9 +24,9 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_syncFlagMock = $this->getMock('Magento\Core\Model\File\Storage\Flag', [], [], '', false);
+        $this->_syncFlagMock = $this->getMock('Magento\MediaStorage\Model\File\Storage\Flag', [], [], '', false);
 
-        $this->_fileStorage = $this->getMock('Magento\Core\Model\File\Storage\Flag', [], [], '', false);
+        $this->_fileStorage = $this->getMock('Magento\MediaStorage\Model\File\Storage\Flag', [], [], '', false);
         $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
