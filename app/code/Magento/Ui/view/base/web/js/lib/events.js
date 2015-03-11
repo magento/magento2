@@ -46,21 +46,22 @@ define([
     return {
         /**
          * Calls callback when name event is triggered.
-         * @param  {String}   name
-         * @param  {Function} callback
-         * @return {Object} reference to this
+         * @param  {String}     events
+         * @param  {Function}   callback
+         * @param  {Function}   ns
+         * @return {Object}     reference to this
          */
-        on: function(events, callback, ns) {
+        on: function (events, callback, ns) {
             var storage = getEvents(this),
-                iterator; 
+                iterator;
 
-            if( arguments.length < 2 ){
+            if (arguments.length < 2) {
                 ns = callback;
             }
 
             iterator = addHandler.bind(null, storage, ns);
 
-            _.isObject(events) ? 
+            _.isObject(events) ?
                 _.each(events, iterator) :
                 iterator(callback, events);
 
@@ -68,18 +69,18 @@ define([
         },
 
         /**
-         * Removed callback from listening to target event 
-         * @param  {String} name
+         * Removed callback from listening to target events
+         * @param  {String} ns
          * @return {Object} reference to this
          */
-        off: function(ns) {
+        off: function (ns) {
             var storage = getEvents(this),
                 filter  = keepHandler.bind(null, ns);
 
-            _.each(storage, function(handlers, name){
+            _.each(storage, function (handlers, name) {
                 handlers = handlers.filter(filter);
 
-                handlers.length ? 
+                handlers.length ?
                     (storage[name] = handlers) :
                     (delete storage[name]);
             });
@@ -92,15 +93,11 @@ define([
          * @param  {String} name
          * @return {Object} reference to this
          */
-        trigger: function(name) {
+        trigger: function (name) {
             var handlers = getEvents(this, name),
                 args     = _.toArray(arguments).slice(1);
 
-            if (_.isUndefined(handlers)) {
-                return true;
-            }  
-
-            return trigger(handlers, args);
+            return _.isUndefined(handlers) || trigger(handlers, args);
         }
-    }
+    };
 });
