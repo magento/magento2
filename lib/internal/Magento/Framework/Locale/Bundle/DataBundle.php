@@ -25,6 +25,7 @@ class DataBundle
      */
     public function get($locale)
     {
+        $locale = $this->cleanLocale($locale);
         $class = get_class($this);
         if (!isset(static::$bundles[$class][$locale])) {
             $bundle = new \ResourceBundle($locale, $this->path);
@@ -34,5 +35,24 @@ class DataBundle
             static::$bundles[$class][$locale] = $bundle;
         }
         return static::$bundles[$class][$locale];
+    }
+
+    /**
+     * Clean locale leaving only language and script
+     *
+     * @param string $locale
+     * @return string
+     */
+    protected function cleanLocale($locale)
+    {
+        $localeParts = \Locale::parseLocale($locale);
+        $cleanLocaleParts = [];
+        if (isset($localeParts['language'])) {
+            $cleanLocaleParts['language'] = $localeParts['language'];
+        }
+        if (isset($localeParts['script'])) {
+            $cleanLocaleParts['script'] = $localeParts['script'];
+        }
+        return \Locale::composeLocale($cleanLocaleParts);
     }
 }

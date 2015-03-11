@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\TestFramework\Helper\ObjectManager;
-
 class ListsTest extends \PHPUnit_Framework_TestCase
 {
     /**
