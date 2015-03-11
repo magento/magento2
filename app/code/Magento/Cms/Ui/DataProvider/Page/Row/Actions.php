@@ -45,13 +45,17 @@ class Actions implements RowInterface
      * Get data
      *
      * @param array $dataRow
+     * @param array $data
      * @return mixed
      */
-    public function getData(array $dataRow)
+    public function getData(array $dataRow, array $data = [])
     {
         return [
             'edit' => [
-                'href' => $this->urlBuilder->getUrl(static::URL_PATH, ['page_id' => $dataRow['page_id']]),
+                'href' => $this->urlBuilder->getUrl(
+                    isset($data['url_path']) ? $data['url_path'] : static::URL_PATH,
+                    ['page_id' => $dataRow['page_id']]
+                ),
                 'label' => __('Edit'),
                 'hidden' => true,
 
