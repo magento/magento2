@@ -125,7 +125,7 @@ return [
     ['Mage_Adminhtml_Block_System_Config_Tabs', 'Magento\Config\Block\System\Config\Tabs'],
     [
         'Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize',
-        'Magento\Config\Block\System\Config\System\Storage\Media\Synchronize'
+        'Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput',
@@ -358,7 +358,7 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron', 'Magento\Cron\Model\Config\Backend\Sitemap'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database',
-        'Magento\Config\Model\Config\Backend\Storage\Media\Database'
+        'Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database'
     ],
     ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Config\Model\Config\Backend\Baseurl'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Config\Model\Config\Backend\Cache'],
@@ -547,11 +547,11 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
-        'Magento\Config\Model\Config\Source\Storage\Media\Database'
+        'Magento\MediaStorage\Model\Config\Source\Storage\Media\Database'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage',
-        'Magento\Config\Model\Config\Source\Storage\Media\Storage'
+        'Magento\MediaStorage\Model\Config\Source\Storage\Media\Storage'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Apply_On', 'Magento\Tax\Model\Config\Source\Apply\On'],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Basedon', 'Magento\Tax\Model\Config\Source\Basedon'],
@@ -792,7 +792,6 @@ return [
     ['Mage_Core_Model_Config_System'],
     ['Mage_Core_Model_Design_Source_Apply'],
     ['Mage_Core_Model_Language'],
-    ['Magento\Core\Helper\Data'],
     ['Magento\Core\Model\Flag', 'Magento\Framework\Flag'],
     ['Magento\Framework\Model\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Core\Model\AbstractModel', 'Magento\Framework\Model\AbstractModel'],
@@ -1369,6 +1368,8 @@ return [
     ['Magento\Core\Model\Module\Declaration\FileResolver'],
     ['Magento\Core\Model\Module\Declaration\SchemaLocator'],
     ['Magento\Core\Model\Module\Dir\ReverseResolver'],
+    ['Magento\Core\Model\Module\ResourceResolver'],
+    ['Magento\Core\Model\Module\ResourceResolverInterface'],
     ['Magento\Core\Model\Resource\SetupInterface'],
     ['Magento\Core\Model\Db\UpdaterInterface'],
     ['Magento\Core\Model\Router\NoRouteHandlerInterface'],
@@ -1382,8 +1383,6 @@ return [
     ['Magento\Quote\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
     ['Magento\Core\Helper\Http'],
     ['Magento\Core\Helper\Theme', 'Magento\Theme\Helper\Theme'],
-    ['Magento\Core\Helper\Url', 'Magento\Framework\Url\Helper\Data'],
-    ['Magento\Core\Helper\PostData', 'Magento\Framework\Data\Helper\PostHelper'],
     ['Magento\Core\Model\Theme', 'Magento\Theme\Model\Theme'],
     ['Magento\Core\Model\Theme\Collection', 'Magento\Theme\Model\Theme\Collection'],
     ['Magento\Core\Model\Theme\Data', 'Magento\Theme\Model\Theme\Data'],
@@ -1537,8 +1536,8 @@ return [
         'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
     ],
     [
-        'Magento\Backend\Controller\System\Config\System\Storage',
-        'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
+        'Magento\MediaStorage\Controller\System\Config\System\Storage',
+        'Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage'
     ],
     ['Magento\Adminhtml\Controller\System\Design', 'Magento\Backend\Controller\Adminhtml\System\Design'],
     ['Magento\Adminhtml\Controller\System\Store', 'Magento\Backend\Controller\Adminhtml\System\Store'],
@@ -1662,7 +1661,7 @@ return [
     ['Magento\Core\Block\Text\TextList\Link', 'Magento\Framework\View\Element\Text\TextList\Link'],
     ['Magento\Core\Block\Messages', 'Magento\Framework\View\Element\Messages'],
     ['Magento\Core\Model\Message', 'Magento\Framework\Message\Factory'],
-    ['Magento\Core\Model\Resource\Setup'],
+    ['Magento\Core\Model\Resource\Setup', 'Magento\Theme\Model\Resource\Setup'],
     ['Magento\Core\Model\Message\AbstractMessage', 'Magento\Framework\Message\AbstractMessage'],
     ['Magento\Core\Model\Message\Collection', 'Magento\Framework\Message\Collection'],
     ['Magento\Core\Model\Message\CollectionFactory', 'Magento\Framework\Message\CollectionFactory'],
@@ -3099,4 +3098,5 @@ return [
     ['Magento\Framework\Module\Updater'],
     ['Magento\Setup\Module\SetupFactory'],
     ['Magento\Framework\Module\Updater\SetupFactory'],
+    ['Magento\Backend\Model\Config\Source\Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
 ];

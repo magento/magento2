@@ -146,11 +146,7 @@ class Source
             $path,
             $this->appMode
         );
-        $preProcessors = $this->preProcessorPool
-            ->getPreProcessors($chain->getOrigContentType(), $chain->getTargetContentType());
-        foreach ($preProcessors as $processor) {
-            $processor->process($chain);
-        }
+        $this->preProcessorPool->process($chain);
         $chain->assertValid();
         if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;

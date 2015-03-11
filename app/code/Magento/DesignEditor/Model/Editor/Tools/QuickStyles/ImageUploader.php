@@ -30,7 +30,7 @@ class ImageUploader extends \Magento\Framework\Object
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\File\UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
@@ -44,12 +44,12 @@ class ImageUploader extends \Magento\Framework\Object
     /**
      * Generic constructor of change instance
      *
-     * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Framework\Filesystem $filesystem,
         array $data = []
     ) {
@@ -111,7 +111,7 @@ class ImageUploader extends \Magento\Framework\Object
     public function uploadFile($key)
     {
         $result = [];
-        /** @var $uploader \Magento\Core\Model\File\Uploader */
+        /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => $key]);
         $uploader->setAllowedExtensions($this->_allowedExtensions);
         $uploader->setAllowRenameFiles(true);

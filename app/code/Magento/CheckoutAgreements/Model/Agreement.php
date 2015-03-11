@@ -70,7 +70,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getAgreementId()
     {
-        return $this->getData('agreement_id');
+        return $this->getData(self::AGREEMENT_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAgreementId($id)
+    {
+        return $this->setData(self::AGREEMENT_ID, $id);
     }
 
     /**
@@ -78,7 +86,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getName()
     {
-        return $this->getData('name');
+        return $this->getData(self::NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
     }
 
     /**
@@ -86,7 +102,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getContent()
     {
-        return $this->getData('content');
+        return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
     }
 
     /**
@@ -94,7 +118,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getContentHeight()
     {
-        return $this->getData('content_height');
+        return $this->getData(self::CONTENT_HEIGHT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContentHeight($height)
+    {
+        return $this->setData(self::CONTENT_HEIGHT, $height);
     }
 
     /**
@@ -102,7 +134,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getCheckboxText()
     {
-        return $this->getData('checkbox_text');
+        return $this->getData(self::CHECKBOX_TEXT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCheckboxText($text)
+    {
+        return $this->setData(self::CHECKBOX_TEXT, $text);
     }
 
     /**
@@ -110,7 +150,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getIsActive()
     {
-        return $this->getData('is_active');
+        return $this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($status)
+    {
+        return $this->setData(self::IS_ACTIVE, $status);
     }
 
     /**
@@ -118,7 +166,15 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
      */
     public function getIsHtml()
     {
-        return $this->getData('is_html');
+        return $this->getData(self::IS_HTML);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsHtml($isHtml)
+    {
+        return $this->setData(self::IS_HTML, $isHtml);
     }
     //@codeCoverageIgnoreEnd
 }
