@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,7 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -72,7 +72,7 @@ class CreatePost extends \Magento\Customer\Controller\AccountRedirect
     /** @var \Magento\Framework\UrlInterface */
     protected $urlModel;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper  */
+    /** @var DataObjectHelper  */
     protected $dataObjectHelper;
 
     /**
@@ -82,6 +82,7 @@ class CreatePost extends \Magento\Customer\Controller\AccountRedirect
      * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
+     * @param DecoderInterface $urlDecoder
      * @param AccountManagementInterface $accountManagement
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
@@ -94,8 +95,7 @@ class CreatePost extends \Magento\Customer\Controller\AccountRedirect
      * @param Registration $registration
      * @param Escaper $escaper
      * @param CustomerExtractor $customerExtractor
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param DecoderInterface $urlDecoder
+     * @param DataObjectHelper $dataObjectHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -106,6 +106,7 @@ class CreatePost extends \Magento\Customer\Controller\AccountRedirect
         PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
+        DecoderInterface $urlDecoder,
         AccountManagementInterface $accountManagement,
         Address $addressHelper,
         UrlFactory $urlFactory,
@@ -118,8 +119,7 @@ class CreatePost extends \Magento\Customer\Controller\AccountRedirect
         Registration $registration,
         Escaper $escaper,
         CustomerExtractor $customerExtractor,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        DecoderInterface $urlDecoder
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->accountManagement = $accountManagement;
         $this->addressHelper = $addressHelper;
