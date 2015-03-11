@@ -9,7 +9,7 @@ namespace Magento\Framework\View\Template\Html;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class Minifier implements MinifierInterface
+class   Minifier implements MinifierInterface
 {
     /**
      * @var Filesystem
@@ -52,6 +52,7 @@ class Minifier implements MinifierInterface
         'label',
         'select',
         'textarea',
+        '\?',
     ];
 
     /**
@@ -100,19 +101,23 @@ class Minifier implements MinifierInterface
     {
         $file = $this->appDirectory->getRelativePath($file);
         $content = preg_replace(
-            '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
-            '><',
+            '#((?:<\?php\s+(?!echo)[^\?]*)\?>)\s+#',
+            '$1',
             preg_replace(
-                '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
-                . '(?:<(?>textarea|pre|script)\b|\z))#',
-                ' ',
+                '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
+                '><',
                 preg_replace(
-                    '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
-                    '',
+                    '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
+                    . '(?:<(?>textarea|pre|script)\b|\z))#',
+                    ' ',
                     preg_replace(
-                        '#(?<!:)//[^\n\r]*(\s\?\>)#',
-                        '$1',
-                        $this->appDirectory->readFile($file)
+                        '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
+                        '',
+                        preg_replace(
+                            '#(?<!:)//[^\n\r]*(\s\?\>)#',
+                            '$1',
+                            $this->appDirectory->readFile($file)
+                        )
                     )
                 )
             )
