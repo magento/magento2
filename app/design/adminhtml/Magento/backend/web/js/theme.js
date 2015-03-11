@@ -83,6 +83,8 @@ define('globalNavigation', [
                 .on('blur.tabFocus', function (e) {
                     $(e.target).trigger('mouseleave');
                 });
+
+            this.menuCategory.on('focus', 'a', this._open.bind(this));
         },
 
         _open: function (e) {
