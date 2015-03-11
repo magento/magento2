@@ -25,14 +25,14 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_syncFlagMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\Flag',
+            'Magento\MediaStorage\Model\File\Storage\Flag',
             ['getState', 'getFlagData', 'setState', '__sleep', '__wakeup', 'save'],
             [],
             '',
             false
         );
 
-        $this->_fileStorage = $this->getMock('Magento\Core\Model\File\Storage\Flag', [], [], '', false);
+        $this->_fileStorage = $this->getMock('Magento\MediaStorage\Model\File\Storage\Flag', [], [], '', false);
         $this->_fileStorage->expects($this->any())->method('loadSelf')->will($this->returnValue($this->_syncFlagMock));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -80,11 +80,11 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     public function isDisplayedDataProvider()
     {
         return [
-            [false, ['has_errors' => 1], \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED],
+            [false, ['has_errors' => 1], \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED],
             [false, ['has_errors' => true], false],
-            [true, [], \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED],
-            [false, ['has_errors' => 0], \Magento\Core\Model\File\Storage\Flag::STATE_RUNNING],
-            [true, ['has_errors' => 0], \Magento\Core\Model\File\Storage\Flag::STATE_FINISHED]
+            [true, [], \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED],
+            [false, ['has_errors' => 0], \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING],
+            [true, ['has_errors' => 0], \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED]
         ];
     }
 

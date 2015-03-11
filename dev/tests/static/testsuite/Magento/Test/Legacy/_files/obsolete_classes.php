@@ -125,7 +125,7 @@ return [
     ['Mage_Adminhtml_Block_System_Config_Tabs', 'Magento\Config\Block\System\Config\Tabs'],
     [
         'Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize',
-        'Magento\Config\Block\System\Config\System\Storage\Media\Synchronize'
+        'Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput',
@@ -358,7 +358,7 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron', 'Magento\Cron\Model\Config\Backend\Sitemap'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database',
-        'Magento\Config\Model\Config\Backend\Storage\Media\Database'
+        'Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database'
     ],
     ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Config\Model\Config\Backend\Baseurl'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Config\Model\Config\Backend\Cache'],
@@ -547,11 +547,11 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
-        'Magento\Config\Model\Config\Source\Storage\Media\Database'
+        'Magento\MediaStorage\Model\Config\Source\Storage\Media\Database'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage',
-        'Magento\Config\Model\Config\Source\Storage\Media\Storage'
+        'Magento\MediaStorage\Model\Config\Source\Storage\Media\Storage'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Apply_On', 'Magento\Tax\Model\Config\Source\Apply\On'],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Basedon', 'Magento\Tax\Model\Config\Source\Basedon'],
@@ -1536,8 +1536,8 @@ return [
         'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
     ],
     [
-        'Magento\Backend\Controller\System\Config\System\Storage',
-        'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
+        'Magento\MediaStorage\Controller\System\Config\System\Storage',
+        'Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage'
     ],
     ['Magento\Adminhtml\Controller\System\Design', 'Magento\Backend\Controller\Adminhtml\System\Design'],
     ['Magento\Adminhtml\Controller\System\Store', 'Magento\Backend\Controller\Adminhtml\System\Store'],

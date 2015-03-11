@@ -350,7 +350,7 @@ return [
     [
         'XML_PATH_PROTECTED_FILE_EXTENSIONS',
         '\Magento\Core\Helper\Data',
-        '\Magento\Core\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS'
+        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS'
     ],
     [
         'XML_PATH_PUBLIC_FILES_VALID_PATHS',
