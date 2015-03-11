@@ -32,7 +32,7 @@
             <field path="payment/checkmo/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
 
-        <dataset name="checkmo_rollback">
+        <dataset name="checkmo_disabled">
             <field path="payment/checkmo/active" scope="payment" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
 
