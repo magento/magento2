@@ -25,6 +25,13 @@ interface ConfigInterface
     public function isMergeJsFiles();
 
     /**
+     * Check whether bundling of JavScript files is on
+     *
+     * @return bool
+     */
+    public function isBundlingJsFiles();
+
+    /**
      * Check whether asset minification is on for specified content type
      *
      * @param string $contentType
