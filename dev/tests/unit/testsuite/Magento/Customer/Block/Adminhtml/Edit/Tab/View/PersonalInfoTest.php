@@ -45,33 +45,57 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $customer = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface', [], [], '', false
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            [],
+            '',
+            false
         );
         $customer->expects($this->any())->method('getId')->willReturn(1);
         $customer->expects($this->any())->method('getStoreId')->willReturn(1);
 
         $customerDataFactory = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory', ['create'], [], '', false
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
         );
         $customerDataFactory->expects($this->any())->method('create')->willReturn($customer);
 
         $backendSession = $this->getMock(
-            'Magento\Backend\Model\Session', ['getCustomerData'], [], '', false
+            'Magento\Backend\Model\Session',
+            ['getCustomerData'],
+            [],
+            '',
+            false
         );
         $backendSession->expects($this->any())->method('getCustomerData')->willReturn(['account' => []]);
 
         $this->customerLog = $this->getMock(
-            'Magento\Customer\Model\Log', ['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'], [], '', false
+            'Magento\Customer\Model\Log',
+            ['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'],
+            [],
+            '',
+            false
         );
         $this->customerLog->expects($this->any())->method('loadByCustomer')->willReturnSelf();
 
         $customerLogger = $this->getMock(
-            'Magento\Customer\Model\Logger', ['get'], [], '', false
+            'Magento\Customer\Model\Logger',
+            ['get'],
+            [],
+            '',
+            false
         );
         $customerLogger->expects($this->any())->method('get')->willReturn($this->customerLog);
 
         $dateTime = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime', ['now'], [], '', false
+            'Magento\Framework\Stdlib\DateTime',
+            ['now'],
+            [],
+            '',
+            false
         );
         $dateTime->expects($this->any())->method('now')->willReturn('2015-03-04 12:00:00');
 
@@ -82,13 +106,14 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->localeDate
-            ->expects($this->any())
-            ->method('getDefaultTimezonePath')
-            ->willReturn($this->pathToDefaultTimezone);
+        $this->localeDate->expects($this->any())->method('getDefaultTimezonePath')->willReturn($this->pathToDefaultTimezone);
 
         $this->scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config', ['getValue'], [], '', false
+            'Magento\Framework\App\Config',
+            ['getValue'],
+            [],
+            '',
+            false
         );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -117,9 +142,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($this->defaultTimezone);
 
-        $this->assertEquals(
-            $this->defaultTimezone, $this->block->getStoreLastLoginDateTimezone()
-        );
+        $this->assertEquals($this->defaultTimezone, $this->block->getStoreLastLoginDateTimezone());
     }
 
     /**

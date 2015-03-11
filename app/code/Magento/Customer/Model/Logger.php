@@ -103,7 +103,8 @@ class Logger
                 ['last_visit_at']
             )
             ->where(
-                'cl.customer_id = ?', $customerId
+                'cl.customer_id = ?',
+                $customerId
             )
             ->order(
                 'cv.visitor_id DESC'

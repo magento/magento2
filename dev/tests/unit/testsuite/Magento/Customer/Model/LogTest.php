@@ -46,29 +46,21 @@ class LogTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerId()
     {
-        $this->assertEquals(
-            $this->logData['customer_id'], $this->log->getCustomerId()
-        );
+        $this->assertEquals($this->logData['customer_id'], $this->log->getCustomerId());
     }
 
     public function testGetLastLoginAt()
     {
-        $this->assertEquals(
-            $this->logData['last_login_at'], $this->log->getLastLoginAt()
-        );
+        $this->assertEquals($this->logData['last_login_at'], $this->log->getLastLoginAt());
     }
 
     public function testGetLastVisitAt()
     {
-        $this->assertEquals(
-            $this->logData['last_visit_at'], $this->log->getLastVisitAt()
-        );
+        $this->assertEquals($this->logData['last_visit_at'], $this->log->getLastVisitAt());
     }
 
     public function testGetLastLogoutAt()
     {
-        $this->assertEquals(
-            $this->logData['last_logout_at'], $this->log->getLastLogoutAt()
-        );
+        $this->assertEquals($this->logData['last_logout_at'], $this->log->getLastLogoutAt());
     }
 }
