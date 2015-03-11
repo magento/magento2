@@ -39,4 +39,11 @@ interface ConfigInterface
      * @return string
      */
     public function getAssetMinificationAdapter($contentType);
+
+    /**
+     * Check whether minify of HTML is on
+     *
+     * @return bool
+     */
+    public function isMinifingHtml();
 }
