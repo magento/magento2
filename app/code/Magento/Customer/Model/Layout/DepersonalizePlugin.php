@@ -7,11 +7,18 @@
  */
 namespace Magento\Customer\Model\Layout;
 
+use Magento\PageCache\Model\DepersonalizeChecker;
+
 /**
  * Class DepersonalizePlugin
  */
 class DepersonalizePlugin
 {
+    /**
+     * @var DepersonalizeChecker
+     */
+    protected $depersonalizeChecker;
+
     /**
      * @var \Magento\Framework\Session\SessionManagerInterface
      */
@@ -26,16 +33,6 @@ class DepersonalizePlugin
      * @var \Magento\Customer\Model\CustomerFactory
      */
     protected $customerFactory;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \Magento\Framework\Module\Manager
-     */
-    protected $moduleManager;
 
     /**
      * @var \Magento\Customer\Model\Visitor
@@ -53,35 +50,24 @@ class DepersonalizePlugin
     protected $formKey;
 
     /**
-     * @var \Magento\PageCache\Model\Config
-     */
-    protected $cacheConfig;
-
-    /**
+     * @param DepersonalizeChecker $depersonalizeChecker
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Visitor $visitor
-     * @param \Magento\PageCache\Model\Config $cacheConfig
      */
     public function __construct(
+        DepersonalizeChecker $depersonalizeChecker,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Customer\Model\Visitor $visitor,
-        \Magento\PageCache\Model\Config $cacheConfig
+        \Magento\Customer\Model\Visitor $visitor
     ) {
         $this->session = $session;
         $this->customerSession = $customerSession;
         $this->customerFactory = $customerFactory;
-        $this->request = $request;
-        $this->moduleManager = $moduleManager;
         $this->visitor = $visitor;
-        $this->cacheConfig = $cacheConfig;
+        $this->depersonalizeChecker = $depersonalizeChecker;
     }
 
     /**
@@ -92,10 +78,7 @@ class DepersonalizePlugin
      */
     public function beforeGenerateXml(\Magento\Framework\View\LayoutInterface $subject)
     {
-        if ($this->moduleManager->isEnabled(
-            'Magento_PageCache'
-        ) && $this->cacheConfig->isEnabled() && !$this->request->isAjax() && $subject->isCacheable()
-        ) {
+        if ($this->depersonalizeChecker->checkIfDepersonalize($subject)) {
             $this->customerGroupId = $this->customerSession->getCustomerGroupId();
             $this->formKey = $this->session->getData(\Magento\Framework\Data\Form\FormKey::FORM_KEY);
         }
@@ -111,11 +94,7 @@ class DepersonalizePlugin
      */
     public function afterGenerateXml(\Magento\Framework\View\LayoutInterface $subject, $result)
     {
-        if ($this->moduleManager->isEnabled('Magento_PageCache')
-            && $this->cacheConfig->isEnabled()
-            && !$this->request->isAjax()
-            && $subject->isCacheable()
-        ) {
+        if ($this->depersonalizeChecker->checkIfDepersonalize($subject)) {
             $this->visitor->setSkipRequestLogging(true);
             $this->visitor->unsetData();
             $this->session->clearStorage();
