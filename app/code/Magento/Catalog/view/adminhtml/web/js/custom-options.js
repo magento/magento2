@@ -134,7 +134,7 @@ define([
                         },
                         open: function () {
                             $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-"
+
                             var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
                             $(this).closest('.ui-dialog').css('margin-top', topMargin);
                         },
