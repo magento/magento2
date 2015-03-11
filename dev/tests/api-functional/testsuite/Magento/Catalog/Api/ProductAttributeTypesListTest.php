@@ -6,8 +6,6 @@
  */
 namespace Magento\Catalog\Api;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
-
 class ProductAttributeTypesListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductAttributeTypesListV1';
@@ -19,7 +17,7 @@ class ProductAttributeTypesListTest extends \Magento\TestFramework\TestCase\Weba
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/types',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

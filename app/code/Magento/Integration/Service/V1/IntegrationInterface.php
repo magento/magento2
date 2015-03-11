@@ -71,4 +71,12 @@ interface IntegrationInterface
      * @throws \Magento\Framework\Exception\IntegrationException
      */
     public function delete($integrationId);
+
+    /**
+     * Return an array of selected resources  for an integration.
+     *
+     * @param int $integrationId
+     * @return array
+     */
+    public function getSelectedResources($integrationId);
 }

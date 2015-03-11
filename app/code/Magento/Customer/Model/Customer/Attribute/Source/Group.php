@@ -25,14 +25,12 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_converter;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\Object $converter
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
         GroupManagementInterface $groupManagement,
@@ -40,7 +38,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;
-        parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
+        parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
     }
 
     /**

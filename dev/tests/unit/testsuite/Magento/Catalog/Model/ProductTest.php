@@ -37,7 +37,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemBuilderMock;
+    protected $stockItemFactoryMock;
 
     /**
      * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -120,6 +120,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $imageCacheFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelperMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -133,13 +138,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->stockItemBuilderMock = $this->getMock(
-            'Magento\CatalogInventory\Api\Data\StockItemDataBuilder',
-            ['populateWithArray', 'create'],
+        $this->stockItemFactoryMock = $this->getMock(
+            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
+            ['create'],
             [],
             '',
             false
         );
+        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productFlatProcessor = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
             [],
@@ -252,7 +260,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resource,
                 'registry' => $this->registry,
                 'moduleManager' => $this->moduleManager,
-                'stockItemBuilder' => $this->stockItemBuilderMock,
+                'stockItemFactory' => $this->stockItemFactoryMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'categoryRepository' => $this->categoryRepository,
                 'catalogProduct' => $this->_catalogProduct,
@@ -383,15 +392,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testReindex($productChanged, $isScheduled, $productFlatCount, $categoryIndexerCount)
     {
         $this->model->setData('entity_id', 1);
-        $this->_catalogProduct->expects($this->once())->method('isDataForProductCategoryIndexerWasChanged')->willReturn($productChanged);
+        $this->_catalogProduct->expects($this->once())
+            ->method('isDataForProductCategoryIndexerWasChanged')
+            ->willReturn($productChanged);
+        if ($productChanged) {
+            $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
+                ->method('get')
+                ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
+                ->will($this->returnValue($this->categoryIndexerMock));
+            $this->categoryIndexerMock->expects($this->any())
+                ->method('isScheduled')
+                ->will($this->returnValue($isScheduled));
+            $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
+        }
         $this->productFlatProcessor->expects($this->exactly($productFlatCount))->method('reindexRow');
-        $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
-            ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-            ->will($this->returnValue($this->categoryIndexerMock));
-        $this->categoryIndexerMock->expects($this->any())->method('isScheduled')->will($this->returnValue($isScheduled));
-        $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
-
         $this->model->reindex();
     }
 
@@ -400,7 +414,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         return array(
             'set 1' => [true, false, 1, 1],
             'set 2' => [true, true, 1, 0],
-            'set 3' => [false, false, 0, 0]
+            'set 3' => [false, false, 1, 0]
         );
     }
 
@@ -465,6 +479,21 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'affected_category_ids' => [1],
                     'is_changed_categories' => true
                 ]
+            ],
+            [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+            ],
+            [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
+            ],
+            [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [], 'status' => 1],
             ]
         ];
     }
@@ -643,11 +672,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with('Magento_CatalogInventory')
             ->will($this->returnValue(true));
-        $this->stockItemBuilderMock->expects($this->once())
+        $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($data['stock_item'])
+            ->with($stockItemMock, $data['stock_item'], '\Magento\CatalogInventory\Api\Data\StockItemInterface')
             ->will($this->returnSelf());
-        $this->stockItemBuilderMock->expects($this->once())
+        $this->stockItemFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($stockItemMock));
         $stockItemMock->expects($this->once())->method('setProduct')->with($this->model);

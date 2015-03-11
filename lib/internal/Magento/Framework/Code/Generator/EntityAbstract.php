@@ -39,7 +39,7 @@ abstract class EntityAbstract
     /**
      * Class generator object
      *
-     * @var CodeGenerator\CodeGeneratorInterface
+     * @var \Magento\Framework\Code\Generator\CodeGeneratorInterface
      */
     protected $_classGenerator;
 
@@ -52,14 +52,14 @@ abstract class EntityAbstract
      * @param null|string $sourceClassName
      * @param null|string $resultClassName
      * @param Io $ioObject
-     * @param CodeGenerator\CodeGeneratorInterface $classGenerator
+     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
-        CodeGenerator\CodeGeneratorInterface $classGenerator = null,
+        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
         DefinedClasses $definedClasses = null
     ) {
         if ($ioObject) {
@@ -70,7 +70,7 @@ abstract class EntityAbstract
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
         } else {
-            $this->_classGenerator = new CodeGenerator\Zend();
+            $this->_classGenerator = new ClassGenerator();
         }
         if ($definedClasses) {
             $this->definedClasses = $definedClasses;
@@ -78,11 +78,11 @@ abstract class EntityAbstract
             $this->definedClasses = new DefinedClasses();
         }
 
-        $this->_sourceClassName = ltrim($sourceClassName, '\\');
+        $this->_sourceClassName = $this->_getFullyQualifiedClassName($sourceClassName);
         if ($resultClassName) {
-            $this->_resultClassName = $resultClassName;
-        } elseif ($sourceClassName) {
-            $this->_resultClassName = $this->_getDefaultResultClassName($sourceClassName);
+            $this->_resultClassName = $this->_getFullyQualifiedClassName($resultClassName);
+        } elseif ($this->_sourceClassName) {
+            $this->_resultClassName = $this->_getDefaultResultClassName($this->_sourceClassName);
         }
     }
 
@@ -138,7 +138,8 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        return '\\' . ltrim($className, '\\');
+        $className = ltrim($className, '\\');
+        return $className ? '\\' . $className : '';
     }
 
     /**
@@ -291,7 +292,7 @@ abstract class EntityAbstract
      */
     protected function _getClassDocBlock()
     {
-        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see \\' . $this->_getSourceClassName();
+        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see ' . $this->_getSourceClassName();
         return ['shortDescription' => $description];
     }
 
