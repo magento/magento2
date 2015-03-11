@@ -44,7 +44,9 @@
 
 .map-old-price,
 .product-info-price .map-show-info {
-    margin-right: @indent__s;
+    &:not(:last-child) {
+        margin-right: @indent__s;
+    }
 }
 
 }
@@ -57,7 +59,7 @@
         max-width: 100%; 
     }
     .map-old-price,
-    .product-info-price .map-show-info {
+    .map-show-info {
         display: inline-block;
         &:not(:last-child) {
             margin-bottom: @indent__s;

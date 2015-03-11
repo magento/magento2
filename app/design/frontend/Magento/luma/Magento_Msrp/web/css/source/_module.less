@@ -56,9 +56,25 @@
     }
 }
 
+.map-old-price {
+    text-decoration: line-through;
+}
+
 .map-old-price,
+.product-item .map-old-price,
 .product-info-price .map-show-info {
-    margin-right: @indent__s;
+    &:not(:last-child) {
+        margin-right: @indent__s;
+    }
+}
+
+.product-options-bottom .price-box,
+.product-info-price .price-box {
+    .old-price {
+        .price-container > span {
+            display: inline;
+        }
+    }
 }
 
 }
@@ -71,7 +87,7 @@
         max-width: 100%; 
     }
     .map-old-price,
-    .product-info-price .map-show-info {
+    .map-show-info {
         display: inline-block;
         &:not(:last-child) {
             margin-bottom: @indent__s;
