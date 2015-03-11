@@ -40,7 +40,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
 
         if ($value) {
             $data = $this->_localeDate->formatDateTime(
-                $this->_localeDate->date(new \DateTime($value)),
+                new \DateTime($value),
                 \IntlDateFormatter::MEDIUM,
                 \IntlDateFormatter::NONE
             );
