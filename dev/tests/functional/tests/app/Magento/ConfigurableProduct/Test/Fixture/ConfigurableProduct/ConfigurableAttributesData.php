@@ -715,6 +715,50 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ],
         ],
+
+        'two_variations_with_fixed_price' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 1,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                        'option_key_1' => [
+                            'label' => 'option_2_%isolation%',
+                            'pricing_value' => 2,
+                            'is_percent' => 'No',
+                            'include' => 'Yes',
+                        ],
+                    ],
+                ],
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
+            ],
+            'products' => [
+                'attribute_key_0:option_key_0' => 'catalogProductSimple::product_without_category',
+                'attribute_key_0:option_key_1' => 'catalogProductSimple::product_without_category',
+            ],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 100,
+                    ],
+                    'weight' => 1,
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 200,
+                    ],
+                    'weight' => 1,
+                ],
+            ],
+        ],
     ];
 
     /**

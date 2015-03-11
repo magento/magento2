@@ -29,7 +29,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'options' => [
                     'links' => [
                         [
-                            'label' => 'link_1',
+                            'label' => 'link_0',
                             'value' => 'Yes',
                         ],
                     ],
@@ -43,11 +43,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'options' => [
                     'links' => [
                         [
-                            'label' => 'link_1',
+                            'label' => 'link_0',
                             'value' => 'Yes',
                         ],
                         [
-                            'label' => 'link_2',
+                            'label' => 'link_1',
                             'value' => 'Yes'
                         ],
                     ],
@@ -75,7 +75,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'options' => [
                     'links' => [
                         [
-                            'label' => 'link_1',
+                            'label' => 'link_0',
                             'value' => 'Yes',
                         ],
                     ],
@@ -92,7 +92,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                     'links' => [
                         [
-                            'label' => 'link_1',
+                            'label' => 'link_0',
                             'value' => 'Yes'
                         ]
                     ],

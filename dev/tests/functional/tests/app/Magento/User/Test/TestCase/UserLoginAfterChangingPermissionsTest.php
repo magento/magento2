@@ -7,7 +7,7 @@
 namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\User\Test\Fixture\AdminUserRole;
+use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserEdit;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
@@ -122,14 +122,14 @@ class UserLoginAfterChangingPermissionsTest extends Injectable
     }
 
     /**
-     * @param AdminUserRole $role
-     * @param AdminUserRole $updatedRole
+     * @param Role $role
+     * @param Role $updatedRole
      * @param User $user
      * @return void
      */
     public function testLoginAfterChangingPermissions(
-        AdminUserRole $role,
-        AdminUserRole $updatedRole,
+        Role $role,
+        Role $updatedRole,
         User $user
     ) {
         /** Create role and a new user with this role */

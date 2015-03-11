@@ -13,13 +13,12 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertBundleProductDetailsInWishlist
- * Assert that the correct option details are displayed on the "View Details" tool tip
+ * Assert that the correct option details are displayed on the "View Details" tool tip.
  */
-class AssertProductDetailsInWishlist extends AbstractAssertForm
+class AssertProductDetailsInWishlist extends AbstractAssertWishlistProductDetails
 {
     /**
-     * Assert that the correct option details are displayed on the "View Details" tool tip
+     * Assert that the correct option details are displayed on the "View Details" tool tip.
      *
      * @param CmsIndex $cmsIndex
      * @param WishlistIndex $wishlistIndex
@@ -34,19 +33,11 @@ class AssertProductDetailsInWishlist extends AbstractAssertForm
         FixtureFactory $fixtureFactory
     ) {
         $cmsIndex->getLinksBlock()->openLink('My Wish List');
-        $actualOptions = $wishlistIndex->getItemsBlock()->getItemProduct($product)->getOptions();
-        $cartFixture = $fixtureFactory->createByCode('cart', ['data' => ['items' => ['products' => [$product]]]]);
-        $expectedOptions = $cartFixture->getItems()[0]->getData()['options'];
-
-        $errors = $this->verifyData(
-            $this->sortDataByPath($expectedOptions, '::title'),
-            $this->sortDataByPath($actualOptions, '::title')
-        );
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
+        $this->assertProductDetails($wishlistIndex, $fixtureFactory, $product);
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
