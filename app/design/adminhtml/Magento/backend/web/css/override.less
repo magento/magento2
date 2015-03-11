@@ -2667,6 +2667,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .popup-window {
   background: #ffffff;
+}
+.popup-window.dialog {
   z-index: 1010 !important;
 }
 .popup-window .table_window > tbody > tr > td {
@@ -3102,12 +3104,12 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .admin__menu .level-0 > .submenu {
   background-color: #524d49;
   box-shadow: 0 0 3px #000000;
-  left: -100rem;
+  left: -90rem;
   min-height: ~" calc(7.5rem + 2rem + 100%)";
   padding: 2rem 0 0;
   position: absolute;
   top: -7.5rem;
-  transition: all .7s linear;
+  transition: all .5s ease;
   visibility: hidden;
   z-index: 698;
 }
@@ -3178,6 +3180,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: absolute;
   right: 0;
   top: 0;
+}
+.admin__menu .submenu-close:active {
+  transform: scale(0.9);
 }
 .admin__menu .submenu-close:before {
   color: #a79d95;
