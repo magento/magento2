@@ -15,8 +15,8 @@
     </div>
     <div class="clear"></div>
     <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
-        <div id="<%= data.id %>" class="file-row">
-            <span class="file-info"><%= data.name %> (<%= data.size %>)</span>
+        <div id="<%- data.id %>" class="file-row">
+            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
             <div class="progressbar-container">
                 <div class="progressbar upload-progress" style="width: 0%;"></div>
             </div>

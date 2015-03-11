@@ -31,7 +31,8 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     protected $mappingData = [
         'country_id' => [
-            'United States' => 'US'
+            'United States' => 'US',
+            'United Kingdom' => 'GB'
         ],
         'region_id' => [
             'California' => 12,
@@ -55,6 +56,16 @@ class Curl extends AbstractCurl implements CustomerInterface
             'taxvat',
             'gender'
         ]
+    ];
+
+    /**
+     * Fields that have to be send using update curl.
+     *
+     * @var array
+     */
+    protected $fieldsToUpdate = [
+        'address',
+        'group_id',
     ];
 
     /**
@@ -92,8 +103,8 @@ class Curl extends AbstractCurl implements CustomerInterface
 
         if (!empty($address)) {
             $data['address'] = $address;
-            $this->addAddress($data);
         }
+        $this->updateCustomer($data);
 
         return $result;
     }
@@ -131,16 +142,21 @@ class Curl extends AbstractCurl implements CustomerInterface
     }
 
     /**
-     * Add addresses in to customer account
+     * Update customer fields that can not be added at creation step.
+     * - address
+     * - group_id
      *
      * @param array $data
      * @return void
      * @throws \Exception
      */
-    protected function addAddress(array $data)
+    protected function updateCustomer(array $data)
     {
+        $result = array_intersect($this->fieldsToUpdate, array_keys($data));
+        if (empty($result)) {
+            return;
+        }
         $curlData = [];
-        $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $data['customer_id'];
         foreach ($data as $key => $value) {
             foreach ($this->curlMapping as $prefix => $prefixValues) {
                 if (in_array($key, $prefixValues)) {
@@ -152,15 +168,18 @@ class Curl extends AbstractCurl implements CustomerInterface
         unset($data['password'], $data['password_confirmation']);
 
         $curlData = $this->replaceMappingData(array_merge($curlData, $data));
-        $curlData = $this->prepareAddressData($curlData);
+        if (!empty($data['address'])) {
+            $curlData = $this->prepareAddressData($curlData);
+        }
 
+        $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $data['customer_id'];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $curlData);
         $response = $curl->read();
         $curl->close();
 
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            throw new \Exception('Failed to assign an address to the customer!');
+            throw new \Exception('Failed to update customer!');
         }
     }
 

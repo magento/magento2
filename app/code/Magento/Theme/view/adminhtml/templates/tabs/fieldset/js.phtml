@@ -9,8 +9,8 @@
 <div id="js-file-uploader" class="uploader">
 </div>
 <script id="js-file-uploader-template" type="text/x-magento-template"> 
-    <div id="<%= data.id %>" class="file-row">
-        <span class="file-info"><%= data.name %> (<%= data.size %>)</span>
+    <div id="<%- data.id %>" class="file-row">
+        <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
         <div class="progressbar-container">
             <div class="progressbar upload-progress" style="width: 0%;"></div>
         </div>
@@ -20,21 +20,21 @@
 <script id="js-uploaded-file-template" type="text/x-magento-template">
     <input class="up" type="button" value="">
     <input class="down" type="button" value="">
-    <input type="hidden" name="js_order[<%= data.id %>]" value="1">
+    <input type="hidden" name="js_order[<%- data.id %>]" value="1">
 
     <div class="js-file">
-        <%= data.name %>
+        <%- data.name %>
         <div class="remove-js">
             <input
                 type="checkbox"
-                id="remove_js_files_<%= data.id %>"
+                id="remove_js_files_<%- data.id %>"
                 name="js_removed_files[]"
-                value="<%= data.id %>" />
-            <label for="remove_js_files_<%= data.id %>"><?php echo __('Remove') ?></label>
+                value="<%- data.id %>" />
+            <label for="remove_js_files_<%- data.id %>"><?php echo __('Remove') ?></label>
         </div>
     </div>
 
-    <input type="hidden" name="js_uploaded_files[]" value="<%= data.temporary %>" />
+    <input type="hidden" name="js_uploaded_files[]" value="<%- data.temporary %>" />
 </script>
 
 <ul id="js-files-container" class="js-files-container ui-sortable" ></ul>
