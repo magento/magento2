@@ -106,7 +106,10 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->localeDate->expects($this->any())->method('getDefaultTimezonePath')->willReturn($this->pathToDefaultTimezone);
+        $this->localeDate
+            ->expects($this->any())
+            ->method('getDefaultTimezonePath')
+            ->willReturn($this->pathToDefaultTimezone);
 
         $this->scopeConfig = $this->getMock(
             'Magento\Framework\App\Config',

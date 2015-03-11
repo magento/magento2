@@ -108,6 +108,7 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param string $format
      * @return string|array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function outputValue($format = AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
