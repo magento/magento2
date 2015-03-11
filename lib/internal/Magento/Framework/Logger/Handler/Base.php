@@ -7,6 +7,7 @@
 namespace Magento\Framework\Logger\Handler;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -40,6 +41,7 @@ class Base extends StreamHandler
             $filePath ? $filePath . $this->fileName : BP . $this->fileName,
             $this->loggerType
         );
+        $this->setFormatter(new LineFormatter(null, null, true));
     }
 
     /**
