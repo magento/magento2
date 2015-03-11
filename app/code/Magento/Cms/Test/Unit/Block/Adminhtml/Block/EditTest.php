@@ -53,7 +53,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Block\Adminhtml\Block\Edit',
             [
                 'registry' => $this->registryMock,
-                'escaper' => $this->escaperMock
+                'escaper' => $this->escaperMock,
             ]
         );
     }
@@ -84,14 +84,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with($title)
             ->willReturn($escapedTitle);
 
-        $this->assertInternalType('string', $this->this->getHeaderText());
+        $this->assertInstanceOf('Magento\Framework\Phrase', $this->this->getHeaderText());
     }
 
     public function getHeaderTextDataProvider()
     {
         return [
             'modelBlockId NOT EMPTY' => ['modelBlockId' => 1],
-            'modelBlockId IS EMPTY' => ['modelBlockId' => null]
+            'modelBlockId IS EMPTY' => ['modelBlockId' => null],
         ];
     }
 }

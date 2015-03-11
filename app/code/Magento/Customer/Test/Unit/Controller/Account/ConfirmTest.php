@@ -171,7 +171,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressHelper' => $this->addressHelperMock,
                 'urlFactory' => $urlFactoryMock,
-                'resultRedirectFactory' => $redirectFactoryMock
+                'resultRedirectFactory' => $redirectFactoryMock,
             ]
         );
     }
@@ -388,12 +388,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
             ->will($this->returnValue($successUrl));
 
-        $this->redirectMock->expects($this->once())
+        $this->redirectMock->expects($this->never())
             ->method('success')
             ->with($this->equalTo($resultUrl))
             ->will($this->returnValue($resultUrl));
 
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock->expects($this->never())
             ->method('isSetFlag')
             ->with(
                 $this->equalTo(Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD),
@@ -426,7 +426,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 true,
-                __('Thank you for registering with')
+                __('Thank you for registering with'),
             ],
             [
                 1,
@@ -435,7 +435,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 false,
-                __('Thank you for registering with')
+                __('Thank you for registering with'),
             ],
         ];
     }

@@ -262,7 +262,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->hasData($this->_keyStatusFilters)) {
             return [
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
             ];
         }
         return $product->getData($this->_keyStatusFilters);
@@ -361,7 +361,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                             }
 
                             if (!isset($_result[0])) {
-                                return __('We cannot process the item.');
+                                return __('We cannot process the item.')->render();
                             }
 
                             if ($isStrictProcessMode) {
@@ -399,7 +399,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return __('Please specify the quantity of product(s).');
+        return __('Please specify the quantity of product(s).')->render();
     }
 
     /**

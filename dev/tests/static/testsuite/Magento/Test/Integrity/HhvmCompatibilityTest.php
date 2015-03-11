@@ -6,11 +6,11 @@
  * See COPYING.txt for license details.
  *
  */
-namespace Magento\Test\HhvmCompatibility;
+namespace Magento\Test\Integrity;
 
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 
-class IniGetSetTest extends \PHPUnit_Framework_TestCase
+class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var array
@@ -38,7 +38,7 @@ class IniGetSetTest extends \PHPUnit_Framework_TestCase
         'default_socket_timeout',
     ];
 
-    public function testAllowedGetSetDirectives()
+    public function testAllowedIniGetSetDirectives()
     {
         $deniedDirectives = [];
         foreach ($this->getFiles() as $file) {

@@ -170,10 +170,6 @@
 
 </IfModule>
 
-<IfModule mod_env.c>
-    SetEnv MAGE_MODE "developer"
-</IfModule>
-
 ############################################
 ## By default allow all access
 
