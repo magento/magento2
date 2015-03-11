@@ -287,6 +287,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Returns timezone of the store to which customer assigned.
+     *
      * @return string
      */
     public function getStoreLastLoginDateTimezone()
@@ -301,20 +303,31 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     /**
      * Get customer's current status.
      *
+     * Customer considered 'Offline' in the next cases:
+     *
+     * - customer has never been logged in;
+     * - customer clicked 'Log Out' link\button;
+     * - predefined interval has passed since customer's last activity.
+     *
+     * In all other cases customer considered 'Online'.
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getCurrentStatus()
     {
+        // Customer has never been logged in.
         if (!$this->getCustomerLog()->getLastLoginAt()) {
             return __('Offline');
         }
 
+        // Customer clicked 'Log Out' link\button.
         if ($this->getCustomerLog()->getLastLogoutAt() &&
             strtotime($this->getCustomerLog()->getLastLogoutAt()) > strtotime($this->getCustomerLog()->getLastLoginAt())
         ) {
             return __('Offline');
         }
 
+        // Predefined interval has passed since customer's last activity.
         $interval = $this->getOnlineMinutesInterval();
 
         if ($this->getCustomerLog()->getLastVisitAt() &&
@@ -333,28 +346,36 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getLastLoginDate()
     {
-        if ($date = $this->getCustomerLog()->getLastLoginAt()) {
+        $date = $this->getCustomerLog()->getLastLoginAt();
+
+        if ($date) {
             return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         }
+
         return __('Never');
     }
 
     /**
+     * Returns customer last login date in store's timezone.
+     *
      * @return \Magento\Framework\Phrase|string
      */
     public function getStoreLastLoginDate()
     {
-        if ($date = strtotime($this->getCustomerLog()->getLastLoginAt())) {
+        $date = strtotime($this->getCustomerLog()->getLastLoginAt());
+
+        if ($date) {
             $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
             return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         }
+
         return __('Never');
     }
 
     /**
-     * Return online minutes interval.
+     * Returns interval that shows how long customer will be considered 'Online'.
      *
-     * @return int Minutes Interval
+     * @return int Interval in minutes
      */
     protected function getOnlineMinutesInterval()
     {
