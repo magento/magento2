@@ -40,10 +40,10 @@ class Lists
         $list = [];
         foreach ($zones as $code) {
             $list[$code] = \IntlTimeZone::createTimeZone($code)->getDisplayName(
-                    false,
-                    \IntlTimeZone::DISPLAY_LONG,
-                    ResolverInterface::DEFAULT_LOCALE
-                ) . ' (' . $code . ')';
+                false,
+                \IntlTimeZone::DISPLAY_LONG,
+                ResolverInterface::DEFAULT_LOCALE
+            ) . ' (' . $code . ')';
         }
         asort($list);
         return $list;

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
+
 use Magento\Framework\Locale\Bundle\DataBundle;
 
 /**

@@ -774,8 +774,8 @@ class Full
         }
 
         if (!$this->dateTime->isEmptyDate($date)) {
-            list($dateObj, $format) = $this->dates[$storeId];
             /** @var \DateTime $dateObj */
+            $dateObj = $this->dates[$storeId];
             return $this->localeDate->formatDateTime($dateObj, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE);
         }
 

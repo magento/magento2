@@ -9,7 +9,6 @@
     ],
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "ext-intl" : "*",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
