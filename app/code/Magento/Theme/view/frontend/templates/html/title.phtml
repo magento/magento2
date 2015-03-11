@@ -18,7 +18,8 @@ if (trim($block->getPageTitle())) {
 ?>
 <?php if ($title): ?>
 <div class="page-title<?php echo $cssClass; ?>">
-    <h1 class="title" <?php if ($block->getId()): ?> id="<?php echo $block->getId();?>" <?php endif; ?>
+    <h1 class="title"
+        <?php if ($block->getId()): ?> id="<?php echo $block->getId();?>" <?php endif; ?>
         <?php if ($block->getAddBaseAttributeAria()): ?>
             aria-labelledby="<?php echo $block->getAddBaseAttributeAria(); ?>"
         <?php endif; ?>>
