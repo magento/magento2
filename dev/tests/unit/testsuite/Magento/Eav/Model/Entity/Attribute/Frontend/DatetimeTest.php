@@ -63,9 +63,6 @@ class DatetimeTest extends \PHPUnit_Framework_TestCase
         $this->localeDateMock->expects($this->once())->method('formatDateTime')
             ->with($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE, null, null, null)
             ->willReturn($attributeValue);
-        $this->localeDateMock->expects($this->once())->method('date')
-            ->with($date)
-            ->willReturn($date);
 
         $this->assertEquals($attributeValue, $this->model->getValue($object));
     }
