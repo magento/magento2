@@ -9,6 +9,7 @@ namespace Magento\Tools\Di\Code\Generator;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config as InterceptionConfig;
 use Magento\Tools\Di\Code\Reader\Type;
 
@@ -114,7 +115,7 @@ class InterceptionConfigurationBuilder
      */
     private function getPluginsList($interceptedInstances)
     {
-        $this->cacheManager->setEnabled(['compiled_config'], true);
+        $this->cacheManager->setEnabled([CompiledConfig::TYPE_IDENTIFIER], true);
         $this->pluginList->setInterceptedClasses($interceptedInstances);
 
         $inheritedConfig = [];

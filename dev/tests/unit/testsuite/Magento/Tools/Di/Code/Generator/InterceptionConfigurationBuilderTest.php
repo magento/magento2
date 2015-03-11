@@ -5,6 +5,8 @@
  */
 namespace Magento\Tools\Di\Code\Generator;
 
+use Magento\Framework\App\Interception\Cache\CompiledConfig;
+
 class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -26,6 +28,11 @@ class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $typeReader;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheManager;
+
     protected function setUp()
     {
         $this->interceptionConfig = $this->getMock(
@@ -42,11 +49,20 @@ class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->cacheManager = $this->getMock(
+            'Magento\Framework\App\Cache\Manager',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->typeReader = $this->getMock('Magento\Tools\Di\Code\Reader\Type', ['isConcrete'], [], '', false);
         $this->model = new \Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder(
             $this->interceptionConfig,
             $this->pluginList,
-            $this->typeReader
+            $this->typeReader,
+            $this->cacheManager
         );
     }
 
@@ -66,6 +82,9 @@ class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
                 ['Class1', true],
                 ['instance', true],
             ]);
+        $this->cacheManager->expects($this->once())
+            ->method('setEnabled')
+            ->with([CompiledConfig::TYPE_IDENTIFIER], true);
         $this->pluginList->expects($this->once())
             ->method('setInterceptedClasses')
             ->with($definedClasses);

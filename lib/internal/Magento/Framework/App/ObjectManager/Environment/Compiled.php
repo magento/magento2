@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\ObjectManager\Environment;
 
 use Magento\Framework\App\EnvironmentInterface;
+use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
@@ -111,6 +112,8 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
             'Magento\Framework\Interception\PluginListInterface',
             ['cache' => $objectManager->get('Magento\Framework\App\Interception\Cache\CompiledConfig')]
         );
-        $objectManager->get('Magento\Framework\App\Cache\Manager')->setEnabled(['compiled_config'], true);
+        $objectManager
+            ->get('Magento\Framework\App\Cache\Manager')
+            ->setEnabled([CompiledConfig::TYPE_IDENTIFIER], true);
     }
 }

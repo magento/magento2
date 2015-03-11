@@ -124,8 +124,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'Magento\Tools\Di\Code\Generator\PluginList' => [
-                'cache' => [
-                    'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                'arguments' => [
+                    'cache' => [
+                        'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                    ]
                 ]
             ]
         ];
