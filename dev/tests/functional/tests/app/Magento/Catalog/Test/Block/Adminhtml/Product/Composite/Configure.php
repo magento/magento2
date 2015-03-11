@@ -30,7 +30,7 @@ class Configure extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $okButton = '.ui-dialog-buttonset button:nth-of-type(2)';
+    protected $okButton = '.ui-button.action-primary';
 
     /**
      * Backend abstract block
