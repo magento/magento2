@@ -35,7 +35,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helperMock;
+    protected $jsonHelperMock;
 
     protected function setUp()
     {
@@ -64,7 +64,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_theme)
         );
 
-        $this->_helperMock = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
+        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
@@ -74,7 +74,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
                 'urlBuilder' => $this->_urlBuilder,
                 'themeContext' => $this->_themeContext,
                 'formFactory' => $this->getMock('Magento\Framework\Data\FormFactory', [], [], '', false),
-                'coreHelper' => $this->_helperMock
+                'jsonHelper' => $this->jsonHelperMock
             ]
         );
     }
@@ -169,7 +169,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['js' => 'files'])
         );
 
-        $this->_helperMock->expects(
+        $this->jsonHelperMock->expects(
             $this->once()
         )->method(
             'jsonEncode'

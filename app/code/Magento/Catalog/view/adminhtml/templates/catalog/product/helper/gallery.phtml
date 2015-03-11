@@ -14,7 +14,7 @@ $elementName = $block->getElement()->getName() . '[images]';
      data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
      data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
      data-types="<?php echo $block->escapeHtml(
-         $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getImageTypes())
+         $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
     >
     <?php if (!$block->getElement()->getReadonly()) {

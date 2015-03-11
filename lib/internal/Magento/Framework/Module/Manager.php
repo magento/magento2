@@ -9,9 +9,6 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Module\Plugin\DbStatusValidator;
-use Magento\Framework\Module\Updater\SetupInterface;
-
 class Manager
 {
     /**

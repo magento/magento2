@@ -7,7 +7,6 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 /**
  * Class ShipmentRemoveTrackTest
@@ -73,7 +72,7 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/shipment/track/' . $track->getId(),
-                'httpMethod' => Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

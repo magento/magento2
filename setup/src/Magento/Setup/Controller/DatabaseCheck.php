@@ -47,10 +47,13 @@ class DatabaseCheck extends AbstractActionController
     public function indexAction()
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+
         try {
             $installer = $this->installerFactory->create($this->webLogger);
             $password = isset($params['password']) ? $params['password'] : '';
             $installer->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
+            $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';
+            $installer->checkDatabaseTablePrefix($tablePrefix);
             return new JsonModel(['success' => true]);
         } catch (\Exception $e) {
             return new JsonModel(['success' => false, 'error' => $e->getMessage()]);
