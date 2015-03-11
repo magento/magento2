@@ -70,7 +70,7 @@ class TemplateFile extends File
     {
         $template = parent::getFile($area, $themeModel, $file, $module);
 
-        if (!$this->assetConfig->isMinifingHtml()) {
+        if (!$this->assetConfig->isMinifyHtml()) {
             return $template;
         }
 

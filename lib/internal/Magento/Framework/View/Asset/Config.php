@@ -110,7 +110,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      *
      * @return bool
      */
-    public function isMinifingHtml()
+    public function isMinifyHtml()
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MINIFICATION_HTML,

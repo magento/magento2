@@ -45,5 +45,5 @@ interface ConfigInterface
      *
      * @return bool
      */
-    public function isMinifingHtml();
+    public function isMinifyHtml();
 }
