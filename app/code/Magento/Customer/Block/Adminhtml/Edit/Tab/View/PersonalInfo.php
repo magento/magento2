@@ -12,7 +12,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Adminhtml customer view personal information sales block
+ * Adminhtml customer view personal information sales block.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PersonalInfo extends \Magento\Backend\Block\Template
@@ -33,6 +34,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @var \Magento\Customer\Model\Log
      */
     protected $customerLog;
+
+    /**
+     * @var \Magento\Customer\Model\Logger
+     */
+    protected $customerLogger;
 
     /**
      * @var AccountManagementInterface
@@ -111,12 +117,9 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->dateTime = $dateTime;
         $this->addressMapper = $addressMapper;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->customerLogger = $customerLogger;
 
         parent::__construct($context, $data);
-
-        $this->customerLog = $customerLogger->get(
-            $this->getCustomer()->getId()
-        );
     }
 
     /**
@@ -140,6 +143,22 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     public function getCustomerId()
     {
         return $this->coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+    }
+
+    /**
+     * Retrieves customer log.
+     *
+     * @return \Magento\Customer\Model\Log
+     */
+    public function getCustomerLog()
+    {
+        if (!$this->customerLog) {
+            $this->customerLog = $this->customerLogger->get(
+                $this->getCustomer()->getId()
+            );
+        }
+
+        return $this->customerLog;
     }
 
     /**
@@ -286,20 +305,20 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getCurrentStatus()
     {
-        if (!$this->customerLog->getLastLoginAt()) {
+        if (!$this->getCustomerLog()->getLastLoginAt()) {
             return __('Offline');
         }
 
-        if ($this->customerLog->getLastLogoutAt() &&
-            strtotime($this->customerLog->getLastLogoutAt()) > strtotime($this->customerLog->getLastLoginAt())
+        if ($this->getCustomerLog()->getLastLogoutAt() &&
+            strtotime($this->getCustomerLog()->getLastLogoutAt()) > strtotime($this->getCustomerLog()->getLastLoginAt())
         ) {
             return __('Offline');
         }
 
         $interval = $this->getOnlineMinutesInterval();
 
-        if ($this->customerLog->getLastVisitAt() &&
-            strtotime($this->dateTime->now()) - strtotime($this->customerLog->getLastVisitAt()) > $interval * 60
+        if ($this->getCustomerLog()->getLastVisitAt() &&
+            strtotime($this->dateTime->now()) - strtotime($this->getCustomerLog()->getLastVisitAt()) > $interval * 60
         ) {
             return __('Offline');
         }
@@ -314,7 +333,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getLastLoginDate()
     {
-        if ($date = $this->customerLog->getLastLoginAt()) {
+        if ($date = $this->getCustomerLog()->getLastLoginAt()) {
             return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         }
         return __('Never');
@@ -325,7 +344,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getStoreLastLoginDate()
     {
-        if ($date = strtotime($this->customerLog->getLastLoginAt())) {
+        if ($date = strtotime($this->getCustomerLog()->getLastLoginAt())) {
             $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
             return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         }
