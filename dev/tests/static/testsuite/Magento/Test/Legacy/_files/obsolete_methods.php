@@ -1063,7 +1063,7 @@ return [
     [
         'getProtectedFileExtensions',
         '\Magento\Core\Helper\Data',
-        '\Magento\Core\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
+        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
     ],
     ['getStoreId', '\Magento\Core\Helper\Data'],
     ['getExactDivision', '\Magento\Core\Helper\Data', '\Magento\Framework\Math\Division::getExactDivision'],
@@ -2051,6 +2051,7 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['getPreProcessors', 'Magento\Framework\View\Asset\PreProcessor\Pool', 'process'],
     ['isPhpFile', '\Magento\Tools\Di\Code\Reader\ClassesScanner'],
     ['renderPage', 'Magento\Cms\Helper\Page'],
     ['renderPageExtended', 'Magento\Cms\Helper\Page'],

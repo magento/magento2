@@ -1,0 +1,124 @@
+{
+    "var": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= path.tmp %>/generation/**/*",
+                    "<%= path.tmp %>/log/**/*",
+                    "<%= path.tmp %>/maps/**/*",
+                    "<%= path.tmp %>/page_cache/**/*",
+                    "<%= path.tmp %>/tmp/**/*",
+                    "<%= path.tmp %>/view/**/*",
+                    "<%= path.tmp %>/view_preprocessed/**/*"
+                ]
+            }
+        ]
+    },
+    "pub": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.pub %>frontend/**/*",
+                    "<%= path.pub %>adminhtml/**/*"
+                ]
+            }
+        ]
+    },
+    "styles": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/view_preprocessed/**/*",
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= path.pub %>frontend/**/*.less",
+                    "<%= path.pub %>frontend/**/*.css",
+                    "<%= path.pub %>adminhtml/**/*.less",
+                    "<%= path.pub %>adminhtml/**/*.css"
+                ]
+            }
+        ]
+    },
+    "markup": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= path.tmp %>/generation/**/*",
+                    "<%= path.tmp %>/page_cache/**/*"
+                ]
+            }
+        ]
+    },
+    "js": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.pub %>**/*.js",
+                    "<%= path.pub %>**/*.html",
+                    "<%= path.pub %>_requirejs/**/*"
+                ]
+            }
+        ]
+    },
+    "blank": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= combo.autopath(\"blank\", \"pub\") %>**/*",
+                    "<%= combo.autopath(\"blank\", \"tmpLess\") %>**/*",
+                    "<%= combo.autopath(\"blank\", \"tmpSource\") %>**/*"
+                ]
+            }
+        ]
+    },
+    "backend": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= combo.autopath(\"backend\", \"pub\") %>**/*",
+                    "<%= combo.autopath(\"backend\", \"tmpLess\") %>**/*",
+                    "<%= combo.autopath(\"backend\", \"tmpSource\") %>**/*"
+                ]
+            }
+        ]
+    },
+    "luma": {
+        "force": true,
+        "files": [
+            {
+                "force": true,
+                "dot": true,
+                "src": [
+                    "<%= path.tmp %>/cache/**/*",
+                    "<%= combo.autopath(\"luma\", \"pub\") %>**/*",
+                    "<%= combo.autopath(\"luma\", \"tmpLess\") %>**/*",
+                    "<%= combo.autopath(\"luma\", \"tmpSource\") %>**/*"
+                ]
+            }
+        ]
+    }
+}
