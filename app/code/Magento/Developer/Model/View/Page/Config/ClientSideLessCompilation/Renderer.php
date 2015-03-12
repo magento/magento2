@@ -121,7 +121,7 @@ class Renderer extends Config\Renderer
                 ) {
                     $attributes = $this->addDefaultAttributes('less', []);
                     $groupTemplate = $this->getAssetTemplate($asset->getContentType(), $attributes);
-                    $result .= sprintf($groupTemplate, $asset->getUrl());
+                    $result .= sprintf($groupTemplate, $asset->getSourceUrl());
                 } else {
                     $result .= sprintf($template, $asset->getUrl());
                 }
