@@ -8,7 +8,6 @@
         "magento/module-cms": "0.42.0-beta10",
         "magento/module-indexer": "0.42.0-beta10",
         "magento/module-customer": "0.42.0-beta10",
-        "magento/module-core": "0.42.0-beta10",
         "magento/module-theme": "0.42.0-beta10",
         "magento/module-checkout": "0.42.0-beta10",
         "magento/module-log": "0.42.0-beta10",
