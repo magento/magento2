@@ -30,7 +30,7 @@ class LogoTest extends \PHPUnit_Framework_TestCase
 
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($mediaDirectory));
         $helper = $this->getMock(
-            'Magento\Core\Helper\File\Storage\Database',
+            'Magento\MediaStorage\Helper\File\Storage\Database',
             ['checkDbUsage'],
             [],
             '',

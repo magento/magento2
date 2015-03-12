@@ -6,7 +6,6 @@
 namespace Magento\Framework\Less\Test\Unit\File\Collector;
 
 use \Magento\Framework\Less\File\Collector\Library;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
@@ -16,37 +15,37 @@ use Magento\Framework\Filesystem;
 class LibraryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\View\File\FileList\Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileListFactoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileSystemMock;
 
     /**
-     * @var \Magento\Framework\View\File\Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\File\FileList|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fileListMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $libraryDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themesDirectoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeMock;
 
@@ -60,7 +59,9 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->fileListMock = $this->getMockBuilder('Magento\Framework\View\File\FileList')
             ->disableOriginalConstructor()->getMock();
-        $this->fileListFactoryMock->expects($this->any())->method('create')
+        $this->fileListFactoryMock->expects($this->any())
+            ->method('create')
+            ->with('Magento\Framework\Less\File\FileList\Collator')
             ->will($this->returnValue($this->fileListMock));
 
         $this->fileSystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
@@ -119,7 +120,7 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
         $this->libraryDirectoryMock->expects($this->any())->method('search')->will($this->returnValue($libraryFiles));
         $this->libraryDirectoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnCallback(
             function ($file) {
-                    return '/opt/Magneto/lib/' . $file;
+                return '/opt/Magneto/lib/' . $file;
             }
         ));
         $themePath = '/var/Magento/ATheme';

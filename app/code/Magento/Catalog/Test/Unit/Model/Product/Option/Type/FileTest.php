@@ -18,7 +18,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $rootDirectory;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreFileStorageDatabase;
 
@@ -32,7 +32,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->coreFileStorageDatabase = $this->getMock(
-            'Magento\Core\Helper\File\Storage\Database',
+            'Magento\MediaStorage\Helper\File\Storage\Database',
             ['copyFile'],
             [],
             '',

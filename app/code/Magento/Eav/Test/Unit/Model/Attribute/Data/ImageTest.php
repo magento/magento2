@@ -23,7 +23,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
         $urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', [], [], '', false);
         $fileValidatorMock = $this->getMock(
-            '\Magento\Core\Model\File\Validator\NotProtectedExtension', [], [], '', false
+            '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension', [], [], '', false
         );
         $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
 

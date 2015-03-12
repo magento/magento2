@@ -37,7 +37,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storage;
 
@@ -73,7 +73,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->fileSystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->storage = $this->getMock('Magento\Core\Helper\File\Storage', [], [], '', false);
+        $this->storage = $this->getMock('Magento\MediaStorage\Helper\File\Storage', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
 
         $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
@@ -126,7 +126,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
-                    ['Magento\Core\Helper\File\Storage', $this->storage]
+                    ['Magento\MediaStorage\Helper\File\Storage', $this->storage]
                 ]
             );
 
@@ -176,7 +176,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
-                    ['Magento\Core\Helper\File\Storage', $this->storage]
+                    ['Magento\MediaStorage\Helper\File\Storage', $this->storage]
                 ]
             );
 

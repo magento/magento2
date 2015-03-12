@@ -47,7 +47,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        $fileStorageDb = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);
+        $fileStorageDb = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $this->resourceModel = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media',
             [

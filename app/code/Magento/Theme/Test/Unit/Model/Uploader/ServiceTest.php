@@ -17,12 +17,12 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     protected $_service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\File\Uploader
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\Uploader
      */
     protected $_uploader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\File\UploaderFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
@@ -48,9 +48,9 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_uploader = $this->getMock('Magento\Core\Model\File\Uploader', [], [], '', false);
+        $this->_uploader = $this->getMock('Magento\MediaStorage\Model\File\Uploader', [], [], '', false);
         $this->_uploaderFactory = $this->getMock(
-            'Magento\Core\Model\File\UploaderFactory',
+            'Magento\MediaStorage\Model\File\UploaderFactory',
             ['create'],
             [],
             '',

@@ -6,7 +6,6 @@
 namespace Magento\Theme\Test\Unit\Model\Favicon;
 
 use \Magento\Theme\Model\Favicon\Favicon;
-
 use Magento\Config\Model\Config\Backend\Image\Favicon as ImageFavicon;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\UrlInterface;
@@ -30,7 +29,7 @@ class FaviconTest extends \PHPUnit_Framework_TestCase
     protected $scopeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Helper\File\Storage\Database
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $fileStorageDatabase;
 
@@ -51,7 +50,7 @@ class FaviconTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->store);
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $this->scopeManager = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
-        $this->fileStorageDatabase = $this->getMockBuilder('Magento\Core\Helper\File\Storage\Database')
+        $this->fileStorageDatabase = $this->getMockBuilder('Magento\MediaStorage\Helper\File\Storage\Database')
             ->disableOriginalConstructor()
             ->getMock();
         $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')

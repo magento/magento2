@@ -38,7 +38,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false);
+        $fileStorageDbMock = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);

@@ -9,7 +9,6 @@
 namespace Magento\Framework\View\Test\Unit\Asset;
 
 use \Magento\Framework\View\Asset\Source;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
@@ -143,7 +142,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
      * @param string $isMaterialization
      * @dataProvider getFileDataProvider
      */
-    public function testGetFile($origFile, $origPath, $origContentType, $origContent, $isMaterialization)
+    public function testGetFile($origFile, $origPath, $origContent, $isMaterialization)
     {
         $filePath = 'some/file.ext';
         $cacheValue = "{$origPath}:{$filePath}";
@@ -162,12 +161,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->with($origPath)
             ->will($this->returnValue($origContent));
-        $processor = $this->getMockForAbstractClass('Magento\Framework\View\Asset\PreProcessorInterface');
         $this->preProcessorPool->expects($this->once())
-            ->method('getPreProcessors')
-            ->with($origContentType, 'ext')
-            ->will($this->returnValue([$processor]));
-        $processor->expects($this->once())
             ->method('process')
             ->will($this->returnCallback([$this, 'chainTestCallback']));
         if ($isMaterialization) {
@@ -235,10 +229,10 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     public function getFileDataProvider()
     {
         return [
-            ['/root/some/file.ext', 'source/some/file.ext', 'ext', 'processed', false],
-            ['/root/some/file.ext', 'source/some/file.ext', 'ext', 'not_processed', true],
-            ['/root/some/file.ext2', 'source/some/file.ext2', 'ext2', 'processed', true],
-            ['/root/some/file.ext2', 'source/some/file.ext2', 'ext2', 'not_processed', true],
+            ['/root/some/file.ext', 'source/some/file.ext', 'processed', false],
+            ['/root/some/file.ext', 'source/some/file.ext', 'not_processed', true],
+            ['/root/some/file.ext2', 'source/some/file.ext2', 'processed', true],
+            ['/root/some/file.ext2', 'source/some/file.ext2', 'not_processed', true],
         ];
     }
 

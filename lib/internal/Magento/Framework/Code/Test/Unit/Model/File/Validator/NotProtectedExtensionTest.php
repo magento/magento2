@@ -10,7 +10,7 @@ use Magento\Framework\Phrase;
 class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_model;
 
@@ -33,14 +33,14 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             $this->equalTo(
-                \Magento\Core\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS
+                \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS
             ),
             $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
             $this->equalTo(null)
         )->will(
             $this->returnValue($this->_protectedList)
         );
-        $this->_model = new \Magento\Core\Model\File\Validator\NotProtectedExtension($this->_scopeConfig);
+        $this->_model = new \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension($this->_scopeConfig);
     }
 
     public function testGetProtectedFileExtensions()
@@ -51,7 +51,7 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
     public function testInitialization()
     {
         $property = new \ReflectionProperty(
-            '\Magento\Core\Model\File\Validator\NotProtectedExtension',
+            '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension',
             '_messageTemplates'
         );
         $property->setAccessible(true);
@@ -61,7 +61,7 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($defaultMess, $property->getValue($this->_model));
 
         $property = new \ReflectionProperty(
-            '\Magento\Core\Model\File\Validator\NotProtectedExtension',
+            '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension',
             '_protectedFileExtensions'
         );
         $property->setAccessible(true);
