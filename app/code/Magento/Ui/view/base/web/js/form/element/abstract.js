@@ -6,8 +6,9 @@ define([
     'underscore',
     'mage/utils',
     'Magento_Ui/js/form/component',
-    'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Component, validator) {
+    'Magento_Ui/js/lib/validation/validator',
+    'Magento_Ui/js/form/components/posCodeFix'
+], function (_, utils, Component, validator, posCodeFix) {
     'use strict';
     
     /**
@@ -261,5 +262,6 @@ define([
 
             this.validate();
         }
-    });
+    })
+        .extend(posCodeFix);
 });
