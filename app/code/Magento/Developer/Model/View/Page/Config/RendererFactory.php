@@ -6,6 +6,7 @@
 namespace Magento\Developer\Model\View\Page\Config;
 
 use Magento\Developer\Model\Config\Source\WorkflowType;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
@@ -59,6 +60,11 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      */
     public function create(array $data =[])
     {
-        return $this->rendererTypes[$this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)];
+        return $this->objectManager->create(
+            $this->rendererTypes[
+                $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE)
+            ],
+            $data
+        );
     }
 }

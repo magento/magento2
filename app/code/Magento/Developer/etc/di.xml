@@ -17,8 +17,8 @@
     <type name="Magento\Developer\Model\View\Page\Config\RendererFactory">
         <arguments>
             <argument name="rendererTypes" xsi:type="array">
-                <item name="client_side_compilation" xsi:type="object">Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer</item>
-                <item name="server_side_compilation" xsi:type="object">\Magento\Framework\View\Page\Config\Renderer</item>
+                <item name="client_side_compilation" xsi:type="string">Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer</item>
+                <item name="server_side_compilation" xsi:type="string">Magento\Framework\View\Page\Config\Renderer</item>
             </argument>
         </arguments>
     </type>
