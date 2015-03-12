@@ -19,8 +19,16 @@ class MenuTest extends \PHPUnit_Framework_TestCase
      */
     protected $blockMenu;
 
+    /** @var \Magento\Framework\App\Cache\Type\Config $configCacheType */
+    protected $configCacheType;
+
     protected function setUp()
     {
+        $this->configCacheType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\App\Cache\Type\Config'
+        );
+        $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
+
         $this->blockMenu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Block\Menu'
         );
@@ -65,7 +73,10 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Model\Menu\Config',
-            ['configReader' => $configReader]
+            [
+                'configReader' => $configReader,
+                'configCacheType' => $this->configCacheType
+            ]
         );
     }
 
@@ -80,5 +91,13 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
         $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
         $auth->login(\Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown()
+    {
+        $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
     }
 }
