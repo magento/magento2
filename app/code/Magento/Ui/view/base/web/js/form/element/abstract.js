@@ -7,7 +7,7 @@ define([
     'mage/utils',
     'Magento_Ui/js/form/component',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Component, validator, posCodeFix) {
+], function (_, utils, Component, validator) {
     'use strict';
     
     /**
