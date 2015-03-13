@@ -22,12 +22,12 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
     /**
      * PHP extensions message.
      */
-    const PHP_EXTENSIONS_REGEXP = 'You meet (\d+) out of \1 PHP extensions requirements\.';
+    const PHP_EXTENSIONS_REGEXP = '/You meet (\d+) out of \1 PHP extensions requirements\./';
 
     /**
      * File permission message.
      */
-    const FILE_PERMISSION_REGEXP = 'You meet (\d+) out of \1 writable file permission requirements\.';
+    const FILE_PERMISSION_REGEXP = '/You meet (\d+) out of \1 writable file permission requirements\./';
 
     /**
      * Assert that PHP Version, PHP Extensions and File Permission are ok.
