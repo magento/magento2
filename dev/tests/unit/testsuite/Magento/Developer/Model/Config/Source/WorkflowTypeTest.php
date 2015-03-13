@@ -25,7 +25,7 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $this->assertInstanceOf('\Magento\Framework\Option\ArrayInterface', $this->model);
-        $this->assertCount(3, $this->model->toOptionArray());
+        $this->assertCount(2, $this->model->toOptionArray());
         $option = current($this->model->toOptionArray());
 
         /** @var \Magento\Framework\Phrase $label */

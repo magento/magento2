@@ -28,11 +28,6 @@ class FileGenerator
     const LOCK_FILE = 'less.lock';
 
     /**
-     * Styling mode
-     */
-    const STYLING_MODE = true;
-
-    /**
      * @var string
      */
     protected $lessDirectory;
@@ -41,11 +36,6 @@ class FileGenerator
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $tmpDirectory;
-
-    /**
-     * @var \Magento\Framework\View\Filesystem
-     */
-    protected $_filesystem;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -68,18 +58,25 @@ class FileGenerator
     private $importProcessor;
 
     /**
+     * @var \Magento\Framework\App\View\Asset\Publisher
+     */
+    private $publisher;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor
      * @param \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
      * @param \Magento\Framework\View\Asset\Source $assetSource
+     * @param \Magento\Framework\App\View\Asset\Publisher $publisher
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor,
         \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor,
-        \Magento\Framework\View\Asset\Source $assetSource
+        \Magento\Framework\View\Asset\Source $assetSource,
+        \Magento\Framework\App\View\Asset\Publisher $publisher
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
@@ -89,6 +86,7 @@ class FileGenerator
 
         $this->magentoImportProcessor = $magentoImportProcessor;
         $this->importProcessor = $importProcessor;
+        $this->publisher = $publisher;
     }
 
     /**
@@ -118,10 +116,9 @@ class FileGenerator
         $this->generateRelatedFiles();
         $lessRelativePath = preg_replace('#\.css$#', '.less', $chain->getAsset()->getPath());
         $tmpFilePath = $this->createFile($lessRelativePath, $chain->getContent());
-        
-        if (self::STYLING_MODE) {
-            $this->createFileMain($lessRelativePath, $chain->getContent());
-        }
+
+        $this->createFileMain($lessRelativePath, $chain->getContent());
+
         $this->tmpDirectory->delete($lockFilePath);
         return $tmpFilePath;
     }
@@ -175,9 +172,8 @@ class FileGenerator
         $relatedAsset->getFilePath();
 
         $this->createFile($relatedAsset->getPath(), $relatedAsset->getContent());
-        if (self::STYLING_MODE) {
-            $this->createSymlink($relatedAsset);
-        }
+        $relatedAsset->getSourceFile();
+        $this->publisher->publish($relatedAsset);
     }
 
     /**
@@ -187,7 +183,7 @@ class FileGenerator
      * @param string $contents
      * @return string
      */
-    protected function createFile($relativePath, $contents)
+    private function createFile($relativePath, $contents)
     {
         $filePath = $this->lessDirectory . '/' . $relativePath;
 
@@ -203,35 +199,11 @@ class FileGenerator
      *
      * @return void
      */
-    protected function createFileMain($relativePath, $contents)
+    private function createFileMain($relativePath, $contents)
     {
         $filePath = '/static/' . $relativePath;
         $contents .= '@urls-resolved: true;' . PHP_EOL . PHP_EOL;
         $this->pubDirectory->writeFile($filePath, $contents);
-        return;
-    }
-
-    /**
-     * @param LocalInterface $relatedAsset
-     *
-     * @return void
-     */
-    protected function createSymLink(LocalInterface $relatedAsset)
-    {
-        $prefix = '/static/';
-        $linkDir = $prefix . str_replace(pathinfo($relatedAsset->getPath())['basename'], '', $relatedAsset->getPath());
-        if (strpos($relatedAsset->getSourceFile(), 'view_preprocessed') !== false) {
-            $linkTarget = $this->assetSource->findSource($relatedAsset);
-        } else {
-            $linkTarget = $relatedAsset->getSourceFile();
-        }
-        $link = $this->pubDirectory->getAbsolutePath($prefix . $relatedAsset->getPath());
-        if (!$this->pubDirectory->isExist($linkDir)) {
-            $this->pubDirectory->create($linkDir);
-        }
-        if (!file_exists($link)) {
-            symlink($linkTarget, $link);
-        }
         return;
     }
 }

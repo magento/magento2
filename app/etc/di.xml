@@ -573,6 +573,24 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="lessFileGeneratorMaterialization" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
+        <arguments>
+            <argument name="strategiesList" xsi:type="array">
+                <item name="view_preprocessed" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink</item>
+                <item name="default" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Copy</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileGeneratorPublisher" type="Magento\Framework\App\View\Asset\Publisher">
+        <arguments>
+            <argument name="materializationStrategyFactory" xsi:type="object">lessFileGeneratorMaterialization</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Less\FileGenerator">
+        <arguments>
+            <argument name="publisher" xsi:type="object">lessFileGeneratorPublisher</argument>
+        </arguments>
+    </type>
     <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>

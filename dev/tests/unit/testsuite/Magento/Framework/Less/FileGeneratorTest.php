@@ -42,6 +42,11 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\App\View\Asset\Publisher|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $publisher;
+
     protected function setUp()
     {
         $this->tmpDirectory = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
@@ -67,12 +72,14 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Less\PreProcessor\Instruction\Import', [], [], '', false
         );
 
-        $repo = $this->getMock(
+        $assetSource = $this->getMock(
             'Magento\Framework\View\Asset\Source', [], [], '', false
         );
 
+        $this->publisher = $this->getMock('Magento\Framework\App\View\Asset\Publisher', [], [], '', false);
+
         $this->object = new \Magento\Framework\Less\FileGenerator(
-            $filesystem, $this->assetRepo, $this->magentoImport, $this->import, $repo
+            $filesystem, $this->assetRepo, $this->magentoImport, $this->import, $assetSource, $this->publisher
         );
     }
 
