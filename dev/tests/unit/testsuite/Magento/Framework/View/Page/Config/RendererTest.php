@@ -331,7 +331,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->with('', ['_direct' => 'core/index/notFound'])
             ->willReturn($assetNoRoutUrl);
 
-        $this->assertEquals($expectedResult, $this->renderer->renderAssets());
+        $this->assertEquals(
+            $expectedResult,
+            $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
+        );
     }
 
     /**

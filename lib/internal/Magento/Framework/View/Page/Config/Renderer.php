@@ -104,7 +104,7 @@ class Renderer implements RendererInterface
         $result .= $this->renderMetadata();
         $result .= $this->renderTitle();
         $this->prepareFavicon();
-        $result .= $this->renderAssets(array_fill_keys($this->assetTypeOrder, ''));
+        $result .= $this->renderAssets($this->getAvailableResultGroups());
         $result .= $this->pageConfig->getIncludes();
         return $result;
     }
@@ -368,5 +368,13 @@ class Renderer implements RendererInterface
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableResultGroups()
+    {
+        return array_fill_keys($this->assetTypeOrder, '');
     }
 }
