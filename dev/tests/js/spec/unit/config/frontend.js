@@ -5,6 +5,6 @@
 
 require.config({
     paths: {
-        'jquery/ui': 'jquery/jquery-ui'    
+        'jquery/ui': 'jquery/jquery-ui'
     }
-})
+});

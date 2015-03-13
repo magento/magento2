@@ -63,7 +63,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->response = $this->getMock('Magento\Core\Model\File\Storage\Response', [], [], '', false);
+        $this->response = $this->getMock('Magento\MediaStorage\Model\File\Storage\Response', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->publisher = $this->getMock('Magento\Framework\App\View\Asset\Publisher', [], [], '', false);
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);

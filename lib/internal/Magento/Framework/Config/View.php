@@ -31,13 +31,24 @@ class View extends \Magento\Framework\Config\AbstractXml
     {
         $result = [];
         /** @var $varsNode \DOMElement */
-        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $varsNode) {
-            $moduleName = $varsNode->getAttribute('module');
-            /** @var $varNode \DOMElement */
-            foreach ($varsNode->getElementsByTagName('var') as $varNode) {
-                $varName = $varNode->getAttribute('name');
-                $varValue = $varNode->nodeValue;
-                $result[$moduleName][$varName] = $varValue;
+        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $childNode) {
+            switch ($childNode->tagName) {
+                case 'vars':
+                    $moduleName = $childNode->getAttribute('module');
+                    /** @var $varNode \DOMElement */
+                    foreach ($childNode->getElementsByTagName('var') as $varNode) {
+                        $varName = $varNode->getAttribute('name');
+                        $varValue = $varNode->nodeValue;
+                        $result[$childNode->tagName][$moduleName][$varName] = $varValue;
+                    }
+                    break;
+                case 'exclude':
+                    /** @var $itemNode \DOMElement */
+                    foreach ($childNode->getElementsByTagName('item') as $itemNode) {
+                        $itemType = $itemNode->getAttribute('type');
+                        $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
+                    }
+                    break;
             }
         }
         return $result;
@@ -53,7 +64,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVars($module)
     {
-        return isset($this->_data[$module]) ? $this->_data[$module] : [];
+        return isset($this->_data['vars'][$module]) ? $this->_data['vars'][$module] : [];
     }
 
     /**
@@ -65,7 +76,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getVarValue($module, $var)
     {
-        return isset($this->_data[$module][$var]) ? $this->_data[$module][$var] : false;
+        return isset($this->_data['vars'][$module][$var]) ? $this->_data['vars'][$module][$var] : false;
     }
 
     /**
@@ -96,6 +107,38 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function _getIdAttributes()
     {
-        return ['/view/vars' => 'module', '/view/vars/var' => 'name'];
+        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/item' => ['type', 'item']];
+    }
+
+    /**
+     * Get excluded file list
+     *
+     * @return array
+     */
+    public function getExcludedFiles()
+    {
+        $items = $this->getItems();
+        return isset($items['file']) ? $items['file'] : [];
+    }
+
+    /**
+     * Get excluded directory list
+     *
+     * @return array
+     */
+    public function getExcludedDir()
+    {
+        $items = $this->getItems();
+        return isset($items['directory']) ? $items['directory'] : [];
+    }
+
+    /**
+     * Get a list of excludes
+     *
+     * @return array
+     */
+    protected function getItems()
+    {
+        return isset($this->_data['exclude']) ? $this->_data['exclude'] : [];
     }
 }

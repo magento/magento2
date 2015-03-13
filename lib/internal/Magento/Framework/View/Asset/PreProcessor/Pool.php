@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\PreProcessorInterface;
 
 /**
  * A registry of asset preprocessors (not to confuse with the "Registry" pattern)
@@ -14,47 +15,65 @@ use Magento\Framework\ObjectManagerInterface;
 class Pool
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @var array
      */
-    public function __construct(ObjectManagerInterface $objectManager)
+    private $preProcessorClasses = [];
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param array $preProcessors
+     */
+    public function __construct(ObjectManagerInterface $objectManager, array $preProcessors = [])
     {
         $this->objectManager = $objectManager;
+        $this->preProcessorClasses = $preProcessors;
     }
 
     /**
-     * Retrieve preprocessors instances suitable to convert source content type into a destination one
+     * Execute preprocessors instances suitable to convert source content type into a destination one
      *
-     * BUG: this implementation is hard-coded intentionally because there is a logic duplication that needs to be fixed.
-     * Adding an extensibility layer through DI configuration would add even more fragility to this design.
-     * If you need to add another preprocessor, use interceptors or class inheritance (at your own risk).
-     *
-     * @param string $sourceContentType
-     * @param string $targetContentType
-     * @return \Magento\Framework\View\Asset\PreProcessorInterface[]
+     * @param Chain $chain
+     * @return void
      */
-    public function getPreProcessors($sourceContentType, $targetContentType)
+    public function process(Chain $chain)
     {
-        $result = [];
-        if ($sourceContentType == 'less') {
-            if ($targetContentType == 'css') {
-                $result[] = $this->objectManager->get('Magento\Framework\Css\PreProcessor\Less');
-            } elseif ($targetContentType == 'less') {
-                /**
-                 * @bug This logic is duplicated at \Magento\Framework\Less\FileGenerator::generateLessFileTree()
-                 * If you need to extend or modify behavior of LESS preprocessing, you must account for both places
-                 */
-                $result[] = $this->objectManager->get('Magento\Framework\Less\PreProcessor\Instruction\MagentoImport');
-                $result[] = $this->objectManager->get('Magento\Framework\Less\PreProcessor\Instruction\Import');
+        $fromType = $chain->getOrigContentType();
+        $toType = $chain->getTargetContentType();
+        foreach ($this->getPreProcessors($fromType, $toType) as $preProcessor) {
+            $preProcessor->process($chain);
+        }
+    }
+
+    /**
+     * Retrieve preProcessors by types
+     *
+     * @param string $fromType
+     * @param string $toType
+     * @return PreProcessorInterface[]
+     */
+    private function getPreProcessors($fromType, $toType)
+    {
+        $preProcessors = [];
+        if (isset($this->preProcessorClasses[$fromType]) && isset($this->preProcessorClasses[$fromType][$toType])) {
+            $preProcessors = $this->preProcessorClasses[$fromType][$toType];
+        } else {
+            $preProcessors[] = 'Magento\Framework\View\Asset\PreProcessor\Passthrough';
+        }
+
+        $processorInstances = [];
+        foreach ($preProcessors as $preProcessor) {
+            $processorInstance = $this->objectManager->get($preProcessor);
+            if (!$processorInstance instanceof PreProcessorInterface) {
+                throw new \UnexpectedValueException("{$preProcessor} has to implement the PreProcessorInterface.");
             }
+            $processorInstances[] = $processorInstance;
         }
-        if ($targetContentType == 'css') {
-            $result[] = $this->objectManager->get('Magento\Framework\View\Asset\PreProcessor\ModuleNotation');
-        }
-        return $result;
+
+        return $processorInstances;
     }
 }

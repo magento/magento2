@@ -65,13 +65,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $themeMock = $this->getMock(
             'Magento\Theme\Model\Theme',
-            ['getId', 'getCustomization', 'getCustomViewConfigPath'],
+            ['getCode', 'getCustomization', 'getCustomViewConfigPath'],
             [],
             '',
             false
         );
         $themeMock->expects($this->atLeastOnce())
-            ->method('getId')
+            ->method('getCode')
             ->will($this->returnValue(2));
         $themeMock->expects($this->once())
             ->method('getCustomization')
