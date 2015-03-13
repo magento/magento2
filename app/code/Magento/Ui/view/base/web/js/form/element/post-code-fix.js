@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
+    'Magento_Ui/js/lib/registry/registry',
     './abstract'
-], function (Abstract) {
+], function (registry, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -13,25 +14,28 @@ define([
          *
          * @return {Boolean}
          */
-        getInititalValue: function(){
-            debugger;
-            return this._super();
+        initListeners: function(){
+            this._super();
+            this.provider.data.on('update:'+this.parentScope+'.country_id', this.update.bind(this));
+            return this;
         },
 
-        /**
-         * Calls 'store' method of parent, if value is defined and instance's
-         *     'unique' property set to true, calls 'setUnique' method
-         *
-         * @return {Object} - reference to instance
-         */
-        store: function() {
-            this._super();
+        update: function(value){
+            var parentScope  = this.getPart(this.getPart(this.name, -2), -2),
+                component = registry.get(parentScope + '.country_id.0'),
+                element;
 
-            if (this.hasUnique) {
-                this.setUnique();
+            component
+                .options()
+                .some(function (el, idx) {
+                    element = el;
+                    return el.value === value;
+                });
+
+            if(!element.is_region_required) {
+                this.error(false);
             }
-
-            return this;
+            this.required(!!element.is_region_required);
         }
     });
 });
