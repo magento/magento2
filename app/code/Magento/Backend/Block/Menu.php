@@ -410,7 +410,7 @@ class Menu extends \Magento\Backend\Block\Template
         if ($level == 0 && $limit) {
             $colStops = $this->_columnBrake($menuItem->getChildren(), $limit);
             $output .= '<strong class="submenu-title">' . $this->_getAnchorLabel($menuItem) . '</strong>';
-            $output .= '<button class="submenu-close _close"></button>';
+            $output .= '<a href="#" class="submenu-close _close" data-role="close-submenu"></a>';
         }
 
         $output .= $this->renderNavigation($menuItem->getChildren(), $level + 1, $limit, $colStops);

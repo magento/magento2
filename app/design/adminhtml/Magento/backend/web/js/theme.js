@@ -5,91 +5,88 @@
 
 define('globalNavigation', [
     'jquery',
-    'jquery/ui',
-    'jquery/hover-intent'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
     $.widget('mage.globalNavigation', {
         options: {
-            menuCategory: '.level-0',
-            menuLinks: 'a',
-            itemsConfig: null,
-            hoverIntentConfig: {
-                interval: 100,
-                timeout: 500 // number = milliseconds delay before onMouseOut
+            selectors: {
+                topLevelItem: '.level-0',
+                topLevelHref: '> a',
+                subMenu: '> .submenu',
+                closeSubmenuBtn: '[data-role="close-submenu"]'
             },
-            overlayClass: 'admin__menu-overlay',
-            categoriesConfig: {
-                'li': {
-                    open: 'click'
-                }
-            }
+            overlayTmpl: '<div class="admin__menu-overlay"></div>'
         },
 
         _create: function () {
-            this.menu           = this.element;
-            this.menuCategory   = $(this.options.menuCategory, this.menu);
-            this.menuLinks      = $(this.options.menuLinks, this.menuCategory);
+            var selectors = this.options.selectors;
 
-            this._addOverlay();
+            this.menu      = this.element;
+            this.menuLinks = $(selectors.topLevelHref, selectors.topLevelItem);
 
-            this._bind();
+            this._initOverlay()
+                ._bind();
         },
 
-        _addOverlay: function () {
+        _initOverlay: function () {
             var wrapper = $('<div />').addClass('admin__scope');
 
-            this.overlay = $('<div />')
-                .addClass(this.options.overlayClass)
-                .appendTo('body')
-                .hide(0);
+            this.overlay = $(this.options.overlayTmpl).appendTo('body').hide(0);
 
             /**
              * @todo fix LESS and remove next line and wrapper definition
              */
             this.overlay.wrap(wrapper);
-        },
 
-        _menuCategoryBind: function (category, config) {
-            var open = this._open.bind(this);
-
-            if (config.open) {
-                $('> a', category).on(config.open, open);
-            }
-        },
-
-        _menuCategoryEvents: function () {
-            this.menuCategory.each($.proxy(function (i, category) {
-                var itemConfig = {};
-
-                if (this.options.categoriesConfig) {
-                    $.each(this.options.categoriesConfig, $.proxy(function (selector, conf) {
-                        if ($(category).is(selector)) {
-                            itemConfig = conf;
-                        }
-                    }, this));
-                }
-                this._menuCategoryBind($(category), itemConfig);
-            }, this));
+            return this;
         },
 
         _bind: function () {
-            this._menuCategoryEvents();
-            this.menuLinks
-                .on('focus.tabFocus', function (e) {
-                    $(e.target).trigger('mouseenter');
-                })
-                .on('blur.tabFocus', function (e) {
-                    $(e.target).trigger('mouseleave');
-                });
+            var lighten = this._lighten.bind(this),
+                open    = this._open.bind(this),
+                darken  = this._darken.bind(this);
 
-            this.menuCategory.on('focus', 'a', this._open.bind(this));
+            this.menuLinks
+                .on('focus', lighten)
+                .on('click', open)
+                .on('blur',  darken);
+        },
+
+        _lighten: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
+
+            menuItem
+                .addClass('_active')
+                .siblings(selectors.topLevelItem)
+                .removeClass('_active');
+        },
+
+        _darken: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
+
+            menuItem.removeClass('_active');
+        },
+
+        _closeSubmenu: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
+
+            this._close(e);
+
+            $(selectors.topLevelHref, menuItem).focus();
         },
 
         _open: function (e) {
-            var menuItem = $(e.target).closest('.level-0'),
-                subMenu = $('> .submenu', menuItem);
+            var selectors           = this.options.selectors,
+                menuItemSelector    = selectors.topLevelItem,
+                menuItem            = $(e.target).closest(menuItemSelector),
+                subMenu             = $(selectors.subMenu, menuItem),
+                close               = this._closeSubmenu.bind(this),
+                closeBtn            = subMenu.find(selectors.closeSubmenuBtn);
 
             if (subMenu.length) {
                 e.preventDefault();
@@ -97,42 +94,31 @@ define('globalNavigation', [
 
             menuItem
                 .addClass('_hover _recent')
-                .siblings('._active')
-                .addClass('_current')
-                .removeClass('_active');
-
-            menuItem
-                .siblings('.level-0')
+                .siblings(menuItemSelector)
                 .removeClass('_hover _recent');
 
-            subMenu
-                .attr('aria-expanded', 'true');
+            subMenu.attr('aria-expanded', 'true');
 
-            subMenu.find('button._close').on('click', this._close.bind(this));
+            closeBtn.on('click', close);
 
-            this.overlay
-                .on('click', this._close.bind(this))
-                .show(0);
+            this.overlay.show(0).on('click', close);
         },
 
         _close: function (e) {
-            var navigation  = this.element,
-                menuItem    = $('.level-0._hover', navigation),
-                subMenu     = $('> submenu', menuItem);
+            var selectors   = this.options.selectors,
+                menuItem    = this.menu.find(selectors.topLevelItem + '._hover._recent'),
+                subMenu     = $(selectors.subMenu, menuItem),
+                closeBtn    = subMenu.find(selectors.closeSubmenuBtn);
 
             e.preventDefault();
 
-            this.overlay.off('click').hide(0);
+            this.overlay.hide(0).off('click');
 
-            subMenu.find('button._close').off('click');
+            closeBtn.off('click');
 
-            menuItem.addClass('_active').removeClass('_current');
+            subMenu.attr('aria-expanded', 'false');
 
-            subMenu
-                .removeClass('_show')
-                .attr('aria-expanded', 'false');
-
-            menuItem.removeClass('_hover _active');
+            menuItem.removeClass('_hover _recent');
         }
     });
 
