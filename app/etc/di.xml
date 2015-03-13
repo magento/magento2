@@ -560,6 +560,13 @@
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
+        <arguments>
+            <argument name="fileGeneratorTypes" xsi:type="array">
+                <item name="less" xsi:type="object">Magento\Framework\Less\FileGenerator</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="developerPublisher" type="Magento\Framework\App\View\Asset\Publisher">
         <arguments>
             <argument name="materializationStrategyFactory" xsi:type="object">developerMaterialization</argument>

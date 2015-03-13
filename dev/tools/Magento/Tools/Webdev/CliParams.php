@@ -50,6 +50,11 @@ class CliParams
     private $files = ['css/styles-m'];
 
     /**
+     * @var string
+     */
+    private $ext;
+
+    /**
      * @var int
      */
     private $verbose = Log::ERROR;
@@ -62,6 +67,12 @@ class CliParams
     public function __construct(\Zend_Console_Getopt $opt)
     {
         $this->locale = $opt->getOption('locale')? :$this->locale;
+
+        if (!$opt->getOption('ext')) {
+            throw new \Zend_Console_Getopt_Exception('Provide "ext" parameter!');
+        }
+
+        $this->ext = $opt->getOption('ext');
 
         if (!preg_match('/^[a-z]{2}_[A-Z]{2}$/', $this->locale)) {
             throw new \Zend_Console_Getopt_Exception('Invalid locale format');
@@ -169,5 +180,13 @@ class CliParams
     public function setVerbose($verbose)
     {
         $this->verbose = $verbose;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExt()
+    {
+        return $this->ext;
     }
 }

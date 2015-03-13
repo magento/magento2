@@ -154,7 +154,7 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getAbsolutePath')
             ->will($this->returnValueMap($pathsMap));
 
-        $actual = $this->object->generateLessFileTree($chain);
+        $actual = $this->object->generateFileTree($chain);
         $this->assertSame($expectedPath, $actual);
     }
 }

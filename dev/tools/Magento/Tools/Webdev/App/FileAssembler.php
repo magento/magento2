@@ -12,20 +12,20 @@ use Magento\Framework\AppInterface;
 use Magento\Tools\Webdev\CliParams;
 use Magento\Tools\View\Deployer\Log;
 use Magento\Framework\View\Asset\Source;
-use Magento\Framework\Less\FileGenerator;
 use Magento\Framework\App\Console\Response;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\View\Asset\SourceFileGeneratorPool;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
 
 /**
+ * Class FileAssembler
  *
- * Class Compiler
  * @package Magento\Tools\Di\App
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Lesser implements AppInterface
+class FileAssembler implements AppInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -60,7 +60,7 @@ class Lesser implements AppInterface
     /**
      * @var \Magento\Framework\Less\FileGenerator
      */
-    private $fileGenerator;
+    private $sourceFileGeneratorPoll;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
@@ -73,6 +73,11 @@ class Lesser implements AppInterface
     private $logger;
 
     /**
+     * @var ChainFactory
+     */
+    private $chainFactory;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Response $response
      * @param CliParams $params
@@ -80,8 +85,9 @@ class Lesser implements AppInterface
      * @param ConfigLoader $configLoader
      * @param State $state
      * @param Source $assetSource
-     * @param FileGenerator $fileGenerator
+     * @param \Magento\Framework\View\Asset\SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param \Magento\Tools\View\Deployer\Log $logger
+     * @param ChainFactory $chainFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -91,8 +97,9 @@ class Lesser implements AppInterface
         ConfigLoader $configLoader,
         State $state,
         Source $assetSource,
-        FileGenerator $fileGenerator,
-        Log $logger
+        SourceFileGeneratorPool $sourceFileGeneratorPoll,
+        Log $logger,
+        ChainFactory $chainFactory
     ) {
         $this->response = $response;
         $this->params = $params;
@@ -100,9 +107,10 @@ class Lesser implements AppInterface
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
         $this->assetRepo = $assetRepo;
-        $this->fileGenerator = $fileGenerator;
+        $this->sourceFileGeneratorPoll = $sourceFileGeneratorPoll;
         $this->assetSource = $assetSource;
         $this->logger = $logger;
+        $this->chainFactory = $chainFactory;
     }
 
     /**
@@ -115,8 +123,10 @@ class Lesser implements AppInterface
         $this->state->setAreaCode($this->params->getArea());
         $this->objectManager->configure($this->configLoader->load($this->params->getArea()));
 
+        $sourceFileGenerator = $this->sourceFileGeneratorPoll->create($this->params->getExt());
+
         foreach ($this->params->getFiles() as $file) {
-            $file .= '.less';
+            $file .= '.' . $this->params->getExt();
 
             $this->logger->logMessage("Gathering {$file} sources.");
 
@@ -131,8 +141,16 @@ class Lesser implements AppInterface
 
             $sourceFile = $this->assetSource->findSource($asset);
             $content = \file_get_contents($sourceFile);
-            $chain = new Chain($asset, $content, 'less');
-            $this->fileGenerator->generateLessFileTree($chain);
+
+            $chain = $this->chainFactory->create(
+                [
+                    'asset'           => $asset,
+                    'origContent'     => $content,
+                    'origContentType' => $asset->getContentType()
+                ]
+            );
+
+            $sourceFileGenerator->generateFileTree($chain);
 
             $this->logger->logMessage("Done");
         }

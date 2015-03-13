@@ -17,6 +17,7 @@ try {
             'area=s'    => 'area, one of (frontend|adminhtml|doc), default: frontend',
             'theme=s'   => 'theme in format Vendor/theme, default: Magento/blank',
             'files=s'   => 'files to pre-process (accept more than one file type as comma-separate values), default: css/styles-m',
+            'ext=s'     => 'dynamic stylesheet language: less|sass',
             'verbose|v' => 'provide extra output',
             'help|h'    => 'show help',
         ]
@@ -41,7 +42,7 @@ try {
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication(
-    'Magento\Tools\WebDev\App\Lesser',
+    'Magento\Tools\WebDev\App\FileAssembler',
     ['params' => $params, 'logger' => $logger]
 );
 $bootstrap->run($app);

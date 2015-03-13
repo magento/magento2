@@ -8,9 +8,10 @@ namespace Magento\Framework\Less;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\SourceFileGeneratorInterface;
 
-class FileGenerator
+class FileGenerator implements SourceFileGeneratorInterface
 {
     /**
      * Temporary directory prefix
@@ -92,10 +93,10 @@ class FileGenerator
     /**
      * Create a tree of self-sustainable files and return the topmost LESS file, ready for passing to 3rd party library
      *
-     * @param \Magento\Framework\View\Asset\PreProcessor\Chain $chain
+     * @param Chain $chain
      * @return string Absolute path of generated LESS file
      */
-    public function generateLessFileTree(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
+    public function generateFileTree(Chain $chain)
     {
         /**
          * @bug This logic is duplicated at \Magento\Framework\View\Asset\PreProcessor\Pool::getPreProcessors()

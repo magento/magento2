@@ -16,11 +16,12 @@ module.exports = {
         var cmdPlus = /^win/.test(process.platform) ? ' & ' : ' && ',
             command = 'grunt --force clean:' + themeName + cmdPlus;
 
-        command = command + 'php -f dev/tools/Magento/Tools/Webdev/lesser.php --' +
+        command = command + 'php -f dev/tools/Magento/Tools/Webdev/file_assembler.php --' +
         ' --locale=' + theme[themeName].locale +
         ' --area=' + theme[themeName].area +
         ' --theme=' + theme[themeName].name +
-        ' --files=' + theme[themeName].files.join(',');
+        ' --files=' + theme[themeName].files.join(',') +
+        ' --ext=' + theme[themeName].dsl;
 
         return command;
     },

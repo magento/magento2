@@ -7,6 +7,16 @@
 
 /**
  * Define Themes
+ *
+ * area: area, one of (frontend|adminhtml|doc),
+ * name: theme name in format Vendor/theme-name,
+ * locale: locale,
+ * files: [
+ * 'css/styles-m',
+ * 'css/styles-l'
+ * ],
+ * dsl: dynamic stylesheet language (less|sass)
+ *
  */
 module.exports = {
     blank: {
@@ -16,7 +26,8 @@ module.exports = {
         files: [
             'css/styles-m',
             'css/styles-l'
-        ]
+        ],
+        dsl: 'less'
     },
     luma: {
         area: 'frontend',
@@ -25,7 +36,8 @@ module.exports = {
         files: [
             'css/styles-m',
             'css/styles-l'
-        ]
+        ],
+        dsl: 'less'
     },
     backend: {
         area: 'adminhtml',
@@ -36,6 +48,7 @@ module.exports = {
             'css/styles',
             'css/pages',
             'css/admin'
-        ]
+        ],
+        dsl: 'less'
     }
 };
