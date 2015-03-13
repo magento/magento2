@@ -311,10 +311,17 @@ class Observer
         if ($this->_taxData->displayBothPrices()) {
             $options['optionTemplate'] = sprintf(
                 '<%%= data.label %%>'
-                . '<%% if(data.finalPrice.value) { %%>'
+                . '<%% if (data.finalPrice.value) { %%>'
                 . ' <%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
                 . '<%% } %%>',
                 __('Excl. tax:')
+            );
+        } elseif ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax()) {
+            $options['optionTemplate'] = sprintf(
+                '<%%= data.label %%>'
+                . '<%% if (data.basePrice.value) { %%>'
+                . ' <%%= data.basePrice.formatted %%>'
+                . '<%% } %%>'
             );
         }
 
