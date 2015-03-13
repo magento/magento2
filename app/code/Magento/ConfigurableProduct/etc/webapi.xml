@@ -31,7 +31,7 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-    <route url="/V1/configurable-products/:sku/options/:optionId" method="GET">
+    <route url="/V1/configurable-products/:sku/options/:id" method="GET">
         <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="get"/>
         <resources>
             <resource ref="Magento_Catalog::products"/>
@@ -61,7 +61,7 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-    <route url="/V1/configurable-products/:sku/options/:optionId" method="DELETE">
+    <route url="/V1/configurable-products/:sku/options/:id" method="DELETE">
         <service class="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" method="deleteById" />
         <resources>
             <resource ref="Magento_Catalog::products" />

@@ -26,7 +26,7 @@ class OptionTypesListTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => str_replace(':productSku/', '', self::RESOURCE_PATH) . 'types',
+                'resourcePath' => str_replace(':sku/', '', self::RESOURCE_PATH) . 'types',
                 'httpMethod'   => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
             ],
             'soap' => [
