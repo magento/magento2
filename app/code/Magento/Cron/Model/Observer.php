@@ -324,6 +324,12 @@ class Observer
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_CLEANUP_EVERY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+        $scheduleLifetime = (int)$this->_scopeConfig->getValue(
+            'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
+
         if ($lastCleanup > time() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
             return $this;
         }
@@ -353,7 +359,9 @@ class Observer
         $now = time();
         /** @var Schedule $record */
         foreach ($history as $record) {
-            $checkTime = strtotime($record->getExecutedAt() ? $record->getExecutedAt() : $record->getScheduledAt());
+            $checkTime = strtotime($record->getExecutedAt() ? $record->getExecutedAt() :
+                    (int)$record->getScheduledAt() + $scheduleLifetime
+            );
             if ($checkTime < $now - $historyLifetimes[$record->getStatus()]) {
                 $record->delete();
             }
