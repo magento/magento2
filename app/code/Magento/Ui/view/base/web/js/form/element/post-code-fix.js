@@ -11,6 +11,8 @@ define([
 
     return Abstract.extend({
         /**
+         * Extended list of Listeners
+         *
          * @return {this}
          */
         initListeners: function(){
@@ -21,26 +23,40 @@ define([
             return this;
         },
 
+        /**
+         * Fix _postcode_ depend on _country_id_ change:
+         *  - If country in list "Zip/Postal Code is Optional countries" then
+         *    - field "postcode" should not be required
+         *
+         * @returns {this}
+         */
         update: function(){
             var parentScope  = this.getPart(this.getPart(this.name, -2), -2),
-                countryComponent = registry.get(parentScope + '.country_id.0'),
-                value = countryComponent.value(),
-                element;
+                option,
+                postcode = this;
 
-            countryComponent
-                .options()
-                .some(function (el) {
-                    element = el;
-                    return el.value === value;
-                });
+            registry.get(parentScope + '.country_id.0', function (countryComponent) {
+                var value = countryComponent.value();
 
-            if(!element.is_region_required) {
-                this.error(false);
-                this.validation = _.omit(this.validation, 'required-entry');
-            } else {
-                this.validation['required-entry'] = true;
-            }
-            this.required(!!element.is_region_required);
+                if (!value) { // empty value discard logic
+                    return;
+                }
+
+                countryComponent
+                    .options()
+                    .some(function (el) {
+                        option = el;
+                        return el.value === value;
+                    });
+
+                if(!option.is_region_required) {
+                    postcode.error(false);
+                    postcode.validation = _.omit(postcode.validation, 'required-entry');
+                } else {
+                    postcode.validation['required-entry'] = true;
+                }
+                postcode.required(!!option.is_region_required);
+            });
 
             return this;
         }
