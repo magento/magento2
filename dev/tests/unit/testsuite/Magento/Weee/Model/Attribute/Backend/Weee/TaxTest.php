@@ -51,7 +51,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getAttribute')
             ->will($this->returnValue($attributeMock));
 
-        $taxes = [['state' => 'Texas', 'country' => 'US', 'website_id' => '1']];
+        $taxes = [['state' => 12, 'country' => 'US', 'website_id' => '1']];
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
@@ -64,8 +64,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         // No exception
         $modelMock->validate($productMock);
 
-        $taxes = [['state' => 'Texas', 'country' => 'US', 'website_id' => '1'],
-            ['state' => 'Texas', 'country' => 'US', 'website_id' => '1']];
+        $taxes = [['state' => 12, 'country' => 'US', 'website_id' => '1'],
+            ['state' => 12, 'country' => 'US', 'website_id' => '1']];
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
@@ -188,14 +188,19 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'withRegion' => [
-                'origData' => [['state' => 'TX', 'country' => 'US', 'website_id' => '1']],
-                'currentData' => [['state' => 'TX', 'country' => 'US', 'website_id' => '2', 'price' => 100]],
-                'expectedData' => ['state' => 'TX', 'country' => 'US', 'website_id' => '2', 'value' => 100,
+                'origData' => [['state' => 12, 'country' => 'US', 'website_id' => '1']],
+                'currentData' => [['state' => 12, 'country' => 'US', 'website_id' => '2', 'price' => 100]],
+                'expectedData' => ['state' => 12, 'country' => 'US', 'website_id' => '2', 'value' => 100,
+                                   'attribute_id' => 1]],
+            'withAllRegion' => [
+                'origData' => [['state' => '*', 'country' => 'US', 'website_id' => '1']],
+                'currentData' => [['state' => '*', 'country' => 'US', 'website_id' => '2', 'price' => 100]],
+                'expectedData' => ['state' => 0, 'country' => 'US', 'website_id' => '2', 'value' => 100,
                                    'attribute_id' => 1]],
             'withNoRegion' => [
-                'origData' => [['state' => '0', 'country' => 'US', 'website_id' => '1']],
-                'currentData' => [['state' => '0', 'country' => 'US', 'website_id' => '2', 'price' => 100]],
-                'expectedData' => ['state' => '0', 'country' => 'US', 'website_id' => '2', 'value' => 100,
+                'origData' => [['country' => 'US', 'website_id' => '1']],
+                'currentData' => [['country' => 'US', 'website_id' => '2', 'price' => 100]],
+                'expectedData' => ['state' => 0, 'country' => 'US', 'website_id' => '2', 'value' => 100,
                                    'attribute_id' => 1]]
         ];
     }
