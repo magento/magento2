@@ -16,21 +16,13 @@ interface ProductAttributeMediaGalleryManagementInterface
     /**
      * Create new gallery entry
      *
-     * @param string $productSku
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface $entryContent
-     * @param int $storeId
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return int gallery entry ID
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function create(
-        $productSku,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface $entryContent,
-        $storeId = 0
-    );
+    public function create($product);
 
     /**
      * Update gallery entry

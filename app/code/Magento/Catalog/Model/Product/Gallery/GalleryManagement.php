@@ -6,14 +6,13 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface as ContentInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -154,21 +153,21 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function create(
-        $productSku,
-        ProductAttributeMediaGalleryEntryInterface $entry,
-        ContentInterface $entryContent,
-        $storeId = 0
-    ) {
+    public function create($product)
+    {
         try {
-            $this->storeManager->getStore($storeId);
+            $this->storeManager->getStore($product->getStoreId());
         } catch (\Exception $exception) {
             throw new NoSuchEntityException('There is no store with provided ID.');
         }
+        /** @var $entry ProductAttributeMediaGalleryEntryInterface */
+        $entry = $product->getCustomAttribute('media_gallery')->getValue();
+        $entryContent = $entry->getContent();
+
         if (!$this->contentValidator->isValid($entryContent)) {
             throw new InputException('The image content is not valid.');
         }
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($product->getSku());
 
         $fileContent = @base64_decode($entryContent->getEntryData(), true);
         $mediaTmpPath = $this->mediaConfig->getBaseTmpMediaPath();
@@ -186,15 +185,18 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $absoluteFilePath,
             $entry->getTypes(),
             true,
-            $entry->getIsDisabled()
+            $entry->isDisabled()
         );
         // Update additional fields that are still empty after addImage call
-        $productMediaGallery->updateImage($product, $imageFileUri, [
+        $productMediaGallery->updateImage(
+            $product,
+            $imageFileUri,
+            [
                 'label' => $entry->getLabel(),
                 'position' => $entry->getPosition(),
-                'disabled' => $entry->getIsDisabled(),
-            ]);
-        $product->setStoreId($storeId);
+                'disabled' => $entry->isDisabled(),
+            ]
+        );
 
         try {
             $this->productRepository->save($product);
@@ -228,11 +230,15 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             throw new NoSuchEntityException('There is no image with provided ID.');
         }
 
-        $productMediaGallery->updateImage($product, $filePath, [
-            'label' => $entry->getLabel(),
-            'position' => $entry->getPosition(),
-            'disabled' => $entry->getIsDisabled(),
-        ]);
+        $productMediaGallery->updateImage(
+            $product,
+            $filePath,
+            [
+                'label' => $entry->getLabel(),
+                'position' => $entry->getPosition(),
+                'disabled' => $entry->isDisabled(),
+            ]
+        );
         $productMediaGallery->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $productMediaGallery->setMediaAttribute($product, $entry->getTypes(), $filePath);
         $product->setStoreId($storeId);
@@ -318,7 +324,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             $entry->setId($image['value_id'])
                 ->setLabel($image['label_default'])
                 ->setTypes(array_keys($productImages, $image['file']))
-                ->setIsDisabled($image['disabled_default'])
+                ->setDisabled($image['disabled_default'])
                 ->setPosition($image['position_default'])
                 ->setFile($image['file']);
             $result[] = $entry;

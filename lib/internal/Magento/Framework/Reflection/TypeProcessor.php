@@ -432,7 +432,7 @@ class TypeProcessor
         } elseif ($isArrayType && is_null($value)) {
             return null;
         } elseif (!$isArrayType && !is_array($value)) {
-            if ($value !== null && $type !== self::ANY_TYPE && !settype($value, $type)) {
+            if ($value !== null && $type !== self::ANY_TYPE && !$this->setType($value, $type)) {
                 throw new SerializationException(
                     SerializationException::TYPE_MISMATCH,
                     ['value' => (string)$value, 'type' => $type]
@@ -494,5 +494,23 @@ class TypeProcessor
             );
         }
         return $methodName;
+    }
+
+    /**
+     * Set value to a particular type
+     *
+     * @param mixed $value
+     * @param string $type
+     * @return true on successful type cast
+     */
+    protected function setType(&$value, $type)
+    {
+        // settype doesn't work for boolean string values.
+        // ex: custom_attributes passed from SOAP client can have boolean values as string
+        if ($type == 'bool' || $type == 'boolean') {
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            return true;
+        }
+        return settype($value, $type);
     }
 }
