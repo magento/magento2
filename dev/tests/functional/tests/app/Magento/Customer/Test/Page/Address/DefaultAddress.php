@@ -26,7 +26,7 @@ class DefaultAddress extends Page
      *
      * @var string
      */
-    protected $defaultAddressesSelector = '.block-addresses-default .box-billing-address';
+    protected $defaultAddressesSelector = '.block-addresses-default';
 
     /**
      * Get default addresses block

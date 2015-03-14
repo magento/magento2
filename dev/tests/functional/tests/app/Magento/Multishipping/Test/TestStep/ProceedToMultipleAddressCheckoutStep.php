@@ -35,6 +35,7 @@ class ProceedToMultipleAddressCheckoutStep implements TestStepInterface
      */
     public function run()
     {
+        $this->checkoutCart->open();
         $this->checkoutCart->getMultipleAddressCheckoutBlock()->multipleAddressesCheckout();
     }
 }
