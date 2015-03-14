@@ -125,7 +125,7 @@ return [
     ['Mage_Adminhtml_Block_System_Config_Tabs', 'Magento\Config\Block\System\Config\Tabs'],
     [
         'Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize',
-        'Magento\Config\Block\System\Config\System\Storage\Media\Synchronize'
+        'Magento\MediaStorage\Block\System\Config\System\Storage\Media\Synchronize'
     ],
     [
         'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput',
@@ -358,7 +358,7 @@ return [
     ['Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron', 'Magento\Cron\Model\Config\Backend\Sitemap'],
     [
         'Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database',
-        'Magento\Config\Model\Config\Backend\Storage\Media\Database'
+        'Magento\MediaStorage\Model\Config\Backend\Storage\Media\Database'
     ],
     ['Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Config\Model\Config\Backend\Baseurl'],
     ['Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Config\Model\Config\Backend\Cache'],
@@ -547,11 +547,11 @@ return [
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
-        'Magento\Config\Model\Config\Source\Storage\Media\Database'
+        'Magento\MediaStorage\Model\Config\Source\Storage\Media\Database'
     ],
     [
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage',
-        'Magento\Config\Model\Config\Source\Storage\Media\Storage'
+        'Magento\MediaStorage\Model\Config\Source\Storage\Media\Storage'
     ],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Apply_On', 'Magento\Tax\Model\Config\Source\Apply\On'],
     ['Mage_Adminhtml_Model_System_Config_Source_Tax_Basedon', 'Magento\Tax\Model\Config\Source\Basedon'],
@@ -792,6 +792,7 @@ return [
     ['Mage_Core_Model_Config_System'],
     ['Mage_Core_Model_Design_Source_Apply'],
     ['Mage_Core_Model_Language'],
+    ['Magento\Core\Helper\Data'],
     ['Magento\Core\Model\Flag', 'Magento\Framework\Flag'],
     ['Magento\Framework\Model\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Core\Model\AbstractModel', 'Magento\Framework\Model\AbstractModel'],
@@ -1383,6 +1384,8 @@ return [
     ['Magento\Quote\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
     ['Magento\Core\Helper\Http'],
     ['Magento\Core\Helper\Theme', 'Magento\Theme\Helper\Theme'],
+    ['Magento\Core\Helper\Url', 'Magento\Framework\Url\Helper\Data'],
+    ['Magento\Core\Helper\PostData', 'Magento\Framework\Data\Helper\PostHelper'],
     ['Magento\Core\Model\Theme', 'Magento\Theme\Model\Theme'],
     ['Magento\Core\Model\Theme\Collection', 'Magento\Theme\Model\Theme\Collection'],
     ['Magento\Core\Model\Theme\Data', 'Magento\Theme\Model\Theme\Data'],
@@ -1536,8 +1539,8 @@ return [
         'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
     ],
     [
-        'Magento\Backend\Controller\System\Config\System\Storage',
-        'Magento\Config\Controller\Adminhtml\System\Config\System\Storage'
+        'Magento\MediaStorage\Controller\System\Config\System\Storage',
+        'Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage'
     ],
     ['Magento\Adminhtml\Controller\System\Design', 'Magento\Backend\Controller\Adminhtml\System\Design'],
     ['Magento\Adminhtml\Controller\System\Store', 'Magento\Backend\Controller\Adminhtml\System\Store'],
@@ -2874,9 +2877,9 @@ return [
     ['Magento\Tax\Service\V1\Data\TaxDetails\Item', 'Magento\Tax\Api\Data\TaxDetailsItemInterface'],
     ['Magento\Tax\Service\V1\OrderTaxServiceInterface', 'Magento\Tax\Api\OrderTaxManagementInterface'],
     ['Magento\Tools\I18n\Code', 'Magento\Tools\I18n'],
-    ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\Test\Utility\AggregateInvoker'],
-    ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\Test\Utility\Classes'],
-    ['Magento\TestFramework\Utility\Files', 'Magento\Framework\Test\Utility\Files'],
+    ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
+    ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
+    ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files'],
     ['Magento\Framework\Module\Declaration\Reader\Filesystem', 'Magento\Framework\Module\ModuleList\Loader'],
     ['Magento\Framework\Module\Declaration\FileIterator'],
     ['Magento\Framework\Module\Declaration\FileIteratorFactory'],
@@ -2886,6 +2889,9 @@ return [
     ['Magento\Framework\Module\DependencyManagerInterface'],
     ['Magento\Framework\App\Arguments\Loader'],
     ['Magento\Framework\App\Arguments', 'Magento\Framework\App\DeploymentConfig'],
+    ['Magento\Framework\Test\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
+    ['Magento\Framework\Test\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
+    ['Magento\Framework\Test\Utility\Files', 'Magento\Framework\App\Utility\Files'],
     ['Magento\Bundle\Service\V1\Data\Product\Link', 'Magento\Bundle\Api\Data\LinkInterface'],
     ['Magento\Bundle\Service\V1\Data\Product\Option', 'Magento\Bundle\Api\Data\OptionInterface'],
     [
@@ -3073,7 +3079,6 @@ return [
     ['Magento\Webapi\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Service\V1\Integration'],
     ['Magento\Webapi\Model\Plugin\Setup', 'Magento\Integration\Model\Plugin\Setup'],
     ['Magento\Webapi\Model\Cache\Type', 'Magento\Framework\App\Cache\Type\Webapi'],
-
     ['Magento\Framework\Module\DataSetup', 'Magento\Setup\Module\DataSetup'],
     ['Magento\Authorization\Model\Resource\Setup', 'Magento\Authorization\Setup\AuthorizationFactory'],
     ['Magento\Catalog\Model\Resource\Setup', 'Magento\Catalog\Setup\CategorySetup'],
@@ -3099,4 +3104,5 @@ return [
     ['Magento\Setup\Module\SetupFactory'],
     ['Magento\Framework\Module\Updater\SetupFactory'],
     ['Magento\Backend\Model\Config\Source\Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
+    ['Magento\Reports\Model\Resource\Shopcart\Product\Collection']
 ];

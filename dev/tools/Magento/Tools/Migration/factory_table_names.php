@@ -32,7 +32,7 @@ require realpath(dirname(dirname(dirname(__DIR__)))) . '/dev/tests/static/framew
 $tablesAssociation = getFilesCombinedArray(__DIR__ . '/FactoryTableNames', 'replace_*.php');
 $blackList = getFilesCombinedArray(__DIR__ . '/FactoryTableNames', 'blacklist_*.php');
 
-$phpFiles = \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false);
+$phpFiles = \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, false, false, false);
 
 $replacementResult = false;
 if (!$isSearchTables || $isDryRunMode) {
