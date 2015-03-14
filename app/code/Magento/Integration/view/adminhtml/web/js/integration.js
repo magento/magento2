@@ -331,7 +331,7 @@ define([
                             click: function () {
                                 // Find the 'Allow' button and clone - it has all necessary data, but is going to be
                                 // destroyed along with the current dialog
-                                var ctx = $(this).parent().find('button.primary').clone(true);
+                                var ctx = $(this).parent().find('button.action-primary').clone(true);
                                 $(this).dialog('destroy');
                                 // Make popup out of data we saved from 'Allow' button
                                 window.integration.popup.show(ctx);
