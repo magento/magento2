@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/../../Core/_files/store.php';
+require __DIR__ . '/../../Store/_files/core_fixturestore.php';
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var Magento\Store\Model\Store $store */

@@ -42,7 +42,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Core/_files/second_third_store.php
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      */
     public function testGetDefaultGroupWithNonDefaultStoreId()
     {   

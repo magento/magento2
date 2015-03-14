@@ -6,7 +6,7 @@
 namespace Magento\Newsletter\Model;
 
 /**
- * @magentoDataFixture Magento/Core/_files/store.php
+ * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
  */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
