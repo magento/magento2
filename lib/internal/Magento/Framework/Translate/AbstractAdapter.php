@@ -16,7 +16,7 @@ abstract class AbstractAdapter extends \Zend_Translate_Adapter implements Adapte
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param mixed $data
-     * @param string|\Zend_Locale $locale
+     * @param string $locale
      * @param array $options (optional)
      * @return array
      */
@@ -45,7 +45,7 @@ abstract class AbstractAdapter extends \Zend_Translate_Adapter implements Adapte
      * Stub for setLocale functionality
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param string|\Zend_Locale $locale
+     * @param string $locale
      * @return $this
      */
     public function setLocale($locale)

@@ -59,7 +59,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getLocale'
         )->will(
-            $this->returnValue(new \Zend_Locale('en_US'))
+            $this->returnValue('en_US')
         );
 
         $this->_appStateMock = $this->getMock('\Magento\Framework\App\State', [], [], '', false);

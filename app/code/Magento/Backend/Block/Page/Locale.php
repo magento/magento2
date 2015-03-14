@@ -83,7 +83,7 @@ class Locale extends \Magento\Backend\Block\Template
             ->setId('footer_interface_locale')
             ->setTitle(__('Interface Language'))
             ->setClass('select locale-switcher-select')
-            ->setValue($this->_localeResolver->getLocale()->__toString())
+            ->setValue($this->_localeResolver->getLocale())
             ->setOptions($this->_localeLists->getTranslatedOptionLocales())
             ->getHtml();
 

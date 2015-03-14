@@ -13,11 +13,6 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
 class Language implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Framework\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\GoogleAdwords\Helper\Data
      */
     protected $_helper;
@@ -28,19 +23,14 @@ class Language implements \Magento\Framework\Option\ArrayInterface
     protected $_uppercaseFilter;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\GoogleAdwords\Helper\Data $helper
      * @param \Magento\GoogleAdwords\Model\Filter\UppercaseTitle $uppercaseFilter
      */
     public function __construct(
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\GoogleAdwords\Helper\Data $helper,
         \Magento\GoogleAdwords\Model\Filter\UppercaseTitle $uppercaseFilter
     ) {
         $this->_helper = $helper;
-        $this->_locale = $localeResolver->getLocale();
         $this->_uppercaseFilter = $uppercaseFilter;
     }
 
@@ -54,8 +44,8 @@ class Language implements \Magento\Framework\Option\ArrayInterface
         $languages = [];
         foreach ($this->_helper->getLanguageCodes() as $languageCode) {
             $localeCode = $this->_helper->convertLanguageCodeToLocaleCode($languageCode);
-            $translationForSpecifiedLanguage = $this->_locale->getTranslation($localeCode, 'language', $localeCode);
-            $translationForDefaultLanguage = $this->_locale->getTranslation($localeCode, 'language');
+            $translationForSpecifiedLanguage = \Locale::getDisplayLanguage($localeCode, $localeCode);
+            $translationForDefaultLanguage = \Locale::getDisplayLanguage($localeCode);
 
             $label = sprintf(
                 '%s / %s (%s)',
