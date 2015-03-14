@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Module\Test\ModuleList;
+namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
 use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 
