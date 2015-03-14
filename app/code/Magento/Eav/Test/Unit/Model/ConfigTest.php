@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Model;
+namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Framework\Object;
 use Magento\Eav\Model\Config;
@@ -86,7 +86,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->stateMock
             ->expects($this->atLeastOnce())
             ->method('isEnabled')
-            ->with(Cache\Type::TYPE_IDENTIFIER)
+            ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)
             ->willReturn($cacheEnabled);
         $this->cacheMock
             ->expects($this->exactly($loadCalls))
@@ -181,7 +181,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock
             ->expects($this->once())
             ->method('clean')
-            ->with($this->equalTo([Cache\Type::CACHE_TAG, Entity\Attribute::CACHE_TAG]));
+            ->with(
+                $this->equalTo(
+                    [
+                        \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    ]
+                )
+            );
         $this->config->clear();
     }
 }
