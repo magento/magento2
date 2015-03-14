@@ -105,7 +105,7 @@ class Data extends AbstractHelper
                 }
             }
             $url = 'http://www.magentocommerce.com/gethelp/';
-            $url .= $this->_locale->getLocaleCode() . '/';
+            $url .= $this->_locale->getLocale() . '/';
             $url .= $frontModule . '/';
             $url .= $request->getControllerName() . '/';
             $url .= $request->getActionName() . '/';

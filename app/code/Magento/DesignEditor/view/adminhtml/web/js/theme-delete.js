@@ -71,7 +71,7 @@ define([
                 {
                     text: $.mage.__('Yes'),
                     click: callback,
-                    'class': 'primary'
+                    'class': 'action-primary'
                 }
             ];
 

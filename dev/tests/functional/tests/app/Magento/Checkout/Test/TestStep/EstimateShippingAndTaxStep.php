@@ -75,27 +75,27 @@ class EstimateShippingAndTaxStep implements TestStepInterface
      * @param CheckoutCart $checkoutCart
      * @param Address $address
      * @param AssertEstimateShippingAndTax $assertEstimateShippingAndTax
-     * @param Cart $cart
      * @param FixtureFactory $fixtureFactory
-     * @param array $shipping
      * @param array $products
+     * @param array $shipping
+     * @param Cart|null $cart
      */
     public function __construct(
         CheckoutCart $checkoutCart,
         Address $address,
         AssertEstimateShippingAndTax $assertEstimateShippingAndTax,
-        Cart $cart,
         FixtureFactory $fixtureFactory,
-        array $shipping,
-        array $products
+        array $products,
+        array $shipping = [],
+        Cart $cart = null
     ) {
         $this->checkoutCart = $checkoutCart;
         $this->address = $address;
         $this->assertEstimateShippingAndTax = $assertEstimateShippingAndTax;
-        $this->cart = $cart;
         $this->fixtureFactory = $fixtureFactory;
-        $this->shipping = $shipping;
         $this->products = $products;
+        $this->shipping = $shipping;
+        $this->cart = $cart;
     }
 
     /**
@@ -106,16 +106,16 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     public function run()
     {
         $this->checkoutCart->open();
-        $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
-        if ($this->shipping['shipping_service'] !== '-') {
-            $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
-        }
         /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
-        if (!empty($this->cart->hasData())) {
+        if ($this->cart !== null) {
             $cart = $this->fixtureFactory->createByCode(
                 'cart',
                 ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
             );
+            $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
+            if (!empty($this->shipping)) {
+                $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
+            }
             $this->assertEstimateShippingAndTax->processAssert($this->checkoutCart, $cart);
         }
     }

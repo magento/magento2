@@ -1,0 +1,81 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Main elements -> Tooltip
+//  _____________________________________________
+
+//  ToDo UI: Consist old styles, should be changed with new design
+
+.tooltip {
+    display: inline-block;
+    margin-left: 5px;
+    .help span,
+    .help a {
+        position: relative;
+        z-index: 2;
+        width: 22px;
+        height: 22px;
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+        &:before {
+            content: "?";
+            font-weight: 500;
+            font-size: 18px;
+            display: inline-block;
+            overflow: hidden;
+            height: 22px;
+            border-radius: 11px;
+            line-height: 22px;
+            width: 22px;
+            text-align: center;
+            color: #ffffff;
+            background-color: #514943;
+            .page-main-actions & {
+                background-color: transparent;
+            }
+        }
+        span {
+            .visually-hidden();
+        }
+    }
+    //  TODO Tooltips
+    .tooltip-content {
+        display: none;
+        position: absolute;
+        max-width: 200px;
+        margin-top: 10px;
+        margin-left: -19px;
+        padding: 4px 8px;
+        border-radius: 3px;
+        background: #000;
+        background: rgba(49, 48, 43, .8);
+        color: #fff;
+        text-shadow: none;
+        z-index: 20;
+        &:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: -5px;
+            left: 20px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid #000;
+            opacity: .8;
+        }
+        &.loading {
+            position: absolute;
+            &:before {
+                border-bottom-color: rgba(0, 0, 0, .3);
+            }
+        }
+    }
+    &:hover > .tooltip-content {
+        display: block;
+    }
+}

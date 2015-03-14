@@ -10,7 +10,8 @@
 ?>
 
 <div data-mage-init='{"mediabrowser": <?php echo $block->escapeHtml($block->getFilebrowserSetupObject()); ?>}'>
-    <div style="float:right; width: 79%">
+    <div class="side-col"><?php echo $block->getChildHtml('wysiwyg_images.tree') ?></div>
+    <div class="main-col">
         <div class="insert-title" id="content_header">
             <div class="insert-title-inner">
                 <div class="insert-actions">
@@ -22,5 +23,4 @@
         <div id="contents-uploader"><?php echo $block->getChildHtml('wysiwyg_images.uploader') ?></div>
         <div id="contents"></div>
     </div>
-    <div style="float:left;  width: 20%"><?php echo $block->getChildHtml('wysiwyg_images.tree') ?></div>
 </div>

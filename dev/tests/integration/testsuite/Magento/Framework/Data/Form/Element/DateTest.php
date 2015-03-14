@@ -17,18 +17,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
     protected $_elementFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $_localeDate;
-
-    /**
      * SetUp method
      */
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_elementFactory = $objectManager->create('Magento\Framework\Data\Form\ElementFactory');
-        $this->_localeDate = $objectManager->get('Magento\Framework\Stdlib\DateTime\Timezone');
     }
 
     /**
@@ -36,13 +30,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValue(array $data, $expect)
     {
-        if (isset($data['date_format'])) {
-            $data['date_format'] = $this->_localeDate->getDateFormat($data['date_format']);
-        }
-        if (isset($data['time_format'])) {
-            $data['time_format'] = $this->_localeDate->getTimeFormat($data['time_format']);
-        }
-        /** @var $date \Magento\Framework\Data\Form\Element\Date*/
+        /** @var $date \Magento\Framework\Data\Form\Element\Date */
         $date = $this->_elementFactory->create('Magento\Framework\Data\Form\Element\Date', $data);
         $this->assertEquals($expect, $date->getValue());
     }
@@ -56,25 +44,25 @@ class DateTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [
-                    'date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                    'date_format' => 'MM/d/yy',
+                    'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
-                date('n/j/y g:i A', $testTimestamp),
+                date('m/j/y g:i A', $testTimestamp),
             ],
             [
                 [
-                    'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                    'time_format' => 'h:mm a',
                     'value' => $testTimestamp,
                 ],
                 date('g:i A', $testTimestamp)
             ],
             [
                 [
-                    'date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                    'date_format' => 'MM/d/yy',
                     'value' => $testTimestamp,
                 ],
-                date('n/j/y', $testTimestamp)
+                date('m/j/y', $testTimestamp)
             ]
         ];
     }

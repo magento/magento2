@@ -41,7 +41,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $expected = 'locale';
         $localeMock = $this->getMockForAbstractClass('\Magento\Framework\Locale\ResolverInterface');
         $localeMock->expects($this->once())
-            ->method('getLocaleCode')
+            ->method('getLocale')
             ->will($this->returnValue($expected));
         $this->objectManager->expects($this->once())
             ->method('get')

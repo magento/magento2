@@ -40,7 +40,7 @@ class NewCategoryIds extends Form
      *
      * @var string
      */
-    protected $createCategoryButton = '.action-create';
+    protected $createCategoryButton = '[data-action="save"]';
 
     /**
      * Add new category to product.
