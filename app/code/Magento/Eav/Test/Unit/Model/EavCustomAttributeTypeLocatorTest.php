@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Model;
+namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\EavCustomAttributeTypeLocator;
 
 class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
 {

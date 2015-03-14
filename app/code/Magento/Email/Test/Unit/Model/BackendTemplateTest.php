@@ -7,7 +7,9 @@
 /**
  * Test class for Magento\Email\Model\BackendTemplate.
  */
-namespace Magento\Email\Model;
+namespace Magento\Email\Test\Unit\Model;
+
+use Magento\Email\Model\BackendTemplate;
 
 class BackendTemplateTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +37,7 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(['test' => 1]);
