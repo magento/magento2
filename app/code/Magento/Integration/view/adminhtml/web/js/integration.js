@@ -232,15 +232,30 @@ define([
                             autoOpen: true,
                             minHeight: 450,
                             minWidth: 600,
+                            width: '75%',
                             dialogClass: dialog == 'permissions' ? 'integration-dialog' : 'integration-dialog no-close',
-                            position: {at: 'center'},
-                            closeOnEscape: false
+                            closeOnEscape: false,
+                            position: {
+                                my: 'left top',
+                                at: 'center top',
+                                of: 'body'
+                            },
+                            open: function () {
+                                $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                                var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+                                $(this).closest('.ui-dialog').css('margin-top', topMargin);
+                            },
+                            close: function () {
+                                $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                            }
                         };
                     if (dialog == 'permissions') {
                         // We don't need this button in 'tokens' dialog, since if you got there - integration is
                         // already activated and have necessary tokens
                         buttons.push({
                             text: $.mage.__('Cancel'),
+                            'class': 'action-close',
                             click: function () {
                                 $(this).dialog('close');
                             }
@@ -306,7 +321,7 @@ define([
                     var okButton = {
                         permissions: {
                             text: (isReauthorize == '1') ? $.mage.__('Reauthorize') : $.mage.__('Allow'),
-                            'class': 'primary',
+                            'class': 'action-primary',
                             // This data is going to be used in the next dialog
                             'data-row-id': integrationId,
                             'data-row-name': integrationName,
@@ -316,7 +331,7 @@ define([
                             click: function () {
                                 // Find the 'Allow' button and clone - it has all necessary data, but is going to be
                                 // destroyed along with the current dialog
-                                var ctx = $(this).parent().find('button.primary').clone(true);
+                                var ctx = $(this).parent().find('button.action-primary').clone(true);
                                 $(this).dialog('destroy');
                                 // Make popup out of data we saved from 'Allow' button
                                 window.integration.popup.show(ctx);
@@ -324,7 +339,7 @@ define([
                         },
                         tokens: {
                             text: $.mage.__('Done'),
-                            'class': 'primary',
+                            'class': 'action-primary',
                             click: function () {
                                 // Integration has been activated at the point of generating tokens
                                 window.location.href = url.grid;
