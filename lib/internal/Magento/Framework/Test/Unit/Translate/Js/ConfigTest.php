@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Translate\Js;
+namespace Magento\Framework\Test\Unit\Translate\Js;
+
+use Magento\Framework\Translate\Js\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

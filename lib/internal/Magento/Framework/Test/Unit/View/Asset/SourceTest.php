@@ -6,10 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\View\Asset;
+namespace Magento\Framework\Test\Unit\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\View\Asset\Source;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
