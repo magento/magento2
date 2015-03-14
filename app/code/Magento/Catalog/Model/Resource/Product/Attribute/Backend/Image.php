@@ -25,17 +25,17 @@ class Image extends AbstractBackend
     /**
      * File Uploader factory
      *
-     * @var \Magento\Core\Model\File\UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_fileUploaderFactory;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
+        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
@@ -58,7 +58,7 @@ class Image extends AbstractBackend
         }
 
         try {
-            /** @var $uploader \Magento\Core\Model\File\Uploader */
+            /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
             $uploader = $this->_fileUploaderFactory->create(['fileId' => $this->getAttribute()->getName()]);
             $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
             $uploader->setAllowRenameFiles(true);

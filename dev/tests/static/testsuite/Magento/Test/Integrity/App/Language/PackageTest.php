@@ -30,7 +30,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
     public function declaredConsistentlyDataProvider()
     {
         $result = [];
-        $root = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         foreach (Package::readDeclarationFiles($root) as $row) {
             $result[] = $row;
         }
