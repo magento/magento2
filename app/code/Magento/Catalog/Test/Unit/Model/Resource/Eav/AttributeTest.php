@@ -37,6 +37,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceMock;
 
+    /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eavConfigMock;
+
     public function setUp()
     {
         $this->_processor = $this->getMock(
@@ -89,6 +94,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             [], '', false
         );
 
+        $this->eavConfigMock = $this->getMockBuilder('Magento\Eav\Model\Config')
+            ->setMethods(['clear'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->resourceMock->expects($this->any())
             ->method('_getWriteAdapter')
             ->will($this->returnValue($dbAdapterMock));
@@ -101,7 +111,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                     'productFlatIndexerProcessor' => $this->_processor,
                     'indexerEavProcessor' => $this->_eavProcessor,
                     'resource' => $this->resourceMock,
-                    'data' => ['id' => 1]
+                    'data' => ['id' => 1],
+                    'eavConfig' => $this->eavConfigMock
                 ]
         );
     }
@@ -125,12 +136,28 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterSave();
     }
 
+    public function testAfterSaveEavCache()
+    {
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('clear');
+        $this->_model->afterSave();
+    }
+
     public function testIndexerAfterDeleteAttribute()
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
         $this->_model->setOrigData('id', 2);
         $this->_model->setOrigData('used_in_product_listing', 1);
         $this->_model->afterDeleteCommit();
+    }
+
+    public function testAfterDeleteEavCache()
+    {
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('clear');
+        $this->_model->afterDelete();
     }
 
     public function testGetScopeGlobal()
