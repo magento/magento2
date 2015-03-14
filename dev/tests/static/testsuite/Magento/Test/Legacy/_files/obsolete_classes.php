@@ -3104,4 +3104,5 @@ return [
     ['Magento\Setup\Module\SetupFactory'],
     ['Magento\Framework\Module\Updater\SetupFactory'],
     ['Magento\Backend\Model\Config\Source\Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
+    ['Magento\Reports\Model\Resource\Shopcart\Product\Collection']
 ];
