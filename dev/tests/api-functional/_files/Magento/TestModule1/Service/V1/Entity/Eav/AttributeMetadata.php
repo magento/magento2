@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\TestModule1\Service\V1\Entity\Eav;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
