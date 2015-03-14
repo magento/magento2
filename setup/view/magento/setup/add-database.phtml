@@ -42,9 +42,9 @@
 </div>
 <div
     class="message message-error"
-    ng-show="testConnection.result.success === undefined && testConnection.result !== undefined"
+    ng-show="testConnection.failed !== undefined"
     >
-    <span class="message-text">Unknown Database Server Host.</span>
+    <span class="message-text">{{testConnection.failed}}</span>
 </div>
 
 <form
