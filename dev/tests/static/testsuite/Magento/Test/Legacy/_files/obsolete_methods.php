@@ -406,7 +406,6 @@ return [
     ['getChangeLocaleUrl', 'Magento\Backend\Block\Page\Footer'],
     ['getCheckoutMehod', 'Magento\Checkout\Model\Type\Onepage'],
     ['getChildGroup', '', 'Magento_Core_Block_AbstractBlock::getGroupChildNames()'],
-    ['getConfig', 'Magento\Captcha\Helper\Data'],
     ['getConfig', 'Magento\Cms\Model\Wysiwyg\Images\Storage'],
     ['getConfigAsArray', 'Magento\Cms\Model\Wysiwyg\Images\Storage'],
     ['getConfig', 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute'],
