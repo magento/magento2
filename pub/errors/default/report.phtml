@@ -7,18 +7,18 @@
 
 <h1>There has been an error processing your request</h1>
 <?php if ($this->showSentMsg): ?>
-<div class="message success">
+<div class="message success message-success">
     <div>Your message was submitted and will be responded as soon as possible. Thank you for reporting.</div>
 </div>
 <?php endif; ?>
 <?php if ($this->showSendForm): ?>
-<div class="message info">
+<div class="message info message-info">
     <div>
         We are currently experiencing some technical issues. We apologize for the inconvenience and will contact you shortly to resolve the issue. To help us serve you please fill in the form below.
     </div>
 </div>
     <?php if ($this->showErrorMsg): ?>
-<div class="message error">
+<div class="message error message-error">
     <div>
         Please fill all required fields with valid information
     </div>
