@@ -6,11 +6,11 @@
 -->
 
 <!-- ko if: element.isMultiple() -->
-<fieldset class="field form__field" data-bind="css: {'required': element.required}">
-    <legend class="label">
+<fieldset class="admin__field" data-bind="css: {'_required': element.required}">
+    <legend class="admin__field-label">
         <span data-bind="text: element.label"></span>
     </legend><br />
-    <div class="control" data-bind="css: {'control-fields': element.breakLine, 'control-grouped': !element.breakLine}">
+    <div class="admin__field-control" data-bind="css: {'admin__control-fields': element.breakLine, 'admin__control-grouped': !element.breakLine}">
         <!-- ko foreach: { data: elems, as: 'element' } -->
 
             <!-- ko ifnot: element.hidden -->
@@ -29,7 +29,7 @@
 
         <!-- ko foreach: { data: elems, as: 'element' } -->
             <!-- ko if: element.error() && !element.hidden() -->
-                <label class="mage-error" data-bind="attr: { for: uid }, text: element.error"></label>
+                <label class="admin__field-error" data-bind="attr: { for: uid }, text: element.error"></label>
             <!-- /ko -->
         <!-- /ko -->
     </div>
@@ -39,9 +39,9 @@
 <!-- ko if: element.isSingle() -->
 
     <!-- ko foreach: { data: elems, as: 'element' } -->
-    
+
         <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
-    
+
     <!-- /ko -->
 
 <!-- /ko -->

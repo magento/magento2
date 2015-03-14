@@ -13,14 +13,16 @@ define([
         options: {
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
-                    '<li class="<% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
+                    '<li class="message message-warning <% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
                         '<%= item.text %>' +
                     '</li>' +
                 '<% }); %>'
         },
 
         open: function (severity) {
-            var superMethod = $.proxy(this._super, this);
+            var superMethod = $.proxy(this._super, this),
+                listTemplate,
+                fullTemplate;
 
             $.ajax({
                 url: this.options.ajaxUrl,
@@ -36,12 +38,12 @@ define([
                 });
 
                 tmpl = $(tmpl);
+                listTemplate = $('<ul class="message-system-list"></ul>').append(tmpl);
+                fullTemplate = $('<div class="admin__scope"></div>').append(listTemplate);
 
-                this.element.html(
-                    $('<ul />', {
-                        'class': 'message-system-list'
-                    }).append(tmpl)
-                ).trigger('contentUpdated');
+                this.element
+                    .html(fullTemplate)
+                    .trigger('contentUpdated');
 
                 superMethod();
             }, this));

@@ -55,13 +55,12 @@
             >
         </div>
     </div>
-    <div ng-show="isFailed" class="alert alert-info">
-        <span class="alert-icon icon-failed-round"></span>
-        <p class="alert-text">
+    <div ng-show="isFailed" class="message message-error">
+        <span class="message-text">
             <strong>Installation is incomplete.</strong>
             <br>
             Check the console log for errors before trying again.
-        </p>
+        </span>
     </div>
     <button
         type="button"

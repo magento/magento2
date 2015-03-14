@@ -36,6 +36,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $configWriter;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configReader;
+
+    /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $config;
@@ -49,6 +54,16 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleLoader;
+
+    /**
+     * @var \Magento\Framework\Module\ModuleList\DeploymentConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigFactory;
+
+    /**
+     * @var \Magento\Framework\Module\ModuleList\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
@@ -121,6 +136,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->filePermissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
         $this->configWriter = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
+        $this->configReader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
 
         $this->moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
@@ -131,11 +147,20 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ['Foo_One', 'Bar_Two']
         );
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $allModules = [
-            'Foo_One' => [],
-            'Bar_Two' => [],
-        ];
-        $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
+        $this->deploymentConfigFactory = $this->getMock(
+            'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->deploymentConfig = $this->getMock(
+            'Magento\Framework\Module\ModuleList\DeploymentConfig',
+            [],
+            [],
+            '',
+            false
+        );
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
@@ -166,10 +191,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
             $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
         }
+
         return new Installer(
             $this->filePermissions,
             $this->configWriter,
+            $this->configReader,
             $this->config,
+            $this->deploymentConfigFactory,
             $this->moduleList,
             $this->moduleLoader,
             $this->directoryList,
@@ -199,7 +227,12 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             [DbConfig::CONFIG_KEY, self::$dbConfig],
             [EncryptConfig::CONFIG_KEY, [EncryptConfig::KEY_ENCRYPTION_KEY => 'encryption_key']]
         ]));
-
+        $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+        $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
+        $modules = ['Foo_One' => 1, 'Bar_Two' => 1 ];
+        $this->deploymentConfig->expects($this->any())->method('getData')->willReturn($modules);
+        $this->deploymentConfigFactory->expects($this->any())->method('create')->with($modules)
+            ->willReturn($this->deploymentConfig);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
         $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
         $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
@@ -284,6 +317,43 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->once())->method('log')->with($expectedMessage);
         $this->object->checkApplicationFilePermissions();
         $this->assertSame(['message' => [$expectedMessage]], $this->object->getInstallInfo());
+    }
+
+    public function testUpdateModulesSequence()
+    {
+        $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $varDir->expects($this->exactly(2))->method('getAbsolutePath')->willReturn('/var');
+        $this->filesystem
+            ->expects($this->exactly(2))
+            ->method('getDirectoryWrite')
+            ->willReturn($varDir);
+
+        $allModules = [
+            'Foo_One' => [],
+            'Bar_Two' => [],
+            'New_Module' => [],
+        ];
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
+
+        $expectedModules = [
+            'Bar_Two' => 0,
+            'Foo_One' => 1,
+            'New_Module' => 1
+        ];
+
+        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+        $this->deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
+            ->willReturn($this->deploymentConfig);
+
+        $newObject = $this->createObject(false, false);
+        $this->configReader->expects($this->once())->method('load')
+            ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
+        $this->configWriter->expects($this->once())->method('update')->with($this->deploymentConfig);
+        $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
+        $this->logger->expects($this->at(1))->method('log')
+            ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
+        $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
+        $newObject->updateModulesSequence();
     }
 
     public function testUninstall()

@@ -11,9 +11,8 @@ $titleId = ($block->getTitleId()) ? ' id="' . $block->getTitleId() . '"' : '';
 $titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
 $title = $block->escapeHtml($block->getPageTitle());
 ?>
-<div class="page-title<?php echo $titleClass; ?>">
-    <div class="page-title-inner">
-        <h1 class="title"<?php echo $titleId?>><?php echo $title ?></h1>
-        <?php echo $block->getChildHtml(); ?>
-    </div>
+
+<div class="page-title-wrapper<?php echo $titleClass; ?>">
+    <h1 class="page-title"<?php echo $titleId?>><?php echo $title ?></h1>
+    <?php echo $block->getChildHtml(); ?>
 </div>

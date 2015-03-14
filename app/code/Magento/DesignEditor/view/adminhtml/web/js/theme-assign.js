@@ -326,7 +326,7 @@ define([
                     }
                     return false;
                 }, this),
-                'class': 'primary'
+                'class': 'action-primary'
             };
             this._dialog.setButtons(buttons);
             this._dialog.open();

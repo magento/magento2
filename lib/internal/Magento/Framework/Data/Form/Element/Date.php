@@ -13,24 +13,32 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class Date extends AbstractElement
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Date
+     * @var \DateTime
      */
     protected $_value;
+
+    /**
+     * @var TimezoneInterface
+     */
+    protected $localeDate;
 
     /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
+     * @param TimezoneInterface $localeDate
      * @param array $data
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
+        TimezoneInterface $localeDate,
         $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
@@ -39,6 +47,7 @@ class Date extends AbstractElement
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         }
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -60,44 +69,27 @@ class Date extends AbstractElement
 
     /**
      * Set date value
-     * If \Magento\Framework\Stdlib\DateTime\Date instance is provided instead of value, other params will be ignored.
-     * Format and locale must be compatible with \Magento\Framework\Stdlib\DateTime\Date
      *
      * @param mixed $value
-     * @param string $format
-     * @param string $locale
      * @return $this
      */
-    public function setValue($value, $format = null, $locale = null)
+    public function setValue($value)
     {
         if (empty($value)) {
             $this->_value = '';
             return $this;
         }
-        if ($value instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
+        if ($value instanceof \DateTimeInterface) {
             $this->_value = $value;
             return $this;
         }
         if (preg_match('/^[0-9]+$/', $value)) {
-            $this->_value = new \Magento\Framework\Stdlib\DateTime\Date($this->_toTimestamp($value));
-            //$this->_value = new \Magento\Framework\Stdlib\DateTime\Date((int)value);
+            $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
             return $this;
         }
-        // last check, if input format was set
-        if (null === $format) {
-            $format = DateTime::DATETIME_INTERNAL_FORMAT;
-            if ($this->getInputFormat()) {
-                $format = $this->getInputFormat();
-            }
-        }
-        // last check, if locale was set
-        if (null === $locale) {
-            if (!($locale = $this->getLocale())) {
-                $locale = null;
-            }
-        }
+
         try {
-            $this->_value = new \Magento\Framework\Stdlib\DateTime\Date($value, $format, $locale);
+            $this->_value = new \DateTime($value);
         } catch (\Exception $e) {
             $this->_value = '';
         }
@@ -108,7 +100,7 @@ class Date extends AbstractElement
      * Get date value as string.
      * Format can be specified, or it will be taken from $this->getFormat()
      *
-     * @param string $format (compatible with \Magento\Framework\Stdlib\DateTime\Date
+     * @param string $format (compatible with \DateTime)
      * @return string
      */
     public function getValue($format = null)
@@ -121,13 +113,13 @@ class Date extends AbstractElement
             $format .= ($format && $this->getTimeFormat()) ? ' ' : '';
             $format .= $this->getTimeFormat() ? $this->getTimeFormat() : '';
         }
-        return $this->_value->toString($format);
+        return $this->localeDate->formatDateTime($this->_value, null, null, null, null, $format);
     }
 
     /**
      * Get value instance, if any
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getValueInstance()
     {
@@ -140,8 +132,8 @@ class Date extends AbstractElement
     /**
      * Output the input field and assign calendar instance to it.
      * In order to output the date:
-     * - the value must be instantiated (\Magento\Framework\Stdlib\DateTime\Date)
-     * - output format must be set (compatible with \Magento\Framework\Stdlib\DateTime\Date)
+     * - the value must be instantiated (\DateTime)
+     * - output format must be set (compatible with \DateTime)
      *
      * @throws \Exception
      * @return string

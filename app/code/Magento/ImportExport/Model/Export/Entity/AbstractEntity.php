@@ -283,11 +283,11 @@ abstract class AbstractEntity
                         $to = array_shift($exportFilter[$attrCode]);
 
                         if (is_scalar($from) && !empty($from)) {
-                            $date = $this->_localeDate->date($from, null, null, false)->toString('MM/dd/YYYY');
+                            $date = (new \DateTime($from))->format('m/d/Y');
                             $collection->addAttributeToFilter($attrCode, ['from' => $date, 'date' => true]);
                         }
                         if (is_scalar($to) && !empty($to)) {
-                            $date = $this->_localeDate->date($to, null, null, false)->toString('MM/dd/YYYY');
+                            $date = (new \DateTime($to))->format('m/d/Y');
                             $collection->addAttributeToFilter($attrCode, ['to' => $date, 'date' => true]);
                         }
                     }
