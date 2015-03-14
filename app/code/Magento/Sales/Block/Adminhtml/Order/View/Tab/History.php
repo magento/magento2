@@ -141,18 +141,21 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param array $item
      * @param string $dateType
-     * @param string $format
+     * @param int $format
      * @return string
      */
-    public function getItemCreatedAt(array $item, $dateType = 'date', $format = 'medium')
+    public function getItemCreatedAt(array $item, $dateType = 'date', $format = \IntlDateFormatter::MEDIUM)
     {
         if (!isset($item['created_at'])) {
             return '';
         }
+        $date = $item['created_at'] instanceof \DateTimeInterface
+            ? $item['created_at']
+            : new \DateTime($item['created_at']);
         if ('date' === $dateType) {
-            return $this->formatDate($item['created_at'], $format);
+            return $this->_localeDate->formatDateTime($date, $format, $format);
         }
-        return $this->formatTime($item['created_at'], $format);
+        return $this->_localeDate->formatDateTime($date, \IntlDateFormatter::NONE, $format);
     }
 
     /**
@@ -198,7 +201,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param string $label
      * @param bool $notified
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface $created
+     * @param \DateTime $created
      * @param string $comment
      * @return array
      */
@@ -293,7 +296,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
 
-        /** @var $createdAta \Magento\Framework\Stdlib\DateTime\DateInterface */
+        /** @var $createdAtA \DateTime */
         if ($createdAtA->getTimestamp() == $createdAtB->getTimestamp()) {
             return 0;
         }

@@ -88,8 +88,8 @@ class Bestsellers extends AbstractReport
     /**
      * Aggregate Orders data by order created at
      *
-     * @param string|int|\Zend_Date|array|null $from
-     * @param string|int|\Zend_Date|array|null $to
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -100,7 +100,6 @@ class Bestsellers extends AbstractReport
         $from = $this->_dateToUtc($from);
         $to = $this->_dateToUtc($to);
 
-        $this->_checkDates($from, $to);
         $adapter = $this->_getWriteAdapter();
         //$this->_getWriteAdapter()->beginTransaction();
 

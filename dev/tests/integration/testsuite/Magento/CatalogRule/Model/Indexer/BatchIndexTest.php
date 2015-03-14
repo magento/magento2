@@ -54,7 +54,7 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
             foreach ($productIds as $productId) {
                 $this->assertEquals(
                     $expectedPrice,
-                    $this->resourceRule->getRulePrice(true, 1, $customerGroupId, $productId)
+                    $this->resourceRule->getRulePrice(new \DateTime(), 1, $customerGroupId, $productId)
                 );
             }
         }

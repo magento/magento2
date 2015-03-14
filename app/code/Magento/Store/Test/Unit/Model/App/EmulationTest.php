@@ -141,7 +141,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->any())
             ->method('getStoreId')->willReturn($initStore);
-        $this->localeResolverMock->expects($this->any())->method('getLocaleCode')->willReturn($initLocale);
+        $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn($initLocale);
         $this->inlineConfigMock->expects($this->any())->method('isActive')->willReturn($newInlineTranslate);
         $this->viewDesignMock->expects($this->any())->method('getConfigurationDesignTheme')->willReturn($initTheme);
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($newLocale);
@@ -150,7 +150,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->any())->method('getStoreId')->willReturn($initStore);
         $this->inlineTranslationMock->expects($this->any())->method('suspend')->with($newInlineTranslate);
         $this->viewDesignMock->expects($this->any())->method('setDesignTheme')->with($initTheme);
-        $this->localeResolverMock->expects($this->any())->method('setLocaleCode')->with($newLocale);
+        $this->localeResolverMock->expects($this->any())->method('setLocale')->with($newLocale);
         $this->translateMock->expects($this->any())->method('setLocale')->with($newLocale);
         $this->translateMock->expects($this->any())->method('loadData')->with($newArea);
         $this->storeManagerMock->expects($this->any())
@@ -181,7 +181,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->once())->method('getStoreId')->willReturn($initialStore);
         $this->localeResolverMock->expects($this->once())
-            ->method('getLocaleCode')
+            ->method('getLocale')
             ->willReturn($initLocale);
 
         $this->model->storeCurrentEnvironmentInfo();
@@ -196,7 +196,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('setCurrentStore')->with($initialStore);
         $this->localeResolverMock->expects($this->once())
-            ->method('setLocaleCode')
+            ->method('setLocale')
             ->with($initLocale);
         $this->translateMock->expects($this->once())
             ->method('setLocale')
