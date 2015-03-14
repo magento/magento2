@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Module\ModuleList;
+namespace Magento\Framework\Module\Test\ModuleList;
+
+use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 
 class DeploymentConfigFactoryTest extends \PHPUnit_Framework_TestCase
 {
