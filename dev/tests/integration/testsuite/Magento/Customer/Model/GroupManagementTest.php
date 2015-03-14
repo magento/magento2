@@ -45,7 +45,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      */
     public function testGetDefaultGroupWithNonDefaultStoreId()
-    {   
+    {
         /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
         $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
         $nonDefaultStore = $storeManager->getStore('secondstore');
