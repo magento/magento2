@@ -41,7 +41,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     protected $httpContext;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -123,7 +123,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         $title = __('%1 - Special Products', $this->storeManager->getStore()->getFrontendName());
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         $data = [
@@ -258,7 +258,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     {
         return $this->_scopeConfig->isSetFlag(
             'rss/catalog/special',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

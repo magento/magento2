@@ -8,7 +8,6 @@ namespace Magento\Tax\Model;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Customer\Api\Data\RegionInterface as AddressRegion;
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Api\GroupManagementInterface as CustomerGroupManagement;
@@ -115,7 +114,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -162,11 +161,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $customerRepository;
 
     /**
-     * @var CustomerDataBuilder
-     */
-    protected $customerBuilder;
-
-    /**
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
@@ -176,7 +170,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Config $taxConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param Resource\TaxClass\CollectionFactory $classesFactory
@@ -185,7 +179,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param CustomerGroupManagement $customerGroupManagement
      * @param CustomerGroupRepository $customerGroupRepository
      * @param CustomerRepository $customerRepository
-     * @param CustomerDataBuilder $customerBuilder
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -196,7 +189,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         Config $taxConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
@@ -205,7 +198,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         CustomerGroupManagement $customerGroupManagement,
         CustomerGroupRepository $customerGroupRepository,
         CustomerRepository $customerRepository,
-        CustomerDataBuilder $customerBuilder,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -220,7 +212,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $this->customerGroupManagement = $customerGroupManagement;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->customerRepository = $customerRepository;
-        $this->customerBuilder = $customerBuilder;
         $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -406,19 +397,19 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $request->setCountryId(
             $this->_scopeConfig->getValue(
                 \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_COUNTRY_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
         )->setRegionId(
             $this->_scopeConfig->getValue(
                 \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_REGION_ID,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
         )->setPostcode(
             $this->_scopeConfig->getValue(
                 \Magento\Shipping\Model\Config::XML_PATH_ORIGIN_POSTCODE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
             )
         )->setCustomerClassId(
@@ -490,7 +481,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $address = new \Magento\Framework\Object();
         $basedOn = $this->_scopeConfig->getValue(
             \Magento\Tax\Model\Config::CONFIG_XML_PATH_BASED_ON,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
 
@@ -542,19 +533,19 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 $address->setCountryId(
                     $this->_scopeConfig->getValue(
                         \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         $store
                     )
                 )->setRegionId(
                     $this->_scopeConfig->getValue(
                         \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         $store
                     )
                 )->setPostcode(
                     $this->_scopeConfig->getValue(
                         \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         $store
                     )
                 );

@@ -18,7 +18,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     /**
      * Validator for check not protected extensions
      *
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_validatorNotProtectedExtensions;
 
@@ -28,7 +28,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Core\Model\File\Validator\NotProtectedExtension
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
      */
     protected $_fileValidator;
 
@@ -42,7 +42,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
@@ -50,7 +50,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         \Magento\Framework\Filesystem $filesystem
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
@@ -261,6 +261,8 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function restoreValue($value)
     {

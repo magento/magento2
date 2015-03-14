@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -19,22 +19,18 @@ use Magento\Mtf\Fixture\InjectableFixture;
  */
 class AssertProductIsPresentInCustomerBackendWishlist extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that products added to wishlist are present on Customers account on backend.
      *
      * @param CustomerIndex $customerIndex
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CustomerIndexEdit $customerIndexEdit
      * @param InjectableFixture $product
      * @return void
      */
     public function processAssert(
         CustomerIndex $customerIndex,
-        CustomerInjectable $customer,
+        Customer $customer,
         CustomerIndexEdit $customerIndexEdit,
         InjectableFixture $product
     ) {

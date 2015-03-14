@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3918741a9bf7f1cbd7cde2d301febfb0",
+    "hash": "8ddabb3c4956d1585308d5310203a7ab",
     "packages": [
         {
             "name": "composer/composer",
@@ -133,16 +133,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.12.9-patch1",
+            "version": "1.12.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "956e87daf5bfde66357b70365d42a484c6b7728b"
+                "reference": "d1e5cd8c9f83229bcdd9bb485c3ce25259c77884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/956e87daf5bfde66357b70365d42a484c6b7728b",
-                "reference": "956e87daf5bfde66357b70365d42a484c6b7728b",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/d1e5cd8c9f83229bcdd9bb485c3ce25259c77884",
+                "reference": "d1e5cd8c9f83229bcdd9bb485c3ce25259c77884",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2014-12-12 15:28:16"
+            "time": "2015-02-06 17:25:45"
         },
         {
             "name": "monolog/monolog",
@@ -1865,16 +1865,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.4.2",
+            "version": "v1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038"
+                "reference": "2d6851520bf0250f668307ab2fd28cbb0b35d2b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/3af00cf237289a406e7307e18e7ab0d92cf57038",
-                "reference": "3af00cf237289a406e7307e18e7ab0d92cf57038",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/2d6851520bf0250f668307ab2fd28cbb0b35d2b9",
+                "reference": "2d6851520bf0250f668307ab2fd28cbb0b35d2b9",
                 "shasum": ""
             },
             "require": {
@@ -1914,7 +1914,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-02-03 21:20:51"
+            "time": "2015-02-18 19:35:59"
         },
         {
             "name": "league/climate",
@@ -2029,16 +2029,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.0.4",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "1b0acf162da4f30237987e61e177a57f78e3d87e"
+                "reference": "a15ffcbfbcc4570d4a733ca7b76e9cac0a56c3f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/1b0acf162da4f30237987e61e177a57f78e3d87e",
-                "reference": "1b0acf162da4f30237987e61e177a57f78e3d87e",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/a15ffcbfbcc4570d4a733ca7b76e9cac0a56c3f4",
+                "reference": "a15ffcbfbcc4570d4a733ca7b76e9cac0a56c3f4",
                 "shasum": ""
             },
             "require": {
@@ -2064,20 +2064,20 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2014-12-04 12:38:39"
+            "time": "2015-03-02 08:06:43"
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.2.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "580e6ca75b472a844389ab8df7a0b412901d0d91"
+                "reference": "58c4b00f924d301e8c5281f40cfa9a66f3df9eee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/580e6ca75b472a844389ab8df7a0b412901d0d91",
-                "reference": "580e6ca75b472a844389ab8df7a0b412901d0d91",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/58c4b00f924d301e8c5281f40cfa9a66f3df9eee",
+                "reference": "58c4b00f924d301e8c5281f40cfa9a66f3df9eee",
                 "shasum": ""
             },
             "require": {
@@ -2088,7 +2088,8 @@
                 "symfony/filesystem": ">=2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "*"
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
             },
             "bin": [
                 "src/bin/phpmd"
@@ -2125,7 +2126,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2015-01-25 13:46:59"
+            "time": "2015-03-02 10:26:50"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3263,7 +3264,6 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
-    "prefer-lowest": false,
     "platform": {
         "php": "~5.5.0|~5.6.0"
     },

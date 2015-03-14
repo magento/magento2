@@ -23,9 +23,9 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_themeContext;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -33,7 +33,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
@@ -42,10 +42,10 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_customizationConfig = $customizationConfig;
         $this->_themeContext = $themeContext;
@@ -87,7 +87,7 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Return confirmation message for delete action
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getConfirmMessageDelete()
     {
@@ -145,13 +145,13 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $customization = $this->_themeContext->getStagingTheme()->getCustomization();
         $jsFiles = $customization->getFilesByType(\Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE);
-        return $this->_coreHelper->jsonEncode($customization->generateFileInfo($jsFiles));
+        return $this->jsonHelper->jsonEncode($customization->generateFileInfo($jsFiles));
     }
 
     /**
      * Get js tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTitle()
     {

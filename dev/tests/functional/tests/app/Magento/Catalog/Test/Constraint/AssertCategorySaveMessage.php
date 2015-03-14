@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCategorySaveMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Success category save message
      */

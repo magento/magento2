@@ -19,7 +19,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -73,31 +73,30 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     protected $_attributeCollection;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         array $data = []
     ) {
-        parent::__construct($coreData, $string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
 
         $this->_storeManager = $storeManager;
         $this->_attributeCollection = isset(

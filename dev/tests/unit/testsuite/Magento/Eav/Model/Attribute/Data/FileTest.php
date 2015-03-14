@@ -32,7 +32,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
         $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', [], [], '', false);
         $this->fileValidatorMock = $this->getMock(
-            '\Magento\Core\Model\File\Validator\NotProtectedExtension', ['isValid', 'getMessages'], [], '', false
+            '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension', ['isValid', 'getMessages'], [], '', false
         );
         $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
 
@@ -43,7 +43,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\File::outputValue
+     * covers \Magento\Eav\Model\Attribute\Data\File::outputValue
      *
      * @param string $format
      * @param mixed $value
@@ -94,8 +94,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Eav\Model\Attribute\Data\File::validateValue
-     * @covers \Magento\Eav\Model\Attribute\Data\File::_validateByRules
+     * covers \Magento\Eav\Model\Attribute\Data\File::validateValue
+     * covers \Magento\Eav\Model\Attribute\Data\File::_validateByRules
      *
      * @param mixed $value
      * @param mixed $originalValue

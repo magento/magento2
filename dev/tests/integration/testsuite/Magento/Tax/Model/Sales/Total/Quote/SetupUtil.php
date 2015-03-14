@@ -212,8 +212,8 @@ class SetupUtil
      */
     protected function setConfig($configData)
     {
-        /** @var \Magento\Core\Model\Resource\Config $config */
-        $config = $this->objectManager->get('Magento\Core\Model\Resource\Config');
+        /** @var \Magento\Config\Model\Resource\Config $config */
+        $config = $this->objectManager->get('Magento\Config\Model\Resource\Config');
         foreach ($configData as $path => $value) {
             if ($path == Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS) {
                 $value = $this->productTaxClasses[$value];
@@ -495,10 +495,10 @@ class SetupUtil
     {
         /** @var \Magento\Customer\Api\GroupRepositoryInterface $groupRepository */
         $groupRepository = $this->objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
-        $customerGroupBuilder = $this->objectManager->create('Magento\Customer\Api\Data\GroupDataBuilder');
-        $customerGroupBuilder->setCode('custom_group')
+        $customerGroupFactory = $this->objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
+        $customerGroup = $customerGroupFactory->create()
+            ->setCode('custom_group')
             ->setTaxClassId($customerTaxClassId);
-        $customerGroup = $customerGroupBuilder->create();
         $customerGroupId = $groupRepository->save($customerGroup)->getId();
         return $customerGroupId;
     }

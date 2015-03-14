@@ -16,10 +16,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSearchTermInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that after save a term search on edit term search page displays:
      *  - correct Search Query field passed from fixture
@@ -47,6 +43,7 @@ class AssertSearchTermInGrid extends AbstractConstraint
             'display_in_terms' => strtolower($searchTerm->getDisplayInTerms()),
         ];
 
+        $filters = array_filter($filters);
         $grid->search($filters);
         unset($filters['store_id']);
         \PHPUnit_Framework_Assert::assertTrue(

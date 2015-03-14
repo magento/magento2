@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Model;
 
+use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
+
 /**
  * Captcha Observer
  *
@@ -35,11 +37,11 @@ class Observer
     protected $_customerUrl;
 
     /**
-     * Core data
+     * Json Helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData;
+    protected $jsonHelper;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -80,7 +82,7 @@ class Observer
      * @param Resource\LogFactory $resLogFactory
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Checkout\Model\Type\Onepage $typeOnepage
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Framework\UrlInterface $urlManager
@@ -95,7 +97,7 @@ class Observer
         Resource\LogFactory $resLogFactory,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Checkout\Model\Type\Onepage $typeOnepage,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Framework\UrlInterface $urlManager,
@@ -107,7 +109,7 @@ class Observer
         $this->_resLogFactory = $resLogFactory;
         $this->_session = $session;
         $this->_typeOnepage = $typeOnepage;
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->_customerUrl = $customerUrl;
         $this->_helper = $helper;
         $this->_urlManager = $urlManager;
@@ -204,7 +206,7 @@ class Observer
             if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->_session->setCustomerFormData($controller->getRequest()->getPost());
+                $this->_session->setCustomerFormData($controller->getRequest()->getPostValue());
                 $url = $this->_urlManager->getUrl('*/*/create', ['_nosecret' => true]);
                 $controller->getResponse()->setRedirect($this->redirect->error($url));
             }
@@ -229,7 +231,7 @@ class Observer
                 if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                     $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $result = ['error' => 1, 'message' => __('Incorrect CAPTCHA')];
-                    $controller->getResponse()->representJson($this->_coreData->jsonEncode($result));
+                    $controller->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
                 }
             }
         }
@@ -253,7 +255,7 @@ class Observer
                 if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                     $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $result = ['error' => 1, 'message' => __('Incorrect CAPTCHA')];
-                    $controller->getResponse()->representJson($this->_coreData->jsonEncode($result));
+                    $controller->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
                 }
             }
         }
@@ -264,7 +266,7 @@ class Observer
      * Check Captcha On User Login Backend Page
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Magento\Backend\Model\Auth\Plugin\Exception
+     * @throws \Magento\Framework\Exception\Plugin\AuthenticationException
      * @return $this
      */
     public function checkUserLoginBackend($observer)
@@ -275,7 +277,7 @@ class Observer
         if ($captchaModel->isRequired($login)) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->_request, $formId))) {
                 $captchaModel->logAttempt($login);
-                throw new \Magento\Backend\Model\Auth\Plugin\Exception(__('Incorrect CAPTCHA.'));
+                throw new PluginAuthenticationException(__('Incorrect CAPTCHA.'));
             }
         }
         $captchaModel->logAttempt($login);

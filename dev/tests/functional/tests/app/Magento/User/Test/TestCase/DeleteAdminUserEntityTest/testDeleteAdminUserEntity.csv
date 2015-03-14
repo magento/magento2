@@ -1,3 +1,0 @@
-"isDefaultUser";"constraint"
-"0";"assertImpossibleDeleteYourOwnAccount, assertUserInGrid"
-"1";"assertUserSuccessDeleteMessage, assertUserNotInGrid"

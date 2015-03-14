@@ -64,13 +64,15 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve required options from parent
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the parent block for this block.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the parent block for this block.')
+            );
         }
         $this->setOrder($this->getParentBlock()->getOrder());
 
@@ -228,7 +230,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     {
         return !$this->_scopeConfig->isSetFlag(
             'sales/general/hide_customer_ip',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->getOrder()->getStoreId()
         );
     }

@@ -66,7 +66,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->will($this->returnValue($this->connection));
-        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
         $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
@@ -94,7 +94,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Could not rebuild index for undefined product
      */
     public function testExecuteWithEmptyId()

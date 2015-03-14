@@ -10,7 +10,7 @@ use Magento\Framework\View\Layout;
 
 /**
  * Class HelperTest
- * @covers Magento\Framework\View\Layout\ScheduledStructure\Helper
+ * covers Magento\Framework\View\Layout\ScheduledStructure\Helper
  */
 class HelperTest extends \PHPUnit_Framework_TestCase
 {

@@ -25,14 +25,16 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Newsletter\Model\Resource\Subscriber\Collection $subscriberCollection,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
         $this->_subscriberCollection = $subscriberCollection;
     }
 
@@ -52,16 +54,16 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param ModelQueue $queue
      * @param array $subscriberIds
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addSubscribersToQueue(ModelQueue $queue, array $subscriberIds)
     {
         if (count($subscriberIds) == 0) {
-            throw new \Magento\Framework\Model\Exception(__('There are no subscribers selected.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('There are no subscribers selected.'));
         }
 
         if (!$queue->getId() && $queue->getQueueStatus() != \Magento\Newsletter\Model\Queue::STATUS_NEVER) {
-            throw new \Magento\Framework\Model\Exception(__('You selected an invalid queue.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('You selected an invalid queue.'));
         }
 
         $adapter = $this->_getWriteAdapter();

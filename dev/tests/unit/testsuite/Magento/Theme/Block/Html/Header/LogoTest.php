@@ -8,7 +8,7 @@ namespace Magento\Theme\Block\Html\Header;
 class LogoTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Theme\Block\Html\Header\Logo::getLogoSrc
+     * cover \Magento\Theme\Block\Html\Header\Logo::getLogoSrc
      */
     public function testGetLogoSrc()
     {
@@ -30,7 +30,7 @@ class LogoTest extends \PHPUnit_Framework_TestCase
 
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($mediaDirectory));
         $helper = $this->getMock(
-            'Magento\Core\Helper\File\Storage\Database',
+            'Magento\MediaStorage\Helper\File\Storage\Database',
             ['checkDbUsage'],
             [],
             '',

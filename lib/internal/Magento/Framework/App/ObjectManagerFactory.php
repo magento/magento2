@@ -10,6 +10,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\ObjectManager\Environment;
 use Magento\Framework\ObjectManager\EnvironmentFactory;
 use Magento\Framework\ObjectManager\EnvironmentInterface;
@@ -88,12 +89,11 @@ class ObjectManagerFactory
      * Create ObjectManager
      *
      * @param array $arguments
-     * @param bool $useCompiled
      * @return \Magento\Framework\ObjectManagerInterface
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function create(array $arguments, $useCompiled = true)
+    public function create(array $arguments)
     {
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $arguments);
 
@@ -101,10 +101,10 @@ class ObjectManagerFactory
             $this->driverPool->getDriver(DriverPool::FILE),
             $this->directoryList->getPath(DirectoryList::DI),
             $this->directoryList->getPath(DirectoryList::GENERATION),
-            $deploymentConfig->get('definition/format', 'serialized')
+            $deploymentConfig->get('definition/format', Serialized::MODE_NAME)
         );
 
-        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'), $useCompiled);
+        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
         /** @var \Magento\Framework\ObjectManager\EnvironmentFactory $enFactory */
@@ -127,7 +127,18 @@ class ObjectManagerFactory
             }
         }
 
-        $this->factory = $env->getObjectManagerFactory($arguments);
+        // set cache profiler decorator if enabled
+        if (\Magento\Framework\Profiler::isEnabled()) {
+            $cacheFactoryArguments = $diConfig->getArguments('Magento\Framework\App\Cache\Frontend\Factory');
+            $cacheFactoryArguments['decorators'][] = [
+                'class' => 'Magento\Framework\Cache\Frontend\Decorator\Profiler',
+                'parameters' => ['backendPrefixes' => ['Zend_Cache_Backend_', 'Cm_Cache_Backend_']],
+            ];
+            $cacheFactoryConfig = [
+                'Magento\Framework\App\Cache\Frontend\Factory' => ['arguments' => $cacheFactoryArguments]
+            ];
+            $diConfig->extend($cacheFactoryConfig);
+        }
 
         $sharedInstances = [
             'Magento\Framework\App\DeploymentConfig' => $deploymentConfig,
@@ -144,6 +155,8 @@ class ObjectManagerFactory
             'Magento\Framework\App\ObjectManager\ConfigLoader' => $env->getObjectManagerConfigLoader(),
             $this->_configClassName => $diConfig,
         ];
+        $arguments['shared_instances'] = &$sharedInstances;
+        $this->factory = $env->getObjectManagerFactory($arguments);
 
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = new $this->_locatorClassName($this->factory, $diConfig, $sharedInstances);

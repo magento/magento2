@@ -69,13 +69,12 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $masterAttributeCode = '_email';
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
@@ -83,13 +82,12 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
@@ -97,7 +95,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     ) {
         $this->_storageFactory = $storageFactory;
         parent::__construct(
-            $coreData,
             $string,
             $scopeConfig,
             $importFactory,

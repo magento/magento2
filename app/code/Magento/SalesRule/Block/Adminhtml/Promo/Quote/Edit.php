@@ -62,7 +62,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Getter for form header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

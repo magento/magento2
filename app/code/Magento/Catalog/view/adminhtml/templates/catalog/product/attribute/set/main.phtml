@@ -10,7 +10,7 @@
 <div class="attribute-set">
     <div class="edit-attribute-set attribute-set-col">
         <?php echo $block->getSetFormHtml() ?>
-        <script type="text/javascript">
+        <script>
 require([
     "jquery",
     "mage/mage"
@@ -39,7 +39,7 @@ require([
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
             <script>
-require(["jquery", "extjs/ext-tree-checkbox"], function(jQuery){
+require(["jquery", "extjs/ext-tree-checkbox", "prototype"], function(jQuery){
 
             //<![CDATA[
             var allowDragAndDrop = <?php echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;

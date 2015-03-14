@@ -98,7 +98,7 @@ class Full
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -153,7 +153,7 @@ class Full
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -172,7 +172,7 @@ class Full
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -443,12 +443,8 @@ class Full
             $this->searchableAttributes = [];
 
             $productAttributes = $this->productAttributeCollectionFactory->create();
+            $productAttributes->addToIndexFilter(true);
 
-            if ($this->engineProvider->get() && $this->engineProvider->get()->allowAdvancedIndex()) {
-                $productAttributes->addToIndexFilter(true);
-            } else {
-                $productAttributes->addSearchableAttributeFilter();
-            }
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
             $attributes = $productAttributes->getItems();
 
@@ -672,7 +668,7 @@ class Full
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValue) {
                 $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
-                if (!is_null($value) && $value !== false) {
+                if (!empty($value)) {
                     $attributeCode = $this->getSearchableAttribute($attributeId)->getAttributeCode();
 
                     if (isset($index[$attributeCode])) {
@@ -684,19 +680,17 @@ class Full
             }
         }
 
-        if ($this->engineProvider->get()->allowAdvancedIndex()) {
-            $product = $this->getProductEmulator(
-                $productData['type_id']
-            )->setId(
-                $productData['entity_id']
-            )->setStoreId(
-                $storeId
-            );
-            $typeInstance = $this->getProductTypeInstance($productData['type_id']);
-            $data = $typeInstance->getSearchableData($product);
-            if ($data) {
-                $index['options'] = $data;
-            }
+        $product = $this->getProductEmulator(
+            $productData['type_id']
+        )->setId(
+            $productData['entity_id']
+        )->setStoreId(
+            $storeId
+        );
+        $typeInstance = $this->getProductTypeInstance($productData['type_id']);
+        $data = $typeInstance->getSearchableData($product);
+        if ($data) {
+            $index['options'] = $data;
         }
 
         if ($this->engineProvider->get()) {
@@ -721,6 +715,7 @@ class Full
 
         if ($attribute->getIsSearchable()
             && $attribute->usesSource()
+            && $this->engineProvider->get()->allowAdvancedIndex()
         ) {
             $attribute->setStoreId($storeId);
             $valueText = $attribute->getSource()->getIndexOptionText($valueId);
@@ -765,12 +760,12 @@ class Full
         if (!isset($this->dates[$storeId])) {
             $timezone = $this->scopeConfig->getValue(
                 $this->localeDate->getDefaultTimezonePath(),
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $locale = $this->scopeConfig->getValue(
                 $this->localeResolver->getDefaultLocalePath(),
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $locale = new \Zend_Locale($locale);

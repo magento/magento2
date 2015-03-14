@@ -60,7 +60,7 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
     public function create()
     {
         $dataObjectType = $this->_getDataObjectType();
-        $dataObject = $this->objectFactory->create($dataObjectType, ['builder' => $this]);
+        $dataObject = $this->objectFactory->create($dataObjectType, ['data' => $this->data]);
         $this->data = [];
         return $dataObject;
     }

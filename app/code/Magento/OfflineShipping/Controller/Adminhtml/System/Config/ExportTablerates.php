@@ -7,10 +7,10 @@
 namespace Magento\OfflineShipping\Controller\Adminhtml\System\Config;
 
 use Magento\Framework\App\ResponseInterface;
-use Magento\Backend\Controller\Adminhtml\System\ConfigSectionChecker;
+use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ExportTablerates extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
+class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\AbstractConfig
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -18,23 +18,23 @@ class ExportTablerates extends \Magento\Backend\Controller\Adminhtml\System\Abst
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\Config\Structure $configStructure
-     * @param ConfigSectionChecker $sectionChecker
+     * @param \Magento\Config\Model\Config\Structure $configStructure
+     * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\Config\Structure $configStructure,
+        \Magento\Config\Model\Config\Structure $configStructure,
         ConfigSectionChecker $sectionChecker,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
         $this->_fileFactory = $fileFactory;

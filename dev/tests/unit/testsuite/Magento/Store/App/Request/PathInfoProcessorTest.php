@@ -29,18 +29,8 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock(
-            '\Magento\Framework\App\RequestInterface',
-            [
-                'isDirectAccessFrontendName',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie'
-            ]
-        );
+        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', [], [], '', false);
         $this->_model = new \Magento\Store\App\Request\PathInfoProcessor($this->_storeManagerMock);
     }

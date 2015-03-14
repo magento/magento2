@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Catalog\Test\TestCase\Category\DeleteCategoryEntityTest">
+    <variation name="DeleteCategoryEntityTestVariation1">
+      <data name="category/dataSet" xsi:type="string">root_category</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend"/>
+    </variation>
+    <variation name="DeleteCategoryEntityTestVariation2">
+      <data name="category/dataSet" xsi:type="string">root_subcategory</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySuccessDeleteMessage"/>
+      <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryNotInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnBackend"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryAbsenceOnFrontend"/>
+    </variation>
+  </testCase>
+</config>

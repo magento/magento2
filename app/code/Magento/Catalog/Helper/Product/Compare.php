@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Compare extends \Magento\Core\Helper\Url
+class Compare extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Product Compare Items Collection
@@ -90,13 +90,16 @@ class Compare extends \Magento\Core\Helper\Url
     protected $_wishlistHelper;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
-    protected $_coreHelper;
+    protected $postHelper;
+
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    private $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Visitor $customerVisitor
@@ -104,12 +107,12 @@ class Compare extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Core\Helper\PostData $coreHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Visitor $customerVisitor,
@@ -117,7 +120,7 @@ class Compare extends \Magento\Core\Helper\Url
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Core\Helper\PostData $coreHelper
+        \Magento\Framework\Data\Helper\PostHelper $postHelper
     ) {
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -126,8 +129,9 @@ class Compare extends \Magento\Core\Helper\Url
         $this->_catalogSession = $catalogSession;
         $this->_formKey = $formKey;
         $this->_wishlistHelper = $wishlistHelper;
-        $this->_coreHelper = $coreHelper;
-        parent::__construct($context, $storeManager);
+        $this->postHelper = $postHelper;
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -158,7 +162,7 @@ class Compare extends \Magento\Core\Helper\Url
      */
     public function getPostDataParams($product)
     {
-        return $this->_coreHelper->getPostData($this->getAddUrl(), ['product' => $product->getId()]);
+        return $this->postHelper->getPostData($this->getAddUrl(), ['product' => $product->getId()]);
     }
 
     /**
@@ -228,7 +232,7 @@ class Compare extends \Magento\Core\Helper\Url
             \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $listCleanUrl,
             'product' => $product->getId()
         ];
-        return $this->_coreHelper->getPostData($this->getRemoveUrl(), $data);
+        return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
     }
 
     /**
@@ -252,7 +256,7 @@ class Compare extends \Magento\Core\Helper\Url
         $params = [
             \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
         ];
-        return $this->_coreHelper->getPostData($this->getClearListUrl(), $params);
+        return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }
 
     /**

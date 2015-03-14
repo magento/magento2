@@ -127,7 +127,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             'rss_url' => null, // no rss
         ];
 
-        $this->getRequest()->setPost($request);
+        $this->getRequest()->setPostValue($request);
 
         $this->_objectManager->get('Magento\Framework\Registry')->register(
             'wishlist',

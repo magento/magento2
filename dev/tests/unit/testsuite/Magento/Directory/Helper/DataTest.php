@@ -18,9 +18,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_regionCollection;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_coreHelper;
+    protected $jsonHelperMock;
 
     /**
      * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_config;
+    protected $scopeConfigMock;
 
     /**
      * @var \Magento\Directory\Helper\Data
@@ -40,7 +40,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $context->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
 
         $configCacheType = $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
 
@@ -74,25 +78,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_regionCollection)
         );
 
-        $this->_coreHelper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
+        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_store));
 
         $currencyFactory = $this->getMock('Magento\Directory\Model\CurrencyFactory', [], [], '', false);
-
-        $this->_config = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $arguments = [
             'context' => $context,
             'configCacheType' => $configCacheType,
             'countryCollection' => $this->_countryCollection,
             'regCollectionFactory' => $regCollectionFactory,
-            'coreHelper' => $this->_coreHelper,
+            'jsonHelper' => $this->jsonHelperMock,
             'storeManager' => $storeManager,
             'currencyFactory' => $currencyFactory,
-            'config' => $this->_config
         ];
         $this->_object = $objectManager->getObject('Magento\Directory\Helper\Data', $arguments);
     }
@@ -151,7 +152,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'Country2' => ['r3' => ['code' => 'r3-code', 'name' => 'r3-name']]
         ];
-        $this->_coreHelper->expects(
+        $this->jsonHelperMock->expects(
             $this->once()
         )->method(
             'jsonEncode'
@@ -173,7 +174,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountriesWithStatesRequired($configValue, $expected)
     {
-        $this->_config->expects(
+        $this->scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
@@ -194,7 +195,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountriesWithOptionalZip($configValue, $expected)
     {
-        $this->_config->expects(
+        $this->scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
@@ -217,5 +218,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'empty_list' => ['', []],
             'normal_list' => ['Country1,Country2', ['Country1', 'Country2']]
         ];
+    }
+
+    public function testGetDefaultCountry()
+    {
+        $storeId = 'storeId';
+        $country = 'country';
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                Data::XML_PATH_DEFAULT_COUNTRY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )->will($this->returnValue($country));
+
+        $this->assertEquals($country, $this->_object->getDefaultCountry($storeId));
     }
 }

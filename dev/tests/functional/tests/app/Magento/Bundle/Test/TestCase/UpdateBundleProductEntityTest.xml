@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Bundle\Test\TestCase\UpdateBundleProductEntityTest">
+    <variation name="UpdateBundleProductEntityTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update dynamic bundle product</data>
+      <data name="originalProduct/dataSet" xsi:type="string">bundle_dynamic_product</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+      <data name="product/data/sku" xsi:type="string">bundle_dynamic_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">dynamic-100</data>
+      <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+      <data name="product/data/weight" xsi:type="string">1</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">Bundle Product Fixed Required</data>
+      <data name="product/data/bundle_shipment_type" xsi:type="string">Together</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_dynamic</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
+    </variation>
+    <variation name="UpdateBundleProductEntityTestVariation2" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">Update fixed bundle product</data>
+      <data name="originalProduct/dataSet" xsi:type="string">bundle_fixed_product</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">bundle_fixed_%isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">fixed-756</data>
+      <data name="product/data/weight_type" xsi:type="string">Dynamic</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/bundle_shipment_type" xsi:type="string">Separately</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">default_fixed</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">default</data>
+      <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType"/>
+    </variation>
+    <variation name="UpdateBundleProductEntityTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12841: Edit Bundle Product (Fixed Price)</data>
+      <data name="originalProduct/dataSet" xsi:type="string">bundle_fixed_with_category</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">bundle_fixed_%isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">-</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">120.00</data>
+      <data name="product/data/price/preset" xsi:type="string">bundle_fixed_with_category</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/bundle_shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+    </variation>
+    <variation name="UpdateBundleProductEntityTestVariation4" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12842: Edit Bundle (dynamic) Product</data>
+      <data name="originalProduct/dataSet" xsi:type="string">bundle_dynamic_with_category</data>
+      <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+      <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>
+      <data name="product/data/sku_type" xsi:type="string">-</data>
+      <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
+      <data name="product/data/price/value" xsi:type="string">-</data>
+      <data name="product/data/price/preset" xsi:type="string">bundle_dynamic_with_category</data>
+      <data name="product/data/weight_type" xsi:type="string">-</data>
+      <data name="product/data/weight" xsi:type="string">-</data>
+      <data name="product/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="product/data/description" xsi:type="string">-</data>
+      <data name="product/data/bundle_shipment_type" xsi:type="string">-</data>
+      <data name="product/data/bundle_selections/preset" xsi:type="string">-</data>
+      <data name="product/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="product/data/visibility" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Bundle\Test\Constraint\AssertBundleProductPage"/>
+      <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+    </variation>
+  </testCase>
+</config>

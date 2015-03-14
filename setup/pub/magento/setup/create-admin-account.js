@@ -18,21 +18,21 @@ angular.module('create-admin-account', ['ngStorage'])
                 return;
             }
             var p = $scope.admin.password;
-            if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
+            if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/) && p.match(/[!@#$%^*()_\/\\\-\+=]+/)) {
                 $scope.admin.passwordStatus.class = 'strong';
                 $scope.admin.passwordStatus.label = 'Strong';
-            } else if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
+            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-z]+/) && p.match(/[A-Z]+/)) {
                 $scope.admin.passwordStatus.class = 'good';
                 $scope.admin.passwordStatus.label = 'Good';
-            } else if (p.length > 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
+            } else if (p.length >= 6 && p.match(/[\d]+/) && p.match(/[a-zA-Z]+/)) {
+                $scope.admin.passwordStatus.class = 'fair';
+                $scope.admin.passwordStatus.label = 'Fair';
+            } else if (p.length >= 6) {
                 $scope.admin.passwordStatus.class = 'weak';
                 $scope.admin.passwordStatus.label = 'Weak';
-            } else if (p.length > 6) {
-                $scope.admin.passwordStatus.class = 'to-short';
-                $scope.admin.passwordStatus.label = 'To Short';
             } else {
-                $scope.admin.passwordStatus.class = 'none';
-                $scope.admin.passwordStatus.label = 'None';
+                $scope.admin.passwordStatus.class = 'too-short';
+                $scope.admin.passwordStatus.label = 'Too Short';
             }
         };
 
@@ -71,7 +71,7 @@ angular.module('create-admin-account', ['ngStorage'])
             require: "ngModel",
             link: function(scope, elm, attrs, ctrl){
                 var validator = function(value){
-                    var minReg = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
+                    var minReg = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/,
                         isValid = typeof value === 'string' && minReg.test(value);
 
                     ctrl.$setValidity('checkPassword', isValid);

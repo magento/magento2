@@ -184,7 +184,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method exportItem()
      *
-     * @covers \Magento\CustomerImportExport\Model\Export\Customer::exportItem
+     * covers \Magento\CustomerImportExport\Model\Export\Customer::exportItem
      */
     public function testExportItem()
     {

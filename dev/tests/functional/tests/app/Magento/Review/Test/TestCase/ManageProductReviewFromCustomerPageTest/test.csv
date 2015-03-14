@@ -1,3 +1,0 @@
-"review/data/status_id";"review/data/nickname";"review/data/title";"review/data/detail";"constraint"
-"Approved";"name_upd_%isolation%";"title_upd_%isolation%";"review_upd_%isolation%";"assertReviewSuccessSaveMessage, assertProductReviewInGridOnCustomerPage, assertProductReviewOnProductPage"
-"Not Approved";"name_upd_%isolation%";"title_upd_%isolation%";"review_upd_%isolation%";"assertReviewSuccessSaveMessage, assertProductReviewInGridOnCustomerPage, assertProductRatingNotInProductPage"

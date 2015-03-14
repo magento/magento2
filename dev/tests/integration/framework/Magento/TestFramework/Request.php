@@ -3,20 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\TestFramework;
+
+use \Zend\Stdlib\ParametersInterface;
 
 /**
  * HTTP request implementation that is used instead core one for testing
  */
-namespace Magento\TestFramework;
-
 class Request extends \Magento\Framework\App\Request\Http
 {
     /**
      * Server super-global mock
      *
-     * @var array
+     * @var ParametersInterface
      */
-    protected $_server = [];
+    protected $_server;
 
     /**
      * Retrieve HTTP HOST.
@@ -29,16 +30,16 @@ class Request extends \Magento\Framework\App\Request\Http
      */
     public function getHttpHost($trimPort = true)
     {
-        return 'localhost';
+        return $trimPort ? 'localhost' : 'localhost:81';
     }
 
     /**
      * Set "server" super-global mock
      *
-     * @param array $server
+     * @param ParametersInterface $server
      * @return \Magento\TestFramework\Request
      */
-    public function setServer(array $server)
+    public function setServer(ParametersInterface $server)
     {
         $this->_server = $server;
         return $this;
@@ -47,28 +48,15 @@ class Request extends \Magento\Framework\App\Request\Http
     /**
      * Overridden getter to avoid using of $_SERVER
      *
-     * @param string|null $key
+     * @param string|null $name
      * @param mixed|null $default
-     * @return array|mixed|null
+     * @return ParametersInterface|array|mixed|null
      */
-    public function getServer($key = null, $default = null)
+    public function getServer($name = null, $default = null)
     {
-        if (null === $key) {
+        if (null === $name) {
             return $this->_server;
         }
-
-        return isset($this->_server[$key]) ? $this->_server[$key] : $default;
-    }
-
-    /**
-     * Set the HTTP Method type.
-     *
-     * Examples are POST, PUT, GET, DELETE
-     *
-     * @param string $type
-     */
-    public function setMethod($type)
-    {
-        $this->_server['REQUEST_METHOD'] = $type;
+        return $this->_server->get($name, $default);
     }
 }

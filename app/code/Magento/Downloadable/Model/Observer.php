@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Model;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable Products Observer
@@ -16,11 +16,6 @@ use Magento\Framework\Store\ScopeInterface;
 class Observer
 {
     const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
-
-    /**
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_helper;
 
     /**
      * Core store config
@@ -60,7 +55,6 @@ class Observer
     protected $_objectCopyService;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -70,7 +64,6 @@ class Observer
      * @param \Magento\Framework\Object\Copy $objectCopyService
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -79,7 +72,6 @@ class Observer
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         \Magento\Framework\Object\Copy $objectCopyService
     ) {
-        $this->_helper = $coreData;
         $this->_scopeConfig = $scopeConfig;
         $this->_purchasedFactory = $purchasedFactory;
         $this->_productFactory = $productFactory;
@@ -158,7 +150,7 @@ class Observer
                     ->_scopeConfig
                     ->getValue(
                         \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                        ScopeInterface::SCOPE_STORE
                     );
                 $linkPurchased->setLinkSectionTitle($linkSectionTitle)->save();
                 foreach ($linkIds as $linkId) {
@@ -258,7 +250,7 @@ class Observer
         $downloadableItemsStatuses = [];
         $orderItemStatusToEnable = $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $order->getStoreId()
         );
 
@@ -351,7 +343,7 @@ class Observer
 
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         )) {
             return $this;

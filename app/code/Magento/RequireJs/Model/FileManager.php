@@ -55,11 +55,21 @@ class FileManager
      *
      * @return \Magento\Framework\View\Asset\File
      */
-    public function createRequireJsAsset()
+    public function createRequireJsConfigAsset()
     {
         $relPath = $this->config->getConfigFileRelativePath();
         $this->ensureSourceFile($relPath);
         return $this->assetRepo->createArbitrary($relPath, '');
+    }
+
+    /**
+     * Create a view asset representing the aggregated configuration file
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createRequireJsAsset()
+    {
+        return $this->assetRepo->createArbitrary($this->config->getRequireJsFileRelativePath(), '');
     }
 
     /**
@@ -76,5 +86,51 @@ class FileManager
         if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER || !$dir->isExist($relPath)) {
             $dir->writeFile($relPath, $this->config->getConfig());
         }
+    }
+
+    /**
+     * Create a view asset representing the static js functionality
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createStaticJsAsset()
+    {
+        if ($this->appState->getMode() != \Magento\Framework\App\State::MODE_PRODUCTION) {
+            return false;
+        }
+        $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+        $relPath = $libDir->getRelativePath(\Magento\Framework\RequireJs\Config::STATIC_FILE_NAME);
+        /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+        $context = $this->assetRepo->getStaticViewFileContext();
+
+        return $this->assetRepo->createArbitrary($relPath, $context->getPath());
+    }
+
+    /**
+     * Create a view assets representing the bundle js functionality
+     *
+     * @return \Magento\Framework\View\Asset\File[]
+     */
+    public function createBundleJsPool()
+    {
+        $bundles = [];
+        if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
+            $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+            /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+            $context = $this->assetRepo->getStaticViewFileContext();
+
+            $bundleDir = $context->getPath() . '/' .\Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR;
+
+            if (!$libDir->isExist($bundleDir)) {
+                return [];
+            }
+
+            foreach ($libDir->read($bundleDir) as $bundleFile) {
+                $relPath = $libDir->getRelativePath($bundleFile);
+                $bundles[] = $this->assetRepo->createArbitrary($relPath, '');
+            }
+        }
+
+        return $bundles;
     }
 }

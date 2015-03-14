@@ -23,19 +23,14 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
      */
     private $moduleResource;
 
-    /**
-     * @var \Magento\Framework\Module\ResourceResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $resourceResolver;
-
     protected function setUp()
     {
         $this->moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
         $this->moduleList->expects($this->any())
             ->method('getOne')
             ->will($this->returnValueMap([
-                        ['Module_One', ['name' => 'Module_One', 'schema_version' => '1']],
-                        ['Module_Two', ['name' => 'Module_Two', 'schema_version' => '2']],
+                        ['Module_One', ['name' => 'Module_One', 'setup_version' => '1']],
+                        ['Module_Two', ['name' => 'Module_Two', 'setup_version' => '2']],
                         ['Module_No_Schema', []],
                     ]));
         $this->moduleList->expects($this->any())
@@ -44,12 +39,10 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
 
         $this->_outputConfig = $this->getMockForAbstractClass('Magento\Framework\Module\Output\ConfigInterface');
         $this->moduleResource = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceInterface');
-        $this->resourceResolver = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceResolverInterface');
 
         $this->dbVersionInfo = new DbVersionInfo(
             $this->moduleList,
-            $this->moduleResource,
-            $this->resourceResolver
+            $this->moduleResource
         );
     }
 
@@ -62,14 +55,13 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsDbSchemaUpToDate($moduleName, $dbVersion, $expectedResult)
     {
-        $resourceName = 'resource';
         $this->moduleResource->expects($this->once())
             ->method('getDbVersion')
-            ->with($resourceName)
+            ->with($moduleName)
             ->will($this->returnValue($dbVersion));
         $this->assertEquals(
             $expectedResult,
-            $this->dbVersionInfo->isSchemaUpToDate($moduleName, $resourceName)
+            $this->dbVersionInfo->isSchemaUpToDate($moduleName)
         );
     }
 
@@ -82,14 +74,13 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsDbDataUpToDate($moduleName, $dbVersion, $expectedResult)
     {
-        $resourceName = 'resource';
         $this->moduleResource->expects($this->once())
             ->method('getDataVersion')
-            ->with($resourceName)
+            ->with($moduleName)
             ->will($this->returnValue($dbVersion));
         $this->assertEquals(
             $expectedResult,
-            $this->dbVersionInfo->isDataUpToDate($moduleName, $resourceName)
+            $this->dbVersionInfo->isDataUpToDate($moduleName)
         );
     }
 
@@ -131,11 +122,6 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getDbVersion')
             ->will($this->returnValue(2));
 
-        $this->resourceResolver->expects($this->any())->method('getResourceList')->will($this->returnValueMap([
-                    ['Module_One', ['resource_one']],
-                    ['Module_Two', ['resource_two']],
-                ]));
-
         $expectedErrors = [
             [
                 DbVersionInfo::KEY_MODULE => 'Module_One',
@@ -155,19 +141,19 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Schema version for module 'Module_No_Schema' is not specified
+     * @expectedExceptionMessage Setup version for module 'Module_No_Schema' is not specified
      */
     public function testIsDbSchemaUpToDateException()
     {
-        $this->dbVersionInfo->isSchemaUpToDate('Module_No_Schema', 'resource_name');
+        $this->dbVersionInfo->isSchemaUpToDate('Module_No_Schema');
     }
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Schema version for module 'Module_No_Schema' is not specified
+     * @expectedExceptionMessage Setup version for module 'Module_No_Schema' is not specified
      */
     public function testIsDbDataUpToDateException()
     {
-        $this->dbVersionInfo->isDataUpToDate('Module_No_Schema', 'resource_name');
+        $this->dbVersionInfo->isDataUpToDate('Module_No_Schema');
     }
 }

@@ -142,7 +142,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -163,16 +163,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Image\Factory $imageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -187,9 +187,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Image\Factory $imageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -471,7 +471,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             // check if placeholder defined in config
             $isConfigPlaceholder = $this->_scopeConfig->getValue(
                 "catalog/placeholder/{$this->getDestinationSubdir()}_placeholder",
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $configPlaceholder = '/placeholder/' . $isConfigPlaceholder;
             if (!empty($isConfigPlaceholder) && $this->_fileExists($baseDir . $configPlaceholder)) {

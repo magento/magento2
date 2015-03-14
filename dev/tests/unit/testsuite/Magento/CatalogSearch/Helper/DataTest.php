@@ -26,7 +26,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_stringMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Model\QueryFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_queryFactoryMock;
 
@@ -41,32 +41,25 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_escaperMock;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_filterManagerMock;
-
-    /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
     public function setUp()
     {
-        $this->_contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String');
         $this->_queryFactoryMock = $this->getMock('Magento\Search\Model\QueryFactory', [], [], '', false);
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');
-        $this->_filterManagerMock = $this->getMock('Magento\Framework\Filter\FilterManager', [], [], '', false);
-        $this->_storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->_contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->_scopeConfigMock);
 
         $this->_model = new \Magento\CatalogSearch\Helper\Data(
             $this->_contextMock,
             $this->_stringMock,
-            $this->_scopeConfigMock,
             $this->_queryFactoryMock,
             $this->_escaperMock,
-            $this->_filterManagerMock,
             $this->_storeManagerMock
         );
     }
@@ -88,7 +81,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Search\Model\Query::XML_PATH_MIN_QUERY_LENGTH,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
             ->will($this->returnValue($return));
@@ -102,7 +95,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Search\Model\Query::XML_PATH_MAX_QUERY_LENGTH,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
             ->will($this->returnValue($return));

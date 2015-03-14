@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Store\Test\TestCase\DeleteWebsiteEntityTest">
+    <variation name="DeleteWebsiteEntityTestVariation1">
+      <data name="website/dataSet" xsi:type="string">custom_website</data>
+      <data name="createBackup" xsi:type="string">Yes</data>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessDeleteAndBackupMessages"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteNotInGrid"/>
+      <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
+    </variation>
+    <variation name="DeleteWebsiteEntityTestVariation2">
+      <data name="website/dataSet" xsi:type="string">custom_website</data>
+      <data name="createBackup" xsi:type="string">No</data>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteSuccessDeleteMessage"/>
+      <constraint name="Magento\Store\Test\Constraint\AssertWebsiteNotInGrid"/>
+    </variation>
+  </testCase>
+</config>

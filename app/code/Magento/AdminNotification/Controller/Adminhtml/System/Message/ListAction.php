@@ -36,7 +36,7 @@ class ListAction extends \Magento\Backend\App\AbstractAction
             $result[] = $default;
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                 ->jsonEncode($result)
         );
     }

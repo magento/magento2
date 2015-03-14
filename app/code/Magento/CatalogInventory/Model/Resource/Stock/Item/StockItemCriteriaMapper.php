@@ -10,7 +10,7 @@ use Magento\Framework\DB\GenericMapper;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Data\ObjectFactory;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 
@@ -24,7 +24,7 @@ class StockItemCriteriaMapper extends GenericMapper
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param MapperFactory $mapperFactory
      * @param Select $select
      */
@@ -137,13 +137,13 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function mapQtyFilter($comparisonMethod, $qty)
     {
         $methods = ['<' => 'lt', '>' => 'gt', '=' => 'eq', '<=' => 'lteq', '>=' => 'gteq', '<>' => 'neq'];
         if (!isset($methods[$comparisonMethod])) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('%1 is not a correct comparison method.', $comparisonMethod)
             );
         }

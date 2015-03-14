@@ -256,7 +256,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $invoiceId = 2;
 
         $message = 'model exception';
-        $e = new \Magento\Framework\Model\Exception($message);
+        $e = new \Magento\Framework\Exception\LocalizedException($message);
 
         $this->requestMock->expects($this->once())
             ->method('getParam')

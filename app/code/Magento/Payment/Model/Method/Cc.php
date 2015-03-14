@@ -46,7 +46,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
@@ -61,7 +61,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
@@ -75,7 +75,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $paymentData,
             $scopeConfig,
             $resource,
@@ -143,7 +143,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * Validate payment method information object
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -236,7 +236,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         if ($errorMsg) {
-            throw new \Magento\Framework\Model\Exception($errorMsg);
+            throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
         }
 
         //This must be after all validation conditions

@@ -1,2 +1,0 @@
-"storeInitial/dataSet";"store/data/group_id/dataSet";"store/data/name";"store/data/code";"store/data/is_active";"constraint"
-"custom";"default";"storename_updated%isolation%";"storecode_updated%isolation%";"Enabled";"assertStoreSuccessSaveMessage, assertStoreInGrid, assertStoreForm, assertStoreBackend, assertStoreFrontend"

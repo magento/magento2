@@ -19,18 +19,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function __construct(array $parameters = [])
     {
-        $this->setParam($parameters);
-    }
-
-    /**
-     * Initialize console parameters
-     *
-     * @param array $parameters
-     * @return void
-     */
-    public function setParam($parameters)
-    {
-        $this->params = getopt(null, $parameters);
+        $this->setParams(getopt(null, $parameters));
     }
 
     /**
@@ -89,6 +78,28 @@ class Request implements \Magento\Framework\App\RequestInterface
     }
 
     /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set params from key value array
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setParams(array $data)
+    {
+        $this->params = $data;
+        return $this;
+    }
+
+    /**
      * Stub to satisfy RequestInterface
      *
      * @param null|string $name
@@ -97,5 +108,15 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function getCookie($name, $default)
     {
+    }
+
+    /**
+     * Stub to satisfy RequestInterface
+     *
+     * @return bool
+     */
+    public function isSecure()
+    {
+        return false;
     }
 }

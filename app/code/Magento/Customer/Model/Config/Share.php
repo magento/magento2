@@ -31,7 +31,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      */
     protected $_customerResource;
 
-    /** @var  \Magento\Framework\Store\StoreManagerInterface */
+    /** @var  \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManager;
 
     /**
@@ -40,7 +40,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -50,7 +50,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -80,7 +80,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
     {
         return $this->_config->getValue(
             self::XML_PATH_CUSTOMER_ACCOUNT_SHARE,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == self::SHARE_WEBSITE;
     }
 
@@ -98,7 +98,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * Check for email duplicates before saving customers sharing options
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -106,7 +106,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         if ($value == self::SHARE_GLOBAL) {
             if ($this->_customerResource->findEmailDuplicates()) {
                 //@codingStandardsIgnoreStart
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.'
                     )

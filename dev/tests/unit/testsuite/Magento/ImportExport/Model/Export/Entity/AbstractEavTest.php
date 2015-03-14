@@ -50,7 +50,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method _addAttributesToCollection()
      *
-     * @covers \Magento\ImportExport\Model\Export\Entity\AbstractEav::_addAttributesToCollection
+     * covers \Magento\ImportExport\Model\Export\Entity\AbstractEav::_addAttributesToCollection
      */
     public function testAddAttributesToCollection()
     {
@@ -70,8 +70,8 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for methods _addAttributeValuesToRow()
      *
-     * @covers \Magento\ImportExport\Model\Export\Entity\AbstractEav::_initAttributeValues
-     * @covers \Magento\ImportExport\Model\Export\Entity\AbstractEav::_addAttributeValuesToRow
+     * covers \Magento\ImportExport\Model\Export\Entity\AbstractEav::_initAttributeValues
+     * covers \Magento\ImportExport\Model\Export\Entity\AbstractEav::_addAttributeValuesToRow
      */
     public function testAddAttributeValuesToRow()
     {

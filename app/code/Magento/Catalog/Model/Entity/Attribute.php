@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Entity;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Product attribute extension with event dispatching
@@ -72,14 +72,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -93,14 +94,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
-        \Magento\Core\Helper\Data $coreData,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
+        \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -114,14 +116,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
-            $coreData,
+            $customAttributeFactory,
             $eavConfig,
             $eavTypeFactory,
             $storeManager,
             $resourceHelper,
             $universalFactory,
-            $optionDataBuilder,
+            $optionDataFactory,
+            $dataObjectProcessor,
+            $dataObjectHelper,
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
@@ -141,7 +144,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     {
         try {
             $this->attrLockValidator->validate($this);
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw new \Magento\Eav\Exception($exception->getMessage());
         }
 

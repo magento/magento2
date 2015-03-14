@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -16,17 +16,13 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerMassDeleteInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that customers which haven't been deleted are present in customer grid
      *
      * @param CustomerIndex $pageCustomerIndex
      * @param AssertCustomerInGrid $assertCustomerInGrid
      * @param int $customersQtyToDelete
-     * @param CustomerInjectable[] $customers
+     * @param Customer[] $customers
      * @return void
      */
     public function processAssert(

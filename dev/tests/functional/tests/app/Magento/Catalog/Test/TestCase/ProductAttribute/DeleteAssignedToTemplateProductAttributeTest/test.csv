@@ -1,3 +1,0 @@
-"productTemplate/dataSet";"productTemplate/data/assigned_attributes/presets";"constraint"
-"custom_attribute_set";"attribute_type_dropdown";"assertProductAttributeSuccessDeleteMessage, assertProductAttributeAbsenceInGrid, assertProductAttributeAbsenceForAttributeMapping, assertProductAttributeAbsenceInTemplateGroups, assertProductAttributeAbsenceInUnassignedAttributes"
-"default";"attribute_type_text_field";"assertProductAttributeSuccessDeleteMessage, assertProductAttributeAbsenceInGrid, assertProductAttributeAbsenceInVariationsSearch"

@@ -72,36 +72,37 @@
 require([
     'jquery',
     'Magento_Ui/js/lib/registry/registry',
+    'mage/template',
     'jquery/file-uploader',
     'mage/mage',
     'prototype'
-], function(jQuery, registry){
+], function(jQuery, registry, mageTemplate){
     registry.get('downloadable', function (Downloadable) {
         var linkTemplate = '<tr>'+
             '<td>'+
-                '<input type="hidden" class="__delete__" name="downloadable[link][{{id}}][is_delete]" value="" />'+
-                '<input type="hidden" name="downloadable[link][{{id}}][link_id]" value="{{link_id}}" />'+
-                '<input type="text" class="required-entry input-text" name="downloadable[link][{{id}}][title]" value="{{title}}" />'+
-                '<?php echo $_product->getStoreId() ? '<input type="checkbox" id="downloadable_link_{{id}}_title" name="downloadable[link][{{id}}][use_default_title]" value="1" /><label class="normal" for="downloadable_link_{{id}}_title">Use Default Value</label>' : '' ?>'+
+                '<input type="hidden" class="__delete__" name="downloadable[link][<%= data.id %>][is_delete]" value="" />'+
+                '<input type="hidden" name="downloadable[link][<%= data.id %>][link_id]" value="<%= data.link_id %>" />'+
+                '<input type="text" class="required-entry input-text" name="downloadable[link][<%= data.id %>][title]" value="<%= data.title %>" />'+
+                '<?php echo $_product->getStoreId() ? '<input type="checkbox" id="downloadable_link_<%= data.id %>_title" name="downloadable[link][<%= data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_link_<%= data.id %>_title">Use Default Value</label>' : '' ?>'+
             '</td>'+
             <?php if ($block->getCanReadPrice() !== false) : ?>
             '<td class="input-price">'+
-                '<input type="text" id="downloadable_link_{{id}}_price_value" class="input-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][{{id}}][price]" value="{{price}}"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                '<input type="text" id="downloadable_link_<%= data.id %>_price_value" class="input-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%= data.id %>][price]" value="<%= data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
                 '<label>[<?php echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
                 <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
-                '<br /><input type="checkbox" id="downloadable_link_{{id}}_price" name="downloadable[link][{{id}}][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_{{id}}_price">Use Default Value</label>' +
+                '<br /><input type="checkbox" id="downloadable_link_<%= data.id %>_price" name="downloadable[link][<%= data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_<%= data.id %>_price">Use Default Value</label>' +
                 <?php endif; ?>
             '</td>' +
             <?php else : ?>
-            '<input type="hidden" id="downloadable_link_{{id}}_price_value" class="link-prices" name="downloadable[link][{{id}}][price]" value="0" />' +
+            '<input type="hidden" id="downloadable_link_<%= data.id %>_price_value" class="link-prices" name="downloadable[link][<%= data.id %>][price]" value="0" />' +
             <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
-            '<input type="hidden" id="downloadable_link_{{id}}_price" name="downloadable[link][{{id}}][use_default_price]" value="1" />' +
+            '<input type="hidden" id="downloadable_link_<%= data.id %>_price" name="downloadable[link][<%= data.id %>][use_default_price]" value="1" />' +
             <?php endif; ?>
             <?php endif; ?>
-            '<td><input type="text" id="downloadable_link_{{id}}_downloads" name="downloadable[link][{{id}}][number_of_downloads]" class="input-text downloads" value="{{number_of_downloads}}" />'+
-            '<p><input type="checkbox" class="checkbox" id="downloadable_link_{{id}}_is_unlimited" name="downloadable[link][{{id}}][is_unlimited]" value="1" {{is_unlimited}} /> <label for="downloadable_link_{{id}}_is_unlimited">Unlimited</label></p></td>'+
+            '<td><input type="text" id="downloadable_link_<%= data.id %>_downloads" name="downloadable[link][<%= data.id %>][number_of_downloads]" class="input-text downloads" value="<%= data.number_of_downloads %>" />'+
+            '<p><input type="checkbox" class="checkbox" id="downloadable_link_<%= data.id %>_is_unlimited" name="downloadable[link][<%= data.id %>][is_unlimited]" value="1" <%= data.is_unlimited %> /> <label for="downloadable_link_<%= data.id %>_is_unlimited">Unlimited</label></p></td>'+
             '<td>'+
-                '<select id="downloadable_link _{{id}}_shareable" name="downloadable[link][{{id}}][is_shareable]">'+
+                '<select id="downloadable_link _<%= data.id %>_shareable" name="downloadable[link][<%= data.id %>][is_shareable]">'+
                     '<option value="1">Yes</option>'+
                     '<option value="0">No</option>'+
                     '<option value="2" selected="selected">Use config</option>'+
@@ -110,73 +111,68 @@ require([
             '<td>'+
                 '<div class="files">'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_{{id}}_sample_file_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_file_type" name="downloadable[link][{{id}}][sample][type]" value="file"{{sample_file_checked}} /> File:</label>'+
-                        '<input type="hidden" id="downloadable_link_{{id}}_sample_file_save" name="downloadable[link][{{id}}][sample][file]" value="{{sample_file_save}}" class="validate-downloadable-file"/>'+
-                        '<div id="downloadable_link_{{id}}_sample_file" class="uploader">'+
-                            '<div id="downloadable_link_{{id}}_sample_file-old" class="file-row-info"></div>'+
-                            '<div id="downloadable_link_{{id}}_sample_file-new" class="file-row-info"></div>'+
+                        '<label for="downloadable_link_<%= data.id %>_sample_file_type"><input type="radio" class="radio" id="downloadable_link_<%= data.id %>_sample_file_type" name="downloadable[link][<%= data.id %>][sample][type]" value="file"<%= data.sample_file_checked %> /> File:</label>'+
+                        '<input type="hidden" id="downloadable_link_<%= data.id %>_sample_file_save" name="downloadable[link][<%= data.id %>][sample][file]" value="<%= data.sample_file_save %>" class="validate-downloadable-file"/>'+
+                        '<div id="downloadable_link_<%= data.id %>_sample_file" class="uploader">'+
+                            '<div id="downloadable_link_<%= data.id %>_sample_file-old" class="file-row-info"></div>'+
+                            '<div id="downloadable_link_<%= data.id %>_sample_file-new" class="file-row-info"></div>'+
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_{{id}}_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
-                                '<script type="text/javascript">' +
-                                '/*<![CDATA[*/' +
-                                    'linksUploader("#downloadable_link_{{id}}_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
-                                '/*]]>*/' +
+                                '<input id="downloadable_link_<%= data.id %>_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
+                                '<script>' +
+                                    'linksUploader("#downloadable_link_<%= data.id %>_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
                                 '</scr'+'ipt>'+
                             '</div>'+
                             '<div class="clear"></div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_{{id}}_sample_url_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_url_type" name="downloadable[link][{{id}}][sample][type]" value="url"{{sample_url_checked}} /> URL:</label><input type="text" class="input-text validate-downloadable-url validate-url" name="downloadable[link][{{id}}][sample][url]" value="{{sample_url}}" />'+
+                        '<label for="downloadable_link_<%= data.id %>_sample_url_type"><input type="radio" class="radio" id="downloadable_link_<%= data.id %>_sample_url_type" name="downloadable[link][<%= data.id %>][sample][type]" value="url"<%= data.sample_url_checked %> /> URL:</label><input type="text" class="input-text validate-downloadable-url validate-url" name="downloadable[link][<%= data.id %>][sample][url]" value="<%= data.sample_url %>" />'+
                     '</div>'+
                     '<div>'+
-                        '<span id="downloadable_link_{{id}}_sample_container"></span>'+
+                        '<span id="downloadable_link_<%= data.id %>_sample_container"></span>'+
                     '</div>'+
                 '</div>'+
             '</td>'+
             '<td>'+
                 '<div class="files">'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_{{id}}_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_{{id}}_file_type" name="downloadable[link][{{id}}][type]" value="file"{{file_checked}} /> File:</label>'+
-                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_{{id}}_file_save" name="downloadable[link][{{id}}][file]" value="{{file_save}}" />'+
-                        '<div id="downloadable_link_{{id}}_file" class="uploader">'+
-                            '<div id="downloadable_link_{{id}}_file-old" class="file-row-info"></div>'+
-                            '<div id="downloadable_link_{{id}}_file-new" class="file-row-info new-file"></div>'+
+                        '<label for="downloadable_link_<%= data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%= data.id %>_file_type" name="downloadable[link][<%= data.id %>][type]" value="file"<%= data.file_checked %> /> File:</label>'+
+                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_<%= data.id %>_file_save" name="downloadable[link][<%= data.id %>][file]" value="<%= data.file_save %>" />'+
+                        '<div id="downloadable_link_<%= data.id %>_file" class="uploader">'+
+                            '<div id="downloadable_link_<%= data.id %>_file-old" class="file-row-info"></div>'+
+                            '<div id="downloadable_link_<%= data.id %>_file-new" class="file-row-info new-file"></div>'+
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_{{id}}_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
-                                '<script type="text/javascript">' +
-                                '/*<![CDATA[*/' +
-                                    'linksUploader("#downloadable_link_{{id}}_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
-                                '/*]]>*/' +
+                                '<input id="downloadable_link_<%= data.id %>_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
+                                '<script>' +
+                                    'linksUploader("#downloadable_link_<%= data.id %>_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
                                 '</scr'+'ipt>'+
                             '</div>'+
                             '<div class="clear"></div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_{{id}}_url_type" name="downloadable[link][{{id}}][type]" value="url"{{url_checked}} /> URL:</label><input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[link][{{id}}][link_url]" value="{{link_url}}" />'+
+                        '<label for="downloadable_link_<%= data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%= data.id %>_url_type" name="downloadable[link][<%= data.id %>][type]" value="url"<%= data.url_checked %> /> URL:</label><input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[link][<%= data.id %>][link_url]" value="<%= data.link_url %>" />'+
                     '</div>'+
                     '<div>'+
-                        '<span id="downloadable_link_{{id}}_link_container"></span>'+
+                        '<span id="downloadable_link_<%= data.id %>_link_container"></span>'+
                     '</div>'+
                 '</div>'+
             '</td>'+
-            '<td><input type="text" name="downloadable[link][{{id}}][sort_order]" value="{{sort_order}}" class="input-text sort" /></td>'+
+            '<td><input type="text" name="downloadable[link][<%= data.id %>][sort_order]" value="<%= data.sort_order %>" class="input-text sort" /></td>'+
             '<td class="col-delete">'+
-                '<button id="downloadable_link_{{id}}_delete_button" type="button" class="action- scalable delete delete-link-item"><span><span><span><?php echo __('Delete'); ?></span></span></span></button>'+
+                '<button id="downloadable_link_<%= data.id %>_delete_button" type="button" class="action- scalable delete delete-link-item"><span><span><span><?php echo __('Delete'); ?></span></span></span></button>'+
             '</td>'+
         '</tr>';
 
         var linkItems = {
             tbody : $('link_items_body'),
-            templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
             templateText : linkTemplate,
             itemCount : 0,
             add : function(data) {
                 alertAlreadyDisplayed = false;
-                this.template = new Template(this.templateText, this.templateSyntax);
+                this.template = mageTemplate(this.templateText);
 
                 if(!data.link_id){
                     data = {};
@@ -199,7 +195,11 @@ require([
                     data.sample_file_checked = ' checked="checked"';
                 }
 
-                Element.insert(this.tbody, {'bottom':this.template.evaluate(data)});
+                Element.insert(this.tbody, {
+                    'bottom': this.template({
+                        data: data
+                    })
+                });
 
                 scopeTitle = $('downloadable_link_'+data.id+'_title');
                 if (scopeTitle) {
@@ -343,18 +343,32 @@ require([
                     sequentialUploads: true,
                     maxFileSize: 2000000,
                     add: function (e, data) {
+                        var progressTmpl = mageTemplate(id + '-template'),
+                            fileSize,
+                            tmpl;
+
                         $.each(data.files, function (index, file) {
                             if ($(id + ' .progressbar-container').length) {
                                 $(id + ' .progressbar-container').parent().remove();
                             }
+                            
+                            fileSize = typeof file.size == "undefined" ?
+                                $.mage.__('We could not detect a size.') :
+                                byteConvert(file.size);
+
                             data.fileId = Math.random().toString(36).substr(2, 9);
-                            var progressTmpl = $(id + '-template').children(':first').clone();
-                            progressTmpl.attr('id', data.fileId);
-                            var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
-                                    .replace('{{name}}', file.name);
-                            progressTmpl.html(fileInfoHtml);
-                            progressTmpl.appendTo(id);
+
+                            tmpl = progressTmpl({
+                                data: {
+                                    name: file.name,
+                                    size: fileSize,
+                                    id: data.fileId
+                                }
+                            });
+
+                            $(tmpl).appendTo(id);
                         });
+
                         $(this).fileupload('process', data).done(function () {
                             data.submit();
                         });

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Review\Test\TestCase\UpdateProductReviewEntityOnProductPageTest">
+    <variation name="UpdateProductReviewEntityOnProductPageTestVariation1">
+      <data name="rating" xsi:type="string">3</data>
+      <data name="review/data/status_id" xsi:type="string">Approved</data>
+      <data name="productRating/data/select_stores" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+      <data name="review/data/nickname" xsi:type="string">name%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">details%isolation%</data>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewBackendSuccessSaveMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
+    </variation>
+  </testCase>
+</config>

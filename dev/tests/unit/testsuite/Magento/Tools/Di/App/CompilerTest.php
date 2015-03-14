@@ -103,8 +103,22 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             'preferences' =>
                 [
                     'Magento\Tools\Di\Compiler\Config\WriterInterface' =>
-                        'Magento\Tools\Di\Compiler\Config\Writer\Filesystem'
+                        'Magento\Tools\Di\Compiler\Config\Writer\Filesystem',
+                    'Magento\Tools\Di\Compiler\Log\Writer\WriterInterface' =>
+                        'Magento\Tools\Di\Compiler\Log\Writer\Console'
+                ],
+            'Magento\Tools\Di\Compiler\Config\ModificationChain' => [
+                'arguments' => [
+                    'modificationsList' => [
+                        'PreferencesResolving' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
+                        'BackslashTrim' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim'],
+                        'ArgumentsSerialization' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
+                    ]
                 ]
+            ]
         ];
     }
 

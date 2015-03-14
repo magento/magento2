@@ -8,7 +8,7 @@ namespace Magento\GroupedProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
+use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Client\BrowserInterface;
 
 /**
@@ -16,10 +16,6 @@ use Magento\Mtf\Client\BrowserInterface;
  */
 class AssertSpecialPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupedProductPage
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Format error message
      *
@@ -38,14 +34,14 @@ class AssertSpecialPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupe
      * Assert that displayed grouped price on grouped product page equals passed from fixture
      *
      * @param CatalogProductView $catalogProductView
-     * @param GroupedProductInjectable $product
+     * @param GroupedProduct $product
      * @param AssertProductSpecialPriceOnProductPage $specialPrice
      * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        GroupedProductInjectable $product,
+        GroupedProduct $product,
         AssertProductSpecialPriceOnProductPage $specialPrice,
         BrowserInterface $browser
     ) {

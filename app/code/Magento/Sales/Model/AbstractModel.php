@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -28,7 +28,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -39,7 +39,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -50,7 +50,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

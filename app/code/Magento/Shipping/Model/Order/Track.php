@@ -6,29 +6,21 @@
 
 namespace Magento\Shipping\Model\Order;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
  * @method int getParentId()
- * @method \Magento\Sales\Model\Order\Shipment\Track setParentId(int $value)
  * @method float getWeight()
- * @method \Magento\Sales\Model\Order\Shipment\Track setWeight(float $value)
  * @method float getQty()
- * @method \Magento\Sales\Model\Order\Shipment\Track setQty(float $value)
  * @method int getOrderId()
- * @method \Magento\Sales\Model\Order\Shipment\Track setOrderId(int $value)
  * @method string getDescription()
- * @method \Magento\Sales\Model\Order\Shipment\Track setDescription(string $value)
  * @method string getTitle()
- * @method \Magento\Sales\Model\Order\Shipment\Track setTitle(string $value)
  * @method string getCarrierCode()
- * @method \Magento\Sales\Model\Order\Shipment\Track setCarrierCode(string $value)
  * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Shipment\Track setCreatedAt(string $value)
  * @method string getUpdatedAt()
- * @method \Magento\Sales\Model\Order\Shipment\Track setUpdatedAt(string $value)
  *
  */
 class Track extends \Magento\Sales\Model\Order\Shipment\Track
@@ -42,10 +34,10 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -58,10 +50,10 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -72,7 +64,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $localeDate,
             $dateTime,
             $storeManager,
@@ -87,7 +79,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
     /**
      * Retrieve detail for shipment track
      *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getNumberDetail()
     {

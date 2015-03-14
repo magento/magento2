@@ -24,9 +24,25 @@ interface ProductTierPriceInterface
     public function getQty();
 
     /**
+     * Set tier qty
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty);
+
+    /**
      * Retrieve price value
      *
      * @return float
      */
     public function getValue();
+
+    /**
+     * Set price value
+     *
+     * @param float $value
+     * @return $this
+     */
+    public function setValue($value);
 }

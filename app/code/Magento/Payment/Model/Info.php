@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -36,7 +36,7 @@ class Info extends AbstractExtensibleModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -47,7 +47,7 @@ class Info extends AbstractExtensibleModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -60,7 +60,7 @@ class Info extends AbstractExtensibleModel
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -93,13 +93,15 @@ class Info extends AbstractExtensibleModel
      * Retrieve payment method model object
      *
      * @return \Magento\Payment\Model\MethodInterface
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMethodInstance()
     {
         if (!$this->hasMethodInstance()) {
             if (!$this->getMethod()) {
-                throw new \Magento\Framework\Model\Exception(__('The payment method you requested is not available.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The payment method you requested is not available.')
+                );
             }
 
             try {
@@ -145,12 +147,12 @@ class Info extends AbstractExtensibleModel
      * @param string|array $key
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setAdditionalInformation($key, $value = null)
     {
         if (is_object($value)) {
-            throw new \Magento\Framework\Model\Exception(__('The payment disallows storing objects.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The payment disallows storing objects.'));
         }
         $this->_initAdditionalInformation();
         if (is_array($key) && is_null($value)) {

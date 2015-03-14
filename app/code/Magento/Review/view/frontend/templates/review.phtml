@@ -5,7 +5,7 @@
  */
 ?>
 
-<div id="product-review-container"></div>
+<div id="product-review-container" data-role="product-review"></div>
 <?php echo $block->getChildHtml(); ?>
 
 <script>
@@ -19,7 +19,7 @@
                 dataType: 'html'
             }).done(function (data) {
                 $('#product-review-container').html(data);
-                $('.pages a').each(function (index, element) {
+                $('[data-role="product-review"] .pages a').each(function (index, element) {
                     $(element).click(function (event) {
                         processReviews($(element).attr('href'), true);
                         event.preventDefault();

@@ -7,7 +7,7 @@
 namespace Magento\Tax\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
@@ -21,9 +21,9 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     /**
      * Order View Page.
      *
-     * @var OrderView
+     * @var SalesOrderView
      */
-    protected $orderView;
+    protected $salesOrderView;
 
     /**
      * Order View Page.
@@ -76,7 +76,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      * @param array $prices
      * @param InjectableFixture $product
      * @param OrderIndex $orderIndex
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderInvoiceNew $orderInvoiceNew
      * @param OrderCreditMemoNew $orderCreditMemoNew
      * @return void
@@ -85,11 +85,11 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         array $prices,
         InjectableFixture $product,
         OrderIndex $orderIndex,
-        OrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderInvoiceNew $orderInvoiceNew,
         OrderCreditMemoNew $orderCreditMemoNew
     ) {
-        $this->orderView = $orderView;
+        $this->salesOrderView = $salesOrderView;
         $this->orderInvoiceNew = $orderInvoiceNew;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
         $orderIndex->open();
@@ -101,7 +101,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         $prices = $this->preparePrices($prices);
         $message = 'Prices on order view page should be equal to defined in dataset.';
         \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
-        $orderView->getPageActions()->invoice();
+        $salesOrderView->getPageActions()->invoice();
         //Check prices on invoice creation page
         $actualPrices = [];
         $actualPrices = $this->getInvoiceNewPrices($actualPrices, $product);
@@ -115,7 +115,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         $actualPrices = $this->getOrderTotals($actualPrices);
         $message = 'Prices on invoice page should be equal to defined in dataset.';
         \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
-        $orderView->getPageActions()->orderCreditMemo();
+        $salesOrderView->getPageActions()->orderCreditMemo();
         //Check prices on credit memo creation page
         $pricesCreditMemo = $this->preparePricesCreditMemo($prices);
         $actualPrices = [];
@@ -177,7 +177,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      */
     public function getOrderPrices($actualPrices, InjectableFixture $product)
     {
-        $viewBlock = $this->orderView->getItemsOrderedBlock();
+        $viewBlock = $this->salesOrderView->getItemsOrderedBlock();
         $actualPrices['cart_item_price_excl_tax'] = $viewBlock->getItemPriceExclTax($product->getName());
         $actualPrices['cart_item_price_incl_tax'] = $viewBlock->getItemPriceInclTax($product->getName());
         $actualPrices['cart_item_subtotal_excl_tax'] = $viewBlock->getItemSubExclTax($product->getName());

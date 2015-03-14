@@ -608,10 +608,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogImportExport\Model\Import\Uploader',
             ['init'],
             [
-                $objectManager->create('Magento\Core\Helper\File\Storage\Database'),
-                $objectManager->create('Magento\Core\Helper\File\Storage'),
+                $objectManager->create('Magento\MediaStorage\Helper\File\Storage\Database'),
+                $objectManager->create('Magento\MediaStorage\Helper\File\Storage'),
                 $objectManager->create('Magento\Framework\Image\AdapterFactory'),
-                $objectManager->create('Magento\Core\Model\File\Validator\NotProtectedExtension')
+                $objectManager->create('Magento\MediaStorage\Model\File\Validator\NotProtectedExtension')
             ]
         );
         $this->_uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($uploader));
@@ -809,7 +809,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $product->load($id);
         $this->assertEquals('1', $product->getHasOptions());
 
-        $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->setCurrentStore('fixturestore');
+        $objectManager->get('Magento\Store\Model\StoreManagerInterface')->setCurrentStore('fixturestore');
 
         /** @var \Magento\Catalog\Model\Product $simpleProduct */
         $simpleProduct = $objectManager->create('Magento\Catalog\Model\Product');

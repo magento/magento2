@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Handler\Review;
 
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
@@ -49,7 +49,7 @@ class Curl extends AbstractCurl implements ReviewInterface
     {
         /** @var Review $review */
         $url = $_ENV['app_backend_url'] . 'review/product/post/';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $data = $this->replaceMappingData($this->getPreparedData($review));
 
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);

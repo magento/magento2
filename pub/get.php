@@ -38,7 +38,7 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 }
 
 // Serve file if it's materialized
-$request = new \Magento\Core\Model\File\Storage\Request(__DIR__);
+$request = new \Magento\MediaStorage\Model\File\Storage\Request(__DIR__);
 if ($mediaDirectory) {
     if (0 !== stripos($request->getPathInfo(), $mediaDirectory . '/') || is_dir($request->getFilePath())) {
         header('HTTP/1.0 404 Not Found');
@@ -53,7 +53,7 @@ if ($mediaDirectory) {
 
     if (is_readable($request->getFilePath())) {
         $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
-            new \Magento\Framework\Controller\Response\Http(),
+            new \Magento\Framework\HTTP\PhpEnvironment\Response(),
             new \Magento\Framework\File\Mime()
         );
         $transfer->send($request->getFilePath());
@@ -69,9 +69,9 @@ if (empty($mediaDirectory)) {
     $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
 }
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
-/** @var \Magento\Core\App\Media $app */
+/** @var \Magento\MediaStorage\App\Media $app */
 $app = $bootstrap->createApplication(
-    'Magento\Core\App\Media',
+    'Magento\MediaStorage\App\Media',
     [
         'request' => $request,
         'workingDirectory' => __DIR__,

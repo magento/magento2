@@ -38,8 +38,8 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $metadataServiceMock;
 
-    /** @var \Magento\Framework\Api\AttributeDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $attributeDataBuilderMock;
+    /** @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $attributeValueFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -97,7 +97,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                     new \Magento\Framework\Object(['attribute_code' => 'attribute3']),
                 ]
             );
-        $this->attributeDataBuilderMock = $this->getMockBuilder('Magento\Framework\Api\AttributeDataBuilder')
+        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->getMockForAbstractClass(
@@ -106,7 +106,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                 $this->contextMock,
                 $this->registryMock,
                 $this->metadataServiceMock,
-                $this->attributeDataBuilderMock,
+                $this->attributeValueFactoryMock,
                 $this->resourceMock,
                 $this->resourceCollectionMock
             ]
@@ -180,15 +180,19 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
     {
         $attributeCode = 'attribute2';
         $attributeValue = 'attribute_value';
-        $this->attributeDataBuilderMock->expects($this->once())
+        $attributeMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->once())
             ->method('setAttributeCode')
             ->with($attributeCode)
-            ->willReturn($this->attributeDataBuilderMock);
-        $this->attributeDataBuilderMock->expects($this->once())
+            ->will($this->returnSelf());
+        $attributeMock->expects($this->once())
             ->method('setValue')
             ->with($attributeValue)
-            ->willReturn($this->attributeDataBuilderMock);
-        $this->attributeDataBuilderMock->expects($this->once())->method('create');
+            ->will($this->returnSelf());
+        $this->attributeValueFactoryMock->expects($this->once())->method('create')
+            ->willReturn($attributeMock);
         $this->model->setData(
             \Magento\Framework\Api\ExtensibleDataInterface::CUSTOM_ATTRIBUTES,
             [$attributeCode => $attributeValue]

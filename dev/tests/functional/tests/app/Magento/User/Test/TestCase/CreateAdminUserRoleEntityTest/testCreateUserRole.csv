@@ -1,3 +1,0 @@
-"role/data/rolename";"role/data/resource_access";"role/data/roles_resources";"constraint"
-AdminRole%isolation%;Custom;Sales;"assertRoleSuccessSaveMessage, assertRoleInGrid"
-AdminRole%isolation%;All;-;"assertRoleSuccessSaveMessage, assertRoleInGrid"

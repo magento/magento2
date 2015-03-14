@@ -72,7 +72,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\ObjectManager\Config\Reader\Dom::_createConfigMerger()
+     * covers \Magento\Framework\ObjectManager\Config\Reader\Dom::_createConfigMerger()
      */
     public function testRead()
     {

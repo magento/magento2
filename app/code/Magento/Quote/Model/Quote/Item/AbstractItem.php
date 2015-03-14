@@ -6,7 +6,7 @@
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Quote item abstract model
@@ -84,7 +84,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -95,7 +95,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -106,7 +106,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -329,7 +329,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
         try {
             $this->setQty($qty);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->setHasError(true);
             $this->setMessage($e->getMessage());
         } catch (\Exception $e) {
@@ -339,7 +339,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
 
         try {
             $this->getProduct()->getTypeInstance()->checkProductBuyState($this->getProduct());
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->setHasError(true)->setMessage($e->getMessage());
             $this->getQuote()->setHasError(
                 true

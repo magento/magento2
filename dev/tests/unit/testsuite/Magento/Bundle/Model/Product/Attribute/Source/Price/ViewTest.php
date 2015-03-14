@@ -68,17 +68,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
+     * covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
      */
     public function testGetOptionTextForExistLabel()
     {
         $existValue = 1;
 
-        $this->assertInternalType('string', $this->model->getOptionText($existValue));
+        $this->assertInstanceOf('Magento\Framework\Phrase', $this->model->getOptionText($existValue));
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
+     * covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
      */
     public function testGetOptionTextForNotExistLabel()
     {

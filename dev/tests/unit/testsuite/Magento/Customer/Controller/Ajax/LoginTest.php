@@ -21,7 +21,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
@@ -46,9 +46,9 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $customerAccountManagementMock;
 
     /**
-     * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataHelper;
+    protected $jsonHelperMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
@@ -61,30 +61,14 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Raw| \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRaw;
 
     protected function setUp()
     {
-        $this->request = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
-                'isPost',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie',
-                'getRawBody',
-                'getMethod',
-                'isXmlHttpRequest'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->response = $this->getMock(
             'Magento\Framework\App\ResponseInterface',
             ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode'],
@@ -122,8 +106,8 @@ class LoginTest extends \PHPUnit_Framework_TestCase
                 false
             );
 
-        $this->dataHelper = $this->getMock(
-            '\Magento\Core\Helper\Data',
+        $this->jsonHelperMock = $this->getMock(
+            '\Magento\Framework\Json\Helper\Data',
             ['jsonDecode'],
             [],
             '',
@@ -154,7 +138,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Controller\Ajax\Login',
             [
                 'customerSession' => $this->customerSession,
-                'helper' => $this->dataHelper,
+                'helper' => $this->jsonHelperMock,
                 'request' => $this->request,
                 'response' => $this->response,
                 'resultRawFactory' => $resultRawFactory,
@@ -172,7 +156,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->request
             ->expects($this->any())
-            ->method('getRawBody')
+            ->method('getContent')
             ->willReturn($jsonRequest);
 
         $this->request
@@ -189,7 +173,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultJson);
 
-        $this->dataHelper
+        $this->jsonHelperMock
             ->expects($this->any())
             ->method('jsonDecode')
             ->with($jsonRequest)
@@ -226,7 +210,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->request
             ->expects($this->any())
-            ->method('getRawBody')
+            ->method('getContent')
             ->willReturn($jsonRequest);
 
         $this->request
@@ -243,7 +227,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultJson);
 
-        $this->dataHelper
+        $this->jsonHelperMock
             ->expects($this->any())
             ->method('jsonDecode')
             ->with($jsonRequest)

@@ -67,8 +67,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
     public function testValidateDataEmptyColumnName()
@@ -80,8 +80,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
     public function testValidateDataColumnNameWithWhitespaces()
@@ -93,8 +93,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for method validateData()
      *
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Model\Exception
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Column names: "_test1" are invalid
      */
     public function testValidateDataAttributeNames()
@@ -107,7 +107,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method isAttributeValid()
      *
      * @dataProvider isAttributeValidDataProvider
-     * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
+     * covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::isAttributeValid
      *
      * @param string $attrCode
      * @param array $attrParams

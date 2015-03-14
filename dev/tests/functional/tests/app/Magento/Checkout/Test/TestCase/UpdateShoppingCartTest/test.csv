@@ -1,3 +1,0 @@
-"product/dataSet";"product/data/price/value";"product/data/checkout_data/qty";"product/data/checkout_data/cartItem/price";"product/data/checkout_data/cartItem/subtotal";"constraint"
-"default";"100";"3";"100";"300";"assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertProductQtyInMiniShoppingCart, assertSubtotalInShoppingCart"
-"with_two_custom_option";"50";"11";"65";"715";"assertPriceInShoppingCart, assertProductQtyInShoppingCart, assertProductQtyInMiniShoppingCart, assertSubtotalInShoppingCart"

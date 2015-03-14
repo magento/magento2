@@ -9,7 +9,7 @@ namespace Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Backend\Test\Handler\Conditions;
 use Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -91,7 +91,7 @@ class Curl extends Conditions implements CatalogRuleInterface
     {
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . 'catalog_rule/promo_catalog/save/';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
@@ -154,16 +154,15 @@ class Curl extends Conditions implements CatalogRuleInterface
     {
         // Sort data in grid to define category price rule id if more than 20 items in grid
         $url = $_ENV['app_backend_url'] . 'catalog_rule/promo_catalog/index/sort/rule_id/dir/desc';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0');
         $response = $curl->read();
         $curl->close();
 
-        $pattern = '/class=\" col\-id col\-rule_id\W*>\W+(\d+)\W+<\/td>\W+<td[\w\s\"=\-]*?>\W+?'
-            . $data['name'] . '/siu';
+        $pattern = '/col-rule_id\W*(\d+)<.td><[^<>]*?>' . $data['name'] . '/siu';
         preg_match($pattern, $response, $matches);
         if (empty($matches)) {
-            throw new \Exception('Cannot find Category Price Rule id');
+            throw new \Exception('Cannot find Catalog Price Rule id! Response: ' . $response);
         }
 
         return $matches[1];

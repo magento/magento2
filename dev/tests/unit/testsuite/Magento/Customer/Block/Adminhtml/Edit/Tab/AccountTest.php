@@ -48,11 +48,14 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataMock;
 
-    /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerBuilderMock;
+    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerFactoryMock;
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $extensibleDataObjectConverterMock;
+
+    /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $dataObjectHelperMock;
 
     protected function setUp()
     {
@@ -78,8 +81,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->customerMetadataMock = $this->getMock(
             'Magento\Customer\Api\CustomerMetadataInterface'
         );
-        $this->customerBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
-            ->setMethods(['populateWithArray', 'create'])
+        $this->customerFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterfaceFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
@@ -169,10 +175,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($urlBuilderMock));
         $this->contextMock->expects($this->any())->method('getStoreManager')
             ->will($this->returnValue($storeManagerMock));
-        $this->customerBuilderMock->expects($this->any())->method('populateWithArray')
-            ->will($this->returnValue($this->customerBuilderMock));
-        $this->customerBuilderMock->expects($this->any())->method('create')
+        $this->customerFactoryMock->expects($this->any())->method('create')
             ->will($this->returnValue($customerObject));
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('populateWithArray');
         $this->options->expects($this->any())->method('getNamePrefixOptions')
             ->will($this->returnValue(['Pref1', 'Pref2']));
         $this->options->expects($this->any())->method('getNameSuffixOptions')
@@ -219,7 +225,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'options' => $this->options,
                 'accountManagement' => $this->accountManagementMock,
                 'customerMetadata' => $this->customerMetadataMock,
-                'customerBuilder' => $this->customerBuilderMock,
+                'customerDataFactory' => $this->customerFactoryMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock
             ]
         )->initForm();

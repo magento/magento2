@@ -30,7 +30,7 @@ class ImageUploader extends \Magento\Framework\Object
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\File\UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
@@ -44,12 +44,12 @@ class ImageUploader extends \Magento\Framework\Object
     /**
      * Generic constructor of change instance
      *
-     * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Framework\Filesystem $filesystem,
         array $data = []
     ) {
@@ -106,11 +106,12 @@ class ImageUploader extends \Magento\Framework\Object
      *
      * @param string $key
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function uploadFile($key)
     {
         $result = [];
-        /** @var $uploader \Magento\Core\Model\File\Uploader */
+        /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => $key]);
         $uploader->setAllowedExtensions($this->_allowedExtensions);
         $uploader->setAllowRenameFiles(true);
@@ -118,7 +119,7 @@ class ImageUploader extends \Magento\Framework\Object
 
         if (!$uploader->save($this->getStoragePath())) {
             /** @todo add translator */
-            throw new \Magento\Framework\Model\Exception('Cannot upload file.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot upload file.'));
         }
         $result['css_path'] = implode(
             '/',

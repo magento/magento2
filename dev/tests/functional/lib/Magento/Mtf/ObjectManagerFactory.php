@@ -52,6 +52,17 @@ class ObjectManagerFactory
         $argInterpreter = $this->createArgumentInterpreter(new BooleanUtils());
         $argumentMapper = new \Magento\Mtf\ObjectManager\Config\Mapper\Dom($argInterpreter);
 
+        $autoloader = new \Magento\Mtf\Code\Generator\Autoloader(
+            new \Magento\Mtf\Code\Generator(
+                [
+                    'page' => 'Magento\Mtf\Util\Generate\Page',
+                    'repository' => 'Magento\Mtf\Util\Generate\Repository',
+                    'fixture' => 'Magento\Mtf\Util\Generate\Fixture'
+                ]
+            )
+        );
+        spl_autoload_register([$autoloader, 'load']);
+
         $sharedInstances['Magento\Mtf\Data\Argument\InterpreterInterface'] = $argInterpreter;
         $sharedInstances['Magento\Mtf\ObjectManager\Config\Mapper\Dom'] = $argumentMapper;
         $objectManager = new $this->locatorClassName($factory, $diConfig, $sharedInstances);
@@ -62,26 +73,6 @@ class ObjectManagerFactory
         self::configure($objectManager);
 
         return $objectManager;
-    }
-
-    /**
-     * Create instance of application deployment config
-     *
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
-     * @param array $arguments
-     * @return \Magento\Framework\App\DeploymentConfig
-     */
-    protected function createDeploymentConfig(
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        array $arguments
-    ) {
-        $data = isset($arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE])
-            ? $arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE]
-            : null;
-        return new \Magento\Framework\App\DeploymentConfig(
-            new \Magento\Framework\App\DeploymentConfig\Reader($directoryList),
-            $data
-        );
     }
 
     /**

@@ -29,7 +29,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
 
         $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
@@ -42,8 +42,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn('table_name');
 
+        $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+
         $this->model = new \Magento\Weee\Model\Resource\Attribute\Backend\Weee\Tax(
-            $this->resourceMock,
+            $contextMock,
             $this->storeManagerMock
         );
     }

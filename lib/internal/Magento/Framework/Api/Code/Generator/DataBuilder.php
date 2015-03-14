@@ -6,10 +6,8 @@
 
 namespace Magento\Framework\Api\Code\Generator;
 
-use Magento\Framework\Code\Generator\CodeGenerator;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Zend\Code\Reflection\ClassReflection;
 
 /**
@@ -56,14 +54,14 @@ class DataBuilder extends EntityAbstract
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io|null $ioObject
-     * @param CodeGenerator\CodeGeneratorInterface|null $classGenerator
+     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface|null $classGenerator
      * @param \Magento\Framework\Code\Generator\DefinedClasses|null $definedClasses
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
-        CodeGenerator\CodeGeneratorInterface $classGenerator = null,
+        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
         \Magento\Framework\Code\Generator\DefinedClasses $definedClasses = null
     ) {
         $this->typeProcessor = new \Magento\Framework\Reflection\TypeProcessor();
@@ -98,7 +96,7 @@ class DataBuilder extends EntityAbstract
                 'parameters' => [
                     ['name' => 'objectFactory', 'type' => '\Magento\Framework\Api\ObjectFactory'],
                     ['name' => 'metadataService', 'type' => '\Magento\Framework\Api\MetadataServiceInterface'],
-                    ['name' => 'attributeValueBuilder', 'type' => '\Magento\Framework\Api\AttributeDataBuilder'],
+                    ['name' => 'attributeValueFactory', 'type' => '\Magento\Framework\Api\AttributeValueFactory'],
                     ['name' => 'objectProcessor', 'type' => '\Magento\Framework\Reflection\DataObjectProcessor'],
                     ['name' => 'typeProcessor', 'type' => '\Magento\Framework\Reflection\TypeProcessor'],
                     ['name' => 'dataBuilderFactory', 'type' => '\Magento\Framework\Serialization\DataBuilderFactory'],
@@ -122,7 +120,7 @@ class DataBuilder extends EntityAbstract
                         ],
                         [
                             'name' => 'param',
-                            'description' => '\Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder'
+                            'description' => '\Magento\Framework\Api\AttributeValueFactory $attributeValueFactory'
                         ],
                         [
                             'name' => 'param',
@@ -146,7 +144,7 @@ class DataBuilder extends EntityAbstract
                         ],
                     ],
                 ],
-            'body' => "parent::__construct(\$objectFactory, \$metadataService, \$attributeValueBuilder, "
+            'body' => "parent::__construct(\$objectFactory, \$metadataService, \$attributeValueFactory, "
                 . "\$objectProcessor, \$typeProcessor, \$dataBuilderFactory, \$objectManagerConfig, "
                 . "'{$this->_getSourceClassName()}');",
         ];

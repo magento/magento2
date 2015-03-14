@@ -9,12 +9,19 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\UrlInterface;
+
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\Image
@@ -32,12 +39,12 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
-        $urlBuilderMock = $this->getMock('\Magento\Framework\Url', [], [], '', false);
+        $this->urlBuilder = $this->getMock('\Magento\Framework\Url', [], [], '', false);
         $this->_image = new \Magento\Framework\Data\Form\Element\Image(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock,
-            $urlBuilderMock
+            $this->urlBuilder
         );
         $formMock = new \Magento\Framework\Object();
         $formMock->getHtmlIdPrefix('id_prefix');
@@ -46,7 +53,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Image::__construct
+     * covers \Magento\Framework\Data\Form\Element\Image::__construct
      */
     public function testConstruct()
     {
@@ -54,7 +61,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Image::getName
+     * covers \Magento\Framework\Data\Form\Element\Image::getName
      */
     public function testGetName()
     {
@@ -63,7 +70,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
      */
     public function testGetElementHtmlWithoutValue()
     {
@@ -76,17 +83,21 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
+     * covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
      */
     public function testGetElementHtmlWithValue()
     {
         $this->_image->setValue('test_value');
+        $this->urlBuilder->expects($this->once())
+            ->method('getBaseUrl')
+            ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
+            ->willReturn('http://localhost/media/');
         $html = $this->_image->getElementHtml();
         $this->assertContains('class="input-file"', $html);
         $this->assertContains('<input', $html);
         $this->assertContains('type="file"', $html);
         $this->assertContains('value="test_value"', $html);
-        $this->assertContains('<a href="test_value" onclick="imagePreview(\'_image\'); return false;"', $html);
+        $this->assertContains('<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"', $html);
         $this->assertContains('<input type="checkbox"', $html);
     }
 }

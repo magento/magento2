@@ -59,8 +59,8 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
                 IntegrationModel::CONSUMER_ID => $integration->getConsumerId(),
                 'popup_content' => $popupContent,
             ];
-            $this->getResponse()->representJson($this->_coreHelper->jsonEncode($result));
-        } catch (\Magento\Framework\Model\Exception $e) {
+            $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;

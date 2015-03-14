@@ -13,7 +13,8 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Tax\Api\Data\TaxRateInterface as TaxRateDataObject;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
@@ -31,13 +32,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @var  Converter
      */
     protected $converter;
-
-    /**
-     * Tax rate data object builder
-     *
-     * @var  \Magento\Tax\Api\Data\TaxRateDataBuilder
-     */
-    protected $rateBuilder;
 
     /**
      * Tax rate registry
@@ -72,7 +66,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $resourceModel;
 
     /**
-     * @param \Magento\Tax\Api\Data\TaxRateDataBuilder $rateBuilder
      * @param Converter $converter
      * @param RateRegistry $rateRegistry
      * @param \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder
@@ -82,7 +75,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
      */
     public function __construct(
-        \Magento\Tax\Api\Data\TaxRateDataBuilder $rateBuilder,
         Converter $converter,
         RateRegistry $rateRegistry,
         \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder,
@@ -91,7 +83,6 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         RegionFactory $regionFactory,
         \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
     ) {
-        $this->rateBuilder = $rateBuilder;
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;
         $this->taxRateSearchResultsBuilder = $taxRateSearchResultsBuilder;
@@ -114,12 +105,8 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         try {
             $this->resourceModel->save($taxRate);
             $taxRate->saveTitles($taxRateTitles);
-        } catch (ModelException $e) {
-            if ($e->getCode() == ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS) {
-                throw new InputException($e->getMessage());
-            } else {
-                throw $e;
-            }
+        } catch (LocalizedException $e) {
+            throw $e;
         }
         $this->rateRegistry->registerTaxRate($taxRate);
         return $taxRate;

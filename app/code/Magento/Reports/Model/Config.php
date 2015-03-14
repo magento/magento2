@@ -16,18 +16,18 @@ class Config extends \Magento\Framework\Object
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($data);

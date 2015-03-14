@@ -66,7 +66,7 @@ class UnreadMessagePopup extends \Magento\Backend\Block\Template
     /**
      * Retrieve popup title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getPopupTitle()
     {

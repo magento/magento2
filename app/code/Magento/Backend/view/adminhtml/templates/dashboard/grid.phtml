@@ -12,40 +12,40 @@
 $numColumns = sizeof($block->getColumns());
 ?>
 <?php if ($block->getCollection()): ?>
-<div class="dashboard-data-wrapper">
-    <table class="dashboard-data" id="<?php echo $block->getId() ?>_table">
-        <?php
-        /* This part is commented to remove all <col> tags from the code. */
-        /* foreach ($block->getColumns() as $_column): ?>
-        <col <?php echo $_column->getHtmlProperty() ?> />
-        <?php endforeach; */ ?>
-        <?php if ($block->getHeadersVisibility() || $block->getFilterVisibility()): ?>
-            <thead>
+<div class="dashboard-item-content">
+    <?php if ($block->getCollection()->getSize()>0): ?>
+        <table class="dashboard-data" id="<?php echo $block->getId() ?>_table">
+            <?php
+            /* This part is commented to remove all <col> tags from the code. */
+            /* foreach ($block->getColumns() as $_column): ?>
+            <col <?php echo $_column->getHtmlProperty() ?> />
+            <?php endforeach; */ ?>
+            <?php if ($block->getHeadersVisibility() || $block->getFilterVisibility()): ?>
+                <thead>
                 <?php if ($block->getHeadersVisibility()): ?>
-                    <tr class="headings">
-                    <?php foreach ($block->getColumns() as $_column): ?>
-                        <th <?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getHeaderHtml() ?></th>
-                    <?php endforeach; ?>
+                    <tr>
+                        <?php foreach ($block->getColumns() as $_column): ?>
+                            <th <?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getHeaderHtml() ?></th>
+                        <?php endforeach; ?>
                     </tr>
                 <?php endif; ?>
-            </thead>
-        <?php endif; ?>
-        <tbody>
-        <?php if (($block->getCollection()->getSize()>0) && (!$block->getIsCollapsed())): ?>
-        <?php foreach ($block->getCollection() as $_index => $_item): ?>
-            <tr title="<?php echo $block->getRowUrl($_item) ?>">
-            <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
-                <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"><?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
-            <?php endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
-        <?php elseif ($block->getEmptyText()): ?>
-            <tr>
-                <td class="<?php echo $block->getEmptyTextClass() ?>" colspan="100"><?php echo $block->getEmptyText() ?></td>
-            </tr>
-        <?php endif; ?>
-        </tbody>
-    </table>
+                </thead>
+            <?php endif; ?>
+            <?php if (!$block->getIsCollapsed()): ?>
+                <tbody>
+                <?php foreach ($block->getCollection() as $_index => $_item): ?>
+                    <tr title="<?php echo $block->getRowUrl($_item) ?>">
+                    <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
+                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"><?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php endif; ?>
+        </table>
+    <?php else: ?>
+        <div class="<?php echo $block->getEmptyTextClass() ?>"><?php echo $block->getEmptyText() ?></div>
+    <?php endif; ?>
 </div>
 <?php if ($block->canDisplayContainer()): ?>
 <script>

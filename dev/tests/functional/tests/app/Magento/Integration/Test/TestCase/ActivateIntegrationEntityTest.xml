@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest">
+    <variation name="ActivateIntegrationEntityTestVariation1">
+      <data name="integration/dataSet" xsi:type="string">default_with_all_resources</data>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup"/>
+      <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage"/>
+    </variation>
+  </testCase>
+</config>

@@ -31,7 +31,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -41,7 +41,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreFileHelper;
 
@@ -92,7 +92,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->config = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\Config')
             ->setMethods(['getBaseMediaPath'])->disableOriginalConstructor()->getMock();
         $this->config->expects($this->any())->method('getBaseMediaPath')->will($this->returnValue('catalog/product'));
-        $this->coreFileHelper = $this->getMockBuilder('Magento\Core\Helper\File\Storage\Database')
+        $this->coreFileHelper = $this->getMockBuilder('Magento\MediaStorage\Helper\File\Storage\Database')
             ->setMethods(['saveFile', 'deleteFolder'])->disableOriginalConstructor()->getMock();
 
         $this->mediaDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Write')

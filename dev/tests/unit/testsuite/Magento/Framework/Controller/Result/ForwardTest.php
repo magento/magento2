@@ -13,7 +13,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Controller\Result\Forward */
     protected $forward;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $requestInterface;
 
     /** @var ObjectManagerHelper */
@@ -23,24 +23,8 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->requestInterface = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [
-                'initForward',
-                'getModuleName',
-                'setModuleName',
-                'getActionName',
-                'setActionName',
-                'getParam',
-                'getCookie',
-                'setDispatched',
-                'setParams',
-                'setControllerName'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->requestInterface = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
         $this->forward = $this->objectManagerHelper->getObject(
             'Magento\Framework\Controller\Result\Forward',
             [

@@ -19,9 +19,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Helper\Data */
     protected $_userData;
 
-    /** @var \Magento\Core\Helper\Data */
-    protected $_coreData;
-
     /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportBuilderMock;
 
@@ -37,7 +34,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportMock;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject */
     protected $_storeManagerMock;
 
     /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
@@ -56,11 +53,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->_userData = $this->getMockBuilder(
             'Magento\User\Helper\Data'
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
-        $this->_coreData = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -115,7 +107,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $this->_storeManagerMock = $this->getMockBuilder(
-            '\Magento\Framework\Store\StoreManagerInterface'
+            '\Magento\Store\Model\StoreManagerInterface'
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
@@ -136,7 +128,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             [
                 'eventManager' => $eventManagerMock,
                 'userData' => $this->_userData,
-                'coreData' => $this->_coreData,
                 'context' => $this->_contextMock,
                 'registry' => $coreRegistry,
                 'resource' => $this->_resourceMock,
@@ -368,7 +359,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->with($password, $this->_model->getPassword())
             ->will($this->returnValue(true));
         $this->_model->setIsActive(false);
-        $this->setExpectedException('Magento\Backend\Model\Auth\Exception', 'This account is inactive.');
+        $this->setExpectedException(
+            'Magento\\Framework\\Exception\\AuthenticationException',
+            'This account is inactive.'
+        );
         $this->_model->verifyIdentity($password);
     }
 
@@ -382,7 +376,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->_model->setIsActive(true);
         $this->_resourceMock->expects($this->once())->method('hasAssigned2Role')->will($this->returnValue(false));
-        $this->setExpectedException('Magento\Backend\Model\Auth\Exception', 'Access denied.');
+        $this->setExpectedException('Magento\\Framework\\Exception\\AuthenticationException', 'Access denied.');
         $this->_model->verifyIdentity($password);
     }
 }

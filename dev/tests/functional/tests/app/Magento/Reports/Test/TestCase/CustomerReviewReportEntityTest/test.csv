@@ -1,4 +1,0 @@
-"customerLogin";"product/dataSet";"review/data/nickname";"review/data/title";"review/data/detail";"reviewsCount";"constraint"
-"Yes";"default";"name_upd_%isolation%";"title_upd_%isolation%";"review_upd_%isolation%";"1";"assertProductReviewsQtyByCustomer, assertProductReportByCustomerInGrid"
-"Yes";"default";"name_upd_%isolation%";"title_upd_%isolation%";"review_upd_%isolation%";"2";"assertProductReviewsQtyByCustomer, assertProductReportByCustomerInGrid"
-"No";"default";"name_upd_%isolation%";"title_upd_%isolation%";"review_upd_%isolation%";"2";"assertProductReviewsQtyByCustomer, assertProductReportByCustomerNotInGrid"

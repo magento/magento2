@@ -22,9 +22,6 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Quote\Model\Quote\AddressFactory */
     protected $_quoteAddressFactory;
 
-    /** @var  \Magento\Customer\Api\Data\CustomerDataBuilder */
-    protected $_customerBuilder;
-
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface */
     protected $_customerRepository;
 
@@ -40,7 +37,6 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
-        $this->_customerBuilder = $objectManager->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         $this->_customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customer = $this->_customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
 
@@ -129,13 +125,11 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $emptyAddress->setLastname(null);
         $this->_block->getQuote()->setBillingAddress($emptyAddress);
         $customer = $this->_customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
-        $customer = $this->_customerBuilder->populate(
-            $customer
-        )->setFirstname(
+        $customer->setFirstname(
             self::SAMPLE_FIRST_NAME
         )->setLastname(
             self::SAMPLE_LAST_NAME
-        )->create();
+        );
         $this->_block->getQuote()->setCustomer($customer);
         $this->_block->getQuote()->save();
 

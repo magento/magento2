@@ -14,10 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductCompareSuccessRemoveAllProductsMessage extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     const SUCCESS_MESSAGE = 'You cleared the comparison list.';
 
     /**
