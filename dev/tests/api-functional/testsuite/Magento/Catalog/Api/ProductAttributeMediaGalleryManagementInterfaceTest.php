@@ -40,7 +40,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $this->createServiceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/products/simple/media',
+                'resourcePath' => '/V1/products/media',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -416,7 +416,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
+        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/media';
 
         $requestData = [
             'sku' => 'wrong_product_sku',

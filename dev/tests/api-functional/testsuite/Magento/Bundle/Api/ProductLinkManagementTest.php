@@ -95,7 +95,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => str_replace(
-                    [':productSku', ':optionId'],
+                    [':sku', ':optionId'],
                     [$productSku, $optionId],
                     $resourcePath
                 ),
@@ -109,7 +109,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         ];
         return $this->_webApiCall(
             $serviceInfo,
-            ['productSku' => $productSku, 'optionId' => $optionId, 'linkedProduct' => $linkedProduct]
+            ['sku' => $productSku, 'optionId' => $optionId, 'linkedProduct' => $linkedProduct]
         );
     }
 
@@ -137,7 +137,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                 'operation' => self::SERVICE_NAME . 'removeChild',
             ],
         ];
-        $requestData = ['productSku' => $productSku, 'optionId' => $optionId, 'childSku' => $childSku];
+        $requestData = ['sku' => $productSku, 'optionId' => $optionId, 'childSku' => $childSku];
         return $this->_webApiCall($serviceInfo, $requestData);
     }
 
