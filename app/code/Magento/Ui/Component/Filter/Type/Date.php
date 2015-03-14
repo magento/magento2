@@ -6,7 +6,6 @@
 namespace Magento\Ui\Component\Filter\Type;
 
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\LocaleInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
 use Magento\Framework\View\Element\UiComponent\ConfigFactory;
@@ -117,7 +116,7 @@ class Date extends FilterAbstract
                 $value['to'] = $this->convertDate(strtotime($value['to']), $locale);
             }
             $value['datetime'] = true;
-            $value['locale'] = $locale->toString();
+            $value['locale'] = $this->localeResolver->getLocale();
         } else {
             $value = null;
         }
@@ -129,33 +128,16 @@ class Date extends FilterAbstract
      * Convert given date to default (UTC) timezone
      *
      * @param int $date
-     * @param LocaleInterface $locale
-     * @return \Magento\Framework\Stdlib\DateTime\Date|null
+     * @param string $locale
+     * @return \DateTime|null
      */
-    protected function convertDate($date, LocaleInterface $locale)
+    protected function convertDate($date, $locale)
     {
         try {
-            $dateObj = $this->localeDate->date(null, null, $locale, false);
-
-            //set default timezone for store (admin)
-            $dateObj->setTimezone(
-                $this->scopeConfig->getValue(
-                    $this->localeDate->getDefaultTimezonePath(),
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            );
-
-            //set beginning of day
-            $dateObj->setHour(00);
-            $dateObj->setMinute(00);
-            $dateObj->setSecond(00);
-
-            //set date with applying timezone of store
-            $dateObj->set($date, null, $locale);
-
+            $dateObj = $this->localeDate->date(new \DateTime($date), $locale, false);
+            $dateObj->setTime(0, 0, 0);
             //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
-
+            $dateObj->setTimezone(new \DateTimeZone('UTC'));
             return $dateObj;
         } catch (\Exception $e) {
             return null;
