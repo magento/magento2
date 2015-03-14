@@ -406,7 +406,6 @@ return [
     ['getChangeLocaleUrl', 'Magento\Backend\Block\Page\Footer'],
     ['getCheckoutMehod', 'Magento\Checkout\Model\Type\Onepage'],
     ['getChildGroup', '', 'Magento_Core_Block_AbstractBlock::getGroupChildNames()'],
-    ['getConfig', 'Magento\Captcha\Helper\Data'],
     ['getConfig', 'Magento\Cms\Model\Wysiwyg\Images\Storage'],
     ['getConfigAsArray', 'Magento\Cms\Model\Wysiwyg\Images\Storage'],
     ['getConfig', 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute'],
@@ -1064,7 +1063,7 @@ return [
     [
         'getProtectedFileExtensions',
         '\Magento\Core\Helper\Data',
-        '\Magento\Core\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
+        '\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::getProtectedFileExtensions'
     ],
     ['getStoreId', '\Magento\Core\Helper\Data'],
     ['getExactDivision', '\Magento\Core\Helper\Data', '\Magento\Framework\Math\Division::getExactDivision'],
@@ -2052,6 +2051,7 @@ return [
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
     ['_getImageHelper', 'Magento\Catalog\Model\Product'],
+    ['getPreProcessors', 'Magento\Framework\View\Asset\PreProcessor\Pool', 'process'],
     ['isPhpFile', '\Magento\Tools\Di\Code\Reader\ClassesScanner'],
     ['renderPage', 'Magento\Cms\Helper\Page'],
     ['renderPageExtended', 'Magento\Cms\Helper\Page'],
@@ -2114,4 +2114,6 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['setProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
 ];

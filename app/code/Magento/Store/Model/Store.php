@@ -253,7 +253,7 @@ class Store extends AbstractModel implements
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -305,7 +305,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\Resource\Store $resource
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\RequestInterface $request
@@ -329,7 +329,7 @@ class Store extends AbstractModel implements
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\Resource\Store $resource,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\RequestInterface $request,
@@ -386,7 +386,7 @@ class Store extends AbstractModel implements
     {
         parent::__wakeup();
         $this->_coreFileStorageDatabase = \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Core\Helper\File\Storage\Database'
+            'Magento\MediaStorage\Helper\File\Storage\Database'
         );
         $this->_config = \Magento\Framework\App\ObjectManager::getInstance()->get(
             'Magento\Framework\App\Config\ReinitableConfigInterface'
