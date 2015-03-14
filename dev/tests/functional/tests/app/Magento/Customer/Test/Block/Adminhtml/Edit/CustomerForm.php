@@ -35,30 +35,14 @@ class CustomerForm extends FormTabs
      *
      * @var string
      */
-    protected $fieldLabel = './/*[contains(@class, "form__field")]/*[contains(@class,"label")]';
-
-    /**
-     * Field wrapper with absent label on form.
-     *
-     * @var string
-     */
-    protected $fieldLabelAbsent = './/*[contains(@class, "form__field") and not(./*[contains(@class,"label")]/*)]';
+    protected $fieldLabel = './/*[contains(@class, "admin__field")]/*[contains(@class,"label")]';
 
     /**
      * Field wrapper with control block on form.
      *
      * @var string
      */
-    protected $fieldWrapperControl = './/*[contains(@class, "form__field")]/*[contains(@class,"control")]';
-
-    // @codingStandardsIgnoreStart
-    /**
-     * Field wrapper with absent control block on form.
-     *
-     * @var string
-     */
-    protected $fieldWrapperControlAbsent = './/*[contains(@class, "form__field") and not(./input or ./*[contains(@class,"control")]/*)]';
-    // @codingStandardsIgnoreEnd
+    protected $fieldWrapperControl = './/*[contains(@class, "admin__field")]/*[contains(@class,"control")]';
 
     /**
      * Fill Customer forms on tabs by customer, addresses data.
@@ -150,11 +134,7 @@ class CustomerForm extends FormTabs
     {
         /* Wait for field label is visible in the form */
         $this->waitForElementVisible($this->fieldLabel, Locator::SELECTOR_XPATH);
-        /* Wait for render all field's labels(assert that absent field without label) in the form */
-        $this->waitForElementNotVisible($this->fieldLabelAbsent, Locator::SELECTOR_XPATH);
         /* Wait for field's control block is visible in the form */
         $this->waitForElementVisible($this->fieldWrapperControl, Locator::SELECTOR_XPATH);
-        /* Wait for render all field's control blocks(assert that absent field without control block) in the form */
-        $this->waitForElementNotVisible($this->fieldWrapperControlAbsent, Locator::SELECTOR_XPATH);
     }
 }
