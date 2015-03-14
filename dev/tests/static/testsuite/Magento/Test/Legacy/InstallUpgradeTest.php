@@ -6,8 +6,8 @@
 
 namespace Magento\Test\Legacy;
 
-use Magento\Framework\Test\Utility\Files;
-use Magento\Framework\Test\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\Utility\AggregateInvoker;
 
 /**
  * Tests to find obsolete install/upgrade schema/data scripts
