@@ -41,7 +41,12 @@ class TemplateFileTest extends \PHPUnit_Framework_TestCase
         $this->resolver = $this->getMock('Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface');
         $this->minifier = $this->getMock('Magento\Framework\View\Template\Html\MinifierInterface');
         $this->state = $this->getMockBuilder('Magento\Framework\App\State')->disableOriginalConstructor()->getMock();
-        $this->assetConfig = $this->getMockForAbstractClass('Magento\Framework\View\Asset\ConfigInterface', [], '', false);
+        $this->assetConfig = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Asset\ConfigInterface',
+            [],
+            '',
+            false
+        );
         $this->object = new TemplateFile($this->resolver, $this->minifier, $this->state, $this->assetConfig);
     }
 

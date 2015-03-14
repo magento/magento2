@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Template\Html;
+namespace Magento\Framework\View\Test\Unit\Template\Html;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Template\Html\Minifier;
 
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -130,7 +131,6 @@ TEXT;
             //]]>
         </script><?php echo "http://some.link.com/" ?> <em>inline text</em> </body></html>
 TEXT;
-        // @codingStandardsIgnoreEnd
 
         $this->appDirectory->expects($this->once())
             ->method('getRelativePath')
@@ -152,6 +152,7 @@ TEXT;
 
         $this->object->minify($file);
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Contain method modify and getPathToModified
