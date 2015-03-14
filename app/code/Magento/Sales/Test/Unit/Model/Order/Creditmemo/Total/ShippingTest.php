@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Sales\Model\Order\Creditmemo\Total;
+namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
             ->disableOriginalConstructor()
