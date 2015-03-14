@@ -171,7 +171,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->dirWriteMock)
         );
 
-        /* Init \Magento\Core\Model\Resource\Layout\Collection model  */
+        /* Init \Magento\Widget\Model\Resource\Layout\Update\Collection model  */
         $this->updateFactory = $this->getMock(
             'Magento\Widget\Model\Layout\UpdateFactory',
             ['create'],

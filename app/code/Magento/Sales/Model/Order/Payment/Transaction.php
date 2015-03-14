@@ -111,7 +111,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * Event object prefix
      *
      * @var string
-     * @see \Magento\Core\Model\Absctract::$_eventPrefix
+     * @see \Magento\Framework\Model\AbstractModel::$_eventPrefix
      */
     protected $_eventPrefix = 'sales_order_payment_transaction';
 
@@ -119,7 +119,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * Event object prefix
      *
      * @var string
-     * @see \Magento\Core\Model\Absctract::$_eventObject
+     * @see \Magento\Framework\Model\AbstractModel::$_eventObject
      */
     protected $_eventObject = 'order_payment_transaction';
 

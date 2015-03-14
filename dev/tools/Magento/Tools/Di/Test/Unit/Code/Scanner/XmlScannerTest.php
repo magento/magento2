@@ -37,7 +37,7 @@ class XmlScannerTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectEntities()
     {
-        $className = 'Magento\Core\Model\Config\Invalidator\Proxy';
+        $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
         $this->_logMock->expects(
             $this->at(0)
         )->method(

@@ -23,7 +23,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected $_emailConfig;
 
     /**
-     * @var /Magento\Core\Model\Resource\Email\Template\CollectionFactory
+     * @var \Magento\Email\Model\Resource\Email\Template\CollectionFactory
      */
     protected $_templatesFactory;
 

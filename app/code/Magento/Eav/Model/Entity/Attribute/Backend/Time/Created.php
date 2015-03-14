@@ -26,7 +26,7 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * Set created date
      *
-     * @param \Magento\Core\Model\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
     public function beforeSave($object)

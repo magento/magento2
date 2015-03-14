@@ -12,7 +12,7 @@ class ReinitableConfigTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $scopePool = $this->getMock('\Magento\Framework\App\Config\ScopePool', ['clean'], [], '', false);
         $scopePool->expects($this->once())->method('clean');
-        /** @var \Magento\Core\Model\ReinitableConfig $config */
+        /** @var \Magento\Framework\App\ReinitableConfig $config */
         $config = $helper->getObject('Magento\Framework\App\ReinitableConfig', ['scopePool' => $scopePool]);
         $this->assertInstanceOf('\Magento\Framework\App\Config\ReinitableConfigInterface', $config->reinit());
     }

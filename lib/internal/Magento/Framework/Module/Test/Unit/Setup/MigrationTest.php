@@ -85,7 +85,6 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             'base_dir' => 'not_used',
             'path_to_map_file' => 'not_used',
             'connection' => $adapterMock,
-            'core_helper' => $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
             'aliases_map' => $aliasesMap
         ];
     }
