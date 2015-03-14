@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model;
+namespace Magento\Store\Model;
 
 /**
  * Dummy layout argument data source object
@@ -31,7 +31,7 @@ class DataSource extends \Magento\Framework\Data\Collection
      * Set updater calls
      *
      * @param array $calls
-     * @return \Magento\Core\Model\DataSource
+     * @return \Magento\Store\Model\DataSource
      */
     public function setUpdaterCall(array $calls)
     {
