@@ -7,7 +7,7 @@
 /**
  * Test theme page layout config model
  */
-namespace Magento\Theme\Test\Unit\ModelPageLayout\Config;
+namespace Magento\Theme\Test\Unit\Model\PageLayout\Config;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
