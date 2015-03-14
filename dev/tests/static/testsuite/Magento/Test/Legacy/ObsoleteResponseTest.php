@@ -29,7 +29,7 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appPath = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $this->appPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         $this->obsoleteMethods = include __DIR__ . '/_files/response/obsolete_response_methods.php';
         $this->filesBlackList = $this->getBlackList();
     }
@@ -39,7 +39,7 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testObsoleteResponseMethods()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -66,7 +66,7 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
         $filesList = [];
 
         foreach ($this->getFilesData('whitelist/refactored_modules*') as $refactoredFolder) {
-            $files = \Magento\Framework\Test\Utility\Files::init()->getFiles(
+            $files = \Magento\Framework\App\Utility\Files::init()->getFiles(
                 [$this->appPath . $refactoredFolder],
                 '*.php'
             );
@@ -75,7 +75,7 @@ class ObsoleteResponseTest extends \PHPUnit_Framework_TestCase
 
         $result = array_map('realpath', $filesList);
         $result = array_diff($result, $this->filesBlackList);
-        return \Magento\Framework\Test\Utility\Files::composeDataSets($result);
+        return \Magento\Framework\App\Utility\Files::composeDataSets($result);
     }
 
     /**

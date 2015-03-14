@@ -13,7 +13,7 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
 {
     public function testLegacyComment()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($filename) {
                 $fileText = file_get_contents($filename);
@@ -37,7 +37,7 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
 
     public function legacyCommentDataProvider()
     {
-        $root = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         $recursiveIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS)
         );
