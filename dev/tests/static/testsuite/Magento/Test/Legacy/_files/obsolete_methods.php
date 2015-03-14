@@ -2114,6 +2114,8 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['setProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
     ['getCollectionAttribute', 'Magento\Eav\Model\Config'],
     ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
