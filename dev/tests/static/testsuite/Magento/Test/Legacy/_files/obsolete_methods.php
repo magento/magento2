@@ -2120,4 +2120,6 @@ return [
         'Magento\Customer\Controller\Account\LoginPost',
         'Magento\Customer\Model\Account\Redirect::getRedirect'
     ],
+    ['getProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['setProductEntityTypeId', 'Magento\Reports\Model\Resource\Product\Collection'],
 ];

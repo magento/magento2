@@ -79,6 +79,8 @@ class GiftMessageManager
                         $message['to']
                     )->setMessage(
                         $message['message']
+                    )->setCustomerId(
+                        $quote->getCustomerId()
                     )->save();
 
                     $entity->setGiftMessageId($giftMessage->getId())->save();
