@@ -3,11 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model\Observer;
+namespace Magento\Customer\Test\Unit\Model\Observer;
 
 use Magento\Customer\Model\Logger;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Event\Observer;
+use Magento\Customer\Model\Observer\Log;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {

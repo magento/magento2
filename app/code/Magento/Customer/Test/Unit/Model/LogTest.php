@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model;
+namespace Magento\Customer\Test\Unit\Model;
 
 /**
  * Customer log model test.
@@ -31,7 +31,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->log = $objectManagerHelper->getObject(
             'Magento\Customer\Model\Log',

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model;
+namespace Magento\Customer\Test\Unit\Model;
 
 /**
  * Customer log data logger test.
@@ -50,7 +50,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', ['create'], [], '', false);
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->logger = $objectManagerHelper->getObject(
             '\Magento\Customer\Model\Logger',

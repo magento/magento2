@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Controller\Cart;
+namespace Magento\Checkout\Test\Unit\Controller\Cart;
+
+use Magento\Checkout\Controller\Cart\Index;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,7 +106,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->controller = $objectManagerHelper->getObject(
             'Magento\Checkout\Controller\Cart\Index',

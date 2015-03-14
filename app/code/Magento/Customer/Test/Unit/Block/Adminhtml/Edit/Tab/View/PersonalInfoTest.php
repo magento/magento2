@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
+namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View;
+
+use Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo;
 
 /**
  * Customer personal information template block test.
@@ -23,7 +25,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     protected $pathToDefaultTimezone = 'path/to/default/timezone';
 
     /**
-     * @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo
+     * @var PersonalInfo
      */
     protected $block;
 
@@ -119,7 +121,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManagerHelper->getObject(
             'Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo',
