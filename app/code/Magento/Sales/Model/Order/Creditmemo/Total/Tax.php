@@ -11,6 +11,7 @@ class Tax extends AbstractTotal
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
