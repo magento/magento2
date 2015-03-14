@@ -7,9 +7,9 @@
 namespace Magento\Sales\Controller\Download;
 
 use Magento\Sales\Model\Download;
-use \Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use \Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\ForwardFactory;
 
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {

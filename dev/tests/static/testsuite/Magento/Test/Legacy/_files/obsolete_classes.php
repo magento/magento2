@@ -115,6 +115,7 @@ return [
     ['Magento\Sales\Block\Adminhtml\Order\Shipment\View', 'Magento\Shipping\Block\Adminhtml\View'],
     ['Magento\Sales\Block\Order\Shipment\Items', 'Magento\Shipping\Block\Items'],
     ['Magento\Sales\Controller\Adminhtml\Order\Shipment', 'Magento\Shipping\Controller\Adminhtml\Order\Shipment'],
+    ['Magento\Sales\Controller\Download'],
     ['Magento\Sales\Block\Order\Shipment', 'Magento\Shipping\Block\Order\Shipment'],
     ['Mage_Adminhtml_Block_Sales_Order_Create_Customer_Grid'],
     ['Mage_Adminhtml_Block_Sales_Order_Create_Search_Grid_Renderer_Giftmessage'],
