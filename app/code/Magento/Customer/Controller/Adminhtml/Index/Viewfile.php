@@ -157,7 +157,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         $fileName = 'customer' . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
         if (!$directory->isFile($fileName)
-            && !$this->_objectManager->get('Magento\Core\Helper\File\Storage')->processStorageFile($path)
+            && !$this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage')->processStorageFile($path)
         ) {
             throw new NotFoundException();
         }

@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 class ValidatorInfo extends Validator
 {
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $coreFileStorageDatabase;
 
@@ -37,14 +37,14 @@ class ValidatorInfo extends Validator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param ValidateFactory $validateFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory $validateFactory
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;

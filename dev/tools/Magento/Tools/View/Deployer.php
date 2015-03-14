@@ -8,8 +8,8 @@ namespace Magento\Tools\View;
 
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
-use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -38,6 +38,9 @@ class Deployer
 
     /** @var Publisher */
     private $assetPublisher;
+
+    /** @var \Magento\Framework\View\Asset\Bundle\Manager */
+    private $bundleManager;
 
     /** @var bool */
     private $isDryRun;
@@ -109,6 +112,7 @@ class Deployer
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);
                     }
+                    $this->bundleManager->flush();
                     $this->logger->logMessage("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
@@ -182,10 +186,9 @@ class Deployer
         $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
         $objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $objectManager->get('Magento\Framework\View\Asset\Repository');
-
         $this->assetPublisher = $objectManager->create('Magento\Framework\App\View\Asset\Publisher');
         $this->htmlMinifier = $objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
-
+        $this->bundleManager = $objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
     }
 
     /**
@@ -220,6 +223,7 @@ class Deployer
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
+                $this->bundleManager->addAsset($asset);
             }
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {

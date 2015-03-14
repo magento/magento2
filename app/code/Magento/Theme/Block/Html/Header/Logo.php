@@ -19,18 +19,18 @@ class Logo extends \Magento\Framework\View\Element\Template
     protected $_template = 'html/header/logo.phtml';
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_fileStorageHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageHelper
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageHelper,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper,
         array $data = []
     ) {
         $this->_fileStorageHelper = $fileStorageHelper;
