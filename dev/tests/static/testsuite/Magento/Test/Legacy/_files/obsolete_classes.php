@@ -792,7 +792,6 @@ return [
     ['Mage_Core_Model_Config_System'],
     ['Mage_Core_Model_Design_Source_Apply'],
     ['Mage_Core_Model_Language'],
-    ['Magento\Core\Helper\Data'],
     ['Magento\Core\Model\Flag', 'Magento\Framework\Flag'],
     ['Magento\Framework\Model\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Core\Model\AbstractModel', 'Magento\Framework\Model\AbstractModel'],
