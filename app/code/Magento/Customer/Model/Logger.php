@@ -85,6 +85,8 @@ class Logger
     }
 
     /**
+     * Load customer log data by customer id
+     *
      * @param int $customerId
      * @return array
      */

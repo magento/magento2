@@ -26,41 +26,57 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
 
     /**
+     * Customer
+     *
      * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $customer;
 
     /**
+     * Customer log
+     *
      * @var \Magento\Customer\Model\Log
      */
     protected $customerLog;
 
     /**
+     * Customer logger
+     *
      * @var \Magento\Customer\Model\Logger
      */
     protected $customerLogger;
 
     /**
+     * Account management
+     *
      * @var AccountManagementInterface
      */
     protected $accountManagement;
 
     /**
+     * Customer group repository
+     *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     protected $groupRepository;
 
     /**
+     * Customer data factory
+     *
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
     /**
+     * Address helper
+     *
      * @var \Magento\Customer\Helper\Address
      */
     protected $addressHelper;
 
     /**
+     * Date time
+     *
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
@@ -73,11 +89,15 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $coreRegistry;
 
     /**
+     * Address mapper
+     *
      * @var Mapper
      */
     protected $addressMapper;
 
     /**
+     * Data object helper
+     *
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
@@ -123,6 +143,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve customer object
+     *
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
@@ -138,6 +160,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve customer id
+     *
      * @return string|null
      */
     public function getCustomerId()
@@ -146,11 +170,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieves customer log.
+     * Retrieves customer log model
      *
      * @return \Magento\Customer\Model\Log
      */
-    public function getCustomerLog()
+    protected function getCustomerLog()
     {
         if (!$this->customerLog) {
             $this->customerLog = $this->customerLogger->get(
@@ -183,6 +207,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve store default timezone from configuration
+     *
      * @return string
      */
     public function getStoreCreateDateTimezone()
@@ -209,6 +235,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check if account is confirmed
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getIsConfirmedStatus()
@@ -226,6 +254,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve store
+     *
      * @return null|string
      */
     public function getCreatedInStore()
@@ -236,6 +266,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve billing address html
+     *
      * @return \Magento\Framework\Phrase|string
      */
     public function getBillingAddressHtml()
@@ -258,6 +290,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve group name
+     *
      * @return string|null
      */
     public function getGroupName()
@@ -273,6 +307,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve customer group by id
+     *
      * @param int $groupId
      * @return \Magento\Customer\Api\Data\GroupInterface|null
      */

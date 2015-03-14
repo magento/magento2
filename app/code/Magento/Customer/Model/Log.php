@@ -55,6 +55,8 @@ class Log
     }
 
     /**
+     * Retrieve customer id
+     *
      * @return int
      */
     public function getCustomerId()
@@ -63,6 +65,8 @@ class Log
     }
 
     /**
+     * Retrieve last login date as string
+     *
      * @return string
      */
     public function getLastLoginAt()
@@ -71,6 +75,8 @@ class Log
     }
 
     /**
+     * Retrieve last visit date as string
+     *
      * @return string
      */
     public function getLastVisitAt()
@@ -79,6 +85,8 @@ class Log
     }
 
     /**
+     * Retrieve last logout date as string
+     *
      * @return string
      */
     public function getLastLogoutAt()
