@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Asset;
 
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * View asset configuration interface
@@ -46,14 +45,14 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     const XML_PATH_MINIFICATION_HTML = 'dev/template/minify_html';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
@@ -65,7 +64,10 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeCssFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_CSS_FILES, ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_MERGE_CSS_FILES,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -75,7 +77,10 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isBundlingJsFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_JS_BUNDLING, ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_JS_BUNDLING,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -85,7 +90,10 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeJsFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_JS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_MERGE_JS_FILES,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -112,7 +120,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (string)$this->scopeConfig->getValue(
             sprintf(self::XML_PATH_MINIFICATION_ADAPTER, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -125,7 +133,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MINIFICATION_HTML,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ScopeInterface::SCOPE_STORE
         );
     }

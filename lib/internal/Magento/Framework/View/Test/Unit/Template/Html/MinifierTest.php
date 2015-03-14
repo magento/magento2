@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Test\Unit\Template\Html;
-
-use \Magento\Framework\View\Template\Html\Minifier;
+namespace Magento\Framework\View\Template\Html;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -39,7 +37,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(DirectoryList::APP)
+            ->with(DirectoryList::ROOT)
             ->willReturn($this->appDirectory);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
@@ -72,6 +70,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($absolutePath, $this->object->getPathToMinified($file));
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Covered method minify and test regular expressions
      * @test
@@ -115,8 +114,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     </body>
 </html>
 TEXT;
+
         $expectedContent = <<<TEXT
-<?php /** * Copyright © 2015 Magento. All rights reserved. * See COPYING.txt for license details. */ ?><?php ?><html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?><div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+<?php /** * Copyright © 2015 Magento. All rights reserved. * See COPYING.txt for license details. */ ?><?php ?><html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
             //<![CDATA[
             var someVar = 123;
             testFunctionCall(function () {
@@ -128,8 +128,9 @@ TEXT;
                 }
             });
             //]]>
-        </script><?php echo "http://some.link.com/" ?><em>inline text</em> </body></html>
+        </script><?php echo "http://some.link.com/" ?> <em>inline text</em> </body></html>
 TEXT;
+        // @codingStandardsIgnoreEnd
 
         $this->appDirectory->expects($this->once())
             ->method('getRelativePath')
@@ -161,14 +162,27 @@ TEXT;
         $file = '/absolute/path/to/phtml/template/file';
         $relativePath = 'relative/path/to/phtml/template/file';
 
-        $this->appDirectory->expects($this->at(0))
+        $htmlDriver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false);
+        $htmlDriver
+            ->expects($this->once())
+            ->method('getRealPath')
+            ->willReturn($file);
+
+        $this->appDirectory
+            ->expects($this->exactly(3))
             ->method('getRelativePath')
             ->with($file)
             ->willReturn($relativePath);
-        $this->htmlDirectory->expects($this->at(0))
+        $this->htmlDirectory
+            ->expects($this->at(1))
             ->method('isExist')
             ->with($relativePath)
             ->willReturn(false);
+
+        $this->htmlDirectory
+            ->expects($this->once())
+            ->method('getDriver')
+            ->willReturn($htmlDriver);
 
         $this->object->getMinified($file);
     }

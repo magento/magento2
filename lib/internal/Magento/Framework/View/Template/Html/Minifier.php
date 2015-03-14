@@ -56,12 +56,22 @@ class Minifier implements MinifierInterface
     ];
 
     /**
+     * @var Filesystem\Directory\ReadInterface
+     */
+    protected $rootDirectory;
+
+    /**
+     * @var Filesystem\Directory\WriteInterface
+     */
+    protected $htmlDirectory;
+
+    /**
      * @param Filesystem $filesystem
      */
     public function __construct(
         Filesystem $filesystem
     ) {
-        $this->appDirectory = $filesystem->getDirectoryRead(DirectoryList::APP);
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
     }
 
@@ -73,7 +83,8 @@ class Minifier implements MinifierInterface
      */
     public function getMinified($file)
     {
-        if (!$this->htmlDirectory->isExist($this->appDirectory->getRelativePath($file))) {
+        $file = $this->htmlDirectory->getDriver()->getRealPath($file);
+        if (!$this->htmlDirectory->isExist($this->rootDirectory->getRelativePath($file))) {
             $this->minify($file);
         }
         return $this->getPathToMinified($file);
@@ -88,7 +99,7 @@ class Minifier implements MinifierInterface
     public function getPathToMinified($file)
     {
         return $this->htmlDirectory->getAbsolutePath(
-            $this->appDirectory->getRelativePath($file)
+            $this->rootDirectory->getRelativePath($file)
         );
     }
 
@@ -100,7 +111,7 @@ class Minifier implements MinifierInterface
      */
     public function minify($file)
     {
-        $file = $this->appDirectory->getRelativePath($file);
+        $file = $this->rootDirectory->getRelativePath($file);
         $content = preg_replace(
             '#((?:<\?php\s+(?!echo)[^\?]*)\?>)\s+#',
             '$1',
@@ -112,12 +123,12 @@ class Minifier implements MinifierInterface
                     . '(?:<(?>textarea|pre|script)\b|\z))#',
                     ' ',
                     preg_replace(
-                        '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
+                        '#(?<!:)//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                         '',
                         preg_replace(
                             '#(?<!:)//[^\n\r]*(\s\?\>)#',
                             '$1',
-                            $this->appDirectory->readFile($file)
+                            $this->rootDirectory->readFile($file)
                         )
                     )
                 )
@@ -127,6 +138,6 @@ class Minifier implements MinifierInterface
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
-        $this->htmlDirectory->writeFile($file, $content);
+        $this->htmlDirectory->writeFile($file, rtrim($content));
     }
 }

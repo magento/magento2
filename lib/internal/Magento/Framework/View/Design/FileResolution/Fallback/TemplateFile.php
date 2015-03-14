@@ -70,18 +70,17 @@ class TemplateFile extends File
     {
         $template = parent::getFile($area, $themeModel, $file, $module);
 
-        if (!$this->assetConfig->isMinifyHtml()) {
-            return $template;
+        if ($template && $this->assetConfig->isMinifyHtml()) {
+            switch ($this->appState->getMode()) {
+                case State::MODE_PRODUCTION:
+                    return $this->templateMinifier->getPathToMinified($template);
+                case State::MODE_DEFAULT:
+                    return $this->templateMinifier->getMinified($template);
+                case State::MODE_DEVELOPER:
+                default:
+                    return $template;
+            }
         }
-
-        switch ($this->appState->getMode()) {
-            case State::MODE_PRODUCTION:
-                return $this->templateMinifier->getPathToMinified($template);
-            case State::MODE_DEFAULT:
-                return $this->templateMinifier->getMinified($template);
-            case State::MODE_DEVELOPER:
-            default:
-                return $template;
-        }
+        return $template;
     }
 }
