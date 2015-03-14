@@ -52,7 +52,7 @@ class Page extends \Magento\Backend\Block\Template
     public function getLang()
     {
         if (!$this->hasData('lang')) {
-            $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
+            $this->setData('lang', substr($this->_localeResolver->getLocale(), 0, 2));
         }
         return $this->getData('lang');
     }

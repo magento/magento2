@@ -286,7 +286,7 @@ class Menu extends \Magento\Backend\Block\Template
             'admin_top_nav',
             $this->getActive(),
             $this->_authSession->getUser()->getId(),
-            $this->_localeResolver->getLocaleCode(),
+            $this->_localeResolver->getLocale(),
         ];
         // Add additional key parameters if needed
         $newCacheKeyInfo = $this->getAdditionalCacheKeyInfo();

@@ -20,8 +20,8 @@ class Notification extends \Magento\Config\Block\System\Config\Form\Field
     {
         $element->setValue($this->_cache->load('admin_notifications_lastcheck'));
         $format = $this->_localeDate->getDateTimeFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+            \IntlDateFormatter::MEDIUM
         );
-        return $this->_localeDate->date(intval($element->getValue()))->toString($format);
+        return \IntlDateFormatter::formatObject($this->_localeDate->date(intval($element->getValue())), $format);
     }
 }

@@ -12,7 +12,7 @@
 "escapehtml var=$order.getBillingAddress().getName()":"Guest Customer Name",
 "var store.getFrontendName()":"Store Name",
 "var order.increment_id":"Order Id",
-"var order.getCreatedAtFormated('long')":"Order Created At (datetime)",
+"var order.getCreatedAtFormated(1)":"Order Created At (datetime)",
 "var order.getBillingAddress().format('html')":"Billing Address",
 "var payment_html":"Payment Details",
 "var order.getShippingAddress().format('html')":"Shipping Address",
@@ -48,7 +48,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
             </tr>
             <tr>
                 <td>
-                    <h2 style="font-size:18px; font-weight:normal; margin:0;">Your Order #{{var order.increment_id}} <small>(placed on {{var order.getCreatedAtFormated('long')}})</small></h2>
+                    <h2 style="font-size:18px; font-weight:normal; margin:0;">Your Order #{{var order.increment_id}} <small>(placed on {{var order.getCreatedAtFormated(1)}})</small></h2>
                 </td>
             </tr>
             <tr>
