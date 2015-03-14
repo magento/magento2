@@ -6,7 +6,7 @@
 
 namespace Magento\TestFramework\Utility;
 
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * A helper to gather various changed files
@@ -23,11 +23,11 @@ class ChangedFiles
      */
     public static function getPhpFiles($changedFilesList)
     {
-        $fileHelper = \Magento\Framework\Test\Utility\Files::init();
+        $fileHelper = \Magento\Framework\App\Utility\Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
             $phpFiles = Files::readLists($changedFilesList);
             if (!empty($phpFiles)) {
-                $phpFiles = \Magento\Framework\Test\Utility\Files::composeDataSets($phpFiles);
+                $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
                 $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles());
             }
         } else {
