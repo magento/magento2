@@ -233,14 +233,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
-        $productSku = $product->getSku();
+        $sku = $product->getSku();
         $productId = $product->getId();
         try {
             $this->resourceModel->delete($product);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\StateException('Unable to remove product ' . $productSku);
+            throw new \Magento\Framework\Exception\StateException('Unable to remove product ' . $sku);
         }
-        unset($this->instances[$productSku]);
+        unset($this->instances[$sku]);
         unset($this->instancesById[$productId]);
         return true;
     }
@@ -248,9 +248,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * {@inheritdoc}
      */
-    public function deleteById($productSku)
+    public function deleteById($sku)
     {
-        $product = $this->get($productSku);
+        $product = $this->get($sku);
         return $this->delete($product);
     }
 

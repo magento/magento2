@@ -108,9 +108,9 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteById($productSku, $type, $linkedProductSku)
+    public function deleteById($sku, $type, $linkedProductSku)
     {
-        $linkItems = $this->linkManagement->getLinkedItemsByType($productSku, $type);
+        $linkItems = $this->linkManagement->getLinkedItemsByType($sku, $type);
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $linkItem */
         foreach ($linkItems as $linkItem) {
             if ($linkItem->getLinkedProductSku() == $linkedProductSku) {
@@ -120,7 +120,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         throw new NoSuchEntityException(
             'Product %s doesn\'t have linked %s as %s',
             [
-                $productSku,
+                $sku,
                 $linkedProductSku,
                 $type
             ]
