@@ -9,7 +9,7 @@ namespace Magento\Mtf\Fixture;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Parent fixture data source clsss.
+ * Parent fixture data source class.
  */
 class DataSource implements FixtureInterface
 {
@@ -51,9 +51,9 @@ class DataSource implements FixtureInterface
     }
 
     /**
-     * Return data set configuration settings
+     * Return data set configuration settings.
      *
-     * @return string
+     * @return array
      */
     public function getDataConfig()
     {
