@@ -51,7 +51,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonFactoryMock;
 
@@ -66,7 +66,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonMock;
 
@@ -112,7 +112,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -123,7 +123,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRawMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
@@ -162,7 +162,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Framework\Controller\Result\JSON',
+            'Magento\Framework\Controller\Result\Json',
             $this->controller->execute()
         );
     }
@@ -185,7 +185,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Framework\Controller\Result\JSON',
+            'Magento\Framework\Controller\Result\Json',
             $this->controller->execute()
         );
     }
@@ -209,7 +209,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Framework\Controller\Result\JSON',
+            'Magento\Framework\Controller\Result\Json',
             $this->controller->execute()
         );
     }
