@@ -1,19 +1,16 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\Url\DecoderInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
@@ -22,28 +19,27 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends \Magento\Customer\Controller\AccountRedirect
+class LoginPost extends \Magento\Customer\Controller\Account
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
 
-    /** @var CustomerUrl */
-    protected $customerUrl;
-
     /** @var Validator */
     protected $formKeyValidator;
+
+    /**
+     * @var AccountRedirect
+     */
+    private $accountRedirect;
 
     /**
      * @param Context $context
      * @param Session $customerSession
      * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
-     * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
-     * @param DecoderInterface $urlDecoder
      * @param AccountManagementInterface $customerAccountManagement
-     * @param CustomerUrl $customerHelperData
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param Validator $formKeyValidator
+     * @param AccountRedirect $accountRedirect
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -52,24 +48,20 @@ class LoginPost extends \Magento\Customer\Controller\AccountRedirect
         Session $customerSession,
         RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
-        ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
-        DecoderInterface $urlDecoder,
         AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
-        Validator $formKeyValidator
+        Validator $formKeyValidator,
+        AccountRedirect $accountRedirect
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
+        $this->accountRedirect = $accountRedirect;
         parent::__construct(
             $context,
             $customerSession,
             $resultRedirectFactory,
-            $resultPageFactory,
-            $scopeConfig,
-            $storeManager,
-            $urlDecoder
+            $resultPageFactory
         );
     }
 
@@ -117,6 +109,6 @@ class LoginPost extends \Magento\Customer\Controller\AccountRedirect
             }
         }
 
-        return $this->loginPostRedirect();
+        return $this->accountRedirect->getRedirect();
     }
 }

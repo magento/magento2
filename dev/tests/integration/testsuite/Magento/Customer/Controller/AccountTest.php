@@ -152,7 +152,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setPostValue('create_address', true);
 
         $this->dispatch('customer/account/createPost');
-        $this->assertRedirect($this->stringContains('customer/account/index/'));
+        $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
             $this->equalTo(['Thank you for registering with Main Website Store.']),
             MessageInterface::TYPE_SUCCESS

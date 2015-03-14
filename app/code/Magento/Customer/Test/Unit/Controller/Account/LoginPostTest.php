@@ -182,31 +182,4 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
         $this->assertEquals($this->openActions, $method->invoke($this->object));
     }
-
-    public function testLoginPostActionWhenRefererSetBeforeAuthUrl()
-    {
-        $this->_formKeyValidator->expects($this->once())->method('validate')->will($this->returnValue(true));
-        $this->customerSession->expects($this->at(0))->method('isLoggedIn')->with()->will($this->returnValue(0));
-        $this->customerSession->expects($this->at(4))->method('isLoggedIn')->with()->will($this->returnValue(1));
-        $this->request->expects(
-            $this->once()
-        )->method(
-            'getParam'
-        )->with(
-            Url::REFERER_QUERY_PARAM_NAME
-        )->will(
-            $this->returnValue('referer')
-        );
-        $this->url->expects($this->once())->method('isOwnOriginUrl')->with();
-
-        $this->redirectFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->redirectResultMock);
-
-        $this->redirectResultMock->expects($this->once())
-            ->method('setUrl')
-            ->willReturnSelf();
-
-        $this->object->execute();
-    }
 }
