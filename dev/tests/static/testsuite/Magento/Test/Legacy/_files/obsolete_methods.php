@@ -2123,4 +2123,8 @@ return [
     ['utcDate', 'Magento\Framework\Stdlib\DateTime\Timezone'],
     ['getLocaleCode', 'Magento\Framework\View\Asset\File\FallbackContext', 'getLocale'],
     ['getLocaleCode', 'Magento\Paypal\Model\Api\AbstractApi', 'getLocale'],
+    ['getCollectionAttribute', 'Magento\Eav\Model\Config'],
+    ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
+    ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
+    ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
 ];
