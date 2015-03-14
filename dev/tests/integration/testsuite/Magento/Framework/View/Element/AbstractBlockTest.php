@@ -35,7 +35,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     'Magento\Framework\View\Element\Context'
                 ),
-                ['module_name' => 'Magento_Core']
+                ['module_name' => 'Magento_Theme']
             ]
         );
     }
@@ -500,8 +500,8 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGetModuleName()
     {
-        $this->assertEquals('Magento_Core', $this->_block->getModuleName());
-        $this->assertEquals('Magento_Core', $this->_block->getData('module_name'));
+        $this->assertEquals('Magento_Theme', $this->_block->getModuleName());
+        $this->assertEquals('Magento_Theme', $this->_block->getData('module_name'));
     }
 
     /**
@@ -636,7 +636,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                         'Magento\Framework\View\Element\Context'
                     ),
-                    ['module_name' => 'Magento_Core']
+                    ['module_name' => 'Magento_Theme']
                 ],
                 $mockClass
             );
