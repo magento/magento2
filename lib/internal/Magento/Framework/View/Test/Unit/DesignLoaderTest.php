@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Test\Unit\Model;
+namespace Magento\Framework\View\Test\Unit;
 
 class DesignLoaderTest extends \PHPUnit_Framework_TestCase
 {
