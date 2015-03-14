@@ -117,13 +117,11 @@
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
     <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
     <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Oyejorge" />
-    <preference for="Magento\Framework\LocaleInterface" type="Magento\Framework\Locale" />
     <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency" />
     <preference for="Magento\Framework\CurrencyInterface" type="Magento\Framework\Currency" />
     <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
     <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
-    <preference for="Magento\Framework\Stdlib\DateTime\DateInterface" type="Magento\Framework\Stdlib\DateTime\Date" />
     <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />

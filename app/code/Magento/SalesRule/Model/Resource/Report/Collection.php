@@ -50,8 +50,8 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Resource\Report $resource
      * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory
+     * @param \Magento\Sales\Model\Resource\Report $resource
      * @param mixed $connection
      */
     public function __construct(
