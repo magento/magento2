@@ -5,6 +5,8 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
+
+
 class TestService
 {
     /**
@@ -18,8 +20,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\Nested $nested
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Nested
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested $nested
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested
      */
     public function nestedData(Nested $nested)
     {
@@ -45,8 +47,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\Simple[] $dataObjects
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\Simple[]
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[] $dataObjects
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]
      */
     public function dataArray(array $dataObjects)
     {
@@ -54,8 +56,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray $arrayData
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\SimpleArray
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray $arrayData
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray
      */
     public function nestedSimpleArray(SimpleArray $arrayData)
     {
@@ -63,8 +65,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray $associativeArrayData
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\AssociativeArray
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray $associativeArrayData
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray
      */
     public function nestedAssociativeArray(AssociativeArray $associativeArrayData)
     {
@@ -72,8 +74,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Framework\Webapi\ServiceInputProcessor\DataArray $dataObjects
-     * @return \Magento\Framework\Webapi\ServiceInputProcessor\DataArray
+     * @param \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray $dataObjects
+     * @return \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray
      */
     public function nestedDataArray(DataArray $dataObjects)
     {
