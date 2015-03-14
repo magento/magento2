@@ -88,6 +88,7 @@ class Curl extends AbstractCurl implements RoleInterface
      * Prepare role resources data.
      *
      * @param array $data
+     * @return array
      */
     protected function prepareResourceAccess(array $data)
     {
