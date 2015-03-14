@@ -3105,6 +3105,7 @@ return [
     ['Magento\Setup\Module\SetupFactory'],
     ['Magento\Framework\Module\Updater\SetupFactory'],
     ['Magento\Backend\Model\Config\Source\Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
+    ['Magento\Reports\Model\Resource\Shopcart\Product\Collection'],
     ['Zend_Locale', '\Locale, \ResourceBundle'],
     ['Zend_Locale_Data', '\Locale, \ResourceBundle'],
     ['Zend_Locale_Content', '\Locale, \ResourceBundle'],
