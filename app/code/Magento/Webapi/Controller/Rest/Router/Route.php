@@ -115,7 +115,7 @@ class Route implements RouterInterface
      */
     public function match(Request $request)
     {
-        /** @var \Magento\Webapi\Controller\Rest\Request $request */
+        /** @var \Magento\Framework\Webapi\Rest\Request $request */
         $pathParts = $this->getPathParts($request->getPathInfo());
         $routeParts = $this->getRouteParts();
         if (count($pathParts) <> count($routeParts)) {

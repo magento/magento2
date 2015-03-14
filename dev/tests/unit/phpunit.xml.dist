@@ -9,9 +9,14 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
          colors="true"
          bootstrap="./framework/bootstrap.php"
->
+        >
     <testsuite name="Magento Unit Tests">
-        <directory suffix="Test.php">testsuite</directory>
+        <directory suffix="Test.php">../../../setup/src/Magento/Setup/Test/Unit</directory>
+        <directory suffix="Test.php">../../../app/code/*/*/Test/Unit</directory>
+        <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
+        <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
+        <directory suffix="Test.php">../../../dev/tools/*/*/Test/Unit</directory>
+        <directory suffix="Test.php">../../../dev/tools/*/*/*/Test/Unit</directory>
     </testsuite>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
