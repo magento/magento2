@@ -244,7 +244,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 'operation' => self::SERVICE_NAME . 'DeleteById'
             ]
         ];
-        return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'optionId' => $optionId]);
+        return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'id' => $optionId]);
     }
 
     /**
@@ -265,7 +265,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 'operation'      => self::SERVICE_NAME . 'Get'
             ]
         ];
-        return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'optionId' => $optionId]);
+        return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'id' => $optionId]);
     }
 
     /**

@@ -73,7 +73,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
             ]
         ];
 
-        $requestData = ['id' => $sku, 'productSku' => $sku];
+        $requestData = ['id' => $sku, 'sku' => $sku];
         $defaultStoreResponse = $this->_webApiCall($serviceInfo, $requestData);
         $nameInDefaultStore = 'Simple Product';
         $this->assertEquals(

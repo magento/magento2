@@ -32,7 +32,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             ],
         ];
 
-        $actual = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'type' => $linkType]);
+        $actual = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'type' => $linkType]);
 
         $expected = [
             [
