@@ -8,6 +8,7 @@
         "magento/module-catalog-inventory": "0.42.0-beta10",
         "magento/module-customer": "0.42.0-beta10",
         "magento/module-catalog": "0.42.0-beta10",
+        "magento/module-config": "0.42.0-beta10",
         "magento/module-payment": "0.42.0-beta10",
         "magento/module-tax": "0.42.0-beta10",
         "magento/module-directory": "0.42.0-beta10",
