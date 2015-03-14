@@ -24,6 +24,7 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $expected = [
+            ['label' => __('None (Translation is disabled)'), 'value' => Config::NO_TRANSLATION],
             ['label' => 'Dictionary (Translation on frontend side)', 'value' => Config::DICTIONARY_STRATEGY],
             ['label' => 'Embedded (Translation on backend side)', 'value' => Config::EMBEDDED_STRATEGY]
         ];

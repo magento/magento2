@@ -14,6 +14,11 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Config extends FrameworkJsConfig
 {
     /**
+     * Both translation strategies are disabled
+     */
+    const NO_TRANSLATION = 'none';
+
+    /**
      * Strategy when all js files are translated while publishing
      */
     const EMBEDDED_STRATEGY = 'embedded';
