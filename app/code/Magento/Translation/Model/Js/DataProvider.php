@@ -6,7 +6,7 @@
 
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;

@@ -6,7 +6,7 @@
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Framework\App\State;
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -45,7 +45,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
-        $this->filesUtilityMock = $this->getMock('Magento\Framework\Test\Utility\Files', [], [], '', false);
+        $this->filesUtilityMock = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->rootDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $filesystem->expects($this->once())
