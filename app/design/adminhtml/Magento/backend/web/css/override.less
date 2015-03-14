@@ -373,6 +373,7 @@ nav ol {
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after {
   left: 0;
   margin-left: 30px;
+  top: .2rem;
 }
 .admin__control-text {
   line-height: 3.3rem;
@@ -644,12 +645,13 @@ option:empty {
 ._required > .admin__field-label span:after {
   color: #eb5202;
   content: '*';
-  display: inline;
+  display: inline-block;
   font-size: 1.6rem;
   font-weight: 500;
+  line-height: 1;
   margin-left: 10px;
-  margin-top: 2px;
   position: absolute;
+  top: 1.2rem;
   z-index: 1;
 }
 ._disabled > .admin__field-label {
