@@ -39,23 +39,31 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $servicesConfig = [
             'services' => [
                 'Magento\Customer\Api\AccountManagementInterface' => [
-                    'activate' => [
-                        'resources' => [
-                            [
-                                'Magento_Customer::manage',
+                    'V1' => [
+                        'methods' => [
+                            'activate' => [
+                                'resources' => [
+                                    [
+                                        'Magento_Customer::manage',
+                                    ],
+                                ],
+                                'secure' => false,
                             ],
                         ],
-                        'secure' => false,
                     ],
                 ],
                 'Magento\Customer\Api\CustomerRepositoryInterface' => [
-                    'getById' => [
-                        'resources' => [
-                            [
-                                'Magento_Customer::customer',
+                    'V1' => [
+                        'methods' => [
+                            'getById' => [
+                                'resources' => [
+                                    [
+                                        'Magento_Customer::customer',
+                                    ],
+                                ],
+                                'secure' => false,
                             ],
                         ],
-                        'secure' => false,
                     ],
                 ],
             ],
@@ -98,6 +106,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestedSoapServices()
     {
         $expectedResult = [
+            'customerAccountManagementV1' =>
             [
                 'methods' => [
                     'activate' => [
@@ -135,57 +144,77 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = 'customerAccountManagementV1Activate';
         $soapOperation = $this->_soapConfig
-            ->getSoapOperation('Magento\Customer\Api\AccountManagementInterface', 'activate');
+            ->getSoapOperation('Magento\Customer\Api\AccountManagementInterface', 'activate', 'V1');
         $this->assertEquals($expectedResult, $soapOperation);
     }
+
     /**
-     * Test identifying service name parts including subservices using class name.
+     * Test identifying service name including subservices using class name.
      *
-     * @dataProvider serviceNamePartsDataProvider
+     * @dataProvider serviceNameDataProvider
      */
-    public function testGetServiceNameParts($className, $preserveVersion, $expected)
+    public function testGetServiceName($className, $version, $preserveVersion, $expected)
     {
-        $actual = $this->_soapConfig->getServiceName($className, $preserveVersion);
+        $actual = $this->_soapConfig->getServiceName($className, $version, $preserveVersion);
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     * Dataprovider for serviceNameParts
+     * Dataprovider for testGetServiceName
      *
      * @return string
      */
-    public function serviceNamePartsDataProvider()
+    public function serviceNameDataProvider()
     {
         return [
-            ['Magento\Customer\Api\AccountManagementInterface', false, 'customerAccountManagement'],
-            [
-                'Magento\Customer\Api\AddressRepositoryInterface',
-                true,
-                'customerAddressRepositoryV1'
-            ],
+            ['Magento\Customer\Api\AccountManagementInterface', 'V1', false, 'customerAccountManagement'],
+            ['Magento\Customer\Api\AddressRepositoryInterface', 'V1', true, 'customerAddressRepositoryV1'],
         ];
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @dataProvider dataProviderForTestGetServiceNamePartsInvalidName
+     * @dataProvider dataProviderForTestGetServiceNameInvalidName
      */
-    public function testGetServiceNamePartsInvalidName($interfaceClassName)
+    public function testGetServiceNameInvalidName($interfaceClassName, $version)
     {
-        $this->_soapConfig->getServiceName($interfaceClassName);
+        $this->_soapConfig->getServiceName($interfaceClassName, $version);
     }
 
-    public function dataProviderForTestGetServiceNamePartsInvalidName()
+    /**
+     * Dataprovider for testGetServiceNameInvalidName
+     *
+     * @return string
+     */
+    public function dataProviderForTestGetServiceNameInvalidName()
     {
         return [
-            ['BarV1Interface'], // Missed vendor, module, 'Service'
-            ['Service\\V1Interface'], // Missed vendor and module
-            ['Magento\\Foo\\Service\\BarVxInterface'], // Version number should be a number
-            ['Magento\\Foo\\Service\\BarInterface'], // Version missed
-            ['Magento\\Foo\\Service\\BarV1'], // 'Interface' missed
-            ['Foo\\Service\\BarV1Interface'], // Module missed
-            ['Foo\\BarV1Interface'] // Module and 'Service' missed
+            ['BarV1Interface', 'V1'], // Missed vendor, module, 'Service'
+            ['Service\\V1Interface', 'V1'], // Missed vendor and module
+            ['Magento\\Foo\\Service\\BarVxInterface', 'V1'], // Version number should be a number
+            ['Magento\\Foo\\Service\\BarInterface', 'V1'], // Version missed
+            ['Magento\\Foo\\Service\\BarV1', 'V1'], // 'Interface' missed
+            ['Foo\\Service\\BarV1Interface', 'V1'], // Module missed
+            ['Foo\\BarV1Interface', 'V1'] // Module and 'Service' missed
         ];
+    }
+
+    public function testGetServiceMetadata()
+    {
+        $expectedResult = [
+            'methods' => [
+                'activate' => [
+                    'method' => 'activate',
+                    'inputRequired' => '',
+                    'isSecure' => '',
+                    'resources' => [['Magento_Customer::manage']],
+                ],
+            ],
+            'class' => 'Magento\Customer\Api\AccountManagementInterface',
+        ];
+        $result = $this->_soapConfig->getServiceMetadata('customerAccountManagementV1');
+        $this->assertEquals($expectedResult, $result);
+
     }
 }
 
