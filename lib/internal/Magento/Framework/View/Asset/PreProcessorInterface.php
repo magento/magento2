@@ -13,8 +13,8 @@ interface PreProcessorInterface
     /**
      * Transform content and/or content type for the specified preprocessing chain object
      *
-     * @param \Magento\Framework\View\Asset\PreProcessor\Chain $chain
+     * @param PreProcessor\Chain $chain
      * @return void
      */
-    public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain);
+    public function process(PreProcessor\Chain $chain);
 }

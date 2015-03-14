@@ -30,6 +30,27 @@ class Collection
     }
 
     /**
+     * @param string $identifier
+     * @param AssetInterface $asset
+     * @param string $key
+     * @return void
+     */
+    public function insert($identifier, AssetInterface $asset, $key)
+    {
+        $result = [];
+        foreach ($this->assets as $assetKey => $assetVal) {
+            if ($assetKey == $key) {
+                $result[$key] = $assetVal;
+                $result[$identifier] = $asset;
+            } else {
+                $result[$assetKey] = $assetVal;
+            }
+        }
+
+        $this->assets = $result;
+    }
+
+    /**
      * Whether an item belongs to a collection or not
      *
      * @param string $identifier
