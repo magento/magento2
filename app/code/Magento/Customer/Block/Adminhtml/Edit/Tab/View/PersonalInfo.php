@@ -7,43 +7,76 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Adminhtml customer view personal information sales block
+ * Adminhtml customer view personal information sales block.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PersonalInfo extends \Magento\Backend\Block\Template
 {
     /**
+     * Interval in minutes that shows how long customer will be marked 'Online'
+     * since his last activity. Used only if it's impossible to get such setting
+     * from configuration.
+     */
+    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
+    /**
+     * Customer
+     *
      * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $customer;
 
     /**
+     * Customer log
+     *
+     * @var \Magento\Customer\Model\Log
+     */
+    protected $customerLog;
+
+    /**
+     * Customer logger
+     *
+     * @var \Magento\Customer\Model\Logger
+     */
+    protected $customerLogger;
+
+    /**
+     * Account management
+     *
      * @var AccountManagementInterface
      */
     protected $accountManagement;
 
     /**
+     * Customer group repository
+     *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     protected $groupRepository;
 
     /**
+     * Customer data factory
+     *
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
     /**
+     * Address helper
+     *
      * @var \Magento\Customer\Helper\Address
      */
     protected $addressHelper;
 
     /**
+     * Date time
+     *
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
@@ -56,11 +89,15 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $coreRegistry;
 
     /**
+     * Address mapper
+     *
      * @var Mapper
      */
     protected $addressMapper;
 
     /**
+     * Data object helper
+     *
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
@@ -75,6 +112,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param Mapper $addressMapper
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Customer\Model\Logger $customerLogger
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,6 +126,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         \Magento\Framework\Registry $registry,
         Mapper $addressMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Customer\Model\Logger $customerLogger,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -98,10 +137,14 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $this->dateTime = $dateTime;
         $this->addressMapper = $addressMapper;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->customerLogger = $customerLogger;
+
         parent::__construct($context, $data);
     }
 
     /**
+     * Retrieve customer object
+     *
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
@@ -117,11 +160,29 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve customer id
+     *
      * @return string|null
      */
     public function getCustomerId()
     {
         return $this->coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+    }
+
+    /**
+     * Retrieves customer log model
+     *
+     * @return \Magento\Customer\Model\Log
+     */
+    protected function getCustomerLog()
+    {
+        if (!$this->customerLog) {
+            $this->customerLog = $this->customerLogger->get(
+                $this->getCustomer()->getId()
+            );
+        }
+
+        return $this->customerLog;
     }
 
     /**
@@ -146,6 +207,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve store default timezone from configuration
+     *
      * @return string
      */
     public function getStoreCreateDateTimezone()
@@ -172,6 +235,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check if account is confirmed
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getIsConfirmedStatus()
@@ -189,6 +254,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve store
+     *
      * @return null|string
      */
     public function getCreatedInStore()
@@ -199,6 +266,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve billing address html
+     *
      * @return \Magento\Framework\Phrase|string
      */
     public function getBillingAddressHtml()
@@ -221,6 +290,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve group name
+     *
      * @return string|null
      */
     public function getGroupName()
@@ -236,6 +307,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve customer group by id
+     *
      * @param int $groupId
      * @return \Magento\Customer\Api\Data\GroupInterface|null
      */
@@ -247,5 +320,105 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             $group = null;
         }
         return $group;
+    }
+
+    /**
+     * Returns timezone of the store to which customer assigned.
+     *
+     * @return string
+     */
+    public function getStoreLastLoginDateTimezone()
+    {
+        return $this->_scopeConfig->getValue(
+            $this->_localeDate->getDefaultTimezonePath(),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getCustomer()->getStoreId()
+        );
+    }
+
+    /**
+     * Get customer's current status.
+     *
+     * Customer considered 'Offline' in the next cases:
+     *
+     * - customer has never been logged in;
+     * - customer clicked 'Log Out' link\button;
+     * - predefined interval has passed since customer's last activity.
+     *
+     * In all other cases customer considered 'Online'.
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getCurrentStatus()
+    {
+        // Customer has never been logged in.
+        if (!$this->getCustomerLog()->getLastLoginAt()) {
+            return __('Offline');
+        }
+
+        // Customer clicked 'Log Out' link\button.
+        if ($this->getCustomerLog()->getLastLogoutAt() &&
+            strtotime($this->getCustomerLog()->getLastLogoutAt()) > strtotime($this->getCustomerLog()->getLastLoginAt())
+        ) {
+            return __('Offline');
+        }
+
+        // Predefined interval has passed since customer's last activity.
+        $interval = $this->getOnlineMinutesInterval();
+
+        if ($this->getCustomerLog()->getLastVisitAt() &&
+            strtotime($this->dateTime->now()) - strtotime($this->getCustomerLog()->getLastVisitAt()) > $interval * 60
+        ) {
+            return __('Offline');
+        }
+
+        return __('Online');
+    }
+
+    /**
+     * Get customer last login date.
+     *
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getLastLoginDate()
+    {
+        $date = $this->getCustomerLog()->getLastLoginAt();
+
+        if ($date) {
+            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+        }
+
+        return __('Never');
+    }
+
+    /**
+     * Returns customer last login date in store's timezone.
+     *
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getStoreLastLoginDate()
+    {
+        $date = strtotime($this->getCustomerLog()->getLastLoginAt());
+
+        if ($date) {
+            $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
+            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+        }
+
+        return __('Never');
+    }
+
+    /**
+     * Returns interval that shows how long customer will be considered 'Online'.
+     *
+     * @return int Interval in minutes
+     */
+    protected function getOnlineMinutesInterval()
+    {
+        $configValue = $this->_scopeConfig->getValue(
+            'customer/online_customers/online_minutes_interval',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }
