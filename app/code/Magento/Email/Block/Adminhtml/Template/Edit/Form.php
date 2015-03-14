@@ -51,7 +51,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareLayout()
     {
         $this->pageConfig->addPageAsset('prototype/windows/themes/default.css');
-        $this->pageConfig->addPageAsset('Magento_Theme::prototype/magento.css');
         return parent::_prepareLayout();
     }
 

@@ -19,7 +19,7 @@ class Grid extends GridInterface
      *
      * @var string
      */
-    protected $addProducts = 'button.add';
+    protected $addProducts = 'button.action-add';
 
     /**
      * An element locator which allows to select entities in grid

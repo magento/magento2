@@ -66,7 +66,7 @@ class Price extends Block
      *
      * @var string
      */
-    protected $closeMap = '//main[@class="page-main"]//div[@class="ui-dialog-buttonset"]//button';
+    protected $closeMap = '..//div[@class="ui-dialog-buttonset"]//button';
 
     /**
      * This method returns the price represented by the block

@@ -56,6 +56,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     ) {
         $this->_voteFactory = $voteFactory;
         $this->_reviewFactory = $reviewFactory;
+        $this->_ratingFactory = $ratingFactory;
 
         parent::__construct(
             $context,
@@ -155,7 +156,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG);
+        return $this->formatDate($date, \IntlDateFormatter::LONG);
     }
 
     /**
