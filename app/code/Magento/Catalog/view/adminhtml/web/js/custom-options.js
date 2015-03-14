@@ -124,55 +124,73 @@ define([
                         title: $.mage.__('Select Product'),
                         autoOpen: false,
                         minWidth: 980,
+                        width: '75%',
                         modal: true,
                         resizable: true,
-                        buttons: [{
-                            text: $.mage.__('Cancel'),
-                            id: 'import-custom-options-close-button',
-                            click: function () {
-                                $(this).dialog('close');
-                            }
-                        }, {
-                            text: $.mage.__('Import'),
-                            id: 'import-custom-options-apply-button',
-                            'class': 'primary',
-                            click: function (event, massActionTrigger) {
-                                var request = [];
-                                $(this).find('input[name=product]:checked').map(function () {
-                                    request.push(this.value);
-                                });
+                        position: {
+                            my: 'left top',
+                            at: 'center top',
+                            of: 'body'
+                        },
+                        open: function () {
+                            $(this).closest('.ui-dialog').addClass('ui-dialog-active');
 
-                                if (request.length === 0) {
-                                    if (!massActionTrigger) {
-                                        alert($.mage.__('Please select items.'));
+                            var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
+                            $(this).closest('.ui-dialog').css('margin-top', topMargin);
+                        },
+                        close: function () {
+                            $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                        },
+                        buttons: [
+                            {
+                                text: $.mage.__('Import'),
+                                id: 'import-custom-options-apply-button',
+                                'class': 'action-primary action-import',
+                                click: function (event, massActionTrigger) {
+                                    var request = [];
+                                    $(this).find('input[name=product]:checked').map(function () {
+                                        request.push(this.value);
+                                    });
+
+                                    if (request.length === 0) {
+                                        if (!massActionTrigger) {
+                                            alert($.mage.__('Please select items.'));
+                                        }
+
+                                        return;
                                     }
 
-                                    return;
-                                }
+                                    $.post(widget.options.customOptionsUrl, {
+                                        'products[]': request,
+                                        form_key: widget.options.formKey
+                                    }, function ($data) {
+                                        $.parseJSON($data).each(function (el) {
+                                            el.id = widget.getFreeOptionId(el.id);
+                                            el.option_id = el.id;
 
-                                $.post(widget.options.customOptionsUrl, {
-                                    'products[]': request,
-                                    form_key: widget.options.formKey
-                                }, function ($data) {
-                                    $.parseJSON($data).each(function (el) {
-                                        el.id = widget.getFreeOptionId(el.id);
-                                        el.option_id = el.id;
-
-                                        if (typeof el.optionValues !== 'undefined') {
-                                            for (var i = 0; i < el.optionValues.length; i++) {
-                                                el.optionValues[i].option_id = el.id;
+                                            if (typeof el.optionValues !== 'undefined') {
+                                                for (var i = 0; i < el.optionValues.length; i++) {
+                                                    el.optionValues[i].option_id = el.id;
+                                                }
                                             }
-                                        }
-                                        //Adding option
-                                        widget.addOption(el);
-                                        //Will save new option on server side
-                                        $('#product_option_' + el.id + '_option_id').val(0);
-                                        $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
+                                            //Adding option
+                                            widget.addOption(el);
+                                            //Will save new option on server side
+                                            $('#product_option_' + el.id + '_option_id').val(0);
+                                            $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
+                                        });
+                                        importContainer.dialog('close');
                                     });
-                                    importContainer.dialog('close');
-                                });
-                            }
-                        }]
+                                }
+                            },
+                            {
+                                text: $.mage.__('Cancel'),
+                                id: 'import-custom-options-close-button',
+                                'class': 'action-close',
+                                click: function () {
+                                    $(this).dialog('close');
+                                }
+                            }]
                     });
                     importContainer.load(
                         this.options.productGridUrl, {

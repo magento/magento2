@@ -50,15 +50,17 @@ endif; ?>
                 <?php //endif; ?>
                 <?php endforeach; ?>
             </select>
-        </div>
-        <?php if ($block->getIsShipping()): ?>
-            <label for="order-shipping_same_as_billing" class="no-float">
+            <p>
+            <?php if ($block->getIsShipping()): ?>
                 <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing" onclick="order.setShippingAsBilling(this.checked)" <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?>/>
-                <?php echo __('Same As Billing Address') ?>
-            </label>
-        <?php else: ?>
-            &nbsp;
-        <?php endif; ?>
+                <label for="order-shipping_same_as_billing" class="no-float">
+                    <?php echo __('Same As Billing Address') ?>
+                </label>
+            <?php else: ?>
+                &nbsp;
+            <?php endif; ?>
+            </p>
+        </div>
     </div>
 
     <div class="order-address" id="<?php echo $_fieldsContainerId ?>">

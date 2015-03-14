@@ -65,9 +65,13 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
     </label>
     <div class="control">
         <input type="text" class="input-text validate-number" id="inventory_min_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][min_qty]" value="<?php echo $block->getFieldValue('min_qty') * 1 ?>" <?php echo $_readonly;?>>
-        <?php $_checked = ($block->getFieldValue('use_config_min_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_min_qty"><?php echo __('Use Config Settings') ?></label>
+
+        <div class="control-inner-wrap">
+            <?php $_checked = ($block->getFieldValue('use_config_min_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_min_qty"><?php echo __('Use Config Settings') ?></label>
+        </div>
+
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(["prototype"], function(){
@@ -89,9 +93,11 @@ toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_m
         <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
                name="<?php echo $block->getFieldSuffix() ?>[stock_data][min_sale_qty]"
                value="<?php echo $block->getFieldValue('min_sale_qty') * 1 ?>" <?php echo $_readonly;?>>
+        <div class="control-inner-wrap">
         <?php $_checked = ($block->getFieldValue('use_config_min_sale_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_min_sale_qty"><?php echo __('Use Config Settings') ?></label>
+            <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_min_sale_qty"><?php echo __('Use Config Settings') ?></label>
+        </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
@@ -112,8 +118,10 @@ toggleValueElements($('inventory_use_config_min_sale_qty'), $('inventory_use_con
     <div class="control">
         <input type="text" class="input-text validate-number" id="inventory_max_sale_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][max_sale_qty]" value="<?php echo $block->getFieldValue('max_sale_qty') * 1 ?>" <?php echo $_readonly;?>>
         <?php $_checked = ($block->getFieldValue('use_config_max_sale_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_max_sale_qty"><?php echo __('Use Config Settings') ?></label>
+        <div class="control-inner-wrap">
+            <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_max_sale_qty"><?php echo __('Use Config Settings') ?></label>
+        </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
@@ -172,9 +180,12 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
             <option value="<?php echo $option['value'] ?>" <?php echo $_selected ?>><?php echo $option['label'] ?></option>
             <?php endforeach; ?>
         </select>
-        <?php $_checked = ($block->getFieldValue('use_config_backorders') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_backorders"><?php echo __('Use Config Settings') ?></label>
+
+        <div class="control-inner-wrap">
+            <?php $_checked = ($block->getFieldValue('use_config_backorders') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_backorders"><?php echo __('Use Config Settings') ?></label>
+        </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
@@ -194,9 +205,12 @@ toggleValueElements($('inventory_use_config_backorders'), $('inventory_use_confi
     </label>
     <div class="control">
         <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][notify_stock_qty]" value="<?php echo $block->getFieldValue('notify_stock_qty') * 1 ?>" <?php echo $_readonly;?>>
-        <?php $_checked = ($block->getFieldValue('use_config_notify_stock_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_notify_stock_qty"><?php echo __('Use Config Settings') ?></label>
+
+        <div class="control-inner-wrap">
+            <?php $_checked = ($block->getFieldValue('use_config_notify_stock_qty') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_notify_stock_qty"><?php echo __('Use Config Settings') ?></label>
+        </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
@@ -222,9 +236,12 @@ toggleValueElements($('inventory_use_config_notify_stock_qty'), $('inventory_use
             <option value="0"<?php if (!$qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
         </select>
         <input type="hidden" id="inventory_enable_qty_increments_default" value="<?php echo $block->getDefaultConfigValue('enable_qty_increments'); ?>">
-        <?php $_checked = ($block->getFieldValue('use_config_enable_qty_inc') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_enable_qty_increments"><?php echo __('Use Config Settings') ?></label>
+
+        <div class="control-inner-wrap">
+            <?php $_checked = ($block->getFieldValue('use_config_enable_qty_inc') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_enable_qty_increments"><?php echo __('Use Config Settings') ?></label>
+        </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
@@ -244,9 +261,11 @@ toggleValueElements($('inventory_use_config_enable_qty_increments'), $('inventor
     </label>
     <div class="control">
         <input type="text" class="input-text validate-digits" id="inventory_qty_increments" name="<?php echo $block->getFieldSuffix() ?>[stock_data][qty_increments]" value="<?php echo $block->getFieldValue('qty_increments') * 1 ?>" <?php echo $_readonly;?>>
-        <?php $_checked = ($block->getFieldValue('use_config_qty_increments') || $block->IsNew()) ? 'checked="checked"' : '' ?>
-        <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
-        <label for="inventory_use_config_qty_increments"><?php echo __('Use Config Settings') ?></label>
+        <div class="control-inner-wrap">
+            <?php $_checked = ($block->getFieldValue('use_config_qty_increments') || $block->IsNew()) ? 'checked="checked"' : '' ?>
+            <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $block->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
+            <label for="inventory_use_config_qty_increments"><?php echo __('Use Config Settings') ?></label>
+        </div>
         <?php if (!$block->isReadonly()): ?>
         <script>
 require(['prototype'], function(){
