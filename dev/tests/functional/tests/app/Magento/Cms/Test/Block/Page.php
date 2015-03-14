@@ -51,6 +51,13 @@ class Page extends Block
     ];
 
     /**
+     * Selector for uninitialized page.
+     *
+     * @var string
+     */
+    protected $uninitialized = '//body[(@data-mage-init)]';
+
+    /**
      * Get page content text.
      *
      * @return string
@@ -106,5 +113,22 @@ class Page extends Block
         } else {
             throw new \Exception('Determine how to find the widget on the page.');
         }
+    }
+
+    /**
+     * Waiting page initialization.
+     *
+     * @return void
+     */
+    public function waitPageInit()
+    {
+        $browser = $this->browser;
+        $uninitialized = $this->uninitialized;
+
+        $this->_rootElement->waitUntil(
+            function () use ($browser, $uninitialized) {
+                return $browser->find($uninitialized, Locator::SELECTOR_XPATH)->isVisible() == false ? true : null;
+            }
+        );
     }
 }
