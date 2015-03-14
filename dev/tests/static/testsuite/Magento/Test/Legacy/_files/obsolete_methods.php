@@ -2114,4 +2114,8 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getCollectionAttribute', 'Magento\Eav\Model\Config'],
+    ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
+    ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
+    ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
 ];
