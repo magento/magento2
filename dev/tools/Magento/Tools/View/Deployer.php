@@ -8,8 +8,8 @@ namespace Magento\Tools\View;
 
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
-use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\App\Utility\Files;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -125,7 +125,7 @@ class Deployer
             $this->count++;
         }
         $this->logger->logMessage("\nSuccessful: {$this->count} files modified\n---\n");
-        $version = $this->dateTime->toTimestamp(true);
+        $version = (new \DateTime())->getTimestamp();
         $this->logger->logMessage("New version of deployed files: {$version}");
         if (!$this->isDryRun) {
             $this->versionStorage->save($version);

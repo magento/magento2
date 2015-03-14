@@ -248,22 +248,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $hasDefaultValue = (string)$defaultValue != '';
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
-            if (!\Zend_Locale_Format::isNumber(
-                $defaultValue,
-                ['locale' => $this->_localeResolver->getLocaleCode()]
-            )
-            ) {
+            $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
+            $defaultValue = $numberFormatter->parse($defaultValue);
+            if ($defaultValue === false) {
                 throw new EavException(__('Invalid default decimal value'));
             }
-
-            try {
-                $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_localeResolver->getLocaleCode()]
-                );
-                $this->setDefaultValue($filter->filter($defaultValue));
-            } catch (\Exception $e) {
-                throw new EavException(__('Invalid default decimal value'));
-            }
+            $this->setDefaultValue($defaultValue);
         }
 
         if ($this->getBackendType() == 'datetime') {
@@ -278,10 +268,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             // save default date value as timestamp
             if ($hasDefaultValue) {
                 $format = $this->_localeDate->getDateFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \IntlDateFormatter::SHORT
                 );
                 try {
-                    $defaultValue = $this->_localeDate->date($defaultValue, $format, null, false)->toValue();
+                    $defaultValue = \IntlDateFormatter::formatObject(new \DateTime($defaultValue), $format);
                     $this->setDefaultValue($defaultValue);
                 } catch (\Exception $e) {
                     throw new EavException(__('Invalid default date'));
