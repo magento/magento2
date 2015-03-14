@@ -1,3 +1,5 @@
+app/code/Magento
+lib/internal/Magento
 Magento/Adminhtml
 Magento/Authorizenet/Model
 Magento/Backend
