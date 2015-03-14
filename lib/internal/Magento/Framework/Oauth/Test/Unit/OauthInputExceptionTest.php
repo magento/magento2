@@ -6,6 +6,7 @@
 namespace Magento\Framework\Oauth\Test\Unit;
 
 use \Magento\Framework\Oauth\OauthInputException;
+use Magento\Framework\Phrase;
 
 class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,9 +14,9 @@ class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new OauthInputException();
         foreach (['field1', 'field2'] as $param) {
-            $exception->addError(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]);
+            $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]));
         }
-        $exception->addError('Message with period.');
+        $exception->addError(new Phrase('Message with period.'));
 
         $this->assertEquals(
             'field1 is a required field, field2 is a required field, Message with period',

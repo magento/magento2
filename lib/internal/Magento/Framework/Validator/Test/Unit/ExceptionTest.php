@@ -6,23 +6,20 @@
 
 namespace Magento\Framework\Validator\Test\Unit;
 
-use Magento\Framework\Exception\InputException;
-
 /**
- * Test case for \Magento\Framework\Validator\ValidatorException
+ * Test case for \Magento\Framework\Validator\Exception
  */
 class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Testing \Magento\Framework\Validator\ValidatorException::getMessage
+     * Testing \Magento\Framework\Validator\Exception::getMessage
      */
     public function testGetMessage()
     {
         $expectedMessage = 'error1' . PHP_EOL . 'error2' . PHP_EOL . 'error3';
         $messages = ['field1' => ['error1', 'error2'], 'field2' => ['error3']];
-        $exception = new \Magento\Framework\Validator\ValidatorException(
-            InputException::DEFAULT_MESSAGE,
-            [],
+        $exception = new \Magento\Framework\Validator\Exception(
+            null,
             null,
             $messages
         );

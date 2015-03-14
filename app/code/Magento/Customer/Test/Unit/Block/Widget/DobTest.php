@@ -120,16 +120,15 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testIsEnabledWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will(
                 $this->throwException(new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
-                )
+                ))
             );
         $this->assertSame(false, $this->_block->isEnabled());
     }
@@ -148,16 +147,15 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testIsRequiredWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will(
                 $this->throwException(new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
-                )
+                ))
             );
         $this->assertSame(false, $this->_block->isRequired());
     }
@@ -348,16 +346,15 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMinDateRangeWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will(
                 $this->throwException(new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
-                )
+                ))
             );
         $this->assertNull($this->_block->getMinDateRange());
     }
@@ -418,16 +415,15 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMaxDateRangeWithException()
     {
-        $this->customerMetadata->expects(
-            $this->any()
-        )->method(
-                'getAttributeMetadata'
-            )->will(
+        $this->customerMetadata->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will(
                 $this->throwException(new NoSuchEntityException(
+                    __(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
-                )
+                ))
             );
         $this->assertNull($this->_block->getMaxDateRange());
     }

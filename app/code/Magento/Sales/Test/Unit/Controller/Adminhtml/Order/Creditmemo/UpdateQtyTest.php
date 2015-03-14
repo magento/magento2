@@ -192,7 +192,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
     public function testExecuteModelException()
     {
         $message = 'Model exception';
-        $e = new \Magento\Framework\Exception\LocalizedException($message);
+        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
         $response = ['error' => true, 'message' => $message];
 
         $this->requestMock->expects($this->any())

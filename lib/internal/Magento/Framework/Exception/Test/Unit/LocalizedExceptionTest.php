@@ -6,6 +6,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Class LocalizedExceptionTest
@@ -43,8 +44,7 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $cause = new \Exception();
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
 
@@ -90,8 +90,7 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         ];
         $cause = new \Exception();
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
         $this->assertEquals($message, $localizeException->getRawMessage());
@@ -106,8 +105,7 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         ];
         $cause = new \Exception();
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
 
@@ -124,8 +122,7 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $cause = new \Exception();
 
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
         $expectedLogMessage = 'message parameter1 parameter2';

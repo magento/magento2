@@ -7,6 +7,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Phrase;
 
 /**
  * Class AuthenticationExceptionTest
@@ -18,8 +19,10 @@ class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $authenticationException = new AuthenticationException(
-            AuthenticationException::AUTHENTICATION_ERROR,
-            ['consumer_id' => 1, 'resources' => 'record2']
+            new Phrase(
+                AuthenticationException::AUTHENTICATION_ERROR,
+                ['consumer_id' => 1, 'resources' => 'record2']
+            )
         );
         $this->assertSame('An authentication error occurred.', $authenticationException->getMessage());
     }

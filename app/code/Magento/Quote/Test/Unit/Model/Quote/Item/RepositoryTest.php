@@ -116,7 +116,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('addProduct')->with($this->productMock, 12);
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $exceptionMessage = 'Could not save quote';
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -196,7 +196,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteItemMock->expects($this->never())->method('addProduct');
         $exceptionMessage = 'Could not save quote';
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -272,7 +272,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('removeItem')->with($itemId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $exceptionMessage = 'Could not remove item from quote';
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)

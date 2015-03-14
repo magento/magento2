@@ -312,7 +312,7 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
-            ->willThrowException(new NoSuchEntityException('hello'));
+            ->willThrowException(new NoSuchEntityException(__('hello')));
 
         $this->model->unassign($attributeSetId, $attributeCode);
     }

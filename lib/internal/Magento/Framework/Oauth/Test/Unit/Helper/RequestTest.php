@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Oauth\Test\Unit\Helper;
 
+use Magento\Framework\Phrase;
+
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Oauth\Helper\Request */
@@ -50,7 +52,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                new \Magento\Framework\Oauth\OauthInputException('msg'),
+                new \Magento\Framework\Oauth\OauthInputException(new Phrase('msg')),
                 ['msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST],
             ],
             [

@@ -7,6 +7,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\StateException;
+use Magento\Framework\Phrase;
 
 /**
  * Class StateExceptionTest
@@ -24,7 +25,7 @@ class StateExceptionTest extends \PHPUnit_Framework_TestCase
             'parameter2',
         ];
         $cause = new \Exception();
-        $stateException = new StateException($message, $params, $cause);
+        $stateException = new StateException(new Phrase($message, $params), $cause);
         $this->assertInstanceOf($instanceClass, $stateException);
     }
 }

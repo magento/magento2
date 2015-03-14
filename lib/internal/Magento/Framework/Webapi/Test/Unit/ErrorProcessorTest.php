@@ -12,6 +12,7 @@ use \Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Phrase;
 
 class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -217,13 +218,15 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         return [
             'NoSuchEntityException' => [
                 new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                    [
-                        'fieldName' => 'detail1',
-                        'fieldValue' => 'value1',
-                        'field2Name' => 'resource_id',
-                        'field2Value' => 'resource10',
-                    ]
+                    new Phrase(
+                        NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                        [
+                            'fieldName' => 'detail1',
+                            'fieldValue' => 'value1',
+                            'field2Name' => 'resource_id',
+                            'field2Value' => 'resource10',
+                        ]
+                    )
                 ),
                 \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND,
                 NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
@@ -242,8 +245,10 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             ],
             'AuthorizationException' => [
                 new AuthorizationException(
-                    AuthorizationException::NOT_AUTHORIZED,
-                    ['consumer_id' => '3', 'resources' => '4']
+                    new Phrase(
+                        AuthorizationException::NOT_AUTHORIZED,
+                        ['consumer_id' => '3', 'resources' => '4']
+                    )
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
                 AuthorizationException::NOT_AUTHORIZED,

@@ -6,6 +6,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 
 /**
  * Class NoSuchEntityExceptionTest
@@ -54,8 +55,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         $expectedLogMessage = 'message parameter1 parameter2';
         $cause = new \Exception();
         $localizeException = new NoSuchEntityException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
 
@@ -82,8 +82,10 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Phrase::setRenderer($this->rendererMock);
 
         $exception = new NoSuchEntityException(
-            $message,
-            ['consumer_id' => 1, 'resources' => 'record2']
+            new Phrase(
+                $message,
+                ['consumer_id' => 1, 'resources' => 'record2']
+            )
         );
         $this->assertSame($expectedMessage, $exception->getMessage());
     }

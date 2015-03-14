@@ -103,7 +103,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->taxClassResourceMock
             ->expects($this->once())
             ->method('delete')
-            ->willThrowException(new CouldNotDeleteException('Some Message'));
+            ->willThrowException(new CouldNotDeleteException(__('Some Message')));
         $this->model->delete($taxClass);
     }
 
@@ -243,7 +243,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new LocalizedException("Something went wrong"));
+            ->willThrowException(new LocalizedException(__("Something went wrong")));
         $this->model->save($taxClass);
     }
 
