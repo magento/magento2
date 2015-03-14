@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Test\Unit\Model;
+namespace Magento\Framework\App\Test\Unit\Router;
 
 class NoRouteHandlerListTest extends \PHPUnit_Framework_TestCase
 {

@@ -82,7 +82,7 @@ return [
                 <block class="Magento\Test\Block" name="test.block">
                     <arguments>
                         <argument name="argumentName" xsi:type="helper"
-                            helper="Magento\Core\Model\Layout\Argument\Handler\TestHelper::testMethod">
+                            helper="Magento\Framework\View\Layout\Argument\Handler\TestHelper::testMethod">
                             <param />
                         </argument>
                     </arguments>
@@ -96,7 +96,7 @@ return [
                 <block class="Magento\Test\Block" name="test.block">
                     <arguments>
                         <argument name="argumentName" xsi:type="helper"
-                            helper="Magento\Core\Model\Layout\Argument\Handler\TestHelper::testMethod">
+                            helper="Magento\Framework\View\Layout\Argument\Handler\TestHelper::testMethod">
                             <param name="paramName" forbidden="forbidden"/>
                         </argument>
                     </arguments>
@@ -110,7 +110,7 @@ return [
                 <block class="Magento\Test\Block" name="test.block">
                     <arguments>
                         <argument name="argumentName" xsi:type="helper"
-                            helper="Magento\Core\Model\Layout\Argument\Handler\TestHelper::testMethod">
+                            helper="Magento\Framework\View\Layout\Argument\Handler\TestHelper::testMethod">
                             <param name="paramName"><forbidden /></param>
                         </argument>
                     </arguments>
