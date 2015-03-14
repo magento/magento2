@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Locale\Bundle\Test\Unit;
+namespace Magento\Framework\Locale\Test\Unit\Bundle;
 
 use Magento\Framework\Locale\Bundle\DataBundle;
 
