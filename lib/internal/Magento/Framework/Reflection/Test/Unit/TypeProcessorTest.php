@@ -185,7 +185,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testFindSetterMethodName()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\DataObject");
+        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
         $setterName = $this->_typeProcessor->findSetterMethodName($class, 'AttrName');
         $this->assertEquals("setAttrName", $setterName);
 
@@ -199,7 +199,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindSetterMethodNameInvalidAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\DataObject");
+        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
         $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
     }
 }
