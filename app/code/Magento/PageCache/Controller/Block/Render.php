@@ -19,7 +19,8 @@ class Render extends \Magento\PageCache\Controller\Block
             $this->_forward('noroute');
             return;
         }
-
+        // disable profiling during private content handling AJAX call
+        \Magento\Framework\Profiler::reset();
         $blocks = $this->_getBlocks();
         $data = [];
         foreach ($blocks as $blockName => $blockInstance) {
