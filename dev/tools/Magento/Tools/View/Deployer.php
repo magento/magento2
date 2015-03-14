@@ -8,8 +8,8 @@ namespace Magento\Tools\View;
 
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
-use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 
