@@ -22,7 +22,7 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productItem = './/*[contains(@class,"product-item-link") and @title="%s"]/ancestor::li';
+    protected $productItem = './/*[contains(@class,"product-item-link") and contains(.,"%s")]/ancestor::li';
 
     /**
      * This member holds the class name of the regular price block.
@@ -43,14 +43,14 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productDetailsSelector = '//*[contains(@class, "product details") and .//*[@title="%s"]]';
+    protected $productDetailsSelector = '//*[contains(@class, "product details") and contains(.,"%s")]';
 
     /**
      * Product name.
      *
      * @var string
      */
-    protected $productTitle = '.product.name [title="%s"]';
+    protected $productTitle = './/*[@class="product name product-item-name"]/a[text()="%s"]';
 
     /**
      * Click for Price link on category page.
@@ -173,7 +173,7 @@ class ListProduct extends Block
      */
     protected function getProductNameElement($productName)
     {
-        return $this->_rootElement->find(sprintf($this->productTitle, $productName));
+        return $this->_rootElement->find(sprintf($this->productTitle, $productName), Locator::SELECTOR_XPATH);
     }
 
     /**

@@ -266,17 +266,18 @@
         }
 
         .fileinput-button {
-            display: inline-block;
             cursor: pointer;
+            display: inline-block;
             float: none;
             vertical-align: middle;
             span {
                 display: none;
             }
             input {
-                position: static;
                 border: none;
+                -moz-transform: none;
                 opacity: 1;
+                position: static;
             }
         }
 
@@ -320,6 +321,34 @@
     top: 0;
 }
 
+.ui-popup-message {
+    .ui-dialog-titlebar {
+        background: @color-lazy-sun;
+        font-size: 1.6rem;
+        font-weight: @font-weight__bold;
+        padding: 2rem 2rem 0;
+    }
+    .ui-dialog-titlebar-close {
+        right: 1.5rem;
+        top: 1rem;
+        &:before {
+            font-size: 1.4rem;
+        }
+    }
+    .ui-dialog-content {
+        background: @color-lazy-sun;
+        padding: 0 2rem 2rem;
+        .message {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .ui-dialog-buttonpane {
+        background: @color-lazy-sun;
+        padding: 0 2rem 2rem;
+    }
+}
 
 //
 //  Block 'Insert Variable'
@@ -393,7 +422,7 @@
 .popup-window {
     background: @popup__background-color;
     &.dialog {
-        z-index: 1010 !important;
+        z-index: 900 !important;
     }
 
     .table_window > tbody > tr > td {
@@ -472,19 +501,36 @@
 
     .popup-title {
         &:extend(.ui-dialog .ui-dialog-titlebar all);
+        background: @color-lazy-sun;
+        font-size: 1.6rem;
+        font-weight: @font-weight__bold;
+        padding: 2rem 2rem 0;
+    }
+
+    .popup-header {
+        .popup-title {
+            margin: 0;
+        }
     }
 
     .popup-content {
+        background: @color-lazy-sun;
         .extend__clearfix();
-        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+        padding: 0 2rem 2rem;
         p {
             margin-top: 0;
+        }
+        .messages {
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
     
     .fieldset {
+        background: @color-lazy-sun;
         border: 0;
-        margin: 0;
+        margin: 1.5rem 0 1.5rem 1.5rem;
         padding: 0;
     }
 
@@ -493,16 +539,17 @@
     }
 
     .messages {
-        margin-top: 0 !important;
+        margin: 0 !important;
     }
     
     .actions {
-        margin: @popup__padding__vertical 0 0;
+        margin: 0;
         text-align: right;
         .extend__clearfix();
 
         .primary {
             &:extend(.ui-dialog .action-primary all);
+            font-size: 1.4rem;
             float: right;
             margin: 0 0 0 @popup__padding__horizontal;
             &:hover {
@@ -512,6 +559,7 @@
 
         .cancel {
             &:extend(.ui-dialog .action-close all);
+            font-size: 1.4rem;
             &:hover {
                 box-shadow: none;
             }

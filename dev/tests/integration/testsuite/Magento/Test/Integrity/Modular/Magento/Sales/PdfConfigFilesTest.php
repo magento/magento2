@@ -29,7 +29,7 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function fileFormatDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('pdf.xml');
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('pdf.xml');
     }
 
     public function testMergedFormat()

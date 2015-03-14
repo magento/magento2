@@ -15,12 +15,12 @@ class Download
     protected $_rootDir;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_fileStorageDatabase;
 
     /**
-     * @var \Magento\Core\Model\File\Storage\DatabaseFactory
+     * @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory
      */
     protected $_storageDatabaseFactory;
 
@@ -31,14 +31,14 @@ class Download
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase
-     * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
+     * @param \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase,
-        \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
+        \Magento\MediaStorage\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_rootDir = $filesystem->getDirectoryWrite(DirectoryList::ROOT);

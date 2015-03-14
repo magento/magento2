@@ -74,5 +74,5 @@ $bootstrap->runBootstrap();
 $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
-\Magento\Framework\Test\Utility\Files::setInstance(new \Magento\Framework\Test\Utility\Files(BP));
+\Magento\Framework\App\Utility\Files::setInstance(new \Magento\Framework\App\Utility\Files(BP));
 unset($bootstrap, $application, $settings, $shell);

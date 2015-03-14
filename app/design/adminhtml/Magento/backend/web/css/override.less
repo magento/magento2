@@ -2571,8 +2571,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .ui-dialog .main-col .fileinput-button,
 .ui-dialog .magento_message .fileinput-button {
-  display: inline-block;
   cursor: pointer;
+  display: inline-block;
   float: none;
   vertical-align: middle;
 }
@@ -2582,9 +2582,10 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .ui-dialog .main-col .fileinput-button input,
 .ui-dialog .magento_message .fileinput-button input {
-  position: static;
   border: none;
+  -moz-transform: none;
   opacity: 1;
+  position: static;
 }
 .ui-dialog .main-col .file-row,
 .ui-dialog .magento_message .file-row {
@@ -2622,6 +2623,30 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: fixed;
   right: 0;
   top: 0;
+}
+.ui-popup-message .ui-dialog-titlebar {
+  background: #fffbbb;
+  font-size: 1.6rem;
+  font-weight: 700;
+  padding: 2rem 2rem 0;
+}
+.ui-popup-message .ui-dialog-titlebar-close {
+  right: 1.5rem;
+  top: 1rem;
+}
+.ui-popup-message .ui-dialog-titlebar-close:before {
+  font-size: 1.4rem;
+}
+.ui-popup-message .ui-dialog-content {
+  background: #fffbbb;
+  padding: 0 2rem 2rem;
+}
+.ui-popup-message .ui-dialog-content .message:last-child {
+  margin-bottom: 0;
+}
+.ui-popup-message .ui-dialog-buttonpane {
+  background: #fffbbb;
+  padding: 0 2rem 2rem;
 }
 .insert-variable {
   list-style: none;
@@ -2669,7 +2694,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background: #ffffff;
 }
 .popup-window.dialog {
-  z-index: 1010 !important;
+  z-index: 900 !important;
 }
 .popup-window .table_window > tbody > tr > td {
   background: #ffffff;
@@ -2711,33 +2736,51 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .fade .popup-inner {
   padding: 0;
 }
+.fade .popup-title {
+  background: #fffbbb;
+  font-size: 1.6rem;
+  font-weight: 700;
+  padding: 2rem 2rem 0;
+}
+.fade .popup-header .popup-title {
+  margin: 0;
+}
 .fade .popup-content {
-  padding: 0 3rem 3rem;
+  background: #fffbbb;
+  padding: 0 2rem 2rem;
 }
 .fade .popup-content p {
   margin-top: 0;
 }
+.fade .popup-content .messages:last-child {
+  margin-bottom: 0;
+}
 .fade .fieldset {
+  background: #fffbbb;
   border: 0;
-  margin: 0;
+  margin: 1.5rem 0 1.5rem 1.5rem;
   padding: 0;
 }
 .fade .maintenance-checkbox-container {
   padding-left: 20%;
 }
 .fade .messages {
-  margin-top: 0 !important;
+  margin: 0 !important;
 }
 .fade .actions {
-  margin: 3rem 0 0;
+  margin: 0;
   text-align: right;
 }
 .fade .actions .primary {
+  font-size: 1.4rem;
   float: right;
   margin: 0 0 0 3rem;
 }
 .fade .actions .primary:hover {
   box-shadow: none;
+}
+.fade .actions .cancel {
+  font-size: 1.4rem;
 }
 .fade .actions .cancel:hover {
   box-shadow: none;
