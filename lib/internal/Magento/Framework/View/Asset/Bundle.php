@@ -99,7 +99,7 @@ class Bundle
     {
         /** @var FallbackContext $context */
         $context = $asset->getContext();
-        return $context->getAreaCode() . ':' . $context->getThemePath() . ':' . $context->getLocaleCode();
+        return $context->getAreaCode() . ':' . $context->getThemePath() . ':' . $context->getLocale();
     }
 
     /**

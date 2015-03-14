@@ -200,7 +200,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 $sort[$name] = $data['value'];
             }
         }
-        $this->_arrayUtils->ksortMultibyte($sort, $this->_localeResolver->getLocaleCode());
+        $this->_arrayUtils->ksortMultibyte($sort, $this->_localeResolver->getLocale());
         foreach (array_reverse($this->_foregroundCountries) as $foregroundCountry) {
             $name = array_search($foregroundCountry, $sort);
             unset($sort[$name]);
