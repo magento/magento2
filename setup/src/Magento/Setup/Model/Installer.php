@@ -591,7 +591,7 @@ class Installer
     }
 
     /**
-     * Set up core_* tables
+     * Set up core tables
      *
      * @param SchemaSetupInterface $setup
      * @return void
@@ -603,9 +603,25 @@ class Installer
 
         $setup->startSetup();
 
-        /**
-         * Create table 'session'
-         */
+        $this->setupSessionTable($setup, $connection);
+        $this->setupCacheTable($setup, $connection);
+        $this->setupCacheTagTable($setup, $connection);
+        $this->setupFlagTable($setup, $connection);
+
+        $setup->endSetup();
+    }
+
+    /**
+     * Create table 'session'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupSessionTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
         $table = $connection->newTable(
             $setup->getTable('session')
         )->addColumn(
@@ -630,10 +646,19 @@ class Installer
             'Database Sessions Storage'
         );
         $connection->createTable($table);
+    }
 
-        /**
-         * Create table 'cache'
-         */
+    /**
+     * Create table 'cache'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupCacheTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
         $table = $connection->newTable(
             $setup->getTable('cache')
         )->addColumn(
@@ -673,10 +698,19 @@ class Installer
             'Caches'
         );
         $connection->createTable($table);
+    }
 
-        /**
-         * Create table 'cache_tag'
-         */
+    /**
+     * Create table 'cache_tag'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupCacheTagTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
         $table = $connection->newTable(
             $setup->getTable('cache_tag')
         )->addColumn(
@@ -698,10 +732,19 @@ class Installer
             'Tag Caches'
         );
         $connection->createTable($table);
+    }
 
-        /**
-         * Create table 'flag'
-         */
+    /**
+     * Create table 'flag'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupFlagTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
         $table = $connection->newTable(
             $setup->getTable('flag')
         )->addColumn(
@@ -741,8 +784,6 @@ class Installer
             'Flag'
         );
         $connection->createTable($table);
-
-        $setup->endSetup();
     }
 
     /**
