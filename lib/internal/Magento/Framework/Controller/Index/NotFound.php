@@ -16,6 +16,6 @@ class NotFound extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $this->getResponse()->setStatusHeader(404, '1.1', 'Not Found');
-        $this->getResponse()->setBody(__('Requested resource not found'));
+        $this->getResponse()->setBody((string)new \Magento\Framework\Phrase('Requested resource not found'));
     }
 }
