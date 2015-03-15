@@ -6,6 +6,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Class implements tests for \Magento\Webapi\Model\Soap\Config class.
  */

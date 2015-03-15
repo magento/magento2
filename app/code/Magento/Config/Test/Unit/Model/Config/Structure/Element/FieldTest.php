@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 class FieldTest extends \PHPUnit_Framework_TestCase

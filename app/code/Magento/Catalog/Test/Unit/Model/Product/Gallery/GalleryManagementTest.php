@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
 class GalleryManagementTest extends \PHPUnit_Framework_TestCase
