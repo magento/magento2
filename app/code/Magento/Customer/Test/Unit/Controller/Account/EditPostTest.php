@@ -156,7 +156,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testEditPostActionWithInvalidFormKey()
     {
@@ -179,6 +178,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testEditPostActionWithAuthenticationExceptionWhenTryingChangePassword()
     {
