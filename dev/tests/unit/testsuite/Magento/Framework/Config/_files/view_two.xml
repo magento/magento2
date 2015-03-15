@@ -15,4 +15,8 @@
     <vars module="Three">
         <var name="three">Value Three</var>
     </vars>
+    <exclude>
+        <item type="directory">first_dir</item>
+        <item type="file">second_file</item>
+    </exclude>
 </view>

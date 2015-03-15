@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+use Magento\Developer\Model\Config\Source\WorkflowType;
+
 /**
  * An object that's passed to preprocessors to carry current and original information for processing
  * Encapsulates complexity of all necessary context and parameters
@@ -43,11 +45,6 @@ class Chain
     private $targetContentType;
 
     /**
-     * @var string
-     */
-    private $appMode;
-
-    /**
      * @var null|string
      */
     private $targetAssetPath;
@@ -57,25 +54,25 @@ class Chain
      * @param string $origContent
      * @param string $origContentType
      * @param null $origAssetPath
-     * @param string $appMode
+     * @param null $frontEndDevelopmentWorkflowType
      */
     public function __construct(
         \Magento\Framework\View\Asset\LocalInterface $asset,
         $origContent,
         $origContentType,
         $origAssetPath = null,
-        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+        $frontEndDevelopmentWorkflowType = null
     ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
         $this->content = $origContent;
         $this->origContentType = $origContentType;
         $this->contentType = $origContentType;
-        $this->appMode = $appMode;
         $this->targetContentType = $asset->getContentType();
         $this->targetAssetPath = $asset->getPath();
 
-        if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
+        // todo will be fixed in MAGETWO-33631
+        if (WorkflowType::CLIENT_SIDE_COMPILATION == $frontEndDevelopmentWorkflowType) {
             $this->targetContentType = $this->origContentType;
             $this->targetAssetPath = $origAssetPath;
         }

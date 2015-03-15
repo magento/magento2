@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
@@ -52,9 +53,9 @@ class Source
     private $themeList;
 
     /**
-     * @var string
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    private $appMode;
+    protected $scopeConfig;
 
     /**
      * @param PreProcessor\Cache $cache
@@ -62,7 +63,7 @@ class Source
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param string $appMode
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         PreProcessor\Cache $cache,
@@ -70,7 +71,7 @@ class Source
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
-        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->cache = $cache;
         $this->filesystem = $filesystem;
@@ -79,7 +80,7 @@ class Source
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
         $this->themeList = $themeList;
-        $this->appMode = $appMode;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -144,13 +145,9 @@ class Source
             $this->rootDir->readFile($path),
             $this->getContentType($path),
             $path,
-            $this->appMode
+            $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)
         );
-        $preProcessors = $this->preProcessorPool
-            ->getPreProcessors($chain->getOrigContentType(), $chain->getTargetContentType());
-        foreach ($preProcessors as $processor) {
-            $processor->process($chain);
-        }
+        $this->preProcessorPool->process($chain);
         $chain->assertValid();
         if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;
@@ -160,6 +157,15 @@ class Source
         $result = [$dirCode, $path];
         $this->cache->save(serialize($result), $cacheId);
         return $result;
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return bool|string
+     */
+    public function findSource(LocalInterface $asset)
+    {
+        return $this->findSourceFile($asset);
     }
 
     /**

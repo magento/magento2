@@ -42,7 +42,7 @@ class LessTest extends \PHPUnit_Framework_TestCase
         $expectedContent = 'updated content';
         $tmpFile = 'tmp/file.ext';
         $this->fileGenerator->expects($this->once())
-            ->method('generateLessFileTree')
+            ->method('generateFileTree')
             ->with($this->chain)
             ->will($this->returnValue($tmpFile));
         $this->adapter->expects($this->once())

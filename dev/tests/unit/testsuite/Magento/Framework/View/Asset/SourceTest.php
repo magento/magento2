@@ -73,6 +73,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile', [], [], '', false
         );
         $this->theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
+        $config = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $themeList = $this->getMockForAbstractClass('Magento\Framework\View\Design\Theme\ListInterface');
         $themeList->expects($this->any())
@@ -87,7 +89,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->preProcessorPool,
             $this->viewFileResolution,
-            $themeList
+            $themeList,
+            $config
         );
     }
 
@@ -141,7 +144,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
      * @param string $isMaterialization
      * @dataProvider getFileDataProvider
      */
-    public function testGetFile($origFile, $origPath, $origContentType, $origContent, $isMaterialization)
+    public function testGetFile($origFile, $origPath, $origContent, $isMaterialization)
     {
         $filePath = 'some/file.ext';
         $cacheValue = "{$origPath}:{$filePath}";
@@ -160,12 +163,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->with($origPath)
             ->will($this->returnValue($origContent));
-        $processor = $this->getMockForAbstractClass('Magento\Framework\View\Asset\PreProcessorInterface');
         $this->preProcessorPool->expects($this->once())
-            ->method('getPreProcessors')
-            ->with($origContentType, 'ext')
-            ->will($this->returnValue([$processor]));
-        $processor->expects($this->once())
             ->method('process')
             ->will($this->returnCallback([$this, 'chainTestCallback']));
         if ($isMaterialization) {
@@ -233,10 +231,10 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     public function getFileDataProvider()
     {
         return [
-            ['/root/some/file.ext', 'source/some/file.ext', 'ext', 'processed', false],
-            ['/root/some/file.ext', 'source/some/file.ext', 'ext', 'not_processed', true],
-            ['/root/some/file.ext2', 'source/some/file.ext2', 'ext2', 'processed', true],
-            ['/root/some/file.ext2', 'source/some/file.ext2', 'ext2', 'not_processed', true],
+            ['/root/some/file.ext', 'source/some/file.ext', 'processed', false],
+            ['/root/some/file.ext', 'source/some/file.ext', 'not_processed', true],
+            ['/root/some/file.ext2', 'source/some/file.ext2', 'processed', true],
+            ['/root/some/file.ext2', 'source/some/file.ext2', 'not_processed', true],
         ];
     }
 

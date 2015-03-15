@@ -42,6 +42,11 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\App\View\Asset\Publisher|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $publisher;
+
     protected function setUp()
     {
         $this->tmpDirectory = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
@@ -55,9 +60,9 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
                 return "content of '$file'";
             }));
         $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
+        $filesystem->expects($this->exactly(2))
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
+            //->with(DirectoryList::VAR_DIR)
             ->will($this->returnValue($this->tmpDirectory));
         $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->magentoImport = $this->getMock(
@@ -66,8 +71,15 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->import = $this->getMock(
             '\Magento\Framework\Less\PreProcessor\Instruction\Import', [], [], '', false
         );
+
+        $assetSource = $this->getMock(
+            'Magento\Framework\View\Asset\Source', [], [], '', false
+        );
+
+        $this->publisher = $this->getMock('Magento\Framework\App\View\Asset\Publisher', [], [], '', false);
+
         $this->object = new \Magento\Framework\Less\FileGenerator(
-            $filesystem, $this->assetRepo, $this->magentoImport, $this->import
+            $filesystem, $this->assetRepo, $this->magentoImport, $this->import, $assetSource, $this->publisher
         );
     }
 
@@ -142,7 +154,7 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getAbsolutePath')
             ->will($this->returnValueMap($pathsMap));
 
-        $actual = $this->object->generateLessFileTree($chain);
+        $actual = $this->object->generateFileTree($chain);
         $this->assertSame($expectedPath, $actual);
     }
 }
