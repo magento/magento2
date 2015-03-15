@@ -9,9 +9,9 @@ namespace Magento\ConfigurableProduct\Model;
 class ProductVariationsBuilder
 {
     /**
-     * @var \Magento\Framework\Api\AttributeDataBuilder
+     * @var \Magento\Framework\Api\AttributeValueFactory
      */
-    private $customAttributeBuilder;
+    private $customAttributeFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
@@ -25,16 +25,16 @@ class ProductVariationsBuilder
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param Product\Type\VariationMatrix $variationMatrix
      */
     public function __construct(
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
     ) {
         $this->productFactory = $productFactory;
-        $this->customAttributeBuilder = $customAttributeBuilder;
+        $this->customAttributeFactory = $customAttributeFactory;
         $this->variationMatrix = $variationMatrix;
     }
 
@@ -58,10 +58,9 @@ class ProductVariationsBuilder
             $suffix = '';
             foreach ($variation as $attributeId => $valueInfo) {
                 $suffix .= '-' . $valueInfo['value'];
-                $customAttribute = $this->customAttributeBuilder
+                $customAttribute = $this->customAttributeFactory->create()
                     ->setAttributeCode($attributes[$attributeId]['attribute_code'])
-                    ->setValue($valueInfo['value'])
-                    ->create();
+                    ->setValue($valueInfo['value']);
                 $customAttributes = array_merge(
                     $item->getCustomAttributes(),
                     [

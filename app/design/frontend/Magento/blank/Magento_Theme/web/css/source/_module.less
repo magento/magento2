@@ -3,7 +3,7 @@
 //  * See COPYING.txt for license details.
 //  */
 
-@import 'module/_collapsible_navigation';
+@import 'module/_collapsible_navigation.less';
 
 @message-global-note__color: @text__color;
 @message-global-note__background: @color-yellow-light2;
@@ -78,8 +78,8 @@ body {
 }
 
 .page-main {
-    > .page-title {
-        .title + .action {
+    > .page-title-wrapper {
+        .page-title + .action {
             margin-top: @indent__l;
         }
     }
@@ -300,11 +300,11 @@ body {
     }
 
     .page-main {
-        > .page-title {
-            .title {
+        > .page-title-wrapper {
+            .page-title {
                 display: inline-block;
             }
-            .title + .action {
+            .page-title + .action {
                 float: right;
                 margin-top: @indent__base;
             }

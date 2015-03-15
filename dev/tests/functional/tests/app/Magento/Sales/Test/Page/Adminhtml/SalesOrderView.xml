@@ -10,7 +10,7 @@
     <block name="pageActions" class="Magento\Sales\Test\Block\Adminhtml\Order\Actions" locator=".page-actions" strategy="css selector"/>
     <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
     <block name="orderForm" class="Magento\Sales\Test\Block\Adminhtml\Order\View\OrderForm" locator="[id='page:main-container']" strategy="css selector"/>
-    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title" strategy="css selector"/>
+    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector"/>
     <block name="itemsOrderedBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Items" locator="#sales_order_view_tabs_order_info_content .grid" strategy="css selector"/>
     <block name="orderTotalsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Totals" locator=".order-totals" strategy="css selector"/>
     <block name="orderHistoryBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\History" locator=".order-comments-history" strategy="css selector"/>

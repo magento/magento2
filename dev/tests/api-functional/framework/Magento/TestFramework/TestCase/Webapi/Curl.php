@@ -22,7 +22,7 @@ class Curl extends Adapter\Rest\CurlClient
      */
     public function constructResourceUrl($resourcePath)
     {
-        return rtrim(TESTS_BASE_URL, '/') . ltrim($resourcePath, '/');
+        return rtrim(TESTS_BASE_URL, '/') . '/' . ltrim($resourcePath, '/');
     }
 
     /**

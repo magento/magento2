@@ -21,7 +21,7 @@ class Login extends Form
      *
      * @var string
      */
-    protected $submit = '[type=submit]';
+    protected $submit = '.action-login';
 
     /**
      * Submit login form

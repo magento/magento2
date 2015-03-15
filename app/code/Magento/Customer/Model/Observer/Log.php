@@ -48,7 +48,7 @@ class Log
     {
         $this->logger->log(
             $observer->getEvent()->getCustomer()->getId(),
-            ['last_login_at' => $this->dateTime->now()]
+            ['last_login_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)]
         );
     }
 
@@ -62,7 +62,7 @@ class Log
     {
         $this->logger->log(
             $observer->getEvent()->getCustomer()->getId(),
-            ['last_logout_at' => $this->dateTime->now()]
+            ['last_logout_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)]
         );
     }
 }

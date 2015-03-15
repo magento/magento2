@@ -44,15 +44,15 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $fromDate = $object->getFromDate();
-        if ($fromDate instanceof \Zend_Date) {
-            $object->setFromDate($fromDate->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+        if ($fromDate instanceof \DateTime) {
+            $object->setFromDate($fromDate->format('Y-m-d H:i:s'));
         } elseif (!is_string($fromDate) || empty($fromDate)) {
             $object->setFromDate(null);
         }
 
         $toDate = $object->getToDate();
-        if ($toDate instanceof \Zend_Date) {
-            $object->setToDate($toDate->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+        if ($toDate instanceof \DateTime) {
+            $object->setToDate($toDate->format('Y-m-d H:i:s'));
         } elseif (!is_string($toDate) || empty($toDate)) {
             $object->setToDate(null);
         }

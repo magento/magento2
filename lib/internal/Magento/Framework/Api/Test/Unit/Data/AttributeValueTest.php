@@ -21,12 +21,12 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAndGettersWithString()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Api\AttributeDataBuilder $attributeBuilder */
-        $attributeBuilder = $helper->getObject('Magento\Framework\Api\AttributeDataBuilder')
-            ->setAttributeCode(self::ATTRIBUTE_CODE)
-            ->setValue(self::STRING_VALUE);
-        $attribute = new AttributeValue($attributeBuilder->getData());
+        $attribute = new AttributeValue(
+            [
+                AttributeValue::ATTRIBUTE_CODE => self::ATTRIBUTE_CODE,
+                AttributeValue::VALUE => self::STRING_VALUE
+            ]
+        );
 
         $this->assertSame(self::ATTRIBUTE_CODE, $attribute->getAttributeCode());
         $this->assertSame(self::STRING_VALUE, $attribute->getValue());
@@ -34,12 +34,12 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAndGettersWithInteger()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Api\AttributeDataBuilder $attributeBuilder */
-        $attributeBuilder = $helper->getObject('Magento\Framework\Api\AttributeDataBuilder')
-            ->setAttributeCode(self::ATTRIBUTE_CODE)
-            ->setValue(self::INTEGER_VALUE);
-        $attribute = new AttributeValue($attributeBuilder->getData());
+        $attribute = new AttributeValue(
+            [
+                AttributeValue::ATTRIBUTE_CODE => self::ATTRIBUTE_CODE,
+                AttributeValue::VALUE => self::INTEGER_VALUE
+            ]
+        );
 
         $this->assertSame(self::ATTRIBUTE_CODE, $attribute->getAttributeCode());
         $this->assertSame(self::INTEGER_VALUE, $attribute->getValue());
@@ -47,12 +47,12 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAndGettersWithFloat()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Api\AttributeDataBuilder $attributeBuilder */
-        $attributeBuilder = $helper->getObject('Magento\Framework\Api\AttributeDataBuilder')
-            ->setAttributeCode(self::ATTRIBUTE_CODE)
-            ->setValue(self::FLOAT_VALUE);
-        $attribute = new AttributeValue($attributeBuilder->getData());
+        $attribute = new AttributeValue(
+            [
+                AttributeValue::ATTRIBUTE_CODE => self::ATTRIBUTE_CODE,
+                AttributeValue::VALUE => self::FLOAT_VALUE
+            ]
+        );
 
         $this->assertSame(self::ATTRIBUTE_CODE, $attribute->getAttributeCode());
         $this->assertSame(self::FLOAT_VALUE, $attribute->getValue());
@@ -60,12 +60,12 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAndGettersWithBoolean()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Api\AttributeDataBuilder $attributeBuilder */
-        $attributeBuilder = $helper->getObject('Magento\Framework\Api\AttributeDataBuilder')
-            ->setAttributeCode(self::ATTRIBUTE_CODE)
-            ->setValue(self::BOOLEAN_VALUE);
-        $attribute = new AttributeValue($attributeBuilder->getData());
+        $attribute = new AttributeValue(
+            [
+                AttributeValue::ATTRIBUTE_CODE => self::ATTRIBUTE_CODE,
+                AttributeValue::VALUE => self::BOOLEAN_VALUE
+            ]
+        );
 
         $this->assertSame(self::ATTRIBUTE_CODE, $attribute->getAttributeCode());
         $this->assertSame(self::BOOLEAN_VALUE, $attribute->getValue());

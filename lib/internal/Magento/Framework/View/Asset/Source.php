@@ -202,7 +202,7 @@ class Source
         $sourceFile = $this->fallback->getFile(
             $context->getAreaCode(),
             $themeModel,
-            $context->getLocaleCode(),
+            $context->getLocale(),
             $asset->getFilePath(),
             $asset->getModule()
         );

@@ -59,7 +59,7 @@ class Button extends \Magento\Backend\Block\Widget
             $title = $this->getLabel();
         }
         $classes = [];
-        $classes[] = 'action-';
+        $classes[] = 'action-default';
         $classes[] = 'scalable';
         if ($this->getClass()) {
             $classes[] = $this->getClass();

@@ -20,7 +20,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 class Curl extends AbstractCurl implements ConfigDataInterface
 {
     /**
-     * Mapping values for data
+     * Mapping values for data.
      *
      * @var array
      */
@@ -33,7 +33,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     ];
 
     /**
-     * Post request for setting configuration
+     * Post request for setting configuration.
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return void
@@ -47,29 +47,60 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     }
 
     /**
-     * Prepare POST data for setting configuration
+     * Prepare POST data for setting configuration.
      *
      * @param FixtureInterface $fixture
      * @return array
      */
     protected function prepareData(FixtureInterface $fixture)
     {
+        $configPath = [];
         $result = [];
         $fields = $fixture->getData();
         if (isset($fields['section'])) {
             foreach ($fields['section'] as $itemSection) {
-                list($scope, $group, $field) = explode('/', $itemSection['path']);
-                $value = isset($this->mappingData[$field])
-                    ? $this->mappingData[$field][$itemSection['value']]
-                    : $itemSection['value'];
-                $result[$scope]['groups'][$group]['fields'][$field]['value'] = $value;
+                parse_str($this->prepareConfigPath($itemSection), $configPath);
+                $result = array_merge_recursive($result, $configPath);
             }
         }
         return $result;
     }
 
     /**
-     * Apply config settings via curl
+     * Prepare config path.
+     *
+     * From payment/cashondelivery/active to ['payment']['groups']['cashondelivery']['fields']['active']
+     *
+     * @param array $input
+     * @return string
+     */
+    protected function prepareConfigPath(array $input)
+    {
+        $resultArray = '';
+        $path = explode('/', $input['path']);
+        foreach ($path as $position => $subPath) {
+            if ($position === 0) {
+                $resultArray.= $subPath;
+                continue;
+            } elseif ($position === (count($path) - 1)) {
+                $resultArray.= '[fields]';
+            } else {
+                $resultArray.= '[groups]';
+            }
+            $resultArray.= '[' . $subPath .']';
+        }
+        $resultArray.= '[value]';
+        if (is_array($input['value'])) {
+            $resultArray.= '[' . key($input['value']) . ']';
+            $resultArray.= '=' . current($input['value']);
+        } else {
+            $resultArray.= '=' . $input['value'];
+        }
+        return $resultArray;
+    }
+
+    /**
+     * Apply config settings via curl.
      *
      * @param array $data
      * @param string $section
@@ -90,7 +121,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     }
 
     /**
-     * Retrieve URL for request
+     * Retrieve URL for request.
      *
      * @param string $section
      * @return string

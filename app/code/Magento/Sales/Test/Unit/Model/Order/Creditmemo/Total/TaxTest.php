@@ -457,6 +457,81 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        // scenario 5: 3 items, 3 invoiced, rowtotal of 150 with 8.25 tax rate
+        // shipping is partially returned
+        $result['last_partial_creditmemo_with_partial_shipping_refund'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'shipping_tax_amount' => 1.24,
+                    'base_shipping_tax_amount' => 1.24,
+                    'shipping_tax_refunded' => 0,
+                    'base_shipping_tax_refunded' => 0,
+                    'shipping_hidden_tax_amount' => 0,
+                    'base_shipping_hidden_tax_amount' => 0,
+                    'tax_amount' => 16.09,
+                    'base_tax_amount' => 16.09,
+                    'tax_invoiced' => 16.09,
+                    'base_tax_invoiced' => 16.09,
+                    'tax_refunded' => 9.9,
+                    'base_tax_refunded' => 9.9,
+                    'shipping_amount' => 15,
+                    'shipping_amount_refunded' => 0,
+                    'base_shipping_amount' => 15,
+                    'base_shipping_amount_refunded' => 0,
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 3,
+                            'tax_invoiced' => 12.38,
+                            'tax_refunded' => 8.26,
+                            'base_tax_invoiced' => 12.38,
+                            'base_tax_refunded' => 8.26,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_refunded' => 2,
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => true,
+                'data_fields' => [
+                    'shipping_amount' => 7.5,
+                    'base_shipping_amount' => 7.5,
+                    'grand_total' => 60.82,
+                    'base_grand_total' => 60.82,
+                    'tax_amount' => 0.82,
+                    'base_tax_amount' => 0.82,
+                    'invoice' => new MagentoObject(
+                        [
+                            'shipping_tax_amount' => 1.24,
+                            'base_shipping_tax_amount' => 1.24,
+                            'shipping_hidden_tax_amount' => 0,
+                            'base_shipping_hidden_tax_amount' => 0,
+                        ]
+                    ),
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 4.12,
+                        'base_tax_amount' => 4.12,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 65.56,
+                    'base_grand_total' => 65.56,
+                    'tax_amount' => 5.56,
+                    'base_tax_amount' => 5.56,
+                ],
+            ],
+        ];
+
         return $result;
     }
 

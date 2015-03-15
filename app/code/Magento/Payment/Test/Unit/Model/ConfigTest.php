@@ -27,8 +27,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Payment\Model\Method\Factory|\PHPUnit_Framework_MockObject_MockObject */
     protected $paymentMethodFactory;
 
-    /** @var \Magento\Framework\Locale\ListsInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $localeLists;
+    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $localeResolver;
 
     /** @var \Magento\Framework\Config\DataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $dataStorage;
@@ -55,8 +55,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $monthList = [
-        1 => 'Marsabruary',
-        11 => 'Venusly',
+        1 => 'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
     ];
 
     /**
@@ -65,8 +75,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $expectedMonthList = [
-        1 => '01 - Marsabruary',
-        11 => '11 - Venusly',
+        1 => '01 - January',
+        '02 - February',
+        '03 - March',
+        '04 - April',
+        '05 - May',
+        '06 - June',
+        '07 - July',
+        '08 - August',
+        '09 - September',
+        '10 - October',
+        '11 - November',
+        '12 - December',
     ];
 
     /**
@@ -84,7 +104,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->paymentMethodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->localeLists = $this->getMock('Magento\Framework\Locale\ListsInterface', [], [], '', false);
+        $this->localeResolver = $this->getMock('Magento\Framework\Locale\ResolverInterface', [], [], '', false);
         $this->dataStorage = $this->getMock('Magento\Framework\Config\DataInterface', [], [], '', false);
         $this->date = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
 
@@ -94,7 +114,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $this->scopeConfig,
                 'paymentMethodFactory' => $this->paymentMethodFactory,
-                'localeLists' => $this->localeLists,
+                'localeResolver' => $this->localeResolver,
                 'dataStorage' => $this->dataStorage,
                 'date' => $this->date
             ]
@@ -161,9 +181,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMonths()
     {
-        $this->localeLists->expects($this->once())->method('getTranslationList')->with('month')->will(
-            $this->returnValue($this->monthList)
-        );
+        $this->localeResolver->expects($this->once())->method('getLocale')->willReturn('en_US');
         $this->assertEquals($this->expectedMonthList, $this->config->getMonths());
     }
 

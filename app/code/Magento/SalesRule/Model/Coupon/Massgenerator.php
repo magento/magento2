@@ -165,10 +165,8 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
             } while ($this->getResource()->exists($code));
 
             $expirationDate = $this->getToDate();
-            if ($expirationDate instanceof \Zend_Date) {
-                $expirationDate = $expirationDate->toString(
-                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                );
+            if ($expirationDate instanceof \DateTime) {
+                $expirationDate = $expirationDate->format('Y-m-d H:i:s');
             }
 
             $coupon->setId(null)
