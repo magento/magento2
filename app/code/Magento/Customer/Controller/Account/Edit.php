@@ -62,7 +62,11 @@ class Edit extends \Magento\Customer\Controller\Account
         $customerId = $this->_getSession()->getCustomerId();
         $customerDataObject = $this->customerRepository->getById($customerId);
         if (!empty($data)) {
-            $this->dataObjectHelper->populateWithArray($customerDataObject, $data);
+            $this->dataObjectHelper->populateWithArray(
+                $customerDataObject,
+                $data,
+                '\Magento\Customer\Api\Data\CustomerInterface'
+            );
         }
         $this->_getSession()->setCustomerData($customerDataObject);
         $this->_getSession()->setChangePassword($this->getRequest()->getParam('changepass') == 1);

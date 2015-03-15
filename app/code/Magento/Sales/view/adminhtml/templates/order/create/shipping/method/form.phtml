@@ -21,11 +21,13 @@
                 <?php $_code = $_rate->getCode() ?>
                 <li>
                    <?php if ($_rate->getErrorMessage()): ?>
-                        <div class="messages">
-                            <div class="message error">
-                                <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
-                            </div>
-                        </div>
+                       <div class="admin__scope">
+                           <div class="messages">
+                               <div class="message message-error error">
+                                   <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
+                               </div>
+                           </div>
+                       </div>
                    <?php else: ?>
                         <?php $_checked = $block->isMethodActive($_code) ? 'checked="checked"' : '' ?>
                         <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>" id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>/>

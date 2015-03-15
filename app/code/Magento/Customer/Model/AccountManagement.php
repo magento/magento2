@@ -988,8 +988,8 @@ class AccountManagement implements AccountManagementInterface
 
         $expirationPeriod = $this->customerModel->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($rpTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime($rpTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }
@@ -1025,7 +1025,9 @@ class AccountManagement implements AccountManagementInterface
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt($this->dateTime->now());
+            $customerSecure->setRpTokenCreatedAt(
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            );
             $this->customerRepository->save($customer);
         }
         return true;

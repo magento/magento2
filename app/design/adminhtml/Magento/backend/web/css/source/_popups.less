@@ -1,0 +1,568 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@popup__background-color: @color-white;
+@popup__padding: 3rem;
+@popup__padding__horizontal: @popup__padding;
+@popup__padding__vertical: @popup__padding;
+
+@popup-title__color: @color-gray20;
+@popup-title__font-size: 2.4rem;
+@popup-title__line-height: 2.4rem;
+
+@popup-close-icon__color: @color-brownie-vanilla;
+@popup-close-icon__hover__color: @color-gray68;
+@popup-close-icon__font: @icons-admin__font-name;
+@popup-close-icon__font-size: 2rem;
+@popup-close-icon__content: @icon-close-mage__content;
+@popup-close-icon__right: 3rem;
+@popup-close-icon__top: 3rem;
+
+@popup-overlay__background-color: rgba(0, 0, 0, .35);
+
+//
+//  Jquery UI popup window
+//  _____________________________________________
+
+.ui-dialog {
+    background: @popup__background-color;
+    min-width: 40%;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all 0.3s;
+    visibility: hidden;
+    width: 75%;
+
+    &.ui-dialog-active {
+        transform: scale(1);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &.ui-draggable {
+        .ui-dialog-titlebar {
+            cursor: move;
+        }
+    }
+
+    .ui-dialog-titlebar {
+        color: @popup-title__color;
+        font-size: @popup-title__font-size;
+        line-height: @popup-title__line-height;
+        padding: @popup__padding__vertical @popup__padding__horizontal * 2 @popup__padding__vertical @popup__padding__horizontal;
+    }
+
+    .ui-dialog-titlebar-close {
+        cursor: pointer;
+        .icon-font(
+        @_icon-font-content: @popup-close-icon__content,
+        @_icon-font: @popup-close-icon__font,
+        @_icon-font-size: @popup-close-icon__font-size,
+        @_icon-font-color: @popup-close-icon__color,
+        @_icon-font-color-hover: @popup-close-icon__hover__color
+        );
+        position: absolute;
+        right: @popup-close-icon__right;
+        top: @popup-close-icon__top - .3;
+        .ui-icon {
+            display: none;
+        }
+        &.ui-state-hover {
+            border: none;
+        }
+    }
+
+    .ui-dialog-content {
+        overflow: auto;
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+
+        .fieldset {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .ui-dialog-buttonpane {
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+    }
+    
+    .content + .ui-dialog-buttonset {
+        padding-top: @popup__padding__vertical;
+        text-align: right;
+    }
+
+    .ui-dialog-buttonset {
+        .extend__clearfix();
+    }
+
+    .action-close {
+        &:extend(.abs-action-tertiary all);
+        font-size: @button__large__font-size;
+        margin: 0 0 0 @popup__padding__horizontal;
+        padding: @button__large__padding-vertical 0;
+    }
+
+    .ui-button,
+    .action-primary {
+        &:extend(.abs-action-secondary all);
+        &:extend(.abs-action-l all);
+        float: right;
+        margin: 0 0 0 @popup__padding__horizontal;
+    }
+    
+    .fieldset {
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    .main-col,
+    .side-col {
+        float: left;
+        padding-bottom: 0;
+        &:after {
+            display: none;
+        }
+    }
+
+    .main-col {
+        padding-right: 0;
+    }
+
+    .grid,
+    .pager {
+        padding-bottom: 0;
+    }
+    
+    .grid-actions {
+        padding-top: 0;
+    }
+
+    .ui-resizable {
+        position: relative;
+    }
+
+    .ui-resizable-handle {
+        position: absolute;
+        font-size: 0.1px;
+        display: block;
+    }
+
+    .ui-resizable-disabled,
+    .ui-resizable-autohide {
+        .ui-resizable-handle {
+            display: none;
+        }
+    }
+
+    .ui-resizable-n {
+        cursor: n-resize;
+        height: 7px;
+        width: 100%;
+        top: -5px;
+        left: 0;
+    }
+
+    .ui-resizable-s {
+        cursor: s-resize;
+        height: 7px;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+    }
+
+    .ui-resizable-e {
+        cursor: e-resize;
+        width: 7px;
+        right: 0;
+        top: 0;
+        height: 100%;
+    }
+
+    .ui-resizable-w {
+        cursor: w-resize;
+        width: 7px;
+        left: -7px;
+        top: 0;
+        height: 100%;
+    }
+
+    .ui-resizable-se {
+        cursor: se-resize;
+        width: 12px;
+        height: 12px;
+        right: 1px;
+        bottom: 1px;
+    }
+
+    .ui-resizable-sw {
+        cursor: sw-resize;
+        width: 9px;
+        height: 9px;
+        left: -5px;
+        bottom: 0;
+    }
+
+    .ui-resizable-nw {
+        cursor: nw-resize;
+        width: 9px;
+        height: 9px;
+        left: -5px;
+        top: -5px;
+    }
+
+    .ui-resizable-ne {
+        cursor: ne-resize;
+        width: 9px;
+        height: 9px;
+        right: 0;
+        top: -5px;
+    }
+
+    //
+    //  Block 'Insert File'
+    //  -----------------------------------------
+
+    .main-col,
+    .magento_message {
+        .insert-title-inner {
+            border-bottom: 1px solid @color-gray68;
+            margin: 0 0 @indent__base;
+            padding-bottom: @indent__xs;
+            .extend__clearfix();
+        }
+        .insert-actions {
+            float: right;
+        }
+        .title {
+            font-size: @font-size__l;
+            padding-top: @indent__xs;
+        }
+
+        .main-col-inner .uploader {
+            border: 1px solid @color-gray68;
+            margin: 0 0 @indent__s;
+            padding: @indent__xs;
+        }
+
+        .breadcrumbs {
+            padding-left: 0;
+            li {
+                &:after {
+                    content: '';
+                    margin: 0 @indent__xs 0 0;
+                }
+            }
+        }
+
+        #contents-uploader {
+            margin: 0 0 @indent__base;
+        }
+
+        .fileinput-button {
+            cursor: pointer;
+            display: inline-block;
+            float: none;
+            vertical-align: middle;
+            span {
+                display: none;
+            }
+            input {
+                border: none;
+                -moz-transform: none;
+                opacity: 1;
+                position: static;
+            }
+        }
+
+        .file-row {
+            border: 1px solid @color-gray68;
+            margin: @indent__xs 0;
+            padding: 2px;
+        }
+
+        .filecnt {
+            border: 1px solid @color-gray68;
+            display: inline-block;
+            margin: 0 @indent__xs 15px 0;
+            padding: 3px;
+            width: 100px;
+            overflow: hidden;
+            &.selected {
+                border-color: @color-blue-dodger;
+            }
+            p {
+                text-align: center;
+            }
+        }
+
+        #contents-uploader {
+            .extend__clearfix()
+        }
+
+        .x-tree {
+            margin-bottom: @indent__base;
+        }
+    }
+}
+
+.ui-widget-overlay {
+    background: @popup-overlay__background-color;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.ui-popup-message {
+    .ui-dialog-titlebar {
+        background: @color-lazy-sun;
+        font-size: 1.6rem;
+        font-weight: @font-weight__bold;
+        padding: 2rem 2rem 0;
+    }
+    .ui-dialog-titlebar-close {
+        right: 1.5rem;
+        top: 1rem;
+        &:before {
+            font-size: 1.4rem;
+        }
+    }
+    .ui-dialog-content {
+        background: @color-lazy-sun;
+        padding: 0 2rem 2rem;
+        .message {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .ui-dialog-buttonpane {
+        background: @color-lazy-sun;
+        padding: 0 2rem 2rem;
+    }
+}
+
+//
+//  Block 'Insert Variable'
+//  _____________________________________________
+
+.insert-variable {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+        margin-top: @indent__xs;
+        padding-left: @indent__s;
+        b {
+            margin-left: -@indent__s;
+            display: inline-block;
+        }
+    }
+}
+
+//
+//  Attribute Popup
+//  _____________________________________________
+
+.attribute-popup-actions {
+    background: @color-white;
+    border-top: 1px solid @color-gray68;
+    bottom: 0;
+    left: 0;
+    padding: @popup__padding;
+    position: fixed;
+    right: 0;
+    top: auto !important;
+    &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+        background: @color-white !important;
+        border-bottom: 0 !important;
+        left: 0 !important;
+        padding: @popup__padding !important;
+        .page-actions-buttons {
+            padding-right: 0;
+        }
+    }
+
+    .action-default {
+        &.reset {
+            &:extend(.abs-action-tertiary all);
+            font-size: @button__large__font-size;
+            padding: @button__large__padding-vertical 0;
+        }
+    }
+
+    .page-actions-buttons > button.action-default.primary {
+        &:extend(.abs-action-secondary all);
+        &:extend(.abs-action-l all);
+        float: right;
+    }
+
+    .page-actions-inner {
+        &:before {
+            display: none;
+        }
+    }
+}
+
+//
+//  Prototype popup window
+//  _____________________________________________
+
+//  Prototype popup window is used to display WYSIWYG
+//  ToDo UI: Remove after complete Prototype removing
+
+.popup-window {
+    background: @popup__background-color;
+    &.dialog {
+        z-index: 900 !important;
+    }
+
+    .table_window > tbody > tr > td {
+        background: @popup__background-color;
+        border: 0;
+        padding: 0;
+    }
+
+    .magento_close {
+        &:extend(.ui-dialog .ui-dialog-titlebar-close all);
+    }
+
+    .magento_title {
+        &:extend(.ui-dialog .ui-dialog-titlebar all);
+    }
+
+    .magento_message {
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+        position: relative;
+    }
+
+    .magento_content {
+        height: auto !important;
+    }
+
+    .magento_buttons {
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+        text-align: right;
+        .extend__clearfix();
+
+        .ok_button {
+            &:extend(.ui-dialog .action-primary all);
+            float: right;
+            margin: 0 0 0 @popup__padding__horizontal;
+        }
+
+        .cancel_button {
+            &:extend(.ui-dialog .action-close all);
+        }
+    }
+}
+
+.overlay_magento {
+    &:extend(.ui-widget-overlay all);
+    z-index: 800 !important;
+}
+
+//
+//  Old popup window
+//  _____________________________________________
+
+//  ToDo UI: old popups should be replaced by jquery UI popup
+
+.fade {
+    &:extend(.ui-widget-overlay all);
+    z-index: 1000;
+
+    .popup {
+        background: @popup__background-color;
+        border: 0;
+        border-radius: 0;
+        display: inline-block;
+        left: 12.5%;
+        position: absolute;
+        top: 5rem;
+        text-align: left;
+        width: 75%;
+        .close {
+            &:extend(.ui-dialog .ui-dialog-titlebar-close all);
+        }
+    }
+
+    .popup-inner {
+        padding: 0;
+    }
+
+    .popup-title {
+        &:extend(.ui-dialog .ui-dialog-titlebar all);
+        background: @color-lazy-sun;
+        font-size: 1.6rem;
+        font-weight: @font-weight__bold;
+        padding: 2rem 2rem 0;
+    }
+
+    .popup-header {
+        .popup-title {
+            margin: 0;
+        }
+    }
+
+    .popup-content {
+        background: @color-lazy-sun;
+        .extend__clearfix();
+        padding: 0 2rem 2rem;
+        p {
+            margin-top: 0;
+        }
+        .messages {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    
+    .fieldset {
+        background: @color-lazy-sun;
+        border: 0;
+        margin: 1.5rem 0 1.5rem 1.5rem;
+        padding: 0;
+    }
+
+    .maintenance-checkbox-container {
+        padding-left: 20%;
+    }
+
+    .messages {
+        margin: 0 !important;
+    }
+    
+    .actions {
+        margin: 0;
+        text-align: right;
+        .extend__clearfix();
+
+        .primary {
+            &:extend(.ui-dialog .action-primary all);
+            font-size: 1.4rem;
+            float: right;
+            margin: 0 0 0 @popup__padding__horizontal;
+            &:hover {
+                box-shadow: none;
+            }
+        }
+
+        .cancel {
+            &:extend(.ui-dialog .action-close all);
+            font-size: 1.4rem;
+            &:hover {
+                box-shadow: none;
+            }
+        }
+    }
+}

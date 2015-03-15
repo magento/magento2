@@ -179,4 +179,13 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
     {
         return $this->_getScopeValue('multiline_count');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterDelete()
+    {
+        $this->_eavConfig->clear();
+        return parent::afterDelete();
+    }
 }

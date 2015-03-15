@@ -37,7 +37,7 @@ class SetRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->attrSetRepositoryMock = $this->getMock('\Magento\Eav\Api\AttributeSetRepositoryInterface');
         $this->searchCriteriaBuilderMock = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaDataBuilder',
+            '\Magento\Framework\Api\SearchCriteriaBuilder',
             [],
             [],
             '',

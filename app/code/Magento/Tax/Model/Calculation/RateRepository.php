@@ -41,9 +41,9 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $rateRegistry;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory
      */
-    private $taxRateSearchResultsBuilder;
+    private $taxRateSearchResultsFactory;
 
     /**
      * @var RateFactory
@@ -68,7 +68,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * @param Converter $converter
      * @param RateRegistry $rateRegistry
-     * @param \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder
+     * @param \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory $taxRateSearchResultsFactory
      * @param RateFactory $rateFactory
      * @param CountryFactory $countryFactory
      * @param RegionFactory $regionFactory
@@ -77,7 +77,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     public function __construct(
         Converter $converter,
         RateRegistry $rateRegistry,
-        \Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder $taxRateSearchResultsBuilder,
+        \Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory $taxRateSearchResultsFactory,
         RateFactory $rateFactory,
         CountryFactory $countryFactory,
         RegionFactory $regionFactory,
@@ -85,7 +85,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     ) {
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;
-        $this->taxRateSearchResultsBuilder = $taxRateSearchResultsBuilder;
+        $this->taxRateSearchResultsFactory = $taxRateSearchResultsFactory;
         $this->rateFactory = $rateFactory;
         $this->countryFactory = $countryFactory;
         $this->regionFactory = $regionFactory;
@@ -173,11 +173,10 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             $taxRate[] = $taxRateModel;
         }
 
-        return $this->taxRateSearchResultsBuilder
+        return $this->taxRateSearchResultsFactory->create()
             ->setItems($taxRate)
             ->setTotalCount($collection->getSize())
-            ->setSearchCriteria($searchCriteria)
-            ->create();
+            ->setSearchCriteria($searchCriteria);
     }
 
     /**

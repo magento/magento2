@@ -19,7 +19,7 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar;
 <div class="modes">
     <?php $_modes = $block->getModes(); ?>
     <?php if ($_modes && count($_modes) > 1): ?>
-    <strong class="modes-label"><?php echo __('View as') ?></strong>
+    <strong class="modes-label" id="modes-label"><?php echo __('View as') ?></strong>
     <?php foreach ($block->getModes() as $_code => $_label): ?>
         <?php if ($block->isModeActive($_code)): ?>
             <strong title="<?php echo $_label ?>"
@@ -32,7 +32,9 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar;
                title="<?php echo $_label ?>"
                href="#"
                data-role="mode-switcher"
-               data-value="<?php echo strtolower($_code); ?>">
+               data-value="<?php echo strtolower($_code); ?>"
+               id="mode-<?php echo strtolower($_code); ?>"
+               aria-labelledby="modes-label mode-<?php echo strtolower($_code); ?>">
                 <span><?php echo $_label ?></span>
             </a>
             <?php endif; ?>

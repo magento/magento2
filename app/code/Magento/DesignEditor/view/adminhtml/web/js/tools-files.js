@@ -38,7 +38,11 @@ define([
                 width:      width || 950,
                 height:     height || 456,
                 zIndex:     this.getMaxZIndex(),
-                close:      function(event, ui) {
+                open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                },
+                close: function(event, ui) {
+                    jQuery(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                     jQuery(this).dialog('destroy');
                     jQuery('#' + windowId).remove();
                 }
@@ -287,17 +291,17 @@ define([
                 modal:       true,
                 resizable:   false,
                 dialogClass: 'vde-dialog',
-                width:       500,
+                width:       '75%',
+                open: function () {
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                },
+                close: function () {
+                    resetValidation();
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                },
                 buttons: [{
-                    text: jQuery.mage.__('Cancel'),
-                    'class': 'action-close',
-                    click: function() {
-                        jQuery('#contents').trigger('hideLoadingPopup');
-                        jQuery('#' + dialogId).dialog('close');
-                    }
-                }, {
                     text: jQuery.mage.__('Yes'),
-                    'class': 'primary',
+                    'class': 'action-primary',
                     click: function() {
                         new Ajax.Request(MediabrowserInstance.deleteFolderUrl, {
                             onSuccess: function(transport) {
@@ -312,6 +316,13 @@ define([
                                 }
                             }.bind(MediabrowserInstance)
                         });
+                        jQuery('#' + dialogId).dialog('close');
+                    }
+                }, {
+                    text: jQuery.mage.__('Cancel'),
+                    'class': 'action-close',
+                    click: function() {
+                        jQuery('#contents').trigger('hideLoadingPopup');
                         jQuery('#' + dialogId).dialog('close');
                     }
                 }]
@@ -332,7 +343,7 @@ define([
                 modal:       true,
                 resizable:   false,
                 dialogClass: 'vde-dialog',
-                width:       500,
+                width:       '75%',
                 buttons: [{
                     text: jQuery.mage.__('Cancel'),
                     'class': 'action-close',

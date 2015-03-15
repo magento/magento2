@@ -497,7 +497,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $sizes = '';
         if (!empty($value['width']) && !empty($value['height']) && $value['width'] > 0 && $value['height'] > 0) {
             $sizes = $value['width'] . ' x ' . $value['height'] . ' ' . __('px.');
-            return [$value, $sizes];
         }
         return $sizes;
     }

@@ -1,0 +1,188 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@temp_gutter: 30px;
+@temp_columns: 12;
+
+//
+//  Form Fields Grid Sketch @todo ui - find the right place
+//  _____________________________________________
+
+#mix-grid() {
+    .row() {
+        .extend__clearer();
+        margin-left: ~'-@{temp_gutter}';
+    }
+    .return_length(@_columns-min, @_total: @temp_columns) {
+        @_part: @_columns-min/@_total;
+        @_length: ~'calc( (100%) * @{_part} - @{temp_gutter} )';
+    }
+    .width(@_columns-min, @_total: @temp_columns) {
+        #mix-grid .return_length(@_columns-min, @_total);
+        width: @_length;
+    }
+    .column(@_columns-min, @_total: @temp_columns) {
+        #mix-grid .width(@_columns-min, @_total);
+        float: left;
+        margin-left: @temp_gutter;
+    }
+}
+
+.col-2-left-layout {
+    #mix-grid .row();
+    margin-top: 50px;
+    width: auto;
+
+    .main-col {
+        #mix-grid .width(9);
+        float: right;
+    }
+
+    .side-col {
+        #mix-grid .column(9);
+    }
+}
+
+//
+//  Admin section wrapper title @todo ui - find the right place
+//  _____________________________________________
+
+.admin__fieldset-wrapper-title {
+    margin-bottom: 30px;
+    padding: 14px 0 16px;
+    strong {
+        &:extend(h2);
+    }
+}
+
+// @todo ui Move to other place:
+.address-item-edit-content {
+    padding: 15px 30px;
+    .admin__field {
+        .extend__field-rows();
+    }
+}
+
+
+.address-list {
+    float: left;
+    list-style-type: none;
+    margin:0;
+    padding: 0;
+    width: 360px;
+    .address-list-item {
+        margin-bottom: 30px;
+    }
+    .action-delete {
+        .button-reset();
+        .icon-font(
+            @icon-remove-small__content,
+            @icons-admin__font-name,
+            @_icon-font-size: 1.6rem,
+            @_icon-font-line-height: 16px,
+            @_icon-font-text-hide: true,
+            @_icon-font-position: after,
+            @_icon-font-color: @color-brown-darkie
+        );
+        span {
+            max-height: 1px;
+            max-width: 1px;
+        }
+        &:hover {
+            &:after {
+                color: darken(@color-brown-darkie, 20%);
+            }
+            position: relative;
+            z-index: 2;
+
+            // @todo ui - testing solution to show action hint without title attribute
+            span {
+                background-color: @color-very-light-gray;
+                border: 1px solid @color-heathered-grey;
+                border-radius: .4rem;
+                bottom: 100%;
+                clip: auto;
+                font-size: @font-size__s;
+                height: auto;
+                left: auto;
+                margin: 0 auto .1rem;
+                padding: .5rem;
+                right: auto;
+                top: auto;
+                max-height: 50px;
+                max-width: 200px;
+                white-space: nowrap;
+                width: auto;
+                transition: all .01s linear .7s;
+            }
+        }
+    }
+}
+
+.address-item-edit {
+    margin-left: 359px;
+    .admin__legend {
+        display: none;
+    }
+    max-width: 500px;
+}
+
+//
+//  Login page form errors @todo ui - remove after validation consistency
+//  _____________________________________________
+
+[class*='admin__control-'].mage-error ~ [class*='admin__addon-']:before,
+.admin__field-control > [class*='admin__control-'].mage-error {
+    border-color: @field-error-control__border-color;
+}
+.admin__field-control label.mage-error {
+    &:extend(.admin__field-error);
+}
+
+
+//
+//  Login page captcha reload @todo ui - remove after loader consistency
+//  _____________________________________________
+
+.page-layout-admin-login {
+    .loading-mask {
+        background: rgba(255,255,255,0.2);
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: @z-index-10;
+    }
+    .popup-loading {
+        height: 149px;
+        left: 50%;
+        margin-left: -218px/2;
+        margin-top: -149px/2;
+        position: absolute;
+        top: 50%;
+        overflow: hidden;
+        width: 218px;
+    }
+}
+
+//
+//  Login page captcha field @todo ui - Create new captcha markup - Change reload button
+//  _____________________________________________
+.page-layout-admin-login {
+    .field-captcha {
+        padding-left: 30px;
+        vertical-align: middle;
+        .captcha-reload {
+            float: right;
+            vertical-align: middle;
+        }
+    }
+}
+

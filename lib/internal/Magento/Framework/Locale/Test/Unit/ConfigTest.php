@@ -11,14 +11,14 @@ namespace Magento\Framework\Locale\Test\Unit;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     private static $allAllowedLocales = [
-        'af_ZA', 'ar_DZ', 'ar_EG', 'ar_KW', 'ar_MA', 'ar_SA', 'az_AZ', 'be_BY', 'bg_BG', 'bn_BD',
-        'bs_BA', 'ca_ES', 'cs_CZ', 'cy_GB', 'da_DK', 'de_AT', 'de_CH', 'de_DE', 'el_GR', 'en_AU',
+        'af_ZA', 'ar_DZ', 'ar_EG', 'ar_KW', 'ar_MA', 'ar_SA', 'az_Latn_AZ', 'be_BY', 'bg_BG', 'bn_BD',
+        'bs_Latn_BA', 'ca_ES', 'cs_CZ', 'cy_GB', 'da_DK', 'de_AT', 'de_CH', 'de_DE', 'el_GR', 'en_AU',
         'en_CA', 'en_GB', 'en_NZ', 'en_US', 'es_AR', 'es_CO', 'es_PA', 'gl_ES', 'es_CR', 'es_ES',
-        'es_MX', 'es_EU', 'es_PE', 'et_EE', 'fa_IR', 'fi_FI', 'fil_PH', 'fr_CA', 'fr_FR', 'gu_IN',
+        'es_MX', 'eu_ES', 'es_PE', 'et_EE', 'fa_IR', 'fi_FI', 'fil_PH', 'fr_CA', 'fr_FR', 'gu_IN',
         'he_IL', 'hi_IN', 'hr_HR', 'hu_HU', 'id_ID', 'is_IS', 'it_CH', 'it_IT', 'ja_JP', 'ka_GE',
-        'km_KH', 'ko_KR', 'lo_LA', 'lt_LT', 'lv_LV', 'mk_MK', 'mn_MN', 'ms_MY', 'nl_NL', 'nb_NO',
-        'nn_NO', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sq_AL', 'sr_RS',
-        'sv_SE', 'sw_KE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_CN', 'zh_HK', 'zh_TW', 'es_CL',
+        'km_KH', 'ko_KR', 'lo_LA', 'lt_LT', 'lv_LV', 'mk_MK', 'mn_Cyrl_MN', 'ms_Latn_MY', 'nl_NL', 'nb_NO',
+        'nn_NO', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sq_AL', 'sr_Cyrl_RS',
+        'sv_SE', 'sw_KE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_Hans_CN', 'zh_Hant_HK', 'zh_Hant_TW', 'es_CL',
         'lo_LA', 'es_VE', 'en_IE',
     ];
 

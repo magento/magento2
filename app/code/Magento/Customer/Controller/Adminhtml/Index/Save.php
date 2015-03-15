@@ -196,7 +196,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customerData['id'] = $customerId;
                 }
 
-                $this->dataObjectHelper->populateWithArray($customer, $customerData);
+                $this->dataObjectHelper->populateWithArray(
+                    $customer,
+                    $customerData,
+                    '\Magento\Customer\Api\Data\CustomerInterface'
+                );
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
                     $region = isset($addressData['region']) ? $addressData['region'] : null;
@@ -206,7 +210,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                         'region_id' => $regionId,
                     ];
                     $addressDataObject = $this->addressDataFactory->create();
-                    $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+                    $this->dataObjectHelper->populateWithArray(
+                        $addressDataObject,
+                        $addressData,
+                        '\Magento\Customer\Api\Data\AddressInterface'
+                    );
                     $addresses[] = $addressDataObject;
                 }
 

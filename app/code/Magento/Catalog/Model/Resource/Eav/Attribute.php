@@ -786,4 +786,13 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             return $this;
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterDelete()
+    {
+        $this->_eavConfig->clear();
+        return parent::afterDelete();
+    }
 }

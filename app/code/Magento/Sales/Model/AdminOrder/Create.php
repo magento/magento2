@@ -1550,7 +1550,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $data = $form->extractData($request);
         $data = $form->restoreData($data);
         $customer = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($customer, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $data,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
 
@@ -1668,7 +1672,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             }
         }
 
-        $this->dataObjectHelper->populateWithArray($customer, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $data,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         return $customer;
     }
 

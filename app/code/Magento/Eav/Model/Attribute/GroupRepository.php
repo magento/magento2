@@ -33,29 +33,29 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     protected $groupListFactory;
 
     /**
-     * @var \Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder
+     * @var \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository
-     * @param \Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
-        \Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder $searchResultsBuilder
+        \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->groupResource = $groupResource;
         $this->groupListFactory = $groupListFactory;
         $this->groupFactory = $groupFactory;
         $this->setRepository = $setRepository;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
     }
 
     /**
@@ -111,10 +111,11 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         $collection->setAttributeSetFilter($attributeSetId);
         $collection->setSortOrder();
 
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
-        $this->searchResultsBuilder->setItems($collection->getItems());
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
-        return $this->searchResultsBuilder->create();
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+        return $searchResult;
     }
 
     /**

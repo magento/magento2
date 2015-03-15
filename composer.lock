@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "07ed79cc8ac7d4c2c61e13cf87cbab40",
+    "hash": "933a1cf749db0c7e6d16e357c12cdaa8",
     "packages": [
         {
             "name": "composer/composer",
@@ -130,6 +130,82 @@
                 "schema"
             ],
             "time": "2012-01-03 00:33:17"
+        },
+        {
+            "name": "magento/magento-composer-installer",
+            "version": "0.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-composer-installer.git",
+                "reference": "7f03451f71e55d52c2bb07325d56a4e6df322f30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/7f03451f71e55d52c2bb07325d56a4e6df322f30",
+                "reference": "7f03451f71e55d52c2bb07325d56a4e6df322f30",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "1.0.0"
+            },
+            "require-dev": {
+                "composer/composer": "*@dev",
+                "firegento/phpcs": "dev-patch-1",
+                "mikey179/vfsstream": "*",
+                "phpunit/phpunit": "*",
+                "phpunit/phpunit-mock-objects": "dev-master",
+                "squizlabs/php_codesniffer": "1.4.7",
+                "symfony/process": "*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "composer-command-registry": [
+                    "MagentoHackathon\\Composer\\Magento\\Command\\DeployCommand"
+                ],
+                "class": "MagentoHackathon\\Composer\\Magento\\Plugin"
+            },
+            "autoload": {
+                "psr-0": {
+                    "MagentoHackathon\\Composer\\Magento": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Vinai Kopp",
+                    "email": "vinai@netzarbeiter.com"
+                },
+                {
+                    "name": "Daniel Fahlke aka Flyingmana",
+                    "email": "flyingmana@googlemail.com"
+                },
+                {
+                    "name": "Jörg Weller",
+                    "email": "weller@flagbit.de"
+                },
+                {
+                    "name": "Karl Spies",
+                    "email": "karl.spies@gmx.net"
+                },
+                {
+                    "name": "Tobias Vogt",
+                    "email": "tobi@webguys.de"
+                },
+                {
+                    "name": "David Fuhr",
+                    "email": "fuhr@flagbit.de"
+                }
+            ],
+            "description": "Composer installer for Magento modules",
+            "homepage": "https://github.com/magento/magento-composer-installer",
+            "keywords": [
+                "composer-installer",
+                "magento"
+            ],
+            "time": "2015-03-05 21:40:30"
         },
         {
             "name": "magento/zendframework1",
@@ -3264,6 +3340,7 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": "~5.5.0|~5.6.0"
     },
@@ -3277,6 +3354,7 @@
         "ext-mcrypt": "*",
         "ext-hash": "*",
         "ext-curl": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-intl": "*"
     }
 }

@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
-<input class="control-file" type="file" data-bind="
-    value: value,
-    attr: {
-        name: inputName,
-        id: uid,
-        'aria-describedby': noticeId,
-        disabled: disabled 
-    },
-    hasFocus: focused"
->
+<div class="admin__control-file-wrapper">
+    <input class="admin__control-file" type="file" data-bind="
+        value: value,
+        attr: {
+            name: inputName,
+            id: uid,
+            'aria-describedby': noticeId,
+            disabled: disabled
+        },
+        hasFocus: focused"
+    />
+    <label class="admin__control-file-label" data-bind="attr: { for: uid}"></label>
+</div>

@@ -78,12 +78,16 @@ define('globalNavigation', [
         },
 
         _hoverEffects: function (e) {
+
+            // Disable current active class while hover is on level 0
+            $(this).siblings('._active').addClass('_current').removeClass('_active');
+
             $(this)
-                .addClass('hover recent')
+                .addClass('_hover _recent')
                 .siblings('.level-0').each(function () {
                     clearTimeout($(this).prop('hoverIntent_t'));
                     $(this).prop('hoverIntent_s', 0);
-                    $(this).removeClass('recent hover');
+                    $(this).removeClass('_recent _hover');
                 });
 
             var targetSubmenu = $(e.target).closest('.submenu');
@@ -94,7 +98,7 @@ define('globalNavigation', [
                 submenu = $('> .submenu', this),
                 colsWidth = 0;
 
-            submenu.show();
+            submenu.addClass('_show');
 
             $.each($('> .submenu > ul li.column', this), function () {
                 colsWidth = colsWidth + parseInt($(this).css('width'));
@@ -104,12 +108,14 @@ define('globalNavigation', [
 
             $(this).toggleClass('reverse', (containerPaddings + colsWidth) > availableWidth);
 
-            submenu
-                .hide()
-                .slideDown('fast');
+            submenu.removeClass('_show');
         },
 
         _leaveEffects: function (e) {
+
+            // Disable current active class while hover is on level 0
+            $(this).siblings('._current').addClass('_active').removeClass('_current');
+
             var targetSubmenu = $(e.target).closest('.submenu'),
                 self = $(this),
                 submenu = $('> .submenu', this);
@@ -119,11 +125,11 @@ define('globalNavigation', [
             }
 
             if (submenu.length) {
-                submenu.slideUp('fast', function () {
-                    self.removeClass('hover');
+                submenu.removeClass('_show', function () {
+                    self.removeClass('_hover');
                 });
             } else {
-                self.removeClass('hover');
+                self.removeClass('_hover');
             }
 
         }
@@ -141,7 +147,7 @@ define('globalSearch', [
     $.widget('mage.globalSearch', {
         options: {
             field: '.search-global-field',
-            fieldActiveClass: 'active',
+            fieldActiveClass: '_active',
             input: '#search-global'
         },
 

@@ -135,7 +135,11 @@ class Edit extends \Magento\Directory\Block\Data
                     'region' => $postedData['region'],
                 ];
             }
-            $this->dataObjectHelper->populateWithArray($this->_address, $postedData);
+            $this->dataObjectHelper->populateWithArray(
+                $this->_address,
+                $postedData,
+                '\Magento\Customer\Api\Data\AddressInterface'
+            );
         }
 
         return $this;

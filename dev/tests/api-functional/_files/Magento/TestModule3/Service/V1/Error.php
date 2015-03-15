@@ -12,21 +12,21 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestModule3\Service\V1\Entity\Parameter;
-use Magento\TestModule3\Service\V1\Entity\ParameterBuilder;
+use Magento\TestModule3\Service\V1\Entity\ParameterFactory;
 
 class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
 {
     /**
-     * @var ParameterBuilder
+     * @var ParameterFactory
      */
-    protected $parameterBuilder;
+    protected $parameterFactory;
 
     /**
-     * @param ParameterBuilder $parameterBuilder
+     * @param ParameterFactory $parameterFactory
      */
-    public function __construct(ParameterBuilder $parameterBuilder)
+    public function __construct(ParameterFactory $parameterFactory)
     {
-        $this->parameterBuilder = $parameterBuilder;
+        $this->parameterFactory = $parameterFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function success()
     {
-        return $this->parameterBuilder->setName('id')->setValue('a good id')->create();
+        return $this->parameterFactory->create()->setName('id')->setValue('a good id');
     }
 
     /**

@@ -14,11 +14,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     protected $listsModel;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\ScopeResolverInterface
-     */
-    protected $mockScopeResolver;
-
-    /**
      * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ConfigInterface
      */
     protected $mockConfig;
@@ -30,164 +25,77 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockScopeResolver = $this->getMockBuilder('\Magento\Framework\App\ScopeResolverInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->mockConfig = $this->getMockBuilder('\Magento\Framework\Locale\ConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockLocaleResolver = $this->getMockBuilder('\Magento\Framework\Locale\ResolverInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $locale = "some_locale";
-        $this->mockLocaleResolver->expects($this->atLeastOnce())
-            ->method('setLocale')
-            ->with($locale);
-
-        $this->listsModel = new \Magento\Framework\Locale\Lists(
-            $this->mockScopeResolver,
-            $this->mockConfig,
-            $this->mockLocaleResolver,
-            $locale
-        );
-    }
-
-    public function testGetCountryTranslationList()
-    {
-        $locale = new \Magento\Framework\Locale('en');
-
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
-            ->will($this->returnValue($locale));
+            ->will($this->returnValue('en_US'));
 
-        // clearly english results
-        $expectedResults = [
-            'AD' => 'Andorra',
-            'ZZ' => 'Unknown Region',
-            'VC' => 'St. Vincent & Grenadines',
-            'PM' => 'Saint Pierre and Miquelon',
-        ];
-
-        $countryTranslationList = $this->listsModel->getCountryTranslationList();
-        foreach ($expectedResults as $key => $value) {
-            $this->assertArrayHasKey($key, $countryTranslationList);
-            $this->assertEquals($value, $countryTranslationList[$key]);
-        }
+        $this->listsModel = new \Magento\Framework\Locale\Lists(
+            $this->mockConfig,
+            $this->mockLocaleResolver
+        );
     }
 
     public function testGetCountryTranslation()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->once())
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $this->assertFalse($this->listsModel->getCountryTranslation(null));
-    }
-
-    public function testGetTranslationList()
-    {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $path = 'territory';
-        $value = 2;
-
-        // clearly english results
-        $expectedResults = [
-            'AD' => 'Andorra',
-            'ZZ' => 'Unknown Region',
-            'VC' => 'St. Vincent & Grenadines',
-            'PM' => 'Saint Pierre and Miquelon',
-        ];
-
-        $countryTranslationList = $this->listsModel->getTranslationList($path, $value);
-        foreach ($expectedResults as $key => $value) {
-            $this->assertArrayHasKey($key, $countryTranslationList);
-            $this->assertEquals($value, $countryTranslationList[$key]);
-        }
+        $this->assertNull($this->listsModel->getCountryTranslation(null));
     }
 
     public function testGetOptionAllCurrencies()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        // clearly English results
-        $expectedResults = [
-            ['value' => 'BAM', 'label' => 'Bosnia-Herzegovina Convertible Mark'],
-            ['value' => 'TTD', 'label' => 'Trinidad and Tobago Dollar'],
-            ['value' => 'USN', 'label' => 'US Dollar (Next day)'],
-            ['value' => 'USS', 'label' => 'US Dollar (Same day)'],
-        ];
+        $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $currencyList = $this->listsModel->getOptionAllCurrencies();
         foreach ($expectedResults as $value) {
-            $this->assertContains($value, $currencyList);
+            $found = false;
+            foreach ($currencyList as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
         }
     }
 
     public function testGetOptionCurrencies()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $allowedCurrencies = ['USD', 'GBP', 'EUR'];
+        $allowedCurrencies = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $this->mockConfig->expects($this->once())
             ->method('getAllowedCurrencies')
             ->will($this->returnValue($allowedCurrencies));
 
-        $expectedArray = [
-            ['value' => 'GBP', 'label' => 'British Pound Sterling'],
-            ['value' => 'EUR', 'label' => 'Euro'],
-            ['value' => 'USD', 'label' => 'US Dollar'],
-        ];
+        $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
-        $this->assertSame($expectedArray, $this->listsModel->getOptionCurrencies());
+        $currencyList = $this->listsModel->getOptionCurrencies();
+        foreach ($expectedResults as $value) {
+            $found = false;
+            foreach ($currencyList as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
+        }
     }
 
     public function testGetOptionCountries()
     {
-        $locale = new \Magento\Framework\Locale('en');
+        $expectedResults = ['US', 'GB', 'DE', 'UA'];
 
-        $this->mockLocaleResolver->expects($this->once())
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        // clearly English results
-        $expectedResults = [
-            ['value' => 'AG', 'label' => 'Antigua and Barbuda'],
-            ['value' => 'BA', 'label' => 'Bosnia and Herzegovina'],
-            ['value' => 'CC', 'label' => 'Cocos (Keeling) Islands'],
-            ['value' => 'GS', 'label' => 'South Georgia & South Sandwich Islands'],
-            ['value' => 'PM', 'label' => 'Saint Pierre and Miquelon'],
-        ];
-
-        $optionCountries = $this->listsModel->getOptionCountries();
+        $list = $this->listsModel->getOptionCountries();
         foreach ($expectedResults as $value) {
-            $this->assertContains($value, $optionCountries);
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
         }
     }
 
     public function testGetOptionsWeekdays()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
         $expectedArray = [
             ['label' => 'Sunday', 'value' => 'Sun'],
             ['label' => 'Monday', 'value' => 'Mon'],
@@ -203,26 +111,15 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionTimezones()
     {
-        $locale = new \Magento\Framework\Locale('en');
+        $expectedResults = ['Australia/Darwin', 'America/Los_Angeles', 'Asia/Jerusalem'];
 
-        $this->mockLocaleResolver->expects($this->exactly(2))
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $expectedResults = [
-            ['value' => 'Australia/Darwin', 'label' => 'AUS Central Standard Time (Australia/Darwin)'],
-            ['value' => 'Asia/Jerusalem', 'label' => 'Israel Standard Time (Asia/Jerusalem)'],
-            ['value' => 'Asia/Yakutsk', 'label' => 'Yakutsk Standard Time (Asia/Yakutsk)'],
-        ];
-
-        $timeZones = $this->listsModel->getOptionTimezones();
+        $list = $this->listsModel->getOptionTimezones();
         foreach ($expectedResults as $value) {
-            $this->assertContains($value, $timeZones);
-        }
-
-        $timeZoneList = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
-        foreach ($timeZones as $timeZone) {
-            $this->assertContains($timeZone['value'], $timeZoneList);
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
         }
     }
 
@@ -230,44 +127,42 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupForOptionLocales();
 
-        $this->assertEquals(
-            [
-                ['value' => 'az_AZ', 'label' => 'Azerbaijani (Azerbaijan)'],
-                ['value' => 'en_US', 'label' => 'English (United States)'],
-            ],
-            $this->listsModel->getOptionLocales()
-        );
+        $expectedResults = ['en_US', 'uk_UA', 'de_DE'];
+
+        $list = $this->listsModel->getOptionLocales();
+        foreach ($expectedResults as $value) {
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
+        }
     }
 
     public function testGetTranslatedOptionLocales()
     {
         $this->setupForOptionLocales();
 
-        $this->assertEquals(
-            [
-                ['value' => 'az_AZ', 'label' => 'Azərbaycan (Azərbaycan) / Azerbaijani (Azerbaijan)'],
-                ['value' => 'en_US', 'label' => 'English (United States) / English (United States)'],
-            ],
-            $this->listsModel->getTranslatedOptionLocales()
-        );
+        $expectedResults = ['en_US', 'uk_UA', 'de_DE'];
+
+        $list = $this->listsModel->getOptionLocales();
+        foreach ($expectedResults as $value) {
+            $found = false;
+            foreach ($list as $item) {
+                $found = $found || ($value == $item['value']);
+            }
+            $this->assertTrue($found);
+        }
     }
 
     /**
-     * @return \Magento\Framework\LocaleInterface
+     * Setup for option locales
      */
     protected function setupForOptionLocales()
     {
-        $locale = new \Magento\Framework\Locale('en');
-
-        $this->mockLocaleResolver->expects($this->any())
-            ->method('getLocale')
-            ->will($this->returnValue($locale));
-
-        $allowedLocales = ['en_US', 'az_AZ'];
+        $allowedLocales = ['en_US', 'uk_UA', 'de_DE'];
         $this->mockConfig->expects($this->once())
             ->method('getAllowedLocales')
             ->will($this->returnValue($allowedLocales));
-
-        return $locale;
     }
 }

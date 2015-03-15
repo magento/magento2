@@ -110,7 +110,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             $this->customer = $this->customerDataFactory->create();
             $this->dataObjectHelper->populateWithArray(
                 $this->customer,
-                $this->_backendSession->getCustomerData()['account']
+                $this->_backendSession->getCustomerData()['account'],
+                '\Magento\Customer\Api\Data\CustomerInterface'
             );
         }
         return $this->customer;
@@ -133,12 +134,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         $createdAt = $this->getCustomer()->getCreatedAt();
         try {
-            $date = $this->_localeDate->scopeDate(
-                $this->getCustomer()->getStoreId(),
-                $this->dateTime->toTimestamp($createdAt),
-                true
-            );
-            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+            $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $createdAt, true);
+            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             return '';
@@ -166,7 +163,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         return $this->formatDate(
             $this->getCustomer()->getCreatedAt(),
-            TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            \IntlDateFormatter::MEDIUM,
             true
         );
     }

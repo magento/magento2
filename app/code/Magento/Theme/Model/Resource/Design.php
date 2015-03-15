@@ -66,15 +66,10 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $object->setDateTo(null);
         }
 
-        if (!is_null(
-            $object->getDateFrom()
-        ) && !is_null(
-            $object->getDateTo()
-        ) && $this->dateTime->toTimestamp(
-            $object->getDateFrom()
-        ) > $this->dateTime->toTimestamp(
-            $object->getDateTo()
-        )
+        if (!is_null($object->getDateFrom())
+            && !is_null($object->getDateTo())
+            && (new \DateTime($object->getDateFrom()))->getTimestamp()
+            > (new \DateTime($object->getDateTo()))->getTimestamp()
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Start date cannot be greater than end date.')
