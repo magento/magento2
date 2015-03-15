@@ -166,7 +166,7 @@ TEXT;
         $htmlDriver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false);
         $htmlDriver
             ->expects($this->once())
-            ->method('getRealPath')
+            ->method('getRealPathSafety')
             ->willReturn($file);
 
         $this->appDirectory

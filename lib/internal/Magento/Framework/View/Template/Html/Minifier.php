@@ -83,7 +83,7 @@ class Minifier implements MinifierInterface
      */
     public function getMinified($file)
     {
-        $file = $this->htmlDirectory->getDriver()->getRealPath($file);
+        $file = $this->htmlDirectory->getDriver()->getRealPathSafety($file);
         if (!$this->htmlDirectory->isExist($this->rootDirectory->getRelativePath($file))) {
             $this->minify($file);
         }

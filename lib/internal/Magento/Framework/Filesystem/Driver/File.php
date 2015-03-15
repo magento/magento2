@@ -741,4 +741,27 @@ class File implements DriverInterface
     {
         return realpath($path);
     }
+
+    /**
+     * Return correct path for link
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function getRealPathSafety($path)
+    {
+        $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+        $realPath = [];
+        foreach ($pathParts as $pathPart) {
+            if ($pathPart == '.') {
+                continue;
+            }
+            if ($pathPart == '..') {
+                array_pop($realPath);
+                continue;
+            }
+            $realPath[] = $pathPart;
+        }
+        return implode(DIRECTORY_SEPARATOR, $realPath);
+    }
 }
