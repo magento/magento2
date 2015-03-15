@@ -6,8 +6,10 @@
 
 namespace Magento\CatalogRule\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 
 /**
  * Test Coverage for Create Catalog Rule
@@ -28,20 +30,28 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
 class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
 {
     /* tags */
+    const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**
      * Create Catalog Price Rule
      *
      * @param CatalogRule $catalogPriceRule
+     * @param Customer $customer
+     * @param string $product
      * @return array
      */
-    public function testCreate(CatalogRule $catalogPriceRule)
-    {
-        $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'MAGETWO-23036']);
+    public function testCreate(
+        CatalogRule $catalogPriceRule,
+        $product,
+        Customer $customer = null
+    ) {
+        $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => $product]);
         // Prepare data
+        $catalogPriceRule = $this->applyCustomerGroup($catalogPriceRule, $customer);
         $replace = [
             'conditions' => [
                 'conditions' => [
@@ -60,6 +70,9 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
 
+        // Prepare data for tear down
+        $this->catalogRules[] = $catalogPriceRule;
+
         // Apply Catalog Price Rule
         $this->catalogRuleIndex->getGridPageActions()->applyRules();
 
@@ -71,9 +84,36 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $this->adminCache->getActionsBlock()->flushMagentoCache();
         $this->adminCache->getMessagesBlock()->waitSuccessMessage();
 
-        // Prepare data for tear down
-        $this->catalogRules[] = $catalogPriceRule;
+        return [
+            'products' => [$productSimple],
+            'category' => $productSimple->getDataFieldConfig('category_ids')['source']->getCategories()[0],
+        ];
+    }
 
-        return ['product' => $productSimple];
+    /**
+     * Create customer with customer group and apply customer group to catalog price rule.
+     *
+     * @param CatalogRule $catalogPriceRule
+     * @param Customer|null $customer
+     * @return CustomerGroupInjectable
+     */
+    public function applyCustomerGroup(CatalogRule $catalogPriceRule, Customer $customer = null)
+    {
+        if ($customer !== null) {
+            $customer->persist();
+            /** @var \Magento\Customer\Test\Fixture\CustomerGroupInjectable $customerGroup */
+            $customerGroup = $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup();
+            $catalogPriceRule = $this->fixtureFactory->createByCode(
+                'catalogRule',
+                [
+                    'data' => array_merge(
+                        $catalogPriceRule->getData(),
+                        ['customer_group_ids' => $customerGroup->getCustomerGroupCode()]
+                    )
+                ]
+            );
+        }
+
+        return $catalogPriceRule;
     }
 }

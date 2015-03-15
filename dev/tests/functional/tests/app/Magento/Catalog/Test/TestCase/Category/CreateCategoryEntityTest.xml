@@ -18,7 +18,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">-</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">-</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">Position</data>
@@ -44,7 +43,6 @@
       <data name="category/data/meta_title" xsi:type="string">RootCategory Page Title</data>
       <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
       <data name="category/data/display_mode" xsi:type="string">Static block and products</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">Yes</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">Position</data>
@@ -70,7 +68,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">-</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">-</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
@@ -97,7 +94,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">No</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
@@ -125,7 +121,7 @@
       <data name="category/data/meta_title" xsi:type="string">Subcategory Page Title</data>
       <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
       <data name="category/data/display_mode" xsi:type="string">Static block and products</data>
-      <data name="category/data/landing_page" xsi:type="string">default</data>
+      <data name="category/data/landing_page/preset" xsi:type="string">default</data>
       <data name="category/data/is_anchor" xsi:type="string">Yes</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">Position</data>
@@ -153,7 +149,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">-</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
@@ -179,7 +174,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">No</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">-</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
@@ -205,7 +199,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">-</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>
@@ -233,7 +226,6 @@
       <data name="category/data/meta_title" xsi:type="string">-</data>
       <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
       <data name="category/data/display_mode" xsi:type="string">-</data>
-      <data name="category/data/landing_page" xsi:type="string">-</data>
       <data name="category/data/is_anchor" xsi:type="string">-</data>
       <data name="category/data/available_product_listing_config" xsi:type="string">-</data>
       <data name="category/data/available_sort_by/sort_0" xsi:type="string">-</data>

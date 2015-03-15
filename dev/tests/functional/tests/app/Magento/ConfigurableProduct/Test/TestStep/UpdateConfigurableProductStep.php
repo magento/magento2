@@ -72,7 +72,7 @@ class UpdateConfigurableProductStep implements TestStepInterface
         CatalogProductEdit $catalogProductEdit,
         ConfigurableProduct $product,
         ConfigurableProduct $updatedProduct,
-        $attributeTypeAction
+        $attributeTypeAction = ''
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductEdit = $catalogProductEdit;

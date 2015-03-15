@@ -45,6 +45,9 @@ class Preview extends Block
         );
         $this->browser->switchToFrame(new Locator($this->iFrame));
 
-        return $this->_rootElement->getText();
+        $content = $this->_rootElement->getText();
+
+        $this->browser->switchToFrame();
+        return $content;
     }
 }

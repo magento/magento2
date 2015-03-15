@@ -12,20 +12,16 @@ use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateSearchTermEntity
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Product is created
+ * 1. Product is created.
  *
  * Steps:
- * 1. Go to backend as admin user
- * 4. Navigate to Marketing->SEO&Search->Search Terms
- * 5. Click "Add New Search Term" button
- * 6. Fill out all data according to dataset
- * 7. Save the Search Term
- * 8. Perform all assertions
+ * 1. Go to backend as admin user.
+ * 4. Navigate to Marketing > SEO&Search > Search Terms.
+ * 5. Click "Add New Search Term" button.
+ * 6. Fill out all data according to dataset.
+ * 7. Save the Search Term.
+ * 8. Perform all assertions.
  *
  * @group Search_Terms_(MX)
  * @ZephyrId MAGETWO-26165
@@ -38,21 +34,21 @@ class CreateSearchTermEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Search term page
+     * Search term page.
      *
      * @var CatalogSearchIndex
      */
     protected $indexPage;
 
     /**
-     * Search term edit page
+     * Search term edit page.
      *
      * @var CatalogSearchEdit
      */
     protected $editPage;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param CatalogSearchIndex $indexPage
      * @param CatalogSearchEdit $editPage
@@ -65,7 +61,7 @@ class CreateSearchTermEntityTest extends Injectable
     }
 
     /**
-     * Run create search term test
+     * Run create search term test.
      *
      * @param CatalogSearchQuery $searchTerm
      * @return void
