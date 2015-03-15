@@ -372,7 +372,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('addSuccess')
             ->with('Test name has been updated in your wish list.', null)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException('error-message'));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('error-message')));
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
