@@ -19,6 +19,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     protected $rendererMock;
 
+    /**
+     * Set up
+     */
     protected function setUp()
     {
         $this->defaultRenderer = Phrase::getRenderer();
@@ -26,11 +29,17 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * Tear down
+     */
     protected function tearDown()
     {
         Phrase::setRenderer($this->defaultRenderer);
     }
 
+    /**
+     * Test rendering
+     */
     public function testRendering()
     {
         $text = 'some text';
@@ -47,6 +56,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $phrase->render());
     }
 
+    /**
+     * Test defers rendering
+     */
     public function testDefersRendering()
     {
         $this->rendererMock->expects($this->never())
@@ -55,6 +67,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         new Phrase('some text');
     }
 
+    /**
+     * Test that to string is alias to render
+     */
     public function testThatToStringIsAliasToRender()
     {
         $text = 'some text';
@@ -71,6 +86,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, (string)$phrase);
     }
 
+    /**
+     * Test get text
+     */
     public function testGetText()
     {
         $text = 'some text';
@@ -79,6 +97,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($text, $phrase->getText());
     }
 
+    /**
+     * Test get arguments
+     */
     public function testGetArguments()
     {
         $text = 'some text';

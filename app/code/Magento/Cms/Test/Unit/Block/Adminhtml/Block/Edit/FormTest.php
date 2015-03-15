@@ -130,6 +130,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
+    /**
+     * Sets up the fixture, for example, open a network connection.
+     * This method is called before a test is executed.
+     */
     public function setUp()
     {
         $this->model = $this->getMock('Magento\Cms\Model\Block', ['getBlockId', 'setStoreId'], [], '', false);
@@ -207,6 +211,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->block->setData('action', $this->action);
     }
 
+    /**
+     * Test prepare form model has no block id and single store mode is on
+     */
     public function testPrepareFormModelHasNoBlockIdAndSingleStoreMode()
     {
         $blockId = null;
@@ -232,7 +239,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->block->toHtml();
     }
 
-
+    /**
+     * Test prepare form model has block id and signle store mode is off
+     */
     public function testPrepareFormModelHasBlockIdAndNonSingleStoreMode()
     {
         $blockId = 'id';

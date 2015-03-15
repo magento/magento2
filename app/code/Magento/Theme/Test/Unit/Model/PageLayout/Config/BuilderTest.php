@@ -31,6 +31,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $themeCollection;
 
+    /**
+     * Setup
+     */
     protected function setUp()
     {
         $this->configFactory = $this->getMockBuilder('Magento\Framework\View\PageLayout\ConfigFactory')
@@ -61,6 +64,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test get page layouts config
+     */
     public function testGetPageLayoutsConfig()
     {
         $files1 = ['content layouts_1.xml', 'content layouts_2.xml'];

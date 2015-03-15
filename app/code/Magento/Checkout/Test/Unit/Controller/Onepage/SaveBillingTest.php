@@ -79,6 +79,9 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultJson;
 
+    /**
+     * Setup
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -165,6 +168,9 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     */
     public function testExecute()
     {
         $this->request->expects($this->once())
@@ -181,6 +187,9 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRaw, $this->controller->execute());
     }
 
+    /**
+     * Test validate minimum amount
+     */
     public function testValidateMinimumAmount()
     {
         $expectedResult = [
@@ -253,6 +262,9 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
+    /**
+     * Test validate minimum amount negative
+     */
     public function testValidateMinimumAmountNegative()
     {
         $errorMessage = 'error_message';

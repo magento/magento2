@@ -75,6 +75,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRawMock;
 
+    /**
+     * Setup
+     */
     public function setUp()
     {
         $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
@@ -144,6 +147,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute module exception
+     */
     public function testExecuteModelException()
     {
         $message = 'Model exception';
@@ -167,6 +173,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute exception
+     */
     public function testExecuteException()
     {
         $message = 'Cannot add new comment.';
@@ -190,6 +199,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute no comment
+     */
     public function testExecuteNoComment()
     {
         $message = 'The Comment Text field cannot be empty.';
@@ -214,6 +226,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     */
     public function testExecute()
     {
         $comment = 'Test comment';
