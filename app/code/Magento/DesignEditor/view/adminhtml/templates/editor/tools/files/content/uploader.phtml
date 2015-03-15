@@ -10,15 +10,15 @@
 <div class="scroll-assets">
     <script data-template="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="progressbar-container">
-           <div class="file-row" data-upload-id="<%= data.id %>">
-              <span class="file-info-name"><%= data.name %></span>
+           <div class="file-row" data-upload-id="<%- data.id %>">
+              <span class="file-info-name"><%- data.name %></span>
               <span class="file-info-details">
-                  <span class="file-info-size">(<%= data.size %>)</span>
+                  <span class="file-info-size">(<%- data.size %>)</span>
                   <span class="file-info-error hidden">&nbsp;</span>
               </span>
               <span class="file-icon">
                   <span class="file-info-cancel">
-                      <button type="button" class="action-delete" data-delete-file="<%= data.id %>">
+                      <button type="button" class="action-delete" data-delete-file="<%- data.id %>">
                           <span><?php echo __('Remove'); ?></span>
                       </button>
                   </span>
