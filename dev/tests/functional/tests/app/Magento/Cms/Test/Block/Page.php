@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Locator;
 class Page extends Block
 {
     /**
+     * Selector for uninitialized page.
+     *
+     * @var string
+     */
+    protected $uninitialized = '//body[(@data-mage-init) or (@aria-busy="true")]';
+
+    /**
      * Cms page content class.
      *
      * @var string

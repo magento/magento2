@@ -10,40 +10,39 @@ use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Page\Page;
 
 /**
- * Class AdminAuthLogin
- * Login page for backend
+ * Login page for backend.
  *
  */
 class AdminAuthLogin extends Page
 {
     /**
-     * URL part for backend authorization
+     * URL part for backend authorization.
      */
     const MCA = 'admin/auth/login';
 
     /**
-     * Form for login
+     * Form for login.
      *
      * @var string
      */
     protected $loginBlock = '#login-form';
 
     /**
-     * Header panel of admin dashboard
+     * Header panel of admin dashboard.
      *
      * @var string
      */
     protected $headerBlock = '.page-header .admin-user';
 
     /**
-     * Global messages block
+     * Global messages block.
      *
      * @var string
      */
     protected $messagesBlock = '#messages .messages';
 
     /**
-     * Constructor
+     * Constructor.
      */
     protected function _init()
     {
@@ -51,7 +50,7 @@ class AdminAuthLogin extends Page
     }
 
     /**
-     * Get the login form block
+     * Get the login form block.
      *
      * @return \Magento\Backend\Test\Block\Admin\Login
      */
@@ -63,7 +62,7 @@ class AdminAuthLogin extends Page
     }
 
     /**
-     * Get the header panel block of admin dashboard
+     * Get the header panel block of admin dashboard.
      *
      * @return \Magento\Backend\Test\Block\Page\Header
      */
@@ -75,7 +74,7 @@ class AdminAuthLogin extends Page
     }
 
     /**
-     * Get global messages block
+     * Get global messages block.
      *
      * @return \Magento\Core\Test\Block\Messages
      */
@@ -84,6 +83,11 @@ class AdminAuthLogin extends Page
         return Factory::getBlockFactory()->getMagentoCoreMessages($this->_browser->find($this->messagesBlock));
     }
 
+    /**
+     * Wait for Header block is visible in the page.
+     *
+     * @return void
+     */
     public function waitForHeaderBlock()
     {
         $browser = $this->_browser;

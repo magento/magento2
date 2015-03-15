@@ -6,15 +6,43 @@
 namespace Magento\Backend\Test\Block;
 
 use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
- * Class Menu
- * Class top menu navigation block
+ * Top menu navigation block.
  */
 class Menu extends Block
 {
     /**
-     * Returns array of parent menu items present on dashboard menu
+     * Main menu selector.
+     *
+     * @var string
+     */
+    protected $mainMenu = './/li/a[span="%s"]';
+
+    /**
+     * Submenu selector.
+     *
+     * @var string
+     */
+    protected $subMenu = './/li[a[span="%s"]]/div[@class="submenu" and @style="display: block;"]';
+
+    /**
+     * Submenu item selector.
+     *
+     * @var string
+     */
+    protected $subMenuItem = './/a[span="%s"]';
+
+    /**
+     * Parent menu item.
+     *
+     * @var string
+     */
+    protected $parentMenuLevel = 'li.parent.level-0:nth-of-type(%s)';
+
+    /**
+     * Returns array of parent menu items present on dashboard menu.
      *
      * @return array
      */
@@ -24,14 +52,49 @@ class Menu extends Block
         $menuItems = [];
         $counter = 1;
         $textSelector = 'a span';
-        while ($navigationMenu->find('li.parent.level-0:nth-of-type(' . $counter . ')')->isVisible()) {
+        while ($navigationMenu->find(sprintf($this->parentMenuLevel, $counter))->isVisible()) {
             $menuItems[] = strtolower(
-                $navigationMenu->find('li.parent.level-0:nth-of-type(' . $counter . ')')
+                $navigationMenu->find(sprintf($this->parentMenuLevel, $counter))
                     ->find($textSelector)
                     ->getText()
             );
             $counter++;
         }
         return $menuItems;
+    }
+
+    /**
+     * Open backend page via menu.
+     *
+     * @param string $menuItem
+     * @return void
+     * @throws \Exception
+     */
+    public function navigate($menuItem)
+    {
+        $menuChain = array_map('trim', explode('>', $menuItem));
+        $mainMenu = $menuChain[0];
+        $subMenu = isset($menuChain[1]) ? $menuChain[1] : null;
+
+        // Click on element in main menu
+        $mainMenuElement = $this->_rootElement->find(sprintf($this->mainMenu, $mainMenu), Locator::SELECTOR_XPATH);
+        if (!$mainMenuElement->isVisible()) {
+            throw new \Exception('Main menu item "' . $mainMenu . '" is not visible.');
+        }
+        $mainMenuElement->click();
+
+        // Click on element in submenu
+        if ($subMenu === null) {
+            return;
+        }
+        $subMenuSelector = sprintf($this->subMenu, $mainMenu);
+        $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
+        $subMenuItem = $this->_rootElement->find($subMenuSelector, Locator::SELECTOR_XPATH)
+            ->find(sprintf($this->subMenuItem, $subMenu), Locator::SELECTOR_XPATH);
+        if (!$subMenuItem->isVisible()) {
+            throw new \Exception('Submenu item "' . $subMenu . '" is not visible in "' . $mainMenu . '"');
+        }
+        $subMenuItem->click();
+        $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
     }
 }

@@ -6,7 +6,7 @@
 
 namespace Magento\User\Test\TestCase;
 
-use Magento\User\Test\Fixture\AdminUserRole;
+use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\Mtf\TestCase\Injectable;
@@ -59,9 +59,9 @@ class CreateAdminUserRoleEntityTest extends Injectable
     /**
      * Runs Create Admin User Role Entity test.
      *
-     * @param AdminUserRole $role
+     * @param Role $role
      */
-    public function testCreateUserRole(AdminUserRole $role)
+    public function testCreateUserRole(Role $role)
     {
         //Steps
         $this->userRoleIndex->open();
