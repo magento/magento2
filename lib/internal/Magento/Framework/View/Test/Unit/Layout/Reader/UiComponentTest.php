@@ -70,7 +70,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ['attributes' => ['group' => '', 'component' => 'listing']]
         );
         $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
-            $element->getAttribute('name'), 'config_path', 'scope'
+            $element->getAttribute('name'),
+            'config_path',
+            'scope'
         );
         $this->model->interpret($this->context, $element);
     }
@@ -80,7 +82,8 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 $this->getElement(
-                    '<ui_component name="cms_block_listing" component="listing" ifconfig="config_path"/>'
+                    '<ui_component name="cms_block_listing" component="listing" ifconfig="config_path"/>',
+                    'ui_component'
                 ),
             ]
         ];
@@ -88,14 +91,15 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $xml
+     * @param string $elementType
      * @return \Magento\Framework\View\Layout\Element
      */
-    protected function getElement($xml)
+    protected function getElement($xml, $elementType)
     {
         $xml = simplexml_load_string(
             '<parent_element>' . $xml . '</parent_element>',
             'Magento\Framework\View\Layout\Element'
         );
-        return current($xml->children());
+        return $xml->{$elementType};
     }
 }

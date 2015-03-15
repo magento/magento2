@@ -42,17 +42,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->config->loadString(''));
         $this->assertTrue($this->config->loadString($xml));
         $this->assertXmlStringEqualsXmlString($xml, $this->config->getXmlString());
-        $this->setExpectedException(
-            '\Exception',
-            'simplexml_load_string(): Entity: line 1: parser error : Start tag expected,'
-        );
-        $this->assertFalse($this->config->loadString('wrong_path'));
     }
 
     public function testLoadDom()
     {
-        $this->config->loadString('<?xml version="1.0"?><config><node>1</node></config>');
-        $this->assertTrue($this->config->loadDom($this->config->getNode()));
+        $dom = new \DOMDocument();
+        $dom->loadXML('<?xml version="1.0"?><config><node>1</node></config>');
+        $this->assertTrue($this->config->loadDom($dom));
     }
 
     public function testGetNode()
