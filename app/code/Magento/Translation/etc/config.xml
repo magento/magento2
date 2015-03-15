@@ -15,6 +15,9 @@
                     <block_html />
                 </invalid_caches>
             </translate_inline>
+            <js>
+                <translate_strategy>none</translate_strategy>
+            </js>
         </dev>
     </default>
 </config>
