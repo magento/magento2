@@ -46,7 +46,7 @@ $_item = $block->getItem();
     <?php if ($block->displayBothPrices()): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php $_incl = $block->getRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount(); ?>
+    <?php $_incl = $block->getTotalAmount($_item); ?>
     <?php echo $block->formatPrice(max(0, $_incl)) ?>
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />

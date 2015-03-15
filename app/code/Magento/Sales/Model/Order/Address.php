@@ -220,6 +220,17 @@ class Address extends AbstractAddress implements OrderAddressInterface
     }
 
     /**
+     * Sets the ID for the order address.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData(OrderAddressInterface::ENTITY_ID, $entityId);
+    }
+
+    /**
      * Returns fax
      *
      * @return string

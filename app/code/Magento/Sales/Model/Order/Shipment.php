@@ -567,6 +567,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Sets items
+     *
+     * @param mixed $items
+     * @return $this
+     */
+    public function setItems($items)
+    {
+        return $this->setData(ShipmentInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns tracks
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[]
@@ -583,6 +594,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
             }
         }
         return $this->getData(ShipmentInterface::TRACKS);
+    }
+
+    /**
+     * Returns tracks
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $tracks
+     * @return $this
+     */
+    public function setTracks($tracks)
+    {
+        return $this->setData(ShipmentInterface::TRACKS, $tracks);
     }
 
     /**
@@ -703,6 +725,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function getComments()
     {
         return $this->getData(ShipmentInterface::COMMENTS);
+    }
+
+    /**
+     * Sets comments
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments(array $comments = null)
+    {
+        return $this->setData(ShipmentInterface::COMMENTS, $comments);
     }
 
     //@codeCoverageIgnoreStart

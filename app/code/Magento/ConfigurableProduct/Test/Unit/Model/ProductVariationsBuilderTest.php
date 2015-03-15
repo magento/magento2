@@ -17,7 +17,7 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $customAttributeBuilder;
+    private $customAttributeFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,8 +36,8 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customAttributeBuilder = $this->getMock(
-            '\Magento\Framework\Api\AttributeDataBuilder',
+        $this->customAttributeFactory = $this->getMock(
+            '\Magento\Framework\Api\AttributeValueFactory',
             [],
             [],
             '',
@@ -64,7 +64,7 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new \Magento\ConfigurableProduct\Model\ProductVariationsBuilder(
             $this->productFactory,
-            $this->customAttributeBuilder,
+            $this->customAttributeFactory,
             $this->variationMatrix
         );
     }
@@ -96,17 +96,17 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
         $output->expects($this->at(0))->method('setData')->with($productData);
 
         $attribute = $this->getMock('\Magento\Framework\Api\AttributeInterface');
-        $this->customAttributeBuilder->expects($this->once())
+        $attribute->expects($this->once())
             ->method('setAttributeCode')
             ->with('sort_order')
             ->willReturnSelf();
 
-        $this->customAttributeBuilder->expects($this->once())
+        $attribute->expects($this->once())
             ->method('setValue')
             ->with(15)
             ->willReturnSelf();
 
-        $this->customAttributeBuilder->expects($this->once())
+        $this->customAttributeFactory->expects($this->once())
             ->method('create')
             ->willReturn($attribute);
 

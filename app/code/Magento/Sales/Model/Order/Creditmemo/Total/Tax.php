@@ -11,6 +11,7 @@ class Tax extends AbstractTotal
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
      *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -64,6 +65,7 @@ class Tax extends AbstractTotal
             }
         }
 
+        $isPartialShippingRefunded = false;
         if ($invoice = $creditmemo->getInvoice()) {
             //recalculate tax amounts in case if refund shipping value was changed
             if ($order->getBaseShippingAmount() && $creditmemo->getBaseShippingAmount()) {
@@ -80,6 +82,9 @@ class Tax extends AbstractTotal
                 $baseTotalHiddenTax = $creditmemo->roundPrice($baseTotalHiddenTax, 'base');
                 $shippingHiddenTaxAmount = $creditmemo->roundPrice($shippingHiddenTaxAmount);
                 $baseShippingHiddenTaxAmount = $creditmemo->roundPrice($baseShippingHiddenTaxAmount, 'base');
+                if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0) {
+                    $isPartialShippingRefunded = true;
+                }
                 $totalTax += $shippingTaxAmount;
                 $baseTotalTax += $baseShippingTaxAmount;
             }
@@ -107,6 +112,9 @@ class Tax extends AbstractTotal
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
                 $shippingHiddenTaxAmount = $creditmemo->roundPrice($shippingHiddenTaxAmount);
                 $baseShippingHiddenTaxAmount = $creditmemo->roundPrice($baseShippingHiddenTaxAmount, 'base');
+                if ($part < 1 && $order->getShippingTaxAmount() > 0) {
+                    $isPartialShippingRefunded = true;
+                }
             } elseif ($shippingDelta == $creditmemo->getBaseShippingAmount()) {
                 $shippingTaxAmount = $order->getShippingTaxAmount() - $order->getShippingTaxRefunded();
                 $baseShippingTaxAmount = $order->getBaseShippingTaxAmount() - $order->getBaseShippingTaxRefunded();
@@ -136,7 +144,7 @@ class Tax extends AbstractTotal
             $creditmemo->getBaseShippingHiddenTaxAmnt() -
             $creditmemo->getBaseHiddenTaxAmount();
 
-        if ($creditmemo->isLast()) {
+        if ($creditmemo->isLast() && !$isPartialShippingRefunded) {
             $totalTax = $allowedTax;
             $baseTotalTax = $allowedBaseTax;
             $totalHiddenTax = $allowedHiddenTax;
