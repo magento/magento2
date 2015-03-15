@@ -9,7 +9,6 @@
     <head>
         <title>Magento Admin</title>
         <link src="requirejs/require.js"/>
-        <css src="mage/calendar.css"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
     </head>
@@ -24,9 +23,10 @@
                 <arguments>
                     <argument name="show_part" xsi:type="string">logo</argument>
                     <argument name="edition" translate="true" xsi:type="string">Community Edition</argument>
+                    <argument name="logo_image_src" xsi:type="string">images/magento-icon.svg</argument>
                 </arguments>
             </block>
-            <block class="Magento\Backend\Block\GlobalSearch" as="search" after="logo" acl="Magento_Backend::global_search"/>
+            <block class="Magento\Backend\Block\GlobalSearch" name="global.search" as="search" after="logo" acl="Magento_Backend::global_search"/>
             <block class="Magento\Backend\Block\Page\Header" name="user" after="-">
                 <arguments>
                     <argument name="show_part" xsi:type="string">user</argument>
@@ -46,7 +46,7 @@
             <block class="Magento\Framework\View\Element\Template" name="js_translate" as="js_translate" template="Magento_Backend::page/js/translate.phtml"/>
         </referenceContainer>
         <referenceContainer name="main.top">
-            <block class="Magento\Theme\Block\Html\Title" name="page-title" template="title.phtml"/>
+            <block class="Magento\Theme\Block\Html\Title" name="page.title" template="title.phtml"/>
         </referenceContainer>
         <referenceContainer name="page.messages">
             <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
@@ -56,9 +56,10 @@
         </referenceContainer>
         <referenceContainer name="footer">
             <block class="Magento\Backend\Block\Page\Locale" name="locale.switcher" template="Magento_Backend::page/locale.phtml"/>
-            <container name="legal" htmlTag="div" htmlClass="footer-legal">
-                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
-                <block class="Magento\Backend\Block\Page\Footer" name="version" as="version">
+            <container name="legal" htmlTag="div" htmlClass="footer-legal col-m-6 col-m-offset-1">
+                <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
+                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
+                <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
                     <arguments>
                         <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                     </arguments>

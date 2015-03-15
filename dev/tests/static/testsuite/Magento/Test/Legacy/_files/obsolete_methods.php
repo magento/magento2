@@ -2037,7 +2037,6 @@ return [
     ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
-    ['setIsConfigurable', 'Magento\Catalog\Api\Data\ProductAttributeDataBuilder'],
     ['_getSendfriendModel', 'Magento\Sendfriend\Block\Send'],
     ['_initSendToFriendModel', 'Magento\Sendfriend\Controller\Product'],
     ['register', 'Magento\Sendfriend\Model\Sendfriend'],
@@ -2124,4 +2123,8 @@ return [
     ['utcDate', 'Magento\Framework\Stdlib\DateTime\Timezone'],
     ['getLocaleCode', 'Magento\Framework\View\Asset\File\FallbackContext', 'getLocale'],
     ['getLocaleCode', 'Magento\Paypal\Model\Api\AbstractApi', 'getLocale'],
+    ['getCollectionAttribute', 'Magento\Eav\Model\Config'],
+    ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
+    ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
+    ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
 ];

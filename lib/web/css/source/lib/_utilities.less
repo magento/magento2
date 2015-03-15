@@ -466,3 +466,41 @@
     -moz-appearance: @value;
     appearance: @value;
 }
+
+//
+//  Pointer for popups or dropdowns
+//  ---------------------------------------------
+.pointer(
+    @_size: 6px,
+    @_background-color: @color-white,
+    @_border-color: @color-gray-light3,
+    @_position__vertical: top,
+    @_position__horizontal: left,
+    @_position__vertical__value: -12px,
+    @_position__horizontal__value: @indent__s,
+    @_z-index: 99
+) {
+    &:before,
+    &:after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-bottom-style: solid;
+    }
+    &:before {
+        .css(@_position__vertical, @_position__vertical__value);
+        .css(@_position__horizontal, @_position__horizontal__value);
+        .css(z-index, @_z-index);
+        .css(border, solid @_size - 1);
+        .css(border-color, transparent transparent @_background-color transparent);
+    }
+    &:after {
+        .css(@_position__vertical, @_position__vertical__value - 2);
+        .css(@_position__horizontal, @_position__horizontal__value - 1);
+        .css(z-index, @_z-index - 1);
+        .css(border, solid @_size);
+        .css(border-color, transparent transparent @_border-color transparent);
+    }
+}

@@ -1,5 +1,9 @@
+app/code/Magento
+lib/internal/Magento/Framework
+dev/tools/Magento
 dev/tests/api-functional
 dev/tests/functional
 dev/tests/integration
 dev/tests/performance
 dev/tests/static
+setup

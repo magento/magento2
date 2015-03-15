@@ -21,15 +21,15 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeBuilderMock;
+    protected $attributeFactoryMock;
 
     protected function setUp()
     {
         $this->optionListMock = $this->getMock('\Magento\Bundle\Model\Product\OptionList', [], [], '', false);
-        $this->attributeBuilderMock = $this->getMock('\Magento\Framework\Api\AttributeDataBuilder', [], [], '', false);
+        $this->attributeFactoryMock = $this->getMock('\Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
         $this->model = new \Magento\Bundle\Model\Plugin\BundleLoadOptions(
             $this->optionListMock,
-            $this->attributeBuilderMock
+            $this->attributeFactoryMock
         );
     }
 
@@ -69,16 +69,16 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->with($productMock)
             ->willReturn([$optionMock]);
-        $this->attributeBuilderMock->expects($this->once())
+        $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
+        $customAttributeMock->expects($this->once())
             ->method('setAttributeCode')
             ->with('bundle_product_options')
             ->willReturnSelf();
-        $this->attributeBuilderMock->expects($this->once())
+        $customAttributeMock->expects($this->once())
             ->method('setValue')
             ->with([$optionMock])
             ->willReturnSelf();
-        $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
-        $this->attributeBuilderMock->expects($this->once())->method('create')->willReturn($customAttributeMock);
+        $this->attributeFactoryMock->expects($this->once())->method('create')->willReturn($customAttributeMock);
 
         $productAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
         $productMock->expects($this->once())->method('getCustomAttributes')->willReturn([$productAttributeMock]);

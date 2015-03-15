@@ -110,7 +110,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             $this->customer = $this->customerDataFactory->create();
             $this->dataObjectHelper->populateWithArray(
                 $this->customer,
-                $this->_backendSession->getCustomerData()['account']
+                $this->_backendSession->getCustomerData()['account'],
+                '\Magento\Customer\Api\Data\CustomerInterface'
             );
         }
         return $this->customer;

@@ -264,6 +264,14 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the hidden tax amount for a credit memo item.
      *
      * @return float Hidden tax amount.
