@@ -47,7 +47,7 @@ class FillAttributeFormOnProductPageStep implements TestStepInterface
      */
     public function run()
     {
-        $this->catalogProductEdit->getProductForm()->fillAttributeForm($this->attribute);
+        $this->catalogProductEdit->getProductForm()->getAttributeForm()->fill($this->attribute);
         return ['attribute' => $this->attribute];
     }
 }

@@ -6,52 +6,62 @@
 
 namespace Magento\CatalogRule\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
- * Class AssertCatalogPriceRuleAppliedProductPage
+ * Assert that Catalog Price Rule is applied on Product page.
  */
 class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
 {
     /**
-     * Assert that Catalog Price Rule is applied & it impacts on product's discount price on Product page
+     * Assert that Catalog Price Rule is applied & it impacts on product's discount price on Product page.
      *
-     * @param CatalogProductSimple $product
-     * @param CatalogProductView $pageCatalogProductView
-     * @param CmsIndex $cmsIndex
-     * @param CatalogCategoryView $catalogCategoryView
-     * @param array $price
+     * @param CatalogProductView $catalogProductViewPage
+     * @param CmsIndex $cmsIndexPage
+     * @param CatalogCategoryView $catalogCategoryViewPage
+     * @param array $products
+     * @param array $productPrice
+     * @param Customer $customer
      * @return void
      */
     public function processAssert(
-        CatalogProductSimple $product,
-        CatalogProductView $pageCatalogProductView,
-        CmsIndex $cmsIndex,
-        CatalogCategoryView $catalogCategoryView,
-        array $price
+        CatalogProductView $catalogProductViewPage,
+        CmsIndex $cmsIndexPage,
+        CatalogCategoryView $catalogCategoryViewPage,
+        array $products,
+        array $productPrice,
+        Customer $customer = null
     ) {
-        $cmsIndex->open();
-        $categoryName = $product->getCategoryIds()[0];
-        $productName = $product->getName();
-        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $catalogCategoryView->getListProductBlock()->openProductViewPage($productName);
-        $productPriceBlock = $pageCatalogProductView->getViewBlock()->getPriceBlock();
-        $actualPrice['regular'] = $productPriceBlock->getRegularPrice();
-        $actualPrice['special'] = $productPriceBlock->getSpecialPrice();
-        $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
-        $diff = $this->verifyData($actualPrice, $price);
-        \PHPUnit_Framework_Assert::assertTrue(
-            empty($diff),
-            implode(' ', $diff)
-        );
+        if ($customer !== null) {
+            $this->objectManager->create(
+                '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                ['customer' => $customer]
+            )->run();
+        }
+        $cmsIndexPage->open();
+        foreach ($products as $key => $product) {
+            $categoryName = $product->getCategoryIds()[0];
+            $productName = $product->getName();
+            $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
+            $catalogCategoryViewPage->getListProductBlock()->openProductViewPage($productName);
+            $productPriceBlock = $catalogProductViewPage->getViewBlock()->getPriceBlock();
+            $actualPrice['regular'] = $productPriceBlock->getRegularPrice();
+            $actualPrice['special'] = $productPriceBlock->getSpecialPrice();
+            $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+            $diff = $this->verifyData($actualPrice, $productPrice[$key]);
+            \PHPUnit_Framework_Assert::assertTrue(
+                empty($diff),
+                implode(' ', $diff)
+            );
+        }
     }
 
     /**
-     * Check if arrays have equal values
+     * Check if arrays have equal values.
      *
      * @param array $formData
      * @param array $fixtureData
@@ -71,7 +81,7 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
     }
 
     /**
-     * Text of catalog price rule visibility on product page (frontend)
+     * Text of catalog price rule visibility on product page (frontend).
      *
      * @return string
      */

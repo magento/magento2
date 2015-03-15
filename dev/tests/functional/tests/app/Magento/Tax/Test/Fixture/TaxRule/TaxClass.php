@@ -6,8 +6,8 @@
 
 namespace Magento\Tax\Test\Fixture\TaxRule;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class TaxClass
@@ -15,23 +15,17 @@ use Magento\Mtf\Fixture\FixtureInterface;
  * Data keys:
  *  - dataSet
  */
-class TaxClass implements FixtureInterface
+class TaxClass extends DataSource
 {
     /**
-     * Array with tax class names
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * Array with tax class fixtures
+     * Array with tax class fixtures.
      *
      * @var array
      */
     protected $fixture;
 
     /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -42,51 +36,16 @@ class TaxClass implements FixtureInterface
         if (isset($data['dataSet'])) {
             $dataSets = $data['dataSet'];
             foreach ($dataSets as $dataSet) {
-                if ($dataSet !== '-') {
-                    /** @var \Magento\Tax\Test\Fixture\TaxClass $taxClass */
-                    $taxClass = $fixtureFactory->createByCode('taxClass', ['dataSet' => $dataSet]);
-                    $this->fixture[] = $taxClass;
-                    $this->data[] = $taxClass->getClassName();
-                }
+                /** @var \Magento\Tax\Test\Fixture\TaxClass $taxClass */
+                $taxClass = $fixtureFactory->createByCode('taxClass', ['dataSet' => $dataSet]);
+                $this->fixture[] = $taxClass;
+                $this->data[] = $taxClass->getClassName();
             }
         }
     }
 
     /**
-     * Persist custom selections tax classes
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return string
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return tax class fixture
+     * Return tax class fixture.
      *
      * @return array
      */

@@ -48,7 +48,7 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $updateShoppingCart = '[name="update_cart_action"]';
+    protected $updateShoppingCart = '.update[name="update_cart_action"]';
 
     /**
      * Cart empty block selector
