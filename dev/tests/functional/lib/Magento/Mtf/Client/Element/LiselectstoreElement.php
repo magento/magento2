@@ -54,7 +54,7 @@ class LiselectstoreElement extends SimpleElement
      *
      * @var string
      */
-    protected $toggleSelector = '.toggle';
+    protected $toggleSelector = '.admin__action-dropdown[data-toggle="dropdown"]';
 
     /**
      * Select value in liselect dropdown

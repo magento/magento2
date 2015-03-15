@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Model;
 
+use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Store\Model\ScopeInterface;
 
@@ -40,9 +41,9 @@ class Config
     /**
      * Locale model
      *
-     * @var \Magento\Framework\Locale\ListsInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_localeLists;
+    protected $localeResolver;
 
     /**
      * Payment method factory
@@ -63,21 +64,21 @@ class Config
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Config\DataInterface $dataStorage
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
-        \Magento\Framework\Locale\ListsInterface $localeLists,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Config\DataInterface $dataStorage,
         \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_dataStorage = $dataStorage;
         $this->_paymentMethodFactory = $paymentMethodFactory;
-        $this->_localeLists = $localeLists;
+        $this->localeResolver = $localeResolver;
         $this->_date = $date;
     }
 
@@ -139,9 +140,12 @@ class Config
      */
     public function getMonths()
     {
-        $data = $this->_localeLists->getTranslationList('month');
-        foreach ($data as $key => $value) {
-            $monthNum = $key < 10 ? '0' . $key : $key;
+        $data = [];
+        $months = (new DataBundle())->get(
+            $this->localeResolver->getLocale()
+        )['calendar']['gregorian']['monthNames']['format']['wide'];
+        foreach ($months as $key => $value) {
+            $monthNum = ++$key < 10 ? '0' . $key : $key;
             $data[$key] = $monthNum . ' - ' . $value;
         }
         return $data;

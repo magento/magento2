@@ -71,7 +71,11 @@ class AttributeMetadataConverter
                     $optionArray = [];
                     foreach ($option['value'] as $optionArrayValues) {
                         $optionObject = $this->optionFactory->create();
-                        $this->dataObjectHelper->populateWithArray($optionObject, $optionArrayValues);
+                        $this->dataObjectHelper->populateWithArray(
+                            $optionObject,
+                            $optionArrayValues,
+                            '\Magento\Customer\Api\Data\OptionInterface'
+                        );
                         $optionArray[] = $optionObject;
                     }
                     $optionDataObject->setOptions($optionArray);

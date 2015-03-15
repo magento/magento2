@@ -72,6 +72,14 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the entity name for the order status history.
      *
      * @return string Entity name.

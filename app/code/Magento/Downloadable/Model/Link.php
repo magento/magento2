@@ -6,7 +6,6 @@
 namespace Magento\Downloadable\Model;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
-use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Downloadable\Model\Resource\Link as Resource;
 
@@ -55,11 +54,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @var MetadataServiceInterface
      */
     protected $metadataService;
-
-    /**
-     * @var AttributeDataBuilder
-     */
-    protected $customAttributeBuilder;
 
     /**
      * @param \Magento\Framework\Model\Context $context

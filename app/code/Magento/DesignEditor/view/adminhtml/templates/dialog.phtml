@@ -20,8 +20,14 @@ require([
         var options = {
             autoOpen:    false,
             modal:       true,
-            width:       570,
-            dialogClass: 'vde-dialog'
+            width:       '75%',
+            dialogClass: 'vde-dialog',
+            open: function () {
+                $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+            },
+            close: function () {
+                $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+            }
         };
         $('#dialog-message-confirm').dialog(options);
     });

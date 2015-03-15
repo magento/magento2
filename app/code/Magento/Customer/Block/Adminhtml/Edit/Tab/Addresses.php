@@ -317,12 +317,20 @@ class Addresses extends GenericMetadata
         }
 
         $customerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerDataObject, $account);
+        $this->dataObjectHelper->populateWithArray(
+            $customerDataObject,
+            $account,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->assign('customer', $customerDataObject);
         $addressCollection = [];
         foreach ($customerData['address'] as $key => $addressData) {
             $addressDataObject = $this->addressDataFactory->create();
-            $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+            $this->dataObjectHelper->populateWithArray(
+                $addressDataObject,
+                $addressData,
+                '\Magento\Customer\Api\Data\AddressInterface'
+            );
             $addressCollection[$key] = $addressDataObject;
         }
         $this->assign('addressCollection', $addressCollection);

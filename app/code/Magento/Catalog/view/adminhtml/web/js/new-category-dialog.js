@@ -55,11 +55,16 @@ define([
             this.element.dialog({
                 title: $.mage.__('Create Category'),
                 autoOpen: false,
-                minWidth: 560,
+                width: '75%',
                 dialogClass: 'mage-new-category-dialog form-inline',
                 modal: true,
                 multiselect: true,
                 resizable: false,
+                position: {
+                    my: 'left top',
+                    at: 'center top',
+                    of: 'body'
+                },
                 open: function () {
                     // fix for suggest field - overlapping dialog z-index
                     $('#new_category_parent-suggest').css('z-index', $.ui.dialog.maxZ + 1);
@@ -69,6 +74,10 @@ define([
                         $('#new_category_name').focus();
                     }
                     $('#new_category_messages').html('');
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 15;
+                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
                 },
                 close: function () {
                     $('#new_category_name, #new_category_parent-suggest').val('');
@@ -77,10 +86,11 @@ define([
                         validationOptions.errorClass, validationOptions.validClass || '');
                     newCategoryForm.validation('clearError');
                     $('#category_ids-suggest').focus();
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 },
                 buttons: [{
                     text: $.mage.__('Create Category'),
-                    'class': 'action-create primary',
+                    'class': 'action-primary',
                     'data-action': 'save',
                     click: function (event) {
                         if (!newCategoryForm.valid()) {

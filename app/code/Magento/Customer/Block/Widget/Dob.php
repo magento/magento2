@@ -160,7 +160,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
     }
 
     /**

@@ -643,6 +643,17 @@ abstract class AbstractModel extends \Magento\Framework\Object
     }
 
     /**
+     * Set entity id
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData('entity_id', $entityId);
+    }
+
+    /**
      * Clearing object for correct deleting by garbage collector
      *
      * @return $this

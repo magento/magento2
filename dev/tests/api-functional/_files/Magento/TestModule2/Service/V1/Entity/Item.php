@@ -16,10 +16,28 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData('id', $id);
+    }
+
+
+    /**
      * @return string
      */
     public function getName()
     {
         return $this->_data['name'];
+    }
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 }

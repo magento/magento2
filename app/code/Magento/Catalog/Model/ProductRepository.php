@@ -37,12 +37,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $initializationHelper;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -74,9 +74,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
-     * @param \Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param Resource\Product\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param Resource\Product $resourceModel
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
@@ -85,9 +85,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function __construct(
         ProductFactory $productFactory,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
-        \Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder $searchResultsBuilder,
+        \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
-        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\Resource\Product $resourceModel,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
@@ -96,7 +96,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
         $this->initializationHelper = $initializationHelper;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
         $this->attributeRepository = $attributeRepository;
@@ -293,10 +293,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
 
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
-        $this->searchResultsBuilder->setItems($collection->getItems());
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
-        return $this->searchResultsBuilder->create();
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+        return $searchResult;
     }
 
     /**

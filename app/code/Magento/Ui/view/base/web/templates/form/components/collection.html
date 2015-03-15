@@ -10,8 +10,8 @@
         <!-- ko foreach: { data: element.elems, as: 'element' } -->
             <li class="address-list-item" data-bind="css: { 'ui-state-active': element.active }, click: activate">
                 <div class="address-list-item-actions">
-                    <button class="action-delete" type="button" data-bind="attr: { title: $parent.removeLabel }, click: $parent.removeChild(element)">
-                        <span data-bind="text: element.removeLabel"></span>
+                    <button class="action-delete" type="button" data-bind="click: $parent.removeChild(element)">
+                        <span data-bind="text: $parent.removeLabel"></span>
                     </button>
                 </div>
                 <!-- ko template: previewTpl --><!-- /ko -->
@@ -22,7 +22,7 @@
         <!-- /ko -->
 
         <li class="address-list-actions last">
-            <button data-bind="attr: { title: element.addLabel }, click: element.addChild" type="button" class="scalable add">
+            <button data-bind="click: element.addChild" type="button" class="scalable add">
                 <span data-bind="text: element.addLabel"></span>
             </button>
         </li>
@@ -30,8 +30,8 @@
     <!-- ko foreach: { data: element.elems, as: 'element' } -->
     <div class="address-item-edit" data-bind="visible: element.active">
         <div class="address-item-edit-content">
-            <fieldset class="fieldset">
-                <legend style="display: none;" class="legend">
+            <fieldset class="admin__fieldset">
+                <legend class="admin__legend">
                     <span data-bind="text: $parent.label"></span>
                 </legend>
                 <br>
