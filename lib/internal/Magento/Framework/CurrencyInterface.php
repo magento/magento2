@@ -32,7 +32,7 @@ interface CurrencyInterface
      * when no symbol is available it returns the currency shortname (f.e. FIM for Finnian Mark)
      *
      * @param  string             $currency (Optional) Currency name
-     * @param  string|\Magento\Framework\Locale $locale   (Optional) Locale to display informations
+     * @param  string $locale   (Optional) Locale to display informations
      * @return string
      */
     public function getSymbol($currency = null, $locale = null);
@@ -41,7 +41,7 @@ interface CurrencyInterface
      * Returns the actual or details of other currency shortnames
      *
      * @param  string             $currency OPTIONAL Currency's name
-     * @param  string|\Magento\Framework\Locale $locale   OPTIONAL The locale
+     * @param  string $locale   OPTIONAL The locale
      * @return string
      */
     public function getShortName($currency = null, $locale = null);
@@ -50,7 +50,7 @@ interface CurrencyInterface
      * Returns the actual or details of other currency names
      *
      * @param  string             $currency (Optional) Currency's short name
-     * @param  string|\Magento\Framework\Locale $locale   (Optional) The locale
+     * @param  string $locale   (Optional) The locale
      * @return string
      */
     public function getName($currency = null, $locale = null);
@@ -123,7 +123,7 @@ interface CurrencyInterface
      * Example: 'de_XX' will be set to 'de' because 'de_XX' does not exist
      * 'xx_YY' will be set to 'root' because 'xx' does not exist
      *
-     * @param  string|\Magento\Framework\Locale $locale (Optional) Locale for parsing input
+     * @param  string $locale (Optional) Locale for parsing input
      * @throws \Zend_Currency_Exception When the given locale does not exist
      * @return $this
      */
@@ -243,7 +243,7 @@ interface CurrencyInterface
     /**
      * Sets a new exchange service
      *
-     * @param string|\Magento\Framework\CurrencyInterface_CurrencyInterface $service Service class
+     * @param string|\Magento\Framework\Locale\CurrencyInterface $service Service class
      * @return \Magento\Framework\CurrencyInterface
      */
     public function setService($service);

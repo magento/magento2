@@ -60,28 +60,10 @@ interface ListsInterface
     public function getOptionAllCurrencies();
 
     /**
-     * Returns localized informations as array, supported are several
-     * types of information.
-     * For detailed information about the types look into the documentation
-     *
-     * @param  string $path (Optional) Type of information to return
-     * @param  string $value (Optional) Value for detail list
-     * @return array Array with the wished information in the given language
-     */
-    public function getTranslationList($path = null, $value = null);
-
-    /**
      * Returns the localized country name
      *
      * @param  $value string Name to get detailed information about
-     * @return array
+     * @return string
      */
     public function getCountryTranslation($value);
-
-    /**
-     * Returns an array with the name of all countries translated to the given language
-     *
-     * @return array
-     */
-    public function getCountryTranslationList();
 }

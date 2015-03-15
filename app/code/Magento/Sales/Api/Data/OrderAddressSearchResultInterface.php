@@ -20,4 +20,12 @@ interface OrderAddressSearchResultInterface extends \Magento\Framework\Api\Searc
      * @return \Magento\Sales\Api\Data\OrderAddressInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

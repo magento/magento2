@@ -22,9 +22,12 @@ angular.module('add-database', ['ngStorage'])
             $http.post('index.php/database-check', $scope.db)
                 .success(function (data) {
                     $scope.testConnection.result = data;
-                    if (!(($scope.testConnection.result !== undefined) && (!$scope.testConnection.result.success))) {
+                    if ($scope.testConnection.result.success) {
                         $scope.nextState();
                     }
+                })
+                .error(function (data) {
+                    $scope.testConnection.failed = data;
                 });
         };
 

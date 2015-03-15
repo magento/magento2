@@ -160,11 +160,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_transportBuilder;
 
     /**
-     * @var AttributeFactory
-     */
-    protected $_attributeFactory;
-
-    /**
      * @var GroupRepositoryInterface
      */
     protected $_groupRepository;
@@ -237,7 +232,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressesFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         GroupRepositoryInterface $groupRepository,
-        AttributeFactory $attributeFactory,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         CustomerInterfaceFactory $customerDataFactory,
@@ -254,7 +248,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         $this->_addressesFactory = $addressesFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_groupRepository = $groupRepository;
-        $this->_attributeFactory = $attributeFactory;
         $this->_encryptor = $encryptor;
         $this->dateTime = $dateTime;
         $this->customerDataFactory = $customerDataFactory;
@@ -295,7 +288,11 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
             $addressesData[] = $address->getDataModel();
         }
         $customerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerDataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $customerDataObject->setAddresses($addressesData)
             ->setId($this->getId());
         return $customerDataObject;
@@ -421,11 +418,19 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         $customerData = (array)$this->getData();
         $customerData[CustomerData::ID] = $this->getId();
         $dataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($dataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $dataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $customerOrigData = (array)$this->getOrigData();
         $customerOrigData[CustomerData::ID] = $this->getId();
         $origDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($origDataObject, $customerOrigData);
+        $this->dataObjectHelper->populateWithArray(
+            $origDataObject,
+            $customerOrigData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->_eventManager->dispatch(
             'customer_save_after_data_object',
             ['customer_data_object' => $dataObject, 'orig_customer_data_object' => $origDataObject]
@@ -1015,18 +1020,15 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         }
 
         $entityType = $this->_config->getEntityType('customer');
-        $attribute = $this->_createCustomerAttribute();
-        $attribute->loadByCode($entityType, 'dob');
+        $attribute = $this->_config->getAttribute($entityType, 'dob');
         if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
             $errors[] = __('The Date of Birth is required.');
         }
-        $attribute = $this->_createCustomerAttribute();
-        $attribute->loadByCode($entityType, 'taxvat');
+        $attribute = $this->_config->getAttribute($entityType, 'taxvat');
         if ($attribute->getIsRequired() && '' == trim($this->getTaxvat())) {
             $errors[] = __('The TAX/VAT number is required.');
         }
-        $attribute = $this->_createCustomerAttribute();
-        $attribute->loadByCode($entityType, 'gender');
+        $attribute = $this->_config->getAttribute($entityType, 'gender');
         if ($attribute->getIsRequired() && '' == trim($this->getGender())) {
             $errors[] = __('Gender is required.');
         }
@@ -1113,7 +1115,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         $date = $this->getCreatedAt();
         if ($date) {
-            return $this->dateTime->toTimestamp($date);
+            return (new \DateTime($date))->getTimestamp();
         }
         return null;
     }
@@ -1278,8 +1280,8 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
 
         $expirationPeriod = $this->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($linkTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime($linkTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }
@@ -1319,14 +1321,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     protected function _createAddressCollection()
     {
         return $this->_addressesFactory->create();
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Attribute
-     */
-    protected function _createCustomerAttribute()
-    {
-        return $this->_attributeFactory->create();
     }
 
     /**

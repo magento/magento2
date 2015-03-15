@@ -69,7 +69,7 @@ define([
                             click: function() {
                                 $('body').trigger(saveConfirmEvent, eventData);
                             },
-                            'class': 'primary'
+                            'class': 'action-primary'
                         }
                     ]
                 );
@@ -155,7 +155,7 @@ define([
                             this.messages.add(response.message, messageType);
                         }, eventData.dialog);
                     },
-                    'class': 'primary'
+                    'class': 'action-primary'
                 }
             ];
             $(event.target).trigger('assign', eventData);

@@ -61,7 +61,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * string format used from input fields (all date input fields need apply locale settings)
      * int value can be declared in code (this meen whot we use valid date)
      *
-     * @param string|int $date
+     * @param string|int|\DateTime $date
      * @return string
      */
     public function formatDate($date)
@@ -70,21 +70,13 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             return null;
         }
         // unix timestamp given - simply instantiate date object
-        if (preg_match('/^[0-9]+$/', $date)) {
-            $date = new \Magento\Framework\Stdlib\DateTime\Date((int)$date);
+        if (is_scalar($date) && preg_match('/^[0-9]+$/', $date)) {
+            $date = new \DateTime('@' . $date);
             // international format
-        } elseif (preg_match('#^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$#', $date)) {
-            $zendDate = new \Magento\Framework\Stdlib\DateTime\Date();
-            $date = $zendDate->setIso($date);
+        } elseif (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date);
             // parse this date in current locale, do not apply GMT offset
-        } else {
-            $date = $this->_localeDate->date(
-                $date,
-                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT),
-                null,
-                false
-            );
         }
-        return $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $date->format('Y-m-d H:i:s');
     }
 }

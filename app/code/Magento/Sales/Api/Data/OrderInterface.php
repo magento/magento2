@@ -1069,6 +1069,14 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the external customer ID for the order.
      *
      * @return string External customer ID.

@@ -29,25 +29,22 @@
 <h2 class="page-title">{{$state.current.header}}</h2>
 
 <div
-    class="alert alert-info"
+    class="message message-success"
     ng-show="testConnection.result.success && testConnection.pressed"
     >
-    <span class="alert-icon icon-success-round"></span>
-    <span class="alert-text">Test connection successful.</span>
+    <span class="message-text">Test connection successful.</span>
 </div>
 <div
-    class="alert alert-info"
+    class="message message-error"
     ng-show="testConnection.result.success === false && testConnection.result !== undefined"
     >
-    <span class="alert-icon icon-failed-round"></span>
-    <span class="alert-text">{{testConnection.result.error}}</span>
+    <span class="message-text">{{testConnection.result.error}}</span>
 </div>
 <div
-    class="alert alert-info"
-    ng-show="testConnection.result.success === undefined && testConnection.result !== undefined"
+    class="message message-error"
+    ng-show="testConnection.failed !== undefined"
     >
-    <span class="alert-icon icon-failed-round"></span>
-    <span class="alert-text">Unknown Database Server Host.</span>
+    <span class="message-text">{{testConnection.failed}}</span>
 </div>
 
 <form

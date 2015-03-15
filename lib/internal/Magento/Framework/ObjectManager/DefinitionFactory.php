@@ -11,10 +11,8 @@
 
 namespace Magento\Framework\ObjectManager;
 
-use Magento\Framework\Api\Code\Generator\DataBuilder as DataBuilderGenerator;
 use Magento\Framework\Api\Code\Generator\Mapper as MapperGenerator;
 use Magento\Framework\Api\Code\Generator\SearchResults;
-use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator;
@@ -104,14 +102,11 @@ class DefinitionFactory
             $generator = new \Magento\Framework\Code\Generator(
                 $generatorIo,
                 [
-                    SearchResultsBuilder::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
                     Generator\Factory::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
                     Generator\Proxy::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
                     Generator\Repository::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Repository',
                     Generator\Persistor::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Persistor',
                     InterceptionGenerator\Interceptor::ENTITY_TYPE => '\Magento\Framework\Interception\Code\Generator\Interceptor',
-                    DataBuilderGenerator::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\DataBuilder',
-                    DataBuilderGenerator::ENTITY_TYPE_BUILDER  => 'Magento\Framework\Api\Code\Generator\DataBuilder',
                     MapperGenerator::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\Mapper',
                     SearchResults::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\SearchResults',
                     ConverterGenerator::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Converter',

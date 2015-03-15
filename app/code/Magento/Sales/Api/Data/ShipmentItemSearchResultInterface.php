@@ -19,4 +19,12 @@ interface ShipmentItemSearchResultInterface extends \Magento\Framework\Api\Searc
      * @return \Magento\Sales\Api\Data\ShipmentItemInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentItemInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

@@ -294,7 +294,9 @@ class ErrorProcessor
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $this->renderErrorMessage($errorMessage);
             } else {
-                $this->renderErrorMessage(new Phrase('Server internal error. See details in report api/%1', $reportId));
+                $this->renderErrorMessage(
+                    new Phrase('Server internal error. See details in report api/%1', [$reportId])
+                );
             }
         }
     }

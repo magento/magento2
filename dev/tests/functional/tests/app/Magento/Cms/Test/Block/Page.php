@@ -33,7 +33,7 @@ class Page extends Block
      *
      * @var string
      */
-    protected $cmsPageTitle = ".page-title";
+    protected $cmsPageTitle = ".page-title-wrapper";
 
     /**
      * Cms page text locator.

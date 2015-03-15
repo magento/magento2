@@ -1,0 +1,64 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Structure
+//  _____________________________________________
+
+//
+//  Indents
+//  ---------------------------------------------
+
+@indent__base: 2rem; // 20px
+@indent__xl: @indent__base * 2; // 40px
+@indent__l: @indent__base * 1.5; // 30px
+@indent__m: @indent__base * 1.25; // 25px
+@indent__s: @indent__base / 2; // 10px
+@indent__xs: @indent__base / 4; // 5px
+
+//
+//  Z axis
+//  ---------------------------------------------
+
+@z-index-1: 100;
+@z-index-2: 200;
+@z-index-3: 300;
+@z-index-4: 400;
+@z-index-5: 500;
+@z-index-6: 600;
+@z-index-7: 700;
+@z-index-8: 800;
+@z-index-9: 900;
+@z-index-10: 1000;
+
+// z-index 3
+@split-button__z-index: @z-index-3;
+
+// z-index 4
+@header__z-index: @z-index-4;
+@page-actions__fixed__z-index: @z-index-4;
+
+// z-index 5
+@field-tooltip__z-index: @z-index-5;
+
+// z-index 7
+@menu__z-index: @z-index-7;
+
+// z-index 8
+@overlay__z-index: @z-index-8;
+
+//  Base z-index for page wrapper to prevent inner page element overlap with pop-ups
+@page-wrapper__z-index__base: 1;
+
+//
+//  Components
+//  ---------------------------------------------
+
+@content__indent: @indent__l;
+
+@menu__width: 8.8rem;
+
+@component__shadow-size__base: 5px;
+@component__box-shadow__base: 1px 1px @component__shadow-size__base rgba(0, 0, 0, .5);

@@ -176,6 +176,14 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getEntityId();
 
     /**
+     * Sets the ID for the order address.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the fax number for the order address.
      *
      * @return string Fax number.

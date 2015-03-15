@@ -16,4 +16,13 @@ class Nested extends AbstractExtensibleObject
     {
         return $this->_get('details');
     }
+
+    /**
+     * @param \Magento\Webapi\Service\Entity\Simple $details
+     * @return $this
+     */
+    public function setDetails($details)
+    {
+        return $this->setData('details', $details);
+    }
 }

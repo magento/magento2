@@ -19,7 +19,7 @@
     <block name="reviewSummary" class="Magento\Review\Test\Block\Product\View\Summary" locator=".product-reviews-summary" strategy="css selector"/>
     <block name="customerReviewBlock" class="Magento\Review\Test\Block\Product\View" locator="#customer-reviews" strategy="css selector"/>
     <block name="reviewFormBlock" class="Magento\Review\Test\Block\Form" locator="#review-form" strategy="css selector"/>
-    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title h1.title .base" strategy="css selector"/>
+    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper h1.page-title .base" strategy="css selector"/>
     <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".column.main .widget" strategy="css selector"/>
   </page>
 </config>
