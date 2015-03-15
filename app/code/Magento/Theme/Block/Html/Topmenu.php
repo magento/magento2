@@ -35,6 +35,11 @@ class Topmenu extends Template implements IdentityInterface
      */
     protected $registry;
 
+    /**
+     * @param Registry $registry
+     * @param Template\Context $context
+     * @param array $data
+     */
     public function __construct(
         Registry $registry,
         Template\Context $context,
@@ -290,7 +295,7 @@ class Topmenu extends Template implements IdentityInterface
         }
 
         if ($item->getIsActive() && $currentCategoryName != $item->getName()) {
-            $classes[] = 'has_active';
+            $classes[] = 'has-active';
         }
 
         if ($currentCategoryName == $item->getName()) {
