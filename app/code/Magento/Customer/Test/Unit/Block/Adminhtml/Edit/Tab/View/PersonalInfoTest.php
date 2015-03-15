@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Customer personal information template block test.
@@ -104,7 +105,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 
         $this->localeDate = $this->getMock(
             'Magento\Framework\Stdlib\DateTime\Timezone',
-            ['scopeDate', 'formatDate', 'getDefaultTimezonePath'],
+            ['scopeDate', 'formatDateTime', 'getDefaultTimezonePath'],
             [],
             '',
             false
@@ -159,7 +160,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      * @param string|null $lastLoginAt
      * @param string|null $lastVisitAt
      * @param string|null $lastLogoutAt
-     *  @return void
+     * @return void
      * @dataProvider getCurrentStatusDataProvider
      */
     public function testGetCurrentStatus($status, $lastLoginAt, $lastVisitAt, $lastLogoutAt)
@@ -168,7 +169,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $this->customerLog->expects($this->any())->method('getLastVisitAt')->willReturn($lastVisitAt);
         $this->customerLog->expects($this->any())->method('getLastLogoutAt')->willReturn($lastLogoutAt);
 
-        $this->assertEquals($status, $this->block->getCurrentStatus());
+        $this->assertEquals($status, (string) $this->block->getCurrentStatus());
     }
 
     /**
@@ -180,7 +181,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             ['Offline', null, null, null],
             ['Offline', '2015-03-04 11:00:00', null, '2015-03-04 12:00:00'],
             ['Offline', '2015-03-04 11:00:00', '2015-03-04 11:40:00', null],
-            ['Online', '2015-03-04 11:00:00', '2015-03-04 11:45:00', null]
+            ['Online', '2015-03-04 11:00:00', (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT), null]
         ];
     }
 
@@ -193,7 +194,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testGetLastLoginDate($result, $lastLoginAt)
     {
         $this->customerLog->expects($this->once())->method('getLastLoginAt')->willReturn($lastLoginAt);
-        $this->localeDate->expects($this->any())->method('formatDate')->willReturn($lastLoginAt);
+        $this->localeDate->expects($this->any())->method('formatDateTime')->willReturn($lastLoginAt);
 
         $this->assertEquals($result, $this->block->getLastLoginDate());
     }
@@ -220,7 +221,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $this->customerLog->expects($this->once())->method('getLastLoginAt')->willReturn($lastLoginAt);
 
         $this->localeDate->expects($this->any())->method('scopeDate')->will($this->returnValue($lastLoginAt));
-        $this->localeDate->expects($this->any())->method('formatDate')->willReturn($lastLoginAt);
+        $this->localeDate->expects($this->any())->method('formatDateTime')->willReturn($lastLoginAt);
 
         $this->assertEquals($result, $this->block->getStoreLastLoginDate());
     }
