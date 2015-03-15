@@ -127,7 +127,7 @@ class PreferencesResolvingTest extends \PHPUnit_Framework_TestCase
                     '_ins_' => 'Type\Dependency\Configured',
                 ],
                 'type_dependency_shared_configured' => [
-                    '_i_' => 'Type\Dependency\Shared\Configured',
+                    '_i_' => 'Type\Dependency\Shared\ConfiguredPreference',
                 ],
                 'global_argument' => [
                     '_a_' => 'global_argument_configured',
@@ -144,12 +144,12 @@ class PreferencesResolvingTest extends \PHPUnit_Framework_TestCase
                     '_vac_' => [
                         'array_value' => 'value',
                         'array_configured_instance' => [
-                            '_i_' => 'Type\Dependency\Shared\Configured',
+                            '_i_' => 'Type\Dependency\Shared\ConfiguredPreference',
                         ],
                         'array_configured_array' => [
                             'array_array_value' => 'value',
                             'array_array_configured_instance' => [
-                                '_ins_' => 'Type\Dependency\Shared\Configured',
+                                '_ins_' => 'Type\Dependency\Shared\ConfiguredPreference',
                             ],
                         ],
                         'array_global_argument' => [
@@ -174,7 +174,8 @@ class PreferencesResolvingTest extends \PHPUnit_Framework_TestCase
             'Type\DependencyInterface' => 'Type\Dependency',
             'Type\Dependency\SharedInterface' => 'Type\Dependency\Shared',
             'Type\Dependency\ConfiguredInterface' => 'Type\Dependency\Configured',
-            'Type\Dependency\Shared\ConfiguredInterface' => 'Type\Dependency\Shared\Configured',
+            'Type\Dependency\Shared\ConfiguredInterface' => 'Type\Dependency\Shared\ConfiguredPreference',
+            'Type\Dependency\Shared\Configured' => 'Type\Dependency\Shared\ConfiguredPreference',
         ];
     }
 }

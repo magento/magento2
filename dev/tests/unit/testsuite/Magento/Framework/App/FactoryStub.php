@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
@@ -33,5 +35,18 @@ class FactoryStub implements \Magento\Framework\ObjectManager\FactoryInterface
     public function create($requestedType, array $arguments = [])
     {
         throw new \BadMethodCallException(__METHOD__);
+    }
+
+    /**
+     * Set object manager
+     *
+     * @param ObjectManagerInterface $objectManager
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function setObjectManager(ObjectManagerInterface $objectManager)
+    {
+
     }
 }

@@ -3,26 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\ObjectManager\Environment;
-
-require 'CompiledTesting.php';
+namespace Magento\Framework\App\ObjectManager\Environment;
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager\Environment\Compiled
+     * @var \Magento\Framework\App\ObjectManager\Environment\Compiled
      */
     protected $_compiled;
 
     protected function setUp()
     {
-        $envFactoryMock = $this->getMock('Magento\Framework\ObjectManager\EnvironmentFactory', [], [], '', false);
-        $this->_compiled = new \Magento\Framework\ObjectManager\Environment\CompiledTesting($envFactoryMock);
-    }
-
-    public function testGetFilePath()
-    {
-        $this->assertContains('/var/di/global.ser', $this->_compiled->getFilePath());
+        $envFactoryMock = $this->getMock('Magento\Framework\App\EnvironmentFactory', [], [], '', false);
+        $this->_compiled = new \Magento\Framework\App\ObjectManager\Environment\CompiledTesting($envFactoryMock);
     }
 
     public function testGetMode()

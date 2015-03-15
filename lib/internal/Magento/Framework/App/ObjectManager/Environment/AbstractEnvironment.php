@@ -4,17 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\ObjectManager\Environment;
+namespace Magento\Framework\App\ObjectManager\Environment;
 
-use Magento\Framework\ObjectManager\EnvironmentFactory;
-use Magento\Framework\ObjectManager\EnvironmentInterface;
+use Magento\Framework\App\EnvironmentFactory;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\App\EnvironmentInterface;
 use Magento\Framework\ObjectManager\Profiler\FactoryDecorator;
 use Magento\Framework\ObjectManager\FactoryInterface;
+use Magento\Framework\ObjectManager\Profiler\Log;
 
 abstract class AbstractEnvironment implements EnvironmentInterface
 {
     /**
-     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
+     * @var ConfigInterface
      */
     protected $config;
 
@@ -50,7 +52,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
      * Returns object manager factory
      *
      * @param array $arguments
-     * @return \Magento\Framework\ObjectManager\Factory\AbstractFactory
+     * @return FactoryInterface
      */
     public function getObjectManagerFactory($arguments)
     {
@@ -83,7 +85,7 @@ abstract class AbstractEnvironment implements EnvironmentInterface
         if (isset($arguments['MAGE_PROFILER']) && $arguments['MAGE_PROFILER'] == 2) {
             $this->factory = new FactoryDecorator(
                 $this->factory,
-                \Magento\Framework\ObjectManager\Profiler\Log::getInstance()
+                Log::getInstance()
             );
         }
     }
