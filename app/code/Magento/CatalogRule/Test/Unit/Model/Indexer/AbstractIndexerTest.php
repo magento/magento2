@@ -18,13 +18,22 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexer;
 
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_eventManagerMock;
+
     protected function setUp()
     {
+        $this->_eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
         $this->indexBuilder = $this->getMock('Magento\CatalogRule\Model\Indexer\IndexBuilder', [], [], '', false);
 
         $this->indexer = $this->getMockForAbstractClass(
             'Magento\CatalogRule\Model\Indexer\AbstractIndexer',
-            [$this->indexBuilder]
+            [
+                $this->indexBuilder,
+                $this->_eventManagerMock
+            ]
         );
     }
 
@@ -39,6 +48,12 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     public function testExecuteFull()
     {
         $this->indexBuilder->expects($this->once())->method('reindexFull');
+        $this->_eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'clean_cache_by_tags',
+                ['object' => $this->indexer]
+            );
 
         $this->indexer->executeFull();
     }

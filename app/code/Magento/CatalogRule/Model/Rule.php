@@ -144,6 +144,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+     */
+    protected $_ruleProductProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -158,6 +163,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $relatedCacheTypes
@@ -179,6 +185,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $relatedCacheTypes = [],
@@ -195,6 +202,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_cacheTypesList = $cacheTypesList;
         $this->_relatedCacheTypes = $relatedCacheTypes;
         $this->dateTime = $dateTime;
+        $this->_ruleProductProcessor = $ruleProductProcessor;
         parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
     }
 
@@ -444,5 +452,31 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->_cacheTypesList->invalidate($this->_relatedCacheTypes);
         }
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        if ($this->isObjectNew()) {
+            $this->_ruleProductProcessor->reindexList($this->getMatchingProductIds());
+        } else {
+            $this->_ruleProductProcessor->getIndexer()->invalidate();
+        }
+        return parent::afterSave();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->_ruleProductProcessor->getIndexer()->invalidate();
+        return parent::afterDelete();
     }
 }

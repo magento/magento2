@@ -17,11 +17,21 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     protected $indexBuilder;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $_eventManager;
+
+    /**
      * @param IndexBuilder $indexBuilder
      */
-    public function __construct(IndexBuilder $indexBuilder)
-    {
+    public function __construct(
+        IndexBuilder $indexBuilder,
+        \Magento\Framework\Event\ManagerInterface $eventManager
+    ) {
         $this->indexBuilder = $indexBuilder;
+        $this->_eventManager = $eventManager;
     }
 
     /**
@@ -43,6 +53,20 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     public function executeFull()
     {
         $this->indexBuilder->reindexFull();
+        $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
+    }
+
+    /**
+     * Get affected cache tags
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [
+            \Magento\Catalog\Model\Category::CACHE_TAG,
+            \Magento\Catalog\Model\Product::CACHE_TAG
+        ];
     }
 
     /**

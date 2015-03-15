@@ -171,9 +171,6 @@
         <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
     </type>
-    <type name="Magento\CatalogRule\Model\Indexer\AbstractIndexer">
-        <plugin name="abstractIndexerAroundSave" type="Magento\PageCache\Model\Indexer\CatalogRulePlugin"/>
-    </type>
     <type name="Magento\Customer\Api\GroupRepositoryInterface">
         <plugin name="invalidatePriceIndexerOnCustomerGroup" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup"/>
     </type>

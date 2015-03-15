@@ -31,6 +31,26 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject */
     protected $condition;
 
+    /**
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_ruleProductProcessor;
+
+    /**
+     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_productCollectionFactory;
+
+    /**
+     * @var \Magento\Framework\Model\Resource\Iterator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_resourceIterator;
+
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productModel;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
@@ -74,13 +94,39 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->_ruleProductProcessor = $this->getMock(
+            '\Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->_productCollectionFactory = $this->getMock(
+            '\Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
+        $this->_resourceIterator = $this->getMock(
+            '\Magento\Framework\Model\Resource\Iterator',
+            ['walk'],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rule = $this->objectManagerHelper->getObject(
             'Magento\CatalogRule\Model\Rule',
             [
                 'storeManager' => $this->storeManager,
-                'combineFactory' => $this->combineFactory
+                'combineFactory' => $this->combineFactory,
+                'ruleProductProcessor' => $this->_ruleProductProcessor,
+                'productCollectionFactory' => $this->_productCollectionFactory,
+                'resourceIterator' => $this->_resourceIterator,
             ]
         );
     }
@@ -140,5 +186,22 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [false],
             [true],
         ];
+    }
+
+    public function testAfterDelete()
+    {
+        $indexer = $this->getMock('\Magento\Indexer\Model\IndexerInterface');
+        $indexer->expects($this->once())->method('invalidate');
+        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->rule->afterDelete();
+    }
+
+    public function testAfterUpdate()
+    {
+        $this->rule->isObjectNew(false);
+        $indexer = $this->getMock('\Magento\Indexer\Model\IndexerInterface');
+        $indexer->expects($this->once())->method('invalidate');
+        $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
+        $this->rule->afterSave();
     }
 }
