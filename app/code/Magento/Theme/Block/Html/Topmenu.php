@@ -7,6 +7,7 @@ namespace Magento\Theme\Block\Html;
 
 use Magento\Framework\View\Block\IdentityInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\Registry;
 
 /**
  * Html page top menu block
@@ -26,6 +27,22 @@ class Topmenu extends Template implements IdentityInterface
      * @var \Magento\Framework\Data\Tree\Node
      */
     protected $_menu;
+
+    /**
+     * Core registry
+     *
+     * @var Registry
+     */
+    protected $registry;
+
+    public function __construct(
+        Registry $registry,
+        Template\Context $context,
+        array $data = []
+    ) {
+        $this->registry = $registry;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Init top menu tree structure
@@ -266,11 +283,17 @@ class Topmenu extends Template implements IdentityInterface
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
 
+        $currentCategoryName = $this->registry->registry('current_category')->getName();
+
         if ($item->getIsFirst()) {
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive()) {
+        if ($item->getIsActive() && $currentCategoryName != $item->getName()) {
+            $classes[] = 'has_active';
+        }
+
+        if ($currentCategoryName == $item->getName()) {
             $classes[] = 'active';
         }
 
