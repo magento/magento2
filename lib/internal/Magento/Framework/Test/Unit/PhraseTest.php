@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Test\Unit;
 
+use \Magento\Framework\Phrase;
+
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,14 +21,14 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
+        $this->defaultRenderer = Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
             ->getMock();
     }
 
     protected function tearDown()
     {
-        \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
+        Phrase::setRenderer($this->defaultRenderer);
     }
 
     public function testRendering()
@@ -34,7 +36,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $phrase = new \Magento\Framework\Phrase($text, $arguments);
+        $phrase = new Phrase($text, $arguments);
         Phrase::setRenderer($this->rendererMock);
 
         $this->rendererMock->expects($this->once())
