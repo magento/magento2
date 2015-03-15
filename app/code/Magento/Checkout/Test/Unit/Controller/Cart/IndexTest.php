@@ -7,6 +7,9 @@ namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
 use Magento\Checkout\Controller\Cart\Index;
 
+/**
+ * Class IndexTest
+ */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -64,6 +67,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultPageFactory;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
@@ -120,6 +126,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithMessages()
     {
         $phrase = $this->getMockBuilder('Magento\Framework\Phrase')

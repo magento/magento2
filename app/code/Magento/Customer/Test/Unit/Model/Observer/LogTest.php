@@ -10,6 +10,9 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Event\Observer;
 use Magento\Customer\Model\Observer\Log;
 
+/**
+ * Class LogTest
+ */
 class LogTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,6 +30,9 @@ class LogTest extends \PHPUnit_Framework_TestCase
      */
     protected $dateTime;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->loggerMock = $this->getMock('Magento\Customer\Model\Logger', [], [], '', false);
@@ -34,6 +40,9 @@ class LogTest extends \PHPUnit_Framework_TestCase
         $this->logObserver = new Log($this->loggerMock, $this->dateTime);
     }
 
+    /**
+     * @return void
+     */
     public function testLogLastLoginAt()
     {
         $id = 1;
@@ -64,6 +73,9 @@ class LogTest extends \PHPUnit_Framework_TestCase
         $this->logObserver->logLastLoginAt($observerMock);
     }
 
+    /**
+     * @return void
+     */
     public function testLogLastLogoutAt()
     {
         $id = 1;

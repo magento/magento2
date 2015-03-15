@@ -7,8 +7,6 @@ namespace Magento\Customer\Test\Unit\Model;
 
 /**
  * Customer log model test.
- *
- * @package Magento\Customer\Model
  */
 class LogTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +27,9 @@ class LogTest extends \PHPUnit_Framework_TestCase
         'last_logout_at' => '2015-03-04 12:05:00',
     ];
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -44,21 +45,33 @@ class LogTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetCustomerId()
     {
         $this->assertEquals($this->logData['customer_id'], $this->log->getCustomerId());
     }
 
+    /**
+     * @return void
+     */
     public function testGetLastLoginAt()
     {
         $this->assertEquals($this->logData['last_login_at'], $this->log->getLastLoginAt());
     }
 
+    /**
+     * @return void
+     */
     public function testGetLastVisitAt()
     {
         $this->assertEquals($this->logData['last_visit_at'], $this->log->getLastVisitAt());
     }
 
+    /**
+     * @return void
+     */
     public function testGetLastLogoutAt()
     {
         $this->assertEquals($this->logData['last_logout_at'], $this->log->getLastLogoutAt());

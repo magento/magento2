@@ -7,8 +7,6 @@ namespace Magento\Customer\Test\Unit\Model;
 
 /**
  * Customer log data logger test.
- *
- * @package Magento\Customer\Model
  */
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,6 +36,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected $adapter;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->adapter = $this->getMock(
@@ -65,6 +66,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      * @param int $customerId
      * @param array $data
      * @dataProvider testLogDataProvider
+     * @return void
      */
     public function testLog($customerId, $data)
     {
@@ -107,6 +109,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      * @param int $customerId
      * @param array $data
      * @dataProvider testGetDataProvider
+     * @return void
      */
     public function testGet($customerId, $data)
     {

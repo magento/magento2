@@ -13,7 +13,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Translation\Model\Js\DataProvider;
 use Magento\Translation\Model\Js\Config;
 
-
+/**
+ * Class DataProviderTest
+ */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,6 +43,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $rootDirectoryMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
@@ -60,6 +65,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetData()
     {
         $themePath = 'blank';

@@ -8,8 +8,14 @@ namespace Magento\Framework\Test\Unit\Translate\Js;
 
 use Magento\Framework\Translate\Js\Config;
 
+/**
+ * Class ConfigTest
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testDefault()
     {
         $config = new Config();
@@ -17,6 +23,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($config->getDictionaryFileName());
     }
 
+    /**
+     * @return void
+     */
     public function testCustom()
     {
         $path = 'path';

@@ -8,6 +8,9 @@ namespace Magento\Translation\Test\Unit\Model\Js\Config\Source;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\Config\Source\Strategy;
 
+/**
+ * Class StrategyTest
+ */
 class StrategyTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,12 +18,20 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * Set up
+     * @return void
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject('Magento\Translation\Model\Js\Config\Source\Strategy');
     }
 
+    /**
+     * Test for toOptionArray method
+     * @return void
+     */
     public function testToOptionArray()
     {
         $expected = [

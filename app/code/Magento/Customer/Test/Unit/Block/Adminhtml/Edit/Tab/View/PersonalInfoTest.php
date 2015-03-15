@@ -9,8 +9,6 @@ use Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo;
 
 /**
  * Customer personal information template block test.
- *
- * @package Magento\Customer\Block\Adminhtml\Edit\Tab\View
  */
 class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +42,9 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $customer = $this->getMock(
@@ -136,6 +137,9 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetStoreLastLoginDateTimezone()
     {
         $this->scopeConfig
@@ -155,6 +159,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      * @param string|null $lastLoginAt
      * @param string|null $lastVisitAt
      * @param string|null $lastLogoutAt
+     *  @return void
      * @dataProvider getCurrentStatusDataProvider
      */
     public function testGetCurrentStatus($status, $lastLoginAt, $lastVisitAt, $lastLogoutAt)
@@ -183,6 +188,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      * @param string $result
      * @param string|null $lastLoginAt
      * @dataProvider getLastLoginDateDataProvider
+     * @return void
      */
     public function testGetLastLoginDate($result, $lastLoginAt)
     {
@@ -207,6 +213,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      * @param string $result
      * @param string|null $lastLoginAt
      * @dataProvider getStoreLastLoginDateDataProvider
+     * @return void
      */
     public function testGetStoreLastLoginDate($result, $lastLoginAt)
     {
