@@ -25,4 +25,16 @@ class FilterGroup extends AbstractExtensibleObject
         $filters = $this->_get(self::FILTERS);
         return is_null($filters) ? [] : $filters;
     }
+
+    /**
+     * Set filters
+     *
+     * @param \Magento\Framework\Api\Filter[] $filters
+     * @return $this
+     * @codeCoverageIgnore
+     */
+    public function setFilters(array $filters = null)
+    {
+        return $this->setData(self::FILTERS, $filters);
+    }
 }

@@ -65,6 +65,14 @@ interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDa
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the is-customer-notified flag value for the credit memo.
      *
      * @return int Is-customer-notified flag value.

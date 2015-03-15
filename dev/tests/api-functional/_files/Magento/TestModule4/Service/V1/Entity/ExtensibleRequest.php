@@ -14,4 +14,22 @@ class ExtensibleRequest extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         return $this->getData("name");
     }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData("name", $name);
+    }
+
+    /**
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData("entity_id", $entityId);
+    }
 }

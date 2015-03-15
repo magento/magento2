@@ -19,7 +19,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
     public function testFormForgotpasswordAction()
     {
         $this->dispatch('backend/admin/auth/forgotpassword');
-        $expected = 'Forgot your user name or password?';
+        $expected = 'Password Help';
         $this->assertContains($expected, $this->getResponse()->getBody());
     }
 

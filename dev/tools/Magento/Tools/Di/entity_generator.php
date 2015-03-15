@@ -4,10 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\Api\Code\Generator\DataBuilder;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
-use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Code\Generator;
 use Magento\Framework\Code\Generator\Io;
@@ -75,9 +73,6 @@ $generator = new Generator(
     $validator,
     $io,
     [
-        DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
-        SearchResultsBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
-        DataBuilder::ENTITY_TYPE_BUILDER  => 'Magento\Framework\Api\Code\Generator\DataBuilder',
         Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
         Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
         Interceptor::ENTITY_TYPE => 'Magento\Framework\Interception\Code\Generator\Interceptor',

@@ -33,9 +33,9 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     protected $attributeCollectionFactory;
 
     /**
-     * @var \Magento\Eav\Api\Data\AttributeSearchResultsDataBuilder
+     * @var \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @var Entity\AttributeFactory
@@ -46,20 +46,20 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
      * @param Config $eavConfig
      * @param Resource\Entity\Attribute $eavResource
      * @param Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Magento\Eav\Api\Data\AttributeSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Resource\Entity\Attribute $eavResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Eav\Api\Data\AttributeSearchResultsDataBuilder $searchResultsBuilder,
+        \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
     ) {
         $this->eavConfig = $eavConfig;
         $this->eavResource = $eavResource;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->attributeFactory = $attributeFactory;
     }
 
@@ -127,10 +127,11 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         foreach ($attributeCollection as $attribute) {
             $attributes[] = $this->get($entityTypeCode, $attribute->getAttributeCode());
         }
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
-        $this->searchResultsBuilder->setItems($attributes);
-        $this->searchResultsBuilder->setTotalCount($totalCount);
-        return $this->searchResultsBuilder->create();
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
+        $searchResults->setItems($attributes);
+        $searchResults->setTotalCount($totalCount);
+        return $searchResults;
     }
 
     /**
