@@ -24,7 +24,12 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultBuilder;
+    protected $searchResultFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchResultsMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -50,9 +55,16 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxRuleRegistry = $this->getMock('\Magento\Tax\Model\Calculation\TaxRuleRegistry', [], [], '', false);
-        $this->searchResultBuilder = $this->getMock(
-            '\Magento\Tax\Api\Data\TaxRuleSearchResultsDataBuilder',
-            ['setSearchCriteria', 'setTotalCount', 'setItems', 'create'],
+        $this->searchResultFactory = $this->getMock(
+            '\Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->searchResultsMock = $this->getMock(
+            '\Magento\Tax\Api\Data\TaxRuleSearchResultsInterface',
+            [],
             [],
             '',
             false
@@ -69,7 +81,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new TaxRuleRepository(
             $this->taxRuleRegistry,
-            $this->searchResultBuilder,
+            $this->searchResultFactory,
             $this->ruleFactory,
             $this->collectionFactory,
             $this->resource
@@ -169,7 +181,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
 
-        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
+        $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
         $filterGroupMock->expects($this->exactly(2))->method('getFilters')->willReturn([$filterMock]);
@@ -183,7 +195,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->once())->method('addFieldToFilter')
             ->with([0 => 'rate.tax_calculation_rate_id'], [0 => ['eq' => 'value']]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
-        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with($collectionSize);
+        $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
         $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
@@ -193,8 +205,8 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
         $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
-        $this->searchResultBuilder->expects($this->once())->method('setItems')->with([]);
-        $this->searchResultBuilder->expects($this->once())->method('create')->willReturnSelf();
-        $this->assertEquals($this->searchResultBuilder, $this->model->getList($searchCriteriaMock));
+        $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
+        $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
+        $this->assertEquals($this->searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 }

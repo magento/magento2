@@ -22,4 +22,15 @@ class AttributeMetadata extends AbstractSimpleObject implements MetadataObjectIn
     {
         return $this->_get(self::ATTRIBUTE_CODE);
     }
+
+    /**
+     * Set code of the attribute.
+     *
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function setAttributeCode($attributeCode)
+    {
+        return $this->setData(self::ATTRIBUTE_CODE, $attributeCode);
+    }
 }

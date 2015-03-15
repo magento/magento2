@@ -69,6 +69,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->typeMock = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
         $this->optionFactoryMock = $this->getMockBuilder('\Magento\Bundle\Api\Data\OptionInterfaceFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')

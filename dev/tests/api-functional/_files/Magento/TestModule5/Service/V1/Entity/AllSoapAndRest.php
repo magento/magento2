@@ -29,6 +29,17 @@ class AllSoapAndRest extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * Set item ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData(self::ID, $entityId);
+    }
+
+    /**
      * Retrieve item Name.
      *
      * @return string|null Item name
@@ -36,6 +47,17 @@ class AllSoapAndRest extends \Magento\Framework\Api\AbstractExtensibleObject
     public function getName()
     {
         return $this->_get(self::NAME);
+    }
+
+    /**
+     * Set item Name.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
     }
 
     /**
@@ -49,6 +71,17 @@ class AllSoapAndRest extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * Set if entity is enabled
+     *
+     * @param bool $isEnabled
+     * @return bool
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        return $this->setData(self::ENABLED, $isEnabled);
+    }
+
+    /**
      * Check if current entity has a property defined
      *
      * @return bool
@@ -56,6 +89,17 @@ class AllSoapAndRest extends \Magento\Framework\Api\AbstractExtensibleObject
     public function hasOrders()
     {
         return $this->_get(self::HAS_ORDERS);
+    }
+
+    /**
+     * Set whether current entity has a property defined
+     *
+     * @param bool $setHasOrders
+     * @return $this
+     */
+    public function setHasOrders($hasOrders)
+    {
+        return $this->setData(self::HAS_ORDERS, $hasOrders);
     }
 
     /**

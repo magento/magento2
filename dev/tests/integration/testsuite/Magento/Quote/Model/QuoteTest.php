@@ -46,7 +46,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
         $expected = $this->_getCustomerDataArray();
         $customer = $customerFactory->create();
-        $dataObjectHelper->populateWithArray($customer, $expected);
+        $dataObjectHelper->populateWithArray(
+            $customer,
+            $expected,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
 
         $this->assertEquals($expected, $this->convertToArray($customer));
@@ -68,7 +72,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         //For save in repository
         $expected = $this->removeIdFromCustomerData($expected);
         $customerDataSet = $customerFactory->create();
-        $dataObjectHelper->populateWithArray($customerDataSet, $expected);
+        $dataObjectHelper->populateWithArray(
+            $customerDataSet,
+            $expected,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->assertEquals($expected, $this->convertToArray($customerDataSet));
         /**
          * @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
@@ -80,7 +88,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $expected = $this->_getCustomerDataArray();
         $expected = $this->changeEmailInCustomerData('test@example.com', $expected);
         $customerDataUpdated = $customerFactory->create();
-        $dataObjectHelper->populateWithArray($customerDataUpdated, $expected);
+        $dataObjectHelper->populateWithArray(
+            $customerDataUpdated,
+            $expected,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $quote->updateCustomerData($customerDataUpdated);
         $customer = $quote->getCustomer();
         $expected = $this->changeEmailInCustomerData('test@example.com', $expected);

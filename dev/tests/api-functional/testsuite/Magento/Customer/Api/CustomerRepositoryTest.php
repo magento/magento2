@@ -213,7 +213,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $newCustomerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -249,7 +253,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $newCustomerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -296,7 +304,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $customerData[Customer::ID] = -1;
         $newCustomerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         $serviceInfo = [
             'rest' => [

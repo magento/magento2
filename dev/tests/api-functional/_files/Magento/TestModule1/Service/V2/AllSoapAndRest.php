@@ -6,21 +6,21 @@
 namespace Magento\TestModule1\Service\V2;
 
 use Magento\TestModule1\Service\V2\Entity\Item;
-use Magento\TestModule1\Service\V2\Entity\ItemBuilder;
+use Magento\TestModule1\Service\V2\Entity\ItemFactory;
 
 class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestInterface
 {
     /**
-     * @var ItemBuilder
+     * @var ItemFactory
      */
-    protected $itemBuilder;
+    protected $itemFactory;
 
     /**
-     * @param ItemBuilder $itemBuilder
+     * @param ItemFactory $itemFactory
      */
-    public function __construct(ItemBuilder $itemBuilder)
+    public function __construct(ItemFactory $itemFactory)
     {
-        $this->itemBuilder = $itemBuilder;
+        $this->itemFactory = $itemFactory;
     }
 
     /**
@@ -28,7 +28,7 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestIn
      */
     public function item($id)
     {
-        return $this->itemBuilder->setId($id)->setName('testProduct1')->setPrice('1')->create();
+        return $this->itemFactory->create()->setId($id)->setName('testProduct1')->setPrice('1');
     }
 
     /**
@@ -37,8 +37,8 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestIn
     public function items($filters = [], $sortOrder = 'ASC')
     {
         $result = [];
-        $firstItem = $this->itemBuilder->setId(1)->setName('testProduct1')->setPrice('1')->create();
-        $secondItem = $this->itemBuilder->setId(2)->setName('testProduct2')->setPrice('2')->create();
+        $firstItem = $this->itemFactory->create()->setId(1)->setName('testProduct1')->setPrice('1');
+        $secondItem = $this->itemFactory->create()->setId(2)->setName('testProduct2')->setPrice('2');
 
         /** Simple filtration implementation */
         if (!empty($filters)) {
@@ -62,7 +62,7 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestIn
      */
     public function create($name)
     {
-        return $this->itemBuilder->setId(rand())->setName($name)->setPrice('10')->create();
+        return $this->itemFactory->create()->setId(rand())->setName($name)->setPrice('10');
     }
 
     /**
@@ -70,10 +70,10 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestIn
      */
     public function update(Item $entityItem)
     {
-        return $this->itemBuilder
+        return $this->itemFactory->create()
             ->setId($entityItem->getId())
             ->setName('Updated' . $entityItem->getName())
-            ->setPrice('5')->create();
+            ->setPrice('5');
     }
 
     /**
@@ -81,6 +81,6 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V2\AllSoapAndRestIn
      */
     public function delete($id)
     {
-        return $this->itemBuilder->setId($id)->setName('testProduct1')->setPrice('1')->create();
+        return $this->itemFactory->create()->setId($id)->setName('testProduct1')->setPrice('1');
     }
 }

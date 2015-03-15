@@ -9,24 +9,24 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 class CanonicalUrlRewriteGenerator
 {
     /** @var ProductUrlPathGenerator */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteBuilder */
-    protected $urlRewriteBuilder;
+    /** @var UrlRewriteFactory */
+    protected $urlRewriteFactory;
 
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
-     * @param UrlRewriteBuilder $urlRewriteBuilder
+     * @param UrlRewriteFactory $urlRewriteFactory
      */
-    public function __construct(ProductUrlPathGenerator $productUrlPathGenerator, UrlRewriteBuilder $urlRewriteBuilder)
+    public function __construct(ProductUrlPathGenerator $productUrlPathGenerator, UrlRewriteFactory $urlRewriteFactory)
     {
         $this->productUrlPathGenerator = $productUrlPathGenerator;
-        $this->urlRewriteBuilder = $urlRewriteBuilder;
+        $this->urlRewriteFactory = $urlRewriteFactory;
     }
 
     /**
@@ -39,13 +39,12 @@ class CanonicalUrlRewriteGenerator
     public function generate($storeId, Product $product)
     {
         return [
-            $this->urlRewriteBuilder
+            $this->urlRewriteFactory->create()
                 ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($product->getId())
                 ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
                 ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
                 ->setStoreId($storeId)
-                ->create()
         ];
     }
 }
