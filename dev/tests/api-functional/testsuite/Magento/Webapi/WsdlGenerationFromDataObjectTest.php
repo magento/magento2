@@ -181,6 +181,7 @@ RESPONSE_ELEMENT;
 
     /**
      * @param string $wsdlContent
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _checkComplexTypesDeclaration($wsdlContent)
     {

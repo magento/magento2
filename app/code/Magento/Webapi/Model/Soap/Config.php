@@ -277,6 +277,7 @@ class Config
      * @param bool $preserveVersion Should version be preserved during interface name conversion into service name
      * @return string
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getServiceName($interfaceName, $version, $preserveVersion = true)
     {

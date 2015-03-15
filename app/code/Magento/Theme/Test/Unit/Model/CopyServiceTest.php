@@ -463,6 +463,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * cover \Magento\Theme\Model\CopyService::_copyFilesystemCustomization
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCopyFilesystemCustomization()
     {
