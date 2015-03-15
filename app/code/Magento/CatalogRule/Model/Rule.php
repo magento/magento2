@@ -462,7 +462,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function afterSave()
     {
         if ($this->isObjectNew()) {
-            $this->_ruleProductProcessor->reindexList($this->getMatchingProductIds());
+            $this->getMatchingProductIds();
+            if (!empty($this->_productIds) && is_array($this->_productIds)) {
+                $this->_ruleProductProcessor->reindexList($this->_productIds);
+            }
         } else {
             $this->_ruleProductProcessor->getIndexer()->invalidate();
         }
