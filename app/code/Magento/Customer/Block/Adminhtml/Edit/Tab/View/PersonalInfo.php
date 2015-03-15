@@ -348,15 +348,17 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getCurrentStatus()
     {
+        $lastLoginTime = $this->getCustomerLog()->getLastLoginAt();
+
         // Customer has never been logged in.
-        if (!$this->getCustomerLog()->getLastLoginAt()) {
+        if (!$lastLoginTime) {
             return __('Offline');
         }
 
+        $lastLogoutTime = $this->getCustomerLog()->getLastLogoutAt();
+
         // Customer clicked 'Log Out' link\button.
-        if ($this->getCustomerLog()->getLastLogoutAt() &&
-            strtotime($this->getCustomerLog()->getLastLogoutAt()) > strtotime($this->getCustomerLog()->getLastLoginAt())
-        ) {
+        if ($lastLogoutTime && strtotime($lastLogoutTime) > strtotime($lastLoginTime)) {
             return __('Offline');
         }
 
@@ -365,8 +367,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $currentTimestamp = (new \DateTime())->getTimestamp();
         $lastVisitTime = $this->getCustomerLog()->getLastVisitAt();
 
-        if ($lastVisitTime && $currentTimestamp - strtotime($lastVisitTime) > $interval * 60
-        ) {
+        if ($lastVisitTime && $currentTimestamp - strtotime($lastVisitTime) > $interval * 60) {
             return __('Offline');
         }
 
@@ -383,7 +384,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         $date = $this->getCustomerLog()->getLastLoginAt();
 
         if ($date) {
-            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
         }
 
         return __('Never');
@@ -400,7 +401,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
 
         if ($date) {
             $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
-            return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
+            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
         }
 
         return __('Never');
