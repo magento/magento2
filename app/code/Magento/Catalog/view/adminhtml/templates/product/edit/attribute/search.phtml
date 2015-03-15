@@ -25,9 +25,9 @@
     <ul data-mage-init='{"menu":[]}'>
         <% if (data.items.length) { %>
         <% _.each(data.items, function(value){ %>
-        <li <%= data.optionData(value) %>><a href="#"><%= value.label %></a></li>
+        <li <%- data.optionData(value) %>><a href="#"><%- value.label %></a></li>
         <% }); %>
-        <% } else { %><span class="mage-suggest-no-records"><%= data.noRecordsText %></span><% } %>
+        <% } else { %><span class="mage-suggest-no-records"><%- data.noRecordsText %></span><% } %>
     </ul>
     <div class="actions"><?php echo $block->getAttributeCreate()?></div>
 </script>

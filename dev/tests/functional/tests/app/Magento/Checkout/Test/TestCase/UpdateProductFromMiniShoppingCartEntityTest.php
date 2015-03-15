@@ -85,6 +85,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
      */
     public function test($originalProduct, $checkoutData)
     {
+        $this->markTestIncomplete('Bug: MAGETWO-34259');
         // Preconditions:
         $product = $this->createProduct($originalProduct);
         $this->addToCart($product);

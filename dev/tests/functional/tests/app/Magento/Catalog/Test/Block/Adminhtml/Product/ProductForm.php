@@ -113,11 +113,6 @@ class ProductForm extends FormTabs
         } else {
             $tabs = $this->getFieldsByTabs($product);
 
-            //TODO: Remove after old product fixture will be deleted
-            if (null === $category && $product instanceof DataFixture) {
-                $categories = $product->getCategories();
-                $category = reset($categories);
-            }
             if ($category) {
                 $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
@@ -147,7 +142,7 @@ class ProductForm extends FormTabs
             /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails $tab */
             $tab = $this->openTab($tabName);
             $tab->addNewAttribute($tabName);
-            $this->fillAttributeForm($attribute);
+            $this->getAttributeForm()->fill($attribute);
         }
     }
 
@@ -284,18 +279,6 @@ class ProductForm extends FormTabs
         }
 
         return $data;
-    }
-
-    /**
-     * Fill product attribute form.
-     *
-     * @param CatalogProductAttribute $productAttribute
-     * @return void
-     */
-    public function fillAttributeForm(CatalogProductAttribute $productAttribute)
-    {
-        $attributeForm = $this->getAttributeForm();
-        $attributeForm->fill($productAttribute);
     }
 
     /**
