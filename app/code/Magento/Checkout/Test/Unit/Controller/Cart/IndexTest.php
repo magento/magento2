@@ -131,35 +131,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithMessages()
     {
-        $phrase = $this->getMockBuilder('Magento\Framework\Phrase')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $phrase->expects($this->once())
-            ->method('__toString')
-            ->willReturn('test_phrase');
-
-        $messages = [
-            '',
-            'test',
-            $phrase
-        ];
-        $this->cart->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($this->quote);
-        $this->quote->expects($this->once())
-            ->method('getItemsCount')
-            ->willReturn(0);
-        $this->quote->expects($this->once())
-            ->method('getMessages')
-            ->willReturn($messages);
-        $map = [
-            ['test'],
-            ['test_phrase']
-        ];
-        $this->messageManager->expects($this->exactly(2))
-            ->method('addError')
-            ->willReturnMap($map);
-
         $layout = $this->getMockBuilder('Magento\Framework\View\Layout')
             ->disableOriginalConstructor()
             ->getMock();

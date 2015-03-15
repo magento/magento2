@@ -135,6 +135,6 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->collection)
         );
 
-        $this->assertSame($this->collection, $this->object->getCollection());
+        $this->assertSame($this->collection, $this->object->getReviews());
     }
 }
