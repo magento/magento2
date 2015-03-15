@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -171,7 +174,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->dirWriteMock)
         );
 
-        /* Init \Magento\Core\Model\Resource\Layout\Collection model  */
+        /* Init \Magento\Widget\Model\Resource\Layout\Update\Collection model  */
         $this->updateFactory = $this->getMock(
             'Magento\Widget\Model\Layout\UpdateFactory',
             ['create'],
@@ -460,6 +463,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * cover \Magento\Theme\Model\CopyService::_copyFilesystemCustomization
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCopyFilesystemCustomization()
     {

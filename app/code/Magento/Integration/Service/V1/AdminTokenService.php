@@ -22,7 +22,7 @@ class AdminTokenService implements AdminTokenServiceInterface
 {
     /**
      * Token Model
-     *
+     *a
      * @var TokenModelFactory
      */
     private $tokenModelFactory;

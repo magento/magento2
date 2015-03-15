@@ -89,7 +89,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetProcessedTemplate()
     {
@@ -137,7 +137,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetProcessedTemplateSubject()
     {
@@ -185,7 +185,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDesignConfigException($config)
     {
-        // \Magento\Core\Model\Template is an abstract class
+        // \Magento\Email\Model\Template is an abstract class
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Email\Model\Template');
         $model->setDesignConfig($config);

@@ -36,36 +36,36 @@ class ServiceInputProcessor
     /** @var ObjectManagerInterface */
     protected $objectManager;
 
-    /** @var ServiceConfigReader */
-    protected $serviceConfigReader;
-
     /** @var AttributeValueFactory */
     protected $attributeValueFactory;
 
     /** @var WebapiCache */
     protected $cache;
 
+    /** @var  CustomAttributeTypeLocatorInterface */
+    protected $customAttributeTypeLocator;
+
     /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
      * @param ObjectManagerInterface $objectManager
-     * @param ServiceConfigReader $serviceConfigReader
      * @param AttributeValueFactory $attributeValueFactory
      * @param WebapiCache $cache
+     * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         ObjectManagerInterface $objectManager,
-        ServiceConfigReader $serviceConfigReader,
         AttributeValueFactory $attributeValueFactory,
-        WebapiCache $cache
+        WebapiCache $cache,
+        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
-        $this->serviceConfigReader = $serviceConfigReader;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->cache = $cache;
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
     }
 
     /**
@@ -153,7 +153,7 @@ class ServiceInputProcessor
                     }
                 }
                 if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
+                    $setterValue = $this->convertCustomAttributeValue($value, $className);
                 } else {
                     $setterValue = $this->_convertValue($value, $returnType);
                 }
@@ -167,24 +167,14 @@ class ServiceInputProcessor
      * Convert custom attribute data array to array of AttributeValue Data Object
      *
      * @param array $customAttributesValueArray
-     * @param string $returnType
      * @param string $dataObjectClassName
      * @return AttributeValue[]
      */
-    protected function convertCustomAttributeValue($customAttributesValueArray, $returnType, $dataObjectClassName)
+    protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
         $result = [];
-        $allAttributes = $this->serviceConfigReader->read();
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
-        if (!isset($allAttributes[$dataObjectClassName])) {
-            $attributes = $this->_convertValue($customAttributesValueArray, $returnType);
-            $attributesByName = [];
-            foreach ($attributes as $attribute) {
-                $attributesByName[$attribute->getAttributeCode()] = $attribute;
-            }
-            return $attributesByName;
-        }
-        $dataObjectAttributes = $allAttributes[$dataObjectClassName];
+
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
@@ -197,11 +187,9 @@ class ServiceInputProcessor
                 $customAttributeCode = null;
             }
 
-            //Check if type is defined, else default to mixed
-            $type = isset($dataObjectAttributes[$customAttributeCode])
-                ? $dataObjectAttributes[$customAttributeCode]
-                : TypeProcessor::ANY_TYPE;
-
+            //Check if type is defined, else default to string
+            $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
+            $type = $type ? $type : TypeProcessor::ANY_TYPE;
             $customAttributeValue = $customAttribute[AttributeValue::VALUE];
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible

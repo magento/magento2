@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Model\Product\Validator;
 use Closure;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Core\Helper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Json\Helper\Data;

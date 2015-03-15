@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
 class FieldTest extends \PHPUnit_Framework_TestCase
@@ -171,7 +174,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTooltipCreatesTooltipBlock()
     {
-        $this->_model->setData(['tooltip_block' => 'Magento\Core\Block\Tooltip'], 'scope');
+        $this->_model->setData(['tooltip_block' => 'Magento\Config\Block\Tooltip'], 'scope');
         $tooltipBlock = $this->getMock('Magento\Framework\View\Element\BlockInterface');
         $tooltipBlock->expects($this->once())->method('toHtml')->will($this->returnValue('tooltip block'));
         $this->_blockFactoryMock->expects(
@@ -179,7 +182,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\Core\Block\Tooltip'
+            'Magento\Config\Block\Tooltip'
         )->will(
             $this->returnValue($tooltipBlock)
         );

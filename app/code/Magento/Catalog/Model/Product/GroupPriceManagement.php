@@ -72,13 +72,13 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function add($productSku, $customerGroupId, $price)
+    public function add($sku, $customerGroupId, $price)
     {
         if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($price, 'Float')) {
             throw new InputException('Please provide valid data');
         }
         $customerGroup = $this->groupRepository->getById($customerGroupId);
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $groupPrices = $product->getData('group_price');
         $websiteIdentifier = 0;
         $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
@@ -122,9 +122,9 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     /**
      * {@inheritdoc}
      */
-    public function remove($productSku, $customerGroupId)
+    public function remove($sku, $customerGroupId)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $websiteIdentifier = 0;
         $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
@@ -137,9 +137,9 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku, $websiteId = null)
+    public function getList($sku, $websiteId = null)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $priceKey = 'website_price';
         $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
         if ($value == 0) {

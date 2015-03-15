@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Webapi\Test\Unit;
 
 use \Magento\Framework\Webapi\ServiceInputProcessor;
@@ -25,10 +28,10 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     protected $serviceInputProcessor;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $attributeValueFactory;
+    protected $attributeValueFactoryMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $serviceConfigReader;
+    protected $customAttributeTypeLocator;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject  */
     protected $objectManagerMock;
@@ -46,7 +49,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
 
-        $this->serviceConfigReader = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
+        $this->customAttributeTypeLocator = $this->getMockBuilder('Magento\Eav\Model\EavCustomAttributeTypeLocator')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,7 +71,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'typeProcessor' => $typeProcessor,
                 'objectManager' => $this->objectManagerMock,
                 'cache' => $cache,
-                'serviceConfigReader' => $this->serviceConfigReader,
+                'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock
             ]
         );
@@ -344,8 +347,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider customAttributesDataProvider
      * @param $customAttributeType
-     * @param $customAttributeValue
-     * @param $attributeCode
+     * @param $inputData
+     * @param $expectedObject
      */
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
@@ -357,13 +360,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray',
             ]
         );
-        $this->serviceConfigReader->expects($this->any())->method('read')->willReturn(
-            [
-                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes' => [
-                    TestService::CUSTOM_ATTRIBUTE_CODE => $customAttributeType
-                ]
-            ]
-        );
+        $this->customAttributeTypeLocator->expects($this->any())->method('getType')->willReturn($customAttributeType);
 
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',

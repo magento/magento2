@@ -55,7 +55,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'DeleteByIdentifier',
             ],
         ];
-        $this->assertTrue($this->_webApiCall($serviceInfo, ['productSku' => $sku, 'optionId' => $optionId]));
+        $this->assertTrue($this->_webApiCall($serviceInfo, ['sku' => $sku, 'optionId' => $optionId]));
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
         $product->load(1);
@@ -87,7 +87,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $option = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'optionId' => $optionId]);
+        $option = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'optionId' => $optionId]);
         unset($option['product_sku']);
         unset($option['option_id']);
         $excepted = include '_files/product_options.php';
@@ -113,7 +113,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $options = $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+        $options = $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
 
         /** Unset dynamic data */
         foreach ($options as $key => $value) {
