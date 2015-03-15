@@ -34,7 +34,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $phrase = new Phrase($text, $arguments);
+        $phrase = new \Magento\Framework\Phrase($text, $arguments);
         Phrase::setRenderer($this->rendererMock);
 
         $this->rendererMock->expects($this->once())

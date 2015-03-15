@@ -238,7 +238,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('authenticate')
             ->with('invalid@example.com', 'invalid')
-            ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.', [])));
+            ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.')));
 
         $this->customerSession->expects($this->never())
             ->method('setCustomerDataAsLoggedIn')
