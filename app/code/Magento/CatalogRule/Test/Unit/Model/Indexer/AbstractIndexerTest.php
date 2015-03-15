@@ -18,16 +18,35 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexer;
 
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_eventManagerMock;
+
+    /**
+     * Set up test
+     *
+     * @return void
+     */
     protected function setUp()
     {
+        $this->_eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
         $this->indexBuilder = $this->getMock('Magento\CatalogRule\Model\Indexer\IndexBuilder', [], [], '', false);
 
         $this->indexer = $this->getMockForAbstractClass(
             'Magento\CatalogRule\Model\Indexer\AbstractIndexer',
-            [$this->indexBuilder]
+            [
+                $this->indexBuilder,
+                $this->_eventManagerMock
+            ]
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $ids = [1, 2, 5];
@@ -36,9 +55,20 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
         $this->indexer->execute($ids);
     }
 
+    /**
+     * Test execute full reindex action
+     *
+     * @return void
+     */
     public function testExecuteFull()
     {
         $this->indexBuilder->expects($this->once())->method('reindexFull');
+        $this->_eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'clean_cache_by_tags',
+                ['object' => $this->indexer]
+            );
 
         $this->indexer->executeFull();
     }
@@ -46,12 +76,19 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\CatalogRule\CatalogRuleException
      * @expectedExceptionMessage Could not rebuild index for empty products array
+     *
+     * @return void
      */
     public function testExecuteListWithEmptyIds()
     {
         $this->indexer->executeList([]);
     }
 
+    /**
+     * @throws \Magento\CatalogRule\CatalogRuleException
+     *
+     * @return void
+     */
     public function testExecuteList()
     {
         $ids = [1, 2, 5];
@@ -63,12 +100,19 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\CatalogRule\CatalogRuleException
      * @expectedExceptionMessage Could not rebuild index for undefined product
+     *
+     * @return void
      */
     public function testExecuteRowWithEmptyId()
     {
         $this->indexer->executeRow(null);
     }
 
+    /**
+     * @throws \Magento\CatalogRule\CatalogRuleException
+     *
+     * @return void
+     */
     public function testExecuteRow()
     {
         $id = 5;
