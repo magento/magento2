@@ -38,6 +38,9 @@ class TemplateFileTest extends \PHPUnit_Framework_TestCase
      */
     protected $assetConfig;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->resolver = $this->getMock('Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface');
@@ -54,6 +57,7 @@ class TemplateFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Cover getFile when mode is developer
+     * @return void
      */
     public function testGetFileWhenStateDeveloper()
     {
@@ -79,6 +83,9 @@ class TemplateFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Cover getFile when mode is default
+     * @param string $mode
+     * @param string $method
+     * @return void
      * @dataProvider getMinifiedDataProvider
      */
     public function testGetFileWhenModifiedNeeded($mode, $method)
@@ -108,6 +115,9 @@ class TemplateFileTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedMinified, $actual);
     }
 
+    /**
+     * @return void
+     */
     public function testGetFileIfMinificationIsDisabled()
     {
         $this->assetConfig

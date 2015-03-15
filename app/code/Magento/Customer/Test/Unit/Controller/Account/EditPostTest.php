@@ -6,6 +6,9 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditPostTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -78,6 +81,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -118,7 +124,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->formKeyValidator = $this->getMock('Magento\Framework\Data\Form\FormKey\Validator', [],[], '', false);
+        $this->formKeyValidator = $this->getMock('Magento\Framework\Data\Form\FormKey\Validator', [], [], '', false);
         $this->customerExtractor = $this->getMock('Magento\Customer\Model\CustomerExtractor', [], [], '', false);
         $this->customer = $this->getMockForAbstractClass(
             'Magento\Customer\Api\Data\CustomerInterface',
@@ -128,6 +134,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return \Magento\Customer\Controller\Account\EditPost
+     */
     public function getController()
     {
         return $this->objectManager->getObject(
@@ -145,6 +154,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testEditPostActionWithInvalidFormKey()
     {
         $this->resultRedirectFactory
@@ -164,6 +177,9 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->redirectResultMock, $this->getController()->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testEditPostActionWithAuthenticationExceptionWhenTryingChangePassword()
     {
         $customerId = 24;
@@ -286,6 +302,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->redirectResultMock, $this->getController()->execute());
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testEditPostActionWithoutErrors()
     {
         $customerId = 24;

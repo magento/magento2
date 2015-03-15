@@ -16,6 +16,9 @@ use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Url\DecoderInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Redirect
 {
     /**
