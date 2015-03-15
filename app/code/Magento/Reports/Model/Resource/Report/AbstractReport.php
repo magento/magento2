@@ -404,10 +404,9 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
         $tzTransitions = [];
         try {
             if (!empty($from)) {
-                $from = (new \DateTime($from))->getTimestamp();
+                $from = $from->getTimestamp();
             }
 
-            $to = new \DateTime($to);
             $nextPeriod = $this->_getWriteAdapter()->formatDate(
                 $to->format('Y-m-d H:i:s')
             );
