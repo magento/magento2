@@ -265,7 +265,7 @@ class Builder implements BuilderInterface
         } elseif (is_subclass_of($dataType, '\Magento\Framework\Model\AbstractExtensibleModel')) {
             return self::TYPE_DATA_MODEL;
         }
-
+        $dataType = ltrim($dataType, '\\');
         $sourceClassPreference = $this->objectManagerConfig->getPreference($dataType);
         if (empty($sourceClassPreference)) {
             throw new \LogicException(

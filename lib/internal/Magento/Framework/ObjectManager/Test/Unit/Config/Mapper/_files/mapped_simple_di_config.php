@@ -9,17 +9,17 @@ return [
         'Magento\Framework\App\RequestInterface' => 'Magento\Framework\App\Request\Http\Proxy',
     ],
     'Magento\Framework\App\State' => ['arguments' => ['test name' => 'test value']],
-    'Magento\Core\Model\Config\Modules' => [
+    'Magento\Config\Model\Config\Modules' => [
         'arguments' => ['test name' => 'test value'],
         'plugins' => [
             'simple_modules_plugin' => [
                 'sortOrder' => 10,
                 'disabled' => true,
-                'instance' => 'Magento\Core\Model\Config\Modules\Plugin',
+                'instance' => 'Magento\Config\Model\Config\Modules\Plugin',
             ],
             'simple_modules_plugin_advanced' => [
                 'sortOrder' => 0,
-                'instance' => 'Magento\Core\Model\Config\Modules\PluginAdvanced',
+                'instance' => 'Magento\Config\Model\Config\Modules\PluginAdvanced',
             ],
             'overridden_plugin' => ['sortOrder' => 30, 'disabled' => true],
         ],

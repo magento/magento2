@@ -64,7 +64,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getVarValue'
         )->with(
-            'Magento_Core',
+            'Magento_Theme',
             'v1'
         )->will(
             $this->returnValue('one')
@@ -80,7 +80,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $block = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\AbstractBlock',
             $helper->getConstructArguments('Magento\Framework\View\Element\AbstractBlock', $params),
-            uniqid('Magento\\Core\\Block\\AbstractBlock\\')
+            uniqid('Magento\\Theme\\Block\\AbstractBlock\\')
         );
 
         $this->assertEquals('one', $block->getVar('v1'));

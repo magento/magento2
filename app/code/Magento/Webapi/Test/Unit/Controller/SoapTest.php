@@ -72,18 +72,13 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['maskException'])
             ->getMock();
         $this->_appStateMock =  $this->getMock('\Magento\Framework\App\State', [], [], '', false);
-        $localeMock =  $this->getMockBuilder('Magento\Framework\Locale')
-            ->disableOriginalConstructor()
-            ->setMethods(['getLanguage'])
-            ->getMock();
-        $localeMock->expects($this->any())->method('getLanguage')->will($this->returnValue('en'));
 
         $localeResolverMock = $this->getMockBuilder(
             'Magento\Framework\Locale\Resolver'
         )->disableOriginalConstructor()->setMethods(
             ['getLocale']
         )->getMock();
-        $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue($localeMock));
+        $localeResolverMock->expects($this->any())->method('getLocale')->will($this->returnValue('en'));
 
         $this->_responseMock->expects($this->any())->method('clearHeaders')->will($this->returnSelf());
         $this->_responseMock

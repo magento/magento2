@@ -3,7 +3,9 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
 //  Animations
+//  _____________________________________________
 
 .animation(@animation) {
     -webkit-animation: @animation;
@@ -53,4 +55,22 @@
     -webkit-backface-visibility: @visibility;
        -moz-backface-visibility: @visibility;
             backface-visibility: @visibility;
+}
+
+//
+//  Effects
+//  _____________________________________________
+
+.transition (
+    @_property: all,
+    @_duration: .1s,
+    @_timing-function: linear
+) {
+    transition: @_property @_duration @_timing-function;
+}
+
+.scale (
+    @_size: .9
+) {
+    transform: scale(@_size);
 }

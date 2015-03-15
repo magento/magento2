@@ -25,8 +25,8 @@ class Shipping extends AbstractReport
     /**
      * Aggregate Shipping data
      *
-     * @param string|int|\Zend_Date|array|null $from
-     * @param string|int|\Zend_Date|array|null $to
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
      * @return $this
      */
     public function aggregate($from = null, $to = null)
@@ -35,7 +35,6 @@ class Shipping extends AbstractReport
         $from = $this->_dateToUtc($from);
         $to = $this->_dateToUtc($to);
 
-        $this->_checkDates($from, $to);
         $this->_aggregateByOrderCreatedAt($from, $to);
         $this->_aggregateByShippingCreatedAt($from, $to);
         $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_SHIPPING_FLAG_CODE);

@@ -6,11 +6,13 @@
  */
 
 namespace Magento\Eav\Test\Unit\Model\Resource\Entity\Attribute;
+
+use Magento\Eav\Model\Resource\Entity\Attribute\Set;
  
 class SetTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Set
      */
     protected $model;
 
@@ -44,9 +46,15 @@ class SetTest extends \PHPUnit_Framework_TestCase
      */
     protected $relationProcessor;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', ['getConnection'], [], '', false);
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\Resource')
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnection', 'getTableName'])
+            ->getMock();
         $this->transactionManagerMock = $this->getMock(
             '\Magento\Framework\Model\Resource\Db\TransactionManagerInterface'
         );
@@ -66,7 +74,10 @@ class SetTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->relationProcessor);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock = $this->getMockBuilder('Magento\Eav\Model\Config')
+            ->setMethods(['isCacheEnabled', 'getEntityType', 'getCache'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set',
             [
@@ -109,6 +120,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\StateException
      * @expectedExceptionMessage Default attribute set can not be deleted
+     * @return void
      */
     public function testBeforeDeleteStateException()
     {
@@ -132,6 +144,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage test exception
+     * @return void
      */
     public function testBeforeDelete()
     {
@@ -153,5 +166,130 @@ class SetTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('test exception'));
 
         $this->model->delete($this->objectMock);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetSetInfoCacheMiss()
+    {
+        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
+            ->getMock();
+        $cacheKey = Set::ATTRIBUTES_CACHE_ID . 1;
+        $cacheMock
+            ->expects($this->once())
+            ->method('load')
+            ->with($cacheKey)
+            ->willReturn(false);
+        $cacheMock
+            ->expects($this->once())
+            ->method('save')
+            ->with(
+                serialize(
+                    [
+                        1 => [
+                            10000 => [
+                                'group_id' =>  10,
+                                'group_sort' =>  100,
+                                'sort' =>  1000
+                            ]
+                        ]
+                    ]
+                ),
+                $cacheKey,
+                [\Magento\Eav\Model\Cache\Type::CACHE_TAG, \Magento\Eav\Model\Entity\Attribute::CACHE_TAG]
+            );
+
+        $this->eavConfigMock->expects($this->any())->method('isCacheEnabled')->willReturn(true);
+        $this->eavConfigMock->expects($this->any())->method('getCache')->willReturn($cacheMock);
+
+        $fetchResult = [
+            [
+                'attribute_id' => 1,
+                'attribute_group_id' => 10,
+                'group_sort_order' => 100,
+                'sort_order' => 1000,
+                'attribute_set_id' => 10000
+            ]
+        ];
+
+        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'joinLeft', 'where'])
+            ->getMock();
+        $selectMock->expects($this->once())->method('from')->will($this->returnSelf());
+        $selectMock->expects($this->once())->method('joinLeft')->will($this->returnSelf());
+        $selectMock->expects($this->atLeastOnce())->method('where')->will($this->returnSelf());
+
+        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->disableOriginalConstructor()
+            ->setMethods(['select', 'fetchAll'])
+            ->getMock();
+        $connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
+        $connectionMock->expects($this->atLeastOnce())->method('fetchAll')->willReturn($fetchResult);
+
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $this->resourceMock->expects($this->any())->method('getTableName')->willReturn('_TABLE_');
+        $this->assertEquals(
+            [
+                1 => [
+                    10000 => [
+                        'group_id' =>  10,
+                        'group_sort' =>  100,
+                        'sort' =>  1000
+                    ]
+                ],
+                2 => [],
+                3 => []
+            ],
+            $this->model->getSetInfo([1, 2, 3], 1)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetSetInfoCacheHit()
+    {
+        $cached = [
+            1 => [
+                10000 => [
+                    'group_id' => 10,
+                    'group_sort' => 100,
+                    'sort' => 1000
+                ]
+            ]
+        ];
+
+        $this->resourceMock->expects($this->never())->method('getConnection');
+        $this->eavConfigMock->expects($this->any())->method('isCacheEnabled')->willReturn(true);
+        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
+            ->getMock();
+        $cacheMock
+            ->expects($this->once())
+            ->method('load')
+            ->with(Set::ATTRIBUTES_CACHE_ID . 1)
+            ->willReturn(serialize($cached));
+
+        $this->eavConfigMock->expects($this->any())->method('getCache')->willReturn($cacheMock);
+
+        $this->assertEquals(
+            [
+                1 => [
+                    10000 => [
+                        'group_id' =>  10,
+                        'group_sort' =>  100,
+                        'sort' =>  1000
+                    ]
+                ],
+                2 => [],
+                3 => []
+            ],
+            $this->model->getSetInfo([1, 2, 3], 1)
+        );
     }
 }

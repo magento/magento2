@@ -69,23 +69,23 @@ abstract class AbstractModel extends AbstractExtensibleModel
     /**
      * Get object created at date affected current active store timezone
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getCreatedAtDate()
     {
-        return $this->_localeDate->date($this->dateTime->toTimestamp($this->getCreatedAt()), null, null, true);
+        return $this->_localeDate->date(new \DateTime($this->getCreatedAt()));
     }
 
     /**
      * Get object created at date affected with object store timezone
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getCreatedAtStoreDate()
     {
         return $this->_localeDate->scopeDate(
             $this->getStore(),
-            $this->dateTime->toTimestamp($this->getCreatedAt()),
+            $this->getCreatedAt(),
             true
         );
     }

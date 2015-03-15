@@ -7,9 +7,9 @@
 namespace Magento\Sales\Controller\Download;
 
 use Magento\Sales\Model\Download;
-use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\ForwardFactory;
 
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {
@@ -49,8 +49,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
-        /** @var $option \Magento\Sales\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create('Magento\Sales\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        /** @var $option \Magento\Quote\Model\Quote\Item\Option */
+        $option = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')->load($quoteItemOptionId);
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
 

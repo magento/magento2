@@ -113,17 +113,8 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      */
     protected function _getProductCollection()
     {
-        $todayStartOfDayDate = $this->_localeDate->date()->setTime(
-            '00:00:00'
-        )->toString(
-            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-        );
-
-        $todayEndOfDayDate = $this->_localeDate->date()->setTime(
-            '23:59:59'
-        )->toString(
-            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-        );
+        $todayStartOfDayDate = $this->_localeDate->date()->setTime(0, 0, 0)->format('Y-m-d H:i:s');
+        $todayEndOfDayDate = $this->_localeDate->date()->setTime(23, 59, 59)->format('Y-m-d H:i:s');
 
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
         $collection = $this->_productCollectionFactory->create();

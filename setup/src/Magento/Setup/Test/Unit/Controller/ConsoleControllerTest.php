@@ -165,8 +165,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateAction()
     {
-        $this->installer->expects($this->once())->method('installSchema');
-        $this->installer->expects($this->once())->method('installDataFixtures');
+        $this->installer->expects($this->at(0))->method('updateModulesSequence');
+        $this->installer->expects($this->at(1))->method('installSchema');
+        $this->installer->expects($this->at(2))->method('installDataFixtures');
         $this->controller->updateAction();
     }
 
@@ -385,12 +386,12 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $moduleListMock
             ->expects($this->once())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Core', 'Magento_Store']));
+            ->will($this->returnValue(['Magento_Theme', 'Magento_Store']));
         $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $fullModuleListMock
             ->expects($this->once())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Core', 'Magento_Store', 'Magento_Directory']));
+            ->will($this->returnValue(['Magento_Theme', 'Magento_Store', 'Magento_Directory']));
         $returnValueMap = [
             [
                 'Magento\Framework\Module\ModuleList',

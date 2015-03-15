@@ -76,7 +76,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             $this->assertAttributeInstanceOf($propertyType, '_' . $propertyName, $model);
         }
 
-        /** @var $resourceMock \Magento\Core\Model\Resource\Resource */
+        /** @var $resourceMock \Magento\Framework\Module\Resource */
         $resourceMock = $this->getMock(
             'Magento\Framework\Module\Resource',
             ['_getReadAdapter', 'getIdFieldName', '__sleep', '__wakeup'],

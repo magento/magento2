@@ -196,7 +196,7 @@ class Fault extends \RuntimeException
      */
     public function getLanguage()
     {
-        return $this->_localeResolver->getLocale()->getLanguage();
+        return \Locale::getPrimaryLanguage($this->_localeResolver->getLocale());
     }
 
     /**
