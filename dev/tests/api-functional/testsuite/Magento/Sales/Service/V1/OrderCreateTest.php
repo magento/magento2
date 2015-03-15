@@ -32,11 +32,11 @@ class OrderCreateTest extends WebapiAbstract
     {
         /** @var \Magento\Sales\Model\Order $orderBuilder */
         $orderFactory = $this->objectManager->get('Magento\Sales\Model\OrderFactory');
-        /** @var \Magento\Sales\Service\V1\Data\OrderItemBuilder $orderItemBuilder */
+        /** @var \Magento\Sales\Api\Data\OrderItemFactory $orderItemFactory */
         $orderItemFactory = $this->objectManager->get('Magento\Sales\Model\Order\ItemFactory');
-        /** @var \Magento\Sales\Service\V1\Data\OrderPaymentBuilder $orderPaymentBuilder */
+        /** @var \Magento\Sales\Api\Data\OrderPaymentFactory $orderPaymentFactory */
         $orderPaymentFactory = $this->objectManager->get('Magento\Sales\Model\Order\PaymentFactory');
-        /** @var \Magento\Sales\Service\V1\Data\OrderAddressBuilder $orderAddressBuilder */
+        /** @var \Magento\Sales\Api\Data\OrderAddressFactory $orderAddressFactory */
         $orderAddressFactory = $this->objectManager->get('Magento\Sales\Model\Order\AddressFactory');
 
         $order = $orderFactory->create(

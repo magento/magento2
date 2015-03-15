@@ -11,7 +11,6 @@ use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 
 /**
- * @method \Magento\Sales\Model\Order\Invoice setTransactionId(string $value)
  * @method \Magento\Sales\Model\Order\Invoice setCreatedAt(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -1199,6 +1198,17 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getTransactionId()
     {
         return $this->getData(InvoiceInterface::TRANSACTION_ID);
+    }
+
+    /**
+     * Sets transaction_id
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        return $this->setData(InvoiceInterface::TRANSACTION_ID, $transactionId);
     }
 
     /**

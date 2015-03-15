@@ -25,8 +25,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $attribute = $this->getMock('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute', null, [], '', false);
-        $eavConfig = $this->getMock('\Magento\Eav\Model\Config', ['getCollectionAttribute'], [], '', false);
-        $eavConfig->expects($this->any())->method('getCollectionAttribute')->will($this->returnValue($attribute));
+        $eavConfig = $this->getMock('\Magento\Eav\Model\Config', ['getAttribute'], [], '', false);
+        $eavConfig->expects($this->any())->method('getAttribute')->will($this->returnValue($attribute));
         $this->dbSelect = $this->getMock('Magento\Framework\DB\Select', ['where', 'from', 'join'], [], '', false);
         $this->dbSelect->expects($this->any())->method('from')->will($this->returnSelf());
         $this->dbSelect->expects($this->any())->method('join')->will($this->returnSelf());

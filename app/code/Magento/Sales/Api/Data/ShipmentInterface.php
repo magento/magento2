@@ -125,6 +125,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the increment ID for the shipment.
      *
      * @return string Increment ID.
@@ -210,6 +218,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getItems();
 
     /**
+     * Sets the items for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets the tracks for the shipment.
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[] Array of tracks.
@@ -217,11 +233,27 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getTracks();
 
     /**
+     * Sets the tracks for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $tracks
+     * @return $this
+     */
+    public function setTracks($tracks);
+
+    /**
      * Gets the comments for the shipment.
      *
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface[] Array of comments.
      */
     public function getComments();
+
+    /**
+     * Sets the comments for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments(array $comments = null);
 
     /**
      * Sets the store ID for the shipment.

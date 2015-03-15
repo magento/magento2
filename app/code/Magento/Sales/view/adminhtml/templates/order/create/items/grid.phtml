@@ -64,7 +64,7 @@
                     <td class="col-price"><strong><?php echo $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
                     <td class="col-price"><strong>
                     <?php
-                        echo $block->formatPrice($block->getSubtotal() + $block->getDiscountAmount());
+                        echo $block->formatPrice($block->getSubtotalWithDiscount());
                     ?></strong></td>
                     <td colspan="2">&nbsp;</td>
                 </tr>

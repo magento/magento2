@@ -10,9 +10,14 @@ use Magento\UrlRewrite\Model\Storage\DuplicateEntryException;
 class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlRewriteBuilder;
+    protected $urlRewriteFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectHelper;
 
     /**
      * @var \Magento\UrlRewrite\Model\Storage\AbstractStorage|\PHPUnit_Framework_MockObject_MockObject
@@ -21,12 +26,15 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlRewriteBuilder = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder')
+        $this->urlRewriteFactory = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
+        $this->dataObjectHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()->getMock();
 
         $this->storage = $this->getMockForAbstractClass(
             'Magento\UrlRewrite\Model\Storage\AbstractStorage',
-            [$this->urlRewriteBuilder],
+            [$this->urlRewriteFactory, $this->dataObjectHelper],
             '',
             true,
             true,
@@ -45,21 +53,21 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
             ->with($data)
             ->will($this->returnValue($rows));
 
-        $this->urlRewriteBuilder->expects($this->at(0))
+        $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with($rows[0])
+            ->with($urlRewrites[0], $rows[0], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->will($this->returnSelf());
 
-        $this->urlRewriteBuilder->expects($this->at(1))
+        $this->urlRewriteFactory->expects($this->at(0))
             ->method('create')
             ->will($this->returnValue($urlRewrites[0]));
 
-        $this->urlRewriteBuilder->expects($this->at(2))
+        $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with($rows[1])
+            ->with($urlRewrites[1], $rows[1], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->will($this->returnSelf());
 
-        $this->urlRewriteBuilder->expects($this->at(3))
+        $this->urlRewriteFactory->expects($this->at(1))
             ->method('create')
             ->will($this->returnValue($urlRewrites[1]));
 
@@ -89,12 +97,12 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
             ->with($data)
             ->will($this->returnValue($row));
 
-        $this->urlRewriteBuilder->expects($this->once())
+        $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($row)
+            ->with($urlRewrite, $row, '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
             ->will($this->returnSelf());
 
-        $this->urlRewriteBuilder->expects($this->any())
+        $this->urlRewriteFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($urlRewrite));
 

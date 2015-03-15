@@ -1159,8 +1159,8 @@
 //--------------------------------------
 .abs-title-orders {
     .page-main {
-        .page-title {
-            .title {
+        .page-title-wrapper {
+            .page-title {
                 margin-right: 25px;
             }
             .order-date {
@@ -1177,8 +1177,8 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-title-orders-mobile {
         .page-main {
-            .page-title {
-                .title {
+            .page-title-wrapper {
+                .page-title {
                     display: block;
                 }
                 .order-status {
@@ -1193,7 +1193,7 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-title-orders-desktop {
         .page-main {
-            .page-title {
+            .page-title-wrapper {
                 .order-date {
                     @order-date-indent: ceil(@h1__margin-bottom/1.5);
                     margin: -@order-date-indent 0 18px;

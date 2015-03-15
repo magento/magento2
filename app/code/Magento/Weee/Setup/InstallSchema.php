@@ -59,9 +59,9 @@ class InstallSchema implements InstallSchemaInterface
             'Value'
         )->addColumn(
             'state',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            ['nullable' => false, 'default' => '*'],
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'default' => '0'],
             'State'
         )->addColumn(
             'attribute_id',
@@ -69,12 +69,6 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true, 'nullable' => false],
             'Attribute Id'
-        )->addColumn(
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false],
-            'Entity Type Id'
         )->addIndex(
             $setup->getIdxName('weee_tax', ['website_id']),
             ['website_id']

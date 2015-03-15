@@ -184,7 +184,11 @@ class CreatePost extends \Magento\Customer\Controller\Account
             }
         }
         $addressDataObject = $this->addressDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $addressData,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
         $addressDataObject->setRegion($regionDataObject);
 
         $addressDataObject->setIsDefaultBilling(

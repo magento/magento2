@@ -24,10 +24,8 @@ $numColumns = sizeof($block->getColumns());
 <?php if ($block->getCollection()): ?>
 <?php if ($block->canDisplayContainer()): ?>
     <?php if ($block->getGridHeader()): ?>
-        <div class="page-title">
-            <div class="page-title-inner">
-                <h1 class="title"><?php echo $block->getGridHeader(); ?></h1>
-            </div>
+        <div class="page-title-wrapper">
+            <h1 class="page-title"><?php echo $block->getGridHeader(); ?></h1>
         </div>
     <?php endif ?>
 
