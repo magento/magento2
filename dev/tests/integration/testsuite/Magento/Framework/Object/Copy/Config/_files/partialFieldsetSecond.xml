@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/Object/etc/fieldset_file.xsd">
     <scope id="global">
-        <fieldset id="sales_convert_quote_item">
+        <fieldset id="quote_convert_item">
             <field name="event_id">
                 <aspect name="to_order_item" />
             </field>

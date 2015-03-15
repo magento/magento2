@@ -13,7 +13,19 @@ interface ExtensibleRequestInterface extends \Magento\Framework\Api\ExtensibleDa
     public function getName();
 
     /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * @return int|null
      */
     public function getEntityId();
+
+    /**
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
 }

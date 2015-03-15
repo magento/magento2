@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -15,7 +15,7 @@ use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Serialization\DataBuilderFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
@@ -33,11 +33,11 @@ class ServiceInputProcessor
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
 
-    /** @var DataBuilderFactory */
-    protected $builderFactory;
+    /** @var ObjectManagerInterface */
+    protected $objectManager;
 
-    /** @var AttributeDataBuilder */
-    protected $attributeValueBuilder;
+    /** @var AttributeValueFactory */
+    protected $attributeValueFactory;
 
     /** @var WebapiCache */
     protected $cache;
@@ -49,21 +49,21 @@ class ServiceInputProcessor
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
-     * @param DataBuilderFactory $builderFactory
-     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param ObjectManagerInterface $objectManager
+     * @param AttributeValueFactory $attributeValueFactory
      * @param WebapiCache $cache
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      */
     public function __construct(
         TypeProcessor $typeProcessor,
-        DataBuilderFactory $builderFactory,
-        AttributeDataBuilder $attributeValueBuilder,
+        ObjectManagerInterface $objectManager,
+        AttributeValueFactory $attributeValueFactory,
         WebapiCache $cache,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
     ) {
         $this->typeProcessor = $typeProcessor;
-        $this->builderFactory = $builderFactory;
-        $this->attributeValueBuilder = $attributeValueBuilder;
+        $this->objectManager = $objectManager;
+        $this->attributeValueFactory = $attributeValueFactory;
         $this->cache = $cache;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
     }
@@ -132,7 +132,8 @@ class ServiceInputProcessor
         $data = is_array($data) ? $data : [];
         $class = new ClassReflection($className);
 
-        $builder = $this->builderFactory->getDataBuilder($className);
+        $factory = $this->objectManager->get($className . 'Factory');
+        $object = $factory->create();
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
@@ -142,16 +143,24 @@ class ServiceInputProcessor
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                $setterName = 'set' . $camelCaseProperty;
+                try {
+                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                } catch (\Exception $e) {
+                    if (empty($value)) {
+                        continue;
+                    } else {
+                        throw $e;
+                    }
+                }
                 if ($camelCaseProperty === 'CustomAttributes') {
                     $setterValue = $this->convertCustomAttributeValue($value, $className);
                 } else {
                     $setterValue = $this->_convertValue($value, $returnType);
                 }
-                $builder->{$setterName}($setterValue);
+                $object->{$setterName}($setterValue);
             }
         }
-        return $builder->create();
+        return $object;
     }
 
     /**
@@ -193,10 +202,9 @@ class ServiceInputProcessor
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }
             //Populate the attribute value data object once the value for custom attribute is derived based on type
-            $result[] = $this->attributeValueBuilder
+            $result[$customAttributeCode] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
-                ->setValue($attributeValue)
-                ->create();
+                ->setValue($attributeValue);
         }
 
         return $result;

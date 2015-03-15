@@ -19,7 +19,7 @@ class IndexerTest extends \Magento\Backend\Utility\Controller
     {
         $this->dispatch('backend/indexer/indexer/list/');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<h1 class="title">Index Management</h1>', $body);
+        $this->assertContains('<h1 class="page-title">Index Management</h1>', $body);
         $this->assertSelectCount('#gridIndexer_massaction-select', 1, $body, 'Mode selector is not found');
         $this->assertContains('option value="change_mode_onthefly"', $body);
         $this->assertContains('option value="change_mode_changelog"', $body);
