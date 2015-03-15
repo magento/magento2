@@ -22,20 +22,11 @@ class Log
     protected $logger;
 
     /**
-     * Date formats converter.
-     *
-     * @var DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @param Logger $logger
-     * @param DateTime $dateTime
      */
-    public function __construct(Logger $logger, DateTime $dateTime)
+    public function __construct(Logger $logger)
     {
         $this->logger = $logger;
-        $this->dateTime = $dateTime;
     }
 
     /**

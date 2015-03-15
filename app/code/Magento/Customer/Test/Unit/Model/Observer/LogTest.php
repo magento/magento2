@@ -26,18 +26,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
-     * @var DateTime | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * @return void
      */
     public function setUp()
     {
         $this->loggerMock = $this->getMock('Magento\Customer\Model\Logger', [], [], '', false);
-        $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false);
-        $this->logObserver = new Log($this->loggerMock, $this->dateTime);
+        $this->logObserver = new Log($this->loggerMock);
     }
 
     /**
@@ -46,7 +40,6 @@ class LogTest extends \PHPUnit_Framework_TestCase
     public function testLogLastLoginAt()
     {
         $id = 1;
-        $time = 123;
 
         $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $eventMock = $this->getMock('Magento\Framework\Event', ['getCustomer'], [], '', false);
@@ -62,13 +55,8 @@ class LogTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($id);
 
-        $this->dateTime->expects($this->once())
-            ->method('now')
-            ->willReturn($time);
-
         $this->loggerMock->expects($this->once())
-            ->method('log')
-            ->with($id, ['last_login_at' => $time]);
+            ->method('log');
 
         $this->logObserver->logLastLoginAt($observerMock);
     }
@@ -79,7 +67,6 @@ class LogTest extends \PHPUnit_Framework_TestCase
     public function testLogLastLogoutAt()
     {
         $id = 1;
-        $time = 123;
 
         $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $eventMock = $this->getMock('Magento\Framework\Event', ['getCustomer'], [], '', false);
@@ -95,13 +82,8 @@ class LogTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($id);
 
-        $this->dateTime->expects($this->once())
-            ->method('now')
-            ->willReturn($time);
-
         $this->loggerMock->expects($this->once())
-            ->method('log')
-            ->with($id, ['last_logout_at' => $time]);
+            ->method('log');
 
         $this->logObserver->logLastLogoutAt($observerMock);
     }
