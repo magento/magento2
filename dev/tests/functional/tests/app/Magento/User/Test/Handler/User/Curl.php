@@ -47,8 +47,7 @@ class Curl extends AbstractCurl implements UserInterface
         }
 
         $url = 'admin/user/roleGrid/sort/user_id/dir/desc';
-        $regExpPattern = '/class=\"\scol\-id col\-user_id\W*>\W+(\d+)\W+<\/td>\W+<td[\w\s\"=\-]*?>\W+?'
-            . $data['username'] . '/siu';
+        $regExpPattern = '/col-user_id\W*(\d+)<.td><[^<>]*?>' . $data['username'] . '/siu';
         $extractor = new Extractor($url, $regExpPattern);
 
         return ['user_id' => $extractor->getData()[1]];

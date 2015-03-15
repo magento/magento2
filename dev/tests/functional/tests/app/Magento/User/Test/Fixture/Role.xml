@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="role" module="Magento_User" type="flat" entity_type="authorization_role" collection="Magento\User\Model\Resource\Role\User\Collection" repository_class="Magento\User\Test\Repository\Role" handler_interface="Magento\User\Test\Handler\Role\RoleInterface" class="Magento\User\Test\Fixture\Role">
+        <dataset name="default">
+            <field name="rolename" xsi:type="string">AdminRole%isolation%</field>
+            <field name="resource_access" xsi:type="string">All</field>
+        </dataset>
+        <field name="role_id" is_required="1">
+            <default_value xsi:type="null"/>
+        </field>
+        <field name="parent_id" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="tree_level" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="sort_order" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="role_type" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="user_id" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="rolename" is_required="" group="role-info">
+            <default_value xsi:type="string">AdminRole%isolation%</default_value>
+        </field>
+        <field name="user_type" is_required="">
+            <default_value xsi:type="null"/>
+        </field>
+        <field name="resource_access" group="role-resources">
+            <default_value xsi:type="string">All</default_value>
+        </field>
+        <field name="roles_resources" group="role-resources"/>
+        <field name="in_role_users" group="in_role_users" source="Magento\User\Test\Fixture\Role\InRoleUsers"/>
+    </fixture>
+</config>

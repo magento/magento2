@@ -8,7 +8,7 @@ namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\User\Test\Fixture\AdminUserRole;
+use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
@@ -81,14 +81,14 @@ class UpdateAdminUserRoleEntityTest extends Injectable
     /**
      * Runs Update Admin User Roles Entity test
      *
-     * @param AdminUserRole $roleInit
-     * @param AdminUserRole $role
+     * @param Role $roleInit
+     * @param Role $role
      * @param User $user
      * @return array
      */
     public function testUpdateAdminUserRolesEntity(
-        AdminUserRole $roleInit,
-        AdminUserRole $role,
+        Role $roleInit,
+        Role $role,
         User $user
     ) {
         // Preconditions
@@ -108,7 +108,7 @@ class UpdateAdminUserRoleEntityTest extends Injectable
         $this->userRoleEditRole->getPageActions()->save();
 
         return [
-            'customAdmin' => $role->hasData('in_role_users')
+            'user' => $role->hasData('in_role_users')
                 ? $role->getDataFieldConfig('in_role_users')['source']->getAdminUsers()[0]
                 : $user,
         ];
