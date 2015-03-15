@@ -10,8 +10,11 @@
  * Template for block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Status\PersonalInfo
  */
 
-$createDateAdmin    = $block->getCreateDate();
-$createDateStore    = $block->getStoreCreateDate();
+$lastLoginDateAdmin = $block->getLastLoginDate();
+$lastLoginDateStore = $block->getStoreLastLoginDate();
+
+$createDateAdmin = $block->getCreateDate();
+$createDateStore = $block->getStoreCreateDate();
 ?>
 
 <div class="fieldset-wrapper customer-information">
@@ -21,6 +24,16 @@ $createDateStore    = $block->getStoreCreateDate();
     <table class="data-table">
         <tbody>
         <?php echo $block->getChildHtml(); ?>
+        <tr>
+            <th><?php echo __('Last Logged In:') ?></th>
+            <td><?php echo $lastLoginDateAdmin ?> (<?php echo $block->getCurrentStatus() ?>)</td>
+        </tr>
+        <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
+        <tr>
+            <th><?php echo __('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone()) ?></th>
+            <td><?php echo $lastLoginDateStore ?> (<?php echo $block->getCurrentStatus() ?>)</td>
+        </tr>
+        <?php endif; ?>
         <tr>
             <th><?php echo __('Confirmed email:') ?></th>
             <td><?php echo $block->getIsConfirmedStatus() ?></td>
