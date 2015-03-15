@@ -46,7 +46,7 @@ define([
                     return ['success', 'error', 'info'].indexOf(type) != -1;
                 },
                 _prepareMessage: function(message, type) {
-                    var tmpl = mageTemplate('<div class="<%= data.classes %>"><%= data.message %></div>');
+                    var tmpl = mageTemplate('<div class="<%- data.classes %>"><%- data.message %></div>');
 
                     if (typeof message != 'string' && message.message && message.type) {
                         type = message.type;
