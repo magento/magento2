@@ -25,6 +25,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
 
     /**
      * @param IndexBuilder $indexBuilder
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         IndexBuilder $indexBuilder,

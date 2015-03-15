@@ -51,6 +51,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     protected $productModel;
 
+    /**
+     * Set up before test
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
@@ -134,6 +139,8 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataProviderCallbackValidateProduct
      * @param bool $validate
+     *
+     * @return void
      */
     public function testCallbackValidateProduct($validate)
     {
@@ -180,6 +187,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Data provider for callbackValidateProduct test
+     *
+     * @return array
+     */
     public function dataProviderCallbackValidateProduct()
     {
         return [
@@ -188,6 +200,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Test after delete action
+     *
+     * @return void
+     */
     public function testAfterDelete()
     {
         $indexer = $this->getMock('\Magento\Indexer\Model\IndexerInterface');
@@ -196,6 +213,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->rule->afterDelete();
     }
 
+    /**
+     * Test after update action
+     *
+     * @return void
+     */
     public function testAfterUpdate()
     {
         $this->rule->isObjectNew(false);
