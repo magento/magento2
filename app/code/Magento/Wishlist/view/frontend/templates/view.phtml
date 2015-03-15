@@ -25,7 +25,7 @@
           "confirmRemoveMessage":"<?php echo __("Are you sure you want to remove this product from your wishlist?") ?>",
           "addAllToCartUrl":"<?php echo $block->getAddAllToCartUrl(); ?>",
           "commentString":""},
-          "validation": {}}' action="<?php echo $block->getUrl('*/*/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
+          "validation": {}}' action="<?php echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
         <?php echo $block->getChildHtml('top'); ?>
         <?php if ($block->hasWishlistItems()): ?>
             <?php echo $block->getBlockHtml('formkey');?>

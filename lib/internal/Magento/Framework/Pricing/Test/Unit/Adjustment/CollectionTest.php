@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $result = $collection->getItems();
 
-        $this->assertEquals($expectedResult, array_keys($result));
+        $this->assertEmpty(array_diff($expectedResult, array_keys($result)));
     }
 
     public function getItemsDataProvider()

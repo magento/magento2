@@ -108,8 +108,6 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             $this->cart->save();
 
-            $this->_checkoutSession->setCartWasUpdated(true);
-
             /**
              * @todo remove wishlist observer processAddToCart
              */
