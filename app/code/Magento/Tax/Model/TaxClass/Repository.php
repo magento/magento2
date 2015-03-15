@@ -32,9 +32,9 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     protected $taxClassCollectionFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @var ClassModelRegistry
@@ -66,7 +66,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param TaxClassCollectionFactory $taxClassCollectionFactory
-     * @param \Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory
      * @param ClassModelRegistry $classModelRegistry
      * @param \Magento\Tax\Model\Resource\TaxClass $taxClassResource
      */
@@ -74,14 +74,14 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         TaxClassCollectionFactory $taxClassCollectionFactory,
-        \Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder $searchResultsBuilder,
+        \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory,
         ClassModelRegistry $classModelRegistry,
         \Magento\Tax\Model\Resource\TaxClass $taxClassResource
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->taxClassCollectionFactory = $taxClassCollectionFactory;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->classModelRegistry = $classModelRegistry;
         $this->taxClassResource = $taxClassResource;
     }
@@ -187,13 +187,14 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
         /** @var TaxClassCollection $collection */
         $collection = $this->taxClassCollectionFactory->create();
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
+        $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         /** @var SortOrder $sortOrder */
         if ($sortOrders) {
@@ -206,8 +207,8 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-        $this->searchResultsBuilder->setItems($collection->getItems());
-        return $this->searchResultsBuilder->create();
+        $searchResults->setItems($collection->getItems());
+        return $searchResults;
     }
 
     /**

@@ -11,27 +11,26 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
 
 /**
- * Class AdvancedPropertiesTab
- * Tab "Advanced Attribute Properties"
+ * Tab "Advanced Attribute Properties".
  */
 class Advanced extends Tab
 {
     /**
-     * "Advanced Attribute Properties" tab-button
+     * "Advanced Attribute Properties" tab-button.
      *
      * @var string
      */
     protected $propertiesTab = '[data-target="#advanced_fieldset-content"][data-toggle="collapse"]';
 
     /**
-     * "Advanced Attribute Properties" tab-button active
+     * "Advanced Attribute Properties" content.
      *
      * @var string
      */
-    protected $propertiesTabActive = '.title.active';
+    protected $propertiesTabContent = '#advanced_fieldset-content';
 
     /**
-     * Fill 'Advanced Attribute Properties' tab
+     * Fill 'Advanced Attribute Properties' tab.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -39,10 +38,10 @@ class Advanced extends Tab
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        if (!$this->_rootElement->find($this->propertiesTabActive)->isVisible()) {
+        if (!$this->_rootElement->find($this->propertiesTabContent)->isVisible()) {
             $this->_rootElement->find($this->propertiesTab)->click();
         }
 
-        return parent::fillFormTab($fields);
+        return parent::fillFormTab($fields, $element);
     }
 }

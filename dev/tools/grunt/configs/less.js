@@ -25,6 +25,20 @@ var lessOptions = {
         dumpLineNumbers: false, // use 'comments' instead false to output line comments for source
         ieCompat: false
     },
+    backend: {
+        files: combo.lessFiles('backend')
+    },
+    override: {
+        files: {
+            '<%= combo.autopath("backend","pub") %>css/styles-migration.css': '<%= combo.autopath("backend","pub") %>css/styles-migration.less'
+        }
+    },
+    blank: {
+        files: combo.lessFiles('blank')
+    },
+    luma: {
+        files: combo.lessFiles('luma')
+    },
     setup: {
         files: {
             '<%= path.css.setup %>/setup.css': '<%= path.less.setup %>/setup.less'

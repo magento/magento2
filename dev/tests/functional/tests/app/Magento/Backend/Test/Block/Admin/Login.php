@@ -10,24 +10,37 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Login
- * Login form for backend user
- *
+ * Login form for backend user.
  */
 class Login extends Form
 {
     /**
-     * 'Log in' button
+     * 'Log in' button.
      *
      * @var string
      */
-    protected $submit = '[type=submit]';
+    protected $submit = '.action-login';
 
     /**
-     * Submit login form
+     * Submit login form.
      */
     public function submit()
     {
         $this->_rootElement->find($this->submit, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Wait for Login form is not visible in the page.
+     *
+     * @return void
+     */
+    public function waitFormNotVisible()
+    {
+        $form = $this->_rootElement;
+        $this->browser->waitUntil(
+            function () use ($form) {
+                return $form->isVisible() ? null : true;
+            }
+        );
     }
 }

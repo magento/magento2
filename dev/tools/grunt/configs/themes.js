@@ -47,7 +47,8 @@ module.exports = {
             'css/styles-old',
             'css/styles',
             'css/pages',
-            'css/admin'
+            'css/admin',
+            'css/styles-migration'
         ],
         dsl: 'less'
     }

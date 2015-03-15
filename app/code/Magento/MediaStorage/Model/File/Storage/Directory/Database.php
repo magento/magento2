@@ -193,7 +193,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
             }
 
             try {
-                $dir['path'] = ltrim($dir['path'], '.');
+                $dir['path'] = ltrim($dir['path'], './');
                 $directory = $this->_directoryFactory->create(['connectionName' => $this->getConnectionName()]);
                 $directory->setPath($dir['path']);
 
@@ -203,7 +203,9 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
                     $directory->setUploadTime($dateSingleton->date());
                     $directory->save();
                 } else {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Parent directory does not exist: %1', $dir['path']));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Parent directory does not exist: %1', $dir['path'])
+                    );
                 }
             } catch (\Exception $e) {
                 $this->_logger->critical($e);

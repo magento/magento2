@@ -10,7 +10,7 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\SalesOrderView;
+use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,7 +25,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
      * @param GiftMessage $giftMessage
      * @param Customer $customer
      * @param OrderHistory $orderHistory
-     * @param SalesOrderView $salesOrderView
+     * @param CustomerOrderView $customerOrderView
      * @param CustomerAccountLogout $customerAccountLogout
      * @param string $orderId
      * @param array $products
@@ -35,7 +35,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
         GiftMessage $giftMessage,
         Customer $customer,
         OrderHistory $orderHistory,
-        SalesOrderView $salesOrderView,
+        CustomerOrderView $customerOrderView,
         CustomerAccountLogout $customerAccountLogout,
         $orderId,
         $products = []
@@ -64,7 +64,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
             }
             \PHPUnit_Framework_Assert::assertEquals(
                 $expectedData,
-                $salesOrderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
+                $customerOrderView->getGiftMessageForItemBlock()->getGiftMessage($product->getName()),
                 'Wrong gift message is displayed on "' . $product->getName() . '" item.'
             );
         }

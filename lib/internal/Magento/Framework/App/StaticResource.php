@@ -100,6 +100,8 @@ class StaticResource implements \Magento\Framework\AppInterface
      */
     public function launch()
     {
+        // disabling profiling when retrieving static resource
+        \Magento\Framework\Profiler::reset();
         $appMode = $this->state->getMode();
         if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
             $this->response->setHttpResponseCode(404);

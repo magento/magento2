@@ -14,8 +14,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Curl handler for creating Cms page
+ * Curl handler for creating Cms page.
  */
 class Curl extends Conditions implements CmsPageInterface
 {
@@ -26,7 +25,7 @@ class Curl extends Conditions implements CmsPageInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Published' => 1,
+            'Enabled' => 1,
             'Disabled' => 0,
         ],
         'store_id' => [
@@ -37,22 +36,35 @@ class Curl extends Conditions implements CmsPageInterface
             '2 columns with left bar' => '2columns-left',
             '2 columns with right bar' => '2columns-right',
             '3 columns' => '3columns',
-        ],
-        'under_version_control' => [
-            'Yes' => 1,
-            'No' => 0,
-        ],
+        ]
     ];
 
     /**
-     * Url for save cms page
+     * Url for save cms page.
      *
      * @var string
      */
-    protected $url = 'admin/cms_page/save/back/edit/active_tab/main_section/';
+    protected $url = 'cms/page/save/back/edit/active_tab/main_section/';
 
     /**
-     * Post request for creating a cms page
+     * Mapping values for data.
+     *
+     * @var array
+     */
+    protected $additionalMappingData = [];
+
+    /**
+     * @constructor
+     * @param Config $configuration
+     */
+    public function __construct(Config $configuration)
+    {
+        $this->mappingData = array_merge($this->mappingData, $this->additionalMappingData);
+        parent::__construct($configuration);
+    }
+
+    /**
+     * Post request for creating a cms page.
      *
      * @param FixtureInterface $fixture
      * @return array
@@ -77,7 +89,7 @@ class Curl extends Conditions implements CmsPageInterface
     }
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param array $data
      * @return array

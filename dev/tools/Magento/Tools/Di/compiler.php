@@ -6,10 +6,8 @@
 require __DIR__ . '/../../../bootstrap.php';
 
 $rootDir = realpath(__DIR__ . '/../../../../../');
-use Magento\Framework\Api\Code\Generator\DataBuilder;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
-use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
@@ -40,8 +38,17 @@ try {
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
+
+    $testExcludePatterns = [
+        "#^$rootDir/app/code/[\\w]+/[\\w]+/Test#",
+        "#^$rootDir/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
+        "#^$rootDir/setup/src/Magento/Setup/Test#",
+        "#^$rootDir/dev/tools/Magento/Tools/[\\w]+/Test#"
+    ];
     $fileExcludePatterns = $opt->getOption('exclude-pattern') ?
         [$opt->getOption('exclude-pattern')] : ['#[\\\\/]M1[\\\\/]#i'];
+    $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
+
     $relationsFile = $diDir . '/relations.ser';
     $pluginDefFile = $diDir . '/plugins.ser';
 
@@ -88,10 +95,7 @@ try {
     $generator = new \Magento\Framework\Code\Generator(
         $generatorIo,
         [
-            DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
             Interceptor::ENTITY_TYPE => 'Magento\Framework\Interception\Code\Generator\Interceptor',
-            SearchResultsBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
-            DataBuilder::ENTITY_TYPE_BUILDER  => 'Magento\Framework\Api\Code\Generator\DataBuilder',
             Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
             Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
             Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
