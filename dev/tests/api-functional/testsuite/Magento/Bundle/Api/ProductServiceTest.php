@@ -61,6 +61,7 @@ class ProductServiceTest extends WebapiAbstract
      */
     public function testCreateBundle()
     {
+        $this->markTestSkipped('Processing of custom attributes has been changed in MAGETWO-34448.');
         $bundleProductOptions = [
             "attribute_code" => "bundle_product_options",
             "value" => [
