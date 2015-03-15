@@ -203,7 +203,11 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         $this->setChild(
             'reset_filter_button',
             $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData(
-                ['label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()', 'class' => 'action-reset']
+                [
+                    'label' => __('Reset Filter'),
+                    'onclick' => $this->getJsObjectName() . '.resetFilter()',
+                    'class' => 'action-reset'
+                ]
             )
         );
         $this->setChild(
