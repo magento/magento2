@@ -14,4 +14,12 @@ interface AttributeSetSearchResultsInterface extends \Magento\Framework\Api\Sear
      * @return \Magento\Eav\Api\Data\AttributeSetInterface[]
      */
     public function getItems();
+
+    /**
+     * Set attribute sets list.
+     *
+     * @param \Magento\Eav\Api\Data\AttributeSetInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

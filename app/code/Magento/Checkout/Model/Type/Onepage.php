@@ -585,7 +585,11 @@ class Onepage
         }
 
         $customer = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($customer, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         if ($quote->getCheckoutMethod() == self::METHOD_REGISTER) {
             // We always have $customerRequest here, otherwise we would have been kicked off the function several
@@ -816,7 +820,11 @@ class Onepage
         $customer = $quote->getCustomer();
         $customerBillingData = $billing->exportCustomerAddress();
         $dataArray = $this->_objectCopyService->getDataFromFieldset('checkout_onepage_quote', 'to_customer', $quote);
-        $this->dataObjectHelper->populateWithArray($customer, $dataArray);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $dataArray,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $quote->setCustomer($customer)->setCustomerId(true);
 
         $customerBillingData->setIsDefaultBilling(true);

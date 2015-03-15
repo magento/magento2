@@ -196,7 +196,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG);
+        return $this->formatDate($date, \IntlDateFormatter::LONG);
     }
 
     /**

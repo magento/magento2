@@ -63,6 +63,14 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the is-customer-notified flag value for the invoice.
      *
      * @return int Is-customer-notified flag value.

@@ -1,0 +1,235 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Imports
+//  _____________________________________________
+
+@import 'actions/_actions-split.less';
+
+//
+//  Variables
+//  _____________________________________________
+
+//  Base button
+@button__background-color: @color-gray89;
+@button__border-color: @color-gray68;
+@button__color: @color-brownie;
+@button__font-family: @font-family__base;
+@button__font-size: @font-size__base;
+@button__padding-top: .5em;
+@button__padding-bottom: .57em;
+@button__padding-horizontal: 1em;
+@button__padding-vertical__l: .6875em;
+
+@button__active__background-color: darken(@button__background-color, 5%);
+@button__hover__background-color: darken(@button__background-color, 3%);
+@button__hover__border-color: @color-blue-pure;
+@button__hover__box-shadow: 0 0 0 1px @button__hover__border-color;
+
+@button__large__font-size: 1.6rem;
+@button__large__padding-horizontal: 1.45em;
+@button__large__padding-vertical: .7em;
+
+//  Primary button
+@button-primary__background-color: @primary__color;
+@button-primary__color: @color-white;
+@button-primary__hover__background-color: @color-phoenix-brown-almost;
+@button-primary__hover__border-color: @color-phoenix-brown;
+
+//  Secondary button
+@button-secondary__background-color: @color-brownie;
+@button-secondary__border-color: @color-brownie;
+@button-secondary__color: @color-white;
+@button-secondary__active__background-color: @color-very-dark-gray-black2;
+@button-secondary__hover__background-color: @color-very-dark-gray-black2;
+
+//
+//  Utilities
+//  _____________________________________________
+
+.action-reset () {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    &:hover {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+}
+
+//
+//  Extends
+//  _____________________________________________
+
+.abs-action-reset {
+    .action-reset();
+}
+
+.abs-action-pattern {
+    border: 1px solid;
+    border-radius: 0; // ToDo UI: Delete with admin scope
+    display: inline-block;
+    font-family: @button__font-family;
+    font-size: @button__font-size;
+    font-weight: @font-weight__semibold;
+    padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
+    text-align: center;
+    vertical-align: baseline; // ToDo UI: Delete with admin scope
+    &[disabled],
+    &.disabled {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+.abs-action-l {
+    font-size: @font-size__l;
+    letter-spacing: .025em;
+    padding-bottom: @button__padding-vertical__l;
+    padding-top: @button__padding-vertical__l;
+}
+
+.abs-action-default {
+    .action-default();
+}
+
+.abs-action-primary {
+    .action-primary();
+}
+
+.abs-action-secondary {
+    .action-secondary();
+}
+
+.abs-action-tertiary {
+    .action-tertiary();
+}
+
+.abs-action-quaternary {
+    .action-quaternary();
+}
+
+//
+//  Default action
+//  ---------------------------------------------
+
+.action-default,
+button {
+    &:extend(.abs-action-pattern all);
+    background: @button__background-color;
+    border-color: @button__border-color;
+    color: @button__color;
+    &:hover {
+        background-color: @button__hover__background-color;
+        color: @button__color;
+        text-decoration: none;
+    }
+}
+
+//
+//  Primary action
+//  ---------------------------------------------
+
+.action-primary {
+    &:extend(.abs-action-pattern all);
+    background-color: @button-primary__background-color;
+    border-color: @button-primary__background-color;
+    color: @button-primary__color;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
+    &:hover,
+    &:active {
+        background-color: @button-primary__hover__background-color;
+        border-color: @button-primary__hover__border-color;
+        box-shadow: @button__hover__box-shadow;
+        color: @button-primary__color;
+        text-decoration: none;
+    }
+    &.disabled,
+    &[disabled] {
+        cursor: default;
+        opacity: @disabled__opacity;
+        pointer-events: none;
+    }
+}
+
+//
+//  Secondary action
+//  ---------------------------------------------
+
+.action-secondary {
+    &:extend(.abs-action-pattern all);
+    background-color: @button-secondary__background-color;
+    border-color: @button-secondary__border-color;
+    color: @button-secondary__color;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+    &:hover,
+    &:active {
+        background-color: @button-secondary__hover__background-color;
+        box-shadow: @button__hover__box-shadow;
+        color: @button-secondary__color;
+        text-decoration: none;
+    }
+    &:active {
+        background-color: @button-secondary__active__background-color;
+    }
+}
+
+//
+//  Tertiary action & Quaternary action
+//  ---------------------------------------------
+
+.action-tertiary,
+.action-quaternary {
+    &:extend(.abs-action-pattern all);
+    background-color: transparent;
+    border-color: transparent;
+    text-shadow: none;
+    &:active,
+    &:hover {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+    }
+}
+
+.action-tertiary {
+    color: @link__color;
+    &:active,
+    &:hover {
+        color: @link__hover__color;
+        text-decoration: underline;
+    }
+}
+
+.action-quaternary {
+    color: @text__color;
+    &:active,
+    &:hover {
+        color: darken(@text__color, 10%);
+    }
+}
+
+//
+//  ToDo UI: Button migration
+//  _____________________________________________
+
+button {
+    &:extend(.abs-action-default all);
+    &.primary {
+        &:extend(.abs-action-primary all);
+    }
+    &.secondary {
+        &:extend(.abs-action-secondary all);
+    }
+    &.tertiary {
+        &:extend(.abs-action-tertiary all);
+    }
+}

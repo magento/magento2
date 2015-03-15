@@ -19,4 +19,12 @@ interface ShipmentCommentSearchResultInterface extends \Magento\Framework\Api\Se
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

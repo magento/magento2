@@ -20,9 +20,6 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustmentNegative(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustmentPositive(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setTransactionId(string $value)
  * @method \Magento\Sales\Model\Order\Creditmemo setCreatedAt(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -857,6 +854,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Set base_adjustment_negative
+     *
+     * @param float $baseAdjustmentNegative
+     * @return $this
+     */
+    public function setBaseAdjustmentNegative($baseAdjustmentNegative)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE, $baseAdjustmentNegative);
+    }
+
+    /**
      * Returns base_adjustment_positive
      *
      * @return float
@@ -864,6 +872,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getBaseAdjustmentPositive()
     {
         return $this->getData(CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE);
+    }
+
+    /**
+     * Set base_adjustment_positive
+     *
+     * @param float $baseAdjustmentPositive
+     * @return $this
+     */
+    public function setBaseAdjustmentPositive($baseAdjustmentPositive)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE, $baseAdjustmentPositive);
     }
 
     /**
@@ -1244,6 +1263,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getTransactionId()
     {
         return $this->getData(CreditmemoInterface::TRANSACTION_ID);
+    }
+
+    /**
+     * Sets the credit memo transaction ID.
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        return $this->setData(CreditmemoInterface::TRANSACTION_ID, $transactionId);
     }
 
     /**

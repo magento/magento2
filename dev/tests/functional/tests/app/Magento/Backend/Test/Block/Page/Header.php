@@ -34,7 +34,7 @@ class Header extends Block
      *
      * @var string
      */
-    protected $searchSelector = '.search-global.miniform';
+    protected $searchSelector = '.search-global';
 
     /**
      * Log out Admin User.

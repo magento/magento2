@@ -1,10 +1,4 @@
 {
-    "backend": {
-        "files": [
-            "<%= combo.autopath(\"backend\",\"pub\") %>/**/*.less"
-        ],
-        "tasks": "less:backend"
-    },
     "blank": {
         "files": [
             "<%= combo.autopath(\"blank\",\"pub\") %>/**/*.less"
@@ -20,5 +14,20 @@
     "setup": {
         "files": "<%= path.less.setup %>/**/*.less",
         "tasks": "less:setup"
+    },
+    "backendCompile": {
+        "files": [
+            "<%= combo.autopath(\"backend\",\"pub\") %>/**/*.less"
+        ],
+        "tasks": "less:backend"
+    },
+    "backendReplace": {
+        "files": [
+            "<%= combo.autopath(\"backend\",\"pub\") %>/css/styles.css"
+        ],
+        "tasks": [
+            "replace:example",
+            "less:override"
+        ]
     }
 }

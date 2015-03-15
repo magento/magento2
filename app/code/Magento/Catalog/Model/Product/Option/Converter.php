@@ -31,7 +31,7 @@ class Converter
     public function toArray(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
         $optionData = $option->getData();
-        $values = $option->getData('values');
+        $values = $option->getValues();
         $valuesData = [];
         if (!empty($values)) {
             foreach ($values as $key => $value) {

@@ -15,20 +15,20 @@ class BundleLoadOptions
     protected $productOptionList;
 
     /**
-     * @var \Magento\Framework\Api\AttributeDataBuilder
+     * @var \Magento\Framework\Api\AttributeValueFactory
      */
-    protected $customAttributeBuilder;
+    protected $customAttributeFactory;
 
     /**
      * @param \Magento\Bundle\Model\Product\OptionList $productOptionList
-     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      */
     public function __construct(
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
-        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
     ) {
         $this->productOptionList = $productOptionList;
-        $this->customAttributeBuilder = $customAttributeBuilder;
+        $this->customAttributeFactory = $customAttributeFactory;
     }
 
     /**
@@ -50,10 +50,9 @@ class BundleLoadOptions
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             return $product;
         }
-        $customAttribute = $this->customAttributeBuilder
+        $customAttribute = $this->customAttributeFactory->create()
             ->setAttributeCode('bundle_product_options')
-            ->setValue($this->productOptionList->getItems($product))
-            ->create();
+            ->setValue($this->productOptionList->getItems($product));
         $attributes = array_merge($product->getCustomAttributes(), ['bundle_product_options' => $customAttribute]);
         $product->setData('custom_attributes', $attributes);
         return $product;

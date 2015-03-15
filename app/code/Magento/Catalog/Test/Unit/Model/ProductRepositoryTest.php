@@ -58,7 +58,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultsBuilderMock;
+    protected $searchResultsFactoryMock;
 
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
@@ -98,7 +98,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaDataBuilder',
+            '\Magento\Framework\Api\SearchCriteriaBuilder',
             [],
             [],
             '',
@@ -111,9 +111,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->searchResultsBuilderMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder',
-            ['setSearchCriteria', 'setItems', 'setTotalCount', 'create'],
+        $this->searchResultsFactoryMock = $this->getMock(
+            '\Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -134,7 +134,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'metadataServiceInterface' => $this->metadataServiceMock,
-                'searchResultsBuilder' => $this->searchResultsBuilderMock,
+                'searchResultsFactory' => $this->searchResultsFactoryMock,
                 'eavConfig' => $this->eavConfigMock,
             ]
         );
@@ -433,13 +433,19 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(42);
         $collectionMock->expects($this->once())->method('setPageSize')->with(42);
         $collectionMock->expects($this->once())->method('load');
-        $this->searchResultsBuilderMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
-        $this->searchResultsBuilderMock->expects($this->once())->method('setItems')->with([$itemsMock]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
-        $this->searchResultsBuilderMock->expects($this->once())->method('setTotalCount')->with(128);
-        $this->searchResultsBuilderMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->assertEquals($this->searchResultsBuilderMock, $this->model->getList($searchCriteriaMock));
+        $searchResultsMock = $this->getMock(
+            '\Magento\Catalog\Api\Data\ProductSearchResultsInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
+        $searchResultsMock->expects($this->once())->method('setItems')->with([$itemsMock]);
+        $this->searchResultsFactoryMock->expects($this->once())->method('create')->willReturn($searchResultsMock);
+        $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 
     /**
