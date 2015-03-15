@@ -5,7 +5,7 @@
  */
 -->
 <!-- ko ifnot: 'items' in option  -->
-    <option data-bind="attr: { label: option.label, value: option.value }"></option>
+    <option data-bind="attr: { label: option.label, value: option.value }, text: option.label"></option>
 <!-- /ko -->
 <!-- ko if: 'items' in option  -->
     <optgroup data-bind="attr: { label: option.label }"></optgroup>

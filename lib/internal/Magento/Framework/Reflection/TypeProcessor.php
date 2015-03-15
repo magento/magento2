@@ -495,4 +495,32 @@ class TypeProcessor
         }
         return $methodName;
     }
+
+    /**
+     * Find the setter method name for a property from the given class
+     *
+     * @param ClassReflection $class
+     * @param string $camelCaseProperty
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     */
+    public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
+    {
+        $setterName = 'set' . $camelCaseProperty;
+        $boolSetterName = 'setIs' . $camelCaseProperty;
+        if ($class->hasMethod($setterName)) {
+            $methodName = $setterName;
+        } elseif ($class->hasMethod($boolSetterName)) {
+            $methodName = $boolSetterName;
+        } else {
+            throw new \Exception(
+                sprintf(
+                    'Property :"%s" does not exist in the provided class: "%s".',
+                    $camelCaseProperty,
+                    $class->getName()
+                )
+            );
+        }
+        return $methodName;
+    }
 }

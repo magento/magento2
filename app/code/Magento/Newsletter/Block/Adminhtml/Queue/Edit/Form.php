@@ -78,10 +78,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+            \IntlDateFormatter::MEDIUM
         );
         $timeFormat = $this->_localeDate->getTimeFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+            \IntlDateFormatter::MEDIUM
         );
 
         if ($queue->getQueueStatus() == \Magento\Newsletter\Model\Queue::STATUS_NEVER) {
@@ -157,7 +157,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $form->getElement(
                 'date'
             )->setValue(
-                $this->_localeDate->date($queue->getQueueStartAt(), \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                $this->_localeDate->date(new \DateTime($queue->getQueueStartAt()))
             );
         }
 

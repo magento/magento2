@@ -6,21 +6,21 @@
 namespace Magento\TestModule2\Service\V1;
 
 use Magento\TestModule2\Service\V1\Entity\Item;
-use Magento\TestModule2\Service\V1\Entity\ItemBuilder;
+use Magento\TestModule2\Service\V1\Entity\ItemFactory;
 
 class NoWebApiXml implements \Magento\TestModule2\Service\V1\NoWebApiXmlInterface
 {
     /**
-     * @var ItemBuilder
+     * @var ItemFactory
      */
-    protected $itemBuilder;
+    protected $itemFactory;
 
     /**
-     * @param ItemBuilder $itemBuilder
+     * @param ItemFactory $itemFactory
      */
-    public function __construct(ItemBuilder $itemBuilder)
+    public function __construct(ItemFactory $itemFactory)
     {
-        $this->itemBuilder = $itemBuilder;
+        $this->itemFactory = $itemFactory;
     }
 
     /**
@@ -28,7 +28,7 @@ class NoWebApiXml implements \Magento\TestModule2\Service\V1\NoWebApiXmlInterfac
      */
     public function item($id)
     {
-        return $this->itemBuilder->setId($id)->setName('testProduct1')->create();
+        return $this->itemFactory->create()->setId($id)->setName('testProduct1');
     }
 
     /**
@@ -36,9 +36,9 @@ class NoWebApiXml implements \Magento\TestModule2\Service\V1\NoWebApiXmlInterfac
      */
     public function items()
     {
-        $result1 = $this->itemBuilder->setId(1)->setName('testProduct1')->create();
+        $result1 = $this->itemFactory->create()->setId(1)->setName('testProduct1');
 
-        $result2 = $this->itemBuilder->setId(2)->setName('testProduct2')->create();
+        $result2 = $this->itemFactory->create()->setId(2)->setName('testProduct2');
 
         return [$result1, $result2];
     }
@@ -48,7 +48,7 @@ class NoWebApiXml implements \Magento\TestModule2\Service\V1\NoWebApiXmlInterfac
      */
     public function create($name)
     {
-        return $this->itemBuilder->setId(rand())->setName($name)->create();
+        return $this->itemFactory->create()->setId(rand())->setName($name);
     }
 
     /**
@@ -56,6 +56,6 @@ class NoWebApiXml implements \Magento\TestModule2\Service\V1\NoWebApiXmlInterfac
      */
     public function update(Item $item)
     {
-        return $this->itemBuilder->setId($item->getId())->setName('Updated' . $item->getName())->create();
+        return $this->itemFactory->create()->setId($item->getId())->setName('Updated' . $item->getName());
     }
 }

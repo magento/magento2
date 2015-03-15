@@ -87,6 +87,14 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the name for the shipment item.
      *
      * @return string Name.

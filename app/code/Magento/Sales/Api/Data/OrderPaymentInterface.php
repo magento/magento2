@@ -550,6 +550,14 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the last transaction ID for the order payment.
      *
      * @return string Last transaction ID.

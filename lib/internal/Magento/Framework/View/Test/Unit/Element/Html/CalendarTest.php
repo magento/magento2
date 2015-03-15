@@ -47,19 +47,7 @@ class CalendarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetYearRange()
     {
-        $testCurrentYear = 2123;
-        $date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateInterface')
-            ->getMock();
-
-        $date->expects($this->any())
-            ->method('__toString')
-            ->will($this->returnValue($testCurrentYear));
-
-        $this->localeDate->expects($this->any())
-            ->method('date')
-            ->with($this->equalTo('Y'))
-            ->will($this->returnValue($date));
-
+        $testCurrentYear = (new \DateTime())->format('Y');
         $this->assertEquals((int)$testCurrentYear - 100 . ':' . $testCurrentYear, $this->block->getYearRange());
     }
 }

@@ -131,14 +131,12 @@
             </table>
         </div>
         <?php if (!$block->isRedirectToCartEnabled()) : ?>
-            <script>
-                require([
-                    'jquery',
-                    'domReady!',
-                    'Magento_Catalog/js/catalog-add-to-cart'
-                ], function($) {
-                    $('[data-role=tocart-form]').catalogAddToCart();
-                });
+            <script type="text/x-magento-init">
+            {
+                "[data-role=tocart-form]": {
+                    "catalogAddToCart": {}
+                }
+            }
             </script>
         <?php endif; ?>
 <?php else: ?>
