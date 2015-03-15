@@ -30,7 +30,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultsBuilderMock;
+    protected $searchResultsFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -54,9 +54,9 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->setRepositoryMock = $this->getMock('\Magento\Eav\Api\AttributeSetRepositoryInterface');
-        $this->searchResultsBuilderMock = $this->getMock(
-            '\Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder',
-            ['setSearchCriteria', 'setItems', 'setTotalCount', 'create'],
+        $this->searchResultsFactoryMock = $this->getMock(
+            '\Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory',
+            ['create'],
             [],
             '',
             false
@@ -77,7 +77,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
                 'groupListFactory' => $this->groupListFactoryMock,
                 'groupFactory' => $this->groupFactoryMock,
                 'setRepository' => $this->setRepositoryMock,
-                'searchResultsBuilder' => $this->searchResultsBuilderMock
+                'searchResultsFactory' => $this->searchResultsFactoryMock
             ]
         );
     }
@@ -246,11 +246,18 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupCollectionMock->expects($this->once())->method('setSortOrder');
         $groupCollectionMock->expects($this->once())->method('getSize')->willReturn(1);
 
-        $this->searchResultsBuilderMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
-        $this->searchResultsBuilderMock->expects($this->once())->method('setItems')->with([$groupMock]);
-        $this->searchResultsBuilderMock->expects($this->once())->method('setTotalCount')->with(1);
-        $this->searchResultsBuilderMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->assertEquals($this->searchResultsBuilderMock, $this->model->getList($searchCriteriaMock));
+        $searchResultsMock = $this->getMock(
+            '\Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
+        $searchResultsMock->expects($this->once())->method('setItems')->with([$groupMock]);
+        $searchResultsMock->expects($this->once())->method('setTotalCount')->with(1);
+        $this->searchResultsFactoryMock->expects($this->once())->method('create')->willReturn($searchResultsMock);
+        $this->assertEquals($searchResultsMock, $this->model->getList($searchCriteriaMock));
     }
 
     /**

@@ -63,6 +63,14 @@ interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleData
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the is-customer-notified flag value for the shipment comment.
      *
      * @return int Is-customer-notified flag value.

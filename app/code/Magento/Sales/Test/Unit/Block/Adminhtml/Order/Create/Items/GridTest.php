@@ -339,6 +339,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($html, $grid->getItemRowTotalHtml($this->itemMock));
     }
+
     public function testGetItemRowTotalWithDiscountHtml()
     {
         $html = '$34.28';
@@ -360,4 +361,81 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($html, $grid->getItemRowTotalWithDiscountHtml($this->itemMock));
     }
+
+    /**
+     * @param array $orderData
+     * @param bool $displayTotalsIncludeTax
+     * @param float $expected
+     * @dataProvider getSubtotalWithDiscountDataProvider
+     */
+    public function testGetSubtotalWithDiscount($orderData, $displayTotalsIncludeTax, $expected)
+    {
+        $quoteAddressMock = $this->getMock(
+            '\Magento\Quote\Model\Quote\Address',
+            ['getSubtotal', 'getTaxAmount','getHiddenTaxAmount','getDiscountAmount'],
+            [],
+            '',
+            false
+        );
+        $gridMock = $this->getMock(
+            'Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid',
+            ['getQuoteAddress','displayTotalsIncludeTax'],
+            [],
+            '',
+            false
+        );
+
+        $gridMock->expects($this->any())->method('getQuoteAddress')
+            ->will($this->returnValue($quoteAddressMock));
+        $gridMock->expects($this->any())->method('displayTotalsIncludeTax')
+            ->will($this->returnValue($displayTotalsIncludeTax));
+
+        $quoteAddressMock->expects($this->once())
+            ->method('getSubtotal')
+            ->will($this->returnValue($orderData['subTotal']));
+
+        $quoteAddressMock->expects($this->any())
+            ->method('getTaxAmount')
+            ->will($this->returnValue($orderData['taxAmount']));
+
+        $quoteAddressMock->expects($this->any())
+            ->method('getHiddenTaxAmount')
+            ->will($this->returnValue($orderData['hiddenTaxAmount']));
+
+        $quoteAddressMock->expects($this->once())
+            ->method('getDiscountAmount')
+            ->will($this->returnValue($orderData['discountAmount']));
+
+        $this->assertEquals($expected, $gridMock->getSubtotalWithDiscount());
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubtotalWithDiscountDataProvider()
+    {
+        $result = [];
+        $result['displayTotalsIncludeTaxTrue'] = [
+            'orderData' => [
+                'subTotal' => 32.59,
+                'taxAmount' => 8.2,
+                'hiddenTaxAmount' => 1.72,
+                'discountAmount' => -10.24
+            ],
+            'displayTotalsIncludeTax'=> true,
+            'expected' => 32.27
+        ];
+        $result['displayTotalsIncludeTaxFalse'] = [
+            'orderData' => [
+                'subTotal' => 66.67,
+                'taxAmount' => 20,
+                'hiddenTaxAmount' => 8,
+                'discountAmount' => -34.67
+            ],
+            'displayTotalsIncludeTax'=> false,
+            'expected' => 32
+        ];
+        return $result;
+    }
+
 }

@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
+use Magento\Framework\App\ErrorHandler;
 
 class InstallerFactory
 {
@@ -33,6 +34,9 @@ class InstallerFactory
     {
         $this->serviceLocator = $serviceLocator;
         $this->resourceFactory = $resourceFactory;
+        // For Setup Wizard we are using our customized error handler
+        $handler = new ErrorHandler();
+        set_error_handler([$handler, 'handler']);
     }
 
     /**
@@ -46,7 +50,9 @@ class InstallerFactory
         return new Installer(
             $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
+            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig'),
+            $this->serviceLocator->get('Magento\Framework\Module\ModuleList\DeploymentConfigFactory'),
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList'),
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList\Loader'),
             $this->serviceLocator->get('Magento\Framework\App\Filesystem\DirectoryList'),

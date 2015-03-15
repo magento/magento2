@@ -34,9 +34,9 @@ define([
             priceHolderSelector: '.price-box',
             state: {},
             priceFormat: {},
-            optionTemplate: '<%= data.label %>' +
+            optionTemplate: '<%- data.label %>' +
                             '<% if (data.finalPrice.value) { %>' +
-                                ' <%= data.finalPrice.formatted %>' +
+                                ' <%- data.finalPrice.formatted %>' +
                             '<% } %>',
             mediaGallerySelector: '[data-role=media-gallery]'
         },

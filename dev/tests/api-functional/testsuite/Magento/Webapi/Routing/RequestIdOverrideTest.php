@@ -26,9 +26,9 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
     protected $_restResourcePath;
 
     /**
-     * @var \Magento\TestModule5\Service\V1\Entity\AllSoapAndRestBuilder
+     * @var \Magento\TestModule5\Service\V1\Entity\AllSoapAndRestFactory
      */
-    protected $itemBuilder;
+    protected $itemFactory;
 
     /**
      * @var string
@@ -40,8 +40,8 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
         $this->_markTestAsRestOnly('Request Id overriding is a REST based feature.');
         $this->_version = 'V1';
         $this->_restResourcePath = "/{$this->_version}/TestModule5/";
-        $this->itemBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\TestModule5\Service\V1\Entity\AllSoapAndRestBuilder');
+        $this->itemFactory = Bootstrap::getObjectManager()
+            ->create('Magento\TestModule5\Service\V1\Entity\AllSoapAndRestFactory');
     }
 
     public function testOverride()
@@ -54,10 +54,9 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
-        $item = $this->itemBuilder
+        $item = $this->itemFactory->create()
             ->setEntityId($incorrectItemId)
-            ->setName('test')
-            ->create();
+            ->setName('test');
         $requestData = ['entityItem' => $item->__toArray()];
         $item = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(
@@ -78,10 +77,9 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
-        $item = $this->itemBuilder
+        $item = $this->itemFactory->create()
             ->setEntityId($incorrectItemId)
-            ->setName('test')
-            ->create();
+            ->setName('test');
         $requestData = ['entityItem' => $item->__toArray()];
         $item = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(
@@ -100,9 +98,8 @@ class RequestIdOverrideTest extends \Magento\Webapi\Routing\BaseService
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
-        $item = $this->itemBuilder
-            ->setName('test')
-            ->create();
+        $item = $this->itemFactory->create()
+            ->setName('test');
         $requestData = ['entityItem' => $item->__toArray()];
         $item = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(

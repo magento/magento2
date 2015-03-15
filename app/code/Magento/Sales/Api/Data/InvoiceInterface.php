@@ -348,6 +348,14 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the global currency code for the invoice.
      *
      * @return string Global currency code.
@@ -500,6 +508,14 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return string Transaction ID.
      */
     public function getTransactionId();
+
+    /**
+     * Sets the transaction ID for the invoice.
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId);
 
     /**
      * Gets the updated-at timestamp for the invoice.
