@@ -54,8 +54,6 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 
             $this->cart->save();
 
-            $this->_checkoutSession->setCartWasUpdated(true);
-
             $this->_eventManager->dispatch(
                 'checkout_cart_update_item_complete',
                 ['item' => $item, 'request' => $this->getRequest(), 'response' => $this->getResponse()]
