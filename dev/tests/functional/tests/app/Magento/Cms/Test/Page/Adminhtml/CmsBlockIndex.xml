@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CmsBlockIndex" area="Adminhtml" mca="cms/block" module="Magento_Cms">
+        <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector" />
+        <block name="gridPageActions" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector" />
+        <block name="cmsBlockGrid" class="Magento\Cms\Test\Block\Adminhtml\Block\CmsGrid" locator=".grid" strategy="css selector" />
+    </page>
+</config>

@@ -43,5 +43,12 @@
                 <item name="dataSet" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
+
+        <dataset name="customer_group_retail_customer">
+            <field name="customer_group_code" xsi:type="string">Customer_group_%isolation%</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">retail_customer</item>
+            </field>
+        </dataset>
     </repository>
 </config>
