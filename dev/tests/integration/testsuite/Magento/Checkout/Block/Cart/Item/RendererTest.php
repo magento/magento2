@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Block\Cart\Item;
 
 /**
+ * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_and_image.php
  */
 class RendererTest extends \PHPUnit_Framework_TestCase

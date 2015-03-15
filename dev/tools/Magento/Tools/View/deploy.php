@@ -43,7 +43,7 @@ $logger = new \Magento\Tools\View\Deployer\Log($verbosity);
 
 try {
     // run the deployment logic
-    $filesUtil = new \Magento\Framework\Test\Utility\Files(BP);
+    $filesUtil = new \Magento\Framework\App\Utility\Files(BP);
     $omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []);
     $objectManager = $omFactory->create(
         [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]

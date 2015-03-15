@@ -33,7 +33,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link\Current
     ) {
         parent::__construct($context, $defaultPath, $data);
         $this->httpContext = $httpContext;
-        $this->_isScopePrivate = true;
     }
 
     /**

@@ -56,7 +56,6 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      *
      * Expect an exception if the specified file does not exist.
      * @expectedException \Exception
-     * @expectedExceptionMessage include(This_is_not_a_file): failed to open stream: No such file or directory
      */
     public function testRenderException()
     {

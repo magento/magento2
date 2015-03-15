@@ -38,26 +38,28 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $xml
+     * @param string $elementType
      * @return \Magento\Framework\View\Layout\Element
      */
-    protected function getElement($xml)
+    protected function getElement($xml, $elementType)
     {
         $xml = '<' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>'
             . $xml
             . '</' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>';
 
         $xml = simplexml_load_string($xml, 'Magento\Framework\View\Layout\Element');
-        return current($xml->children());
+        return $xml->{$elementType};
     }
 
     /**
      * Prepare reader pool
      *
      * @param string $xml
+     * @param string $elementType
      */
-    protected function prepareReaderPool($xml)
+    protected function prepareReaderPool($xml, $elementType)
     {
-        $this->currentElement = $this->getElement($xml);
+        $this->currentElement = $this->getElement($xml, $elementType);
         $this->readerPool->expects($this->once())->method('interpret')->with($this->context, $this->currentElement);
     }
 
@@ -116,7 +118,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([]);
+            ->willReturn([
+                'actions' => [
+                    ['someMethod', [], 'action_config_path', 'scope'],
+                ],
+            ]);
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(
@@ -140,8 +146,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareReaderPool(
             '<' . $literal . ' ifconfig="' . $ifconfigValue . '">'
-                . '<action method="someMethod" ifconfig="action_config_path" />'
-                . '</' . $literal . '>'
+            . '<action method="someMethod" ifconfig="action_config_path" />'
+            . '</' . $literal . '>',
+            $literal
         );
 
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
@@ -184,7 +191,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([]);
+            ->willReturn([
+                'actions' => [
+                    ['someMethod', [], 'action_config_path', 'scope'],
+                ],
+            ]);
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(
@@ -199,8 +210,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareReaderPool(
             '<' . $literal . ' name="' . $literal . '">'
-                . '<action method="someMethod" ifconfig="action_config_path" />'
-                . '</' . $literal . '>'
+            . '<action method="someMethod" ifconfig="action_config_path" />'
+            . '</' . $literal . '>',
+            $literal
         );
 
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */

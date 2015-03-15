@@ -262,7 +262,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->hasData($this->_keyStatusFilters)) {
             return [
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
             ];
         }
         return $product->getData($this->_keyStatusFilters);
