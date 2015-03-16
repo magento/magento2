@@ -319,6 +319,16 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $modulesDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
         $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
 
+        /**
+         * trim copyright message for text templates
+         */
+        if ('html' != $templateType
+            && preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
+            && strpos($matches[0], 'Copyright') > 0
+        ) {
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
+
         if (preg_match('/<!--@subject\s*(.*?)\s*@-->/u', $templateText, $matches)) {
             $this->setTemplateSubject($matches[1]);
             $templateText = str_replace($matches[0], '', $templateText);
@@ -335,9 +345,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         }
 
         /**
-         * Remove comment lines
+         * Remove comment lines and extra spaces
          */
-        $templateText = preg_replace('#\{\*.*\*\}#suU', '', $templateText);
+        $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
 
         $this->setTemplateText($templateText);
         $this->setId($templateId);
