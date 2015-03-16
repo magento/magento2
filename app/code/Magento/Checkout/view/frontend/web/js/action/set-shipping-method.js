@@ -6,6 +6,6 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(function(shippingMethodCode) {
+define(['../model/order'], function(order, shippingMethodCode) {
     return order.setShippingMethod(shippingMethodCode);
 });

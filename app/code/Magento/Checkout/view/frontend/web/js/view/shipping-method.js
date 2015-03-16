@@ -9,15 +9,14 @@
 define(
     [
         'underscore',
-        'handlebars',
         'text!./templates/shipping-method.html',
         '../model/order',
         '../model/shipping-service',
         '../action/set-shipping-method'
     ],
-    function(_, handlebars, template, order, shippingService, setShippingMethod) {
+    function(_, template, order, shippingService, setShippingMethod) {
         var root;
-        template = Handlebars.compile(template);
+        template = _.template(template);
         order.setBillingAddress = _.wrap(_.bind(order.setBillingAddress, order), function(func, addressId, shipToSame) {
             return func(addressId, shipToSame).done(function() {
                 view.render();

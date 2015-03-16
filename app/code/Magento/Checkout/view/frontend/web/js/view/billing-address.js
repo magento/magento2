@@ -11,13 +11,12 @@ define(
         'underscore',
         'text!./templates/billing-address.html',
         '../model/order',
-        "handlebars",
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Customer/js/model/customer'
     ],
-    function(_, template, order, handlebars, selectBillingAddress, customer) {
+    function(_, template, order, selectBillingAddress, customer) {
         var root;
-        var template = Handlebars.compile(template);
+        var template = _.template(template);
         var object = {
             render: function (newRoot) {
                 root = newRoot || root;

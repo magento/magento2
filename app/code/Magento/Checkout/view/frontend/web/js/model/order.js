@@ -11,7 +11,7 @@ define(['mage/storage'], function(storage) {
     return {
         setBillingAddress: function (billingAddressId, shipToSame) {
             return storage.post(
-                'checkout/onepage/saveBilling',
+                '/checkout/onepage/saveBilling',
                 {'billing_address_id': billingAddressId, 'billing': {'use_for_shipping': shipToSame}}
             ).done(
                 function() {
@@ -22,9 +22,9 @@ define(['mage/storage'], function(storage) {
         getBillingAddress: function() {
             return billingAddress;
         },
-        setShippingMethod: function() {
+        setShippingMethod: function(billingAddressId, shipToSame) {
             return storage.post(
-                'checkout/onepage/saveBilling',
+                '/checkout/onepage/saveBilling',
                 {'billing_address_id': billingAddressId, 'billing': {'use_for_shipping': shipToSame}}
             ).done(
                 function() {

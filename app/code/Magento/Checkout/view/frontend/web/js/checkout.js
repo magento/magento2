@@ -16,6 +16,7 @@
 /*global alert*/
 define(
     [
+        'jquery',
         'mage/view/composite',
         'mage/url',
         'Magento_Ui/js/view/errors',
@@ -27,7 +28,7 @@ define(
         './view/progress',
         'Magento_Customer/js/model/customer'
     ],
-    function(composite, url, errors, authentication, billingAddress, shipping, payment, review, progress, customer) {
+    function($, composite, url, errors, authentication, billingAddress, shipping, payment, review, progress, customer) {
         var first = composite();
         var accordion = composite();
         accordion.addChild(authentication, 'authentication');
@@ -42,7 +43,7 @@ define(
             authentication.setFormKey(options.formKey);
             url.setBaseUrl(options.baseUrl);
             customer.setIsLoggedIn(options.isLoggedIn);
-            return first.render(element);
+            return first.render($(element));
         }
     }
 );
