@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
 use Magento\Payment\Model\Method\Substitution;

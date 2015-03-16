@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Relations;
 
 require_once __DIR__ . '/../_files/Child.php';
