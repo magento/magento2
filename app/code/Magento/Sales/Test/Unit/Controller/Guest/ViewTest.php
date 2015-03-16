@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Controller\Guest;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
