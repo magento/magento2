@@ -7,7 +7,7 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['mage/storage', '../model/customer', 'Magento_Core/js/model/errorlist'],
+    ['mage/storage', '../model/customer', 'Magento_Ui/js/model/errorlist'],
     function(storage, customer, errorlist) {
         return function(login, password, formKey) {
             return storage.post(
