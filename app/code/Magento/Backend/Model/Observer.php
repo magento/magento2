@@ -11,45 +11,17 @@ namespace Magento\Backend\Model;
 class Observer
 {
     /**
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $backendSession;
-
-    /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
      */
     private $cacheFrontendPool;
 
     /**
-     * Initialize dependencies
-     *
-     * @param Session $backendSession
      * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
     ) {
-        $this->backendSession = $backendSession;
         $this->cacheFrontendPool = $cacheFrontendPool;
-    }
-
-    /**
-     * Bind locale
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     */
-    public function bindLocale($observer)
-    {
-        $locale = $observer->getEvent()->getLocale();
-        if ($locale) {
-            $selectedLocale = $this->backendSession->getLocale();
-            if ($selectedLocale) {
-                $locale->setLocaleCode($selectedLocale);
-            }
-        }
-        return $this;
     }
 
     /**

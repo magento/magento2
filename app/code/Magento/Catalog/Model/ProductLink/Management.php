@@ -70,10 +70,10 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkedItemsByType($productSku, $type)
+    public function getLinkedItemsByType($sku, $type)
     {
         $output = [];
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         try {
             $collection = $this->entityCollectionProvider->getCollection($product, $type);
         } catch (NoSuchEntityException $e) {
@@ -89,10 +89,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
                 ->setPosition($item['position']);
             if (isset($item['custom_attributes'])) {
                 foreach ($item['custom_attributes'] as $option) {
-                    $productLink->setCustomAttribute(
-                        $option['attribute_code'],
-                        $option['value']
-                    );
+                    $productLink->getExtensionAttributes()->setQty($option['value']);
                 }
             }
             $output[] = $productLink;
@@ -103,7 +100,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function setProductLinks($productSku, $type, array $items)
+    public function setProductLinks($sku, $type, array $items)
     {
         $linkTypes = $this->linkTypeProvider->getLinkTypes();
 
@@ -113,7 +110,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
             );
         }
 
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $assignedSkuList = [];
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
         foreach ($items as $link) {

@@ -262,4 +262,25 @@ class ItemDetails extends AbstractExtensibleModel implements TaxDetailsItemInter
     {
         return $this->setData(TaxDetailsItemInterface::KEY_ASSOCIATED_ITEM_CODE, $associatedItemCode);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxDetailsItemExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

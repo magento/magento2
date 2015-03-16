@@ -257,11 +257,27 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function getBaseAdjustmentNegative();
 
     /**
+     * Sets the credit memo negative base adjustment.
+     *
+     * @param float $baseAdjustmentNegative
+     * @return $this
+     */
+    public function setBaseAdjustmentNegative($baseAdjustmentNegative);
+
+    /**
      * Gets the credit memo positive base adjustment.
      *
      * @return float Credit memo positive base adjustment.
      */
     public function getBaseAdjustmentPositive();
+
+    /**
+     * Sets the credit memo positive base adjustment.
+     *
+     * @param float $baseAdjustmentPositive
+     * @return $this
+     */
+    public function setBaseAdjustmentPositive($baseAdjustmentPositive);
 
     /**
      * Gets the credit memo base currency code.
@@ -401,6 +417,15 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return int Credit memo ID.
      */
     public function getEntityId();
+
+    /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
     /**
      * Gets the credit memo global currency code.
      *
@@ -546,6 +571,14 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return string Credit memo transaction ID.
      */
     public function getTransactionId();
+
+    /**
+     * Sets the credit memo transaction ID.
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId);
 
     /**
      * Gets the credit memo updated-at timestamp.
@@ -927,4 +960,19 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return $this
      */
     public function setDiscountDescription($description);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes);
 }

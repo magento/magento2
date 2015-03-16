@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class StockStatusTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/stockStatus';
+    const RESOURCE_PATH = '/V1/stockStatuses';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php

@@ -129,9 +129,6 @@ class Source
     private function preProcess(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
-        if (!$sourceFile) {
-            return false;
-        }
         $dirCode = DirectoryList::ROOT;
         $path = $this->rootDir->getRelativePath($sourceFile);
         $cacheId = $path . ':' . $asset->getPath();
@@ -141,7 +138,7 @@ class Source
         }
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
             $asset,
-            $this->rootDir->readFile($path),
+            $path ? $this->rootDir->readFile($path) : "",
             $this->getContentType($path),
             $path,
             $this->appMode
@@ -205,7 +202,7 @@ class Source
         $sourceFile = $this->fallback->getFile(
             $context->getAreaCode(),
             $themeModel,
-            $context->getLocaleCode(),
+            $context->getLocale(),
             $asset->getFilePath(),
             $asset->getModule()
         );

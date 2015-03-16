@@ -68,7 +68,7 @@ define([
             var buttons = {
                 text: $.mage.__('OK'),
                 click: callback,
-                'class': 'primary'
+                'class': 'action-primary'
             };
 
             dialog.title.set(this.options.eventData.confirm.title);
@@ -119,8 +119,14 @@ define([
                 this.options.dialog = $(this.options.dialogSelector).dialog({
                     autoOpen:    false,
                     modal:       true,
-                    width:       570,
-                    dialogClass: 'vde-dialog'
+                    width:       '75%',
+                    dialogClass: 'vde-dialog',
+                    open: function () {
+                        $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                    },
+                    close: function () {
+                        $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+                    }
                 });
             }
             return this.options.dialog;

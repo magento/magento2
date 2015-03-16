@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Api\AttributeValueFactory;
-
 /**
  * Customer group model
  *
@@ -17,7 +15,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)
  * @method Group setTaxClassName(string $value)
  */
-class Group extends \Magento\Framework\Model\AbstractExtensibleModel
+class Group extends \Magento\Framework\Model\AbstractModel
 {
     const NOT_LOGGED_IN_ID = 0;
 
@@ -63,8 +61,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoresConfig $storesConfig
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
@@ -76,8 +72,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoresConfig $storesConfig,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Tax\Model\ClassModelFactory $classModelFactory,
@@ -91,8 +85,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

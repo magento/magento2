@@ -38,7 +38,7 @@ class LocaleQuantityProcessor
      */
     public function process($qty)
     {
-        $this->localFilter->setOptions(['locale' => $this->localeResolver->getLocaleCode()]);
+        $this->localFilter->setOptions(['locale' => $this->localeResolver->getLocale()]);
         $qty = $this->localFilter->filter((double)$qty);
         if ($qty < 0) {
             $qty = null;

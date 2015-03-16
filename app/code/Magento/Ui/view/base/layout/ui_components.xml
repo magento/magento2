@@ -155,7 +155,6 @@
                 <item name="extends" xsi:type="string">input</item>
                 <item name="config" xsi:type="array">
                     <item name="input_type" xsi:type="string">email</item>
-                    <item name="addbefore" xsi:type="string">@email:</item>
                 </item>
             </argument>
         </arguments>

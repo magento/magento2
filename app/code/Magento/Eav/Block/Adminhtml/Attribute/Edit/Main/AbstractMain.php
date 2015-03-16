@@ -202,7 +202,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $fieldset->addField(
             'default_value_date',
             'date',

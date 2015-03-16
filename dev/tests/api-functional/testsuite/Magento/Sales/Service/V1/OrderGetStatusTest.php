@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class OrderGetStatusTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/order/%d/status';
+    const RESOURCE_PATH = '/V1/orders/%d/statuses';
 
     const SERVICE_READ_NAME = 'salesOrderManagementV1';
 

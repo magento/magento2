@@ -135,3 +135,8 @@ Copyright,Copyright
 "2 columns with right bar","2 colunas com barra à direita"
 "3 columns","3 colunas"
 "Skip to content","Skip to content"
+"Invalid regular expression: ""%1"".","Invalid regular expression: ""%1""."
+"Start date cannot be greater than end date.","Data de início não pode ser maior que a data do término."
+"Your design change for the specified store intersects with another one, please specify another date range.","Sua mudança de design para a loja especificada cruza com outra, por favor especifique outro intervalo de datas."
+Copy,Copy
+"Circular-reference in theme inheritance detected for ""%1""","Circular-reference in theme inheritance detected for ""%1"""

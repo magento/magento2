@@ -6,7 +6,9 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface ProductCustomOptionTypeInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface ProductCustomOptionTypeInterface extends ExtensibleDataInterface
 {
     /**
      * Get option type label
@@ -52,4 +54,21 @@ interface ProductCustomOptionTypeInterface
      * @return $this
      */
     public function setGroup($group);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductCustomOptionTypeExtensionInterface $extensionAttributes
+    );
 }

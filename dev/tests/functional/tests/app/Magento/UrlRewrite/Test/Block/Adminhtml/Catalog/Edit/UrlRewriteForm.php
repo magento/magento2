@@ -12,13 +12,12 @@ use Magento\Mtf\Client\Element;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class UrlRewriteForm
- * Catalog URL rewrite edit form
+ * Catalog URL rewrite edit form.
  */
 class UrlRewriteForm extends Form
 {
     /**
-     * Fill the root form
+     * Fill the root form.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element

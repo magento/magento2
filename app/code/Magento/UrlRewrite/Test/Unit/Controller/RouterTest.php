@@ -252,8 +252,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getRedirectType')->will($this->returnValue(0));
         $urlRewrite->expects($this->any())->method('getTargetPath')->will($this->returnValue('target-path'));
+        $urlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('request-path'));
         $this->urlFinder->expects($this->any())->method('findOneByData')->will($this->returnValue($urlRewrite));
         $this->request->expects($this->once())->method('setPathInfo')->with('/target-path');
+        $this->request->expects($this->once())->method('setAlias')
+            ->with(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, 'request-path');
         $this->actionFactory->expects($this->once())->method('create')
             ->with('Magento\Framework\App\Action\Forward', ['request' => $this->request]);
 

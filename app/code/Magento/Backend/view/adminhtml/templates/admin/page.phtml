@@ -25,10 +25,12 @@
         <?php echo $block->getChildHtml('menu') ?>
         <?php echo $block->getChildHtml('notifications'); ?>
 
-        <section class="page-content" id="anchor-content">
+        <main class="page-content" id="anchor-content">
             <?php echo $block->getChildHtml('main-top'); ?>
-            <div id="messages" data-container-for="messages" class="messages">
-                <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+            <div class="admin__scope">
+                <div class="messages" id="messages" data-container-for="messages">
+                    <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+                </div>
             </div>
             <?php echo $block->getChildHtml('page_main_actions'); ?>
             <?php if ($block->getChildHtml('left')): ?>
@@ -46,12 +48,12 @@
                     <?php echo $block->getChildHtml('content') ?>
                 </div>
             <?php endif; ?>
-        </section>
+        </main>
 
         <?php echo $block->getChildHtml('js') ?>
-        <div class="page-footer-wrapper">
+        <footer class="page-footer">
             <?php echo $block->getChildHtml('footer') ?>
-        </div>
+        </footer>
     </div>
     <?php echo $block->getChildHtml('before_body_end') ?>
 </body>

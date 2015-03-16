@@ -39,7 +39,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->varDirectory = $objectManager->get(
             'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
             DirectoryList::VAR_DIR
@@ -49,7 +50,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\Filesystem\Driver\File(),
             $generationDirectory
         );
-        $this->_generator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->_generator = $objectManager->create(
             'Magento\Framework\Code\Generator',
             [
                 'ioObject' => $this->_ioObject,
@@ -61,6 +62,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
+        $this->_generator->setObjectManager($objectManager);
     }
 
     protected function tearDown()

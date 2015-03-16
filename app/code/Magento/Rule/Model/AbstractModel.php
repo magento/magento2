@@ -294,7 +294,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Set specified data to current rule.
      * Set conditions and actions recursively.
-     * Convert dates into \Zend_Date.
+     * Convert dates into \DateTime.
      *
      * @param array $data
      * @return array
@@ -320,15 +320,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
                 }
             } else {
                 /**
-                 * Convert dates into \Zend_Date
+                 * Convert dates into \DateTime
                  */
                 if (in_array($key, ['from_date', 'to_date']) && $value) {
-                    $value = $this->_localeDate->date(
-                        $value,
-                        \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-                        null,
-                        false
-                    );
+                    $value = new \DateTime($value);
                 }
                 $this->setData($key, $value);
             }
@@ -367,10 +362,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($fromDate && $toDate) {
-            $fromDate = new \Magento\Framework\Stdlib\DateTime\Date($fromDate, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
-            $toDate = new \Magento\Framework\Stdlib\DateTime\Date($toDate, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $fromDate = new \DateTime($fromDate);
+            $toDate = new \DateTime($toDate);
 
-            if ($fromDate->compare($toDate) === 1) {
+            if ($fromDate > $toDate) {
                 $result[] = __('End Date must follow Start Date.');
             }
         }

@@ -15,8 +15,7 @@ use Magento\Framework\Option\ArrayInterface;
  */
 
 /**
- * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library. Probably will be refactored while
- * moving \Magento\Core to library
+ * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {

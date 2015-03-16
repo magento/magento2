@@ -17,4 +17,12 @@ interface TaxRateSearchResultsInterface extends SearchResultsInterface
      * @return \Magento\Tax\Api\Data\TaxRateInterface[]
      */
     public function getItems();
+
+    /**
+     * Set items
+     *
+     * @param \Magento\Tax\Api\Data\TaxRateInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

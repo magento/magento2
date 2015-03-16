@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Api\Data;
 
-interface AttributeSetInterface
+interface AttributeSetInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get attribute set ID
@@ -66,4 +66,19 @@ interface AttributeSetInterface
      * @return $this
      */
     public function setEntityTypeId($entityTypeId);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeSetExtensionInterface $extensionAttributes);
 }

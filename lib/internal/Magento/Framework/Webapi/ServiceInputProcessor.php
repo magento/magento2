@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -15,7 +15,7 @@ use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Serialization\DataBuilderFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
@@ -30,42 +30,44 @@ class ServiceInputProcessor
 {
     const CACHE_ID_PREFIX = 'service_method_params_';
 
+    const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
+
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
 
-    /** @var DataBuilderFactory */
-    protected $builderFactory;
+    /** @var ObjectManagerInterface */
+    protected $objectManager;
 
-    /** @var ServiceConfigReader */
-    protected $serviceConfigReader;
-
-    /** @var AttributeDataBuilder */
-    protected $attributeValueBuilder;
+    /** @var AttributeValueFactory */
+    protected $attributeValueFactory;
 
     /** @var WebapiCache */
     protected $cache;
+
+    /** @var  CustomAttributeTypeLocatorInterface */
+    protected $customAttributeTypeLocator;
 
     /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
-     * @param DataBuilderFactory $builderFactory
-     * @param ServiceConfigReader $serviceConfigReader
-     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param ObjectManagerInterface $objectManager
+     * @param AttributeValueFactory $attributeValueFactory
      * @param WebapiCache $cache
+     * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      */
     public function __construct(
         TypeProcessor $typeProcessor,
-        DataBuilderFactory $builderFactory,
-        ServiceConfigReader $serviceConfigReader,
-        AttributeDataBuilder $attributeValueBuilder,
-        WebapiCache $cache
+        ObjectManagerInterface $objectManager,
+        AttributeValueFactory $attributeValueFactory,
+        WebapiCache $cache,
+        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
     ) {
         $this->typeProcessor = $typeProcessor;
-        $this->builderFactory = $builderFactory;
-        $this->serviceConfigReader = $serviceConfigReader;
-        $this->attributeValueBuilder = $attributeValueBuilder;
+        $this->objectManager = $objectManager;
+        $this->attributeValueFactory = $attributeValueFactory;
         $this->cache = $cache;
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
     }
 
     /**
@@ -126,13 +128,17 @@ class ServiceInputProcessor
      * @param string $className
      * @param array $data
      * @return object the newly created and populated object
+     * @throws \Exception
      */
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
         $class = new ClassReflection($className);
-
-        $builder = $this->builderFactory->getDataBuilder($className);
+        if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
+            $className = substr($className, 0, -strlen('Interface'));
+        }
+        $factory = $this->objectManager->get($className . 'Factory');
+        $object = $factory->create();
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
@@ -142,35 +148,38 @@ class ServiceInputProcessor
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                $setterName = 'set' . $camelCaseProperty;
+                try {
+                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                } catch (\Exception $e) {
+                    if (empty($value)) {
+                        continue;
+                    } else {
+                        throw $e;
+                    }
+                }
                 if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
+                    $setterValue = $this->convertCustomAttributeValue($value, $className);
                 } else {
                     $setterValue = $this->_convertValue($value, $returnType);
                 }
-                $builder->{$setterName}($setterValue);
+                $object->{$setterName}($setterValue);
             }
         }
-        return $builder->create();
+        return $object;
     }
 
     /**
      * Convert custom attribute data array to array of AttributeValue Data Object
      *
      * @param array $customAttributesValueArray
-     * @param string $returnType
      * @param string $dataObjectClassName
      * @return AttributeValue[]
      */
-    protected function convertCustomAttributeValue($customAttributesValueArray, $returnType, $dataObjectClassName)
+    protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
         $result = [];
-        $allAttributes = $this->serviceConfigReader->read();
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
-        if (!isset($allAttributes[$dataObjectClassName])) {
-            return $this->_convertValue($customAttributesValueArray, $returnType);
-        }
-        $dataObjectAttributes = $allAttributes[$dataObjectClassName];
+
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
@@ -183,11 +192,9 @@ class ServiceInputProcessor
                 $customAttributeCode = null;
             }
 
-            //Check if type is defined, else default to mixed
-            $type = isset($dataObjectAttributes[$customAttributeCode])
-                ? $dataObjectAttributes[$customAttributeCode]
-                : TypeProcessor::ANY_TYPE;
-
+            //Check if type is defined, else default to string
+            $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
+            $type = $type ? $type : TypeProcessor::ANY_TYPE;
             $customAttributeValue = $customAttribute[AttributeValue::VALUE];
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
@@ -200,10 +207,9 @@ class ServiceInputProcessor
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }
             //Populate the attribute value data object once the value for custom attribute is derived based on type
-            $result[] = $this->attributeValueBuilder
+            $result[$customAttributeCode] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
-                ->setValue($attributeValue)
-                ->create();
+                ->setValue($attributeValue);
         }
 
         return $result;

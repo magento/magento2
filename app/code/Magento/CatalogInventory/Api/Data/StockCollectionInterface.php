@@ -22,4 +22,12 @@ interface StockCollectionInterface extends SearchResultsInterface
      * @return \Magento\CatalogInventory\Api\Data\StockInterface[]
      */
     public function getItems();
+
+    /**
+     * Set items
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

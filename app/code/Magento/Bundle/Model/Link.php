@@ -7,6 +7,7 @@
 namespace Magento\Bundle\Model;
 
 /**
+ * Class Link
  * @codeCoverageIgnore
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -195,5 +196,26 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setCanChangeQuantity($canChangeQuantity)
     {
         return $this->setData(self::KEY_CAN_CHANGE_QUANTITY, $canChangeQuantity);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Bundle\Api\Data\LinkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

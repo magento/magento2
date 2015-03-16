@@ -12,29 +12,29 @@ interface LinkRepositoryInterface
     /**
      * List of samples for downloadable product
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Downloadable\Api\Data\SampleInterface[]
      */
-    public function getSamples($productSku);
+    public function getSamples($sku);
 
     /**
      * List of links with associated samples
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Downloadable\Api\Data\LinkInterface[]
      */
-    public function getLinks($productSku);
+    public function getLinks($sku);
 
     /**
      * Update downloadable link of the given product (link type and its resources cannot be changed)
      *
-     * @param string $productSku
+     * @param string $sku
      * @param \Magento\Downloadable\Api\Data\LinkContentInterface $linkContent
      * @param int $linkId
      * @param bool $isGlobalScopeContent
      * @return int
      */
-    public function save($productSku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false);
+    public function save($sku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false);
 
     /**
      * Delete downloadable link

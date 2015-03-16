@@ -12,6 +12,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * EAV Entity attribute model
  *
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
+ * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
@@ -66,7 +67,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param TypeFactory $eavTypeFactory
@@ -87,7 +88,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
@@ -107,7 +108,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $eavConfig,
             $eavTypeFactory,
@@ -248,22 +249,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $hasDefaultValue = (string)$defaultValue != '';
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
-            if (!\Zend_Locale_Format::isNumber(
-                $defaultValue,
-                ['locale' => $this->_localeResolver->getLocaleCode()]
-            )
-            ) {
+            $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
+            $defaultValue = $numberFormatter->parse($defaultValue);
+            if ($defaultValue === false) {
                 throw new EavException(__('Invalid default decimal value'));
             }
-
-            try {
-                $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_localeResolver->getLocaleCode()]
-                );
-                $this->setDefaultValue($filter->filter($defaultValue));
-            } catch (\Exception $e) {
-                throw new EavException(__('Invalid default decimal value'));
-            }
+            $this->setDefaultValue($defaultValue);
         }
 
         if ($this->getBackendType() == 'datetime') {
@@ -278,10 +269,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             // save default date value as timestamp
             if ($hasDefaultValue) {
                 $format = $this->_localeDate->getDateFormat(
-                    \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                    \IntlDateFormatter::SHORT
                 );
                 try {
-                    $defaultValue = $this->_localeDate->date($defaultValue, $format, null, false)->toValue();
+                    $defaultValue = \IntlDateFormatter::formatObject(new \DateTime($defaultValue), $format);
                     $this->setDefaultValue($defaultValue);
                 } catch (\Exception $e) {
                     throw new EavException(__('Invalid default date'));

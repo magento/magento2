@@ -134,6 +134,7 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         // Steps
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink('Log In');
+        sleep(3);
         $this->customerAccountLogin->getLoginBlock()->fill($initialCustomer);
         $this->customerAccountLogin->getLoginBlock()->submit();
 

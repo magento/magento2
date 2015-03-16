@@ -48,7 +48,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, ['productSku' => $productData[ProductInterface::SKU]]);
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $productData[ProductInterface::SKU]]);
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
             $this->assertEquals($productData[$key], $response[$key]);
         }
@@ -72,7 +72,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $expectedMessage = 'Requested product doesn\'t exist';
 
         try {
-            $this->_webApiCall($serviceInfo, ['productSku' => $invalidSku]);
+            $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
             $this->fail("Expected throwing exception");
         } catch (\SoapFault $e) {
             $this->assertContains(
@@ -274,6 +274,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, ['productSku' => $sku]) : $this->_webApiCall($serviceInfo);
+            $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
     }
 }

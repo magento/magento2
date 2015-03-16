@@ -181,7 +181,7 @@ class Redirect extends Template
     {
         $html = '';
 
-        $html .= '<div class="page-title">';
+        $html .= '<div class="page-title-wrapper">';
         $html .= '<h1>' . (string)new \Magento\Framework\Phrase('Redirecting...') . '</h1>';
         $html .= '</div>';
         if ($this->getMessage()) {

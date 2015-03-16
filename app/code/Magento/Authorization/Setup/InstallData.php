@@ -85,5 +85,17 @@ class InstallData implements InstallDataInterface
                 $rule->setData('resource_id', 'Magento_Backend::all')->save();
             }
         }
+
+        /**
+         * Delete rows by condition from authorization_rule
+         */
+        $setup->startSetup();
+
+        $tableName = $setup->getTable('authorization_rule');
+        if ($tableName) {
+            $setup->getConnection()->delete($tableName, ['resource_id = ?' => 'admin/system/tools/compiler']);
+        }
+
+        $setup->endSetup();
     }
 }

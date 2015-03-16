@@ -12,7 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class InvoiceCreateTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/invoice';
+    const RESOURCE_PATH = '/V1/invoices';
 
     const SERVICE_READ_NAME = 'salesInvoiceRepositoryV1';
 

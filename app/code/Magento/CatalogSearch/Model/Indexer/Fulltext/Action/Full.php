@@ -28,9 +28,9 @@ class Full
     protected $separator = ' | ';
 
     /**
-     * Array of \Magento\Framework\Stdlib\DateTime\DateInterface objects per store
+     * Array of \DateTime objects per store
      *
-     * @var array
+     * @var \DateTime[]
      */
     protected $dates = [];
 
@@ -140,7 +140,7 @@ class Full
     /**
      * @var \Magento\Framework\Search\Request\Config
      */
-    private $searchRequestConfig;
+    protected $searchRequestConfig;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -763,23 +763,20 @@ class Full
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-            $locale = $this->scopeConfig->getValue(
-                $this->localeResolver->getDefaultLocalePath(),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $locale = new \Zend_Locale($locale);
+            
+            $this->localeResolver->emulate($storeId);
 
-            $dateObj = new \Magento\Framework\Stdlib\DateTime\Date(null, null, $locale);
-            $dateObj->setTimezone($timezone);
-            $this->dates[$storeId] = [$dateObj, $locale->getTranslation(null, 'date', $locale)];
+            $dateObj = new \DateTime();
+            $dateObj->setTimezone(new \DateTimeZone($timezone));
+            $this->dates[$storeId] = $dateObj;
+
+            $this->localeResolver->revert();
         }
 
         if (!$this->dateTime->isEmptyDate($date)) {
-            list($dateObj, $format) = $this->dates[$storeId];
-            $dateObj->setDate($date, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-
-            return $dateObj->toString($format);
+            /** @var \DateTime $dateObj */
+            $dateObj = $this->dates[$storeId];
+            return $this->localeDate->formatDateTime($dateObj, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE);
         }
 
         return null;

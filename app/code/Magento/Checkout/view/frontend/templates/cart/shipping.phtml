@@ -77,7 +77,7 @@
         }
     </script>
     <?php if (($_shippingRateGroups = $block->getEstimateRates())): ?>
-    <form id="co-shipping-method-form" action="<?php echo $block->getUrl('checkout/cart/estimateUpdatePost') ?>">
+    <form id="co-shipping-method-form" action="<?php echo $block->getUrl('checkout/cart/estimateUpdatePost') ?>" method="post">
         <fieldset class="fieldset rates">
             <dl class="items methods">
                 <?php foreach ($_shippingRateGroups as $code => $_rates): ?>

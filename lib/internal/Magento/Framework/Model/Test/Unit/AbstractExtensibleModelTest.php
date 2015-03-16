@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Model\Test\Unit;
 
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
@@ -97,6 +100,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                     new \Magento\Framework\Object(['attribute_code' => 'attribute3']),
                 ]
             );
+        $extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -105,7 +111,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             [
                 $this->contextMock,
                 $this->registryMock,
-                $this->metadataServiceMock,
+                $extensionAttributesFactory,
                 $this->attributeValueFactoryMock,
                 $this->resourceMock,
                 $this->resourceCollectionMock
@@ -129,10 +135,9 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
         );
         $attributesAsArray = ['attribute1' => true, 'attribute2' => 'Attribute Value', 'attribute3' => 333];
-        $addedAttributes = $this->addCustomAttributesToModel($attributesAsArray, $this->model);
-        $addedAttributes = array_values($addedAttributes);
+        $this->addCustomAttributesToModel($attributesAsArray, $this->model);
         $this->assertEquals(
-            $addedAttributes,
+            [],
             $this->model->getCustomAttributes(),
             'Custom attributes retrieved from the model using getCustomAttributes() are invalid.'
         );
@@ -151,15 +156,13 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
         ];
         $modelData = ['key1' => 'value1', 'key2' => 222];
         $this->model->setData($modelData);
-        $addedAttributes = $this->addCustomAttributesToModel($attributesAsArray, $this->model);
-        $modelDataAsFlatArray = array_merge($modelData, $addedAttributes);
-        unset($modelDataAsFlatArray['invalid']);
+        $this->addCustomAttributesToModel($attributesAsArray, $this->model);
         $this->assertEquals(
-            $modelDataAsFlatArray,
+            $modelData,
             $this->model->getData(),
             'All model data should be represented as a flat array, including custom attributes.'
         );
-        foreach ($modelDataAsFlatArray as $field => $value) {
+        foreach ($modelData as $field => $value) {
             $this->assertEquals(
                 $value,
                 $this->model->getData($field),
@@ -173,7 +176,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testRestrictedCustomAttributesGet()
     {
-        $this->model->getData(\Magento\Framework\Api\ExtensibleDataInterface::CUSTOM_ATTRIBUTES);
+        $this->model->getData(\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES);
     }
 
     public function testSetCustomAttributesAsLiterals()
@@ -183,18 +186,18 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
         $attributeMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValue')
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->never())
             ->method('setAttributeCode')
             ->with($attributeCode)
             ->will($this->returnSelf());
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->never())
             ->method('setValue')
             ->with($attributeValue)
             ->will($this->returnSelf());
-        $this->attributeValueFactoryMock->expects($this->once())->method('create')
+        $this->attributeValueFactoryMock->expects($this->never())->method('create')
             ->willReturn($attributeMock);
         $this->model->setData(
-            \Magento\Framework\Api\ExtensibleDataInterface::CUSTOM_ATTRIBUTES,
+            \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES,
             [$attributeCode => $attributeValue]
         );
     }
@@ -206,20 +209,19 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
      */
     protected function addCustomAttributesToModel($attributesAsArray, $model)
     {
-        $objectManager = new ObjectManagerHelper($this);
-        /** @var \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder */
-        $attributeValueBuilder = $objectManager->getObject('Magento\Framework\Api\AttributeDataBuilder');
         $addedAttributes = [];
         foreach ($attributesAsArray as $attributeCode => $attributeValue) {
-            $addedAttributes[$attributeCode] = $attributeValueBuilder
-                ->setAttributeCode($attributeCode)
-                ->setValue($attributeValue)
-                ->create();
+            $addedAttributes[$attributeCode] = new AttributeValue(
+                [
+                    AttributeValue::ATTRIBUTE_CODE => $attributeCode,
+                    AttributeValue::VALUE => $attributeValue,
+                ]
+            );
         }
         $model->setData(
             array_merge(
                 $model->getData(),
-                [\Magento\Framework\Api\ExtensibleDataInterface::CUSTOM_ATTRIBUTES => $addedAttributes]
+                [\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => $addedAttributes]
             )
         );
         return $addedAttributes;

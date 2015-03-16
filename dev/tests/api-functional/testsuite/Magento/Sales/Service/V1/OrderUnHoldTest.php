@@ -27,7 +27,7 @@ class OrderUnHoldTest extends WebapiAbstract
         }
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId() . '/unhold',
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/unhold',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

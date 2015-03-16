@@ -26,7 +26,7 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testProcessWithValidStoreCode()
     {

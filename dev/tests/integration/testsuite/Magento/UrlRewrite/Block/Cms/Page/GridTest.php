@@ -48,7 +48,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /**
      * Test prepare grid when there is more than one store
      *
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testPrepareGridForMultipleStores()
     {

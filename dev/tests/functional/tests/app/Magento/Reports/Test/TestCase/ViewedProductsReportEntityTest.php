@@ -65,7 +65,6 @@ class ViewedProductsReportEntityTest extends Injectable
      */
     public function __prepare(CatalogProductIndex $catalogProductIndexPage)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-33029');
         $catalogProductIndexPage->open();
         $catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
     }

@@ -28,22 +28,26 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $xmlString
-     * @dataProvider testConvertWithInvalidDomDataProvider
+     * @dataProvider convertWithInvalidDomDataProvider
      * @expectedException \Exception
      */
     public function testConvertWithInvalidDom($xmlString)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML($xmlString);
-        $this->_converter->convert($dom);
+        try {
+            $dom->loadXML($xmlString);
+            $this->_converter->convert($dom);
+        } catch (\PHPUnit_Framework_Error $ex) {
+            // do nothing because we expect \Exception but not \PHPUnit_Framework_Error
+        }
     }
 
-    public function testConvertWithInvalidDomDataProvider()
+    public function convertWithInvalidDomDataProvider()
     {
         return [
             'Module node without "name" attribute' => ['<?xml version="1.0"?><config><module /></config>'],
             'Sequence module node without "name" attribute' => [
-                '<?xml dbversion="1.0"?><config><module name="Module_One" setup_version="1.0.0.0">' .
+                '<?xml version="1.0"?><config><module name="Module_One" setup_version="1.0.0.0">' .
                 '<sequence><module/></sequence></module></config>',
             ],
         ];
