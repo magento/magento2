@@ -120,6 +120,7 @@
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
             <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
