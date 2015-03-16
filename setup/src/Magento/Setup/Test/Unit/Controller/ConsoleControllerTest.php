@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\ConsoleController;
@@ -132,7 +134,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $errorMessage = 'Missing route matches; unsure how to retrieve action';
         $event = $this->getMock('Zend\Mvc\MvcEvent');
-        $exception = $this->getMock('Magento\Setup\Exception', [], [$errorMessage]);
+        $exception = $this->getMock('Magento\Setup\Exception', ['getCode'], [$errorMessage]);
         $event->expects($this->once())->method('getRouteMatch')->willThrowException($exception);
         $this->consoleLogger->expects($this->once())->method('log')->with($errorMessage);
         $this->controller->onDispatch($event);
@@ -386,12 +388,12 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $moduleListMock
             ->expects($this->once())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Core', 'Magento_Store']));
+            ->will($this->returnValue(['Magento_Theme', 'Magento_Store']));
         $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $fullModuleListMock
             ->expects($this->once())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Core', 'Magento_Store', 'Magento_Directory']));
+            ->will($this->returnValue(['Magento_Theme', 'Magento_Store', 'Magento_Directory']));
         $returnValueMap = [
             [
                 'Magento\Framework\Module\ModuleList',

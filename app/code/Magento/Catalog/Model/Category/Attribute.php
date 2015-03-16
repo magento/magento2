@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Category;
 
+/**
+ * Class Attribute
+ *
+ * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
+ */
 class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\CategoryAttributeInterface
 {

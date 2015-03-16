@@ -58,6 +58,13 @@ class Cart extends Block
     protected $cartEmpty = '.cart-empty';
 
     /**
+     * Cart container selector
+     *
+     * @var string
+     */
+    protected $cartContainer = '.cart-container';
+
+    /**
      * Get cart item block
      *
      * @param FixtureInterface $product
@@ -169,5 +176,13 @@ class Cart extends Block
     public function cartIsEmpty()
     {
         return $this->_rootElement->find($this->cartEmpty, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Wait while cart container is loaded
+     */
+    public function waitCartContainerLoading()
+    {
+        $this->waitForElementVisible($this->cartContainer);
     }
 }

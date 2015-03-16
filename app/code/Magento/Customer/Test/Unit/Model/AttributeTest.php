@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Attribute;
@@ -28,11 +30,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
-
-    /**
-     * @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataServiceMock;
 
     /**
      * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -109,6 +106,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private $dataObjectHelperMock;
 
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesFactory;
+
+    /**
+     * Test method
+     */
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -116,7 +121,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
             ->getMock();
-        $this->metadataServiceMock = $this->getMockBuilder('Magento\Framework\Api\MetadataServiceInterface')
+        $this->extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
@@ -173,7 +179,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->attribute = new Attribute(
             $this->contextMock,
             $this->registryMock,
-            $this->metadataServiceMock,
+            $this->extensionAttributesFactory,
             $this->attributeValueFactoryMock,
             $this->configMock,
             $this->typeFactoryMock,
@@ -190,6 +196,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test method
+     */
     public function testAfterSaveEavCache()
     {
         $this->configMock
@@ -199,6 +208,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->attribute->afterSave();
     }
 
+    /**
+     * Test method
+     */
     public function testAfterDeleteEavCache()
     {
         $this->configMock

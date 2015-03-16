@@ -6,11 +6,13 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\AbstractSimpleObject;
+
 /**
  * Filter which can be used by any methods from service layer.
  * @codeCoverageIgnore
  */
-class Filter extends AbstractExtensibleObject
+class Filter extends AbstractSimpleObject
 {
     /**#@+
      * Constants for Data Object keys

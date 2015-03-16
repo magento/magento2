@@ -6,13 +6,13 @@
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Entity attribute option label model
  *
  */
-class OptionLabel extends AbstractExtensibleModel implements AttributeOptionLabelInterface
+class OptionLabel extends AbstractModel implements AttributeOptionLabelInterface
 {
     /**
      * {@inheritdoc}

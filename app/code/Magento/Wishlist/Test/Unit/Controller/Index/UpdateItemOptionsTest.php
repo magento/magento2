@@ -71,6 +71,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventManager;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->productRepository = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
@@ -87,6 +92,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
     }
 
+    /**
+     * TearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         unset(
@@ -104,6 +114,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Prepare context
+     *
+     * @return void
+     */
     public function prepareContext()
     {
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
@@ -146,6 +161,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->messageManager);
     }
 
+    /**
+     * Get controller
+     *
+     * @return \Magento\Wishlist\Controller\Index\UpdateItemOptions
+     */
     protected function getController()
     {
         $this->prepareContext();
@@ -157,6 +177,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute without product id
+     *
+     * @return void
+     */
     public function testExecuteWithoutProductId()
     {
         $this->request
@@ -174,6 +199,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->getController()->execute();
     }
 
+    /**
+     * Test execute without product
+     *
+     * @return void
+     */
     public function testExecuteWithoutProduct()
     {
         $this->request
@@ -182,12 +212,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('product')
             ->willReturn(2);
 
-        $exception = $this->getMock('Magento\Framework\Exception\NoSuchEntityException', [], [], '', false);
         $this->productRepository
             ->expects($this->once())
             ->method('getById')
             ->with(2)
-            ->willThrowException($exception);
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
         $this->messageManager
             ->expects($this->once())
@@ -204,6 +233,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->getController()->execute();
     }
 
+    /**
+     * Test execute without wish list
+     *
+     * @return void
+     */
     public function testExecuteWithoutWishList()
     {
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
@@ -270,6 +304,9 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test execute add success exception
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteAddSuccessException()
@@ -369,16 +406,15 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist_update_item', ['wishlist' => $wishlist, 'product' => $product, 'item' => $item])
             ->willReturn(true);
 
-        $exception = $this->getMock('\Magento\Framework\Exception\LocalizedException', [], [], '', false);
         $this->messageManager
             ->expects($this->once())
             ->method('addSuccess')
             ->with('Test name has been updated in your wish list.', null)
-            ->willThrowException($exception);
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('error-message')));
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
-            ->with('', null)
+            ->with('error-message', null)
             ->willReturn(true);
 
         $this->redirect
@@ -390,6 +426,9 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->getController()->execute();
     }
     /**
+     * Test execute add success critical exception
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteAddSuccessCriticalException()
@@ -399,7 +438,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $item = $this->getMock('Magento\Wishlist\Model\Item', [], [], '', false);
         $helper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);
         $logger = $this->getMock('Magento\Framework\Logger\Monolog', [], [], '', false);
-        $exception = $this->getMock('Exception', [], [], '', false);
+        $exception = new \Exception();
 
         $logger
             ->expects($this->once())

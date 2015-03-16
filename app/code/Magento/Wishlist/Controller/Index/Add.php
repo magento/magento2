@@ -96,7 +96,7 @@ class Add extends Action\Action implements IndexInterface
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {
-                throw new \Magento\Framework\Exception\LocalizedException($result);
+                throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
             $wishlist->save();
 
@@ -112,10 +112,6 @@ class Add extends Action\Action implements IndexInterface
                 $referer = $this->_redirect->getRefererUrl();
             }
 
-            /**
-             *  Set referer to avoid referring to the compare popup window
-             */
-            $session->setAddActionReferer($referer);
 
             /** @var $helper \Magento\Wishlist\Helper\Data */
             $helper = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();

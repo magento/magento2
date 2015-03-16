@@ -38,7 +38,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
 
         $groupPriceList = $this->_webApiCall(
             $serviceInfo,
-            ['productSku' => $productSku, 'customerGroupId' => $customerGroupId]
+            ['sku' => $productSku, 'customerGroupId' => $customerGroupId]
         );
 
         $this->assertCount($count, $groupPriceList);
@@ -78,7 +78,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Remove',
             ],
         ];
-        $requestData = ['productSku' => $productSku, 'customerGroupId' => $customerGroupId, 'qty' => $qty];
+        $requestData = ['sku' => $productSku, 'customerGroupId' => $customerGroupId, 'qty' => $qty];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
     }
 
@@ -114,7 +114,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         ];
 
         $requestData = [
-            'productSku' => $productSku,
+            'sku' => $productSku,
             'customerGroupId' => $customerGroupId,
             'qty' => $qty,
             'price' => $price,
@@ -152,7 +152,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
         $requestData = [
-            'productSku' => $productSku,
+            'sku' => $productSku,
             'customerGroupId' => $customerGroupId,
             'qty' => $qty,
             'price' => $price,
@@ -190,7 +190,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
         $requestData = [
-            'productSku' => $productSku,
+            'sku' => $productSku,
             'customerGroupId' => $customerGroupId,
             'qty' => $qty,
             'price' => $price,

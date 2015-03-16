@@ -130,9 +130,6 @@ class Source
     private function preProcess(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
-        if (!$sourceFile) {
-            return false;
-        }
         $dirCode = DirectoryList::ROOT;
         $path = $this->rootDir->getRelativePath($sourceFile);
         $cacheId = $path . ':' . $asset->getPath();
@@ -140,6 +137,7 @@ class Source
         if ($cached) {
             return unserialize($cached);
         }
+
         $chain = $this->chainFactory->create(
             [
                 'asset' => $asset,

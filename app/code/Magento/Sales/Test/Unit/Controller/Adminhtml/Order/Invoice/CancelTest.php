@@ -64,6 +64,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -145,6 +148,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecute()
     {
         $invoiceId = 2;
@@ -217,6 +223,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteNoInvoice()
     {
         $invoiceId = 2;
@@ -251,12 +260,15 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultForward, $this->controller->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $invoiceId = 2;
 
         $message = 'model exception';
-        $e = new \Magento\Framework\Exception\LocalizedException($message);
+        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
@@ -300,6 +312,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteException()
     {
         $invoiceId = 2;

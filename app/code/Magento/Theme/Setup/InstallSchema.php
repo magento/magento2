@@ -157,6 +157,56 @@ class InstallSchema implements InstallSchemaInterface
         );
         $connection->createTable($table);
 
+        /**
+         * Create table 'design_change'
+         */
+        $table = $connection->newTable(
+            $installer->getTable('design_change')
+        )->addColumn(
+            'design_change_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'nullable' => false, 'primary' => true],
+            'Design Change Id'
+        )->addColumn(
+            'store_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Store Id'
+        )->addColumn(
+            'design',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Design'
+        )->addColumn(
+            'date_from',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
+            null,
+            [],
+            'First Date of Design Activity'
+        )->addColumn(
+            'date_to',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
+            null,
+            [],
+            'Last Date of Design Activity'
+        )->addIndex(
+            $installer->getIdxName('design_change', ['store_id']),
+            ['store_id']
+        )->addForeignKey(
+            $installer->getFkName('design_change', 'store_id', 'store', 'store_id'),
+            'store_id',
+            $installer->getTable('store'),
+            'store_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        )->setComment(
+            'Design Changes'
+        );
+        $connection->createTable($table);
+
         $installer->endSetup();
 
     }

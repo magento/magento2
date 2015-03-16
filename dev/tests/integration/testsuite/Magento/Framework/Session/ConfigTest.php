@@ -210,11 +210,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((bool)ini_get('session.cookie_secure'), $this->_model->getCookieSecure());
     }
 
-    public function testCookieSecureIsMutable()
+    public function testSetCookieSecureInOptions()
     {
-        $value = ini_get('session.cookie_secure') ? false : true;
-        $this->_model->setCookieSecure($value);
-        $this->assertEquals($value, $this->_model->getCookieSecure());
+        $this->_model->setCookieSecure(true);
+        $this->assertTrue($this->_model->getCookieSecure());
     }
 
     public function testCookieDomainIsMutable()
@@ -243,11 +242,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($preVal, $this->_model->getCookieDomain());
     }
 
-    public function testCookieHttpOnlyIsMutable()
+    public function testSetCookieHttpOnlyInOptions()
     {
-        $value = ini_get('session.cookie_httponly') ? false : true;
-        $this->_model->setCookieHttpOnly($value);
-        $this->assertEquals($value, $this->_model->getCookieHttpOnly());
+        $this->_model->setCookieHttpOnly(true);
+        $this->assertTrue($this->_model->getCookieHttpOnly());
     }
 
     public function testUseCookiesDefaultsToIniSettings()
@@ -255,11 +253,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((bool)ini_get('session.use_cookies'), $this->_model->getUseCookies());
     }
 
-    public function testUseCookiesIsMutable()
+    public function testSetUseCookiesInOptions()
     {
-        $value = ini_get('session.use_cookies') ? false : true;
-        $this->_model->setUseCookies($value);
-        $this->assertEquals($value, (bool)$this->_model->getUseCookies());
+        $this->_model->setUseCookies(true);
+        $this->assertTrue($this->_model->getUseCookies());
     }
 
     public function testUseOnlyCookiesDefaultsToIniSettings()
@@ -267,11 +264,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame((bool)ini_get('session.use_only_cookies'), $this->_model->getUseOnlyCookies());
     }
 
-    public function testUseOnlyCookiesIsMutable()
+    public function testSetUseOnlyCookiesInOptions()
     {
-        $value = ini_get('session.use_only_cookies') ? false : true;
-        $this->_model->setOption('use_only_cookies', $value);
-        $this->assertEquals($value, (bool)$this->_model->getOption('use_only_cookies'));
+        $this->_model->setOption('use_only_cookies', true);
+        $this->assertTrue((bool)$this->_model->getOption('use_only_cookies'));
     }
 
     public function testRefererCheckDefaultsToIniSettings()

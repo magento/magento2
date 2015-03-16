@@ -114,9 +114,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             $this->returnValue([
                 'some_code' => ['instance' => 'Magento\Sales\Model\Order\Total\AbstractTotal', 'sort_order' => 1903],
                 'other_code' => ['instance' => 'Magento\Sales\Model\Order\Total\AbstractTotal', 'sort_order' => 1112],
-                'equal_order' => ['instance' => 'Magento\Sales\Model\Order\Total\AbstractTotal', 'sort_order' => 1112],
                 'big_order' => ['instance' => 'Magento\Sales\Model\Order\Total\AbstractTotal', 'sort_order' => 3000],
-                'no_order' => ['instance' => 'Magento\Sales\Model\Order\Total\AbstractTotal'],
             ])
         );
 
@@ -126,8 +124,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'no_order' => $total,
-                'equal_order' => $total,
                 'other_code' => $total,
                 'some_code' => $total,
                 'big_order' => $total,

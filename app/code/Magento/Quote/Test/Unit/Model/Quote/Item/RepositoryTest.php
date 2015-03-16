@@ -51,6 +51,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $itemDataFactoryMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->quoteRepositoryMock =
@@ -74,6 +77,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param null|string|bool|int|float $value
+     * @return void
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Invalid value of
      * @dataProvider addItemWithInvalidQtyDataProvider
@@ -84,6 +88,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->save($this->dataMock);
     }
 
+    /**
+     * @return array
+     */
     public function addItemWithInvalidQtyDataProvider()
     {
         return [
@@ -98,6 +105,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @expectedExceptionMessage Could not save quote
      */
@@ -116,7 +124,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('addProduct')->with($this->productMock, 12);
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $exceptionMessage = 'Could not save quote';
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -125,6 +133,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->save($this->dataMock);
     }
 
+    /**
+     * @return void
+     */
     public function testSave()
     {
         $cartId = 13;
@@ -150,6 +161,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Cart 11 doesn't contain item  5
      */
@@ -171,6 +183,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @expectedExceptionMessage Could not save quote
      */
@@ -196,7 +209,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteItemMock->expects($this->never())->method('addProduct');
         $exceptionMessage = 'Could not save quote';
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -205,6 +218,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->save($this->dataMock);
     }
 
+    /**
+     * @return void
+     */
     public function testUpdateItem()
     {
         $cartId = 11;
@@ -236,6 +252,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Cart 11 doesn't contain item  5
      */
@@ -255,6 +272,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @expectedExceptionMessage Could not remove item from quote
      */
@@ -272,7 +290,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('removeItem')->with($itemId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $exceptionMessage = 'Could not remove item from quote';
-        $exception = new \Magento\Framework\Exception\CouldNotSaveException($exceptionMessage);
+        $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -281,6 +299,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->delete($this->dataMock);
     }
 
+    /**
+     * @return void
+     */
     public function testDelete()
     {
         $cartId = 11;
@@ -298,6 +319,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository->delete($this->dataMock);
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
@@ -310,6 +334,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$itemMock], $this->repository->getList(33));
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteById()
     {
         $cartId = 11;

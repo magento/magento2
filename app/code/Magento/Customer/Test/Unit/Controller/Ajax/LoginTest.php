@@ -51,12 +51,12 @@ class LoginTest extends \PHPUnit_Framework_TestCase
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJson;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory| \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonFactory;
 
@@ -114,10 +114,10 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -238,7 +238,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('authenticate')
             ->with('invalid@example.com', 'invalid')
-            ->willThrowException(new InvalidEmailOrPasswordException('Invalid login or password.', []));
+            ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.')));
 
         $this->customerSession->expects($this->never())
             ->method('setCustomerDataAsLoggedIn')

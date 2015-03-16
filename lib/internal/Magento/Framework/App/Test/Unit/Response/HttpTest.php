@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\App\Test\Unit\Response;
 
 use \Magento\Framework\App\Response\Http;
@@ -53,6 +56,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->model);
+        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
     }
 
     public function testSendVary()
@@ -114,13 +120,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $ttl = 120;
         $pragma = 'cache';
         $cacheControl = 'max-age=' . $ttl . ', public, s-maxage=' . $ttl;
-        $between = 1000;
+        $expiresResult = gmdate('D, d M Y H:i:s T', time() + $ttl);
 
         $this->model->setPublicHeaders($ttl);
         $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
         $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
-        $expiresResult = time($this->model->getHeader('Expires')->getFieldValue());
-        $this->assertTrue($expiresResult > $between || $expiresResult < $between);
+        $this->assertLessThanOrEqual($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**

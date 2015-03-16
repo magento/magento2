@@ -6,7 +6,7 @@
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Api\Data\AttributeOptionInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Emtity attribute option model
@@ -18,7 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends AbstractExtensibleModel implements AttributeOptionInterface
+class Option extends AbstractModel implements AttributeOptionInterface
 {
     /**
      * Resource initialization

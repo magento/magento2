@@ -6,9 +6,9 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 
-class Agreement extends AbstractExtensibleModel implements AgreementInterface
+class Agreement extends AbstractModel implements AgreementInterface
 {
     /**
      * Allowed CSS units for height field
