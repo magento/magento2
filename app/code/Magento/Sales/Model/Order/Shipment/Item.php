@@ -15,6 +15,7 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements ShipmentItemInterface
 {
@@ -46,7 +47,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -56,7 +57,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -66,7 +67,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -158,7 +159,9 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
         if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid qty to ship for item "%1".', $this->getName()));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid qty to ship for item "%1".', $this->getName())
+            );
         }
         return $this;
     }
@@ -363,6 +366,27 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     public function setSku($sku)
     {
         return $this->setData(ShipmentItemInterface::SKU, $sku);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

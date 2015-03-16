@@ -12,32 +12,32 @@ interface ProductGroupPriceManagementInterface
     /**
      * Set group price for product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $customerGroupId
      * @param float $price
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function add($productSku, $customerGroupId, $price);
+    public function add($sku, $customerGroupId, $price);
 
     /**
      * Remove group price from product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $customerGroupId
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function remove($productSku, $customerGroupId);
+    public function remove($sku, $customerGroupId);
 
     /**
      * Retrieve list of product prices
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getList($productSku);
+    public function getList($sku);
 }

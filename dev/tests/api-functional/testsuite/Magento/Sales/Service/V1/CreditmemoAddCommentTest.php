@@ -66,7 +66,7 @@ class CreditmemoAddCommentTest extends WebapiAbstract
         $requestData = ['entity' => $commentData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/creditmemo/comment',
+                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/comments',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

@@ -602,7 +602,7 @@ class Structure
     private function _assertElementExists($elementId)
     {
         if (!isset($this->_elements[$elementId])) {
-            throw new Exception("No element found with ID '{$elementId}'.");
+            throw new \OutOfBoundsException("No element found with ID '{$elementId}'.");
         }
     }
 

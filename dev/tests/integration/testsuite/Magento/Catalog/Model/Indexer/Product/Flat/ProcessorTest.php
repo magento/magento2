@@ -88,7 +88,7 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      */
     public function testAddNewStore()

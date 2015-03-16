@@ -44,13 +44,8 @@ class BundleSaveOptions
             return $result;
         }
 
-        /* @var \Magento\Framework\Api\AttributeValue $bundleProductOptionsAttrValue */
-        $bundleProductOptionsAttrValue = $product->getCustomAttribute('bundle_product_options');
-        if (is_null($bundleProductOptionsAttrValue) || !is_array($bundleProductOptionsAttrValue->getValue())) {
-            $bundleProductOptions = [];
-        } else {
-            $bundleProductOptions = $bundleProductOptionsAttrValue->getValue();
-        }
+        /* @var \Magento\Bundle\Api\Data\OptionInterface[] $options */
+        $bundleProductOptions = $product->getExtensionAttributes()->getBundleProductOptions();
 
         if (is_array($bundleProductOptions)) {
             foreach ($bundleProductOptions as $option) {

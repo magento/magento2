@@ -77,7 +77,7 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
         $errors = $this->validator->validate($object);
         if (!empty($errors)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot save track") . ":\n" . implode("\n", $errors)
+                __("Cannot save track:\n%1", implode("\n", $errors))
             );
         }
 

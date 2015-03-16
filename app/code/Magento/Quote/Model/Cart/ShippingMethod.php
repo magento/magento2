@@ -162,4 +162,26 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     {
         return $this->setData(self::KEY_AVAILABLE, $available);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\ShippingMethodExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

@@ -11,8 +11,12 @@
     <legend class="legend"><span><?php echo __('Product In Websites') ?></span></legend>
     <br>
     <?php if ($block->getProductId()): ?>
-    <div class="message info">
-        <div><?php echo __("Items that you don't want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
+    <div class="admin__scope">
+        <div class="messages">
+            <div class="message message-notice">
+                <?php echo __("Items that you don't want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?>
+            </div>
+        </div>
     </div>
     <?php endif; ?>
     <div class="store-scope">

@@ -7,7 +7,7 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
-    <route url="/V1/order/:id" method="GET">
+    <route url="/V1/orders/:id" method="GET">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="get"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
@@ -19,61 +19,61 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/status" method="GET">
+    <route url="/V1/orders/:id/statuses" method="GET">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="getStatus"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/cancel" method="POST">
+    <route url="/V1/orders/:id/cancel" method="POST">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="cancel"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/email" method="POST">
+    <route url="/V1/orders/:id/emails" method="POST">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="notify"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/hold" method="POST">
+    <route url="/V1/orders/:id/hold" method="POST">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="hold"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/unhold" method="POST">
+    <route url="/V1/orders/:id/unhold" method="POST">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="unHold"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/comment" method="POST">
+    <route url="/V1/orders/:id/comments" method="POST">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="addComment"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id/comments" method="GET">
+    <route url="/V1/orders/:id/comments" method="GET">
         <service class="Magento\Sales\Api\OrderManagementInterface" method="getCommentsList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/create" method="PUT">
+    <route url="/V1/orders/create" method="PUT">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:parent_id" method="PUT">
+    <route url="/V1/orders/:parent_id" method="PUT">
         <service class="Magento\Sales\Api\OrderAddressRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/:id" method="GET">
+    <route url="/V1/invoices/:id" method="GET">
         <service class="Magento\Sales\Api\InvoiceRepositoryInterface" method="get"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
@@ -85,37 +85,37 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/:id/comments" method="GET">
+    <route url="/V1/invoices/:id/comments" method="GET">
         <service class="Magento\Sales\Api\InvoiceManagementInterface" method="getCommentsList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/:id/email" method="POST">
+    <route url="/V1/invoices/:id/emails" method="POST">
         <service class="Magento\Sales\Api\InvoiceManagementInterface" method="notify"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/:id/void" method="POST">
+    <route url="/V1/invoices/:id/void" method="POST">
         <service class="Magento\Sales\Api\InvoiceManagementInterface" method="setVoid"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/:id/capture" method="POST">
+    <route url="/V1/invoices/:id/capture" method="POST">
         <service class="Magento\Sales\Api\InvoiceManagementInterface" method="setCapture"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/comment" method="POST">
+    <route url="/V1/invoices/comments" method="POST">
         <service class="Magento\Sales\Api\InvoiceCommentRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/invoice/" method="POST">
+    <route url="/V1/invoices/" method="POST">
         <service class="Magento\Sales\Api\InvoiceRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
@@ -145,13 +145,13 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/creditmemo/:id/email" method="POST">
+    <route url="/V1/creditmemo/:id/emails" method="POST">
         <service class="Magento\Sales\Api\CreditmemoManagementInterface" method="notify"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/creditmemo/comment" method="POST">
+    <route url="/V1/creditmemo/:id/comments" method="POST">
         <service class="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
@@ -181,13 +181,13 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/shipment/comment" method="POST">
+    <route url="/V1/shipment/:id/comments" method="POST">
         <service class="Magento\Sales\Api\ShipmentCommentRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/shipment/:id/email" method="POST">
+    <route url="/V1/shipment/:id/emails" method="POST">
         <service class="Magento\Sales\Api\ShipmentManagementInterface" method="notify"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
@@ -217,7 +217,7 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/" method="POST">
+    <route url="/V1/orders/" method="POST">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::sales" />

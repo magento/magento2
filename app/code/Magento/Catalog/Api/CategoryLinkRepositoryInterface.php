@@ -34,12 +34,12 @@ interface CategoryLinkRepositoryInterface
     /**
      * Remove the product assignment from the category by category id and sku
      *
-     * @param string $productSku
-     * @param string $productSku
+     * @param string $sku
+     * @param string $sku
      * @return bool will returned True if products successfully deleted
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function deleteByIds($categoryId, $productSku);
+    public function deleteByIds($categoryId, $sku);
 }

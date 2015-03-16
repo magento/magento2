@@ -13,4 +13,10 @@ interface CustomAttributeDataObjectInterface extends \Magento\Framework\Api\Exte
      * @return string
      */
     public function getName();
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
 }

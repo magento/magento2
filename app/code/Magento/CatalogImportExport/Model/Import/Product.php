@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Import entity product model
@@ -336,7 +337,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_localeDate;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
@@ -409,7 +410,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
@@ -444,7 +445,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Filesystem $filesystem,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        DateTime $dateTime,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         Product\StoreResolver $storeResolver,
@@ -617,14 +618,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], ['params' => $params]))
             ) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Entity type model '%1' is not found", $productTypeConfig['model'])
+                    __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
-                        'Entity type model must be an instance of ' .
-                        'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
+                        'Entity type model must be an instance of '
+                        . 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
                     )
                 );
             }
@@ -943,7 +944,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     if (isset($this->_oldSku[$rowSku])) {
                         // existing row
                         $entityRowsUp[] = [
-                            'updated_at' => $this->dateTime->now(),
+                            'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             'entity_id' => $this->_oldSku[$rowSku]['entity_id'],
                         ];
                     } else {
@@ -954,8 +955,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
                                 'sku' => $rowSku,
                                 'has_options' => isset($rowData['has_options']) ? $rowData['has_options'] : 0,
-                                'created_at' => $this->dateTime->now(),
-                                'updated_at' => $this->dateTime->now(),
+                                'created_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
+                                'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             ];
                             $productsQty++;
                         } else {
@@ -1086,7 +1087,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
                         $attrValue = new \DateTime('@' . strtotime($attrValue));
-                        $attrValue = $attrValue->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                        $attrValue = $attrValue->format(DateTime::DATETIME_PHP_FORMAT);
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
                         $attrValue = $product->getData($attribute->getAttributeCode());
@@ -1232,7 +1233,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("File directory '%1' is not readable.", $tmpPath)
+                    __('File directory \'%1\' is not readable.', $tmpPath)
                 );
             }
             $destinationDir = "catalog/product";
@@ -1241,7 +1242,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_mediaDirectory->create($destinationDir);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("File directory '%1' is not writable.", $destinationPath)
+                    __('File directory \'%1\' is not writable.', $destinationPath)
                 );
             }
         }
@@ -1440,8 +1441,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $stockItemDo->setData($row);
                     $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                     if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                        $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
-                            ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+                        $row['low_stock_date'] = $this->_localeDate->date(null, null, false)
+                            ->format('Y-m-d H:i:s');
                     }
                     $row['stock_status_changed_auto'] =
                         (int) !$this->stockStateProvider->verifyStock($stockItemDo);

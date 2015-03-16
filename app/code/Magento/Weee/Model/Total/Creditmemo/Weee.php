@@ -80,8 +80,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
                 'base'
             );
 
-            $orderItemTaxAmount = $orderItemWeeeAmountInclTax - $orderItemWeeeAmountExclTax;
-            $orderItemBaseTaxAmount = $orderItemBaseWeeeAmountInclTax - $baseWeeeAmountInclTax;
             $itemTaxAmount = $weeeAmountInclTax - $weeeAmountExclTax;
             $itemBaseTaxAmount = $baseWeeeAmountInclTax - $baseWeeeAmountExclTax;
 
@@ -117,6 +115,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 
             //Set the ratio of the tax amount in invoice item compared to tax amount in order item
             //This information is needed to calculate tax per tax rate later
+            $orderItemTaxAmount = $orderItemWeeeAmountInclTax - $orderItemWeeeAmountExclTax;
             if ($orderItemTaxAmount != 0) {
                 $taxRatio = [];
                 if ($item->getTaxRatio()) {
@@ -132,7 +131,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $newApplied = [];
             $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
-                $title = $one['title'];
+                $title = (string)$one['title'];
                 $one['base_row_amount'] = $creditmemo->roundPrice($one['base_row_amount'] * $ratio, $title.'_base');
                 $one['row_amount'] = $creditmemo->roundPrice($one['row_amount'] * $ratio, $title);
                 $one['base_row_amount_incl_tax'] = $creditmemo->roundPrice(

@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<small class="magento-version"><?php echo __('Magento ver. %1', \Magento\Framework\AppInterface::VERSION) ?></small>
-<?php if ($block->getBugreportUrl()): ?>
-<a class="link-report" href="<?php echo $block->getBugreportUrl(); ?>" id="footer_bug_tracking"><?php echo __('Help Us Keep Magento Healthy - Report All Bugs') ?></a>
-<?php endif; ?>
+<p class="magento-version">
+    <strong><?php echo __('Magento'); ?></strong>
+    <?php echo __('ver. %1', \Magento\Framework\AppInterface::VERSION) ?>
+</p>

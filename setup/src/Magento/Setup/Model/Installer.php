@@ -13,12 +13,14 @@ use Magento\Framework\App\DeploymentConfig\InstallConfig;
 use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 use Magento\Framework\App\DeploymentConfig\SessionConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\DeploymentConfig;
+use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
@@ -103,11 +105,25 @@ class Installer
     private $deploymentConfigWriter;
 
     /**
+     * Deployment configuration reader
+     *
+     * @var Writer
+     */
+    private $deploymentConfigReader;
+
+    /**
      * Module list
      *
      * @var ModuleListInterface
      */
     private $moduleList;
+
+    /**
+     * Factory for module deployment config
+     *
+     * @var DeploymentConfigFactory
+     */
+    private $deploymentConfigFactory;
 
     /**
      * Module list loader
@@ -211,7 +227,9 @@ class Installer
      *
      * @param FilePermissions $filePermissions
      * @param Writer $deploymentConfigWriter
+     * @param Reader $deploymentConfigReader
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param DeploymentConfigFactory $deploymentConfigFactory
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
      * @param DirectoryList $directoryList
@@ -230,7 +248,9 @@ class Installer
     public function __construct(
         FilePermissions $filePermissions,
         Writer $deploymentConfigWriter,
+        Reader $deploymentConfigReader,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        DeploymentConfigFactory $deploymentConfigFactory,
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
         DirectoryList $directoryList,
@@ -246,6 +266,8 @@ class Installer
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
+        $this->deploymentConfigReader = $deploymentConfigReader;
+        $this->deploymentConfigFactory = $deploymentConfigFactory;
         $this->moduleList = $moduleList;
         $this->moduleLoader = $moduleLoader;
         $this->directoryList = $directoryList;
@@ -336,7 +358,7 @@ class Installer
             $key = array_search($module, $toEnable);
             $result[$module] = false !== $key;
         }
-        return new DeploymentConfig($result);
+        return $this->deploymentConfigFactory->create($result);
     }
 
     /**
@@ -591,6 +613,202 @@ class Installer
     }
 
     /**
+     * Set up core tables
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function setupCoreTables(SchemaSetupInterface $setup)
+    {
+        /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connection = $setup->getConnection();
+
+        $setup->startSetup();
+
+        $this->setupSessionTable($setup, $connection);
+        $this->setupCacheTable($setup, $connection);
+        $this->setupCacheTagTable($setup, $connection);
+        $this->setupFlagTable($setup, $connection);
+
+        $setup->endSetup();
+    }
+
+    /**
+     * Create table 'session'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupSessionTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('session')
+        )->addColumn(
+            'session_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false, 'primary' => true],
+            'Session Id'
+        )->addColumn(
+            'session_expires',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Date of Session Expiration'
+        )->addColumn(
+            'session_data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+            '2M',
+            ['nullable' => false],
+            'Session Data'
+        )->setComment(
+            'Database Sessions Storage'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
+     * Create table 'cache'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupCacheTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('cache')
+        )->addColumn(
+            'id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            200,
+            ['nullable' => false, 'primary' => true],
+            'Cache Id'
+        )->addColumn(
+            'data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+            '2M',
+            [],
+            'Cache Data'
+        )->addColumn(
+            'create_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Cache Creation Time'
+        )->addColumn(
+            'update_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Time of Cache Updating'
+        )->addColumn(
+            'expire_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Cache Expiration Time'
+        )->addIndex(
+            $setup->getIdxName('cache', ['expire_time']),
+            ['expire_time']
+        )->setComment(
+            'Caches'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
+     * Create table 'cache_tag'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupCacheTagTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('cache_tag')
+        )->addColumn(
+            'tag',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            100,
+            ['nullable' => false, 'primary' => true],
+            'Tag'
+        )->addColumn(
+            'cache_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            200,
+            ['nullable' => false, 'primary' => true],
+            'Cache Id'
+        )->addIndex(
+            $setup->getIdxName('cache_tag', ['cache_id']),
+            ['cache_id']
+        )->setComment(
+            'Tag Caches'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
+     * Create table 'flag'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupFlagTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('flag')
+        )->addColumn(
+            'flag_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Flag Id'
+        )->addColumn(
+            'flag_code',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Flag Code'
+        )->addColumn(
+            'state',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Flag State'
+        )->addColumn(
+            'flag_data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            '64k',
+            [],
+            'Flag Data'
+        )->addColumn(
+            'last_update',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            'Date of Last Flag Update'
+        )->addIndex(
+            $setup->getIdxName('flag', ['last_update']),
+            ['last_update']
+        )->setComment(
+            'Flag'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
      * Installs DB schema
      *
      * @return void
@@ -602,6 +820,7 @@ class Installer
             ['resource' => $this->context->getResources()]
         );
         $this->setupModuleRegistry($setup);
+        $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->handleDBSchemaData($setup, 'schema');
     }
@@ -784,6 +1003,33 @@ class Installer
         );
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
+    }
+
+    /**
+     * Updates modules in deployment configuration
+     *
+     * @return void
+     */
+    public function updateModulesSequence()
+    {
+        $this->assertDeploymentConfigExists();
+        $this->log->log('File system cleanup:');
+        $this->deleteDirContents(DirectoryList::GENERATION);
+        $this->deleteDirContents(DirectoryList::CACHE);
+        $this->log->log('Updating modules:');
+        $allModules = array_keys($this->moduleLoader->load());
+        $deploymentConfig = $this->deploymentConfigReader->load();
+        $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
+        $result = [];
+        foreach ($allModules as $module) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
+                $result[$module] = 0;
+            } else {
+                $result[$module] = 1;
+            }
+        }
+        $segment = $this->deploymentConfigFactory->create($result);
+        $this->deploymentConfigWriter->update($segment);
     }
 
     /**

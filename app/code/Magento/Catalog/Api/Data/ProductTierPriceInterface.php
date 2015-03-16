@@ -7,10 +7,12 @@
 
 namespace Magento\Catalog\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * @todo remove this interface if framework support return array
  */
-interface ProductTierPriceInterface
+interface ProductTierPriceInterface extends ExtensibleDataInterface
 {
     const QTY = 'qty';
 
@@ -45,4 +47,21 @@ interface ProductTierPriceInterface
      * @return $this
      */
     public function setValue($value);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface $extensionAttributes
+    );
 }

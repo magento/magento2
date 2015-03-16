@@ -33,6 +33,6 @@ class ModuleXMLTest extends \PHPUnit_Framework_TestCase
      */
     public function moduleXmlDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('module.xml');
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('module.xml');
     }
 }

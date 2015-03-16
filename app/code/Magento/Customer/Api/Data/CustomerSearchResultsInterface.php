@@ -17,4 +17,12 @@ interface CustomerSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      * @return \Magento\Customer\Api\Data\CustomerInterface[]
      */
     public function getItems();
+
+    /**
+     * Set customers list.
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

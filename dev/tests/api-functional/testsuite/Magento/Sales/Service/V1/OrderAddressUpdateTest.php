@@ -59,7 +59,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId(),
+                'resourcePath' => '/V1/orders/' . $order->getId(),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
