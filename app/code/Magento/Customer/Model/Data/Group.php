@@ -95,4 +95,25 @@ class Group extends \Magento\Framework\Api\AbstractExtensibleObject implements
     {
         return $this->setData(self::TAX_CLASS_NAME, $taxClassName);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Customer\Api\Data\GroupExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Customer\Api\Data\GroupExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Customer\Api\Data\GroupExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

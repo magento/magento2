@@ -49,7 +49,6 @@ class RegisterLink extends \Magento\Framework\View\Element\Html\Link
         $this->httpContext = $httpContext;
         $this->_registration = $registration;
         $this->_customerUrl = $customerUrl;
-        $this->_isScopePrivate = true;
     }
 
     /**

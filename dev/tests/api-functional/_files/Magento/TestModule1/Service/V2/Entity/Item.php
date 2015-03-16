@@ -16,6 +16,15 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData('id', $id);
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -24,10 +33,28 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
+    }
+
+    /**
      * @return string
      */
     public function getPrice()
     {
         return $this->_data['price'];
+    }
+
+    /**
+     * @param string $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData('price', $price);
     }
 }

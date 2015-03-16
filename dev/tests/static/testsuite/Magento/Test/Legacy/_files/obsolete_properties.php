@@ -409,4 +409,6 @@ return [
     ['_cache', 'Magento\Framework\Locale\Resolver'],
     ['_localeFactory', 'Magento\Framework\Locale\Resolver'],
     ['_emulatedLocales', 'Magento\Framework\Locale\Resolver', 'emulatedLocales'],
+    ['_collectionAttributes', 'Magento\Eav\Model\Config'],
+    ['_attributeFactory', '\Magento\Customer\Model\Customer'],
 ];

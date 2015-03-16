@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
   <page name="OrderInvoiceView" area="Adminhtml" mca="sales/order_invoice/view" module="Magento_Sales">
-    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title" strategy="css selector"/>
+    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector"/>
     <block name="pageActions" class="Magento\Sales\Test\Block\Adminhtml\Order\Actions" locator=".page-actions" strategy="css selector"/>
     <block name="itemsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Invoice\View\Items" locator="//div[./div[@id='invoice_item_container']]" strategy="xpath"/>
   </page>

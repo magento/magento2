@@ -10,7 +10,7 @@ class ProductOptionTypeListTest extends \Magento\TestFramework\TestCase\WebapiAb
 {
     const SERVICE_READ_NAME = 'bundleProductOptionTypeListV1';
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/bundle-products/option/types';
+    const RESOURCE_PATH = '/V1/bundle-products/options/types';
 
     public function testGetTypes()
     {

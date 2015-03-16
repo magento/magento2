@@ -20,4 +20,12 @@ interface CreditmemoSearchResultInterface extends \Magento\Framework\Api\SearchR
      * @return \Magento\Sales\Api\Data\CreditmemoInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

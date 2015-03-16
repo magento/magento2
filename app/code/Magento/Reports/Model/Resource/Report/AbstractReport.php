@@ -398,6 +398,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param mixed $from
      * @param mixed $to
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getTZOffsetTransitions($timezone, $from = null, $to = null)
     {

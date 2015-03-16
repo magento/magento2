@@ -79,8 +79,8 @@
 
 // My account
 .account {
-    .page-title {
-        .title {
+    .page-title-wrapper {
+        .page-title {
             display: inline-block;
         }
     }
@@ -137,8 +137,10 @@
 //--------------------------------------
 .block {
     &:extend(.abs-margin-for-blocks-and-widgets all);
-    &:last-child {
-        margin-bottom: 0;
+    .column.main & {
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
     .title {
         strong {
@@ -227,7 +229,7 @@
     }
 
     .account {
-        .page-title {
+        .page-title-wrapper {
             &:extend(.abs-add-clearfix-desktop all);
         }
         .column.main {
@@ -354,7 +356,7 @@
         }
     }
     .customer-account-index {
-        .page-title {
+        .page-title-wrapper {
             position: relative;
         }
     }

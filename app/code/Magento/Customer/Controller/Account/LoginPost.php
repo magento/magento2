@@ -38,6 +38,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
      * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
+     * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
      *

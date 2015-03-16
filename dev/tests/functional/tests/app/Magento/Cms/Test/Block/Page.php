@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Locator;
 class Page extends Block
 {
     /**
+     * Selector for uninitialized page.
+     *
+     * @var string
+     */
+    protected $uninitialized = '//body[(@data-mage-init) or (@aria-busy="true")]';
+
+    /**
      * Cms page content class.
      *
      * @var string
@@ -26,7 +33,7 @@ class Page extends Block
      *
      * @var string
      */
-    protected $cmsPageTitle = ".page-title";
+    protected $cmsPageTitle = ".page-title-wrapper";
 
     /**
      * Cms page text locator.
@@ -49,13 +56,6 @@ class Page extends Block
         'Catalog New Products List' => './/*/div[contains(@class,"widget new") and contains(.,"%s")]',
         'CMS Static Block' => './/*/div[contains(@class,"widget static block") and contains(.,"%s")]',
     ];
-
-    /**
-     * Selector for uninitialized page.
-     *
-     * @var string
-     */
-    protected $uninitialized = '//body[(@data-mage-init)]';
 
     /**
      * Get page content text.

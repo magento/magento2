@@ -138,6 +138,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getRedirectDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testGetRedirect(
         $customerId,

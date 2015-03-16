@@ -166,7 +166,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             ],
         ];
         /** @var int $result */
-        $result = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'option' => $option]);
+        $result = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'option' => $option]);
         $this->assertGreaterThan(0, $result);
     }
 
@@ -196,7 +196,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
 
         $requestBody = ['option' => $option];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $requestBody['productSku'] = $productSku;
+            $requestBody['sku'] = $productSku;
             $requestBody['option']['id'] = $optionId;
         }
 
@@ -223,7 +223,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 'operation' => self::SERVICE_NAME . 'GetList'
             ]
         ];
-        return $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+        return $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
     }
 
     /**
@@ -244,7 +244,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 'operation' => self::SERVICE_NAME . 'DeleteById'
             ]
         ];
-        return $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'optionId' => $optionId]);
+        return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'id' => $optionId]);
     }
 
     /**
@@ -265,7 +265,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 'operation'      => self::SERVICE_NAME . 'Get'
             ]
         ];
-        return $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'optionId' => $optionId]);
+        return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'id' => $optionId]);
     }
 
     /**
@@ -285,6 +285,6 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
                 'operation'      => self::SERVICE_NAME . 'GetList'
             ]
         ];
-        return $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+        return $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
     }
 }

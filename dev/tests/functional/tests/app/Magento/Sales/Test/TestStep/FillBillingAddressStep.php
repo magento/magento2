@@ -42,7 +42,7 @@ class FillBillingAddressStep implements TestStepInterface
      * @param Address $billingAddress
      * @param string $saveAddress
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, Address $billingAddress, $saveAddress)
+    public function __construct(OrderCreateIndex $orderCreateIndex, Address $billingAddress, $saveAddress = 'No')
     {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->billingAddress = $billingAddress;

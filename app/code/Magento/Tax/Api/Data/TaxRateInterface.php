@@ -189,4 +189,19 @@ interface TaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setTitles(array $titles = null);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Tax\Api\Data\TaxRateExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes);
 }

@@ -40,4 +40,26 @@ class FakeRegion extends AbstractExtensibleModel implements FakeRegionInterface
     {
         return $this->getData(self::REGION_ID);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

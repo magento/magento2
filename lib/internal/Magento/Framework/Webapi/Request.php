@@ -39,4 +39,22 @@ class Request extends HttpRequest implements RequestInterface
         $pathInfo = preg_replace('#\?.*#', '', $pathInfo);
         $this->setPathInfo($pathInfo);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Added CGI environment support.
+     */
+    public function getHeader($header, $default = false)
+    {
+        $headerValue = parent::getHeader($header, $default);
+        if ($headerValue == false) {
+            /** Workaround for hhvm environment */
+            $header = 'REDIRECT_HTTP_' . strtoupper(str_replace('-', '_', $header));
+            if (isset($_SERVER[$header])) {
+                $headerValue = $_SERVER[$header];
+            }
+        }
+        return $headerValue;
+    }
 }

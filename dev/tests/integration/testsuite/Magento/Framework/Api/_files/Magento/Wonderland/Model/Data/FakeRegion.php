@@ -8,16 +8,8 @@ namespace Magento\Wonderland\Model\Data;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
 
-class FakeRegion extends AbstractExtensibleObject
+class FakeRegion extends AbstractExtensibleObject implements \Magento\Wonderland\Api\Data\FakeRegionInterface
 {
-    /**#@+
-     * Constants for keys of data array
-     */
-    const REGION_CODE = 'region_code';
-    const REGION = 'region';
-    const REGION_ID = 'region_id';
-    /**#@-*/
-
     /**
      * Get region
      *
@@ -46,5 +38,38 @@ class FakeRegion extends AbstractExtensibleObject
     public function getRegionId()
     {
         return $this->_get(self::REGION_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Set region code
+     *
+     * @param string $regionCode
+     * @return $this
+     */
+    public function setRegionCode($regionCode)
+    {
+        return $this->setData(self::REGION_CODE, $regionCode);
     }
 }

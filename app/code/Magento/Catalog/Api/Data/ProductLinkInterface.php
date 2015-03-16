@@ -18,10 +18,10 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Set product SKU
      *
-     * @param string $productSku
+     * @param string $sku
      * @return $this
      */
-    public function setProductSku($productSku);
+    public function setProductSku($sku);
 
     /**
      * Get link type
@@ -82,4 +82,21 @@ interface ProductLinkInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setPosition($position);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
+    );
 }

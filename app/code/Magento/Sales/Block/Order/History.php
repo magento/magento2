@@ -30,6 +30,9 @@ class History extends \Magento\Framework\View\Element\Template
      */
     protected $_orderConfig;
 
+    /** @var \Magento\Sales\Model\Resource\Order\Collection */
+    protected $orders;
+
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
@@ -57,22 +60,32 @@ class History extends \Magento\Framework\View\Element\Template
     protected function _construct()
     {
         parent::_construct();
-
-        $orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
-            '*'
-        )->addFieldToFilter(
-            'customer_id',
-            $this->_customerSession->getCustomerId()
-        )->addFieldToFilter(
-            'status',
-            ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
-        )->setOrder(
-            'created_at',
-            'desc'
-        );
-
-        $this->setOrders($orders);
         $this->pageConfig->getTitle()->set(__('My Orders'));
+    }
+
+    /**
+     * @return bool|\Magento\Sales\Model\Resource\Order\Collection
+     */
+    public function getOrders()
+    {
+        if (!($customerId = $this->_customerSession->getCustomerId())) {
+            return false;
+        }
+        if (!$this->orders) {
+            $this->orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+                '*'
+            )->addFieldToFilter(
+                'customer_id',
+                $customerId
+            )->addFieldToFilter(
+                'status',
+                ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
+            )->setOrder(
+                'created_at',
+                'desc'
+            );
+        }
+        return $this->orders;
     }
 
     /**
@@ -81,15 +94,16 @@ class History extends \Magento\Framework\View\Element\Template
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-
-        $pager = $this->getLayout()->createBlock(
-            'Magento\Theme\Block\Html\Pager',
-            'sales.order.history.pager'
-        )->setCollection(
-            $this->getOrders()
-        );
-        $this->setChild('pager', $pager);
-        $this->getOrders()->load();
+        if ($this->getOrders()) {
+            $pager = $this->getLayout()->createBlock(
+                'Magento\Theme\Block\Html\Pager',
+                'sales.order.history.pager'
+            )->setCollection(
+                $this->getOrders()
+            );
+            $this->setChild('pager', $pager);
+            $this->getOrders()->load();
+        }
         return $this;
     }
 
@@ -107,7 +121,7 @@ class History extends \Magento\Framework\View\Element\Template
      */
     public function getViewUrl($order)
     {
-        return $this->getUrl('*/*/view', ['order_id' => $order->getId()]);
+        return $this->getUrl('sales/order/view', ['order_id' => $order->getId()]);
     }
 
     /**
@@ -116,7 +130,7 @@ class History extends \Magento\Framework\View\Element\Template
      */
     public function getTrackUrl($order)
     {
-        return $this->getUrl('*/*/track', ['order_id' => $order->getId()]);
+        return $this->getUrl('sales/order/track', ['order_id' => $order->getId()]);
     }
 
     /**
@@ -125,7 +139,7 @@ class History extends \Magento\Framework\View\Element\Template
      */
     public function getReorderUrl($order)
     {
-        return $this->getUrl('*/*/reorder', ['order_id' => $order->getId()]);
+        return $this->getUrl('sales/order/reorder', ['order_id' => $order->getId()]);
     }
 
     /**

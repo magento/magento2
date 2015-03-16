@@ -163,6 +163,7 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
+        $definitionFactory->getCodeGenerator()->setObjectManager($objectManager);
 
         $diConfig->setCache(
             $objectManager->get('Magento\Framework\App\ObjectManager\ConfigCache')

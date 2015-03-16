@@ -135,3 +135,8 @@ Copyright,Copyright
 "2 columns with right bar",2栏带右边栏
 "3 columns",3栏
 "Skip to content","Skip to content"
+"Invalid regular expression: ""%1"".","Invalid regular expression: ""%1""."
+"Start date cannot be greater than end date.",开始日期不能大于结束日期。
+"Your design change for the specified store intersects with another one, please specify another date range.",您对指定商店设计的更改和另一个有交叉，请重新指定日期范围。
+Copy,Copy
+"Circular-reference in theme inheritance detected for ""%1""","Circular-reference in theme inheritance detected for ""%1"""

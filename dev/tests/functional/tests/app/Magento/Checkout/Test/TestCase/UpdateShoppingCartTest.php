@@ -15,9 +15,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Update ShoppingCart
- *
- * Test Flow:
  * Precondition:
  * 1. Simple product is created
  * 2. Clear shopping cart
@@ -113,6 +110,7 @@ class UpdateShoppingCartTest extends Injectable
         $productView->fillOptions($product);
         $productView->setQty(1);
         $productView->clickAddToCart();
+        $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         $qty = $product->getCheckoutData()['qty'];
         $this->checkoutCart->open();

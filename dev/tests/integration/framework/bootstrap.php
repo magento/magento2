@@ -32,7 +32,7 @@ try {
         $installConfigFile = $installConfigFile . '.dist';
     }
     $sandboxUniqueId = md5(sha1_file($installConfigFile));
-    $installDir = "{$testsTmpDir}/sandbox-{$sandboxUniqueId}";
+    $installDir = "{$testsTmpDir}/sandbox-{$settings->get('TESTS_PARALLEL_THREAD', 0)}-{$sandboxUniqueId}";
     $application = new \Magento\TestFramework\Application(
         $shell,
         $installDir,

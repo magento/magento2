@@ -15,6 +15,7 @@ class CategoryAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
     public function testGetItems()
     {
+        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $testAttributeCode = 'include_in_menu';
         $expectedOptions = [
             [

@@ -96,6 +96,9 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $_formKeyValidator;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
@@ -170,6 +173,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
 
     /**
      * covers \Magento\Customer\Controller\Account::getAllowedActions
+     * @return void
      */
     public function testGetAllowedActions()
     {

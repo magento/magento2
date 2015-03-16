@@ -8,7 +8,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="prototype/windows/themes/default.css"/>
-        <css src="Magento_Theme::prototype/magento.css"/>
     </head>
     <body>
         <referenceContainer name="content">

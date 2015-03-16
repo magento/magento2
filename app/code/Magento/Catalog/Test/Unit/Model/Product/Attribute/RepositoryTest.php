@@ -79,16 +79,16 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->eavAttributeRepositoryMock =
             $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock->expects($this->any())->method('getEntityType')
+            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->validatorFactoryMock = $this->getMock(
             'Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory',
             [],
             [],
             '',
             false);
-        $this->metadataConfigMock =
-            $this->getMock('Magento\Framework\Api\Config\MetadataConfig', [], [], '', false);
         $this->searchCriteriaBuilderMock =
-            $this->getMock('Magento\Framework\Api\SearchCriteriaDataBuilder', [], [], '', false);
+            $this->getMock('Magento\Framework\Api\SearchCriteriaBuilder', [], [], '', false);
         $this->filterBuilderMock =
             $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
         $this->searchResultMock =
@@ -98,7 +98,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'getItems',
                     'getSearchCriteria',
                     'getTotalCount',
-                    '__wakeup'
+                    'setItems',
+                    'setSearchCriteria',
+                    'setTotalCount',
+                    '__wakeup',
                 ],
                 [],
                 '',
@@ -111,7 +114,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->eavAttributeRepositoryMock,
             $this->eavConfigMock,
             $this->validatorFactoryMock,
-            $this->metadataConfigMock,
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock
         );
@@ -174,9 +176,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
-            ->with(
-                \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID
-            )
+            ->with(4)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
@@ -193,11 +193,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 $searchCriteriaMock
             )->willReturn($this->searchResultMock);
         $this->searchResultMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
-        $this->metadataConfigMock->expects($this->once())
-            ->method('getCustomAttributesMetadata')
-            ->with(null)
-            ->willReturn(['Attribute metadata']);
-        $expected = array_merge([$itemMock], ['Attribute metadata']);
+        $expected = [$itemMock];
 
         $this->assertEquals($expected, $this->model->getCustomAttributesMetadata());
     }

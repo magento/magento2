@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\Catalog\Model\Category;
@@ -37,6 +40,9 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Resource\Category\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $categoriesCollection;
 
+    /**
+     * Test method
+     */
     protected function setUp()
     {
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
@@ -75,6 +81,9 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test method
+     */
     public function testGenerationForGlobalScope()
     {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(null));
@@ -84,19 +93,31 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesCollection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
         $this->initObjectRegistryFactory([]);
+        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $canonical->setTargetPath('category-1')
+            ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['canonical']));
+            ->will($this->returnValue([$canonical]));
+        $categories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $categories->setTargetPath('category-2')
+            ->setStoreId(2);
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['categories']));
+            ->will($this->returnValue([$categories]));
+        $current = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $current->setTargetPath('category-3')
+            ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['current']));
+            ->will($this->returnValue([$current]));
 
         $this->assertEquals(
-            ['canonical', 'categories', 'current'],
+            ['category-1-1' => $canonical, 'category-2-2' => $categories, 'category-3-3' => $current],
             $this->productUrlRewriteGenerator->generate($this->product)
         );
     }
 
+    /**
+     * Test method
+     */
     public function testGenerationForSpecificStore()
     {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
@@ -113,16 +134,22 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesCollection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([$category]));
         $this->initObjectRegistryFactory([$category]);
+        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $canonical->setTargetPath('category-1')
+            ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['canonical']));
+            ->will($this->returnValue([$canonical]));
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
 
-        $this->assertEquals(['canonical'], $this->productUrlRewriteGenerator->generate($this->product));
+        $this->assertEquals(['category-1-1' => $canonical], $this->productUrlRewriteGenerator->generate($this->product));
     }
 
+    /**
+     * Test method
+     */
     public function testSkipRootCategoryForCategoriesGenerator()
     {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
@@ -136,16 +163,22 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesCollection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([$rootCategory]));
         $this->initObjectRegistryFactory([]);
+        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $canonical->setTargetPath('category-1')
+            ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['canonical']));
+            ->will($this->returnValue([$canonical]));
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
 
-        $this->assertEquals(['canonical'], $this->productUrlRewriteGenerator->generate($this->product));
+        $this->assertEquals(['category-1-1' => $canonical], $this->productUrlRewriteGenerator->generate($this->product));
     }
 
+    /**
+     * Test method
+     */
     public function testSkipGenerationForNotStoreRootCategory()
     {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
@@ -159,16 +192,22 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesCollection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([$category]));
         $this->initObjectRegistryFactory([]);
+        $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $canonical->setTargetPath('category-1')
+            ->setStoreId(1);
         $this->canonicalUrlRewriteGenerator->expects($this->any())->method('generate')
-            ->will($this->returnValue(['canonical']));
+            ->will($this->returnValue([$canonical]));
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
 
-        $this->assertEquals(['canonical'], $this->productUrlRewriteGenerator->generate($this->product));
+        $this->assertEquals(['category-1-1' => $canonical], $this->productUrlRewriteGenerator->generate($this->product));
     }
 
+    /**
+     * Test method
+     */
     public function testSkipGenerationForGlobalScope()
     {
         $this->product->expects($this->any())->method('getStoreIds')->will($this->returnValue([1, 2]));

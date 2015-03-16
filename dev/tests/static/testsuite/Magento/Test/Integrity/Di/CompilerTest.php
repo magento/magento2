@@ -7,14 +7,13 @@
  */
 namespace Magento\Test\Integrity\Di;
 
-use Magento\Framework\Api\Code\Generator\DataBuilder;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
-use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
-use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -316,16 +315,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generator = new \Magento\Framework\Code\Generator(
             $generatorIo,
             [
-                DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
-                SearchResultsBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
-                DataBuilder::ENTITY_TYPE_BUILDER => 'Magento\Framework\Api\Code\Generator\DataBuilder',
                 Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
                 Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
                 Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
                 Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
                 SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
-                ObjectExtensionInterface::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'
+                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
+                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
+                ExtensionAttributesGenerator::ENTITY_TYPE =>
+                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
