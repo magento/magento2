@@ -33,7 +33,8 @@
         "composer/composer": "1.0.0-alpha8",
         "monolog/monolog": "1.11.0",
         "tubalmartin/cssmin": "2.4.8-p4",
-        "magento/magento-composer-installer": "*"
+        "magento/magento-composer-installer": "*",
+        "symfony/console": "~2.3"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
