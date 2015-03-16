@@ -10,8 +10,8 @@ interface DataProviderInterface
 {
     /**
      * Get translation data
-     *
+     * @param string $themePath
      * @return string[]
      */
-    public function getData();
+    public function getData($themePath);
 }

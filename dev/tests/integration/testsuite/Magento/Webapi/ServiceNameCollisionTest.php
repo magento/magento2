@@ -11,6 +11,8 @@
  */
 namespace Magento\Webapi;
 
+use Magento\Webapi\Model\Config\Converter;
+
 class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -28,10 +30,12 @@ class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
         $webapiConfig = $objectManager->get('Magento\Webapi\Model\Config');
         $serviceNames = [];
 
-        foreach (array_keys($webapiConfig->getServices()['services']) as $serviceClassName) {
-            $newServiceName = $soapConfig->getServiceName($serviceClassName);
-            $this->assertFalse(in_array($newServiceName, $serviceNames));
-            $serviceNames[] = $newServiceName;
+        foreach ($webapiConfig->getServices()[Converter::KEY_SERVICES] as $serviceClassName => $serviceVersionData) {
+            foreach ($serviceVersionData as $version => $serviceData) {
+                $newServiceName = $soapConfig->getServiceName($serviceClassName, $version);
+                $this->assertFalse(in_array($newServiceName, $serviceNames));
+                $serviceNames[] = $newServiceName;
+            }
         }
     }
 }

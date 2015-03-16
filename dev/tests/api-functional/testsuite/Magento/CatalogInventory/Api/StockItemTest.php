@@ -29,7 +29,7 @@ class StockItemTest extends WebapiAbstract
     /**
      * Resource path
      */
-    const RESOURCE_PATH = '/V1/stockItem';
+    const RESOURCE_PATH = '/V1/stockItems';
 
     /** @var \Magento\Catalog\Model\Resource\Product\Collection */
     protected $productCollection;

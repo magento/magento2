@@ -24,18 +24,26 @@ class DataObjectHelper
     protected $typeProcessor;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     */
+    protected $extensionFactory;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      */
     public function __construct(
         ObjectFactory $objectFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
     ) {
         $this->objectFactory = $objectFactory;
         $this->objectProcessor = $objectProcessor;
         $this->typeProcessor = $typeProcessor;
+        $this->extensionFactory = $extensionFactory;
     }
 
     /**
@@ -69,7 +77,7 @@ class DataObjectHelper
                 'set' . $camelCaseKey,
                 'setIs' . $camelCaseKey,
             ];
-            if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES
+            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES
                 && ($dataObject instanceof ExtensibleDataInterface)
                 && is_array($data[$key])
                 && !empty($data[$key])
@@ -83,7 +91,11 @@ class DataObjectHelper
             } elseif ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
                 $methodName = array_values($methodNames)[0];
                 if (!is_array($value)) {
-                    $dataObject->$methodName($value);
+                    if ($methodName === 'setExtensionAttributes' && is_null($value)) {
+                        // Cannot pass a null value to a method with a typed parameter
+                    } else {
+                        $dataObject->$methodName($value);
+                    }
                 } else {
                     $getterMethodName = 'get' . $camelCaseKey;
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
@@ -137,6 +149,8 @@ class DataObjectHelper
         if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensibleDataInterface')) {
             $object = $this->objectFactory->create($returnType, []);
             $this->populateWithArray($object, $value, $returnType);
+        } else if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensionAttributesInterface')) {
+            $object = $this->extensionFactory->create(get_class($dataObject), $value);
         } else {
             $object = $this->objectFactory->create($returnType, $value);
         }

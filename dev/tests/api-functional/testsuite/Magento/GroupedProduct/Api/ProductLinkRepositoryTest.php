@@ -37,8 +37,8 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
             'linked_product_type' => 'simple',
             'linked_product_sku' => 'simple',
             'position' => 3,
-            'custom_attributes' => [
-                'qty' => ['attribute_code' => 'qty', 'value' => (float) 300.0000],
+            'extension_attributes' => [
+                'qty' =>  (float) 300.0000,
             ],
         ];
 
@@ -55,7 +55,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         ];
         $this->_webApiCall($serviceInfo, ['entity' => $productData]);
 
-        /** @var \Magento\Catalog\Model\ProductLink\Management $linkManagement */
+        /** @var \Magento\Catalog\Api\ProductLinkManagementInterface $linkManagement */
         $linkManagement = $this->objectManager->get('Magento\Catalog\Api\ProductLinkManagementInterface');
         $actual = $linkManagement->getLinkedItemsByType($productSku, $linkType);
         array_walk($actual, function (&$item) {

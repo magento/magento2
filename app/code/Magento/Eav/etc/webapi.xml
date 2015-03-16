@@ -31,7 +31,7 @@
             <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
-    <route url="/V1/eav/attribute-sets" method="PUT">
+    <route url="/V1/eav/attribute-sets/:attributeSetId" method="PUT">
         <service class="Magento\Eav\Api\AttributeSetRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Catalog::sets"/>

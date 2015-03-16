@@ -39,12 +39,14 @@ class CanonicalUrlRewriteGenerator
      */
     public function generate($storeId, Category $category)
     {
-        return [
-            $this->urlRewriteFactory->create()->setStoreId($storeId)
+        $urlPath = $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
+        $result = [
+            $urlPath . '_' . $storeId => $this->urlRewriteFactory->create()->setStoreId($storeId)
                 ->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($category->getId())
-                ->setRequestPath($this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId))
+                ->setRequestPath($urlPath)
                 ->setTargetPath($this->categoryUrlPathGenerator->getCanonicalUrlPath($category))
         ];
+        return $result;
     }
 }

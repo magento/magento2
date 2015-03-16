@@ -1797,4 +1797,19 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\OrderItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderItemExtensionInterface $extensionAttributes);
 }

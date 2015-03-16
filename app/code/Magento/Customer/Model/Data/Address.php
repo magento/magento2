@@ -10,20 +10,43 @@ namespace Magento\Customer\Model\Data;
 use Magento\Customer\Api\Data\RegionInterface;
 use \Magento\Framework\Api\AttributeValueFactory;
 
+/**
+ * Class Address
+ *
+ */
 class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\AddressInterface
 {
     /**
-     * @param \Magento\Customer\Api\AddressMetadataInterface $metadataService
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
+    protected $metadataService;
+
+    /**
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $attributeValueFactory
+     * @param \Magento\Customer\Api\AddressMetadataInterface $metadataService
      * @param array $data
      */
     public function __construct(
-        \Magento\Customer\Api\AddressMetadataInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $attributeValueFactory,
+        \Magento\Customer\Api\AddressMetadataInterface $metadataService,
         $data = []
     ) {
-        parent::__construct($metadataService, $attributeValueFactory, $data);
+        $this->metadataService = $metadataService;
+        parent::__construct($extensionFactory, $attributeValueFactory, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+        }
+        return $this->customAttributesCodes;
     }
 
     /**
@@ -402,5 +425,26 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     public function setIsDefaultBilling($isDefaultBilling)
     {
         return $this->setData(self::DEFAULT_BILLING, $isDefaultBilling);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Customer\Api\Data\AddressExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Customer\Api\Data\AddressExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Customer\Api\Data\AddressExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

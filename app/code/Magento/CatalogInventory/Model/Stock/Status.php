@@ -9,7 +9,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -38,7 +38,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param MetadataServiceInterface $metadataService
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -48,7 +48,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        MetadataServiceInterface $metadataService,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -58,7 +58,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -171,6 +171,28 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     public function setStockStatus($stockStatus)
     {
         return $this->setData(self::KEY_STOCK_STATUS, $stockStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

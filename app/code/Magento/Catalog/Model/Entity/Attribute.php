@@ -43,6 +43,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Catalog\Model\Entity\Attribute setIsWysiwygEnabled(int $value)
  * @method int getIsUsedForPromoRules()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPromoRules(int $value)
+ * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
@@ -71,7 +72,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
@@ -93,7 +94,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
@@ -115,7 +116,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $eavConfig,
             $eavTypeFactory,

@@ -218,4 +218,21 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
      * @return $this
      */
     public function setCarrierCode($code);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
+    );
 }

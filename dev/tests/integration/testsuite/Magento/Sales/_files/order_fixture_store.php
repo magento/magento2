@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-require __DIR__ . '/../../../Magento/Core/_files/store.php';
+require __DIR__ . '/../../../Magento/Store/_files/core_fixturestore.php';
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';
 /** @var \Magento\Catalog\Model\Product $product */

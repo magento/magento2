@@ -9,7 +9,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Customer attribute metadata interface.
  */
-interface AttributeMetadataInterface
+interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObjectInterface
 {
     /**#@+
      * Constants used as keys of data array
@@ -32,21 +32,6 @@ interface AttributeMetadataInterface
     const NOTE = 'note';
     const BACKEND_TYPE = 'backend_type';
     /**#@-*/
-
-    /**
-     * Retrieve code of the attribute.
-     *
-     * @return string
-     */
-    public function getAttributeCode();
-
-    /**
-     * Set attribute code
-     *
-     * @param string $attributeCode
-     * @return $this
-     */
-    public function setAttributeCode($attributeCode);
 
     /**
      * Frontend HTML for input element.

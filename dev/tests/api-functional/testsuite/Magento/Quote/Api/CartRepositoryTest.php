@@ -153,18 +153,6 @@ class CartRepositoryTest extends WebapiAbstract
     {
         $cart = $this->getCart('test01');
 
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/carts',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => 'quoteCartRepositoryV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'quoteCartRepositoryV1GetList',
-            ],
-        ];
-
         // The following two filters are used as alternatives. The target cart does not match the first one.
         $grandTotalFilter = $this->filterBuilder->setField('grand_total')
             ->setConditionType('gteq')
@@ -195,6 +183,18 @@ class CartRepositoryTest extends WebapiAbstract
         $searchCriteria = $this->searchBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchCriteria];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'quoteCartRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'quoteCartRepositoryV1GetList',
+            ],
+        ];
+
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('total_count', $searchResult);
         $this->assertEquals(1, $searchResult['total_count']);

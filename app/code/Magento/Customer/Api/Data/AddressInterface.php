@@ -7,12 +7,10 @@
 
 namespace Magento\Customer\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Customer address interface.
  */
-interface AddressInterface extends ExtensibleDataInterface
+interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -306,4 +304,19 @@ interface AddressInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setIsDefaultBilling($isDefaultBilling);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Customer\Api\Data\AddressExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Customer\Api\Data\AddressExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Customer\Api\Data\AddressExtensionInterface $extensionAttributes);
 }

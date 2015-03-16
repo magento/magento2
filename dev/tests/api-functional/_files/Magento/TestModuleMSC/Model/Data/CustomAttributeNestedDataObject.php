@@ -10,6 +10,11 @@ namespace Magento\TestModuleMSC\Model\Data;
 
 use Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface;
 
+/**
+ * Class CustomAttributeNestedDataObject
+ *
+ * @method \Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectExtensionInterface getExtensionAttributes()
+ */
 class CustomAttributeNestedDataObject extends \Magento\Framework\Model\AbstractExtensibleModel implements
     CustomAttributeNestedDataObjectInterface
 {

@@ -20,7 +20,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
     public function testGetAttributes()
     {
-        $attributeSetId = \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID;
+        $attributeSetId = 4;
 
         $serviceInfo = [
             'rest' => [
@@ -155,7 +155,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 $serviceInfo,
                 [
                     'attributeSetId' => $payload['attributeSetId'],
-                    'attributeCode' => $payload['attributeCode']
+                    'attributeCode' => $payload['attributeCode'],
                 ]
             )
         );
@@ -164,10 +164,10 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     protected function getAttributeData()
     {
         return [
-            'attributeSetId' => \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID,
+            'attributeSetId' => 4,
             'attributeGroupId' => 8,
             'attributeCode' => 'cost',
-            'sortOrder' => 3
+            'sortOrder' => 3,
         ];
     }
 

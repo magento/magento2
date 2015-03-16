@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -61,6 +64,16 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $searchResultsFactoryMock;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eavConfigMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensibleDataObjectConverterMock;
+
+    /**
      * @var array data to create product
      */
     protected $productData = [
@@ -114,7 +127,16 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceModelMock = $this->getMock('\Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock->expects($this->any())->method('getEntityType')
+            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->objectManager = new ObjectManager($this);
+
+        $this->extensibleDataObjectConverterMock = $this
+            ->getMockBuilder('\Magento\Framework\Api\ExtensibleDataObjectConverter')
+            ->setMethods(['toNestedArray'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
@@ -126,7 +148,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'metadataServiceInterface' => $this->metadataServiceMock,
-                'searchResultsFactory' => $this->searchResultsFactoryMock
+                'searchResultsFactory' => $this->searchResultsFactoryMock,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                'eavConfig' => $this->eavConfigMock,
             ]
         );
     }
@@ -243,30 +267,34 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveExisting()
     {
         $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')->will($this->returnValue(100));
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->productMock));
         $this->initializationHelperMock->expects($this->once())->method('initialize')->with($this->productMock);
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)->willReturn(true);
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
 
     public function testSaveNew()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->productMock));
         $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)->willReturn(true);
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
         $this->assertEquals($this->productMock, $this->model->save($this->productMock));
     }
 
@@ -277,7 +305,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveUnableToSaveException()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->productMock));
@@ -286,6 +313,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Exception());
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
         $this->model->save($this->productMock);
     }
 
@@ -296,7 +327,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveException()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->productMock));
@@ -306,6 +336,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception('123'));
         $this->productMock->expects($this->never())->method('getId');
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
         $this->model->save($this->productMock);
     }
 
@@ -316,7 +350,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveInvalidProductException()
     {
         $this->resourceModelMock->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
-        $this->productMock->expects($this->once())->method('toFlatArray')->will($this->returnValue($this->productData));
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->productMock));
@@ -324,6 +357,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(['error1', 'error2']);
         $this->productMock->expects($this->never())->method('getId');
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
         $this->model->save($this->productMock);
     }
 
@@ -392,7 +429,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->filterBuilderMock->expects($this->once())->method('setValue')
-            ->with(\Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+            ->with(4)
             ->willReturn($this->filterBuilderMock);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('addFilter')->with([$filterMock])
             ->willReturn($searchCriteriaBuilderMock);
@@ -461,44 +498,44 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'identifier' => 'test-sku',
                 'editMode' => false,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 25,
                 'editMode' => false,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 25,
                 'editMode' => true,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 'test-sku',
                 'editMode' => true,
-                'storeId' => null
+                'storeId' => null,
             ],
             [
                 'identifier' => 25,
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => $anyObject,
             ],
             [
                 'identifier' => 'test-sku',
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => $anyObject,
             ],
             [
                 'identifier' => 25,
                 'editMode' => false,
-                'storeId' => $anyObject
+                'storeId' => $anyObject,
             ],
             [
 
                 'identifier' => 'test-sku',
                 'editMode' => false,
-                'storeId' => $anyObject
-            ]
+                'storeId' => $anyObject,
+            ],
         ];
     }
 }

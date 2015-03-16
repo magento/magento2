@@ -6,12 +6,11 @@
 
 namespace Magento\Framework\Api;
 
-
 /**
  * Data Object for SearchCriteria
  * @codeCoverageIgnore
  */
-class SearchCriteria extends AbstractExtensibleObject implements SearchCriteriaInterface
+class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInterface
 {
     /**#@+
      * Constants for Data Object keys
