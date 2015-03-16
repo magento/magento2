@@ -4,7 +4,7 @@ Options -Indexes
     RewriteEngine Off
 </IfModule>
 
-<Files "cli">
+<Files "magento">
     Order Allow,Deny
     Deny from all
 </Files>
