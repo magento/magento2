@@ -6,6 +6,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Utility;
+use Magento\Framework\Test\Utility\Files;
 
 class Classes
 {
@@ -185,13 +186,11 @@ class Classes
     public static function collectModuleClasses($subTypePattern = '[A-Za-z]+')
     {
         $pattern = '/^' . preg_quote(
-            \Magento\Framework\Test\Utility\Files::init()->getPathToSource(),
+            Files::init()->getPathToSource(),
             '/'
         ) . '\/app\/code\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
         $result = [];
-        foreach (
-            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false, false) as $file
-        ) {
+        foreach (Files::init()->getPhpFiles(true, false, false, false, false) as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = "{$matches[1]}_{$matches[2]}";
                 $class = "{$module}" . '\\' . str_replace(
@@ -216,7 +215,7 @@ class Classes
         if (!empty(self::$_virtualClasses)) {
             return self::$_virtualClasses;
         }
-        $configFiles = \Magento\Framework\Test\Utility\Files::init()->getDiConfigs();
+        $configFiles = Files::init()->getDiConfigs();
         foreach ($configFiles as $fileName) {
             $configDom = new \DOMDocument();
             $configDom->load($fileName);
