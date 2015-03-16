@@ -100,9 +100,10 @@ class Files
      * @param bool $otherCode non-application PHP-code (doesn't include "dev" directory)
      * @param bool $templates application PHTML-code
      * @param bool $asDataSet
+     * @param bool $tests tests folder
      * @return array
      */
-    public function getPhpFiles($appCode = true, $otherCode = true, $templates = true, $asDataSet = true)
+    public function getPhpFiles($appCode = true, $otherCode = true, $templates = true, $asDataSet = true, $tests = true)
     {
         $key = __METHOD__ . "/{$this->_path}/{$appCode}/{$otherCode}/{$templates}";
         if (!isset(self::$_cache[$key])) {
@@ -122,6 +123,12 @@ class Files
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
                     self::getFiles(["{$this->_path}/lib/internal/Magento"], '*.php'),
                     self::getFiles(["{$this->_path}/dev/tools/Magento/Tools/SampleData"], '*.php')
+                );
+            }
+            if ($tests) {
+                $files = array_merge(
+                    $files,
+                    self::getFiles(["{$this->_path}/dev/tests"], '*.php')
                 );
             }
             if ($templates) {

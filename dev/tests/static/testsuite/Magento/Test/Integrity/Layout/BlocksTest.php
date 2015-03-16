@@ -94,7 +94,9 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
     public function getChildBlockDataProvider()
     {
         $result = [];
-        foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, true, false) as $file) {
+        foreach (
+            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, true, false, false) as $file
+        ) {
             $aliases = \Magento\Framework\Test\Utility\Classes::getAllMatches(
                 file_get_contents($file),
                 '/\->getChildBlock\(\'([^\']+)\'\)/x'

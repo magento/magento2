@@ -427,7 +427,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $files,
             $this->_prepareFiles(
                 'php',
-                \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, true),
+                \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, true, false),
                 true
             )
         );
@@ -489,7 +489,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/' .
             '(?<path>[\/\w]*).php/';
 
-        $files = \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false);
+        $files = \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false, false);
         foreach ($files as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];

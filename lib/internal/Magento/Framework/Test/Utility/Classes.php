@@ -189,7 +189,9 @@ class Classes
             '/'
         ) . '\/app\/code\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
         $result = [];
-        foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false) as $file) {
+        foreach (
+            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false, false) as $file
+        ) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = "{$matches[1]}_{$matches[2]}";
                 $class = "{$module}" . '\\' . str_replace(

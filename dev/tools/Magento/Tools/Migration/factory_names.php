@@ -8,7 +8,7 @@
 require realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/dev/tests/static/framework/bootstrap.php';
 
 // PHP code
-foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, true, false) as $file) {
+foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, true, false, false) as $file) {
     $content = file_get_contents($file);
     $classes = \Magento\Framework\Test\Utility\Classes::collectPhpCodeClasses($content);
     $factoryNames = array_filter($classes, 'isFactoryName');
