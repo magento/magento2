@@ -85,6 +85,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultForwardMock;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
@@ -170,11 +173,14 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $id = 123;
         $message = 'Model exception';
-        $e = new \Magento\Framework\Exception\LocalizedException($message);
+        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -202,6 +208,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteException()
     {
         $id = 321;
@@ -234,6 +243,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteNoCreditmemo()
     {
         $this->requestMock->expects($this->any())
@@ -257,6 +269,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecute()
     {
         $id = '111';

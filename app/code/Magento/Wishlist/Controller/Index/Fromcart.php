@@ -51,7 +51,9 @@ class Fromcart extends Action\Action implements IndexInterface
         try {
             $item = $cart->getQuote()->getItemById($itemId);
             if (!$item) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("The requested cart item doesn't exist."));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The requested cart item doesn\'t exist.')
+                );
             }
 
             $productId = $item->getProductId();

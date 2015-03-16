@@ -11,7 +11,7 @@ class Validate extends \Magento\Variable\Controller\Adminhtml\System\Variable
     /**
      * Validate Action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -26,7 +26,7 @@ class Validate extends \Magento\Variable\Controller\Adminhtml\System\Variable
             $response->setError(true);
             $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         }
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($response->toArray());
     }

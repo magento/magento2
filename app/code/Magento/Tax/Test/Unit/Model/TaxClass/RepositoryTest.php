@@ -47,6 +47,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $taxClassCollectionFactory;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -93,6 +96,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testDelete()
     {
         $taxClass = $this->getMock('\Magento\Tax\Model\ClassModel', [], [], '', false);
@@ -103,6 +109,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      * @expectedExceptionMessage Some Message
      */
@@ -113,10 +120,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->taxClassResourceMock
             ->expects($this->once())
             ->method('delete')
-            ->willThrowException(new CouldNotDeleteException('Some Message'));
+            ->willThrowException(new CouldNotDeleteException(__('Some Message')));
         $this->model->delete($taxClass);
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteWithException()
     {
         $taxClass = $this->getMock('\Magento\Tax\Model\ClassModel', [], [], '', false);
@@ -128,6 +138,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->delete($taxClass));
     }
 
+    /**
+     * @return void
+     */
     public function testGet()
     {
         $taxClass = $this->getMock('\Magento\Tax\Api\Data\TaxClassInterface');
@@ -140,7 +153,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($taxClass, $this->model->get($classId));
     }
-    
+
+    /**
+     * @return void
+     */
     public function testDeleteById()
     {
         $taxClass = $this->getMock('\Magento\Tax\Model\ClassModel', [], [], '', false);
@@ -158,6 +174,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->deleteById($classId));
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $taxClassOne = $this->getMock('\Magento\Tax\Api\Data\TaxClassInterface');
@@ -195,6 +214,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->searchResultMock, $this->model->getList($searchCriteria));
     }
 
+    /**
+     * @return void
+     */
     public function testSave()
     {
         $taxClass = $this->getMock('\Magento\Tax\Model\ClassModel', [], [], '', false);
@@ -217,6 +239,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Updating classType is not allowed.
      */
@@ -232,6 +255,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Something went wrong
      */
@@ -252,11 +276,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($originTaxClass);
 
         $this->taxClassResourceMock->expects($this->once())->method('save')->with($taxClass)
-            ->willThrowException(new LocalizedException("Something went wrong"));
+            ->willThrowException(new LocalizedException(__("Something went wrong")));
         $this->model->save($taxClass);
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage A class with the same name already exists for ClassType PRODUCT.
      */
@@ -282,6 +307,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $classType
+     * @return void
      * @dataProvider validateTaxClassDataProvider
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage One or more input exceptions have occurred.
@@ -304,6 +331,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($taxClass);
     }
 
+    /**
+     * @return array
+     */
     public function validateTaxClassDataProvider()
     {
         return [
