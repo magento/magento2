@@ -10,7 +10,7 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 
 /**
@@ -64,7 +64,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var ChainFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ChainFactoryInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $chainFactory;
 
@@ -87,9 +87,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $this->theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
 
-        $this->chainFactory = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\ChainFactory')
-            ->disableOriginalConstructor()
-            ->setMethods([])
+        $this->chainFactory = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface')
             ->getMock();
         $this->chain = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
             ->disableOriginalConstructor()

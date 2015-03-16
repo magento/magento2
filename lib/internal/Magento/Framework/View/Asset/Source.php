@@ -7,7 +7,7 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 /**
@@ -53,7 +53,7 @@ class Source
     private $themeList;
 
     /**
-     * @var ChainFactory
+     * @var ChainFactoryInterface
      */
     private $chainFactory;
 
@@ -63,7 +63,7 @@ class Source
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param ChainFactory $chainFactory
+     * @param ChainFactoryInterface $chainFactory
      */
     public function __construct(
         PreProcessor\Cache $cache,
@@ -71,7 +71,7 @@ class Source
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
-        ChainFactory $chainFactory
+        ChainFactoryInterface $chainFactory
     ) {
         $this->cache = $cache;
         $this->filesystem = $filesystem;

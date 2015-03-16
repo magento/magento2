@@ -17,7 +17,7 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\View\Asset\SourceFileGeneratorPool;
-use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 
 /**
  * Class FileAssembler
@@ -73,7 +73,7 @@ class FileAssembler implements AppInterface
     private $logger;
 
     /**
-     * @var ChainFactory
+     * @var ChainFactoryInterface
      */
     private $chainFactory;
 
@@ -87,7 +87,7 @@ class FileAssembler implements AppInterface
      * @param Source $assetSource
      * @param \Magento\Framework\View\Asset\SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param \Magento\Tools\View\Deployer\Log $logger
-     * @param ChainFactory $chainFactory
+     * @param ChainFactoryInterface $chainFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -101,7 +101,7 @@ class FileAssembler implements AppInterface
         Source $assetSource,
         SourceFileGeneratorPool $sourceFileGeneratorPoll,
         Log $logger,
-        ChainFactory $chainFactory
+        ChainFactoryInterface $chainFactory
     ) {
         $this->response = $response;
         $this->params = $params;
