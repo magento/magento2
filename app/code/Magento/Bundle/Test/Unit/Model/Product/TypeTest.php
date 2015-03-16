@@ -2347,13 +2347,34 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $isManageStock
-     * @return \Magento\CatalogInventory\Api\Data\StockItem|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getStockItem($isManageStock)
     {
-        $result = $this->getMockBuilder('\Magento\CatalogInventory\Api\Data\StockItem')
-            ->setMethods(['getManageStock'])
-            ->disableOriginalConstructor()
+        $result = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemInterface')
+            ->setMethods(
+                [
+                    'getManageStock', 'getItemId', 'setItemId',
+                    'getProductId', 'setProductId', 'getWebsiteId',
+                    'setWebsiteId', 'getStockId', 'setStockId',
+                    'getQty', 'setQty', 'getIsInStock',
+                    'setIsInStock', 'getIsQtyDecimal', 'setIsQtyDecimal',
+                    'getShowDefaultNotificationMessage', 'getUseConfigMinQty', 'setUseConfigMinQty',
+                    'getMinQty', 'setMinQty', 'getUseConfigMinSaleQty',
+                    'setUseConfigMinSaleQty', 'getMinSaleQty', 'setMinSaleQty',
+                    'getUseConfigMaxSaleQty', 'setUseConfigMaxSaleQty', 'getMaxSaleQty',
+                    'setMaxSaleQty', 'getUseConfigBackorders', 'setUseConfigBackorders',
+                    'getBackorders', 'setBackorders', 'getUseConfigNotifyStockQty',
+                    'setUseConfigNotifyStockQty', 'getNotifyStockQty', 'setNotifyStockQty',
+                    'getUseConfigQtyIncrements', 'setUseConfigQtyIncrements', 'getQtyIncrements',
+                    'setQtyIncrements', 'getUseConfigEnableQtyInc', 'setUseConfigEnableQtyInc',
+                    'getEnableQtyIncrements', 'setEnableQtyIncrements', 'getUseConfigManageStock',
+                    'setUseConfigManageStock', 'setManageStock', 'getLowStockDate',
+                    'setLowStockDate', 'getIsDecimalDivided', 'setIsDecimalDivided',
+                    'getStockStatusChangedAuto', 'setStockStatusChangedAuto', 'getExtensionAttributes',
+                    'setExtensionAttributes'
+                ]
+            )
             ->getMock();
         $result->method('getManageStock')
             ->willReturn($isManageStock);
