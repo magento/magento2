@@ -1102,7 +1102,7 @@ input.mage-error ~ .addafter {
         white-space: normal;
     }
 }
-
+.details-content > .field.required > .label,
 .fieldset > .field.required > .label {
     &:after {
         content:'';
@@ -3370,55 +3370,13 @@ tr.dynamic-grid input.input-text {
 /*
     System - Tax
 --------------------------------------*/
-.tax-rate-popup .ui-dialog-content.ui-widget-content {
-    padding: 10px 10px 0;
-}
 
-.tax-rate-popup .fieldset {
-    margin: 0;
-}
-
-.tax-rate-popup .field {
-    margin-bottom: 20px;
-}
-
-.tax-rate-popup .field .label {
-    margin: 8px 0 0;
-    width: 30%;
-    padding: 0 30px 0 0;
-    float: left;
-    text-align: right;
-    box-sizing: content-box;
-}
-
-.tax-rate-popup .field .control {
-    width: 58%;
-    margin: 0;
-    float: left;
-}
-
-.tax-rate-popup .field .control select,
-.tax-rate-popup .field .control .input-text {
-    width: 100%;
-}
-
-.tax-rate-popup .field-rate .control .input-text {
-    width: 50%;
-}
-
-.tax-rate-popup .field-rate label.mage-error {
-    display: block;
-}
-
-.tax-rate-popup .tax-rate-titles-note-td {
-    margin-left: 26%;
-    padding-left: 20px;
-}
-
-.field-tax_rate,
-.field-tax_customer_class,
-.field-tax_product_class {
-    position: relative;
+.tax-rate-popup .form-inline .field {
+    position: static;
+    &.required .label {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 .mselect-hidden + .mage-error {
