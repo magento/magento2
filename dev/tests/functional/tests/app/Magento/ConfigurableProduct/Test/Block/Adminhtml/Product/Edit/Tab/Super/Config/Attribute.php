@@ -160,8 +160,8 @@ class Attribute extends Form
     protected function createNewVariationSet(array $attribute)
     {
         $attributeFixture = ObjectManager::getInstance()->create(
-           'Magento\Catalog\Test\Fixture\CatalogProductAttribute',
-           ['data' => $attribute]
+            'Magento\Catalog\Test\Fixture\CatalogProductAttribute',
+            ['data' => $attribute]
         );
 
         $this->_rootElement->find($this->createNewVariationSet)->click();
