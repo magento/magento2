@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Exception\File;
 
-class LargeSizeException extends \Magento\Framework\Exception\LocalizedException
+use Magento\Framework\Exception\LocalizedException;
+
+class LargeSizeException extends LocalizedException
 {
 }

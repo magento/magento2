@@ -27,7 +27,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productValidator;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -44,7 +44,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Builder $productBuilder
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Catalog\Model\Product\Validator $productValidator
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      */
@@ -53,7 +53,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         Product\Builder $productBuilder,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Catalog\Model\Product\Validator $productValidator,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
@@ -68,7 +68,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * Validate product
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

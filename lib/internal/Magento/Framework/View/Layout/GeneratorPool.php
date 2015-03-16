@@ -32,20 +32,28 @@ class GeneratorPool
     protected $scopeResolver;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param ScheduledStructure\Helper $helper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $generators
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        \Psr\Log\LoggerInterface $logger,
         array $generators = null
     ) {
         $this->helper = $helper;
         $this->scopeConfig = $scopeConfig;
         $this->scopeResolver = $scopeResolver;
+        $this->logger = $logger;
         $this->addGenerators($generators);
     }
 
@@ -196,8 +204,13 @@ class GeneratorPool
         if (!$alias && false === $structure->getChildId($destination, $childAlias)) {
             $alias = $childAlias;
         }
-        $structure->unsetChild($element, $alias)->setAsChild($element, $destination, $alias);
-        $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
+        $structure->unsetChild($element, $alias);
+        try {
+            $structure->setAsChild($element, $destination, $alias);
+            $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
+        } catch (\OutOfBoundsException $e) {
+            $this->logger->critical('Broken reference: '. $e->getMessage());
+        }
         return $this;
     }
 }

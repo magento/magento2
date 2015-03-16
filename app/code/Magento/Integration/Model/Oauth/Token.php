@@ -186,7 +186,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function convertToAccess()
     {
         if (self::TYPE_REQUEST != $this->getType()) {
-            throw new OauthException('Cannot convert to access token due to token is not request type');
+            throw new OauthException(__('Cannot convert to access token due to token is not request type'));
         }
         return $this->saveAccessToken(UserContextInterface::USER_TYPE_INTEGRATION);
     }
@@ -278,7 +278,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         )
         ) {
             $messages = $this->_urlValidator->getMessages();
-            throw new OauthException(array_shift($messages));
+            throw new OauthException(__(array_shift($messages)));
         }
 
         /** @var $validatorLength \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength */
@@ -287,14 +287,14 @@ class Token extends \Magento\Framework\Model\AbstractModel
         $validatorLength->setName('Token Secret Key');
         if (!$validatorLength->isValid($this->getSecret())) {
             $messages = $validatorLength->getMessages();
-            throw new OauthException(array_shift($messages));
+            throw new OauthException(__(array_shift($messages)));
         }
 
         $validatorLength->setLength(OauthHelper::LENGTH_TOKEN);
         $validatorLength->setName('Token Key');
         if (!$validatorLength->isValid($this->getToken())) {
             $messages = $validatorLength->getMessages();
-            throw new OauthException(array_shift($messages));
+            throw new OauthException(__(array_shift($messages)));
         }
 
         if (null !== ($verifier = $this->getVerifier())) {
@@ -302,7 +302,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
             $validatorLength->setName('Verifier Key');
             if (!$validatorLength->isValid($verifier)) {
                 $messages = $validatorLength->getMessages();
-                throw new OauthException(array_shift($messages));
+                throw new OauthException(__(array_shift($messages)));
             }
         }
         return true;

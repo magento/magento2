@@ -46,18 +46,18 @@ class ContentValidator
     {
         $fileContent = @base64_decode($entryContent->getEntryData(), true);
         if (empty($fileContent)) {
-            throw new InputException('The image content must be valid base64 encoded data.');
+            throw new InputException(__('The image content must be valid base64 encoded data.'));
         }
         $imageProperties = @getimagesizefromstring($fileContent);
         if (empty($imageProperties)) {
-            throw new InputException('The image content must be valid base64 encoded data.');
+            throw new InputException(__('The image content must be valid base64 encoded data.'));
         }
         $sourceMimeType = $imageProperties['mime'];
         if ($sourceMimeType != $entryContent->getMimeType() || !$this->isMimeTypeValid($sourceMimeType)) {
-            throw new InputException('The image MIME type is not valid or not supported.');
+            throw new InputException(__('The image MIME type is not valid or not supported.'));
         }
         if (!$this->isNameValid($entryContent->getName())) {
-            throw new InputException('Provided image name contains forbidden characters.');
+            throw new InputException(__('Provided image name contains forbidden characters.'));
         }
         return true;
     }

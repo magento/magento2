@@ -9,7 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -21,13 +21,13 @@ class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         parent::__construct($context, $productBuilder);
@@ -38,7 +38,7 @@ class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * Search for attributes by part of attribute's label in admin store
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

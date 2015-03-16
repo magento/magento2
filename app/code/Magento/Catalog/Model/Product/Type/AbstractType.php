@@ -503,7 +503,7 @@ abstract class AbstractType
                             if (isset($queueOptions['option'])) {
                                 $queueOptions['option']->setIsValid(false);
                             }
-                            throw new \Magento\Framework\Exception\LocalizedException(__("The file upload failed."));
+                            throw new \Magento\Framework\Exception\LocalizedException(__('The file upload failed.'));
                         }
                         $this->_fileStorageDb->saveFile($dst);
                         break;

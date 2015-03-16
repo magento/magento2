@@ -30,7 +30,7 @@ class ResultFactory
      * @var array
      */
     protected $typeMap = [
-        self::TYPE_JSON     => 'Magento\Framework\Controller\Result\JSON',
+        self::TYPE_JSON     => 'Magento\Framework\Controller\Result\Json',
         self::TYPE_RAW      => 'Magento\Framework\Controller\Result\Raw',
         self::TYPE_REDIRECT => 'Magento\Framework\Controller\Result\Redirect',
         self::TYPE_FORWARD  => 'Magento\Framework\Controller\Result\Forward',

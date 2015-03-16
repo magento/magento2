@@ -321,7 +321,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $adapter->rollback();
             $stream->close();
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         } catch (\Exception $e) {
             $adapter->rollback();
             $stream->close();
