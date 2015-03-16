@@ -7,7 +7,9 @@ namespace Magento\Theme\Block\Html;
 
 use Magento\Framework\View\Block\IdentityInterface;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\Registry;
+use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\Data\Tree\NodeFactory;
 
 /**
  * Html page top menu block
@@ -26,7 +28,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @var \Magento\Framework\Data\Tree\Node
      */
-    protected $_menu;
+    protected $menu;
 
     /**
      * Core registry
@@ -35,23 +37,26 @@ class Topmenu extends Template implements IdentityInterface
      */
     protected $registry;
 
+    /**
+     * @param Template\Context $context
+     * @param NodeFactory $nodeFactory
+     * @param TreeFactory $treeFactory
+     * @param array $data
+     */
     public function __construct(
-        Registry $registry,
         Template\Context $context,
+        NodeFactory $nodeFactory,
+        TreeFactory $treeFactory,
         array $data = []
     ) {
-        $this->registry = $registry;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Init top menu tree structure
-     *
-     * @return void
-     */
-    public function _construct()
-    {
-        $this->_menu = new \Magento\Framework\Data\Tree\Node([], 'root', new \Magento\Framework\Data\Tree());
+        $this->menu = $nodeFactory->create(
+            [
+                'data' => [],
+                'idField' => 'root',
+                'tree' => $treeFactory->create()
+            ]
+        );
     }
 
     /**
@@ -66,18 +71,18 @@ class Topmenu extends Template implements IdentityInterface
     {
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_before',
-            ['menu' => $this->_menu, 'block' => $this]
+            ['menu' => $this->menu, 'block' => $this]
         );
 
-        $this->_menu->setOutermostClass($outermostClass);
-        $this->_menu->setChildrenWrapClass($childrenWrapClass);
+        $this->menu->setOutermostClass($outermostClass);
+        $this->menu->setChildrenWrapClass($childrenWrapClass);
 
-        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+        $html = $this->_getHtml($this->menu, $childrenWrapClass, $limit);
 
         $transportObject = new \Magento\Framework\Object(['html' => $html]);
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_after',
-            ['menu' => $this->_menu, 'transportObject' => $transportObject]
+            ['menu' => $this->menu, 'transportObject' => $transportObject]
         );
         $html = $transportObject->getHtml();
 
@@ -224,13 +229,13 @@ class Topmenu extends Template implements IdentityInterface
 
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
             $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $this->escapeHtml(
-                $child->getName()
-            ) . '</span></a>' . $this->_addSubMenu(
-                $child,
-                $childLevel,
-                $childrenWrapClass,
-                $limit
-            ) . '</li>';
+                    $child->getName()
+                ) . '</span></a>' . $this->_addSubMenu(
+                    $child,
+                    $childLevel,
+                    $childrenWrapClass,
+                    $limit
+                ) . '</li>';
             $itemPosition++;
             $counter++;
         }
@@ -283,17 +288,15 @@ class Topmenu extends Template implements IdentityInterface
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
 
-        $currentCategoryName = $this->registry->registry('current_category')->getName();
-
         if ($item->getIsFirst()) {
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive() && $currentCategoryName != $item->getName()) {
+        if ($item->getIsActive() && !$item->getIsCurrentCategory()) {
             $classes[] = 'has-active';
         }
 
-        if ($currentCategoryName == $item->getName()) {
+        if ($item->getIsCurrentCategory()) {
             $classes[] = 'active';
         }
 
