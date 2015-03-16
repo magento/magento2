@@ -90,22 +90,4 @@ class ChainTest extends \PHPUnit_Framework_TestCase
             ['anotherContent', 'anotherType', true],
         ];
     }
-
-    public function testChainTargetAssetPathNonDevMode()
-    {
-        $assetPath = 'assetPath';
-        $origPath = 'origPath';
-
-        $this->asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $this->asset->expects($this->once())
-            ->method('getContentType')
-            ->will($this->returnValue('assetType'));
-        $this->asset->expects($this->once())
-            ->method('getPath')
-            ->will($this->returnValue($assetPath));
-        $chain = new Chain($this->asset, 'origContent', 'origType', $origPath);
-
-        $this->assertSame($chain->getTargetAssetPath(), $assetPath);
-        $this->assertNotSame($chain->getTargetAssetPath(), $origPath);
-    }
 }

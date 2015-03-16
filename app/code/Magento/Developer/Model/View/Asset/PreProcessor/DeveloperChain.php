@@ -27,8 +27,7 @@ class DeveloperChain extends Chain
         parent::__construct(
             $asset,
             $origContent,
-            $origContentType,
-            $origAssetPath
+            $origContentType
         );
 
         $this->targetContentType = $this->origContentType;

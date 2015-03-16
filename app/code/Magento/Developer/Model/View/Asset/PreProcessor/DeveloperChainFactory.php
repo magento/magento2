@@ -9,7 +9,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Developer\Model\Config\Source\WorkflowType;
 
 class DeveloperChainFactory implements ChainFactoryInterface

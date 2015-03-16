@@ -51,15 +51,13 @@ class Chain
 
     /**
      * @param LocalInterface $asset
-     * @param string $origContent
-     * @param string $origContentType
-     * @param null $origAssetPath
+     * @param $origContent
+     * @param $origContentType
      */
     public function __construct(
         LocalInterface $asset,
         $origContent,
-        $origContentType,
-        $origAssetPath = null
+        $origContentType
     ) {
         $this->asset = $asset;
         $this->origContent = $origContent;

@@ -73,7 +73,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     protected $titleMock;
 
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     protected $objectManagerHelper;
 
     protected function setUp()
@@ -119,7 +121,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManager($this);;
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Page\Config\Renderer',
             [
