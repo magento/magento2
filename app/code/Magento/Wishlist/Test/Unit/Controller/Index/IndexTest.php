@@ -29,11 +29,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerSession;
-
-    /**
      * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $view;
@@ -48,7 +43,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->wishlistProvider = $this->getMock('Magento\Wishlist\Controller\WishlistProvider', [], [], '', false);
         $this->view = $this->getMock('Magento\Framework\App\View', [], [], '', false);
         $this->redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
@@ -105,7 +99,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->prepareContext();
         return new \Magento\Wishlist\Controller\Index\Index(
             $this->context,
-            $this->customerSession,
             $this->wishlistProvider
         );
     }
@@ -126,29 +119,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     {
         $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
 
-        $block = $this->getMock('Magento\Ui\Component\Form\Element\Input', [], [], '', false);
-        $block
-            ->expects($this->at(0))
-            ->method('__call')
-            ->with('setRefererUrl', ['http://referer-url-test.com'])
-            ->willReturn(true);
-        $block
-            ->expects($this->at(1))
-            ->method('__call')
-            ->with('setRefererUrl', ['http://referer-url.com'])
-            ->willReturn(true);
-
-        $this->redirect
-            ->expects($this->once())
-            ->method('getRefererUrl')
-            ->willReturn('http://referer-url-test.com');
-
         $layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $layout
-            ->expects($this->once())
-            ->method('getBlock')
-            ->with('customer.wishlist')
-            ->willReturn($block);
         $layout
             ->expects($this->once())
             ->method('initMessages')
@@ -164,19 +135,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('loadLayout')
             ->willReturn(true);
         $this->view
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('getLayout')
             ->willReturn($layout);
         $this->view
             ->expects($this->once())
             ->method('renderLayout')
             ->willReturn(true);
-
-        $this->customerSession
-            ->expects($this->once())
-            ->method('__call')
-            ->with('getAddActionReferer', [true])
-            ->willReturn('http://referer-url.com');
 
         $this->getController()->execute();
     }

@@ -80,12 +80,12 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->$saveAction();
 
-        // Create simple product with category
-        $productSimple->persist();
-
         // Prepare data for tear down
         $this->catalogRules[] = $catalogPriceRule;
 
-        return ['product' => $productSimple];
+        // Create simple product with category
+        $productSimple->persist();
+
+        return ['products' => [$productSimple]];
     }
 }

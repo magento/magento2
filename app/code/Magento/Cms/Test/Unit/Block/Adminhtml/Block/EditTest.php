@@ -53,7 +53,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Block\Adminhtml\Block\Edit',
             [
                 'registry' => $this->registryMock,
-                'escaper' => $this->escaperMock
+                'escaper' => $this->escaperMock,
             ]
         );
     }
@@ -91,7 +91,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'modelBlockId NOT EMPTY' => ['modelBlockId' => 1],
-            'modelBlockId IS EMPTY' => ['modelBlockId' => null]
+            'modelBlockId IS EMPTY' => ['modelBlockId' => null],
         ];
     }
 }

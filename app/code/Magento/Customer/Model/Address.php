@@ -9,7 +9,6 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Customer address model
@@ -45,14 +44,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param AddressMetadataInterface $addressMetadataService
+     * @param AddressMetadataInterface $metadataService
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
@@ -66,14 +65,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        AddressMetadataInterface $addressMetadataService,
+        AddressMetadataInterface $metadataService,
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
@@ -88,14 +87,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $directoryData,
             $eavConfig,
             $addressConfig,
             $regionFactory,
             $countryFactory,
-            $addressMetadataService,
+            $metadataService,
             $addressDataFactory,
             $regionDataFactory,
             $dataObjectHelper,

@@ -7,6 +7,7 @@ namespace Magento\Customer\Model\Data;
 
 /**
  * Data Model implementing Address Region interface
+ *
  */
 class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\RegionInterface
@@ -72,5 +73,26 @@ class Region extends \Magento\Framework\Api\AbstractExtensibleObject implements
     public function setRegionId($regionId)
     {
         return $this->setData(self::REGION_ID, $regionId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

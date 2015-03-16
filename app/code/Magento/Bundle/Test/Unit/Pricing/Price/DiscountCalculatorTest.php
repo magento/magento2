@@ -8,8 +8,6 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\FinalPrice;
-
 /**
  * Class DiscountCalculatorTest
  */
@@ -95,7 +93,7 @@ class DiscountCalculatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->priceInfoMock));
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo(FinalPrice::PRICE_CODE))
+            ->with($this->equalTo(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE))
             ->will($this->returnValue($this->finalPriceMock));
         $this->finalPriceMock->expects($this->once())
             ->method('getValue')

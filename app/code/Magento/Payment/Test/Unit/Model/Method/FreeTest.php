@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Test\Unit\Model\Method;
 
 class FreeTest extends \PHPUnit_Framework_TestCase
@@ -27,13 +30,19 @@ class FreeTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
 
         $registry = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $metadataService = $this->getMock('\Magento\Framework\Api\MetadataServiceInterface');
+        $extensionAttributesFactory = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttributesFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $customAttributeFactory = $this->getMock('\Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
 
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
             $context,
             $registry,
-            $metadataService,
+            $extensionAttributesFactory,
             $customAttributeFactory,
             $paymentData,
             $this->scopeConfig,

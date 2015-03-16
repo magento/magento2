@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Core/_files/store.php';
+require __DIR__ . '/../../../Magento/Store/_files/core_fixturestore.php';
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 
 $currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

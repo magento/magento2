@@ -590,7 +590,11 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $customerEntity = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerEntity, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customerEntity,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         $customerAfter = $this->accountManagement->createAccount($customerEntity, 'aPassword');
         $this->assertGreaterThan(0, $customerAfter->getId());

@@ -7,7 +7,8 @@ namespace Magento\UrlRewrite\Model\Storage;
 
 use Magento\Framework\App\Resource;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\Framework\Api\DataObjectHelper;
 
 class DbStorage extends AbstractStorage
 {
@@ -32,15 +33,19 @@ class DbStorage extends AbstractStorage
     protected $resource;
 
     /**
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder $urlRewriteBuilder
+     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
+     * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\Resource $resource
      */
-    public function __construct(UrlRewriteBuilder $urlRewriteBuilder, Resource $resource)
-    {
+    public function __construct(
+        UrlRewriteFactory $urlRewriteFactory,
+        DataObjectHelper $dataObjectHelper,
+        Resource $resource
+    ) {
         $this->connection = $resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
         $this->resource = $resource;
 
-        parent::__construct($urlRewriteBuilder);
+        parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
 
     /**

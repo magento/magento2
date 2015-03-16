@@ -72,7 +72,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         } else {
             $urlBuilder->expects($this->any())
                 ->method('getUrl')
-                ->with('*/*/*', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
+                ->with('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
                 ->will($this->returnValue($this->url));
         }
 

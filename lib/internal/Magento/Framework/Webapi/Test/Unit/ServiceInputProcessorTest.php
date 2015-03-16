@@ -3,13 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Webapi\Test\Unit;
 
-use \Magento\Framework\Webapi\ServiceInputProcessor;
-use \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
-use \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
 use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
 use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
@@ -25,15 +28,20 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     protected $serviceInputProcessor;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $attributeValueBuilder;
+    protected $attributeValueFactoryMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $serviceConfigReader;
+    protected $customAttributeTypeLocator;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    protected $objectManagerMock;
 
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectFactory = new WebapiBuilderFactory($objectManager);
+        $this->objectManagerMock = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
         $cache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
@@ -41,21 +49,30 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
 
-        $this->serviceConfigReader = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
+        $this->customAttributeTypeLocator = $this->getMockBuilder('Magento\Eav\Model\EavCustomAttributeTypeLocator')
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var \Magento\Framework\Api\AttributeDataBuilder */
-        $this->attributeValueBuilder = $objectManager->getObject('Magento\Framework\Api\AttributeDataBuilder');
+        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeValueFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(
+                function () use ($objectManager) {
+                    return $objectManager->getObject('Magento\Framework\Api\AttributeValue');
+                }
+            );
 
         $this->serviceInputProcessor = $objectManager->getObject(
             'Magento\Framework\Webapi\ServiceInputProcessor',
             [
                 'typeProcessor' => $typeProcessor,
-                'builderFactory' => $objectFactory,
+                'objectManager' => $this->objectManagerMock,
                 'cache' => $cache,
-                'serviceConfigReader' => $this->serviceConfigReader,
-                'attributeValueBuilder' => $this->attributeValueBuilder
+                'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
+                'attributeValueFactory' => $this->attributeValueFactoryMock
             ]
         );
     }
@@ -102,6 +119,12 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedDataProperties()
     {
+        $this->setupFactory(
+            [
+                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested',
+                '\Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple',
+            ]
+        );
         $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -144,6 +167,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayProperties()
     {
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple']);
         $data = ['associativeArray' => ['key' => 'value', 'key_two' => 'value_two']];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -162,6 +186,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayPropertiesWithItem()
     {
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray']);
         $data = ['associativeArray' => ['item' => 'value']];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -179,6 +204,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayPropertiesWithItemArray()
     {
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray']);
         $data = ['associativeArray' => ['item' => ['value1','value2']]];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -197,6 +223,11 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfDataObjectProperties()
     {
+        $this->setupFactory(
+            [
+                '\Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple'
+            ]
+        );
         $data = [
             'dataObjects' => [
                 ['entityId' => 14, 'name' => 'First'],
@@ -228,6 +259,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedSimpleArrayProperties()
     {
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray']);
         $data = ['arrayData' => ['ids' => [1, 2, 3, 4]]];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -249,6 +281,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedAssociativeArrayProperties()
     {
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray']);
         $data = [
             'associativeArrayData' => ['associativeArray' => ['key' => 'value', 'key2' => 'value2']],
         ];
@@ -272,6 +305,12 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedArrayOfDataObjectProperties()
     {
+        $this->setupFactory(
+            [
+                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray',
+                '\Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple',
+            ]
+        );
         $data = [
             'dataObjects' => [
                 'items' => [['entityId' => 1, 'name' => 'First'], ['entityId' => 2, 'name' => 'Second']],
@@ -308,18 +347,20 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider customAttributesDataProvider
      * @param $customAttributeType
-     * @param $customAttributeValue
-     * @param $attributeCode
+     * @param $inputData
+     * @param $expectedObject
      */
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
-        $this->serviceConfigReader->expects($this->any())->method('read')->willReturn(
+        $this->setupFactory(
             [
-                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes' => [
-                    TestService::CUSTOM_ATTRIBUTE_CODE => $customAttributeType
-                ]
+                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes',
+                '\Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple',
+                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple',
+                'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray',
             ]
         );
+        $this->customAttributeTypeLocator->expects($this->any())->method('getType')->willReturn($customAttributeType);
 
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -479,5 +520,28 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 ]
             ]]
         );
+    }
+    protected function setupFactory(array $classNames)
+    {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $returnValueMap = [];
+        foreach ($classNames as $className) {
+            $factoryMock = $this->getMockBuilder($className . 'Factory')
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
+            $factoryMock->expects($this->any())
+                ->method('create')
+                ->willReturnCallback(
+                    function () use ($objectManager, $className) {
+                        return $objectManager->getObject($className);
+                    }
+                );
+            $returnValueMap[] = [$className . 'Factory', $factoryMock];
+        }
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($returnValueMap));
     }
 }

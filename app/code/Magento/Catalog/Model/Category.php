@@ -190,11 +190,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * @var \Magento\Framework\Api\MetadataServiceInterface
+     */
+    protected $metadataService;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
      * @param Resource\Category\Tree $categoryTreeResource
      * @param Resource\Category\TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
@@ -215,9 +221,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTreeResource,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
@@ -234,6 +241,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
+        $this->metadataService = $metadataService;
         $this->_treeModel = $categoryTreeResource;
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_storeCollectionFactory = $storeCollectionFactory;
@@ -249,7 +257,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $storeManager,
             $resource,
@@ -272,6 +280,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         } else {
             $this->_init('Magento\Catalog\Model\Resource\Category');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+        }
+        return $this->customAttributesCodes;
     }
 
     /**
@@ -1323,6 +1342,27 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function setChildrenData(array $childrenData = null)
     {
         return $this->setData(self::KEY_CHILDREN_DATA, $childrenData);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\CategoryExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

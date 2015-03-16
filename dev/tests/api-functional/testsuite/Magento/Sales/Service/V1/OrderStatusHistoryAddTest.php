@@ -57,7 +57,7 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
         $requestData = ['id' => $order->getId(), 'statusHistory' => $commentData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId() . '/comment',
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/comments',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

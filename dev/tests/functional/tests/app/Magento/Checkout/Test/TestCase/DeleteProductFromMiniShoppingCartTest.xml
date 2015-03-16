@@ -19,6 +19,6 @@
       <data name="products" xsi:type="string">catalogProductSimple::default</data>
       <data name="deletedProductIndex" xsi:type="string">0</data>
       <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
-  </variation>
+    </variation>
   </testCase>
 </config>

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\TestModuleMSC\Model\Data\Eav;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
@@ -32,6 +35,17 @@ class AttributeMetadata extends AbstractExtensibleObject implements MetadataObje
     }
 
     /**
+     * Set id of the attribute.
+     *
+     * @param string $attributeId
+     * @return $this
+     */
+    public function setAttributeId($attributeId)
+    {
+        return $this->setData(self::ATTRIBUTE_ID, $attributeId);
+    }
+
+    /**
      * Retrieve code of the attribute.
      *
      * @return string|null
@@ -39,5 +53,16 @@ class AttributeMetadata extends AbstractExtensibleObject implements MetadataObje
     public function getAttributeCode()
     {
         return $this->_get(self::ATTRIBUTE_CODE);
+    }
+
+    /**
+     * Set code of the attribute.
+     *
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function setAttributeCode($attributeCode)
+    {
+        return $this->setData(self::ATTRIBUTE_CODE, $attributeCode);
     }
 }

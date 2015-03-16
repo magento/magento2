@@ -114,4 +114,19 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return $this
      */
     public function setCustomerTaxClassId($customerTaxClassId);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes);
 }

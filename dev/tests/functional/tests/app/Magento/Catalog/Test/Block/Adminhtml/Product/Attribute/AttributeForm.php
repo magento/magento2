@@ -65,6 +65,14 @@ class AttributeForm extends FormTabs
     }
 
     /**
+     * @destructor
+     */
+    public function __destruct()
+    {
+        $this->browser->switchToFrame();
+    }
+
+    /**
      * Fill the attribute form.
      *
      * @param FixtureInterface $fixture
@@ -112,6 +120,5 @@ class AttributeForm extends FormTabs
     public function saveAttributeForm()
     {
         $this->browser->find($this->saveButton)->click();
-        $this->browser->selectWindow();
     }
 }

@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class LowStockItemsTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/stockItem/lowStock/';
+    const RESOURCE_PATH = '/V1/stockItems/lowStock/';
 
     /**
      * @param float $qty

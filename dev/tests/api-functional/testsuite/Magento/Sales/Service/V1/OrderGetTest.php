@@ -9,7 +9,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderGetTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/order';
+    const RESOURCE_PATH = '/V1/orders';
 
     const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 

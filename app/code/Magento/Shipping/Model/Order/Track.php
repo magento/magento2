@@ -21,7 +21,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Shipment\Track setCreatedAt(string $value)
  * @method string getUpdatedAt()
- *
+ * @method \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface getExtensionAttributes()
  */
 class Track extends \Magento\Sales\Model\Order\Shipment\Track
 {
@@ -33,7 +33,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -49,7 +49,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -63,7 +63,7 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $localeDate,
             $dateTime,

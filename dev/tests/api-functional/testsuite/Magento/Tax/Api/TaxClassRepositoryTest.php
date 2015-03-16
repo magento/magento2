@@ -23,7 +23,7 @@ class TaxClassRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'taxTaxClassRepositoryV1';
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/taxClass';
+    const RESOURCE_PATH = '/V1/taxClasses';
 
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;

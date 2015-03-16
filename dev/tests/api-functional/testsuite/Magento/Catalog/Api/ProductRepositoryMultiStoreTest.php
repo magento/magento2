@@ -34,7 +34,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
 
     /**
      * Create another store one time for testSearch
-     * @magentoApiDataFixture Magento/Core/_files/store.php
+     * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testCreateAnotherStore()
     {
@@ -73,7 +73,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
             ]
         ];
 
-        $requestData = ['id' => $sku, 'productSku' => $sku];
+        $requestData = ['id' => $sku, 'sku' => $sku];
         $defaultStoreResponse = $this->_webApiCall($serviceInfo, $requestData);
         $nameInDefaultStore = 'Simple Product';
         $this->assertEquals(
