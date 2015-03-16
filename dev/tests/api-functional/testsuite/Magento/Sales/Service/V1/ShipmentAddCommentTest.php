@@ -61,7 +61,7 @@ class ShipmentAddCommentTest extends WebapiAbstract
         $requestData = ['entity' => $commentData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/shipment/comment',
+                'resourcePath' => '/V1/shipment/' . $shipment->getId() . '/comments',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

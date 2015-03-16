@@ -10,6 +10,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Class Stock
+ *
  */
 class Stock extends AbstractExtensibleModel implements StockInterface
 {
@@ -118,6 +119,28 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     public function setStockName($stockName)
     {
         return $this->setData(self::STOCK_NAME, $stockName);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\CatalogInventory\Api\Data\StockExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CatalogInventory\Api\Data\StockExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

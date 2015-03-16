@@ -212,4 +212,19 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setAdditionalInformation($key, $value);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes);
 }

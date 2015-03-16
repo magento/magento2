@@ -7,7 +7,6 @@
         "magento/module-catalog": "0.42.0-beta11",
         "magento/module-catalog-inventory": "0.42.0-beta11",
         "magento/module-sales": "0.42.0-beta11",
-        "magento/module-core": "0.42.0-beta11",
         "magento/module-checkout": "0.42.0-beta11",
         "magento/module-backend": "0.42.0-beta11",
         "magento/module-eav": "0.42.0-beta11",

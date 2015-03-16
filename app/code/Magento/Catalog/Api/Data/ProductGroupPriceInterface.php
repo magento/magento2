@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Api\Data;
 
-interface ProductGroupPriceInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface ProductGroupPriceInterface extends ExtensibleDataInterface
 {
     /**
      * Retrieve customer group id
@@ -37,4 +39,21 @@ interface ProductGroupPriceInterface
      * @return $this
      */
     public function setValue($value);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductGroupPriceExtensionInterface $extensionAttributes
+    );
 }

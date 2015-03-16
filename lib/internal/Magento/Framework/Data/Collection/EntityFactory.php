@@ -35,9 +35,9 @@ class EntityFactory implements EntityFactoryInterface
     public function create($className, array $data = [])
     {
         $model = $this->_objectManager->create($className, $data);
-        //TODO: fix that when this factory used only for \Magento\Core\Model\Abstract
-        //if (!$model instanceof \Magento\Core\Model\Abstract) {
-        //    throw new \LogicException($className . ' doesn\'t implement \Magento\Core\Model\Abstract');
+        //TODO: fix that when this factory used only for \Magento\Framework\Model\AbstractModel
+        //if (!$model instanceof \Magento\Framework\Model\AbstractModel) {
+        //    throw new \LogicException($className . ' doesn\'t implement \Magento\Framework\Model\AbstractModel');
         //}
         return $model;
     }

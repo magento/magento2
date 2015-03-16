@@ -27,7 +27,7 @@ class ShipmentEmailTest extends WebapiAbstract
         $shipment = $shipmentCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/shipment/' . $shipment->getId() . '/email',
+                'resourcePath' => '/V1/shipment/' . $shipment->getId() . '/emails',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

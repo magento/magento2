@@ -32,7 +32,6 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             [
                 'name' => 'magento/module-module1',
                 'dependencies' => [
-                    ['module' => 'magento/module-core', 'type' => 'hard'],
                     ['module' => 'magento/module-module2', 'type' => 'hard'],
                     ['module' => 'magento/module-backend', 'type' => 'soft'],
                 ],
@@ -40,7 +39,6 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             [
                 'name' => 'magento/module-module2',
                 'dependencies' => [
-                    ['module' => 'magento/module-core', 'type' => 'hard'],
                     ['module' => 'magento/module-module3', 'type' => 'hard'],
                 ]
             ],

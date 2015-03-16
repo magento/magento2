@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
@@ -40,6 +41,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $definitionMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $relationsMock;
+
     protected function setUp()
     {
         $this->readerMock = $this->getMock(
@@ -55,6 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Interception\ObjectManager\ConfigInterface'
         );
         $this->definitionMock = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
+        $this->relationsMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManager\RelationsInterface');
     }
 
     /**
@@ -62,7 +69,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param string $type
      * @dataProvider hasPluginsDataProvider
      */
-    public function testHasPluginsWhenDataIsNotCached($expectedResult, $type)
+    public function testHasPluginsWhenDataIsNotCached($expectedResult, $type, $entityParents)
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
         $this->readerMock->expects($this->any())
@@ -112,14 +119,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->definitionMock->expects($this->any())->method('getClasses')->will($this->returnValue(
             [
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy',
-                '\Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy',
+                'Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy',
             ]
         ));
+        $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
+        $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
+
         $model = new \Magento\Framework\Interception\Config\Config(
             $this->readerMock,
             $this->configScopeMock,
             $this->cacheMock,
-            new \Magento\Framework\ObjectManager\Relations\Runtime(),
+            $this->relationsMock,
             $this->omConfigMock,
             $this->definitionMock,
             'interception'
@@ -170,27 +180,33 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 true,
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer',
+                [],
             ],
             [
                 true,
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item',
+                [],
             ],
             [
                 true,
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced',
+                [],
             ],
             [
                 // the following model has only inherited plugins
                 true,
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Enhanced',
+                ['Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer'],
             ],
             [
                 false,
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy',
+                [],
             ],
             [
                 true,
                 'virtual_custom_item',
+                [],
             ]
         ];
     }

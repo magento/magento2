@@ -6,11 +6,14 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
+class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGalleryEntryInterface
 {
     /**
      * Retrieve gallery entry ID
@@ -46,9 +49,8 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Check if gallery entry is hidden from product page
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsDisabled()
+    public function isDisabled()
     {
         return $this->getData(self::DISABLED);
     }
@@ -71,6 +73,14 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function getFile()
     {
         return $this->getData(self::FILE);
+    }
+
+    /**
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface|null
+     */
+    public function getContent()
+    {
+        return $this->getData(self::CONTENT);
     }
 
     /**
@@ -98,12 +108,12 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Set whether gallery entry is hidden from product page
      *
-     * @param bool $isDisabled
+     * @param bool $disabled
      * @return $this
      */
-    public function setIsDisabled($isDisabled)
+    public function setDisabled($disabled)
     {
-        return $this->setData(self::DISABLED, $isDisabled);
+        return $this->setData(self::DISABLED, $disabled);
     }
 
     /**
@@ -126,5 +136,37 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setFile($file)
     {
         return $this->setData(self::FILE, $file);
+    }
+
+    /**
+     * Set media gallery content
+     *
+     * @param $content \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface
+     * @return $this
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return ProductAttributeMediaGalleryEntryExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

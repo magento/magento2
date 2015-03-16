@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\ConsoleController;
@@ -386,12 +388,12 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $moduleListMock
             ->expects($this->once())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Core', 'Magento_Store']));
+            ->will($this->returnValue(['Magento_Theme', 'Magento_Store']));
         $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $fullModuleListMock
             ->expects($this->once())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Core', 'Magento_Store', 'Magento_Directory']));
+            ->will($this->returnValue(['Magento_Theme', 'Magento_Store', 'Magento_Directory']));
         $returnValueMap = [
             [
                 'Magento\Framework\Module\ModuleList',

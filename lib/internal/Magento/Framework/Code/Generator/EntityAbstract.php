@@ -121,13 +121,24 @@ abstract class EntityAbstract
     }
 
     /**
-     * Get source class name
+     * Get full source class name, with namespace
      *
      * @return string
      */
-    protected function _getSourceClassName()
+    public function getSourceClassName()
     {
         return $this->_sourceClassName;
+    }
+
+    /**
+     * Get source class without namespace.
+     *
+     * @return string
+     */
+    public function getSourceClassNameWithoutNamespace()
+    {
+        $parts = explode('\\', ltrim($this->getSourceClassName(), '\\'));
+        return end($parts);
     }
 
     /**
@@ -234,7 +245,7 @@ abstract class EntityAbstract
      */
     protected function _validateData()
     {
-        $sourceClassName = $this->_getSourceClassName();
+        $sourceClassName = $this->getSourceClassName();
         $resultClassName = $this->_getResultClassName();
         $resultFileName = $this->_ioObject->getResultFileName($resultClassName);
 
@@ -292,7 +303,7 @@ abstract class EntityAbstract
      */
     protected function _getClassDocBlock()
     {
-        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see ' . $this->_getSourceClassName();
+        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see ' . $this->getSourceClassName();
         return ['shortDescription' => $description];
     }
 
