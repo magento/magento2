@@ -155,7 +155,7 @@ class Price extends AbstractFilter
     public function getCurrencyRate()
     {
         $rate = $this->_getData('currency_rate');
-        if (is_null($rate)) {
+        if ($rate === null) {
             $rate = $this->_storeManager->getStore($this->getStoreId())
                 ->getCurrentCurrencyRate();
         }

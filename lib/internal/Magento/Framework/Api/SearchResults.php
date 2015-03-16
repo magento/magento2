@@ -22,7 +22,7 @@ class SearchResults extends AbstractSimpleObject
      */
     public function getItems()
     {
-        return is_null($this->_get(self::KEY_ITEMS)) ? [] : $this->_get(self::KEY_ITEMS);
+        return $this->_get(self::KEY_ITEMS) === null ? [] : $this->_get(self::KEY_ITEMS);
     }
 
     /**

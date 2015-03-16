@@ -157,6 +157,7 @@ return [
     ['_parseDescription', 'Magento\Sales\Model\Order\Pdf\Items\AbstractItems'],
     ['_parsePackageTheme', 'Magento\Widget\Model\Widget\Instance'],
     ['_parseXmlTrackingResponse', 'Magento\Fedex\Model\Carrier'],
+    ['_parseXml', 'Magento\Fedex\Model\Carrier'],
     ['_prepareCondition', 'Magento\CatalogSearch\Model\Advanced'],
     ['_prepareConfigurableProductData', 'Magento\CatalogImportExport\Model\Export\Product'],
     ['_prepareConfigurableProductPrice', 'Magento\CatalogImportExport\Model\Export\Product'],
@@ -2105,6 +2106,7 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getGlobalIcon', '\Magento\Backend\Block\Widget'],
     ['getSuccessRedirect', 'Magento\Customer\Controller\Account\CreatePost'],
     [
         'loginPostRedirect',

@@ -27,6 +27,8 @@ class TwoPluginTest extends AbstractPlugin
                 ]
             ]
         );
+
+        parent::setUp();
     }
 
     public function testPluginBeforeWins()

@@ -320,7 +320,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         parent::save($product);
 
         $data = $product->getGroupedLinkData();
-        if (!is_null($data)) {
+        if ($data !== null) {
             $this->productLinks->saveGroupedLinks($product, $data);
         }
         return $this;

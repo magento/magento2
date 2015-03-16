@@ -351,7 +351,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _loadDirectoryCountries()
     {
-        if (!is_null($this->_importIso2Countries) && !is_null($this->_importIso3Countries)) {
+        if ($this->_importIso2Countries !== null && $this->_importIso3Countries !== null) {
             return $this;
         }
 
@@ -375,7 +375,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _loadDirectoryRegions()
     {
-        if (!is_null($this->_importRegions)) {
+        if ($this->_importRegions !== null) {
             return $this;
         }
 

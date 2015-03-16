@@ -77,7 +77,7 @@ class Observer
      */
     protected function _event($eventTypeId, $objectId, $subjectId = null, $subtype = 0)
     {
-        if (is_null($subjectId)) {
+        if ($subjectId === null) {
             if ($this->_customerSession->isLoggedIn()) {
                 $subjectId = $this->_customerSession->getCustomerId();
             } else {

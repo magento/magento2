@@ -63,7 +63,7 @@ class Subscriber extends \Magento\Backend\Block\Template
      */
     public function getQueueCollection()
     {
-        if (is_null($this->_queueCollection)) {
+        if ($this->_queueCollection === null) {
             /** @var $this->_queueCollection \Magento\Newsletter\Model\Resource\Queue\Collection */
             $this->_queueCollection = $this
                 ->_collectionFactory

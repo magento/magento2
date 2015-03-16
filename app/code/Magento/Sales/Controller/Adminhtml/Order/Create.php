@@ -185,9 +185,8 @@ class Create extends \Magento\Backend\App\Action
         if (!$this->_getOrderCreateModel()->getQuote()->isVirtual()) {
             $syncFlag = $this->getRequest()->getPost('shipping_as_billing');
             $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()->getShippingMethod();
-            if (is_null(
-                $syncFlag
-            ) && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
+            if ($syncFlag === null
+            && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
                 $this->_getOrderCreateModel()->setShippingAsBilling(1);
             } else {

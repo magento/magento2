@@ -512,7 +512,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getStatus()
     {
-        if (is_null($this->_getData(self::STATUS))) {
+        if ($this->_getData(self::STATUS) === null) {
             $this->setData(self::STATUS, \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         }
         return $this->_getData(self::STATUS);
@@ -587,7 +587,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getCategory()
     {
         $category = $this->getData('category');
-        if (is_null($category) && $this->getCategoryId()) {
+        if ($category === null && $this->getCategoryId()) {
             $category = $this->categoryRepository->get($this->getCategoryId());
             $this->setCategory($category);
         }
