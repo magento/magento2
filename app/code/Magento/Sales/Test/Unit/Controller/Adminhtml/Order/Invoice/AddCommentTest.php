@@ -291,7 +291,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     /**
      * Test execute exception
      *
-     *@return void
+     * @return void
      */
     public function testExecuteException()
     {
