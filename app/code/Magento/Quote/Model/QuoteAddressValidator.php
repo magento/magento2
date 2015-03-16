@@ -52,7 +52,7 @@ class QuoteAddressValidator
             $customer->load($addressData->getCustomerId());
             if (!$customer->getId()) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
-                    'Invalid customer id ' . $addressData->getCustomerId()
+                    __('Invalid customer id %1', $addressData->getCustomerId())
                 );
             }
         }
@@ -63,7 +63,7 @@ class QuoteAddressValidator
             $address->load($addressData->getId());
             if (!$address->getId()) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
-                    'Invalid address id ' . $addressData->getId()
+                    __('Invalid address id %1', $addressData->getId())
                 );
             }
 
@@ -71,7 +71,7 @@ class QuoteAddressValidator
             if ($addressData->getCustomerId()) {
                 if ($address->getCustomerId() != $addressData->getCustomerId()) {
                     throw new \Magento\Framework\Exception\InputException(
-                        'Address with id ' . $addressData->getId() . ' belongs to another customer'
+                        __('Address with id %1 belongs to another customer', $addressData->getId())
                     );
                 }
             }

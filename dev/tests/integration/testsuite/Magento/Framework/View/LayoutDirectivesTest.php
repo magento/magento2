@@ -224,7 +224,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \OutOfBoundsException
      */
     public function testRemoveBroken()
     {

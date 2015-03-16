@@ -27,6 +27,9 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
     /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $initializationHelper;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->productBuilder = $this->getMock(
@@ -101,8 +104,9 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
     }
 
     /**
-     * @dataProvider exceptionTypeDataProvider
      * @param string $exceptionType
+     * @return void
+     * @dataProvider exceptionTypeDataProvider
      */
     public function testExecuteSetsProductDataToSessionAndRedirectsToNewActionOnError($exceptionType)
     {
@@ -111,7 +115,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         $this->request->expects($this->any())->method('getPostValue')->willReturn($productData);
         $this->initializationHelper->expects($this->any())->method('initialize')
             ->willReturn($this->product);
-        $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType('message'));
+        $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType(__('message')));
 
         $this->session->expects($this->once())->method('setProductData')->with($productData);
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');

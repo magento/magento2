@@ -127,7 +127,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         if (!isset($attributes['media_gallery'])
             || !($attributes['media_gallery'] instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute)
         ) {
-            throw new StateException('Requested product does not support images.');
+            throw new StateException(__('Requested product does not support images.'));
         }
         /** @var $galleryAttribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
         $galleryAttribute = $attributes['media_gallery'];
@@ -158,14 +158,14 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         try {
             $this->storeManager->getStore($product->getStoreId());
         } catch (\Exception $exception) {
-            throw new NoSuchEntityException('There is no store with provided ID.');
+            throw new NoSuchEntityException(__('There is no store with provided ID.'));
         }
         /** @var $entry ProductAttributeMediaGalleryEntryInterface */
         $entry = $product->getCustomAttribute('media_gallery')->getValue();
         $entryContent = $entry->getContent();
 
         if (!$this->contentValidator->isValid($entryContent)) {
-            throw new InputException('The image content is not valid.');
+            throw new InputException(__('The image content is not valid.'));
         }
         $product = $this->productRepository->get($product->getSku());
 
@@ -201,7 +201,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new StateException('Cannot save product.');
+            throw new StateException(__('Cannot save product.'));
         }
         // Remove all temporary files
         $mediaDirectory->delete($relativeFilePath);
@@ -220,14 +220,14 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         try {
             $this->storeManager->getStore($storeId);
         } catch (\Exception $exception) {
-            throw new NoSuchEntityException('There is no store with provided ID.');
+            throw new NoSuchEntityException(__('There is no store with provided ID.'));
         }
         $product = $this->productRepository->get($sku);
         /** @var $productMediaGallery \Magento\Catalog\Model\Product\Attribute\Backend\Media */
         $productMediaGallery = $this->getGalleryAttributeBackend($product);
         $filePath = $this->entryResolver->getEntryFilePathById($product, $entry->getId());
         if (is_null($filePath)) {
-            throw new NoSuchEntityException('There is no image with provided ID.');
+            throw new NoSuchEntityException(__('There is no image with provided ID.'));
         }
 
         $productMediaGallery->updateImage(
@@ -246,7 +246,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new StateException('Cannot save product.');
+            throw new StateException(__('Cannot save product.'));
         }
         return true;
     }
@@ -261,7 +261,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $productMediaGallery = $this->getGalleryAttributeBackend($product);
         $filePath = $this->entryResolver->getEntryFilePathById($product, $entryId);
         if (is_null($filePath)) {
-            throw new NoSuchEntityException('There is no image with provided ID.');
+            throw new NoSuchEntityException(__('There is no image with provided ID.'));
         }
 
         $productMediaGallery->removeImage($product, $filePath);
@@ -277,7 +277,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         try {
             $product = $this->productRepository->get($sku);
         } catch (\Exception $exception) {
-            throw new NoSuchEntityException("Such product doesn't exist");
+            throw new NoSuchEntityException(__('Such product doesn\'t exist'));
         }
 
         $output = null;
@@ -296,7 +296,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         }
 
         if (is_null($output)) {
-            throw new NoSuchEntityException("Such image doesn't exist");
+            throw new NoSuchEntityException(__('Such image doesn\'t exist'));
         }
         return $output;
     }

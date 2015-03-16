@@ -17,6 +17,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_factory;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
@@ -28,6 +33,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test create
+     *
+     * @return void
+     */
     public function testCreate()
     {
         $className = 'Magento\Framework\Filter\Template';
@@ -47,6 +57,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($filterMock, $this->_factory->create($className));
     }
 
+    /**
+     * Test create with arguments
+     *
+     * @return void
+     */
     public function testCreateWithArguments()
     {
         $className = 'Magento\Framework\Filter\Template';
@@ -68,8 +83,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test wrong type exception
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage WrongClass doesn't extends \Magento\Framework\Filter\Template
+     * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Filter\Template
+     * @return void
      */
     public function testWrongTypeException()
     {
