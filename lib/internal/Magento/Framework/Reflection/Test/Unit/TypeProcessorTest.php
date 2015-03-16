@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Zend\Code\Reflection\ClassReflection;

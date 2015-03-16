@@ -490,18 +490,18 @@ class Files
     /**
      * Returns list of Javascript files in Magento
      *
+     * @param string $area
+     * @param string $themePath
+     * @param string $namespace
+     * @param string $module
      * @return array
      */
-    public function getJsFiles()
+    public function getJsFiles($area = '*', $themePath = '*/*', $namespace = '*', $module = '*')
     {
-        $key = __METHOD__ . $this->_path;
+        $key = $area . $themePath . $namespace . $module . __METHOD__ . $this->_path;
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $namespace = '*';
-        $module = '*';
-        $area = '*';
-        $themePath = '*/*';
         $files = self::getFiles(
             [
                 "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}/web",

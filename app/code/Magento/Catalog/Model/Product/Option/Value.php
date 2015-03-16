@@ -8,10 +8,9 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Catalog product option select type model
@@ -23,7 +22,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
+class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {
     /**
      * Option type percent
@@ -66,8 +65,6 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -76,8 +73,6 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -87,8 +82,6 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

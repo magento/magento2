@@ -11,19 +11,19 @@ interface ProductCustomOptionRepositoryInterface
     /**
      * Get the list of custom options for a specific product
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
      */
-    public function getList($productSku);
+    public function getList($sku);
 
     /**
      * Get custom option for a specific product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $optionId
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface
      */
-    public function get($productSku, $optionId);
+    public function get($sku, $optionId);
 
     /**
      * Delete custom option from product
@@ -42,9 +42,9 @@ interface ProductCustomOptionRepositoryInterface
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option);
 
     /**
-     * @param string $productSku
+     * @param string $sku
      * @param int $optionId
      * @return bool
      */
-    public function deleteByIdentifier($productSku, $optionId);
+    public function deleteByIdentifier($sku, $optionId);
 }

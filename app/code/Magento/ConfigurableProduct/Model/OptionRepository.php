@@ -84,15 +84,15 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * {@inheritdoc}
      */
-    public function get($productSku, $optionId)
+    public function get($sku, $id)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         $collection = $this->getConfigurableAttributesCollection($product);
-        $collection->addFieldToFilter($collection->getResource()->getIdFieldName(), $optionId);
+        $collection->addFieldToFilter($collection->getResource()->getIdFieldName(), $id);
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
         $configurableAttribute = $collection->getFirstItem();
         if (!$configurableAttribute->getId()) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $optionId));
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
         }
         $prices = $configurableAttribute->getPrices();
         if (is_array($prices)) {
@@ -112,10 +112,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku)
+    public function getList($sku)
     {
         $options = [];
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         foreach ($this->getConfigurableAttributesCollection($product) as $option) {
             $values = [];
             $prices = $option->getPrices();
@@ -153,12 +153,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * {@inheritdoc}
      */
-    public function deleteById($productSku, $optionId)
+    public function deleteById($sku, $id)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         $attributeCollection = $this->configurableType->getConfigurableAttributeCollection($product);
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
-        $option = $attributeCollection->getItemById($optionId);
+        $option = $attributeCollection->getItemById($id);
         if ($option === null) {
             throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
@@ -169,13 +169,13 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function save($productSku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
+    public function save($sku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
     {
         /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
         $configurableAttribute = $this->configurableAttributeFactory->create();
         if ($option->getId()) {
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->getProduct($productSku);
+            $product = $this->getProduct($sku);
             $configurableAttribute->load($option->getId());
             if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
                 throw new NoSuchEntityException(
@@ -203,7 +203,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         } else {
             $this->validateNewOptionData($option);
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->productRepository->get($productSku);
+            $product = $this->productRepository->get($sku);
             $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
             if (!in_array($product->getTypeId(), $allowedTypes)) {
                 throw new \InvalidArgumentException('Incompatible product type');
@@ -244,16 +244,16 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     /**
      * Retrieve product instance by sku
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Model\Product
      * @throws InputException
      */
-    private function getProduct($productSku)
+    private function getProduct($sku)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         if (\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE !== $product->getTypeId()) {
             throw new InputException(
-                __('Only implemented for configurable product: %1', $productSku)
+                __('Only implemented for configurable product: %1', $sku)
             );
         }
         return $product;

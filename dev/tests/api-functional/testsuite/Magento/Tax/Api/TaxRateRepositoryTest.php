@@ -21,7 +21,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
 {
     const SERVICE_NAME = "taxTaxRateRepositoryV1";
     const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/taxRate";
+    const RESOURCE_PATH = "/V1/taxRates";
 
     /** @var \Magento\Tax\Model\Calculation\Rate[] */
     private $fixtureTaxRates;

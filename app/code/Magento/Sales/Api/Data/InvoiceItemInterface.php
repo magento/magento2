@@ -471,4 +471,19 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setBaseHiddenTaxAmount($amount);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes);
 }

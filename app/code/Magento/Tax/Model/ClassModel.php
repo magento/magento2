@@ -37,7 +37,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -47,7 +47,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\TaxClass\Factory $classFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -57,7 +57,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -178,4 +178,25 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         return $this->setData(self::KEY_TYPE, $classType);
     }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxClassExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

@@ -77,6 +77,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
             $parentCategory = $this->get($parentId);
+            $existingData['include_in_menu'] =
+                isset($existingData['include_in_menu']) ? (bool)$existingData['include_in_menu'] : false;
             /** @var  $category Category */
             $category->setData($existingData);
             $category->setPath($parentCategory->getPath());

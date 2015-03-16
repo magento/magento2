@@ -1,9 +1,9 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Media;
 
 /**
@@ -67,5 +67,27 @@ class GalleryEntryContent extends \Magento\Framework\Model\AbstractExtensibleMod
     public function setName($name)
     {
         return $this->setData(self::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

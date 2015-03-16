@@ -70,10 +70,10 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     /**
      * {@inheritdoc}
      */
-    public function deleteByIds($categoryId, $productSku)
+    public function deleteByIds($categoryId, $sku)
     {
         $category = $this->categoryRepository->get($categoryId);
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $productPositions = $category->getProductsPosition();
 
         $productID = $product->getId();

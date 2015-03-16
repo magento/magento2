@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Test\Unit\Design\Fallback;
 
 use \Magento\Framework\View\Design\Fallback\RulePool;
@@ -229,12 +232,12 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
             ],
             'template, non-modular-magento-core' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
-                ['namespace' => 'Magento', 'module' => 'Core'],
+                ['namespace' => 'Magento', 'module' => 'Theme'],
                 [
-                    DirectoryList::THEMES . '/area/current_theme_path/Magento_Core/templates',
-                    DirectoryList::THEMES . '/area/parent_theme_path/Magento_Core/templates',
-                    DirectoryList::MODULES . '/Magento/Core/view/area/templates',
-                    DirectoryList::MODULES . '/Magento/Core/view/base/templates',
+                    DirectoryList::THEMES . '/area/current_theme_path/Magento_Theme/templates',
+                    DirectoryList::THEMES . '/area/parent_theme_path/Magento_Theme/templates',
+                    DirectoryList::MODULES . '/Magento/Theme/view/area/templates',
+                    DirectoryList::MODULES . '/Magento/Theme/view/base/templates',
                 ],
             ],
 

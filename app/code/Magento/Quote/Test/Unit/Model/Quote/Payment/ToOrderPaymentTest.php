@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Payment;
 
 use Magento\Payment\Model\Method\Substitution;
@@ -79,7 +81,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
         $data = ['some_id' => 1];
         $paymentMethodTitle = 'TestTitle';
         $additionalInfo = ['token' => 'TOKEN-123'];
-        
+
         $this->paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInterface);
         $methodInterface->expects($this->once())->method('getTitle')->willReturn($paymentMethodTitle);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(

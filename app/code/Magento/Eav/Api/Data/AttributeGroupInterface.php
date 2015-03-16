@@ -1,12 +1,13 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Api\Data;
 
-interface AttributeGroupInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface AttributeGroupInterface extends ExtensibleDataInterface
 {
     const GROUP_ID = 'attribute_group_id';
 
@@ -58,4 +59,21 @@ interface AttributeGroupInterface
      * @return $this
      */
     public function setAttributeSetId($attributeSetId);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Eav\Api\Data\AttributeGroupExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Eav\Api\Data\AttributeGroupExtensionInterface $extensionAttributes
+    );
 }

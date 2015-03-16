@@ -92,24 +92,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetFileNoOriginalFile()
-    {
-        $this->viewFileResolution->expects($this->once())
-            ->method('getFile')
-            ->with('frontend', $this->theme, 'en_US', 'some/file.ext', 'Magento_Module')
-            ->will($this->returnValue(false));
-        $this->assertFalse($this->object->getFile($this->getAsset()));
-    }
-
-    public function testGetFileNoOriginalFileBasic()
-    {
-        $this->staticDirRead->expects($this->once())
-            ->method('getAbsolutePath')
-            ->with('some/file.ext')
-            ->will($this->returnValue(false));
-        $this->assertFalse($this->object->getFile($this->getAsset(false)));
-    }
-
     public function testGetFileCached()
     {
         $root = '/root/some/file.ext';

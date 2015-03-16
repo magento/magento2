@@ -15,7 +15,7 @@
         <arguments>
             <argument name="layoutFactory" xsi:type="object">customLayoutFactory</argument>
         </arguments>
-        <plugin name="first" type="Magento\Core\Model\Action\Plugin" />
+        <plugin name="first" type="Magento\Store\Model\Action\Plugin" />
     </type>
     <virtualType name="customStoreManagerProxy" type="Magento\Store\Model\StoreManager\Proxy" />
     <virtualType name="customLayoutFactory" type="Magento\Framework\View\LayoutFactory" />

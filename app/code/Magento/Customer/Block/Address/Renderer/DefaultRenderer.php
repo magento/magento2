@@ -47,7 +47,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param ElementFactory $elementFactory
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory ,
+     * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Customer\Api\AddressMetadataInterface $metadataService
      * @param Mapper $addressMapper
      * @param array $data

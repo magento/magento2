@@ -96,9 +96,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function get($productSku, $optionId)
+    public function get($sku, $optionId)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
 
         /** @var \Magento\Bundle\Model\Option $option */
         $option = $this->type->getOptionsCollection($product)->getItemById($optionId);
@@ -126,9 +126,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku)
+    public function getList($sku)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         return $this->productOptionList->getItems($product);
     }
 
@@ -151,9 +151,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function deleteById($productSku, $optionId)
+    public function deleteById($sku, $optionId)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         $optionCollection = $this->type->getOptionsCollection($product);
         $optionCollection->setIdFilter($optionId);
         return $this->delete($optionCollection->getFirstItem());
@@ -216,13 +216,13 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\InputException
      */
-    private function getProduct($productSku)
+    private function getProduct($sku)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(__('Only implemented for bundle product'));
         }

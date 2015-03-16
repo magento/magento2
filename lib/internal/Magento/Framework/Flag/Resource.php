@@ -17,6 +17,6 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_flag', 'flag_id');
+        $this->_init('flag', 'flag_id');
     }
 }

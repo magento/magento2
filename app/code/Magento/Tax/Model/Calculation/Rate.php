@@ -51,7 +51,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param Rate\TitleFactory $taxTitleFactory
@@ -64,7 +64,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
@@ -79,7 +79,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -494,4 +494,25 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
         return $this->setData(self::KEY_TITLES, $titles);
     }
     // @codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxRateExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

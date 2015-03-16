@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
@@ -70,7 +71,7 @@ class CanonicalUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->urlRewriteFactory->expects($this->any())->method('create')->will($this->returnValue($this->urlRewrite));
         $this->assertEquals(
-            [$this->urlRewrite],
+            ['category.html_store_id' => $this->urlRewrite],
             $this->canonicalUrlRewriteGenerator->generate($storeId, $this->category)
         );
     }

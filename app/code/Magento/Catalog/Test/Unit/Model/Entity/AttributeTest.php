@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model\Entity;
 
 use Magento\Catalog\Model\Entity\Attribute;
@@ -114,6 +116,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private $dataObjectHelperMock;
 
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesFactory;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -123,6 +130,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
             ->getMock();
         $this->metadataServiceMock = $this->getMockBuilder('Magento\Framework\Api\MetadataServiceInterface')
+            ->getMock();
+        $this->extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()
@@ -181,7 +191,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->attribute = new Attribute(
             $this->contextMock,
             $this->registryMock,
-            $this->metadataServiceMock,
+            $this->extensionAttributesFactory,
             $this->attributeValueFactoryMock,
             $this->configMock,
             $this->typeFactoryMock,

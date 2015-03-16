@@ -44,18 +44,18 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku)
+    public function getList($sku)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         return $product->getOptions();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($productSku, $optionId)
+    public function get($sku, $optionId)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $option = $product->getOptionById($optionId);
         if (is_null($option)) {
             throw NoSuchEntityException::singleField('optionId', $optionId);
@@ -77,8 +77,8 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $productSku = $option->getProductSku();
-        $product = $this->productRepository->get($productSku, true);
+        $sku = $option->getProductSku();
+        $product = $this->productRepository->get($sku, true);
         $optionData = $this->converter->toArray($option);
         if ($option->getOptionId()) {
             if (!$product->getOptionById($option->getOptionId())) {
@@ -100,7 +100,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             throw new CouldNotSaveException(__('Could not save product option'));
         }
 
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         if (!$option->getOptionId()) {
             $currentOptions = $product->getOptions();
 
@@ -112,16 +112,16 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         } else {
             $newID = $option->getOptionId();
         }
-        $option = $this->get($productSku, $newID);
+        $option = $this->get($sku, $newID);
         return $option;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function deleteByIdentifier($productSku, $optionId)
+    public function deleteByIdentifier($sku, $optionId)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $options = $product->getOptions();
         $option = $product->getOptionById($optionId);
         if (is_null($option)) {
