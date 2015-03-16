@@ -34,17 +34,17 @@ class Actions implements RowInterface
     /**
      * Get data
      *
-     * @param array $dataRow
-     * @param array $data
+     * @param array $rowData
+     * @param array $rowActionConfig
      * @return mixed
      */
-    public function getData(array $dataRow, array $data = [])
+    public function getData(array $rowData, array $rowActionConfig = [])
     {
         return [
             'edit' => [
                 'href' => $this->urlBuilder->getUrl(
-                    isset($data['url_path']) ? $data['url_path'] : static::URL_PATH,
-                    ['block_id' => $dataRow['block_id']]
+                    isset($rowActionConfig['url_path']) ? $rowActionConfig['url_path'] : static::URL_PATH,
+                    ['block_id' => $rowData['block_id']]
                 ),
                 'label' => __('Edit'),
             ]
