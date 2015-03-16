@@ -28,8 +28,6 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Initialize testable object
-     *
-     * @return void
      */
     public function setUp()
     {
@@ -54,7 +52,6 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     /**
      * Covered method getPathToMinified
      * @test
-     * @return void
      */
     public function testGetPathToMinified()
     {
@@ -78,7 +75,6 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     /**
      * Covered method minify and test regular expressions
      * @test
-     * @return void
      */
     public function testMinify()
     {
@@ -161,7 +157,6 @@ TEXT;
     /**
      * Contain method modify and getPathToModified
      * @test
-     * @return void
      */
     public function testGetMinified()
     {

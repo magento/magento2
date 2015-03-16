@@ -81,9 +81,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
-    /**
-     * @return void
-     */
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -154,9 +151,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testEditPostActionWithInvalidFormKey()
     {
         $this->resultRedirectFactory
@@ -177,7 +171,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testEditPostActionWithAuthenticationExceptionWhenTryingChangePassword()
@@ -303,7 +296,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testEditPostActionWithoutErrors()
