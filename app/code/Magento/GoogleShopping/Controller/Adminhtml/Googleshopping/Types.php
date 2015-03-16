@@ -59,7 +59,7 @@ class Types extends \Magento\Backend\App\Action
             $this->_objectManager->create('Magento\GoogleShopping\Model\Type')
         );
         $typeId = $this->getRequest()->getParam('id');
-        if (!is_null($typeId)) {
+        if ($typeId !== null) {
             $this->_coreRegistry->registry('current_item_type')->load($typeId);
         }
         return $this;

@@ -100,7 +100,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         /** @var \Magento\Customer\Model\Group $group */
         $group = $this->groupFactory->create();
         $group->load($groupId);
-        if (is_null($group->getId())) {
+        if ($group->getId() === null) {
             throw NoSuchEntityException::singleField('groupId', $groupId);
         }
         return $groupId == self::NOT_LOGGED_IN_ID || $group->usesAsDefault();
@@ -111,7 +111,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
      */
     public function getDefaultGroup($storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getCode();
         }
         try {

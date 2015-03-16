@@ -164,7 +164,7 @@ class Handler
                     $result[$key] = $value;
                 }
             }
-        } elseif (is_scalar($data) || is_null($data)) {
+        } elseif (is_scalar($data) || $data === null) {
             $result = $data;
         } else {
             throw new \InvalidArgumentException("Service returned result in invalid format.");

@@ -247,52 +247,23 @@ abstract class EntityAbstract
     {
         $sourceClassName = $this->getSourceClassName();
         $resultClassName = $this->_getResultClassName();
-        $resultFileName = $this->_ioObject->getResultFileName($resultClassName);
+        $resultDir = $this->_ioObject->getResultFileDirectory($resultClassName);
 
-        // @todo the controller handling logic below must be removed when controllers become PSR-0 compliant
-        $controllerSuffix = 'Controller';
-        $pathParts = explode('_', $sourceClassName);
-        if (strrpos(
-            $sourceClassName,
-            $controllerSuffix
-        ) === strlen(
-            $sourceClassName
-        ) - strlen(
-            $controllerSuffix
-        ) && isset(
-            $pathParts[2]
-        ) && !in_array(
-            $pathParts[2],
-            ['Block', 'Helper', 'Model']
-        )
-        ) {
-            $controllerPath = preg_replace(
-                '/^([0-9A-Za-z]*)_([0-9A-Za-z]*)/',
-                '\\1_\\2_controllers',
-                $sourceClassName
-            );
-            $filePath = stream_resolve_include_path(str_replace('_', '/', $controllerPath) . '.php');
-            $isSourceClassValid = !empty($filePath);
-        } else {
-            $isSourceClassValid = $this->definedClasses->classLoadable($sourceClassName);
-        }
-
-        if (!$isSourceClassValid) {
+        if (!$this->definedClasses->classLoadable($sourceClassName)) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
         } elseif ($this->definedClasses->classLoadable($resultClassName)) {
             $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
-        } elseif (!$this->_ioObject->makeGenerationDirectory()) {
-            $this->_addError('Can\'t create directory ' . $this->_ioObject->getGenerationDirectory() . '.');
-            return false;
-        } elseif (!$this->_ioObject->makeResultFileDirectory($resultClassName)) {
-            $this->_addError(
-                'Can\'t create directory ' . $this->_ioObject->getResultFileDirectory($resultClassName) . '.'
-            );
-            return false;
-        } elseif ($this->_ioObject->fileExists($resultFileName)) {
-            $this->_addError('Result file ' . $resultFileName . ' already exists.');
+        } elseif (
+            /**
+             * If makeResultFileDirectory only fails because the file is already created,
+             * a competing process has generated the file, no exception should be thrown.
+             */
+            !$this->_ioObject->makeResultFileDirectory($resultClassName)
+            && !$this->_ioObject->fileExists($resultDir)
+        ) {
+            $this->_addError('Can\'t create directory ' . $resultDir . '.');
             return false;
         }
         return true;

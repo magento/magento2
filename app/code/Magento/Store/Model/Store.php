@@ -452,7 +452,7 @@ class Store extends AbstractModel implements
      */
     public function load($key, $field = null)
     {
-        if (!is_numeric($key) && is_null($field)) {
+        if (!is_numeric($key) && $field === null) {
             $this->_getResource()->load($this, $key, 'code');
             return $this;
         }
@@ -502,7 +502,7 @@ class Store extends AbstractModel implements
      */
     public function getWebsite()
     {
-        if (is_null($this->getWebsiteId())) {
+        if ($this->getWebsiteId() === null) {
             return false;
         }
         return $this->_storeManager->getWebsite($this->getWebsiteId());
@@ -538,9 +538,9 @@ class Store extends AbstractModel implements
      */
     public function getBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure = null)
     {
-        $cacheKey = $type . '/' . (is_null($secure) ? 'null' : ($secure ? 'true' : 'false'));
+        $cacheKey = $type . '/' . ($secure === null ? 'null' : ($secure ? 'true' : 'false'));
         if (!isset($this->_baseUrlCache[$cacheKey])) {
-            $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool)$secure;
+            $secure = $secure === null ? $this->isCurrentlySecure() : (bool)$secure;
             switch ($type) {
                 case \Magento\Framework\UrlInterface::URL_TYPE_WEB:
                     $path = $secure
@@ -861,7 +861,7 @@ class Store extends AbstractModel implements
     {
         // try to get currently set code among allowed
         $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY);
-        $code = is_null($code) ? $this->_getSession()->getCurrencyCode() : $code;
+        $code = $code === null ? $this->_getSession()->getCurrencyCode() : $code;
         if (empty($code)) {
             $code = $this->getDefaultCurrencyCode();
         }
@@ -934,7 +934,7 @@ class Store extends AbstractModel implements
     {
         $currency = $this->getData('current_currency');
 
-        if (is_null($currency)) {
+        if ($currency === null) {
             $currency = $this->currencyFactory->create()->load($this->getCurrentCurrencyCode());
             $baseCurrency = $this->getBaseCurrency();
 

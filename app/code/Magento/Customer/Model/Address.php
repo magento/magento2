@@ -141,7 +141,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
         }
         $customAttributes = $address->getCustomAttributes();
-        if (!is_null($customAttributes)) {
+        if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
                 $this->setData($attribute->getAttributeCode(), $attribute->getValue());
             }
@@ -226,7 +226,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getAttributes()
     {
         $attributes = $this->getData('attributes');
-        if (is_null($attributes)) {
+        if ($attributes === null) {
             $attributes = $this->_getResource()->loadAllAttributes($this)->getSortedAttributes();
             $this->setData('attributes', $attributes);
         }

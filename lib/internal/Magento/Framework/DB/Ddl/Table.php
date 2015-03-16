@@ -224,7 +224,7 @@ class Table
      */
     public function getName()
     {
-        if (is_null($this->_tableName)) {
+        if ($this->_tableName === null) {
             throw new \Zend_Db_Exception('Table name is not defined');
         }
         return $this->_tableName;

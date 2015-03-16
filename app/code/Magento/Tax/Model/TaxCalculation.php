@@ -136,7 +136,7 @@ class TaxCalculation implements TaxCalculationInterface
         $storeId = null,
         $round = true
     ) {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getStoreId();
         }
 
@@ -236,7 +236,7 @@ class TaxCalculation implements TaxCalculationInterface
         $storeId = null,
         $isDefault = false
     ) {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getStoreId();
         }
         if (!$isDefault) {
@@ -338,7 +338,7 @@ class TaxCalculation implements TaxCalculationInterface
             + $item->getDiscountTaxCompensationAmount();
 
         $itemAppliedTaxes = $item->getAppliedTaxes();
-        if (is_null($itemAppliedTaxes)) {
+        if ($itemAppliedTaxes === null) {
             return $taxDetailsData;
         }
         $appliedTaxes = $taxDetailsData[TaxDetailsInterface::KEY_APPLIED_TAXES];

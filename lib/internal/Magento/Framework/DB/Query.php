@@ -138,7 +138,7 @@ class Query implements QueryInterface
      */
     public function getSize()
     {
-        if (is_null($this->totalRecords)) {
+        if ($this->totalRecords === null) {
             $sql = $this->getSelectCountSql();
             $this->totalRecords = $this->getConnection()->fetchOne($sql, $this->bindParams);
         }

@@ -127,7 +127,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         } else {
             throw new \Exception(__('Please correct the tab configuration and try again.'));
         }
-        if (is_null($this->_tabs[$tabId]->getUrl())) {
+        if ($this->_tabs[$tabId]->getUrl() === null) {
             $this->_tabs[$tabId]->setUrl('#');
         }
 
@@ -138,7 +138,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         $this->_tabs[$tabId]->setId($tabId);
         $this->_tabs[$tabId]->setTabId($tabId);
 
-        if (is_null($this->_activeTab)) {
+        if ($this->_activeTab === null) {
             $this->_activeTab = $tabId;
         }
         if (true === $this->_tabs[$tabId]->getActive()) {
@@ -197,7 +197,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         )
         ) {
             $this->_activeTab = $tabId;
-            if (!is_null($this->_activeTab) && $tabId !== $this->_activeTab) {
+            if ($this->_activeTab !== null && $tabId !== $this->_activeTab) {
                 foreach ($this->_tabs as $id => $tab) {
                     $tab->setActive($id === $tabId);
                 }
@@ -326,7 +326,7 @@ class Tabs extends \Magento\Backend\Block\Widget
             }
             return '#';
         }
-        if (!is_null($tab->getUrl())) {
+        if ($tab->getUrl() !== null) {
             return $tab->getUrl();
         }
         return '#';

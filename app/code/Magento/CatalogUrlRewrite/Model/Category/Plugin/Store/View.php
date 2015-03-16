@@ -94,7 +94,7 @@ class View
     protected function generateProductUrls($websiteId, $originWebsiteId, $storeId)
     {
         $urls = [];
-        $websiteIds = $websiteId != $originWebsiteId && !is_null($originWebsiteId)
+        $websiteIds = $websiteId != $originWebsiteId && $originWebsiteId !== null
             ? [$websiteId, $originWebsiteId]
             : [$websiteId];
         $collection = $this->productFactory->create()
