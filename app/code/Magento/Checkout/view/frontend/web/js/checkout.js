@@ -13,15 +13,11 @@ define(
         'Magento_Customer/js/model/customer'
     ],
     function( url, authentication, customer) {
-        return function (element, options) {
-            return {
-                launch: function (root, baseUrl, formKey, isLoggedIn) {
-                    authentication.setFormKey(formKey);
-                    url.setBaseUrl(baseUrl);
-                    customer.setIsLoggedIn(isLoggedIn);
-                    return first.render(root);
-                }
-            };
+        return function (options, root) {
+            authentication.setFormKey(options.formKey);
+            url.setBaseUrl(options.baseUrl);
+            customer.setIsLoggedIn(options.isLoggedIn);
+            return first.render(root);
         };
     }
 );
