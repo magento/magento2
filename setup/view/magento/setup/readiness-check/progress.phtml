@@ -75,7 +75,7 @@
                     </a>
                 </p>
                 <p ng-show="version.expanded">
-                    Donwload and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
+                    Download and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.
                 </p>
                 <p ng-show="version.expanded">If you need more help please call your hosting provider.</p>
             </div>
@@ -86,15 +86,15 @@
 
 </div>
 
-<div id="php-rawpost" class="rediness-check-item" ng-show="rawpost.visible">
+<div id="php-settings" class="rediness-check-item" ng-show="settings.visible">
 
-    <h3 class="readiness-check-title" ng-hide="version.processed">
+    <h3 class="readiness-check-title" ng-hide="settings.processed">
         Checking PHP Settings...
     </h3>
 
-    <div ng-show="rawpost.processed" ng-switch="rawpost.responseType">
+    <div ng-show="settings.processed" ng-switch="settings.responseType">
 
-        <div ng-switch-when="success" ng-init="updateOnSuccess(rawpost)">
+        <div ng-switch-when="success" ng-init="updateOnSuccess(settings)">
 
             <span class="readiness-check-icon icon-success-round"></span>
 
@@ -107,29 +107,40 @@
 
         </div>
 
-        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(rawpost)">
-
-            <div class="rediness-check-side">
-                <p class="side-title">Need Help?</p>
-                <a href="http://php.net/manual/en/ini.core.php#ini.always-populate-raw-post-data" target="_blank">PHP Documentation</a>
-            </div>
+        <div class="readiness-check-item" ng-switch-default ng-init="updateOnError(settings)">
 
             <span class="readiness-check-icon icon-failed-round"></span>
+            <h3 class="readiness-check-title">PHP Settings Check</h3>
 
-            <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
-                <p>
-                    Your PHP Version is {{rawpost.data.version}}, but always_populate_raw_post_data = {{rawpost.data.ini}}.
-                    <a href="#php-rawpost" ng-click="updateOnExpand(rawpost)">
-                        <span ng-hide="rawpost.expanded">Show detail</span>
-                        <span ng-show="rawpost.expanded">Hide detail</span>
-                    </a>
-                </p>
-                <p ng-show="rawpost.expanded">
-                    $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
-                    Please open your php.ini file and set always_populate_raw_post_data to -1.
-                </p>
-                <p ng-show="rawpost.expanded">If you need more help please call your hosting provider.</p>
+            <div ng-show="settings.data.rawpost.error">
+                <div class="rediness-check-side">
+                    <p class="side-title">Need Help?</p>
+                    <a href="http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data" target="_blank">PHP Documentation</a>
+                </div>
+                <div class="readiness-check-content">
+
+                    <p>
+                        Your PHP Version is {{settings.data.rawpost.version}}, but always_populate_raw_post_data = {{settings.data.rawpost.ini}}.
+                        <a href="#php-settings" ng-click="updateOnExpand(settings)">
+                            <span ng-hide="settings.expanded">Show detail</span>
+                            <span ng-show="settings.expanded">Hide detail</span>
+                        </a>
+                    </p>
+                    <p ng-show="settings.expanded">
+                        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
+                        Please open your php.ini file and set always_populate_raw_post_data to -1.
+                    </p>
+                    <p ng-show="settings.expanded">If you need more help please call your hosting provider.</p>
+                </div>
+            </div>
+
+            <div ng-show="settings.data.xdebug_max_nesting_level.error">
+                <div class="readiness-check-content">
+                    <p>
+                        Magento2 requires xdebug.max_nesting_level to be set {{settings.data.xdebug_max_nesting_level.requiredLevel}} or more,
+                        but it set xdebug.max_nesting_level={{settings.data.xdebug_max_nesting_level.currentLevel}}.
+                    </p>
+                </div>
             </div>
 
         </div>

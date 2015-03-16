@@ -88,23 +88,28 @@ class Environment extends AbstractActionController
     }
 
     /**
-     * Checks if PHP version >= 5.6.0 and always_populate_raw_post_data is set
+     * Checks PHP settings
      *
      * @return JsonModel
      */
-    public function phpRawpostAction()
+    public function phpSettingsAction()
     {
-        $iniSetting = ini_get('always_populate_raw_post_data');
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0 && (int)$iniSetting > -1) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+
+        $settings = array_merge(
+            $this->checkRawPost(),
+            $this->checkXDebugNestedLevel()
+        );
+
+        foreach ($settings as $setting) {
+            if ($setting['error']) {
+                $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            }
         }
+
         $data = [
             'responseType' => $responseType,
-            'data' => [
-                'version' => PHP_VERSION,
-                'ini' => ini_get('always_populate_raw_post_data')
-            ]
+            'data' => $settings
         ];
 
         return new JsonModel($data);
@@ -169,5 +174,58 @@ class Environment extends AbstractActionController
         ];
 
         return new JsonModel($data);
+    }
+
+    /**
+     * Checks if PHP version >= 5.6.0 and always_populate_raw_post_data is set
+     *
+     * @return array
+     */
+    private function checkRawPost()
+    {
+        $data = [];
+        $error = false;
+        $iniSetting = ini_get('always_populate_raw_post_data');
+
+        if (version_compare(PHP_VERSION, '5.6.0') >= 0 && (int)$iniSetting > -1) {
+            $error = true;
+        }
+
+        $data['rawpost'] = [
+            'version' => PHP_VERSION,
+            'ini' => ini_get('always_populate_raw_post_data'),
+            'error' => $error
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Checks if xdebug.max_nesting_level is set 200 or more
+     * @return array
+     */
+    private function checkXDebugNestedLevel()
+    {
+        $data = [];
+        $error = false;
+
+        $currentExtensions = $this->phpInformation->getCurrent();
+        if (in_array('xdebug', $currentExtensions)) {
+
+            $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
+            $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
+
+            if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
+                $error = true;
+            }
+
+            $data['xdebug_max_nesting_level'] = [
+                'currentLevel' => $currentXDebugNestingLevel,
+                'requiredLevel' => $minimumRequiredXDebugNestedLevel,
+                'error' => $error
+            ];
+        }
+
+        return $data;
     }
 }
