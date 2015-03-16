@@ -1951,12 +1951,18 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
      *
      * This utility function is used to simplify expected result verification.
      *
-     * @param AbstractExtensibleModel $object
+     * @param \Magento\Framework\Object $object
      * @return array
      */
-    private function convertObjectToArray(AbstractExtensibleModel $object)
+    private function convertObjectToArray($object)
     {
-        $data = $object->getData();
+        if ($object instanceof \Magento\Framework\Object) {
+            $data = $object->getData();
+        } else if (is_object($object)) {
+            $data = (array)$object;
+        } else {
+            throw new \InvalidArgumentException("Provided argument is not an object.");
+        }
         foreach ($data as $key => $value) {
             if (is_object($value)) {
                 $data[$key] = $this->convertObjectToArray($value);

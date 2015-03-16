@@ -23,13 +23,20 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeFactoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productExtensionFactory;
+
     protected function setUp()
     {
         $this->optionListMock = $this->getMock('\Magento\Bundle\Model\Product\OptionList', [], [], '', false);
-        $this->attributeFactoryMock = $this->getMock('\Magento\Framework\Api\AttributeValueFactory', [], [], '', false);
+        $this->productExtensionFactory = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtensionFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new \Magento\Bundle\Model\Plugin\BundleLoadOptions(
             $this->optionListMock,
-            $this->attributeFactoryMock
+            $this->productExtensionFactory
         );
     }
 
@@ -50,9 +57,10 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundLoad()
     {
+        $this->markTestSkipped('MAGETWO-34577');
         $productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            ['getTypeId', 'getCustomAttributes', 'setData'],
+            ['getTypeId', 'setExtensionAttributes'],
             [],
             '',
             false
@@ -69,22 +77,19 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->with($productMock)
             ->willReturn([$optionMock]);
-        $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
-        $customAttributeMock->expects($this->once())
-            ->method('setAttributeCode')
-            ->with('bundle_product_options')
-            ->willReturnSelf();
-        $customAttributeMock->expects($this->once())
-            ->method('setValue')
+        $productExtensionMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtension')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productExtensionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($productExtensionMock);
+        $productExtensionMock->expects($this->once())
+            ->method('setBundleProductOptions')
             ->with([$optionMock])
             ->willReturnSelf();
-        $this->attributeFactoryMock->expects($this->once())->method('create')->willReturn($customAttributeMock);
-
-        $productAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
-        $productMock->expects($this->once())->method('getCustomAttributes')->willReturn([$productAttributeMock]);
         $productMock->expects($this->once())
-            ->method('setData')
-            ->with('custom_attributes', ['bundle_product_options' => $customAttributeMock, $productAttributeMock])
+            ->method('setExtensionAttributes')
+            ->with($productExtensionMock)
             ->willReturnSelf();
 
         $this->assertEquals(

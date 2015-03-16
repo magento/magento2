@@ -241,11 +241,17 @@ class TypeProcessor
     {
         $methodDocBlock = $methodReflection->getDocBlock();
         if (!$methodDocBlock) {
-            throw new \InvalidArgumentException('Each getter must have description with @return annotation.');
+            throw new \InvalidArgumentException(
+                "Each getter must have description with @return annotation. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
         }
         $returnAnnotations = $methodDocBlock->getTags('return');
         if (empty($returnAnnotations)) {
-            throw new \InvalidArgumentException('Getter return type must be specified using @return annotation.');
+            throw new \InvalidArgumentException(
+                "Getter return type must be specified using @return annotation. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
         }
         /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
         $returnAnnotation = current($returnAnnotations);
@@ -441,7 +447,7 @@ class TypeProcessor
         } else {
             throw new SerializationException(
                 SerializationException::TYPE_MISMATCH,
-                ['value' => (string)$value, 'type' => $type]
+                ['value' => gettype($value), 'type' => $type]
             );
         }
         return $value;

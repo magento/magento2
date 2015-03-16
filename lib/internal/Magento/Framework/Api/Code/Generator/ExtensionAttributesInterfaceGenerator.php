@@ -11,7 +11,7 @@ use Magento\Framework\Code\Generator\Io;
 /**
  * Code generator for data object extension interfaces.
  */
-class ObjectExtensionInterface extends \Magento\Framework\Api\Code\Generator\ObjectExtension
+class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator
 {
     const ENTITY_TYPE = 'extensionInterface';
 
@@ -51,10 +51,18 @@ class ObjectExtensionInterface extends \Magento\Framework\Api\Code\Generator\Obj
     /**
      * {@inheritdoc}
      */
-    protected function _validateData()
+    protected function getExtendedClass()
+    {
+        return '\Magento\Framework\Api\ExtensionAttributesInterface';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validateResultClassName()
     {
         $result = true;
-        $sourceClassName = $this->_getSourceClassName();
+        $sourceClassName = $this->getSourceClassName();
         $resultClassName = $this->_getResultClassName();
         $interfaceSuffix = 'Interface';
         $expectedResultClassName = substr($sourceClassName, 0, -strlen($interfaceSuffix))
@@ -65,6 +73,6 @@ class ObjectExtensionInterface extends \Magento\Framework\Api\Code\Generator\Obj
             );
             $result = false;
         }
-        return parent::_validateData() && $result;
+        return $result;
     }
 }

@@ -10,6 +10,7 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
 }
 
+require_once __DIR__ . '/autoload.php';
 require BP . '/app/functions.php';
 
 

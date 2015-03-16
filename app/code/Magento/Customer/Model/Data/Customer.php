@@ -6,23 +6,47 @@
 
 namespace Magento\Customer\Model\Data;
 
-use Magento\Customer\Api\Data\CustomerInterface;
 use \Magento\Framework\Api\AttributeValueFactory;
 
+/**
+ * Class Customer
+ *
+ */
 class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\CustomerInterface
 {
     /**
-     * @param \Magento\Customer\Api\CustomerMetadataInterface $metadataService
+     * @var \Magento\Customer\Api\CustomerMetadataInterface
+     */
+    protected $metadataService;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $attributeValueFactory
+     * @param \Magento\Customer\Api\CustomerMetadataInterface $metadataService
      * @param array $data
      */
     public function __construct(
-        \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $attributeValueFactory,
+        \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
         $data = []
     ) {
-        parent::__construct($metadataService, $attributeValueFactory, $data);
+        $this->metadataService = $metadataService;
+        parent::__construct($extensionFactory, $attributeValueFactory, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+        }
+        return $this->customAttributesCodes;
     }
 
     /**
@@ -420,5 +444,26 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setAddresses(array $addresses = null)
     {
         return $this->setData(self::KEY_ADDRESSES, $addresses);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Customer\Api\Data\CustomerExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Customer\Api\Data\CustomerExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Customer\Api\Data\CustomerExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

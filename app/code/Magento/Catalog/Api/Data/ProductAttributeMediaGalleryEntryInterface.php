@@ -7,7 +7,9 @@
  */
 namespace Magento\Catalog\Api\Data;
 
-interface ProductAttributeMediaGalleryEntryInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInterface
 {
     const ID = 'id';
     const LABEL = 'label';
@@ -121,4 +123,21 @@ interface ProductAttributeMediaGalleryEntryInterface
      * @return $this 
      */
     public function setContent($content);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
+    );
 }

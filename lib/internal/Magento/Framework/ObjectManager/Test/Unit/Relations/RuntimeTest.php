@@ -36,4 +36,25 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
             ['Magento\Test\Di\Child', ['Magento\Test\Di\DiParent', 'Magento\Test\Di\ChildInterface']]
         ];
     }
+
+    /**
+     * @param $entity
+     * @expectedException  \Magento\Framework\Exception
+     * @dataProvider nonExistentGeneratorsDataProvider
+     */
+    public function testHasIfNonExists($entity)
+    {
+        $this->_model->has($entity);
+    }
+
+    public function nonExistentGeneratorsDataProvider()
+    {
+        return [
+            ['Magento\Test\Module\Model\Item\Factory'],
+            ['Magento\Test\Module\Model\Item\Proxy'],
+            ['Magento\Test\Module\Model\Item\Interceptor'],
+            ['Magento\Test\Module\Model\Item\Mapper'],
+            ['Magento\Test\Module\Model\Item\SearchResults']
+        ];
+    }
 }

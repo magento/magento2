@@ -46,6 +46,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
+    }
+
     public function testIncludeTemplate()
     {
         $this->mockViewFilesystem->expects($this->once())

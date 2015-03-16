@@ -6,7 +6,9 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface CategoryProductLinkInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface CategoryProductLinkInterface extends ExtensibleDataInterface
 {
     /**
      * @return string|null
@@ -44,4 +46,21 @@ interface CategoryProductLinkInterface
      * @return $this
      */
     public function setCategoryId($categoryId);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\CategoryProductLinkExtensionInterface $extensionAttributes
+    );
 }

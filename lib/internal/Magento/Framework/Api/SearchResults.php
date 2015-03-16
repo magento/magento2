@@ -9,7 +9,7 @@ namespace Magento\Framework\Api;
 /**
  * SearchResults Service Data Object used for the search service requests
  */
-class SearchResults extends \Magento\Framework\Api\AbstractExtensibleObject
+class SearchResults extends AbstractSimpleObject
 {
     const KEY_ITEMS = 'items';
     const KEY_SEARCH_CRITERIA = 'search_criteria';

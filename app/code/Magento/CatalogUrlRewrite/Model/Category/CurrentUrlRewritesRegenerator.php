@@ -83,7 +83,7 @@ class CurrentUrlRewritesRegenerator
         if ($this->category->getData('save_rewrites_history')) {
             $targetPath = $this->categoryUrlPathGenerator->getUrlPathWithSuffix($this->category, $storeId);
             if ($url->getRequestPath() !== $targetPath) {
-                $urls[] = $this->urlRewriteFactory->create()
+                $urls[$url->getRequestPath() . '_' . $storeId] = $this->urlRewriteFactory->create()
                     ->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($this->category->getId())
                     ->setRequestPath($url->getRequestPath())
@@ -108,7 +108,7 @@ class CurrentUrlRewritesRegenerator
             ? $url->getTargetPath()
             : $this->categoryUrlPathGenerator->getUrlPathWithSuffix($this->category, $storeId);
         if ($url->getRequestPath() !== $targetPath) {
-            $urls[] = $this->urlRewriteFactory->create()
+            $urls[$url->getRequestPath() . '_' . $storeId] = $this->urlRewriteFactory->create()
                 ->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($this->category->getId())
                 ->setRequestPath($url->getRequestPath())

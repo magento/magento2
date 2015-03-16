@@ -89,10 +89,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
                 ->setPosition($item['position']);
             if (isset($item['custom_attributes'])) {
                 foreach ($item['custom_attributes'] as $option) {
-                    $productLink->setCustomAttribute(
-                        $option['attribute_code'],
-                        $option['value']
-                    );
+                    $productLink->getExtensionAttributes()->setQty($option['value']);
                 }
             }
             $output[] = $productLink;

@@ -70,8 +70,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'interceptor' => '\Magento\Framework\Interception\Code\Generator\Interceptor'
             ]
         );
-
-        $this->model->generateClass($className . $entityType);
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $fullClassName = $className . $entityType;
+        $entityGeneratorMock = $this->getMockBuilder($fullClassName)->disableOriginalConstructor()->getMock();
+        $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
+        $this->model->setObjectManager($objectManagerMock);
+        $this->model->generateClass($fullClassName);
     }
 
     /**
@@ -125,7 +129,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
-
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $entityGeneratorMock = $this->getMockBuilder($resultClassName)->disableOriginalConstructor()->getMock();
+        $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
+        $this->model->setObjectManager($objectManagerMock);
         $this->model->generateClass($resultClassName);
     }
 

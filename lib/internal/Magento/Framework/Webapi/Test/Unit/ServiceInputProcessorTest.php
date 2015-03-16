@@ -8,11 +8,11 @@
 
 namespace Magento\Framework\Webapi\Test\Unit;
 
-use \Magento\Framework\Webapi\ServiceInputProcessor;
-use \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
-use \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
+use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
 use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
 use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
@@ -167,7 +167,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayProperties()
     {
-        $this->setupFactory(['\Magento\Webapi\Service\Entity\Simple']);
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple']);
         $data = ['associativeArray' => ['key' => 'value', 'key_two' => 'value_two']];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -186,7 +186,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayPropertiesWithItem()
     {
-        $this->setupFactory(['Magento\Webapi\Service\Entity\AssociativeArray']);
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray']);
         $data = ['associativeArray' => ['item' => 'value']];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -204,7 +204,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayPropertiesWithItemArray()
     {
-        $this->setupFactory(['Magento\Webapi\Service\Entity\AssociativeArray']);
+        $this->setupFactory(['Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray']);
         $data = ['associativeArray' => ['item' => ['value1','value2']]];
         $result = $this->serviceInputProcessor->process(
             'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
@@ -529,6 +529,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         foreach ($classNames as $className) {
             $factoryMock = $this->getMockBuilder($className . 'Factory')
                 ->setMethods(['create'])
+                ->disableOriginalConstructor()
                 ->getMock();
             $factoryMock->expects($this->any())
                 ->method('create')

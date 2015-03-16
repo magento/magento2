@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Api\Test\Unit;
 
-use \Magento\Framework\Api\ExtensibleDataInterface;
-use \Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\AttributeInterface;
 
 class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -219,7 +219,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         $data = [
             'id' => $id,
-            ExtensibleDataInterface::CUSTOM_ATTRIBUTES => [
+            CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                 [
                     AttributeInterface::ATTRIBUTE_CODE => $customAttributeCode,
                     AttributeInterface::VALUE => $customAttributeValue,

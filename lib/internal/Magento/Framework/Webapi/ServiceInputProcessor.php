@@ -30,6 +30,8 @@ class ServiceInputProcessor
 {
     const CACHE_ID_PREFIX = 'service_method_params_';
 
+    const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
+
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
 
@@ -126,12 +128,15 @@ class ServiceInputProcessor
      * @param string $className
      * @param array $data
      * @return object the newly created and populated object
+     * @throws \Exception
      */
     protected function _createFromArray($className, $data)
     {
         $data = is_array($data) ? $data : [];
         $class = new ClassReflection($className);
-
+        if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
+            $className = substr($className, 0, -strlen('Interface'));
+        }
         $factory = $this->objectManager->get($className . 'Factory');
         $object = $factory->create();
 
