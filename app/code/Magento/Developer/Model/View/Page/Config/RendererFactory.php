@@ -20,7 +20,7 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager = null;
+    protected $objectManager;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -61,8 +61,9 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
     public function create(array $data = [])
     {
         $renderer = $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE);
+
         return $this->objectManager->create(
-            $renderer,
+            $this->rendererTypes[$renderer],
             $data
         );
     }

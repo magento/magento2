@@ -22,15 +22,13 @@ class DeveloperChain extends Chain
         LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origAssetPath = null,
-        $frontEndDevelopmentWorkflowType = null
+        $origAssetPath = null
     ) {
         parent::__construct(
             $asset,
             $origContent,
             $origContentType,
-            $origAssetPath,
-            $frontEndDevelopmentWorkflowType
+            $origAssetPath
         );
 
         $this->targetContentType = $this->origContentType;
