@@ -21,7 +21,8 @@ use Magento\Framework\ObjectManager\Definition\Compiled\Binary;
 use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 use Magento\Framework\ObjectManager\Profiler\Code\Generator as ProfilerGenerator;
-use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -67,6 +68,11 @@ class DefinitionFactory
     ];
 
     /**
+     * @var \Magento\Framework\Code\Generator
+     */
+    protected $codeGenerator;
+
+    /**
      * @param DriverInterface $filesystemDriver
      * @param string $definitionDir
      * @param string $generationDir
@@ -95,26 +101,7 @@ class DefinitionFactory
             $definitionModel = $this->_definitionClasses[$this->_definitionFormat];
             $result = new $definitionModel($definitions);
         } else {
-            $generatorIo = new \Magento\Framework\Code\Generator\Io(
-                $this->_filesystemDriver,
-                $this->_generationDir
-            );
-            $generator = new \Magento\Framework\Code\Generator(
-                $generatorIo,
-                [
-                    Generator\Factory::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
-                    Generator\Proxy::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
-                    Generator\Repository::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Repository',
-                    Generator\Persistor::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Persistor',
-                    InterceptionGenerator\Interceptor::ENTITY_TYPE => '\Magento\Framework\Interception\Code\Generator\Interceptor',
-                    MapperGenerator::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\Mapper',
-                    SearchResults::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\SearchResults',
-                    ConverterGenerator::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Converter',
-                    ProfilerGenerator\Logger::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger',
-                    ObjectExtensionInterface::ENTITY_TYPE =>
-                        'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'                ]
-            );
-            $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
+            $autoloader = new \Magento\Framework\Code\Generator\Autoloader($this->getCodeGenerator());
             spl_autoload_register([$autoloader, 'load']);
 
             $result = new Runtime();
@@ -166,5 +153,37 @@ class DefinitionFactory
     {
         $extractor = $this->_definitionFormat == Binary::MODE_NAME ? 'igbinary_unserialize' : 'unserialize';
         return $extractor($definitions);
+    }
+
+    /**
+     * Get existing code generator. Instantiate a new one if it does not exist yet.
+     *
+     * @return \Magento\Framework\Code\Generator
+     */
+    public function getCodeGenerator()
+    {
+        if (!$this->codeGenerator) {
+            $generatorIo = new \Magento\Framework\Code\Generator\Io(
+                $this->_filesystemDriver,
+                $this->_generationDir
+            );
+            $this->codeGenerator = new \Magento\Framework\Code\Generator(
+                $generatorIo,
+                [
+                    Generator\Factory::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
+                    Generator\Proxy::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
+                    Generator\Repository::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Repository',
+                    Generator\Persistor::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Persistor',
+                    InterceptionGenerator\Interceptor::ENTITY_TYPE => '\Magento\Framework\Interception\Code\Generator\Interceptor',
+                    MapperGenerator::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\Mapper',
+                    SearchResults::ENTITY_TYPE => '\Magento\Framework\Api\Code\Generator\SearchResults',
+                    ConverterGenerator::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Converter',
+                    ProfilerGenerator\Logger::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger',
+                    ExtensionAttributesGenerator::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator',
+                    ExtensionAttributesInterfaceGenerator::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator'
+                ]
+            );
+        }
+        return $this->codeGenerator;
     }
 }

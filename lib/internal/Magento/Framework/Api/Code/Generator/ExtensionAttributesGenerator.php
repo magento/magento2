@@ -12,7 +12,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 /**
  * Code generator for data object extensions.
  */
-class ObjectExtension extends \Magento\Framework\Code\Generator\EntityAbstract
+class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     const ENTITY_TYPE = 'extension';
 
@@ -70,16 +70,7 @@ class ObjectExtension extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getClassProperties()
     {
-        $properties = [];
-        foreach ($this->getCustomAttributes() as $attributeName => $attributeType) {
-            $propertyName = SimpleDataObjectConverter::snakeCaseToCamelCase($attributeName);
-            $properties[] = [
-                'name' => $propertyName,
-                'visibility' => 'protected',
-                'docblock' => ['tags' => [['name' => 'var', 'description' => $attributeType]]],
-            ];
-        }
-        return $properties;
+        return [];
     }
 
     /**
@@ -94,13 +85,13 @@ class ObjectExtension extends \Magento\Framework\Code\Generator\EntityAbstract
             $setterName = 'set' . ucfirst($propertyName);
             $methods[] = [
                 'name' => $getterName,
-                'body' => "return \$this->{$propertyName};",
+                'body' => "return \$this->_get('{$attributeName}');",
                 'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType]]],
             ];
             $methods[] = [
                 'name' => $setterName,
                 'parameters' => [['name' => $propertyName]],
-                'body' => "\$this->{$propertyName} = \${$propertyName};" . PHP_EOL . "return \$this;",
+                'body' => "\$this->setData('{$attributeName}', \${$propertyName});" . PHP_EOL . "return \$this;",
                 'docblock' => [
                     'tags' => [
                         [
@@ -123,18 +114,8 @@ class ObjectExtension extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _validateData()
     {
-        $result = true;
-        $sourceClassName = $this->_getSourceClassName();
-        $resultClassName = $this->_getResultClassName();
-        $interfaceSuffix = 'Interface';
-        $expectedResultClassName = substr($sourceClassName, 0, -strlen($interfaceSuffix)) . self::EXTENSION_SUFFIX;
-        if ($resultClassName !== $expectedResultClassName) {
-            $this->_addError(
-                'Invalid extension name [' . $resultClassName . ']. Use ' . $expectedResultClassName
-            );
-            $result = false;
-        }
-        return parent::_validateData() && $result;
+        $classNameValidationResults = $this->validateResultClassName();
+        return parent::_validateData() && $classNameValidationResults;
     }
 
     /**
@@ -143,7 +124,18 @@ class ObjectExtension extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _generateCode()
     {
         $this->_classGenerator->setImplementedInterfaces([$this->_getResultClassName() . 'Interface']);
+        $this->_classGenerator->setExtendedClass($this->getExtendedClass());
         return parent::_generateCode();
+    }
+
+    /**
+     * Get class, which should be used as a parent for generated class.
+     *
+     * @return string
+     */
+    protected function getExtendedClass()
+    {
+        return '\Magento\Framework\Api\AbstractSimpleObject';
     }
 
     /**
@@ -156,11 +148,40 @@ class ObjectExtension extends \Magento\Framework\Code\Generator\EntityAbstract
         if (!isset($this->allCustomAttributes)) {
             $this->allCustomAttributes = $this->configReader->read();
         }
-        $dataInterface = ltrim($this->_getSourceClassName(), '\\');
+        $dataInterface = ltrim($this->getSourceClassName(), '\\');
         if (isset($this->allCustomAttributes[$dataInterface])) {
+            foreach ($this->allCustomAttributes[$dataInterface] as $attributeName => $attributeType) {
+                if (strpos($attributeType, '\\') !== false) {
+                    /** Add preceding slash to class names, while leaving primitive types as is */
+                    $attributeType = $this->_getFullyQualifiedClassName($attributeType);
+                    $this->allCustomAttributes[$dataInterface][$attributeName] =
+                        $this->_getFullyQualifiedClassName($attributeType);
+                }
+            }
             return $this->allCustomAttributes[$dataInterface];
         } else {
             return [];
         }
+    }
+
+    /**
+     * Ensure that result class name corresponds to the source class name.
+     *
+     * @return bool
+     */
+    protected function validateResultClassName()
+    {
+        $result = true;
+        $sourceClassName = $this->getSourceClassName();
+        $resultClassName = $this->_getResultClassName();
+        $interfaceSuffix = 'Interface';
+        $expectedResultClassName = substr($sourceClassName, 0, -strlen($interfaceSuffix)) . self::EXTENSION_SUFFIX;
+        if ($resultClassName !== $expectedResultClassName) {
+            $this->_addError(
+                'Invalid extension name [' . $resultClassName . ']. Use ' . $expectedResultClassName
+            );
+            $result = false;
+        }
+        return $result;
     }
 }

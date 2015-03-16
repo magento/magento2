@@ -15,7 +15,8 @@ use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\ObjectManager\Code\Generator\Persistor;
-use Magento\Framework\Api\Code\Generator\ObjectExtensionInterface;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Tools\Di\Code\Scanner;
 use Magento\Tools\Di\Compiler\Log\Log;
 use Magento\Tools\Di\Compiler\Log\Writer;
@@ -103,10 +104,16 @@ try {
             Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
             Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
             SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
-            ObjectExtensionInterface::ENTITY_TYPE =>
-                'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface'
+            ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
+                'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
+            ExtensionAttributesGenerator::ENTITY_TYPE =>
+                'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
         ]
     );
+    /** Initialize object manager for code generation based on configs */
+    $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+    $objectManager = $magentoObjectManagerFactory->create($_SERVER);
+    $generator->setObjectManager($objectManager);
 
     $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
     spl_autoload_register([$generatorAutoloader, 'load']);
@@ -235,6 +242,17 @@ try {
     if ($log->hasError()) {
         exit(1);
     }
+
+    echo 'On *nix systems, verify the Magento application has permissions to modify files created by the compiler'
+        . ' in the "var" directory. For instance, if you run the Magento application using Apache,'
+        . ' the owner of the files in the "var" directory should be the Apache user (example command:'
+        . ' "chown -R www-data:www-data <MAGENTO_ROOT>/var" where MAGENTO_ROOT is the Magento root directory).' . "\n";
+    /** TODO: Temporary solution before having necessary changes on bamboo to overcome issue described above */
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootDir . '/var'));
+    foreach ($iterator as $item) {
+        chmod($item, 0777);
+    }
+
 } catch (Zend_Console_Getopt_Exception $e) {
     echo $e->getUsageMessage();
     echo 'Please, use quotes(") for wrapping strings.' . "\n";

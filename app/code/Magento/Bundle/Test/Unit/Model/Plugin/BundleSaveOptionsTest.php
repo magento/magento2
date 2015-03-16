@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use \Magento\Bundle\Model\Plugin\BundleSaveOptions;
@@ -32,6 +34,16 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productExtensionMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productBundleOptionsMock;
+
+    /**
      * @var \Closure
      */
     protected $closureMock;
@@ -40,17 +52,37 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->productRepositoryMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->productOptionRepositoryMock = $this->getMock('Magento\Bundle\Api\ProductOptionRepositoryInterface');
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['getExtensionAttributes', 'getTypeId'],
+            [],
+            '',
+            false
+        );
         $this->closureMock = function () {
             return $this->productMock;
         };
         $this->plugin = new BundleSaveOptions($this->productOptionRepositoryMock);
+        $this->productExtensionMock = $this->getMock(
+            'Magento\Catalog\Api\Data\ProductExtension',
+            ['getBundleProductOptions'],
+            [],
+            '',
+            false
+        );
+        $this->productBundleOptionsMock = $this->getMock(
+            'Magento\Bundle\Api\Data\OptionInterface',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function testAroundSaveWhenProductIsSimple()
     {
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('simple');
-        $this->productMock->expects($this->never())->method('getCustomAttribute');
+        $this->productMock->expects($this->never())->method('getExtensionAttributes');
 
         $this->assertEquals(
             $this->productMock,
@@ -62,9 +94,11 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('bundle');
         $this->productMock->expects($this->once())
-            ->method('getCustomAttribute')
-            ->with('bundle_product_options')
-            ->willReturn(null);
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getBundleProductOptions')
+            ->willReturn([]);
 
         $this->productOptionRepositoryMock->expects($this->never())->method('save');
 
@@ -76,16 +110,17 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundSaveWhenProductIsBundleWithOptions()
     {
-        $option = $this->getMock('\Magento\Bundle\Api\Data\OptionInterface');
-        $bundleProductOptionsAttrValue = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
-        $bundleProductOptionsAttrValue->expects($this->atLeastOnce())->method('getValue')->willReturn([$option]);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('bundle');
         $this->productMock->expects($this->once())
-            ->method('getCustomAttribute')
-            ->with('bundle_product_options')
-            ->willReturn($bundleProductOptionsAttrValue);
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getBundleProductOptions')
+            ->willReturn([$this->productBundleOptionsMock]);
 
-        $this->productOptionRepositoryMock->expects($this->once())->method('save')->with($this->productMock, $option);
+        $this->productOptionRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->productMock, $this->productBundleOptionsMock);
 
         $this->assertEquals(
             $this->productMock,

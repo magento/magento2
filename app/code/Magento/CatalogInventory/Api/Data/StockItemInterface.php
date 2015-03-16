@@ -398,4 +398,21 @@ interface StockItemInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setStockStatusChangedAuto($stockStatusChangedAuto);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
+    );
 }

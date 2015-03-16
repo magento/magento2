@@ -645,4 +645,21 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setWeeeTaxAppliedRowAmount($amount);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
+    );
 }

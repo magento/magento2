@@ -21,6 +21,16 @@ class WrappedErrorParameter extends \Magento\Framework\Api\AbstractExtensibleObj
     }
 
     /**
+     * Get value.
+     *
+     * @return string $value
+     */
+    public function getValue()
+    {
+        return $this->_data['value'];
+    }
+
+    /**
      * Set field name.
      *
      * @param string $fieldName
@@ -29,16 +39,6 @@ class WrappedErrorParameter extends \Magento\Framework\Api\AbstractExtensibleObj
     public function setFieldName($fieldName)
     {
         return $this->setData('field_name', $fieldName);
-    }
-
-    /**
-     * Get value.
-     *
-     * @return string $value
-     */
-    public function getValue()
-    {
-        return $this->_data['value'];
     }
 
     /**

@@ -34,21 +34,31 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     protected $linkManagement;
 
     /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param CollectionProvider $entityCollectionProvider
      * @param LinksInitializer $linkInitializer
      * @param Management $linkManagement
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
-        \Magento\Catalog\Model\ProductLink\Management $linkManagement
+        \Magento\Catalog\Model\ProductLink\Management $linkManagement,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
     ) {
         $this->productRepository = $productRepository;
         $this->entityCollectionProvider = $entityCollectionProvider;
         $this->linkInitializer = $linkInitializer;
         $this->linkManagement = $linkManagement;
+        $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
     /**
@@ -59,11 +69,16 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getProductSku());
         $links = $this->entityCollectionProvider->getCollection($product, $entity->getLinkType());
-
+        $extensions = $this->dataObjectProcessor->buildOutputDataArray(
+            $entity->getExtensionAttributes(),
+            'Magento\Catalog\Api\Data\ProductLinkExtensionInterface'
+        );
+        $extensions = is_array($extensions) ? $extensions : [];
         $data = $entity->__toArray();
-        foreach ($entity->getCustomAttributes() as $attribute) {
-            $data[$attribute->getAttributeCode()] = $attribute->getValue();
+        foreach ($extensions as $attributeCode => $attribute) {
+            $data[$attributeCode] = $attribute;
         }
+        unset($data['extension_attributes']);
         $data['product_id'] = $linkedProduct->getId();
         $links[$linkedProduct->getId()] = $data;
         $this->linkInitializer->initializeLinks($product, [$entity->getLinkType() => $links]);

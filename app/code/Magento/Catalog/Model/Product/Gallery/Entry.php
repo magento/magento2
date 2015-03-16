@@ -6,11 +6,14 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
+class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGalleryEntryInterface
 {
     /**
      * Retrieve gallery entry ID
@@ -144,5 +147,26 @@ class Entry extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setContent($content)
     {
         return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return ProductAttributeMediaGalleryEntryExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

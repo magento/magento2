@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// @codingStandardsIgnoreFile
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
-class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Api\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
@@ -14,7 +14,7 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
     protected $configReaderMock;
 
     /**
-     * @var \Magento\Framework\Api\Code\Generator\ObjectExtension|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $model;
 
@@ -26,7 +26,7 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Framework\Api\Code\Generator\ObjectExtension',
+            'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator',
             [
                 'configReader' => $this->configReaderMock,
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
@@ -68,9 +68,9 @@ class ExtensionGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testValidateException()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Api\Code\Generator\ObjectExtension $model */
+        /** @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator $model */
         $model = $objectManager->getObject(
-            'Magento\Framework\Api\Code\Generator\ObjectExtension',
+            'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator',
             [
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
                 'resultClassName' => '\Magento\Catalog\Api\Data\ProductInterface'

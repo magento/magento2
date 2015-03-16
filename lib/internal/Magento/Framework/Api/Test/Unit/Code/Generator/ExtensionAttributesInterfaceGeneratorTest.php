@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// @codingStandardsIgnoreFile
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
-class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testGenerate()
     {
@@ -28,9 +28,9 @@ class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\Api\Code\Generator\ObjectExtensionInterface $model */
+        /** @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator $model */
         $model = $objectManager->getObject(
-            'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface',
+            'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
             [
                 'configReader' => $configReaderMock,
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
@@ -49,9 +49,9 @@ class ExtensionInterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testValidateException()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Api\Code\Generator\ObjectExtensionInterface $model */
+        /** @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator $model */
         $model = $objectManager->getObject(
-            'Magento\Framework\Api\Code\Generator\ObjectExtensionInterface',
+            'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
             [
                 'sourceClassName' => '\Magento\Catalog\Api\Data\Product',
                 'resultClassName' => '\Magento\Catalog\Api\Data\ProductInterface'

@@ -101,6 +101,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     public function testGetList()
     {
+        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $productSku = 'simple';
         $serviceInfo = [
             'rest' => [

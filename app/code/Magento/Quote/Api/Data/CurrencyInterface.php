@@ -147,4 +147,19 @@ interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setBaseToQuoteRate($baseToQuoteRate);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Quote\Api\Data\CurrencyExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes);
 }
