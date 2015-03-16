@@ -733,7 +733,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
      * @return $this
      */
-    public function setComments(array $comments = null)
+    public function setComments($comments = null)
     {
         return $this->setData(ShipmentInterface::COMMENTS, $comments);
     }
