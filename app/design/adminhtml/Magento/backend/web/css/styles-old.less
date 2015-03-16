@@ -3,19 +3,19 @@
  * See COPYING.txt for license details.
  */
 
-@import 'source/lib/_lib'; // Global lib
-@import 'source/lib/_utilities';
-@baseDir: "../"; //default
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/lib/_utilities.less';
+@baseDir: "../"; // Default
 
 .normalize();
 
 /* Backend */
-@import "../mui/clearless/all";
+@import "../mui/clearless/all.less";
 @import "../mui/styles/vars.less";
 @import "../mui/styles/base.less";
-@import "../mui/styles/table.less"; // import table styles
-@import "../mui/styles/dashboard.less"; // import dashboard
-@import (reference) "../mui/styles/abstract"; // import some abstract
+@import "../mui/styles/table.less"; // Import table styles
+@import "../mui/styles/dashboard.less"; // Import dashboard
+@import (reference) "../mui/styles/abstract.less"; // Import some abstract
 
 
 /*
@@ -980,7 +980,7 @@ input.mage-error ~ .addafter {
     width: 8px;
     height: 14px;
     line-height: 14px;
-    background: url(Magento_Backend::images/draggable-handle-vertical.png) no-repeat 0 0;
+    background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
     cursor: ns-resize;
     color: #b2b0ad;
 }
@@ -1078,13 +1078,60 @@ input.mage-error ~ .addafter {
     padding-top: 0;
 }
 
-.field.required > .label:after {
-    color: #e22626;
-    font-size: 16px;
-    font-weight: 500;
-    position: absolute;
-    margin-left: 10px;
+.form-inline div:not([class*='fields-group']) > .field > .label,
+.form-inline .fieldset > .field > .label {
+    color: #303030;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 3.2rem;
+    padding: 0 30px 0 0;
+    white-space: nowrap;
+
+    &:before {
+        content: '.';
+        margin-left: -7px;
+        overflow: hidden;
+        visibility: hidden;
+        width: 0;
+    }
+
+    span {
+        display: inline-block;
+        line-height: 1.33;
+        vertical-align: middle;
+        white-space: normal;
+    }
 }
+.details-content > .field.required > .label,
+.fieldset > .field.required > .label {
+    &:after {
+        content:'';
+    }
+    padding-left: 1.5rem;
+    .form-inline & {
+        padding-left: 0;
+    }
+    span {
+        &:after {
+            color: #e22626;
+            content: '*';
+            display: inline-block;
+            font-size: 1.6rem;
+            font-weight: 500;
+            left: 0;
+            line-height: 1;
+            position: absolute;
+            top: .2rem;
+            z-index: 1;
+            .form-inline & {
+                left: auto;
+                margin-left: 10px;
+                top: 1.2rem;
+            }
+        }
+    }
+}
+
 
 .with-addon .textarea {
     margin: 0 0 6px;
@@ -1094,7 +1141,7 @@ input.mage-error ~ .addafter {
 .fieldset .control .addon .textarea {
     width: 100%;
 }
-
+.details-content > .field > input[type="checkbox"],
 .fieldset > .field > input[type="checkbox"] {
     margin-top: 9px;
 }
@@ -1719,243 +1766,6 @@ address {
 .backup-dialog {
     margin-top: inherit !important;
 }
-
-/*
-    Login page
--------------------------------------- */
-.page-login {
-    height: 100%;
-}
-
-.page-login .wrapper {
-    min-height: 100%;
-    padding: 0;
-}
-
-.page-login .wrapper-inner {
-    overflow: auto;
-    padding-bottom: 140px;
-}
-
-.adminhtml-auth-login,
-.page-login {
-    background: #f2ebde;
-}
-
-.page-login .footer {
-    clear: both;
-    height: 100px;
-    margin-top: -100px;
-    position: relative;
-    box-sizing: border-box;
-}
-
-.page-login .footer-content {
-    max-width: none;
-    min-width: 0;
-}
-
-.page-login .footer-copyright {
-    text-align: left;
-}
-
-.page-login .form-login {
-    width: 280px;
-    margin: 160px auto 60px;
-    padding: 30px 25px;
-    border: 1px solid #e3ded5;
-    border-radius: 5px;
-    background: #f7f2ec;
-}
-
-.page-login .fieldset {
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    margin: 0;
-    padding: 0;
-}
-
-.page-login .fieldset > .legend {
-    border-bottom: 0;
-    margin-bottom: 15px;
-}
-
-.page-login .fieldset > .legend span {
-    font-size: 32px;
-    line-height: 32px;
-    padding: 0;
-    color: #8a847c;
-    display: inline;
-}
-
-.page-login .fieldset .field {
-    margin: 0 0 13px;
-}
-
-.page-login .form-inline .label {
-    width: auto;
-    padding: 0;
-    margin-bottom: 13px;
-}
-
-.page-login .field-username label,
-.page-login .field-password label,
-.page-login .field-confirmation label {
-    display: none;
-}
-
-.page-login .form-inline .label + .control {
-    width: auto;
-    float: none;
-}
-
-.page-login .header {
-    margin-bottom: 30px;
-    background: transparent;
-    padding: 0;
-    z-index: auto;
-    position: static;
-}
-
-.page-login .header .logo {
-    display: block;
-    width: 262px;
-    height: 64px;
-    text-indent: -999em;
-    .url('images/logo-magento.png', 'Magento_Backend');
-    background: url("@{url}") no-repeat;
-}
-
-.page-login {
-    button {
-        border-radius: 2px;
-    }
-    button:not(.primary) {
-        background-image: none;
-        background-color: #f7f3eb;
-        padding: 0 13px;
-        color: #676056;
-        border: 1px solid #ada89e;
-        cursor: pointer;
-        display: inline-block;
-        font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        line-height: 26px;
-        box-sizing: border-box;
-        margin: 0;
-        vertical-align: middle;
-    }
-    button:not(.primary):focus,
-    button:not(.primary):active {
-        background-color: #cac3b4;
-        border: 1px solid #989287;
-    }
-    button:not(.primary):hover {
-        background-color: #cac3b4;
-    }
-    button:not(.primary).disabled,
-    button:not(.primary)[disabled] {
-        cursor: default;
-        pointer-events: none;
-        opacity: .5;
-    }
-    button.primary {
-        background-image: none;
-        background-color: #007dbd;
-        padding: 0 13px;
-        color: #fff;
-        border: 1px solid #0a6c9f;
-        cursor: pointer;
-        display: inline-block;
-        font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 13px;
-        font-weight: 500;
-        line-height: 26px;
-        box-sizing: border-box;
-        vertical-align: middle;
-    }
-    button.primary:focus,
-    button.primary:active {
-        background-color: #026294;
-        border: 1px solid #004c74;
-        color: #fff;
-    }
-    button.primary:hover {
-        background-color: #026294;
-        border: 1px solid #026294;
-    }
-    button.primary.disabled,
-    button.primary[disabled] {
-        cursor: default;
-        pointer-events: none;
-        opacity: .5;
-    }
-}
-
-.page-login .form-actions {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-.page-login .actions,
-.page-login .links {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.page-login input[type=text],
-.page-login input[type=password] {
-    border-color: #cac3b4;
-    font-size: 18px;
-    padding: 12px 12px 14px;
-    height: auto;
-    &:focus {
-        border-color: #007bdb;
-    }
-}
-
-.page-login :-ms-input-placeholder {
-    color: #bebab1 !important;
-}
-
-.page-login ::-webkit-input-placeholder {
-    color: #bebab1 !important;
-}
-
-.page-login :-moz-placeholder {
-    color: #bebab1 !important;
-}
-
-.page-login button.action-login,
-.page-login button.action-retrieve {
-    font-size: 22px;
-    padding: 14px 22px 16px;
-}
-
-.page-login button.action-retrieve,
-.page-login button.action-reset {
-    font-size: 18px;
-    padding: 10px 17px 10px;
-}
-
-.page-login .action-forgotpassword,
-.page-login .action-back {
-    font-size: 12px;
-    color: #1c8bb8;
-    text-decoration: underline;
-    position: absolute;
-    left: 0;
-    bottom: -70px;
-}
-
-.page-login .action-forgotpassword:hover,
-.page-login .action-back:hover {
-    text-decoration: none;
-}
-
 
 /*
     Page Structure
@@ -2695,7 +2505,10 @@ tr.dynamic-grid input.input-text {
 }
 
 .attribute-popup #edit_form {
-    padding-bottom: 80px;
+    display: block;
+    > div:last-of-type {
+        margin-bottom: 150px;
+    }
 }
 
 .attribute-popup #edit_form > .fieldset > .legend {
@@ -3557,55 +3370,13 @@ tr.dynamic-grid input.input-text {
 /*
     System - Tax
 --------------------------------------*/
-.tax-rate-popup .ui-dialog-content.ui-widget-content {
-    padding: 10px 10px 0;
-}
 
-.tax-rate-popup .fieldset {
-    margin: 0;
-}
-
-.tax-rate-popup .field {
-    margin-bottom: 20px;
-}
-
-.tax-rate-popup .field .label {
-    margin: 8px 0 0;
-    width: 30%;
-    padding: 0 30px 0 0;
-    float: left;
-    text-align: right;
-    box-sizing: content-box;
-}
-
-.tax-rate-popup .field .control {
-    width: 58%;
-    margin: 0;
-    float: left;
-}
-
-.tax-rate-popup .field .control select,
-.tax-rate-popup .field .control .input-text {
-    width: 100%;
-}
-
-.tax-rate-popup .field-rate .control .input-text {
-    width: 50%;
-}
-
-.tax-rate-popup .field-rate label.mage-error {
-    display: block;
-}
-
-.tax-rate-popup .tax-rate-titles-note-td {
-    margin-left: 26%;
-    padding-left: 20px;
-}
-
-.field-tax_rate,
-.field-tax_customer_class,
-.field-tax_product_class {
-    position: relative;
+.tax-rate-popup .form-inline .field {
+    position: static;
+    &.required .label {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 .mselect-hidden + .mage-error {

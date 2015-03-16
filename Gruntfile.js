@@ -60,7 +60,14 @@ module.exports = function (grunt) {
             'less:luma',
             'less:backend'
         ],
-
+        /**
+         * Styles for backend theme
+         */
+        backend: [
+            'less:backend',
+            'replace:example',
+            'less:override'
+        ],
         /**
          * Documentation
          */
