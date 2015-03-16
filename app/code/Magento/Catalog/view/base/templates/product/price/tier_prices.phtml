@@ -73,7 +73,7 @@ $product = $block->getSaleableItem();
                     );
                 ?><?php echo __('each') ?>
                 <?php if ($block->getShowDetailedPrice() !== false): ?>
-                    <?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>
+                    <?php echo __(' and') ?>&nbsp;<strong class="benefit"><?php echo __('save ')?>
                         <span class="percent tier-<?php echo $index ?>"><?php echo $tierPriceModel->getSavePercent($price['price']) ?></span>%
                     </strong>
                 <?php endif ?>
