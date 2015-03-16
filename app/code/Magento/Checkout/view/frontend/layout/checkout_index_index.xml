@@ -16,7 +16,7 @@
                                 <item name="component" xsi:type="string">mage/view/composite</item>
                                 <item name="children" xsi:type="array">
                                     <item name="errors" xsi:type="array"><item name="component" xsi:type="string">Magento_Ui/js/view/errors</item></item>
-                                    <item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/viev/progress</item></item>
+                                    <item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>
                                     <item name="accordion" xsi:type="array">
                                         <item name="component" xsi:type="string">mage/view/composite</item>
                                         <item name="children" xsi:type="array">
