@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Code\Generator;
 
+use Magento\Framework\Filesystem\FilesystemException;
+
 class Io
 {
     /**
@@ -82,12 +84,37 @@ class Io
     /**
      * @param string $fileName
      * @param string $content
+     * @throws FilesystemException
      * @return bool
      */
     public function writeResultFile($fileName, $content)
     {
+        /**
+         * Rename is atomic on *nix systems, while file_put_contents is not. Writing to a
+         * temporary file and renaming to the real location helps avoid race conditions on
+         * some systems. Race condition can occur if the compiler has not been run, when
+         * multiple processes are attempting to access the generated file simultaneously.
+         */
         $content = "<?php\n" . $content;
-        return $this->filesystemDriver->filePutContents($fileName, $content);
+        $rand = rand(0,1024);
+        $tmpFile = $fileName . ".$rand";
+        $this->filesystemDriver->filePutContents($tmpFile, $content);
+
+        try {
+            $result = $this->filesystemDriver->rename($tmpFile, $fileName);
+        } catch(FilesystemException $e) {
+            if (!file_exists($fileName)) {
+                throw $e;
+            } else {
+                /**
+                 * Due to race conditions, file may have already been written, causing rename to fail. As long as
+                 * the file exists, everything is okay.
+                 */
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -138,7 +165,7 @@ class Io
                 $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
             }
             return true;
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (FilesystemException $e) {
             return false;
         }
     }

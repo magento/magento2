@@ -91,10 +91,6 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
             ->method('makeResultFileDirectory')
             ->with($this->getResultClassName())
             ->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->once())
-            ->method('fileExists')
-            ->with($resultFileName)
-            ->will($this->returnValue(false));
 
         //Mocking _generateCode call
         $this->classGenerator->expects($this->once())
