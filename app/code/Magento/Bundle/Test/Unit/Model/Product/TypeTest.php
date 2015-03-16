@@ -1771,10 +1771,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $selectionIds
-     * @param $productMock
-     * @param $getSelectionsIndex
-     * @param $getSelectionsIdsIndex
+     * @param array $selectionIds
+     * @param \PHPUnit_Framework_MockObject_MockObject $productMock
+     * @param int $getSelectionsIndex
+     * @param int $getSelectionsIdsIndex
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
 
@@ -1797,9 +1797,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $expected
-     * @param $firstId
-     * @param $secondId
+     * @param int $expected
+     * @param int $firstId
+     * @param int $secondId
      * @return void
      * @dataProvider shakeSelectionsDataProvider
      */
