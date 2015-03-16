@@ -1271,8 +1271,8 @@ input.mage-error ~ .addafter {
 // --------------------------------------
 
 .addon {
-    input {
-        border-width: 1px 0 1px 1px;
+    input[type="text"] {
+        border-width: 1px 1px 1px 0;
         ~ .addafter strong {
             .field-price & {
                 font-size: 18px;
@@ -1280,7 +1280,7 @@ input.mage-error ~ .addafter {
             display: inline-block;
             background: #fff;
             line-height: 24px;
-            margin: 0 3px 0 -2px;
+            margin: 0 3px 0 0;
             padding-left: 4px;
             padding-right: 4px;
             position: relative;
@@ -1300,11 +1300,11 @@ input.mage-error ~ .addafter {
         background: none;
         color: #a6a6a6;
         border-width: 1px 1px 1px 0;
-        border-radius: 2px 2px 0 0;
+        border-radius: 1px 1px 0 0;
         padding: 0;
         border-color: #ada89e;
     }
-    input,
+    input[type="text"],
     select {
         &[disabled],
         &[readonly] {
@@ -1316,6 +1316,14 @@ input.mage-error ~ .addafter {
     }
     .pager input {
         border-width: 1px;
+    }
+}
+
+.field-weight {
+    .addon {
+        input[type="text"] {
+            border-width: 1px 0 1px 1px;
+        }
     }
 }
 
@@ -1338,21 +1346,14 @@ input.mage-error ~ .addafter {
 .field-special_price .addon .addafter,
 .field-msrp .addon .addafter {
     border-width: 1px 0 1px 1px;
-    border-radius: 2px 0 0 2px;
+    border-radius: 1px 0 0 1px;
 }
 
-.field.type-price .addon input:first-child,
-.field-price .addon input:first-child,
-.field-special_price .addon input:first-child,
-.field-msrp .addon input:first-child {
-    border-radius: 0 2px 2px 0;
-}
-
-.field.type-price input,
-.field-price input,
-.field-special_price input,
-.field-msrp input {
-    border-width: 1px 1px 1px 0;
+.field.type-price .addon input[type=text]:first-child,
+.field-price .addon input[type=text]:first-child,
+.field-special_price .addon input[type=text]:first-child,
+.field-msrp .addon input[type=text]:first-child {
+    border-radius: 0 1px 1px 0;
 }
 
 .field.type-price input:focus,
