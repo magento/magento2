@@ -61,6 +61,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     private $priceCurrency;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->bundleCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\CollectionFactory')
@@ -119,6 +122,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedWithoutOptions()
@@ -227,6 +231,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedWithShoppingCart()
@@ -466,6 +471,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedEmptyShoppingCart()
@@ -684,6 +690,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedStringInResult()
@@ -902,6 +909,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedWithoutSelections()
@@ -1007,6 +1015,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedSelectionsSelectionIdsExists()
@@ -1134,6 +1143,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedSelectRequiredOptions()
@@ -1255,6 +1265,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('The required options you selected are not available.', $result);
     }
 
+    /**
+     * @return void
+     */
     public function testPrepareForCartAdvancedParentClassReturnString()
     {
         $exceptedResult = 'String message';
@@ -1276,7 +1289,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($exceptedResult, $result);
     }
 
-
+    /**
+     * @return void
+     */
     public function testPrepareForCartAdvancedAllrequiredOption()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
@@ -1374,6 +1389,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Please select all required options.', $result);
     }
 
+    /**
+     * @return void
+     */
     public function testPrepareForCartAdvancedSpecifyProductOptions()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
@@ -1423,11 +1441,17 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Please specify product option(s).', $result);
     }
 
+    /**
+     * @return void
+     */
     public function testHasWeightTrue()
     {
         $this->assertTrue($this->model->hasWeight(), 'This product has no weight, but it should');
     }
 
+    /**
+     * @return void
+     */
     public function testGetIdentities()
     {
         $identities = ['id1', 'id2'];
@@ -1469,6 +1493,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($identities, $this->model->getIdentities($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testGetSkuWithType()
     {
         $sku = 'sku';
@@ -1487,6 +1514,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sku, $this->model->getSku($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testGetSkuWithoutType()
     {
         $sku = 'sku';
@@ -1539,6 +1569,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sku . '-' . $itemSku, $this->model->getSku($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testGetWeightWithoutCustomOption()
     {
         $weight = 5;
@@ -1559,6 +1592,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($weight, $this->model->getWeight($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testGetWeightWithCustomOption()
     {
         $weight = 5;
@@ -1610,6 +1646,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($weight, $this->model->getWeight($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testGetWeightWithSeveralCustomOption()
     {
         $weight = 5;
@@ -1668,6 +1707,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($weight * $qtyOption, $this->model->getWeight($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testIsVirtualWithoutCustomOption()
     {
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
@@ -1681,6 +1723,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->isVirtual($productMock));
     }
 
+    /**
+     * @return void
+     */
     public function testIsVirtual()
     {
         $selectionIds = [1, 2, 3];
@@ -1755,6 +1800,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @param $expected
      * @param $firstId
      * @param $secondId
+     * @return void
      * @dataProvider shakeSelectionsDataProvider
      */
     public function testShakeSelections($expected, $firstId, $secondId)
@@ -1823,6 +1869,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetSelectionsByIds()
@@ -1926,6 +1973,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->model->getSelectionsByIds($selectionIds, $productMock);
     }
 
+    /**
+     * @return void
+     */
     public function testGetOptionsByIds()
     {
         $optionsIds = [1, 2, 3];
@@ -1997,6 +2047,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->model->getOptionsByIds($optionsIds, $productMock);
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableFalse()
     {
         $product = new \Magento\Framework\Object(
@@ -2009,6 +2062,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->isSalable($product));
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableWithoutOptions()
     {
         $optionCollectionMock = $this->getMockBuilder('\Magento\Bundle\Model\Resource\Option\Collection')
@@ -2026,6 +2082,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->isSalable($product));
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableWithRequiredOptionsTrue()
     {
         $option1 = $this->getRequiredOptionMock(10, 10);
@@ -2071,6 +2130,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->isSalable($product));
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableCache()
     {
         $product = new \Magento\Framework\Object(
@@ -2084,6 +2146,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->isSalable($product));
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableWithEmptySelectionsCollection()
     {
         $option = $this->getRequiredOptionMock(1, 10);
@@ -2102,6 +2167,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->isSalable($product));
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableWithRequiredOptionsOutOfStock()
     {
         $option1 = $this->getRequiredOptionMock(10, 10);
@@ -2145,6 +2213,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->isSalable($product));
     }
 
+    /**
+     * @return void
+     */
     public function testIsSalableNoManageStock()
     {
         $option1 = $this->getRequiredOptionMock(10, 10);
@@ -2274,6 +2345,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         return $optionCollectionMock;
     }
 
+    /**
+     * @param bool $isManageStock
+     * @return \Magento\CatalogInventory\Api\Data\StockItem|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getStockItem($isManageStock)
     {
         $result = $this->getMockBuilder('\Magento\CatalogInventory\Api\Data\StockItem')
@@ -2291,6 +2366,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option $option
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product
+     * @return void
      */
     protected function parentClass($group, $option, $buyRequest, $product)
     {

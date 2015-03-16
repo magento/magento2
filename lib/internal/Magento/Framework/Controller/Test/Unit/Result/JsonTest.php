@@ -7,12 +7,15 @@
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
 /**
- * Class JSONTest
+ * Class JsonTest
  *
  * covers Magento\Framework\Controller\Result\Json
  */
-class JSONTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testRenderResult()
     {
         $json = '{"data":"data"}';
