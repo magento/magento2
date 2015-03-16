@@ -46,7 +46,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 
             // define row prototypeJS template
             template: mageTemplate(
-                    '<tr id="<%= _id %>">'
+                    '<tr id="<%- _id %>">'
                     <?php foreach ($block->getColumns() as $columnName => $column): ?>
                             + '<td>'
                             + '<?php echo $block->renderCellTemplate($columnName)?>'
@@ -54,10 +54,10 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                         <?php endforeach; ?>
 
                     <?php if ($block->isAddAfter()): ?>
-                            + '<td><button class="action- add" type="button" id="addAfterBtn<%= _id %>"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
+                            + '<td><button class="action- add" type="button" id="addAfterBtn<%- _id %>"><span><?php echo __('Add after'); ?><\/span><\/button><\/td>'
                         <?php endif; ?>
 
-                            + '<td class="col-actions"><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'<%= _id %>\')" class="action- delete" type="button"><span><?php echo __('Delete'); ?><\/span><\/button><\/td>'
+                            + '<td class="col-actions"><button onclick="arrayRow<?php echo $_htmlId ?>.del(\'<%- _id %>\')" class="action- delete" type="button"><span><?php echo __('Delete'); ?><\/span><\/button><\/td>'
                             +'<\/tr>'
             ),
 

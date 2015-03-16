@@ -149,7 +149,7 @@ class Topmenu extends Template implements IdentityInterface
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
 
-        $html .= '<ul class="level' . $childLevel . '">';
+        $html .= '<ul class="level' . $childLevel . ' submenu">';
         $html .= $this->_getHtml($child, $childrenWrapClass, $limit, $colStops);
         $html .= '</ul>';
 

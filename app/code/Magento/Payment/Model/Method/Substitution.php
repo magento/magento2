@@ -8,6 +8,8 @@ namespace Magento\Payment\Model\Method;
 
 /**
  * Substitution payment method for non-existing payments
+ *
+ * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  */
 class Substitution extends AbstractMethod
 {

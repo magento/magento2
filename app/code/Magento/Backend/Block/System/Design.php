@@ -24,7 +24,7 @@ class Design extends \Magento\Backend\Block\Template
             ]
         );
 
-        $this->getLayout()->getBlock('page-title')->setPageTitle('Store Design Schedule');
+        $this->getLayout()->getBlock('page.title')->setPageTitle('Store Design Schedule');
 
         return parent::_prepareLayout();
     }

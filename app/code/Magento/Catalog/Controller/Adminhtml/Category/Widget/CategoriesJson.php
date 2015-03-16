@@ -16,20 +16,20 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Registry $coreRegistry
     ) {
         parent::__construct($context, $layoutFactory);
@@ -40,7 +40,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
     /**
      * Categories tree node (Ajax version)
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -53,7 +53,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
                 $this->_coreRegistry->register('current_category', $category);
             }
             $categoryTreeBlock = $this->_getCategoryTreeBlock()->setSelectedCategories(explode(',', $selected));
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setJsonData($categoryTreeBlock->getTreeJson($category));
         }

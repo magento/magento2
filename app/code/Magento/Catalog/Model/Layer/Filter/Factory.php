@@ -42,7 +42,7 @@ class Factory
 
         if (!$filter instanceof \Magento\Catalog\Model\Layer\Filter\AbstractFilter) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                $className . ' doesn\'t extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter'
+                __('%1 doesn\'t extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter', $className)
             );
         }
         return $filter;

@@ -13,19 +13,15 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test creation for DeleteTermEntityTest.
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Enable "Terms and Conditions": Stores > Configuration > Sales > Checkout > Checkout Options
- * 2. Create term according to dataSet
+ * 1. Enable "Terms and Conditions": Stores > Configuration > Sales > Checkout > Checkout Options.
+ * 2. Create term according to dataSet.
  *
  * Steps:
- * 1. Open Backend Stores > Terms and Conditions
- * 2. Open created Term from preconditions
- * 3. Click on 'Delete' button
- * 4. Perform all assertions
+ * 1. Open Backend Stores > Terms and Conditions.
+ * 2. Open created Term from preconditions.
+ * 3. Click on 'Delete' button.
+ * 4. Perform all assertions.
  *
  * @group Terms_and_Conditions_(CS)
  * @ZephyrId MAGETWO-29687
@@ -96,7 +92,7 @@ class DeleteTermEntityTest extends Injectable
      */
     public function tearDown()
     {
-        ObjectManager::getInstance()->create(
+        $this->objectManager->create(
             'Magento\Core\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'checkout_term_condition', 'rollback' => true]
         )->run();

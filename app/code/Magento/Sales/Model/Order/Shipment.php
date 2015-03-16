@@ -92,7 +92,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -109,7 +109,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -130,7 +130,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $localeDate,
             $dateTime,
@@ -567,6 +567,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Sets items
+     *
+     * @param mixed $items
+     * @return $this
+     */
+    public function setItems($items)
+    {
+        return $this->setData(ShipmentInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns tracks
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[]
@@ -583,6 +594,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
             }
         }
         return $this->getData(ShipmentInterface::TRACKS);
+    }
+
+    /**
+     * Returns tracks
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $tracks
+     * @return $this
+     */
+    public function setTracks($tracks)
+    {
+        return $this->setData(ShipmentInterface::TRACKS, $tracks);
     }
 
     /**
@@ -705,6 +727,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         return $this->getData(ShipmentInterface::COMMENTS);
     }
 
+    /**
+     * Sets comments
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments(array $comments = null)
+    {
+        return $this->setData(ShipmentInterface::COMMENTS, $comments);
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
@@ -792,6 +825,27 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function setUpdatedAt($timestamp)
     {
         return $this->setData(ShipmentInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

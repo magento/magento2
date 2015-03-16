@@ -8,7 +8,6 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Payment\Model\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -101,8 +100,8 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
@@ -118,8 +117,8 @@ class Payment extends Info implements OrderPaymentInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
@@ -139,7 +138,7 @@ class Payment extends Info implements OrderPaymentInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $paymentData,
             $encryptor,
@@ -691,7 +690,6 @@ class Payment extends Info implements OrderPaymentInterface
                     if (!$captureTxn) {
                         throw new \Magento\Framework\Exception\LocalizedException(
                             __('If the invoice was created offline, try creating an offline credit memo.'),
-                            [],
                             $e
                         );
                     }
@@ -2571,6 +2569,27 @@ class Payment extends Info implements OrderPaymentInterface
     public function setAddressStatus($addressStatus)
     {
         return $this->setData(OrderPaymentInterface::ADDRESS_STATUS, $addressStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

@@ -9,7 +9,7 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -21,13 +21,13 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         $this->layoutFactory = $layoutFactory;
@@ -42,7 +42,7 @@ class TreeJson extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
             $this->_initAction();

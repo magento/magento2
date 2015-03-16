@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Exception\State;
 
-class ExpiredException extends \Magento\Framework\Exception\StateException
+use Magento\Framework\Exception\StateException;
+
+class ExpiredException extends StateException
 {
 }

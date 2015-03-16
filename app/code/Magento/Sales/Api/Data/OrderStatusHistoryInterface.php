@@ -72,6 +72,14 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the entity name for the order status history.
      *
      * @return string Entity name.
@@ -153,4 +161,21 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
      * @return $this
      */
     public function setEntityName($entityName);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
+    );
 }

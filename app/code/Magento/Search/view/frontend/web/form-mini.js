@@ -29,14 +29,14 @@ define([
             responseFieldElements: 'ul li',
             selectClass: 'selected',
             template:
-            '<li class="<%= data.row_class %>" id="qs-option-<%= data.index %>" role="option">' +
-            '<span class="qs-option-name">' +
-            ' <%= data.title %>' +
-            '</span>' +
-            '<span aria-hidden="true" class="amount">' +
-            '<%= data.num_results %>' +
-            '</span>' +
-            '</li>',
+                '<li class="<%- data.row_class %>" id="qs-option-<%- data.index %>" role="option">' +
+                    '<span class="qs-option-name">' +
+                       ' <%- data.title %>' +
+                    '</span>' +
+                    '<span aria-hidden="true" class="amount">' +
+                        '<%- data.num_results %>' +
+                    '</span>' +
+                '</li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]'
         },

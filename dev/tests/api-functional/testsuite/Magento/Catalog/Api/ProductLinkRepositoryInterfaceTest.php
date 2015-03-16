@@ -47,7 +47,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
                 ],
             ],
             [
-                'productSku' => $productSku,
+                'sku' => $productSku,
                 'type' => $linkType,
                 'linkedProductSku' => $linkedSku
             ]

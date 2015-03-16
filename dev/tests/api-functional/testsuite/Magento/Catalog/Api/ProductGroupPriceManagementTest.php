@@ -32,7 +32,7 @@ class ProductGroupPriceManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $groupPriceList = $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+        $groupPriceList = $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
         $this->assertCount(2, $groupPriceList);
         $this->assertEquals(9, $groupPriceList[0]['value']);
         $this->assertEquals(7, $groupPriceList[1]['value']);
@@ -56,7 +56,7 @@ class ProductGroupPriceManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Remove',
             ],
         ];
-        $requestData = ['productSku' => $productSku, 'customerGroupId' => $customerGroupId];
+        $requestData = ['sku' => $productSku, 'customerGroupId' => $customerGroupId];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
     }
 
@@ -77,7 +77,7 @@ class ProductGroupPriceManagementTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Add',
             ],
         ];
-        $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'customerGroupId' => 1, 'price' => 10]);
+        $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'customerGroupId' => 1, 'price' => 10]);
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductGroupPriceManagementInterface $service */
         $service = $objectManager->get('Magento\Catalog\Api\ProductGroupPriceManagementInterface');
@@ -106,7 +106,7 @@ class ProductGroupPriceManagementTest extends WebapiAbstract
             ],
 
         ];
-        $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'customerGroupId' => 1, 'price' => 10]);
+        $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'customerGroupId' => 1, 'price' => 10]);
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductGroupPriceManagementInterface $service */
         $service = $objectManager->get('Magento\Catalog\Api\ProductGroupPriceManagementInterface');

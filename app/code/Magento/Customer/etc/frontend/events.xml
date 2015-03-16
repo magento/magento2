@@ -17,11 +17,15 @@
     </event>
     <event name="customer_logout">
         <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindCustomerLogout" />
+        <observer name="customer_log_logout" instance="Magento\Customer\Model\Observer\Log" method="logLastLogoutAt" />
     </event>
     <event name="sales_quote_save_after">
         <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteCreate" />
     </event>
     <event name="checkout_quote_destroy">
         <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteDestroy" />
+    </event>
+    <event name="customer_login">
+        <observer name="customer_log_login" instance="Magento\Customer\Model\Observer\Log" method="logLastLoginAt" />
     </event>
 </config>

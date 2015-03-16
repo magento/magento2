@@ -38,7 +38,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Setup\ModuleDataSetupInterface',
             [
                 'resourceName' => 'core_setup',
-                'moduleName' => 'Magento_Core'
+                'moduleName' => 'Magento_Test'
             ]
         );
         $this->_connection = $installer->getConnection();

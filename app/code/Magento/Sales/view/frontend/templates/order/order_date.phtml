@@ -8,4 +8,4 @@
 
 ?>
 
-<div class="order-date"><?php echo __('<span class="label">Order Date:</span> %1', '<date>' . $block->formatDate($block->getOrder()->getCreatedAtStoreDate(), 'long') . '</date>') ?></div>
+<div class="order-date"><?php echo __('<span class="label">Order Date:</span> %1', '<date>' . $block->formatDate($block->getOrder()->getCreatedAtStoreDate(), \IntlDateFormatter::LONG) . '</date>') ?></div>

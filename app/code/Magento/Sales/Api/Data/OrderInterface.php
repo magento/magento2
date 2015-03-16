@@ -1069,6 +1069,14 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the external customer ID for the order.
      *
      * @return string External customer ID.
@@ -2664,4 +2672,19 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setBaseShippingInclTax($amount);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes);
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Exception\File;
 
-class ValidatorException extends \Magento\Framework\Exception\LocalizedException
+use Magento\Framework\Exception\LocalizedException;
+
+class ValidatorException extends LocalizedException
 {
 }

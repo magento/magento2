@@ -20,4 +20,12 @@ interface OrderPaymentSearchResultInterface extends \Magento\Framework\Api\Searc
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

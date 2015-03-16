@@ -11,7 +11,7 @@
 
     <virtualType name="Magento\TestModule1\Service\Config\TestModule1MetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">
         <arguments>
-            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\TestModule1\Service\V1\Entity\Eav\AttributeMetadataBuilder</argument>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\TestModuleMSC\Model\Data\Eav\AttributeMetadataBuilder</argument>
             <argument name="dataObjectClassName" xsi:type="string">Magento\TestModule1\Service\V1\Entity\Item</argument>
         </arguments>
     </virtualType>

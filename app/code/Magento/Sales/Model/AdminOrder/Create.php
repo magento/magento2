@@ -475,7 +475,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                 if ($qty > 0) {
                     $item = $this->initFromOrderItem($orderItem, $qty);
                     if (is_string($item)) {
-                        throw new \Magento\Framework\Exception\LocalizedException($item);
+                        throw new \Magento\Framework\Exception\LocalizedException(__($item));
                     }
                 }
             }
@@ -759,7 +759,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                     $newItem = $this->getQuote()->addProduct($product, $info);
 
                     if (is_string($newItem)) {
-                        throw new \Magento\Framework\Exception\LocalizedException($newItem);
+                        throw new \Magento\Framework\Exception\LocalizedException(__($newItem));
                     }
                     $product->unsSkipCheckRequiredOption();
                     $newItem->checkData();
@@ -794,7 +794,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
 
                         $cartItem = $cart->addProduct($product, $info);
                         if (is_string($cartItem)) {
-                            throw new \Magento\Framework\Exception\LocalizedException($cartItem);
+                            throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
                         }
                         $cartItem->setPrice($item->getProduct()->getPrice());
                         $this->_needCollectCart = true;
@@ -818,7 +818,9 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                         }
                     }
                     if (!$wishlist) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('We couldn\'t find this wish list.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('We couldn\'t find this wish list.')
+                        );
                     }
                     $wishlist->setStore(
                         $this->getSession()->getStore()
@@ -872,7 +874,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                 $orderItem = $this->_objectManager->create('Magento\Sales\Model\Order\Item')->load($orderItemId);
                 $item = $this->initFromOrderItem($orderItem);
                 if (is_string($item)) {
-                    throw new \Magento\Framework\Exception\LocalizedException($item);
+                    throw new \Magento\Framework\Exception\LocalizedException(__($item));
                 }
             }
         }
@@ -1004,7 +1006,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $item = $this->quoteInitializer->init($this->getQuote(), $product, $config);
 
         if (is_string($item)) {
-            throw new \Magento\Framework\Exception\LocalizedException($item);
+            throw new \Magento\Framework\Exception\LocalizedException(__($item));
         }
         $item->checkData();
         $this->setRecollect(true);
@@ -1548,7 +1550,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $data = $form->extractData($request);
         $data = $form->restoreData($data);
         $customer = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($customer, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $data,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
 
@@ -1666,7 +1672,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             }
         }
 
-        $this->dataObjectHelper->populateWithArray($customer, $data);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $data,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         return $customer;
     }
 

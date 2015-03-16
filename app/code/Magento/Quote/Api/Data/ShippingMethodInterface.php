@@ -147,4 +147,21 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setAvailable($available);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Quote\Api\Data\ShippingMethodExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
+    );
 }

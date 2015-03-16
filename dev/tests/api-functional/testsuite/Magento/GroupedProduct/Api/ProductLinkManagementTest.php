@@ -32,7 +32,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             ],
         ];
 
-        $actual = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'type' => $linkType]);
+        $actual = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'type' => $linkType]);
 
         $expected = [
             [
@@ -55,14 +55,14 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             array_walk(
                 $expected,
                 function (&$item) {
-                    $item['custom_attributes'] = [['attribute_code' => 'qty', 'value' => 1.0000]];
+                    $item['extension_attributes'] = ['qty' => 1.0000];
                 }
             );
         } else {
             array_walk(
                 $expected,
                 function (&$item) {
-                    $item['custom_attributes'] = [['attribute_code' => 'qty', 'value' => 1.0000]];
+                    $item['extension_attributes'] = ['qty' => 1.0000];
                 }
             );
         }

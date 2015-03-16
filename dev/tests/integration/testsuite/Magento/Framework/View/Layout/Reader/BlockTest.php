@@ -43,7 +43,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function testInterpretBlockDirective()
     {
         $pageXml = new \Magento\Framework\View\Layout\Element(
-            __DIR__ . '/_files/_layout_update_block.xml', 0, true
+            __DIR__ . '/_files/_layout_update_block.xml',
+            0,
+            true
         );
         $parentElement = new \Magento\Framework\View\Layout\Element('<page></page>');
 
@@ -71,13 +73,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->blockName, $structure->getStructure()[$this->childBlockName][self::IDX_PARENT]);
     }
 
-    /**
-     * @depends testInterpretBlockDirective
-     */
     public function testInterpretReferenceBlockDirective()
     {
         $pageXml = new \Magento\Framework\View\Layout\Element(
-            __DIR__ . '/_files/_layout_update_reference.xml', 0, true
+            __DIR__ . '/_files/_layout_update_reference.xml',
+            0,
+            true
         );
         $parentElement = new \Magento\Framework\View\Layout\Element('<page></page>');
 

@@ -179,7 +179,11 @@ class CreatePost extends \Magento\Customer\Controller\Account
             }
         }
         $addressDataObject = $this->addressDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $addressData,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
         $addressDataObject->setRegion($regionDataObject);
 
         $addressDataObject->setIsDefaultBilling(
@@ -293,7 +297,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
     protected function checkPasswordConfirmation($password, $confirmation)
     {
         if ($password != $confirmation) {
-            throw new InputException('Please make sure your passwords match.');
+            throw new InputException(__('Please make sure your passwords match.'));
         }
     }
 

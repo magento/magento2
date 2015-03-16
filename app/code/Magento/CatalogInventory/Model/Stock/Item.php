@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface as StockConfigurati
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -92,7 +92,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param MetadataServiceInterface $metadataService
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -107,7 +107,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        MetadataServiceInterface $metadataService,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -121,7 +121,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -806,6 +806,28 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     public function setStockStatusChangedAuto($stockStatusChangedAuto)
     {
         return $this->setData(self::STOCK_STATUS_CHANGED_AUTO, $stockStatusChangedAuto);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

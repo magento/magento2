@@ -29,9 +29,13 @@
         <div id="tree-div" class="tree-wrapper"></div>
     </div>
 </div>
-<div data-id="information-dialog-tree" style="display: none;">
-    <span class="messages"><?php echo __('This operation can take much time'); ?><span>
+
+<div data-id="information-dialog-tree" class="messages admin__scope" style="display: none;">
+    <div class="message message-notice">
+       <div><?php echo __('This operation can take much time'); ?></div>
+    </div>
 </div>
+
 <script>
 var tree;
 require([
@@ -272,7 +276,7 @@ function _renderNewTree(config, scopeParams) {
     //updateContent(url); //commented since ajax requests replaced with http ones to load a category
 }
 
-Ext.onReady(function () {
+jQuery(function () {
     categoryLoader = new Ext.tree.TreeLoader({
         dataUrl:'<?php echo $block->getLoadTreeUrl() ?>'
     });
@@ -415,15 +419,35 @@ var mageDialog = (function($) {
         self.dialog = $('[data-id="information-dialog-category"]').dialog({
             autoOpen:   false,
             modal:      true,
-            dialogClass: 'popup-window',
+            dialogClass: 'popup-window ui-popup-message',
             resizable: false,
+            width: '75%',
             title: $.mage.__('Warning message'),
-            buttons: [
-                {text: $.mage.__('Ok'), click: function() { onEvent('ok', this); }},
-                {text: $.mage.__('Cancel'), click: function() { onEvent('cancel', this); } }
+            position: {
+                my: 'left top',
+                at: 'center top',
+                of: 'body'
+            },
+            buttons: [{
+                    text: $.mage.__('Ok'),
+                    'class': 'action-primary',
+                    click: function () {
+                        onEvent('ok', this);
+                    }
+                }, {
+                    text: $.mage.__('Cancel'),
+                    'class': 'action-close',
+                    click: function () {
+                        onEvent('cancel', this);
+                    }
+                }
             ],
             open: function () {
+                $(this).closest('.ui-dialog').addClass('ui-dialog-active');
                 self.dialogOpened = true;
+
+                var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+                $(this).closest('.ui-dialog').css('margin-top', topMargin);
             },
             close: function(event, ui) {
                 $(this).dialog('destroy');

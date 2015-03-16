@@ -79,6 +79,8 @@ class GiftMessageManager
                         $message['to']
                     )->setMessage(
                         $message['message']
+                    )->setCustomerId(
+                        $quote->getCustomerId()
                     )->save();
 
                     $entity->setGiftMessageId($giftMessage->getId())->save();
@@ -103,12 +105,12 @@ class GiftMessageManager
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
         if (is_null($quote->getBillingAddress()->getCountryId())) {
-            throw new InvalidTransitionException('Billing address is not set');
+            throw new InvalidTransitionException(__('Billing address is not set'));
         }
 
         // check if shipping address is set
         if (is_null($quote->getShippingAddress()->getCountryId())) {
-            throw new InvalidTransitionException('Shipping address is not set');
+            throw new InvalidTransitionException(__('Shipping address is not set'));
         }
         $message[$type][$entityId] = [
             'from' => $giftMessage->getSender(),
@@ -119,7 +121,7 @@ class GiftMessageManager
         try {
             $this->add($message, $quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not add gift message to shopping cart');
+            throw new CouldNotSaveException(__('Could not add gift message to shopping cart'));
         }
     }
 }

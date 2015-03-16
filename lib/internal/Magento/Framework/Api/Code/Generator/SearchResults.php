@@ -51,7 +51,7 @@ class SearchResults extends EntityAbstract
                 'tags' => [
                     [
                         'name' => 'return',
-                        'description' => $this->_getSourceClassName() . '[]',
+                        'description' => $this->getSourceClassName() . '[]',
                     ],
                 ],
             ],

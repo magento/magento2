@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\Api;
+
+class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var \Magento\Framework\Api\ExtensionAttributesFactory */
+    private $factory;
+
+    protected function setUp()
+    {
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
+        /** @var \Magento\Framework\ObjectManagerInterface */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->factory = new ExtensionAttributesFactory($objectManager);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testCreateThrowExceptionIfInterfaceNotImplemented()
+    {
+        $this->factory->create('Magento\Framework\Api\ExtensionAttributesFactoryTest');
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testCreateThrowExceptionIfInterfaceNotOverridden()
+    {
+        $this->factory->create('\Magento\Wonderland\Model\Data\FakeExtensibleOne');
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testCreateThrowExceptionIfReturnIsIncorrect()
+    {
+        $this->factory->create('\Magento\Wonderland\Model\Data\FakeExtensibleTwo');
+    }
+
+    public function testCreate()
+    {
+        $this->assertInstanceOf(
+            'Magento\Wonderland\Api\Data\FakeRegionExtension',
+            $this->factory->create('Magento\Wonderland\Model\Data\FakeRegion')
+        );
+    }
+}
