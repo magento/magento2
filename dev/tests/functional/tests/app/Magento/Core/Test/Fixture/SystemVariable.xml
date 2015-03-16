@@ -9,7 +9,7 @@
   <fixture name="systemVariable" 
            module="Magento_Core" 
            type="composite" 
-           collection="Magento\Core\Model\Resource\Variable\Collection" 
+           collection="Magento\Variable\Model\Resource\Variable\Collection"
            handler_interface="Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface" 
            class="Magento\Core\Test\Fixture\SystemVariable">
     <dataset name="default">

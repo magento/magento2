@@ -72,6 +72,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $metadataService;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $extensibleDataObjectConverter;
+
+    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -81,6 +91,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param Resource\Product $resourceModel
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -91,7 +104,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\Resource\Product $resourceModel,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -102,6 +117,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -201,8 +218,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function save(\Magento\Catalog\Api\Data\ProductInterface $product, $saveOptions = false)
     {
+        if ($saveOptions) {
+            $productOptions = $product->getProductOptions();
+        }
+        $groupPrices = $product->getData('group_price');
+        $tierPrices = $product->getData('tier_price');
+
         $productId = $this->resourceModel->getIdBySku($product->getSku());
-        $product = $this->initializeProductData($product->toFlatArray(), empty($productId));
+        $productDataArray = $this->extensibleDataObjectConverter
+            ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
+        $product = $this->initializeProductData($productDataArray, empty($productId));
         $validationResult = $this->resourceModel->validate($product);
         if (true !== $validationResult) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
@@ -211,8 +236,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         try {
             if ($saveOptions) {
+                $product->setProductOptions($productOptions);
                 $product->setCanSaveCustomOptions(true);
             }
+            $product->setData('group_price', $groupPrices);
+            $product->setData('tier_price', $tierPrices);
             $this->resourceModel->save($product);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
@@ -233,14 +261,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
-        $productSku = $product->getSku();
+        $sku = $product->getSku();
         $productId = $product->getId();
         try {
             $this->resourceModel->delete($product);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\StateException('Unable to remove product ' . $productSku);
+            throw new \Magento\Framework\Exception\StateException('Unable to remove product ' . $sku);
         }
-        unset($this->instances[$productSku]);
+        unset($this->instances[$sku]);
         unset($this->instancesById[$productId]);
         return true;
     }
@@ -248,9 +276,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * {@inheritdoc}
      */
-    public function deleteById($productSku)
+    public function deleteById($sku)
     {
-        $product = $this->get($productSku);
+        $product = $this->get($sku);
         return $this->delete($product);
     }
 
@@ -261,12 +289,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
-
+        $defaultAttributeSetId = $this->eavConfig
+            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
         $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilter(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')
-                    ->setValue(\Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+                    ->setValue($defaultAttributeSetId)
                     ->create(),
             ]
         );

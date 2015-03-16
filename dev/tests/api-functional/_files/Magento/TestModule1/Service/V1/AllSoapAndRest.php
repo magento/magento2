@@ -5,7 +5,7 @@
  */
 namespace Magento\TestModule1\Service\V1;
 
-use Magento\TestModule1\Service\V1\Entity\CustomAttributeDataObjectFactory;
+use Magento\TestModuleMSC\Model\Data\CustomAttributeDataObjectFactory;
 use Magento\TestModule1\Service\V1\Entity\Item;
 use Magento\TestModule1\Service\V1\Entity\ItemFactory;
 

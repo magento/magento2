@@ -126,4 +126,25 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
     {
         return $this->setData(QuoteDetailsInterface::CUSTOMER_TAX_CLASS_ID, $customerTaxClassId);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

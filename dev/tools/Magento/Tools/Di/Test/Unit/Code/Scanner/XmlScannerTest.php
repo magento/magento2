@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tools\Di\Test\Unit\Code\Scanner;
 
 class XmlScannerTest extends \PHPUnit_Framework_TestCase
@@ -37,7 +40,7 @@ class XmlScannerTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectEntities()
     {
-        $className = 'Magento\Core\Model\Config\Invalidator\Proxy';
+        $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
         $this->_logMock->expects(
             $this->at(0)
         )->method(
@@ -66,7 +69,7 @@ class XmlScannerTest extends \PHPUnit_Framework_TestCase
             'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
         );
         $actual = $this->_model->collectEntities($this->_testFiles);
-        $expected = ['Magento\Framework\App\Request\Http\Proxy'];
+        $expected = [];
         $this->assertEquals($expected, $actual);
     }
 }

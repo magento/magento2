@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -63,7 +65,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_observer = (new ObjectManager($this))->getObject('Magento\Catalog\Model\Observer', [
-            'urlFactory' => $this->_getCleanMock('\Magento\Catalog\Model\UrlFactory'),
             'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
             'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
             'storeManager' => $this->_storeManager,

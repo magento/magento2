@@ -6,8 +6,8 @@
  */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
-    <vars module="Magento_Core">
-        <var name="var1">Core Value1</var>
+    <vars module="Magento_Store">
+        <var name="var1">Store Value1</var>
     </vars>
     <vars module="Namespace_Module">
         <var name="var1">value1</var>

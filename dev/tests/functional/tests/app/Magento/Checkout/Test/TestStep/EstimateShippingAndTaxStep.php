@@ -106,6 +106,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
     public function run()
     {
         $this->checkoutCart->open();
+        $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
         /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
         if ($this->cart !== null) {
             $cart = $this->fixtureFactory->createByCode(
@@ -113,6 +114,7 @@ class EstimateShippingAndTaxStep implements TestStepInterface
                 ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
             );
             $this->checkoutCart->getShippingBlock()->fillEstimateShippingAndTax($this->address);
+            $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
             if (!empty($this->shipping)) {
                 $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
             }

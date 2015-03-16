@@ -13,7 +13,6 @@ use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\AuthenticationException;
@@ -39,7 +38,7 @@ use Magento\Framework\Exception\AuthenticationException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
+class Customer extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Configuration paths for email templates and identities
@@ -195,17 +194,20 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Customer\Api\CustomerMetadataInterface
+     */
+    protected $metadataService;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param Resource\Customer $resource
-     * @param Config\Share $configShare
+     * @param ResourceCustomer $resource
+     * @param Share $configShare
      * @param AddressFactory $addressFactory
-     * @param Resource\Address\CollectionFactory $addressesFactory
+     * @param CollectionFactory $addressesFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param GroupRepositoryInterface $groupRepository
      * @param AttributeFactory $attributeFactory
@@ -214,6 +216,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param CustomerInterfaceFactory $customerDataFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param CustomerMetadataInterface $metadataService
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -221,8 +224,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -237,9 +238,11 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         CustomerInterfaceFactory $customerDataFactory,
         DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
+        $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
@@ -256,8 +259,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

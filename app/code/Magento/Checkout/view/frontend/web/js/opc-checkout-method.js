@@ -234,11 +234,9 @@ define([
                             if (msg) {
                                 if (Array.isArray(msg)) {
                                     msg = msg.reduce(function (str, chunk) {
-                                        str += '\n' + $.mage.__(chunk);
+                                        str += '\n' + chunk;
                                         return str;
                                     }, '');
-                                } else {
-                                    msg = $.mage.__(msg);
                                 }
 
                                 $(this.options.countrySelector).trigger('change');

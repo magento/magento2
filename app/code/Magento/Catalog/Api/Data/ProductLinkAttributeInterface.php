@@ -6,7 +6,9 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface ProductLinkAttributeInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+interface ProductLinkAttributeInterface extends ExtensibleDataInterface
 {
     /**
      * Get attribute code
@@ -37,4 +39,21 @@ interface ProductLinkAttributeInterface
      * @return $this
      */
     public function setType($type);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductLinkAttributeExtensionInterface $extensionAttributes
+    );
 }

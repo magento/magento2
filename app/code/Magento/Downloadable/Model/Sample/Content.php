@@ -117,4 +117,26 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->setData(self::SAMPLE_URL, $sampleUrl);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Downloadable\Api\Data\SampleContentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Downloadable\Api\Data\SampleContentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Downloadable\Api\Data\SampleContentExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

@@ -209,5 +209,27 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->setData(self::KEY_VALUES, $values);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\ConfigurableProduct\Api\Data\OptionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
     //@codeCoverageIgnoreEnd
 }

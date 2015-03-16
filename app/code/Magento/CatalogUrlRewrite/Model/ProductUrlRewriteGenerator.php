@@ -137,13 +137,22 @@ class ProductUrlRewriteGenerator
             }
         }
         $this->productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
+        /**
+         * @var $urls \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+         */
         $urls = array_merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $this->product),
             $this->categoriesUrlRewriteGenerator->generate($storeId, $this->product, $this->productCategories),
             $this->currentUrlRewritesRegenerator->generate($storeId, $this->product, $this->productCategories)
         );
+
+        /* Reduce duplicates. Last wins */
+        $result = [];
+        foreach ($urls as $url) {
+            $result[$url->getTargetPath() . '-' . $url->getStoreId()] = $url;
+        }
         $this->productCategories = null;
-        return $urls;
+        return $result;
     }
 
     /**

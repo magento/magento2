@@ -6,11 +6,11 @@
         "magento/module-store": "0.42.0-beta11",
         "magento/module-shipping": "0.42.0-beta11",
         "magento/module-directory": "0.42.0-beta11",
-        "magento/module-core": "0.42.0-beta11",
         "magento/module-catalog": "0.42.0-beta11",
         "magento/module-sales": "0.42.0-beta11",
         "magento/module-catalog-inventory": "0.42.0-beta11",
         "magento/module-quote": "0.42.0-beta11",
+        "magento/module-config": "0.42.0-beta11",
         "magento/framework": "0.42.0-beta11",
         "lib-libxml": "*",
         "magento/magento-composer-installer": "*"

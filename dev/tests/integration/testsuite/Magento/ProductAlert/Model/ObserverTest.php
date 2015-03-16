@@ -5,6 +5,9 @@
  */
 namespace Magento\ProductAlert\Model;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -13,6 +13,8 @@
     <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\Resource\Translate" />
     <preference for="Magento\Framework\Translate\Inline\StateInterface" type="Magento\Framework\Translate\Inline\State" />
     <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite" />
+    <preference for="Magento\Translation\Model\Js\DataProviderInterface" type="Magento\Translation\Model\Js\DataProvider"/>
+    <preference for="Magento\Framework\Translate\Js\Config" type="Magento\Translation\Model\Js\Config"/>
     <type name="Magento\Framework\Translate\Inline">
         <arguments>
             <argument name="templateFileName" xsi:type="string">Magento_Translation::translate_inline.phtml</argument>
@@ -49,6 +51,29 @@
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Translation\Model\Js\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Js\Config">
+        <arguments>
+            <argument name="patterns" xsi:type="array">
+                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="js" xsi:type="array">
+                    <item name="js" xsi:type="array">
+                        <item name="js_translation" xsi:type="string">Magento\Translation\Model\Js\PreProcessor</item>
+                    </item>
+                </item>
+                <item name="json" xsi:type="array">
+                    <item name="json" xsi:type="array">
+                        <item name="json_generation" xsi:type="string">Magento\Translation\Model\Json\PreProcessor</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>

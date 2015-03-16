@@ -6,7 +6,7 @@
         "magento/module-store": "0.42.0-beta11",
         "magento/module-sales": "0.42.0-beta11",
         "magento/module-catalog-inventory": "0.42.0-beta11",
-        "magento/module-core": "0.42.0-beta11",
+        "magento/module-config": "0.42.0-beta11",
         "magento/module-customer": "0.42.0-beta11",
         "magento/module-catalog": "0.42.0-beta11",
         "magento/module-payment": "0.42.0-beta11",

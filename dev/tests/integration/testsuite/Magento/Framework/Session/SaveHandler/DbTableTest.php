@@ -83,7 +83,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = $this->_objectManager->get('Magento\Framework\App\Resource');
         $this->_connection = $resource->getConnection('core_write');
-        $this->_sessionTable = $resource->getTableName('core_session');
+        $this->_sessionTable = $resource->getTableName('session');
 
         // session stores serialized objects with protected properties
         // we need to test this case to ensure that DB adapter successfully processes "\0" symbols in serialized data

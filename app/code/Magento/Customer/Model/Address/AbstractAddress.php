@@ -12,7 +12,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Model\Data\Address as AddressData;
-use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Address abstract model
@@ -29,7 +29,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
+class AbstractAddress extends AbstractExtensibleModel
 {
     /**
      * Possible customer address types
@@ -96,7 +96,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * @var AddressMetadataInterface
      */
-    protected $_addressMetadataService;
+    protected $metadataService;
 
     /**
      * @var AddressInterfaceFactory
@@ -116,14 +116,14 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param AddressMetadataInterface $addressMetadataService
+     * @param AddressMetadataInterface $metadataService
      * @param AddressInterfaceFactory $addressDataFactory
      * @param RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
@@ -135,14 +135,14 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        AddressMetadataInterface $addressMetadataService,
+        AddressMetadataInterface $metadataService,
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
@@ -156,14 +156,14 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         $this->_addressConfig = $addressConfig;
         $this->_regionFactory = $regionFactory;
         $this->_countryFactory = $countryFactory;
-        $this->_addressMetadataService = $addressMetadataService;
+        $this->metadataService = $metadataService;
         $this->addressDataFactory = $addressDataFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -488,7 +488,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         $addressId = $this->getId();
 
-        $attributes = $this->_addressMetadataService->getAllAttributesMetadata();
+        $attributes = $this->metadataService->getAllAttributesMetadata();
         $addressData = [];
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();

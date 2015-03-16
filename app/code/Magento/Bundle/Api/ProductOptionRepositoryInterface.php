@@ -11,23 +11,23 @@ interface ProductOptionRepositoryInterface
     /**
      * Get option for bundle product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $optionId
      * @return \Magento\Bundle\Api\Data\OptionInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function get($productSku, $optionId);
+    public function get($sku, $optionId);
 
     /**
      * Get all options for bundle product
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Bundle\Api\Data\OptionInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function getList($productSku);
+    public function getList($sku);
 
     /**
      * Remove bundle option
@@ -42,13 +42,13 @@ interface ProductOptionRepositoryInterface
     /**
      * Remove bundle option
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $optionId
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function deleteById($productSku, $optionId);
+    public function deleteById($sku, $optionId);
 
     /**
      * Add new option for bundle product

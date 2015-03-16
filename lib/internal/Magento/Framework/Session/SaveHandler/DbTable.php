@@ -31,7 +31,7 @@ class DbTable extends \SessionHandler
      */
     public function __construct(\Magento\Framework\App\Resource $resource)
     {
-        $this->_sessionTable = $resource->getTableName('core_session');
+        $this->_sessionTable = $resource->getTableName('session');
         $this->_write = $resource->getConnection('core_write');
         $this->checkConnection();
     }
