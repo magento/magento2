@@ -25,21 +25,29 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     protected $eavAttributeRepository;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
      * @param \Magento\Framework\Api\Config\MetadataConfig $metadataConfig
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Framework\Api\Config\MetadataConfig $metadataConfig,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
+        \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->metadataConfig = $metadataConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->eavAttributeRepository = $eavAttributeRepository;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -69,11 +77,14 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
+        $defaultAttributeSetId = $this->eavConfig
+            ->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
         $searchCriteria = $this->searchCriteriaBuilder->addFilter(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')
-                    ->setValue(\Magento\Catalog\Api\Data\CategoryAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+                    ->setValue($defaultAttributeSetId)
                     ->create(),
             ]
         );

@@ -150,7 +150,6 @@ class ValidatorFile extends Validator
 
             $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));
 
-            // TODO: I don't know how change this
             if (!is_null($this->product)) {
                 $this->product->getTypeInstance()->addFileQueue(
                     [

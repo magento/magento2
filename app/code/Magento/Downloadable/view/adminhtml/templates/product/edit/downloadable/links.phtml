@@ -80,29 +80,29 @@ require([
     registry.get('downloadable', function (Downloadable) {
         var linkTemplate = '<tr>'+
             '<td>'+
-                '<input type="hidden" class="__delete__" name="downloadable[link][<%= data.id %>][is_delete]" value="" />'+
-                '<input type="hidden" name="downloadable[link][<%= data.id %>][link_id]" value="<%= data.link_id %>" />'+
-                '<input type="text" class="required-entry input-text" name="downloadable[link][<%= data.id %>][title]" value="<%= data.title %>" />'+
-                '<?php echo $_product->getStoreId() ? '<input type="checkbox" id="downloadable_link_<%= data.id %>_title" name="downloadable[link][<%= data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_link_<%= data.id %>_title">Use Default Value</label>' : '' ?>'+
+                '<input type="hidden" class="__delete__" name="downloadable[link][<%- data.id %>][is_delete]" value="" />'+
+                '<input type="hidden" name="downloadable[link][<%- data.id %>][link_id]" value="<%- data.link_id %>" />'+
+                '<input type="text" class="required-entry input-text" name="downloadable[link][<%- data.id %>][title]" value="<%- data.title %>" />'+
+                '<?php echo $_product->getStoreId() ? '<input type="checkbox" id="downloadable_link_<%- data.id %>_title" name="downloadable[link][<%- data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_link_<%- data.id %>_title">Use Default Value</label>' : '' ?>'+
             '</td>'+
             <?php if ($block->getCanReadPrice() !== false) : ?>
             '<td class="input-price">'+
-                '<input type="text" id="downloadable_link_<%= data.id %>_price_value" class="input-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%= data.id %>][price]" value="<%= data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
                 '<label>[<?php echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
                 <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
-                '<br /><input type="checkbox" id="downloadable_link_<%= data.id %>_price" name="downloadable[link][<%= data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_<%= data.id %>_price">Use Default Value</label>' +
+                '<br /><input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_<%- data.id %>_price">Use Default Value</label>' +
                 <?php endif; ?>
             '</td>' +
             <?php else : ?>
-            '<input type="hidden" id="downloadable_link_<%= data.id %>_price_value" class="link-prices" name="downloadable[link][<%= data.id %>][price]" value="0" />' +
+            '<input type="hidden" id="downloadable_link_<%- data.id %>_price_value" class="link-prices" name="downloadable[link][<%- data.id %>][price]" value="0" />' +
             <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
-            '<input type="hidden" id="downloadable_link_<%= data.id %>_price" name="downloadable[link][<%= data.id %>][use_default_price]" value="1" />' +
+            '<input type="hidden" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1" />' +
             <?php endif; ?>
             <?php endif; ?>
-            '<td><input type="text" id="downloadable_link_<%= data.id %>_downloads" name="downloadable[link][<%= data.id %>][number_of_downloads]" class="input-text downloads" value="<%= data.number_of_downloads %>" />'+
-            '<p><input type="checkbox" class="checkbox" id="downloadable_link_<%= data.id %>_is_unlimited" name="downloadable[link][<%= data.id %>][is_unlimited]" value="1" <%= data.is_unlimited %> /> <label for="downloadable_link_<%= data.id %>_is_unlimited">Unlimited</label></p></td>'+
+            '<td><input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text downloads" value="<%- data.number_of_downloads %>" />'+
+            '<p><input type="checkbox" class="checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> /> <label for="downloadable_link_<%- data.id %>_is_unlimited">Unlimited</label></p></td>'+
             '<td>'+
-                '<select id="downloadable_link _<%= data.id %>_shareable" name="downloadable[link][<%= data.id %>][is_shareable]">'+
+                '<select id="downloadable_link _<%- data.id %>_shareable" name="downloadable[link][<%- data.id %>][is_shareable]">'+
                     '<option value="1">Yes</option>'+
                     '<option value="0">No</option>'+
                     '<option value="2" selected="selected">Use config</option>'+
@@ -111,58 +111,58 @@ require([
             '<td>'+
                 '<div class="files">'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_<%= data.id %>_sample_file_type"><input type="radio" class="radio" id="downloadable_link_<%= data.id %>_sample_file_type" name="downloadable[link][<%= data.id %>][sample][type]" value="file"<%= data.sample_file_checked %> /> File:</label>'+
-                        '<input type="hidden" id="downloadable_link_<%= data.id %>_sample_file_save" name="downloadable[link][<%= data.id %>][sample][file]" value="<%= data.sample_file_save %>" class="validate-downloadable-file"/>'+
-                        '<div id="downloadable_link_<%= data.id %>_sample_file" class="uploader">'+
-                            '<div id="downloadable_link_<%= data.id %>_sample_file-old" class="file-row-info"></div>'+
-                            '<div id="downloadable_link_<%= data.id %>_sample_file-new" class="file-row-info"></div>'+
+                        '<label for="downloadable_link_<%- data.id %>_sample_file_type"><input type="radio" class="radio" id="downloadable_link_<%- data.id %>_sample_file_type" name="downloadable[link][<%- data.id %>][sample][type]" value="file"<%- data.sample_file_checked %> /> File:</label>'+
+                        '<input type="hidden" id="downloadable_link_<%- data.id %>_sample_file_save" name="downloadable[link][<%- data.id %>][sample][file]" value="<%- data.sample_file_save %>" class="validate-downloadable-file"/>'+
+                        '<div id="downloadable_link_<%- data.id %>_sample_file" class="uploader">'+
+                            '<div id="downloadable_link_<%- data.id %>_sample_file-old" class="file-row-info"></div>'+
+                            '<div id="downloadable_link_<%- data.id %>_sample_file-new" class="file-row-info"></div>'+
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_<%= data.id %>_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
+                                '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
                                 '<script>' +
-                                    'linksUploader("#downloadable_link_<%= data.id %>_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
+                                    'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
                                 '</scr'+'ipt>'+
                             '</div>'+
                             '<div class="clear"></div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_<%= data.id %>_sample_url_type"><input type="radio" class="radio" id="downloadable_link_<%= data.id %>_sample_url_type" name="downloadable[link][<%= data.id %>][sample][type]" value="url"<%= data.sample_url_checked %> /> URL:</label><input type="text" class="input-text validate-downloadable-url validate-url" name="downloadable[link][<%= data.id %>][sample][url]" value="<%= data.sample_url %>" />'+
+                        '<label for="downloadable_link_<%- data.id %>_sample_url_type"><input type="radio" class="radio" id="downloadable_link_<%- data.id %>_sample_url_type" name="downloadable[link][<%- data.id %>][sample][type]" value="url"<%- data.sample_url_checked %> /> URL:</label><input type="text" class="input-text validate-downloadable-url validate-url" name="downloadable[link][<%- data.id %>][sample][url]" value="<%- data.sample_url %>" />'+
                     '</div>'+
                     '<div>'+
-                        '<span id="downloadable_link_<%= data.id %>_sample_container"></span>'+
+                        '<span id="downloadable_link_<%- data.id %>_sample_container"></span>'+
                     '</div>'+
                 '</div>'+
             '</td>'+
             '<td>'+
                 '<div class="files">'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_<%= data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%= data.id %>_file_type" name="downloadable[link][<%= data.id %>][type]" value="file"<%= data.file_checked %> /> File:</label>'+
-                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_<%= data.id %>_file_save" name="downloadable[link][<%= data.id %>][file]" value="<%= data.file_save %>" />'+
-                        '<div id="downloadable_link_<%= data.id %>_file" class="uploader">'+
-                            '<div id="downloadable_link_<%= data.id %>_file-old" class="file-row-info"></div>'+
-                            '<div id="downloadable_link_<%= data.id %>_file-new" class="file-row-info new-file"></div>'+
+                        '<label for="downloadable_link_<%- data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_file_type" name="downloadable[link][<%- data.id %>][type]" value="file"<%- data.file_checked %> /> File:</label>'+
+                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_<%- data.id %>_file_save" name="downloadable[link][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
+                        '<div id="downloadable_link_<%- data.id %>_file" class="uploader">'+
+                            '<div id="downloadable_link_<%- data.id %>_file-old" class="file-row-info"></div>'+
+                            '<div id="downloadable_link_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_<%= data.id %>_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
+                                '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
                                 '<script>' +
-                                    'linksUploader("#downloadable_link_<%= data.id %>_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
+                                    'linksUploader("#downloadable_link_<%- data.id %>_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
                                 '</scr'+'ipt>'+
                             '</div>'+
                             '<div class="clear"></div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<label for="downloadable_link_<%= data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%= data.id %>_url_type" name="downloadable[link][<%= data.id %>][type]" value="url"<%= data.url_checked %> /> URL:</label><input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[link][<%= data.id %>][link_url]" value="<%= data.link_url %>" />'+
+                        '<label for="downloadable_link_<%- data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_url_type" name="downloadable[link][<%- data.id %>][type]" value="url"<%- data.url_checked %> /> URL:</label><input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[link][<%- data.id %>][link_url]" value="<%- data.link_url %>" />'+
                     '</div>'+
                     '<div>'+
-                        '<span id="downloadable_link_<%= data.id %>_link_container"></span>'+
+                        '<span id="downloadable_link_<%- data.id %>_link_container"></span>'+
                     '</div>'+
                 '</div>'+
             '</td>'+
-            '<td><input type="text" name="downloadable[link][<%= data.id %>][sort_order]" value="<%= data.sort_order %>" class="input-text sort" /></td>'+
+            '<td><input type="text" name="downloadable[link][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort" /></td>'+
             '<td class="col-delete">'+
-                '<button id="downloadable_link_<%= data.id %>_delete_button" type="button" class="action- scalable delete delete-link-item"><span><span><span><?php echo __('Delete'); ?></span></span></span></button>'+
+                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action- scalable delete delete-link-item"><span><span><span><?php echo __('Delete'); ?></span></span></span></button>'+
             '</td>'+
         '</tr>';
 

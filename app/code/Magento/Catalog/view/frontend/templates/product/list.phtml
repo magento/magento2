@@ -133,13 +133,12 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
     </div>
     <?php echo $block->getToolbarHtml() ?>
     <?php if (!$block->isRedirectToCartEnabled()) : ?>
-        <script>
-            require([
-                'jquery',
-                'Magento_Catalog/js/catalog-add-to-cart'
-            ], function($) {
-                $('[data-role=tocart-form],.form.map.checkout').catalogAddToCart();
-            });
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {}
+            }
+        }
         </script>
     <?php endif; ?>
 <?php endif; ?>

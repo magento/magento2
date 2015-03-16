@@ -109,7 +109,7 @@
                 .css(border-bottom, @_nav-level0-item-border);
             }
         }
-        .ui-menu {
+        .submenu {
             &:not(:first-child) {
                 .css(background, @_submenu-background-color);
                 .css(border, @_submenu-border);
@@ -301,10 +301,11 @@
             &.parent:hover > .submenu {
                 overflow: visible !important;
             }
-            .ui-menu {
+            .submenu {
                 .css(font-size, @_submenu-font-size);
                 .css(font-weight, @_submenu-font-weight);
                 .css(min-width, @_submenu-min-width);
+                display: none;
                 padding: 0;
                 margin: 0 !important;
                 position: absolute;
@@ -346,7 +347,7 @@
                     .css(color, @_submenu-item-color-active);
                     .css(text-decoration, @_submenu-item-text-decoration-active);
                 }
-                .ui-menu {
+                .submenu {
                     top: 0 !important;
                     left: 100% !important;
                 }

@@ -19,7 +19,7 @@ use Magento\Store\Model\ScopeInterface;
 class ConfirmTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Account
+     * @var \Magento\Customer\Controller\Account\Confirm
      */
     protected $model;
 
@@ -171,7 +171,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressHelper' => $this->addressHelperMock,
                 'urlFactory' => $urlFactoryMock,
-                'resultRedirectFactory' => $redirectFactoryMock
+                'resultRedirectFactory' => $redirectFactoryMock,
             ]
         );
     }
@@ -426,7 +426,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 true,
-                __('Thank you for registering with')
+                __('Thank you for registering with'),
             ],
             [
                 1,
@@ -435,7 +435,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 false,
-                __('Thank you for registering with')
+                __('Thank you for registering with'),
             ],
         ];
     }
