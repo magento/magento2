@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Exception\State;
 
-class InputMismatchException extends \Magento\Framework\Exception\StateException
+use Magento\Framework\Exception\StateException;
+
+class InputMismatchException extends StateException
 {
 }

@@ -76,7 +76,7 @@ class LabelGenerator
         $shipment->setPackages($request->getParam('packages'));
         $response = $this->labelFactory->create()->requestToShipment($shipment);
         if ($response->hasErrors()) {
-            throw new \Magento\Framework\Exception\LocalizedException($response->getErrors());
+            throw new \Magento\Framework\Exception\LocalizedException(__($response->getErrors()));
         }
         if (!$response->hasInfo()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Response info is not exist.'));

@@ -45,7 +45,7 @@ class ResetPasswordPost extends \Magento\User\Controller\Adminhtml\Auth
             $this->getResponse()->setRedirect(
                 $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
             );
-        } catch (\Magento\Framework\Validator\ValidatorException $exception) {
+        } catch (\Magento\Framework\Validator\Exception $exception) {
             $this->messageManager->addMessages($exception->getMessages());
             $this->_redirect(
                 'adminhtml/auth/resetpassword',

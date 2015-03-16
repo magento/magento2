@@ -96,7 +96,7 @@ class Add extends Action\Action implements IndexInterface
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {
-                throw new \Magento\Framework\Exception\LocalizedException($result);
+                throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
             $wishlist->save();
 

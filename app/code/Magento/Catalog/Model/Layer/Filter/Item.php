@@ -56,7 +56,9 @@ class Item extends \Magento\Framework\Object
     {
         $filter = $this->getData('filter');
         if (!is_object($filter)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The filter must be an object. Please set correct filter.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The filter must be an object. Please set correct filter.')
+            );
         }
         return $filter;
     }
