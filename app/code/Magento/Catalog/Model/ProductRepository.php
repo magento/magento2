@@ -37,12 +37,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $initializationHelper;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -72,36 +72,45 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $metadataService;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
-     * @param \Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param Resource\Product\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param Resource\Product $resourceModel
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductFactory $productFactory,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
-        \Magento\Catalog\Api\Data\ProductSearchResultsDataBuilder $searchResultsBuilder,
+        \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
-        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\Resource\Product $resourceModel,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
         $this->initializationHelper = $initializationHelper;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -261,12 +270,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
-
+        $defaultAttributeSetId = $this->eavConfig
+            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
         $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilter(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')
-                    ->setValue(\Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+                    ->setValue($defaultAttributeSetId)
                     ->create(),
             ]
         );
@@ -293,10 +304,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
 
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
-        $this->searchResultsBuilder->setItems($collection->getItems());
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
-        return $this->searchResultsBuilder->create();
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+        return $searchResult;
     }
 
     /**

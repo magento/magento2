@@ -197,6 +197,14 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the hidden tax amount for the invoice item.
      *
      * @return float Hidden tax amount.

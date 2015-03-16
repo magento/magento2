@@ -132,7 +132,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $errorMessage = 'Missing route matches; unsure how to retrieve action';
         $event = $this->getMock('Zend\Mvc\MvcEvent');
-        $exception = $this->getMock('Magento\Setup\Exception', [], [$errorMessage]);
+        $exception = $this->getMock('Magento\Setup\Exception', ['getCode'], [$errorMessage]);
         $event->expects($this->once())->method('getRouteMatch')->willThrowException($exception);
         $this->consoleLogger->expects($this->once())->method('log')->with($errorMessage);
         $this->controller->onDispatch($event);
@@ -165,8 +165,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateAction()
     {
-        $this->installer->expects($this->once())->method('installSchema');
-        $this->installer->expects($this->once())->method('installDataFixtures');
+        $this->installer->expects($this->at(0))->method('updateModulesSequence');
+        $this->installer->expects($this->at(1))->method('installSchema');
+        $this->installer->expects($this->at(2))->method('installDataFixtures');
         $this->controller->updateAction();
     }
 

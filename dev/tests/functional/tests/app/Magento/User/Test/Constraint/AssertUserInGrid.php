@@ -11,7 +11,7 @@ use Magento\User\Test\Page\Adminhtml\UserIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertUserInGrid
+ * Asserts that user is present in User Grid.
  */
 class AssertUserInGrid extends AbstractConstraint
 {
@@ -20,20 +20,16 @@ class AssertUserInGrid extends AbstractConstraint
      *
      * @param UserIndex $userIndex
      * @param User $user
-     * @param User $customAdmin
      * @return void
      */
-    public function processAssert(
-        UserIndex $userIndex,
-        User $user,
-        User $customAdmin = null
-    ) {
-        $adminUser = ($user->hasData('password') || $user->hasData('username')) ? $user : $customAdmin;
-        $filter = ['username' => $adminUser->getUsername()];
+    public function processAssert(UserIndex $userIndex, User $user)
+    {
+        $filter = ['username' => $user->getUsername()];
+
         $userIndex->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $userIndex->getUserGrid()->isRowVisible($filter),
-            'User with name \'' . $adminUser->getUsername() . '\' is absent in User grid.'
+            'User with name \'' . $user->getUsername() . '\' is absent in User grid.'
         );
     }
 

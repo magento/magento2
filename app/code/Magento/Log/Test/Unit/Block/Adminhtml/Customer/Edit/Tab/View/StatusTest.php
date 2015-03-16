@@ -77,7 +77,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $backendSession->expects($this->any())->method('getCustomerData')->will($this->returnValue($customerData));
 
         $this->localeDate = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Timezone')
-            ->setMethods(['scopeDate', 'formatDate', 'getDefaultTimezonePath'])
+            ->setMethods(['scopeDate', 'formatDateTime', 'getDefaultTimezonePath'])
             ->disableOriginalConstructor()->getMock();
         $this->localeDate->expects($this->any())->method('getDefaultTimezonePath')
             ->will($this->returnValue('path/to/default/timezone'));
@@ -126,7 +126,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $date = date('Y-m-d H:i:s');
         $this->customerLog->expects($this->any())->method('getLoginAt')->will($this->returnValue($date));
-        $this->localeDate->expects($this->once())->method('formatDate')->will($this->returnValue($date));
+        $this->localeDate->expects($this->once())->method('formatDateTime')->will($this->returnValue($date));
         $this->assertEquals($date, $this->block->getLastLoginDate());
     }
 
@@ -141,7 +141,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $time = strtotime($date);
 
         $this->localeDate->expects($this->once())->method('scopeDate')->will($this->returnValue($date));
-        $this->localeDate->expects($this->once())->method('formatDate')->will($this->returnValue($date));
+        $this->localeDate->expects($this->once())->method('formatDateTime')->will($this->returnValue($date));
 
         $this->customerLog->expects($this->any())->method('getLoginAtTimestamp')->will($this->returnValue($time));
         $this->assertEquals($date, $this->block->getStoreLastLoginDate());

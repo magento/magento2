@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\CreateCmsPageEntityTest">
+        <variation name="CreateCmsPageEntityTestVariation1">
+            <data name="description" xsi:type="string">MAGETWO-12399: Create CMS Content Page</data>
+            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="cms/data/identifier" xsi:type="string">identifier-%isolation%</data>
+            <data name="cms/data/store_id" xsi:type="string">All Store Views</data>
+            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+        </variation>
+        <variation name="CreateCmsPageEntityTestVariation2">
+            <data name="description" xsi:type="string">Create page for default store view</data>
+            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
+        </variation>
+        <variation name="CreateCmsPageEntityTestVariation3">
+            <data name="issue" xsi:type="string">Bug: MAGETWO-34858</data>
+            <data name="description" xsi:type="string">Create page with widget and system variable</data>
+            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <data name="cms/data/content/widget/preset" xsi:type="string">default</data>
+            <data name="cms/data/content/variable" xsi:type="string">General Contact Name</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
+        </variation>
+        <variation name="CreateCmsPageEntityTestVariation4">
+            <data name="description" xsi:type="string">Create disabled page</data>
+            <data name="cms/data/title" xsi:type="string">NewCmsPage%isolation%</data>
+            <data name="cms/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
+            <data name="cms/data/is_active" xsi:type="string">Disabled</data>
+            <data name="cms/data/content/content" xsi:type="string">cms_page_text_content%isolation%</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageInGrid" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend" />
+        </variation>
+    </testCase>
+</config>

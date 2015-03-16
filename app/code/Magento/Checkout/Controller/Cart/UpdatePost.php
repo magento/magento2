@@ -20,7 +20,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
     {
         try {
             $this->cart->truncate()->save();
-            $this->_checkoutSession->setCartWasUpdated(true);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->messageManager->addError($exception->getMessage());
         } catch (\Exception $exception) {
@@ -39,7 +38,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
             $cartData = $this->getRequest()->getParam('cart');
             if (is_array($cartData)) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode()]
+                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
                 );
                 foreach ($cartData as $index => $data) {
                     if (isset($data['qty'])) {
@@ -53,7 +52,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
                 $cartData = $this->cart->suggestItemsQty($cartData);
                 $this->cart->updateItems($cartData)->save();
             }
-            $this->_checkoutSession->setCartWasUpdated(true);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError(
                 $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())

@@ -510,7 +510,11 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         $addressData[AddressData::REGION] = $region;
 
         $addressDataObject = $this->addressDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($addressDataObject, $addressData);
+        $this->dataObjectHelper->populateWithArray(
+            $addressDataObject,
+            $addressData,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
         if ($addressId) {
             $addressDataObject->setId($addressId);
         }

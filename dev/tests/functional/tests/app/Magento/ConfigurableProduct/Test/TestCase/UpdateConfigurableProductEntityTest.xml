@@ -50,7 +50,6 @@
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
-      <data name="issue" xsi:type="string">Bug: MTA-1616</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
@@ -75,7 +74,6 @@
       <data name="updatedProduct/data/weight" xsi:type="string">3</data>
       <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
       <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
-      <data name="issue" xsi:type="string">Bug: MTA-1616</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
       <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>

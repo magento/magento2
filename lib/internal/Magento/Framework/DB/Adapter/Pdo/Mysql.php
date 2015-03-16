@@ -275,7 +275,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Convert date to DB format
      *
-     * @param int|string|\Magento\Framework\Stdlib\DateTime\DateInterface $date
+     * @param int|string|\DateTime $date
      * @return \Zend_Db_Expr
      */
     public function convertDate($date)
@@ -286,7 +286,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Convert date and time to DB format
      *
-     * @param   int|string|\Magento\Framework\Stdlib\DateTime\DateInterface $datetime
+     * @param   int|string|\DateTime $datetime
      * @return \Zend_Db_Expr
      */
     public function convertDateTime($datetime)
@@ -1335,6 +1335,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         if (is_array($value) && empty($value)) {
             $value = new \Zend_Db_Expr('NULL');
+        }
+
+        if ($value instanceof \DateTimeInterface) {
+            $value = $value->format('Y-m-d H:i:s');
         }
 
         return parent::quoteInto($text, $value, $type, $count);
@@ -2624,7 +2628,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Format Date to internal database date format
      *
-     * @param int|string|\Magento\Framework\Stdlib\DateTime\DateInterface $date
+     * @param int|string|\DateTime $date
      * @param bool $includeTime
      * @return \Zend_Db_Expr
      */

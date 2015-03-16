@@ -6,31 +6,33 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="Magento\Wishlist\Test\TestCase\ConfigureProductInCustomerWishlistOnFrontendTest">
-    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation1" firstConstraint="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
-    </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation2" firstConstraint="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">configurableProduct::default</data>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
-    </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation3" firstConstraint="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
-    </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation4" firstConstraint="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
-    </variation>
-    <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation5" firstConstraint="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" method="test">
-      <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
-      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
-    </variation>
-  </testCase>
+    <testCase name="Magento\Wishlist\Test\TestCase\ConfigureProductInCustomerWishlistOnFrontendTest">
+        <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation1">
+            <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation2">
+            <data name="product" xsi:type="string">configurableProduct::default</data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation3">
+            <data name="issue" xsi:type="string">Bug: MAGETWO-33952</data>
+            <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation4">
+            <data name="issue" xsi:type="string">Bug: MAGETWO-33952</data>
+            <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
+        </variation>
+        <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation5">
+            <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
+            <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
+        </variation>
+    </testCase>
 </config>

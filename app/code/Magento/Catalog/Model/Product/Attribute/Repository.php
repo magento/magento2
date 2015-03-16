@@ -50,7 +50,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $metadataConfig;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -67,7 +67,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\Api\Config\MetadataConfig $metadataConfig
-     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -79,7 +79,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
         \Magento\Framework\Api\Config\MetadataConfig $metadataConfig,
-        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->attributeResource = $attributeResource;
@@ -216,11 +216,14 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
+        $defaultAttributeSetId = $this->eavConfig
+            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
         $searchCriteria = $this->searchCriteriaBuilder->addFilter(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')
-                    ->setValue(\Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+                    ->setValue($defaultAttributeSetId)
                     ->create(),
             ]
         );

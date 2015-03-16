@@ -19,11 +19,11 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'ar_KW', /*Arabic (Kuwait)*/
         'ar_MA', /*Arabic (Morocco)*/
         'ar_SA', /*Arabic (Saudi Arabia)*/
-        'az_AZ', /*Azerbaijani (Azerbaijan)*/
+        'az_Latn_AZ', /*Azerbaijani (Azerbaijan)*/
         'be_BY', /*Belarusian (Belarus)*/
         'bg_BG', /*Bulgarian (Bulgaria)*/
         'bn_BD', /*Bengali (Bangladesh)*/
-        'bs_BA', /*Bosnian (Bosnia)*/
+        'bs_Latn_BA', /*Bosnian (Bosnia)*/
         'ca_ES', /*Catalan (Catalonia)*/
         'cs_CZ', /*Czech (Czech Republic)*/
         'cy_GB', /*Welsh (United Kingdom)*/
@@ -44,7 +44,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'es_CR', /*Spanish (Costa Rica)*/
         'es_ES', /*Spanish (Spain)*/
         'es_MX', /*Spanish (Mexico)*/
-        'es_EU', /*Basque (Basque)*/
+        'eu_ES', /*Basque (Basque)*/
         'es_PE', /*Spanish (Peru)*/
         'et_EE', /*Estonian (Estonia)*/
         'fa_IR', /*Persian (Iran)*/
@@ -69,8 +69,8 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'lt_LT', /*Lithuanian (Lithuania)*/
         'lv_LV', /*Latvian (Latvia)*/
         'mk_MK', /*Macedonian (Macedonia)*/
-        'mn_MN', /*Mongolian (Mongolia)*/
-        'ms_MY', /*Malaysian (Malaysia)*/
+        'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
+        'ms_Latn_MY', /*Malaysian (Malaysia)*/
         'nl_NL', /*Dutch (Netherlands)*/
         'nb_NO', /*Norwegian BokmГ_l (Norway)*/
         'nn_NO', /*Norwegian Nynorsk (Norway)*/
@@ -82,16 +82,16 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'sk_SK', /*Slovak (Slovakia)*/
         'sl_SI', /*Slovenian (Slovenia)*/
         'sq_AL', /*Albanian (Albania)*/
-        'sr_RS', /*Serbian (Serbia)*/
+        'sr_Cyrl_RS', /*Serbian (Serbia)*/
         'sv_SE', /*Swedish (Sweden)*/
         'sw_KE', /*Swahili (Kenya)*/
         'th_TH', /*Thai (Thailand)*/
         'tr_TR', /*Turkish (Turkey)*/
         'uk_UA', /*Ukrainian (Ukraine)*/
         'vi_VN', /*Vietnamese (Vietnam)*/
-        'zh_CN', /*Chinese (China)*/
-        'zh_HK', /*Chinese (Hong Kong SAR)*/
-        'zh_TW', /*Chinese (Taiwan)*/
+        'zh_Hans_CN', /*Chinese (China)*/
+        'zh_Hant_HK', /*Chinese (Hong Kong SAR)*/
+        'zh_Hant_TW', /*Chinese (Taiwan)*/
         'es_CL', /*Spanich (Chile)*/
         'lo_LA', /*Laotian*/
         'es_VE', /*Spanish (Venezuela)*/
