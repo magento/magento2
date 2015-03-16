@@ -30,15 +30,13 @@ class ChainFactory implements ChainFactoryInterface
      */
     public function create(array $arguments = [])
     {
-        $arguments = array_diff_key(
+        $arguments = array_intersect_key(
             $arguments,
-            array_flip(
-                [
-                    'asset',
-                    'origContent',
-                    'origContentType'
-                ]
-            )
+            [
+                'asset' => 'asset',
+                'origContent' => 'origContent',
+                'origContentType' => 'origContentType'
+            ]
         );
         return $this->_objectManager->create('Magento\Framework\View\Asset\PreProcessor\Chain', $arguments);
     }

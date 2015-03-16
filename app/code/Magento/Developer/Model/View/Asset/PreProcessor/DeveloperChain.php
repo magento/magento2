@@ -6,7 +6,6 @@
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
 use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Framework\View\Asset\LocalInterface;
 
 class DeveloperChain extends Chain
@@ -16,7 +15,6 @@ class DeveloperChain extends Chain
      * @param string $origContent
      * @param string $origContentType
      * @param null $origAssetPath
-     * @param null $frontEndDevelopmentWorkflowType
      */
     public function __construct(
         LocalInterface $asset,
