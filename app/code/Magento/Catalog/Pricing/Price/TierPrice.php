@@ -162,17 +162,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         $qtyCache = [];
         foreach ($priceList as $priceKey => $price) {
             /* filter price by customer group */
-            $eligible = false;
-            if ($price['cust_group'] == $this->customerGroup) {
-                $eligible = true;
-            } elseif ($price['cust_group'] == $this->groupManagement->getAllCustomersGroup()->getId()) {
-                $eligible = true;
-            }
-            if (!$eligible) {
+            if ($price['cust_group'] != $this->customerGroup &&
+                $price['cust_group'] != $this->groupManagement->getAllCustomersGroup()->getId()) {
                 unset($priceList[$priceKey]);
                 continue;
             }
-
             /* select a lower price for each quantity */
             if (isset($qtyCache[$price['price_qty']])) {
                 $priceQty = $qtyCache[$price['price_qty']];
