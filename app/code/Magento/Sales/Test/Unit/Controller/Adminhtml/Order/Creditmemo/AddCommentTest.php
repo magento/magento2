@@ -76,7 +76,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultRawMock;
 
     /**
-     * Setup
+     * SetUp method
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -149,6 +151,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test execute module exception
+     *
+     * @return void
      */
     public function testExecuteModelException()
     {
@@ -175,6 +179,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test execute exception
+     *
+     * @return void
      */
     public function testExecuteException()
     {
@@ -201,6 +207,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test execute no comment
+     *
+     * @return void
      */
     public function testExecuteNoComment()
     {
@@ -228,6 +236,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test execute
+     *
+     * @return void
      */
     public function testExecute()
     {

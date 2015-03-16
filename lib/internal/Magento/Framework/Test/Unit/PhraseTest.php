@@ -20,7 +20,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     protected $rendererMock;
 
     /**
-     * Set up
+     * SetUp method
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -31,6 +33,8 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tear down
+     *
+     * @return void
      */
     protected function tearDown()
     {
@@ -39,6 +43,8 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test rendering
+     *
+     * @return void
      */
     public function testRendering()
     {
@@ -58,6 +64,8 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test defers rendering
+     *
+     * @return void
      */
     public function testDefersRendering()
     {
@@ -69,6 +77,8 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that to string is alias to render
+     *
+     * @return void
      */
     public function testThatToStringIsAliasToRender()
     {
@@ -88,6 +98,8 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get text
+     *
+     * @return void
      */
     public function testGetText()
     {
@@ -99,6 +111,8 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get arguments
+     *
+     * @return void
      */
     public function testGetArguments()
     {

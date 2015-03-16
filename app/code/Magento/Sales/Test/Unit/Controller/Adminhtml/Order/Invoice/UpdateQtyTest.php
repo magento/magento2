@@ -70,6 +70,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultJsonFactoryMock;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -151,6 +156,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $orderId = 1;
@@ -247,6 +257,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultRaw, $this->controller->execute());
     }
 
+    /**
+     * Test execute model exception
+     *
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $message = 'Cannot update item quantity.';
@@ -285,6 +300,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultJsonMock, $this->controller->execute());
     }
 
+    /**
+     * Test execute exception
+     *
+     * @return void
+     */
     public function testExecuteException()
     {
         $message = 'Cannot update item quantity.';

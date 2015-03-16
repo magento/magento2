@@ -80,7 +80,9 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
     protected $resultJson;
 
     /**
-     * Setup
+     * SetUp method
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -171,6 +173,8 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test execute
+     *
+     * @return void
      */
     public function testExecute()
     {
@@ -190,6 +194,8 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test validate minimum amount
+     *
+     * @return void
      */
     public function testValidateMinimumAmount()
     {
@@ -265,6 +271,8 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test validate minimum amount negative
+     *
+     * @return void
      */
     public function testValidateMinimumAmountNegative()
     {
