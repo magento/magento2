@@ -63,7 +63,7 @@ class InstallSchema implements InstallSchemaInterface
             'add_date',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Product alert add date'
         )->addColumn(
             'last_send_date',
@@ -151,7 +151,7 @@ class InstallSchema implements InstallSchemaInterface
             'add_date',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Product alert add date'
         )->addColumn(
             'send_date',

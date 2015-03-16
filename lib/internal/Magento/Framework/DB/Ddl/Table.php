@@ -59,7 +59,7 @@ class Table
     const MAX_VARBINARY_SIZE = 2147483648;
 
     /**
-     * Default values for timestampses - fill with current timestamp on inserting record, on changing and both cases
+     * Default values for timestamps - fill with current timestamp on inserting record, on changing and both cases
      */
     const TIMESTAMP_INIT_UPDATE = 'TIMESTAMP_INIT_UPDATE';
 

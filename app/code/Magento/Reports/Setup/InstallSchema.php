@@ -73,7 +73,7 @@ class InstallSchema implements InstallSchemaInterface
                 'added_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Added At'
             )
             ->addIndex(
@@ -184,7 +184,7 @@ class InstallSchema implements InstallSchemaInterface
                 'added_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Added At'
             )
             ->addIndex(
@@ -294,7 +294,7 @@ class InstallSchema implements InstallSchemaInterface
                 'logged_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Logged At'
             )
             ->addColumn(
@@ -419,7 +419,7 @@ class InstallSchema implements InstallSchemaInterface
                     'added_at',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false],
+                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                     'Added At'
                 )
                 ->addIndex(
@@ -528,7 +528,7 @@ class InstallSchema implements InstallSchemaInterface
                     'added_at',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false],
+                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                     'Added At'
                 )
                 ->addIndex(
