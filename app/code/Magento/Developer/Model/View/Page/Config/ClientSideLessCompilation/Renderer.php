@@ -18,13 +18,14 @@ class Renderer extends Config\Renderer
     private $assetRepo;
 
     /**
-     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param Config $pageConfig
      * @param \Magento\Framework\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
         Config $pageConfig,
@@ -56,21 +57,19 @@ class Renderer extends Config\Renderer
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
+        $taggedAttributes = parent::addDefaultAttributes($contentType, $attributes);
+
+        if ($taggedAttributes !== $attributes) {
+            return $taggedAttributes;
+        }
+
         switch ($contentType) {
-            case 'js':
-                $attributes = ' type="text/javascript" ' . $attributes;
-                break;
-
-            case 'css':
-                $attributes = ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
-                break;
-
             case 'less':
-                $attributes = ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
+                $taggedAttributes = ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
 
         }
-        return $attributes;
+        return $taggedAttributes;
     }
 
     /**

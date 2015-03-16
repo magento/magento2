@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\ObjectManager\Environment;
+namespace Magento\Framework\App\Test\Unit\ObjectManager\Environment;
 
-require 'ConfigTesting.php';
+use Magento\Framework\App\ObjectManager\Environment\Compiled;
 
 class CompiledTesting extends Compiled
 {

@@ -58,12 +58,11 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      *
      * @return \Magento\Framework\View\Page\Config\RendererInterface
      */
-    public function create(array $data =[])
+    public function create(array $data = [])
     {
+        $renderer = $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE);
         return $this->objectManager->create(
-            $this->rendererTypes[
-                $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE)
-            ],
+            $renderer,
             $data
         );
     }

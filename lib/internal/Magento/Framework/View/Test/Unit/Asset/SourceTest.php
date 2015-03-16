@@ -10,6 +10,8 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,6 +63,16 @@ class SourceTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var ChainFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $chainFactory;
+
+    /**
+     * @var Chain | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $chain;
+
     protected function setUp()
     {
         $this->cache = $this->getMock(
@@ -74,7 +86,18 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         );
         $this->theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
-        $config = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+
+        $this->chainFactory = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\ChainFactory')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->chain = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->chainFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->chain);
 
         $themeList = $this->getMockForAbstractClass('Magento\Framework\View\Design\Theme\ListInterface');
         $themeList->expects($this->any())
@@ -90,7 +113,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             $this->preProcessorPool,
             $this->viewFileResolution,
             $themeList,
-            $config
+            $this->chainFactory
         );
     }
 
@@ -137,11 +160,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $origFile
-     * @param string $origPath
-     * @param string $origContentType
-     * @param string $origContent
-     * @param string $isMaterialization
+     * @param $origFile
+     * @param $origPath
+     * @param $origContent
+     * @param $isMaterialization
+     *
      * @dataProvider getFileDataProvider
      */
     public function testGetFile($origFile, $origPath, $origContent, $isMaterialization)
@@ -165,8 +188,20 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($origContent));
         $this->preProcessorPool->expects($this->once())
             ->method('process')
-            ->will($this->returnCallback([$this, 'chainTestCallback']));
+            ->with($this->chain);
         if ($isMaterialization) {
+            $this->chain
+                ->expects($this->once())
+                ->method('isChanged')
+                ->willReturn(true);
+            $this->chain
+                ->expects($this->once())
+                ->method('getContent')
+                ->willReturn('processed');
+            $this->chain
+                ->expects($this->once())
+                ->method('getTargetAssetPath')
+                ->willReturn($filePath);
             $this->varDir->expects($this->once())
                 ->method('writeFile')
                 ->with('view_preprocessed/source/some/file.ext', 'processed');
@@ -217,9 +252,9 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     /**
      * A callback for affecting preprocessor chain in the test
      *
-     * @param \Magento\Framework\View\Asset\PreProcessor\Chain $chain
+     * @param Chain $chain
      */
-    public function chainTestCallback(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
+    public function chainTestCallback(Chain $chain)
     {
         $chain->setContentType('ext');
         $chain->setContent('processed');

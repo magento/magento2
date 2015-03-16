@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\ObjectManager\Environment;
 
+use Magento\Framework\App\Test\Unit\ObjectManager\Environment\CompiledTesting;
+
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,7 +17,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $envFactoryMock = $this->getMock('Magento\Framework\App\EnvironmentFactory', [], [], '', false);
-        $this->_compiled = new \Magento\Framework\App\ObjectManager\Environment\CompiledTesting($envFactoryMock);
+        $this->_compiled = new CompiledTesting($envFactoryMock);
     }
 
     public function testGetMode()

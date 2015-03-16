@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
-use Magento\Developer\Model\Config\Source\WorkflowType;
+use Magento\Framework\View\Asset\LocalInterface;
 
 /**
  * An object that's passed to preprocessors to carry current and original information for processing
@@ -15,7 +15,7 @@ use Magento\Developer\Model\Config\Source\WorkflowType;
 class Chain
 {
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface
+     * @var LocalInterface
      */
     private $asset;
 
@@ -27,7 +27,7 @@ class Chain
     /**
      * @var string
      */
-    private $origContentType;
+    protected $origContentType;
 
     /**
      * @var string
@@ -42,26 +42,24 @@ class Chain
     /**
      * @var string
      */
-    private $targetContentType;
+    protected $targetContentType;
 
     /**
      * @var null|string
      */
-    private $targetAssetPath;
+    protected $targetAssetPath;
 
     /**
-     * @param \Magento\Framework\View\Asset\LocalInterface $asset
+     * @param LocalInterface $asset
      * @param string $origContent
      * @param string $origContentType
      * @param null $origAssetPath
-     * @param null $frontEndDevelopmentWorkflowType
      */
     public function __construct(
-        \Magento\Framework\View\Asset\LocalInterface $asset,
+        LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origAssetPath = null,
-        $frontEndDevelopmentWorkflowType = null
+        $origAssetPath = null
     ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
@@ -70,18 +68,12 @@ class Chain
         $this->contentType = $origContentType;
         $this->targetContentType = $asset->getContentType();
         $this->targetAssetPath = $asset->getPath();
-
-        // todo will be fixed in MAGETWO-33631
-        if (WorkflowType::CLIENT_SIDE_COMPILATION == $frontEndDevelopmentWorkflowType) {
-            $this->targetContentType = $this->origContentType;
-            $this->targetAssetPath = $origAssetPath;
-        }
     }
 
     /**
      * Get asset object
      *
-     * @return \Magento\Framework\View\Asset\LocalInterface
+     * @return LocalInterface
      */
     public function getAsset()
     {

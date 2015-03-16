@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactory;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 /**
@@ -53,9 +53,9 @@ class Source
     private $themeList;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ChainFactory
      */
-    protected $scopeConfig;
+    private $chainFactory;
 
     /**
      * @param PreProcessor\Cache $cache
@@ -63,7 +63,7 @@ class Source
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ChainFactory $chainFactory
      */
     public function __construct(
         PreProcessor\Cache $cache,
@@ -71,7 +71,7 @@ class Source
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        ChainFactory $chainFactory
     ) {
         $this->cache = $cache;
         $this->filesystem = $filesystem;
@@ -80,7 +80,7 @@ class Source
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
         $this->themeList = $themeList;
-        $this->scopeConfig = $scopeConfig;
+        $this->chainFactory = $chainFactory;
     }
 
     /**
@@ -140,13 +140,15 @@ class Source
         if ($cached) {
             return unserialize($cached);
         }
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
-            $asset,
-            $this->rootDir->readFile($path),
-            $this->getContentType($path),
-            $path,
-            $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)
+        $chain = $this->chainFactory->create(
+            [
+                'asset' => $asset,
+                'origContent' => $this->rootDir->readFile($path),
+                'origContentType' => $this->getContentType($path),
+                'origAssetPath' => $path
+            ]
         );
+
         $this->preProcessorPool->process($chain);
         $chain->assertValid();
         if ($chain->isChanged()) {

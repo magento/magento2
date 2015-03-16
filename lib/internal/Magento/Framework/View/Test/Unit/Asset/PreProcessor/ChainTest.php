@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
-use Magento\Developer\Model\Config\Source\WorkflowType;
-
 /**
  * Class ChainTest
  *
@@ -103,33 +101,9 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue($assetPath));
-        $this->object = new Chain($this->asset, 'origContent', 'origType', $origPath);
+        $chain = new Chain($this->asset, 'origContent', 'origType', $origPath);
 
-        $this->assertSame($this->object->getTargetAssetPath(), $assetPath);
-        $this->assertNotSame($this->object->getTargetAssetPath(), $origPath);
-    }
-
-    public function testChainTargetAssetPathDevMode()
-    {
-        $assetPath = 'assetPath';
-        $origPath = 'origPath';
-
-        $this->asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $this->asset->expects($this->once())
-            ->method('getContentType')
-            ->will($this->returnValue('assetType'));
-        $this->asset->expects($this->once())
-            ->method('getPath')
-            ->will($this->returnValue($assetPath));
-        $this->object = new Chain(
-            $this->asset,
-            'origContent',
-            'origType',
-            $origPath,
-            WorkflowType::CLIENT_SIDE_COMPILATION
-        );
-
-        $this->assertSame($this->object->getTargetAssetPath(), $origPath);
-        $this->assertNotSame($this->object->getTargetAssetPath(), $assetPath);
+        $this->assertSame($chain->getTargetAssetPath(), $assetPath);
+        $this->assertNotSame($chain->getTargetAssetPath(), $origPath);
     }
 }

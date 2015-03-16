@@ -7,7 +7,6 @@
 namespace Magento\Framework\View\Page\Config;
 
 use Magento\Framework\View\Asset\GroupedCollection;
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Test for page config renderer model
@@ -117,7 +116,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);;
         $this->renderer = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Page\Config\Renderer',
             [
