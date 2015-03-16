@@ -12,6 +12,9 @@ use Magento\Framework\Phrase;
 
 class InvalidTransitionExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $instanceClass = 'Magento\Framework\Exception\State\InvalidTransitionException';

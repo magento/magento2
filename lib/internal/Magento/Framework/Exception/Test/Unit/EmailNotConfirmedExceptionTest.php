@@ -16,6 +16,9 @@ use Magento\Framework\Phrase;
  */
 class EmailNotConfirmedExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $emailNotConfirmedException = new EmailNotConfirmedException(

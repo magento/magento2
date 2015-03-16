@@ -10,6 +10,9 @@ use Magento\Framework\Phrase;
 
 class AuthorizationExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $authorizationException = new AuthorizationException(

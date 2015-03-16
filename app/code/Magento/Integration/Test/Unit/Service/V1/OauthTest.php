@@ -46,6 +46,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      */
     private $_tokenFactoryMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->_consumerFactory = $this->getMockBuilder(
@@ -108,6 +111,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_emptyConsumerMock->expects($this->any())->method('getId')->will($this->returnValue(null));
     }
 
+    /**
+     * @return void
+     */
     public function testDelete()
     {
         $this->_consumerMock->expects(
@@ -133,6 +139,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\IntegrationException
      * @expectedExceptionMessage Consumer with ID '1' does not exist.
      */
@@ -144,6 +151,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_service->deleteConsumer(self::VALUE_CONSUMER_ID);
     }
 
+    /**
+     * @return void
+     */
     public function testCreateAccessTokenAndClearExisting()
     {
 
@@ -182,6 +192,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_service->createAccessToken(self::VALUE_CONSUMER_ID, true));
     }
 
+    /**
+     * @return void
+     */
     public function testCreateAccessTokenWithoutClearingExisting()
     {
         $this->_consumerMock->expects(
@@ -207,6 +220,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_service->createAccessToken(self::VALUE_CONSUMER_ID, false));
     }
 
+    /**
+     * @return void
+     */
     public function testCreateAccessTokenInvalidConsumerId()
     {
         $this->_consumerMock->expects(
@@ -250,6 +266,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_service->createAccessToken(0, false));
     }
 
+    /**
+     * @return void
+     */
     public function testLoadConsumer()
     {
         $this->_consumerMock->expects(
@@ -268,6 +287,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Oauth\Exception
      * @expectedExceptionMessage Unexpected error. Unable to load oAuth consumer account.
      */
@@ -285,6 +305,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_service->loadConsumer(self::VALUE_CONSUMER_ID);
     }
 
+    /**
+     * @return void
+     */
     public function testLoadConsumerByKey()
     {
         $this->_consumerMock->expects(
@@ -304,6 +327,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Oauth\Exception
      * @expectedExceptionMessage Unexpected error. Unable to load oAuth consumer account.
      */
@@ -321,6 +345,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_service->loadConsumerByKey(self::VALUE_CONSUMER_KEY);
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteToken()
     {
         $this->_consumerMock->expects(
@@ -346,6 +373,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_service->deleteIntegrationToken(self::VALUE_CONSUMER_ID));
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteTokenNegative()
     {
         $this->_consumerMock->expects(
@@ -371,6 +401,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_service->deleteIntegrationToken(null));
     }
 
+    /**
+     * @return void
+     */
     public function testGetAccessTokenNoAccess()
     {
         $this->_consumerMock->expects(
@@ -394,6 +427,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_service->getAccessToken(self::VALUE_CONSUMER_ID), false);
     }
 
+    /**
+     * @return void
+     */
     public function testGetAccessSuccess()
     {
         $this->_consumerMock->expects(

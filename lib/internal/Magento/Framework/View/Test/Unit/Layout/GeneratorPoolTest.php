@@ -44,6 +44,9 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         // ScheduledStructure
@@ -95,6 +98,9 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $schedule
+     * @param array $expectedSchedule
+     * @return void
      * @dataProvider processDataProvider
      */
     public function testProcess($schedule, $expectedSchedule)

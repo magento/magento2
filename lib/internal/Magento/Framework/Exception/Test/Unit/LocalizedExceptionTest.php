@@ -21,6 +21,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     private $renderedMessage;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
@@ -34,12 +37,21 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Phrase::setRenderer($rendererMock);
     }
 
+    /**
+     * @return void
+     */
     public function tearDown()
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
 
-    /** @dataProvider constructorParametersDataProvider */
+    /**
+     * @param string $message
+     * @param array $params
+     * @param string $expectedLogMessage
+     * @return void
+     * @dataProvider constructorParametersDataProvider
+     */
     public function testConstructor($message, $params, $expectedLogMessage)
     {
         $cause = new \Exception();
@@ -57,6 +69,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($cause, $localizeException->getPrevious());
     }
 
+    /**
+     * @return array
+     */
     public function constructorParametersDataProvider()
     {
         return [
@@ -81,6 +96,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetRawMessage()
     {
         $message =  'message %1 %2';
@@ -96,6 +114,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($message, $localizeException->getRawMessage());
     }
 
+    /**
+     * @return void
+     */
     public function testGetParameters()
     {
         $message =  'message %1 %2';
@@ -112,6 +133,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($params, $localizeException->getParameters());
     }
 
+    /**
+     * @return void
+     */
     public function testGetLogMessage()
     {
         $message =  'message %1 %2';

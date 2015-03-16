@@ -17,6 +17,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Response\Http */
     protected $response;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->oauthRequestHelper = new \Magento\Framework\Oauth\Helper\Request();
@@ -29,12 +32,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown()
     {
         unset($this->oauthRequestHelper, $this->response);
     }
 
     /**
+     * @param \Exception $exception
+     * @param array $expected
+     * @return void
      * @dataProvider dataProviderForPrepareErrorResponseTest
      */
     public function testPrepareErrorResponse($exception, $expected)
@@ -48,6 +57,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['oauth_problem' => $expected[0]], $errorResponse);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForPrepareErrorResponseTest()
     {
         return [
@@ -70,6 +82,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $url
+     * @param string $host
      * @dataProvider hostsDataProvider
      */
     public function testGetRequestUrl($url, $host)
@@ -89,6 +103,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($url, $this->oauthRequestHelper->getRequestUrl($httpRequestMock));
     }
 
+    /**
+     * @return array
+     */
     public function hostsDataProvider()
     {
         return  [

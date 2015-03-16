@@ -13,6 +13,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Testing \Magento\Framework\Validator\Exception::getMessage
+     * @return void
      */
     public function testGetMessage()
     {

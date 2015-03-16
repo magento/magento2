@@ -91,6 +91,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultForwardMock;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
@@ -180,6 +183,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteNoCreditmemo()
     {
         $this->requestMock->expects($this->any())
@@ -203,6 +209,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $id = 123;
@@ -236,6 +245,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteException()
     {
         $id = 321;
@@ -269,6 +281,9 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecute()
     {
         $id = '111';
