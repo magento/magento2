@@ -133,7 +133,7 @@ TEXT;
                 }
             });
             //]]>
-        </script><?php echo "http://some.link.com/" ?> <em>inline text</em> </body></html>
+        </script><?php echo "http://some.link.com/" ?> <em>inline text</em></body></html>
 TEXT;
 
         $this->appDirectory->expects($this->once())
