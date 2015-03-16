@@ -4,7 +4,7 @@
  */
 
 'use strict';
-angular.module('customize-your-store', ['ngStorage'])
+angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
     .controller('customizeYourStoreController', ['$scope', '$localStorage' , '$state', '$http', '$sce', function ($scope, $localStorage, $state, $http, $sce) {
         $scope.store = {
             timezone: 'America/Los_Angeles',
