@@ -58,13 +58,6 @@ class Page extends Block
     ];
 
     /**
-     * Selector for uninitialized page.
-     *
-     * @var string
-     */
-    protected $uninitialized = '//body[(@data-mage-init)]';
-
-    /**
      * Get page content text.
      *
      * @return string
