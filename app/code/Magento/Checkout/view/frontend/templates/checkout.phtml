@@ -1,0 +1,23 @@
+<?php
+/**
+ * {license_notice}
+ *
+ * @copyright   {copyright}
+ * @license     {license_link}
+ */
+?>
+<div id="checkout">
+    <h1>Checkout</h1>
+    <script type="text/x-magento-init">
+        {
+            "#checkout": {
+                "Magento_Checkout/js/checkout": {
+                    "formKey": "<?php echo $this->getFormKey(); ?>",
+                    "baseUrl": "<?php echo $this->getBaseUrl();?>",
+                    "isLoggedIn": <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>,
+                    "layout": <?php echo $this->getJsLayout();?>
+                }
+            }
+        }
+    </script>
+</div>

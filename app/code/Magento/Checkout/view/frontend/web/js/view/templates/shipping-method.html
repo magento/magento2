@@ -1,0 +1,22 @@
+<h2>Shipping Method</h2>
+{{#if shippingRateGroups}}
+    <form name="shipping-method-form" id="shipping-method-form">
+        <fieldset class="fieldset">
+            <legend class="legend"><span>{{@key}}</span></legend>
+            <dl class="items methods-shipping">
+                {{#each shippingRateGroups }}
+                <dt class="item-title {{@key}}">{{@key}}</dt>
+                <dd class="item-content {{@key}}">
+                    <div class="field choice">
+                        <input name="shipping_method" type="radio" value="{{@key}}" id="s_method_{{@key}}" checked="checked" />
+                        <label class="label" for="s_method_{{code}}">{{@key}}</label>
+                    </div>
+                </dd>
+                {{/each}}
+            </dl>
+            <input type="submit" value="Continue" />
+        </fieldset>
+    </form>
+{{else}}
+    <p>Sorry, no quotes are available for this order at this time.</p>
+{{/if}}

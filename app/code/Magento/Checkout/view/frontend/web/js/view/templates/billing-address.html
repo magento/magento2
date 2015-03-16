@@ -1,0 +1,12 @@
+<h2>Billing Information </h2>
+<form method="post" id="billing-address-form">
+    <label for="billing-address">Select a billing address from your address book or enter a new address:</label>
+    <select name="billing-address" id="billing-address">
+        {{#each addresses}}
+            <option value="{{id}}">{{region.region}} {{city}} {{street}}</option>
+        {{/each}}
+    </select>
+    <input type="checkbox" name="billing[use_for_shipping]" id="use_for_shipping" />
+    <label for="use_for_shipping">Ship to this address</label>
+    <input type="submit" value="Continue">
+</form>

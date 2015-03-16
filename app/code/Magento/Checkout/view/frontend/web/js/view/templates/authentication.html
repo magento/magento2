@@ -1,0 +1,24 @@
+<h2>Checkout Method</h2>
+<h3>Login</h3>
+<p>Already registered? Please log in below:</p>
+<form method="post" id="login-form">
+    <fieldset>
+        <label for="login">Login</label>
+        <input type="text" name="login" id="login"/>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password"/>
+        <input type="submit" />
+        <a href="">Forgot your password?</a>
+    </fieldset>
+</form>
+<h2>Checkout as a Guest or Register</h2>
+<p>Register with us for future convenience:</p>
+<form method="get">
+    <fieldset>
+        <label for="guest">Checkout as Guest</label>
+        <input type="radio" name="notuser[guest]" id="guest"/>
+        <label for="register">Register</label>
+        <input type="radio" name="notuser[register]" id="register"/>
+        <input type="submit" value="Continue"/>
+    </fieldset>
+</form>

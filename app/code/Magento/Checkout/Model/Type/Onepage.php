@@ -460,7 +460,7 @@ class Onepage
             /**
              * Billing address using options
              */
-            $usingCase = isset($data['use_for_shipping']) ? (int)$data['use_for_shipping'] : self::NOT_USE_FOR_SHIPPING;
+            $usingCase = isset($data['use_for_shipping']) ? (bool)$data['use_for_shipping'] : self::NOT_USE_FOR_SHIPPING;
 
             switch ($usingCase) {
                 case self::NOT_USE_FOR_SHIPPING:
