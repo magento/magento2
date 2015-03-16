@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tools\Di\Compiler\Config\Chain;
+namespace Magento\Tools\Di\Test\Unit\Compiler\Config\Chain;
+
+use Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving;
 
 class PreferencesResolvingTest extends \PHPUnit_Framework_TestCase
 {

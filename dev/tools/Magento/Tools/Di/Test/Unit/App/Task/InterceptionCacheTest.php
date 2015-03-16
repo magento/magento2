@@ -3,9 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\Di\App\Task;
+namespace Magento\Tools\Di\Test\Unit\App\Task;
 
-use Magento\Tools\Di\App\Task\Operation\Interception;
 use Magento\Tools\Di\App\Task\Operation\InterceptionCache;
 
 class InterceptionCacheTest extends \PHPUnit_Framework_TestCase

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\Di\Code\Generator;
+namespace Magento\Tools\Di\Test\Unit\Code\Generator;
 
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
 

@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Unit\App\ObjectManager\Environment;
+namespace Magento\Framework\App\Test\Unit\ObjectManager\Environment;
 
-use Magento\Framework\App\Test\Unit\ObjectManager\Environment\CompiledTesting;
+use Magento\Framework\App\ObjectManager\Environment\Compiled;
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\ObjectManager\Environment\Compiled
+     * @var Compiled
      */
     protected $_compiled;
 

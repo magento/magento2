@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Developer\Test\View\Model\View\Asset\PreProcessor;
+namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChain;

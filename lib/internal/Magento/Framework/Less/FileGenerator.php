@@ -99,7 +99,7 @@ class FileGenerator implements SourceFileGeneratorInterface
     public function generateFileTree(Chain $chain)
     {
         /**
-         * @bug This logic is duplicated at \Magento\Framework\View\Asset\PreProcessor\Pool::getPreProcessors()
+         * @bug This logic is duplicated at \Magento\Framework\View\Asset\PreProcessor\Pool
          * If you need to extend or modify behavior of LESS preprocessing, you must account for both places
          */
 

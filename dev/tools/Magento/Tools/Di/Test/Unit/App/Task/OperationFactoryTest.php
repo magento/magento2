@@ -6,7 +6,10 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Tools\Di\App\Task;
+namespace Magento\Tools\Di\Test\Unit\App\Task;
+
+use Magento\Tools\Di\App\Task\OperationFactory;
+use Magento\Tools\Di\App\Task\OperationException;
 
 class OperationFactoryTest extends \PHPUnit_Framework_TestCase
 {

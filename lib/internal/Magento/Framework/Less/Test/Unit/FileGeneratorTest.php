@@ -6,9 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\Less;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
+namespace Magento\Framework\Less\Test\Unit;
 
 class FileGeneratorTest extends \PHPUnit_Framework_TestCase
 {

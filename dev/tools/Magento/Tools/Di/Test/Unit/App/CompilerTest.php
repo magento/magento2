@@ -3,7 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\Di\App;
+namespace Magento\Tools\Di\Test\Unit\App;
+
+use Magento\Framework\App\Console\Response;
+use Magento\Tools\Di\App\Compiler;
+use Magento\Tools\Di\App\Task;
 
 class CompilerTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +27,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     private $taskManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Console\Response | \PHPUnit_Framework_MockObject_MockObject
+     * @var Response | \PHPUnit_Framework_MockObject_MockObject
      */
     private $responseMock;
 
@@ -62,7 +66,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->taskManagerMock->expects($this->at($index))->method('process');
         $this->responseMock->expects($this->once())
             ->method('setCode')
-            ->with(\Magento\Framework\App\Console\Response::SUCCESS);
+            ->with(Response::SUCCESS);
 
         $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->application->launch());
     }
@@ -87,7 +91,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->taskManagerMock->expects($this->never())->method('process');
         $this->responseMock->expects($this->once())
             ->method('setCode')
-            ->with(\Magento\Framework\App\Console\Response::ERROR);
+            ->with(Response::ERROR);
 
         $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->application->launch());
     }

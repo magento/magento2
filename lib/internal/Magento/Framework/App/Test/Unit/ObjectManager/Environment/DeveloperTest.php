@@ -3,19 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\ObjectManager\Environment;
+namespace Magento\Framework\App\Test\Unit\ObjectManager\Environment;
+
+use Magento\Framework\App\ObjectManager\Environment\Developer;
 
 class DeveloperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\ObjectManager\Environment\Developer
+     * @var Developer
      */
     protected $_developer;
 
     protected function setUp()
     {
         $envFactoryMock = $this->getMock('Magento\Framework\App\EnvironmentFactory', [], [], '', false);
-        $this->_developer = new \Magento\Framework\App\ObjectManager\Environment\Developer($envFactoryMock);
+        $this->_developer = new Developer($envFactoryMock);
     }
 
     public function testGetMode()

@@ -6,12 +6,13 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\View\Asset;
+namespace Magento\Framework\View\Test\Unit\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\Source;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

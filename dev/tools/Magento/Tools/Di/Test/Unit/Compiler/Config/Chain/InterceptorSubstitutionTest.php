@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\Di\Compiler\Config\Chain;
+namespace Magento\Tools\Di\Test\Unit\Compiler\Config\Chain;
+
+use Magento\Tools\Di\Compiler\Config\Chain\InterceptorSubstitution;
 
 class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
 {
