@@ -229,39 +229,89 @@
 }
 
 .grid {
-  .actions-split .dropdown-menu {
-    right: auto;
-    left: auto;
-    text-align: left;
-    color: #676056;
-    font-weight: normal;
-
-    &:after  {
-      right: auto;
-      left: 9px;
+    .actions-split {
+        .clearfix();
+        display: inline-block;
+        position: relative;
+        z-index: 100;
+        &.active {
+            .dropdown-menu {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+        .action-toggle,
+        .action-default {
+            float: left;
+            margin: 0;
+        }
+        .action-default {
+            margin-right: 3rem;
+        }
+        .action-toggle {
+            border-left-color: rgba(0, 0, 0, .2);
+            bottom: 0;
+            padding-left: 0;
+            padding-right: 3rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+            &.active {
+                &:after {
+                    transform: rotate(180deg);
+                }
+            }
+            &:after {
+                border-color: #645d53 transparent transparent transparent;
+                border-style: solid;
+                border-width: .5rem .5rem 0 .5rem;
+                content: '';
+                height: 0;
+                margin-top: -.25rem;
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                width: 0;
+            }
+            &:hover {
+                &:after {
+                    border-color: darken(#645d53, 10%) transparent transparent transparent;
+                }
+            }
+            > span {
+                .visually-hidden();
+            }
+        }
+        .dropdown-menu {
+            > li {
+                padding: 4px 15px;
+                &:hover {
+                    background-color: #e8e8e8;
+                }
+                span {
+                    display: block;
+                }
+            }
+        }
     }
-    &:before {
-      right: auto;
-      left: 10px;
+
+    .grid-actions {
+        padding: 10px 0;
     }
-  }
 
-  .grid-actions {
-    padding: 10px 0;
-  }
+    .hor-scroll {
+        padding-top: 10px;
+    }
 
-  .hor-scroll {
-    padding-top: 10px;
-  }
-
-  .select-box {
-    display: inline-block;
-    vertical-align: top;
-    margin: -12px -10px -7px;
-    padding: 12px 10px 7px;
-    width: 100%;
-  }
+    .select-box {
+        display: inline-block;
+        vertical-align: top;
+        margin: -12px -10px -7px;
+        padding: 12px 10px 7px;
+        width: 100%;
+    }
 }
+
 .filters {
     &-toggle {
         .button(
@@ -491,7 +541,7 @@
         li {
           margin: 0;
           padding: 4px 15px;
-          border-bottom: 1px solid #E5E5E5;
+          border-bottom: 1px solid #e5e5e5;
         }
         li:hover {
           background: #e8e8e8;
@@ -500,7 +550,7 @@
         span {
             font-weight: normal;
             font-size: 13px;
-            color: #645D53;
+            color: #645d53;
         }
         &.active {
             display: block;
@@ -530,7 +580,6 @@
     }
 }
 
-
 //
 // Form Component
 //
@@ -540,7 +589,7 @@
 .field .control select[disabled],
 .field .control select[disabled] ~ .addafter {
     background-color: #f4f4f4;
-    border-color: #dddddd;
+    border-color: #ddd;
     box-shadow: none;
     color: #999;
 }
