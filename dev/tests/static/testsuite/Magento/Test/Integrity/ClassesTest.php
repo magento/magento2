@@ -69,7 +69,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $this->_assertClassesExist($classes, $file);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
         );
     }
 
