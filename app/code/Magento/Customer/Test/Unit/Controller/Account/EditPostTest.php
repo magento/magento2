@@ -252,13 +252,13 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagement
             ->expects($this->once())
             ->method('changePassword')
-            ->willThrowException(new \Magento\Framework\Exception\AuthenticationException('Error'));
+            ->willThrowException(new \Magento\Framework\Exception\AuthenticationException(__('Error')));
         $this->messageManager
             ->expects($this->once())
             ->method('addError')
             ->with('Error');
 
-        $exception = new \Magento\Framework\Exception\InputException('Error');
+        $exception = new \Magento\Framework\Exception\InputException(__('Error'));
         $this->customerRepository
             ->expects($this->once())
             ->method('save')

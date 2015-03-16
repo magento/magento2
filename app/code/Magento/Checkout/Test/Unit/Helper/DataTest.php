@@ -123,8 +123,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->_checkoutSession = $arguments['checkoutSession'];
-        $localeDate = $arguments['localeDate'];
-        $localeDate->expects($this->any())->method('date')->will($this->returnValue('Oct 02, 2013'));
+        $arguments['localeDate']->expects($this->any())
+            ->method('formatDateTime')
+            ->willReturn('Oct 02, 2013');
 
         $this->_transportBuilder = $arguments['transportBuilder'];
 
