@@ -96,6 +96,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRawMock;
 
+    /**
+     * Set up method
+     *
+     * @return void
+     */
     public function setUp()
     {
         $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
@@ -189,6 +194,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute model exception
+     *
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $message = 'Model exception';
@@ -215,6 +225,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute exception
+     *
+     * @return void
+     */
     public function testExecuteException()
     {
         $message = 'Cannot update the item\'s quantity.';
@@ -241,6 +256,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $response = 'output';

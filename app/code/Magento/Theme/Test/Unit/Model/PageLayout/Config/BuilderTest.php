@@ -32,7 +32,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected $themeCollection;
 
     /**
-     * Setup
+     * SetUp method
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -66,6 +68,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get page layouts config
+     *
+     * @return void
      */
     public function testGetPageLayoutsConfig()
     {

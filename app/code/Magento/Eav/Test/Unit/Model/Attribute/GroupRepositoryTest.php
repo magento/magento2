@@ -37,6 +37,11 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $groupListFactoryMock;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->groupResourceMock = $this->getMock(
@@ -82,6 +87,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test saving if object is new
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
+     */
     public function testSaveIfObjectNew()
     {
         $attributeSetId = 42;
@@ -100,6 +112,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($groupMock, $this->model->save($groupMock));
     }
 
+    /**
+     * Test saving if object is not new
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
+     */
     public function testSaveIfObjectNotNew()
     {
         $attributeSetId = 42;
@@ -127,8 +146,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test saving throws exception if attribute set does not exist
+     *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with attributeSetId = -1
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
      */
     public function testSaveThrowExceptionIfAttributeSetDoesNotExist()
     {
@@ -147,8 +171,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test saving throws exception if cannot save group
+     *
      * @expectedException \Magento\Framework\Exception\StateException
      * @expectedExceptionMessage Cannot save attributeGroup
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
      */
     public function testSaveThrowExceptionIfCannotSaveGroup()
     {
@@ -170,8 +199,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test saving throws exception if group does not belong to provided set
+     *
      * @expectedException \Magento\Framework\Exception\StateException
      * @expectedExceptionMessage Attribute group does not belong to provided attribute set
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
      */
     public function testSaveThrowExceptionIfGroupDoesNotBelongToProvidedSet()
     {
@@ -192,8 +226,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test saving throws exception if provided group does not exist
+     *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with attributeGroupId =
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
      */
     public function testSaveThrowExceptionIfProvidedGroupDoesNotExist()
     {
@@ -213,6 +252,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($groupMock);
     }
 
+    /**
+     * Test get list
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
+     */
     public function testGetList()
     {
         $attributeSetId = 'filter';
@@ -261,8 +307,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get list with invalid input exception
+     *
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage attribute_set_id is a required field.
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
     public function testGetListWithInvalidInputException()
     {
@@ -272,8 +323,13 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get list with no such entity exception
+     *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with attributeSetId = filter
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
     public function testGetListWithNoSuchEntityException()
     {
@@ -296,6 +352,12 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->getList($searchCriteriaMock);
     }
 
+    /**
+     * Test get
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
+     */
     public function testGet()
     {
         $groupId = 42;
@@ -307,8 +369,12 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get throws exception if provided group does not exist
+     *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Group with id "42" does not exist.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return void
      */
     public function testGetThrowExceptionIfProvidedGroupDoesNotExist()
     {
@@ -320,6 +386,12 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($groupMock, $this->model->get($groupId));
     }
 
+    /**
+     * Test delete
+     *
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
+     */
     public function testDelete()
     {
         $groupMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Group', [], [], '', false);
@@ -328,8 +400,12 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test deletion throws exception if provided group does not exist
+     *
      * @expectedException \Magento\Framework\Exception\StateException
      * @expectedExceptionMessage Cannot delete attributeGroup with id
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
      */
     public function testDeleteThrowExceptionIfProvidedGroupDoesNotExist()
     {
@@ -342,6 +418,11 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->delete($groupMock);
     }
 
+    /**
+     * Test delete by id
+     *
+     * @return void
+     */
     public function testDeleteById()
     {
         $groupId = 42;

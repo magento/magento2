@@ -18,7 +18,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $_factory;
 
     /**
-     * Setup
+     * SetUp method
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -33,6 +35,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test create
+     *
+     * @return void
      */
     public function testCreate()
     {
@@ -55,6 +59,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test create with arguments
+     *
+     * @return void
      */
     public function testCreateWithArguments()
     {
@@ -77,6 +83,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test wrong type exception
+     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Filter\Template
      * @return void

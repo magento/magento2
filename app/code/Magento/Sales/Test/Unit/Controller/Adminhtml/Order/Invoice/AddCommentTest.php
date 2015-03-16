@@ -79,6 +79,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultJsonMock;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -177,6 +182,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $data = ['comment' => 'test comment'];
@@ -255,6 +265,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultRaw, $this->controller->execute());
     }
 
+    /**
+     * Test execute model exception
+     *
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $message = 'model exception';
@@ -273,6 +288,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 
+    /**
+     * Test execute exception
+     *
+     *@return void
+     */
     public function testExecuteException()
     {
         $response = ['error' => true, 'message' => 'Cannot add new comment.'];

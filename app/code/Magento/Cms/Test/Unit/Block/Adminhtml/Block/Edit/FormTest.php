@@ -133,6 +133,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -213,6 +215,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test prepare form model has no block id and single store mode is on
+     *
+     * @return void
      */
     public function testPrepareFormModelHasNoBlockIdAndSingleStoreMode()
     {
@@ -241,6 +245,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test prepare form model has block id and signle store mode is off
+     *
+     * @return void
      */
     public function testPrepareFormModelHasBlockIdAndNonSingleStoreMode()
     {
