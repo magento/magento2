@@ -26,9 +26,7 @@ class ChainFactory implements ChainFactoryInterface
     }
 
     /**
-     * Creates chain of pre-processors
-     *
-     * @return Chain
+     * {inheritdoc}
      */
     public function create(array $arguments = [])
     {

@@ -10,6 +10,7 @@ interface ChainFactoryInterface
     /**
      * Creates chain of pre-processors
      *
+     * @param array $arguments
      * @return Chain
      */
     public function create(array $arguments = []);

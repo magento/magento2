@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Page\Config;
+namespace Magento\Framework\View\Test\Unit\Page\Config;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Page\Config\Renderer;
 
 /**
  * Test for page config renderer model
@@ -70,7 +72,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     protected $titleMock;
 
-    /** @var ObjectManagerHelper */
+    /** @var ObjectManager */
     protected $objectManagerHelper;
 
     protected function setUp()
@@ -116,7 +118,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);;
+        $this->objectManagerHelper = new ObjectManager($this);;
         $this->renderer = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Page\Config\Renderer',
             [
