@@ -10,6 +10,9 @@ use Magento\Framework\Phrase;
 
 class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testGetAggregatedErrorMessage()
     {
         $exception = new OauthInputException();
@@ -24,6 +27,9 @@ class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetAggregatedErrorMessageNoError()
     {
         $exception = new OauthInputException();

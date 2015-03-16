@@ -16,6 +16,9 @@ use Magento\Framework\Phrase;
  */
 class StateExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testStateExceptionInstance()
     {
         $instanceClass = 'Magento\Framework\Exception\StateException';

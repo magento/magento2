@@ -67,6 +67,8 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in JSON format.
+     *
+     * @return void
      */
     public function testRenderJson()
     {
@@ -94,7 +96,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
      *
      * Method encodes data to JSON and returns it.
      *
-     * @param $data
+     * @param array $data
      * @return string
      */
     public function callbackJsonEncode($data)
@@ -104,6 +106,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in JSON format with turned on developer mode.
+     * @return void
      */
     public function testRenderJsonInDeveloperMode()
     {
@@ -128,6 +131,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in XML format.
+     * @return void
      */
     public function testRenderXml()
     {
@@ -145,6 +149,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in XML format with turned on developer mode.
+     * @return void
      */
     public function testRenderXmlInDeveloperMode()
     {
@@ -165,6 +170,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test default render format is JSON.
+     * @return void
      */
     public function testRenderDefaultFormat()
     {
@@ -177,6 +183,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test maskException method with turned on developer mode.
+     * @return void
      */
     public function testMaskExceptionInDeveloperMode()
     {
@@ -198,6 +205,11 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test sendResponse method with various exceptions
      *
+     * @param \Exception $exception
+     * @param int $expectedHttpCode
+     * @param string $expectedMessage
+     * @param array $expectedDetails
+     * @return void
      * @dataProvider dataProviderForSendResponseExceptions
      */
     public function testMaskException($exception, $expectedHttpCode, $expectedMessage, $expectedDetails)
@@ -213,6 +225,9 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForSendResponseExceptions()
     {
         return [
@@ -270,6 +285,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
      * @param int $expectedHttpCode
      * @param string $expectedMessage
      * @param array $expectedDetails
+     * @return void
      */
     public function assertMaskedException(
         $maskedException,

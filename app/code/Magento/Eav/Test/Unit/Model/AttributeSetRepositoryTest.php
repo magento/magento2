@@ -42,6 +42,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $resultFactoryMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->resourceMock = $this->getMock(
@@ -82,6 +85,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGet()
     {
         $attributeSetId = 1;
@@ -93,6 +99,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage No such entity with id = 9999
      */
@@ -105,6 +112,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->get($attributeSetId);
     }
 
+    /**
+     * @return void
+     */
     public function testSave()
     {
         $attributeSetMock = $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false);
@@ -113,6 +123,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @expectedExceptionMessage There was an error saving attribute set.
      */
@@ -125,6 +136,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->save($attributeSetMock);
     }
 
+    /**
+     * @return void
+     */
     public function testDelete()
     {
         $attributeSetMock = $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false);
@@ -133,6 +147,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      * @expectedExceptionMessage There was an error deleting attribute set.
      */
@@ -146,6 +161,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      * @expectedExceptionMessage Default attribute set can not be deleted
      */
@@ -158,6 +174,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model->delete($attributeSetMock);
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteById()
     {
         $attributeSetId = 1;
@@ -169,6 +188,9 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->deleteById($attributeSetId));
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $entityTypeCode = 'entity_type_code_value';

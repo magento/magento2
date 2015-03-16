@@ -16,6 +16,9 @@ use Magento\Framework\Phrase;
  */
 class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $authenticationException = new AuthenticationException(
