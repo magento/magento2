@@ -113,7 +113,7 @@ class Minifier implements MinifierInterface
     {
         $file = $this->rootDirectory->getRelativePath($file);
         $content = preg_replace(
-            '#\s+</#',
+            '#(?<!]]>)\s+</#',
             '</',
             preg_replace(
                 '#((?:<\?php\s+(?!echo)[^\?]*)\?>)\s+#',
