@@ -36,7 +36,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $request = $objectManager->get('Magento\TestFramework\Request');
 
         $this->assertInstanceOf('Magento\Framework\App\ActionInterface', $this->_model->match($request));
-        $request->setRequestUri('core/index/index');
+        $request->setRequestUri('framework/index/index');
         $this->assertInstanceOf('Magento\Framework\App\ActionInterface', $this->_model->match($request));
 
         $request->setPathInfo(
@@ -54,8 +54,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function testGetControllerClassName()
     {
         $this->assertEquals(
-            'Magento\Core\Controller\Index',
-            $this->_model->getActionClassName('Magento_Core', 'index')
+            'Magento\Framework\Controller\Index',
+            $this->_model->getActionClassName('Magento_Framework', 'index')
         );
     }
 }

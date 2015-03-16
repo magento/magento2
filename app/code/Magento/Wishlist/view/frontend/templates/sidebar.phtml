@@ -55,7 +55,7 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                            class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a>
                                     <?php else: ?>
                                         <?php
-                                            $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                            $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                             $postData = $postDataHelper->getPostData($block->getItemAddToCartUrl($item), ['product' => $product->getEntityId()])
                                         ?>
                                             <button type="button" class="action tocart primary" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
+        <variation name="NavigateMenuTest7">
+            <data name="menuItem" xsi:type="string">System > Backups</data>
+            <data name="pageTitle" xsi:type="string">Backups</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+        </variation>
+    </testCase>
+</config>

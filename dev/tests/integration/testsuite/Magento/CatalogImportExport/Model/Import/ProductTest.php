@@ -322,7 +322,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->importData();
 
-        reset($source);
+        $source->rewind();
         foreach ($source as $row) {
             /** @var $productAfterImport \Magento\Catalog\Model\Product */
             $productBeforeImport = $productsBeforeImport[$row['sku']];
@@ -608,10 +608,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogImportExport\Model\Import\Uploader',
             ['init'],
             [
-                $objectManager->create('Magento\Core\Helper\File\Storage\Database'),
-                $objectManager->create('Magento\Core\Helper\File\Storage'),
+                $objectManager->create('Magento\MediaStorage\Helper\File\Storage\Database'),
+                $objectManager->create('Magento\MediaStorage\Helper\File\Storage'),
                 $objectManager->create('Magento\Framework\Image\AdapterFactory'),
-                $objectManager->create('Magento\Core\Model\File\Validator\NotProtectedExtension')
+                $objectManager->create('Magento\MediaStorage\Model\File\Validator\NotProtectedExtension')
             ]
         );
         $this->_uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($uploader));
@@ -779,7 +779,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppIsolation enabled

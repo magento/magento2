@@ -31,13 +31,13 @@ class ExtensibleDataObjectConverter
      * Convert AbstractExtensibleObject into a nested array.
      *
      * @param ExtensibleDataInterface $dataObject
-     * @param string[] $skipCustomAttributes
+     * @param string[] $skipAttributes
      * @param string $dataObjectType
      * @return array
      */
     public function toNestedArray(
         ExtensibleDataInterface $dataObject,
-        $skipCustomAttributes = [],
+        $skipAttributes = [],
         $dataObjectType = null
     ) {
         if ($dataObjectType == null) {
@@ -50,9 +50,19 @@ class ExtensibleDataObjectConverter
             $customAttributes = $dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY];
             unset ($dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY]);
             foreach ($customAttributes as $attributeValue) {
-                if (!in_array($attributeValue[AttributeValue::ATTRIBUTE_CODE], $skipCustomAttributes)) {
+                if (!in_array($attributeValue[AttributeValue::ATTRIBUTE_CODE], $skipAttributes)) {
                     $dataObjectArray[$attributeValue[AttributeValue::ATTRIBUTE_CODE]]
                         = $attributeValue[AttributeValue::VALUE];
+                }
+            }
+        }
+        if (!empty($dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            /** @var array $extensionAttributes */
+            $extensionAttributes = $dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY];
+            unset ($dataObjectArray[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            foreach ($extensionAttributes as $attributeKey => $attributeValue) {
+                if (!in_array($attributeKey, $skipAttributes)) {
+                    $dataObjectArray[$attributeKey] = $attributeValue;
                 }
             }
         }

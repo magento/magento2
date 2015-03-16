@@ -58,6 +58,7 @@ return [
     ['Magento\Mail', 'Magento\Framework\Mail'],
     ['Magento\HTTP', 'Magento\Framework\HTTP'],
     ['Magento\Math', 'Magento\Framework\Math'],
+    ['Magento\Framework\Code\Generator\CodeGenerator', 'Magento\Framework\Code\Generator'],
     ['Magento\Gdata', 'Magento\Framework\Gdata'],
     ['Magento\Image', 'Magento\Framework\Image'],
     ['Magento\Oauth', 'Magento\Framework\Oauth'],
@@ -81,4 +82,5 @@ return [
     ['Magento\Checkout\Service'],
     ['Magento\GiftMessage\Service'],
     ['Magento\Backend\Controller\Adminhtml\System\Variable', 'Magento\Variable\Controller\Adminhtml\System\Variable'],
+    ['Magento\Framework\Test\Utility', 'Magento\Framework\App\Utility']
 ];

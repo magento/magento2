@@ -10,6 +10,9 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
+use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Import entity product model
@@ -334,7 +337,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_localeDate;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
@@ -374,7 +377,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $masterAttributeCode = 'sku';
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @var ObjectRelationProcessor
+     */
+    protected $objectRelationProcessor;
+
+    /**
+     * @var TransactionManagerInterface
+     */
+    protected $transactionManager;
+
+    /**
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
@@ -397,7 +410,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
@@ -409,7 +422,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
@@ -432,13 +445,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Filesystem $filesystem,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        DateTime $dateTime,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         Product\StoreResolver $storeResolver,
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
         Product\Validator $validator,
+        ObjectRelationProcessor $objectRelationProcessor,
+        TransactionManagerInterface $transactionManager,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -463,7 +478,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->skuProcessor = $skuProcessor;
         $this->categoryProcessor = $categoryProcessor;
         $this->validator = $validator;
-        parent::__construct($coreData, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
+        $this->objectRelationProcessor = $objectRelationProcessor;
+        $this->transactionManager = $transactionManager;
+        parent::__construct($jsonHelper, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
             $data['option_entity']
         ) ? $data['option_entity'] : $optionFactory->create(
@@ -504,6 +521,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Delete products.
      *
      * @return $this
+     * @throws \Exception
      */
     protected function _deleteProducts()
     {
@@ -518,12 +536,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
             if ($idToDelete) {
-                $this->_connection->query(
-                    $this->_connection->quoteInto(
-                        "DELETE FROM `{$productEntityTable}` WHERE `entity_id` IN (?)",
-                        $idToDelete
-                    )
-                );
+                $this->transactionManager->start($this->_connection);
+                try {
+                    $this->objectRelationProcessor->delete(
+                        $this->transactionManager,
+                        $this->_connection,
+                        $productEntityTable,
+                        $this->_connection->quoteInto('entity_id IN (?)', $idToDelete),
+                        ['entity_id' => $idToDelete]
+                    );
+                    $this->transactionManager->commit();
+                } catch (\Exception $e) {
+                    $this->transactionManager->rollBack();
+                    throw $e;
+                }
             }
         }
         return $this;
@@ -918,7 +944,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     if (isset($this->_oldSku[$rowSku])) {
                         // existing row
                         $entityRowsUp[] = [
-                            'updated_at' => $this->dateTime->now(),
+                            'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             'entity_id' => $this->_oldSku[$rowSku]['entity_id'],
                         ];
                     } else {
@@ -929,8 +955,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
                                 'sku' => $rowSku,
                                 'has_options' => isset($rowData['has_options']) ? $rowData['has_options'] : 0,
-                                'created_at' => $this->dateTime->now(),
-                                'updated_at' => $this->dateTime->now(),
+                                'created_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
+                                'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                             ];
                             $productsQty++;
                         } else {
@@ -1061,7 +1087,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
                         $attrValue = new \DateTime('@' . strtotime($attrValue));
-                        $attrValue = $attrValue->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                        $attrValue = $attrValue->format(DateTime::DATETIME_PHP_FORMAT);
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
                         $attrValue = $product->getData($attribute->getAttributeCode());
@@ -1415,8 +1441,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $stockItemDo->setData($row);
                     $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                     if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                        $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
-                            ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+                        $row['low_stock_date'] = $this->_localeDate->date(null, null, false)
+                            ->format('Y-m-d H:i:s');
                     }
                     $row['stock_status_changed_auto'] =
                         (int) !$this->stockStateProvider->verifyStock($stockItemDo);

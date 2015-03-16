@@ -20,10 +20,20 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 
+    /**#@+
+     * Constants for field names
+     */
+    const KEY_TITLE = 'title';
+    const KEY_SORT_ORDER = 'sort_order';
+    const KEY_SAMPLE_TYPE = 'sample_type';
+    const KEY_SAMPLE_FILE = 'sample_file';
+    const KEY_SAMPLE_URL = 'sample_url';
+    /**#@-*/
+
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -32,7 +42,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -41,7 +51,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -123,7 +133,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getTitle()
     {
-        return $this->getData('title');
+        return $this->getData(self::KEY_TITLE);
     }
 
     /**
@@ -132,7 +142,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSortOrder()
     {
-        return $this->getData('sort_order');
+        return $this->getData(self::KEY_SORT_ORDER);
     }
 
     /**
@@ -141,7 +151,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSampleType()
     {
-        return $this->getData('sample_type');
+        return $this->getData(self::KEY_SAMPLE_TYPE);
     }
 
     /**
@@ -150,7 +160,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSampleFile()
     {
-        return $this->getData('sample_file');
+        return $this->getData(self::KEY_SAMPLE_FILE);
     }
 
     /**
@@ -159,6 +169,80 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSampleUrl()
     {
-        return $this->getData('sample_url');
+        return $this->getData(self::KEY_SAMPLE_URL);
+    }
+
+    /**
+     * Set sample title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
+     * Set sort order index for sample
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * @param string $sampleType
+     * @return $this
+     */
+    public function setSampleType($sampleType)
+    {
+        return $this->setData(self::KEY_SAMPLE_TYPE, $sampleType);
+    }
+
+    /**
+     * Set file path or null when type is 'url'
+     *
+     * @param string $sampleFile
+     * @return $this
+     */
+    public function setSampleFile($sampleFile)
+    {
+        return $this->setData(self::KEY_SAMPLE_FILE, $sampleFile);
+    }
+
+    /**
+     * Set sample URL
+     *
+     * @param string $sampleUrl
+     * @return $this
+     */
+    public function setSampleUrl($sampleUrl)
+    {
+        return $this->setData(self::KEY_SAMPLE_URL, $sampleUrl);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Downloadable\Api\Data\SampleExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Downloadable\Api\Data\SampleExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Downloadable\Api\Data\SampleExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

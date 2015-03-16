@@ -6,8 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="sales_convert_quote_to_order">
-        <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="salesEventConvertQuoteToOrder" shared="false" />
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="salesEventQuoteSubmitBefore" shared="false" />
     </event>
     <event name="adminhtml_sales_order_create_create_order">
         <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="checkoutEventCreateOrder" shared="false" />

@@ -20,7 +20,7 @@ class ModuleXMLTest extends \PHPUnit_Framework_TestCase
         $xml = simplexml_load_file($file);
         $this->assertEmpty(
             $xml->xpath('/config/module/@version'),
-            'The "version" attribute is obsolete. Use "schema_version" instead.'
+            'The "version" attribute is obsolete. Use "setup_version" instead.'
         );
         $this->assertEmpty(
             $xml->xpath('/config/module/@active'),
@@ -33,6 +33,6 @@ class ModuleXMLTest extends \PHPUnit_Framework_TestCase
      */
     public function moduleXmlDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('module.xml');
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('module.xml');
     }
 }

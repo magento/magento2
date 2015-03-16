@@ -11,7 +11,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 class CategoryTest extends \Magento\Backend\Utility\Controller
 {
     /**
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @dataProvider saveActionDataProvider
@@ -83,7 +83,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonDecode(
                 $body
             );

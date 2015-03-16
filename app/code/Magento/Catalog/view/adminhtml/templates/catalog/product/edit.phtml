@@ -132,8 +132,8 @@ require([
     });
     $form.mage('validation', {validationUrl: '<?php echo $block->getValidationUrl() ?>'});
 
-    var masks = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getFieldsAutogenerationMasks())?>;
-    var availablePlaceholders = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getAttributesAllowedForAutogeneration())?>;
+    var masks = <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getFieldsAutogenerationMasks())?>;
+    var availablePlaceholders = <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getAttributesAllowedForAutogeneration())?>;
     var Autogenerator = function(masks) {
         this._masks = masks || {};
         this._fieldReverseIndex = this._buildReverseIndex(this._masks);

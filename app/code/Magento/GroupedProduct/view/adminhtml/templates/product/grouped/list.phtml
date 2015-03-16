@@ -11,30 +11,30 @@
         <span class="draggable-handle"></span>
         <input
             type="hidden"
-            name="links[associated][<%= data.id %>][id]"
-            value="<%= data.id %>"
+            name="links[associated][<%- data.id %>][id]"
+            value="<%- data.id %>"
             data-role="id" />
         <input
             type="hidden"
-            name="links[associated][<%= data.id %>][position]"
-            value="<%= data.position %>"
+            name="links[associated][<%- data.id %>][position]"
+            value="<%- data.position %>"
             data-role="position" />
     </td>
     <td data-column="name" class="editable col-name">
-        <%= data.name %>
+        <%- data.name %>
     </td>
     <td data-column="sku" class="col-sku">
-        <%= data.sku %>
+        <%- data.sku %>
     </td>
     <td data-column="price" class="col-price">
-        <%= data.price %>
+        <%- data.price %>
     </td>
     <td data-column="qty" class="editable col-qty col-number">
         <input
             type="text"
             class="input-text "
-            name="links[associated][<%= data.id %>][qty]"
-            value="<%= data.qty %>">
+            name="links[associated][<%- data.id %>][qty]"
+            value="<%- data.qty %>">
     </td>
     <td data-column="actions" class="col-actions">
         <button type="button" class="action- delete" data-role="delete"></button>
@@ -43,7 +43,7 @@
 </script>
 <div class="grid-container" class="no-display">
     <table class="data-table" data-role="grouped-product-grid"
-        data-products="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode(
+        data-products="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
                 $block->getAssociatedProducts()
         )); ?>">
         <thead>

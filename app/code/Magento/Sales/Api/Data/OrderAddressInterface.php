@@ -176,6 +176,14 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getEntityId();
 
     /**
+     * Sets the ID for the order address.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the fax number for the order address.
      *
      * @return string Fax number.
@@ -300,4 +308,219 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return int VAT-request-success flag value.
      */
     public function getVatRequestSuccess();
+
+    /**
+     * Sets the parent ID for the order address.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the country address ID for the order address.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setCustomerAddressId($id);
+
+    /**
+     * Sets the quote address ID for the order address.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setQuoteAddressId($id);
+
+    /**
+     * Sets the region ID for the order address.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setRegionId($id);
+
+    /**
+     * Sets the customer ID for the order address.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setCustomerId($id);
+
+    /**
+     * Sets the fax number for the order address.
+     *
+     * @param string $fax
+     * @return $this
+     */
+    public function setFax($fax);
+
+    /**
+     * Sets the region for the order address.
+     *
+     * @param string $region
+     * @return $this
+     */
+    public function setRegion($region);
+
+    /**
+     * Sets the postal code for the order address.
+     *
+     * @param string $postcode
+     * @return $this
+     */
+    public function setPostcode($postcode);
+
+    /**
+     * Sets the last name for the order address.
+     *
+     * @param string $lastname
+     * @return $this
+     */
+    public function setLastname($lastname);
+
+    /**
+     * Sets the street values, if any, for the order address.
+     *
+     * @param string|string[] $street
+     * @return $this
+     */
+    public function setStreet($street);
+
+    /**
+     * Sets the city for the order address.
+     *
+     * @param string $city
+     * @return $this
+     */
+    public function setCity($city);
+
+    /**
+     * Sets the email address for the order address.
+     *
+     * @param string $email
+     * @return $this
+     */
+    public function setEmail($email);
+
+    /**
+     * Sets the telephone number for the order address.
+     *
+     * @param string $telephone
+     * @return $this
+     */
+    public function setTelephone($telephone);
+
+    /**
+     * Sets the country ID for the order address.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setCountryId($id);
+
+    /**
+     * Sets the first name for the order address.
+     *
+     * @param string $firstname
+     * @return $this
+     */
+    public function setFirstname($firstname);
+
+    /**
+     * Sets the address type for the order address.
+     *
+     * @param string $addressType
+     * @return $this
+     */
+    public function setAddressType($addressType);
+
+    /**
+     * Sets the prefix for the order address.
+     *
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix);
+
+    /**
+     * Sets the middle name for the order address.
+     *
+     * @param string $middlename
+     * @return $this
+     */
+    public function setMiddlename($middlename);
+
+    /**
+     * Sets the suffix for the order address.
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setSuffix($suffix);
+
+    /**
+     * Sets the company for the order address.
+     *
+     * @param string $company
+     * @return $this
+     */
+    public function setCompany($company);
+
+    /**
+     * Sets the VAT ID for the order address.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setVatId($id);
+
+    /**
+     * Sets the VAT-is-valid flag value for the order address.
+     *
+     * @param int $vatIsValid
+     * @return $this
+     */
+    public function setVatIsValid($vatIsValid);
+
+    /**
+     * Sets the VAT request ID for the order address.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setVatRequestId($id);
+
+    /**
+     * Sets the VAT request date for the order address.
+     *
+     * @param string $vatRequestDate
+     * @return $this
+     */
+    public function setVatRequestDate($vatRequestDate);
+
+    /**
+     * Sets the VAT-request-success flag value for the order address.
+     *
+     * @param int $vatRequestSuccess
+     * @return $this
+     */
+    public function setVatRequestSuccess($vatRequestSuccess);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\OrderAddressExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes);
 }

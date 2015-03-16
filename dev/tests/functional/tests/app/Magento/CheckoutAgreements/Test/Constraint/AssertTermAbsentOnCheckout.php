@@ -16,15 +16,10 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 
 /**
- * Class AssertTermAbsentOnCheckout
  * Check that Checkout Agreement is absent in the Place order tab.
  */
 class AssertTermAbsentOnCheckout extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Place order and verify there is no checkbox Terms and Conditions.
      *
@@ -64,6 +59,8 @@ class AssertTermAbsentOnCheckout extends AbstractConstraint
 
         $browser->open($_ENV['app_frontend_url'] . $product['products'][0]->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCartButton();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCart->open();
         $checkoutCart->getCartBlock()->getOnepageLinkBlock()->proceedToCheckout();
         $checkoutOnepage->getLoginBlock()->guestCheckout();
         $checkoutOnepage->getLoginBlock()->clickContinue();

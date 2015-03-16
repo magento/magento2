@@ -8,7 +8,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="view">
         <xs:complexType>
-            <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
                 <xs:element name="vars" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
@@ -29,11 +29,31 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
-            </xs:sequence>
+                <xs:element name="exclude" minOccurs="0" maxOccurs="1" type="excludeType"/>
+            </xs:choice>
         </xs:complexType>
         <xs:unique name="varsModuleIdentifier">
             <xs:selector xpath="vars"/>
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
+    <xs:complexType name="excludeType">
+        <xs:sequence>
+            <xs:element name="item" type="itemType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="itemType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="file"/>
+                            <xs:enumeration value="directory"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 </xs:schema>

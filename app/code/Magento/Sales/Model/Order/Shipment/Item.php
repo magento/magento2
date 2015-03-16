@@ -15,16 +15,6 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Item setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setRowTotal(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setPrice(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setWeight(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setProductId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setOrderItemId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setAdditionalData(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setDescription(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setName(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Item setSku(string $value)
  */
 class Item extends AbstractExtensibleModel implements ShipmentItemInterface
 {
@@ -56,7 +46,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -66,7 +56,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -76,7 +66,7 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -293,4 +283,107 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
     {
         return $this->getData(ShipmentItemInterface::WEIGHT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentItemInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRowTotal($amount)
+    {
+        return $this->setData(ShipmentItemInterface::ROW_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(ShipmentItemInterface::PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(ShipmentItemInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductId($id)
+    {
+        return $this->setData(ShipmentItemInterface::PRODUCT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderItemId($id)
+    {
+        return $this->setData(ShipmentItemInterface::ORDER_ITEM_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(ShipmentItemInterface::ADDITIONAL_DATA, $additionalData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(ShipmentItemInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(ShipmentItemInterface::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(ShipmentItemInterface::SKU, $sku);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

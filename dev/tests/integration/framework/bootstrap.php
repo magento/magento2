@@ -32,7 +32,7 @@ try {
         $installConfigFile = $installConfigFile . '.dist';
     }
     $sandboxUniqueId = md5(sha1_file($installConfigFile));
-    $installDir = "{$testsTmpDir}/sandbox-{$sandboxUniqueId}";
+    $installDir = "{$testsTmpDir}/sandbox-{$settings->get('TESTS_PARALLEL_THREAD', 0)}-{$sandboxUniqueId}";
     $application = new \Magento\TestFramework\Application(
         $shell,
         $installDir,
@@ -62,7 +62,7 @@ try {
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
-    \Magento\Framework\Test\Utility\Files::setInstance(new Magento\Framework\Test\Utility\Files($magentoBaseDir));
+    \Magento\Framework\App\Utility\Files::setInstance(new Magento\Framework\App\Utility\Files($magentoBaseDir));
 
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $testsTmpDir, $magentoBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);

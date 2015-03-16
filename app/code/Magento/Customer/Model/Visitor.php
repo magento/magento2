@@ -133,12 +133,15 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         if ($this->skipRequestLogging || $this->isModuleIgnored($observer)) {
             return $this;
         }
+
         if ($this->session->getVisitorData()) {
             $this->setData($this->session->getVisitorData());
         }
+
+        $this->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
+
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
-            $this->setLastVisitAt($this->dateTime->now());
             $this->save();
             $this->_eventManager->dispatch('visitor_init', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());

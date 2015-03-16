@@ -23,7 +23,7 @@ interface ResolverInterface
      * Set default locale code
      *
      * @param   string $locale
-     * @return  \Magento\Framework\Locale\ResolverInterface
+     * @return  self
      */
     public function setDefaultLocale($locale);
 
@@ -38,31 +38,16 @@ interface ResolverInterface
      * Set locale
      *
      * @param   string $locale
-     * @return  \Magento\Framework\Locale\ResolverInterface
+     * @return  self
      */
     public function setLocale($locale = null);
 
     /**
-     * Retrieve locale object
-     *
-     * @return \Magento\Framework\LocaleInterface
-     */
-    public function getLocale();
-
-    /**
-     * Retrieve locale code
+     * Retrieve locale
      *
      * @return string
      */
-    public function getLocaleCode();
-
-    /**
-     * Specify current locale code
-     *
-     * @param   string $code
-     * @return  \Magento\Framework\Locale\ResolverInterface
-     */
-    public function setLocaleCode($code);
+    public function getLocale();
 
     /**
      * Push current locale to stack and replace with locale from specified scope

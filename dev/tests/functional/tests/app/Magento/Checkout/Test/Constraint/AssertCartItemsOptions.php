@@ -21,10 +21,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
  */
 class AssertCartItemsOptions extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Error message for verify options
      *

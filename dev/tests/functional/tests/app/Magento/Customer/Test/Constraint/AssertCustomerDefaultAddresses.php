@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerDefaultAddresses extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Asserts that Default Billing Address and Default Shipping Address equal to data from fixture
      *
@@ -29,6 +25,7 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
     public function processAssert(CustomerAccountIndex $customerAccountIndex, Address $address)
     {
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('Account Dashboard');
+        sleep(6);
         $defaultBillingAddress = explode(
             "\n",
             $customerAccountIndex->getDashboardAddress()->getDefaultBillingAddressText()

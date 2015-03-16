@@ -41,7 +41,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -49,18 +49,28 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Reports\Model\Resource\Helper $resourceHelper
+        \Magento\Reports\Model\Resource\Helper $resourceHelper,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
+        parent::__construct(
+            $context,
+            $logger,
+            $localeDate,
+            $reportsFlagFactory,
+            $dateTime,
+            $timezoneValidator,
+            $resourcePrefix
+        );
         $this->_productResource = $productResource;
         $this->_resourceHelper = $resourceHelper;
     }
@@ -91,8 +101,6 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         // convert input dates to UTC to be comparable with DATETIME fields in DB
         $from = $this->_dateToUtc($from);
         $to = $this->_dateToUtc($to);
-
-        $this->_checkDates($from, $to);
 
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(

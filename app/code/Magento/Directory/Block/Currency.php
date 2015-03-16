@@ -9,6 +9,8 @@
  */
 namespace Magento\Directory\Block;
 
+use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
+
 class Currency extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -17,33 +19,33 @@ class Currency extends \Magento\Framework\View\Element\Template
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Core\Helper\PostData
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
 
     /**
-     * @var \Magento\Framework\LocaleInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $localeResolver;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Helper\PostData $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = []
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);
-        $this->_locale = $localeResolver->getLocale();
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -78,7 +80,10 @@ class Currency extends \Magento\Framework\View\Element\Template
 
                 foreach ($codes as $code) {
                     if (isset($rates[$code])) {
-                        $currencies[$code] = $this->_locale->getTranslation($code, 'nametocurrency');
+                        $allCurrencies = (new CurrencyBundle())->get(
+                            $this->localeResolver->getLocale()
+                        )['Currencies'];
+                        $currencies[$code] = $allCurrencies[$code][1] ?: $code;
                     }
                 }
             }

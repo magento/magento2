@@ -138,8 +138,8 @@ class ValidatorFile extends Validator
         if ($upload->isUploaded($file) && $upload->isValid($file)) {
             $extension = pathinfo(strtolower($fileInfo['name']), PATHINFO_EXTENSION);
 
-            $fileName = \Magento\Core\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
-            $dispersion = \Magento\Core\Model\File\Uploader::getDispretionPath($fileName);
+            $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
+            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
 
             $filePath = $dispersion;
 
@@ -150,7 +150,6 @@ class ValidatorFile extends Validator
 
             $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));
 
-            // TODO: I don't know how change this
             if (!is_null($this->product)) {
                 $this->product->getTypeInstance()->addFileQueue(
                     [

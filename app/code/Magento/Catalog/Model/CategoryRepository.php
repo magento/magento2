@@ -41,26 +41,18 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
 
     /**
-     * @var \Magento\Catalog\Api\Data\CategoryDataBuilder
-     */
-    protected $categoryBuilder;
-
-    /**
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
-        $this->categoryBuilder = $dataBuilder;
     }
 
     /**
@@ -85,6 +77,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
             $parentCategory = $this->get($parentId);
+            $existingData['include_in_menu'] =
+                isset($existingData['include_in_menu']) ? (bool)$existingData['include_in_menu'] : false;
             /** @var  $category Category */
             $category->setData($existingData);
             $category->setPath($parentCategory->getPath());

@@ -7,6 +7,8 @@ namespace Magento\OfflinePayments\Model;
 
 /**
  * Bank Transfer payment method model
+ *
+ * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  */
 class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
 {

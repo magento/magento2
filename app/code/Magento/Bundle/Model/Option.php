@@ -11,13 +11,22 @@ namespace Magento\Bundle\Model;
  * @method int getParentId()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method Option setParentId(int $value)
- * @method Option setPosition(int $value)
- * @method Option setRequired(int $value)
- * @method Option setType(string $value)
  */
 class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Bundle\Api\Data\OptionInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_OPTION_ID = 'option_id';
+    const KEY_TITLE = 'title';
+    const KEY_REQUIRED = 'required';
+    const KEY_TYPE = 'type';
+    const KEY_POSITION = 'position';
+    const KEY_SKU = 'sku';
+    const KEY_PRODUCT_LINKS = 'product_links';
+    /**#@-*/
+
     /**
      * Default selection object
      *
@@ -127,12 +136,13 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
         return $foundSelection;
     }
 
+    //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
      */
     public function getOptionId()
     {
-        return $this->getData('option_id');
+        return $this->getData(self::KEY_OPTION_ID);
     }
 
     /**
@@ -140,7 +150,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getTitle()
     {
-        return $this->getData('title');
+        return $this->getData(self::KEY_TITLE);
     }
 
     /**
@@ -148,7 +158,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getRequired()
     {
-        return $this->getData('required');
+        return $this->getData(self::KEY_REQUIRED);
     }
 
     /**
@@ -156,7 +166,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getType()
     {
-        return $this->getData('type');
+        return $this->getData(self::KEY_TYPE);
     }
 
     /**
@@ -164,7 +174,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getPosition()
     {
-        return $this->getData('position');
+        return $this->getData(self::KEY_POSITION);
     }
 
     /**
@@ -172,7 +182,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSku()
     {
-        return $this->getData('sku');
+        return $this->getData(self::KEY_SKU);
     }
 
     /**
@@ -180,6 +190,105 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getProductLinks()
     {
-        return $this->getData('product_links');
+        return $this->getData(self::KEY_PRODUCT_LINKS);
     }
+
+    /**
+     * Set option id
+     *
+     * @param int $optionId
+     * @return $this
+     */
+    public function setOptionId($optionId)
+    {
+        return $this->setData(self::KEY_OPTION_ID, $optionId);
+    }
+
+    /**
+     * Set option title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
+     * Set whether option is required
+     *
+     * @param bool $required
+     * @return $this
+     */
+    public function setRequired($required)
+    {
+        return $this->setData(self::KEY_REQUIRED, $required);
+    }
+
+    /**
+     * Set input type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        return $this->setData(self::KEY_TYPE, $type);
+    }
+
+    /**
+     * Set option position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * Set product sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::KEY_SKU, $sku);
+    }
+
+    /**
+     * Set product links
+     *
+     * @param \Magento\Bundle\Api\Data\LinkInterface[] $productLinks
+     * @return $this
+     */
+    public function setProductLinks(array $productLinks = null)
+    {
+        return $this->setData(self::KEY_PRODUCT_LINKS, $productLinks);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Bundle\Api\Data\OptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Bundle\Api\Data\OptionExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

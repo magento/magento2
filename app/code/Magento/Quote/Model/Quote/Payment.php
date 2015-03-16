@@ -5,8 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Framework\Api\AttributeValueFactory;
-
 /**
  * Quote payment information
  *
@@ -18,8 +16,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Quote\Model\Quote\Payment setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Quote\Model\Quote\Payment setUpdatedAt(string $value)
- * @method \Magento\Quote\Model\Quote\Payment setMethod(string $value)
- * @method \Magento\Quote\Model\Quote\Payment setCcType(string $value)
  * @method string getCcNumberEnc()
  * @method \Magento\Quote\Model\Quote\Payment setCcNumberEnc(string $value)
  * @method string getCcLast4()
@@ -32,8 +28,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartMonth(int $value)
  * @method int getCcSsStartYear()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartYear(int $value)
- * @method \Magento\Quote\Model\Quote\Payment setPoNumber(string $value)
- * @method \Magento\Quote\Model\Quote\Payment setAdditionalData(string $value)
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  *
@@ -67,8 +61,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
@@ -80,8 +74,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
@@ -93,7 +87,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $paymentData,
             $encryptor,
@@ -238,69 +232,164 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
 
     /**
      * @codeCoverageIgnoreStart
+     */
+
+    /**
+     * Get purchase order number
      *
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getPoNumber()
     {
-        return $this->getData('po_number');
+        return $this->getData(self::KEY_PO_NUMBER);
     }
 
     /**
-     * {@inheritdoc}
+     * Set purchase order number
+     *
+     * @param string $poNumber
+     * @return $this
+     */
+    public function setPoNumber($poNumber)
+    {
+        return $this->setData(self::KEY_PO_NUMBER, $poNumber);
+    }
+
+    /**
+     * Get payment method code
+     *
+     * @return string
      */
     public function getMethod()
     {
-        return $this->getData('method');
+        return $this->getData(self::KEY_METHOD);
     }
 
     /**
-     * {@inheritdoc}
+     * Set payment method code
+     *
+     * @param string $method
+     * @return $this
+     */
+    public function setMethod($method)
+    {
+        return $this->setData(self::KEY_METHOD, $method);
+    }
+
+    /**
+     * Get credit card owner
+     *
+     * @return string|null
      */
     public function getCcOwner()
     {
-        return $this->getData('cc_owner');
+        return $this->getData(self::KEY_CC_OWNER);
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card owner
+     *
+     * @param string $ccOwner
+     * @return $this
+     */
+    public function setCcOwner($ccOwner)
+    {
+        return $this->setData(self::KEY_CC_OWNER, $ccOwner);
+    }
+
+    /**
+     * Get credit card number
+     *
+     * @return string|null
      */
     public function getCcNumber()
     {
-        return $this->getData('cc_number');
+        return $this->getData(self::KEY_CC_NUMBER);
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card number
+     *
+     * @param string $ccNumber
+     * @return $this
+     */
+    public function setCcNumber($ccNumber)
+    {
+        return $this->setData(self::KEY_CC_NUMBER, $ccNumber);
+    }
+
+    /**
+     * Get credit card type
+     *
+     * @return string|null
      */
     public function getCcType()
     {
-        return $this->getData('cc_type');
+        return $this->getData(self::KEY_CC_TYPE);
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card type
+     *
+     * @param string $ccType
+     * @return $this
+     */
+    public function setCcType($ccType)
+    {
+        return $this->setData(self::KEY_CC_TYPE, $ccType);
+    }
+
+    /**
+     * Get credit card expiration year
+     *
+     * @return string|null
      */
     public function getCcExpYear()
     {
-        $expirationYear = $this->getData('cc_exp_year') ?: null;
+        $expirationYear = $this->getData(self::KEY_CC_EXP_YEAR) ?: null;
         return $expirationYear;
     }
 
     /**
-     * {@inheritdoc}
+     * Set credit card expiration year
+     *
+     * @param string $ccExpYear
+     * @return $this
      */
-    public function getCcExpMonth()
+    public function setCcExpYear($ccExpYear)
     {
-        return $this->getData('cc_exp_month');
+        return $this->setData(self::KEY_CC_EXP_YEAR, $ccExpYear);
     }
 
     /**
-     * {@inheritdoc}
+     * Get credit card expiration month
+     *
+     * @return string|null
+     */
+    public function getCcExpMonth()
+    {
+        return $this->getData(self::KEY_CC_EXP_MONTH);
+    }
+
+    /**
+     * Set credit card expiration month
+     *
+     * @param string $ccExpMonth
+     * @return $this
+     */
+    public function setCcExpMonth($ccExpMonth)
+    {
+        return $this->setData(self::KEY_CC_EXP_MONTH, $ccExpMonth);
+    }
+
+    /**
+     * Get payment additional details
+     *
+     * @return string[]|null
      */
     public function getAdditionalData()
     {
-        $additionalDataValue = $this->getData('additional_data');
+        $additionalDataValue = $this->getData(self::KEY_ADDITIONAL_DATA);
         if (is_string($additionalDataValue)) {
             $additionalData = @unserialize($additionalDataValue);
             if (is_array($additionalData)) {
@@ -311,5 +400,37 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         }
         return null;
     }
+
+    /**
+     * Set payment additional details
+     *
+     * @param string $additionalData
+     * @return $this
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(self::KEY_ADDITIONAL_DATA, $additionalData);
+    }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\PaymentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

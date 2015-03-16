@@ -9,7 +9,7 @@ use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Api\Data\OrderInterface as ApiOrderInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Resource\Order\Address\Collection;
@@ -33,140 +33,9 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  *
  * @method \Magento\Sales\Model\Resource\Order _getResource()
  * @method \Magento\Sales\Model\Resource\Order getResource()
- * @method \Magento\Sales\Model\Order setStatus(string $value)
- * @method \Magento\Sales\Model\Order setCouponCode(string $value)
- * @method \Magento\Sales\Model\Order setProtectCode(string $value)
- * @method \Magento\Sales\Model\Order setShippingDescription(string $value)
- * @method \Magento\Sales\Model\Order setIsVirtual(int $value)
- * @method \Magento\Sales\Model\Order setStoreId(int $value)
- * @method \Magento\Sales\Model\Order setCustomerId(int $value)
- * @method \Magento\Sales\Model\Order setBaseDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseDiscountCanceled(float $value)
- * @method \Magento\Sales\Model\Order setBaseDiscountInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setBaseDiscountRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseGrandTotal(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingCanceled(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseSubtotal(float $value)
- * @method \Magento\Sales\Model\Order setBaseSubtotalCanceled(float $value)
- * @method \Magento\Sales\Model\Order setBaseSubtotalInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setBaseSubtotalRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseTaxCanceled(float $value)
- * @method \Magento\Sales\Model\Order setBaseTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setBaseTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseToGlobalRate(float $value)
- * @method \Magento\Sales\Model\Order setBaseToOrderRate(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalCanceled(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalInvoicedCost(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalOfflineRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalOnlineRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalPaid(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalQtyOrdered(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalRefunded(float $value)
- * @method \Magento\Sales\Model\Order setDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order setDiscountCanceled(float $value)
- * @method \Magento\Sales\Model\Order setDiscountInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setDiscountRefunded(float $value)
- * @method \Magento\Sales\Model\Order setGrandTotal(float $value)
- * @method \Magento\Sales\Model\Order setShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order setShippingCanceled(float $value)
- * @method \Magento\Sales\Model\Order setShippingInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setShippingRefunded(float $value)
- * @method \Magento\Sales\Model\Order setShippingTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setShippingTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order setStoreToBaseRate(float $value)
- * @method \Magento\Sales\Model\Order setStoreToOrderRate(float $value)
- * @method \Magento\Sales\Model\Order setSubtotal(float $value)
- * @method \Magento\Sales\Model\Order setSubtotalCanceled(float $value)
- * @method \Magento\Sales\Model\Order setSubtotalInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setSubtotalRefunded(float $value)
- * @method \Magento\Sales\Model\Order setTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setTaxCanceled(float $value)
- * @method \Magento\Sales\Model\Order setTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order setTotalCanceled(float $value)
- * @method \Magento\Sales\Model\Order setTotalInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setTotalOfflineRefunded(float $value)
- * @method \Magento\Sales\Model\Order setTotalOnlineRefunded(float $value)
- * @method \Magento\Sales\Model\Order setTotalPaid(float $value)
- * @method \Magento\Sales\Model\Order setTotalQtyOrdered(float $value)
- * @method \Magento\Sales\Model\Order setTotalRefunded(float $value)
- * @method \Magento\Sales\Model\Order setCanShipPartially(int $value)
- * @method \Magento\Sales\Model\Order setCanShipPartiallyItem(int $value)
- * @method \Magento\Sales\Model\Order setCustomerIsGuest(int $value)
- * @method \Magento\Sales\Model\Order setCustomerNoteNotify(int $value)
- * @method \Magento\Sales\Model\Order setBillingAddressId(int $value)
- * @method \Magento\Sales\Model\Order setCustomerGroupId(int $value)
- * @method \Magento\Sales\Model\Order setEditIncrement(int $value)
- * @method \Magento\Sales\Model\Order setEmailSent(int $value)
- * @method \Magento\Sales\Model\Order setForcedShipmentWithInvoice(int $value)
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
- * @method \Magento\Sales\Model\Order setPaymentAuthExpiration(int $value)
- * @method \Magento\Sales\Model\Order setQuoteAddressId(int $value)
- * @method \Magento\Sales\Model\Order setQuoteId(int $value)
- * @method \Magento\Sales\Model\Order setShippingAddressId(int $value)
- * @method \Magento\Sales\Model\Order setAdjustmentNegative(float $value)
- * @method \Magento\Sales\Model\Order setAdjustmentPositive(float $value)
- * @method \Magento\Sales\Model\Order setBaseAdjustmentNegative(float $value)
- * @method \Magento\Sales\Model\Order setBaseAdjustmentPositive(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseSubtotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order setBaseTotalDue(float $value)
- * @method \Magento\Sales\Model\Order setPaymentAuthorizationAmount(float $value)
- * @method \Magento\Sales\Model\Order setShippingDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order setSubtotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order setTotalDue(float $value)
- * @method \Magento\Sales\Model\Order setWeight(float $value)
- * @method \Magento\Sales\Model\Order setCustomerDob(string $value)
- * @method \Magento\Sales\Model\Order setIncrementId(string $value)
- * @method \Magento\Sales\Model\Order setAppliedRuleIds(string $value)
- * @method \Magento\Sales\Model\Order setBaseCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order setCustomerEmail(string $value)
- * @method \Magento\Sales\Model\Order setCustomerFirstname(string $value)
- * @method \Magento\Sales\Model\Order setCustomerLastname(string $value)
- * @method \Magento\Sales\Model\Order setCustomerMiddlename(string $value)
- * @method \Magento\Sales\Model\Order setCustomerPrefix(string $value)
- * @method \Magento\Sales\Model\Order setCustomerSuffix(string $value)
- * @method \Magento\Sales\Model\Order setCustomerTaxvat(string $value)
- * @method \Magento\Sales\Model\Order setDiscountDescription(string $value)
- * @method \Magento\Sales\Model\Order setExtCustomerId(string $value)
- * @method \Magento\Sales\Model\Order setExtOrderId(string $value)
- * @method \Magento\Sales\Model\Order setGlobalCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order setHoldBeforeState(string $value)
- * @method \Magento\Sales\Model\Order setHoldBeforeStatus(string $value)
- * @method \Magento\Sales\Model\Order setOrderCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order setOriginalIncrementId(string $value)
- * @method \Magento\Sales\Model\Order setRelationChildId(string $value)
- * @method \Magento\Sales\Model\Order setRelationChildRealId(string $value)
- * @method \Magento\Sales\Model\Order setRelationParentId(string $value)
- * @method \Magento\Sales\Model\Order setRelationParentRealId(string $value)
- * @method \Magento\Sales\Model\Order setRemoteIp(string $value)
- * @method \Magento\Sales\Model\Order setShippingMethod(string $value)
- * @method \Magento\Sales\Model\Order setStoreCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order setStoreName(string $value)
- * @method \Magento\Sales\Model\Order setXForwardedFor(string $value)
- * @method \Magento\Sales\Model\Order setCustomerNote(string $value)
  * @method \Magento\Sales\Model\Order setCreatedAt(string $value)
- * @method \Magento\Sales\Model\Order setUpdatedAt(string $value)
- * @method \Magento\Sales\Model\Order setTotalItemCount(int $value)
- * @method \Magento\Sales\Model\Order setCustomerGender(int $value)
- * @method \Magento\Sales\Model\Order setHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setShippingHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingHiddenTaxAmnt(float $value)
- * @method \Magento\Sales\Model\Order setHiddenTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setBaseHiddenTaxInvoiced(float $value)
- * @method \Magento\Sales\Model\Order setHiddenTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order setBaseHiddenTaxRefunded(float $value)
- * @method \Magento\Sales\Model\Order setShippingInclTax(float $value)
- * @method \Magento\Sales\Model\Order setBaseShippingInclTax(float $value)
  * @method bool hasBillingAddressId()
  * @method \Magento\Sales\Model\Order unsBillingAddressId()
  * @method bool hasShippingAddressId()
@@ -181,7 +50,7 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
+class Order extends AbstractModel implements EntityInterface, OrderInterface
 {
     const ENTITY = 'order';
 
@@ -391,7 +260,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -421,7 +290,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -469,7 +338,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $localeDate,
             $dateTime,
@@ -976,43 +845,49 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     }
 
     /**
-     * Declare order billing address
+     * Sets the billing address, if any, for the order.
      *
-     * @param \Magento\Sales\Model\Order\Address $address
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Model\Order\Address $address)
+    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getBillingAddress();
-        if (!empty($old)) {
+        if (!empty($old) && !empty($address)) {
             $address->setId($old->getId());
         }
-        $address->setEmail($this->getCustomerEmail());
-        $this->addAddress($address->setAddressType('billing'));
+
+        if (!empty($address)) {
+            $address->setEmail($this->getCustomerEmail());
+            $this->addAddress($address->setAddressType('billing'));
+        }
         return $this;
     }
 
     /**
      * Declare order shipping address
      *
-     * @param \Magento\Sales\Model\Order\Address $address
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Model\Order\Address $address)
+    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getShippingAddress();
-        if (!empty($old)) {
+        if (!empty($old) && !empty($address)) {
             $address->setId($old->getId());
         }
-        $address->setEmail($this->getCustomerEmail());
-        $this->addAddress($address->setAddressType('shipping'));
+
+        if (!empty($address)) {
+            $address->setEmail($this->getCustomerEmail());
+            $this->addAddress($address->setAddressType('shipping'));
+        }
         return $this;
     }
 
     /**
      * Retrieve order billing address
      *
-     * @return \Magento\Sales\Model\Order\Address|false
+     * @return \Magento\Sales\Model\Order\Address|null
      */
     public function getBillingAddress()
     {
@@ -1021,13 +896,13 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
                 return $address;
             }
         }
-        return false;
+        return null;
     }
 
     /**
      * Retrieve order shipping address
      *
-     * @return \Magento\Sales\Model\Order\Address|false
+     * @return \Magento\Sales\Model\Order\Address|null
      */
     public function getShippingAddress()
     {
@@ -1036,7 +911,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
                 return $address;
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -2069,13 +1944,21 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getItems()
     {
-        if ($this->getData(ApiOrderInterface::ITEMS) == null) {
+        if ($this->getData(OrderInterface::ITEMS) == null) {
             $this->setData(
-                ApiOrderInterface::ITEMS,
+                OrderInterface::ITEMS,
                 $this->getItemsCollection()->getItems()
             );
         }
-        return $this->getData(ApiOrderInterface::ITEMS);
+        return $this->getData(OrderInterface::ITEMS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setItems($items)
+    {
+        return $this->setData(OrderInterface::ITEMS, $items);
     }
 
     /**
@@ -2083,13 +1966,21 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getPayments()
     {
-        if ($this->getData(ApiOrderInterface::PAYMENTS) == null) {
+        if ($this->getData(OrderInterface::PAYMENTS) == null) {
             $this->setData(
-                ApiOrderInterface::PAYMENTS,
+                OrderInterface::PAYMENTS,
                 $this->getPaymentsCollection()->getItems()
             );
         }
-        return $this->getData(ApiOrderInterface::PAYMENTS);
+        return $this->getData(OrderInterface::PAYMENTS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPayments(array $payments = null)
+    {
+        return $this->setData(OrderInterface::PAYMENTS, $payments);
     }
 
     /**
@@ -2097,13 +1988,21 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getAddresses()
     {
-        if ($this->getData(ApiOrderInterface::ADDRESSES) == null) {
+        if ($this->getData(OrderInterface::ADDRESSES) == null) {
             $this->setData(
-                ApiOrderInterface::ADDRESSES,
+                OrderInterface::ADDRESSES,
                 $this->getAddressesCollection()->getItems()
             );
         }
-        return $this->getData(ApiOrderInterface::ADDRESSES);
+        return $this->getData(OrderInterface::ADDRESSES);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAddresses(array $addresses = null)
+    {
+        return $this->setData(OrderInterface::ADDRESSES, $addresses);
     }
 
     /**
@@ -2113,7 +2012,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getAdjustmentNegative()
     {
-        return $this->getData(ApiOrderInterface::ADJUSTMENT_NEGATIVE);
+        return $this->getData(OrderInterface::ADJUSTMENT_NEGATIVE);
     }
 
     /**
@@ -2123,7 +2022,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getAdjustmentPositive()
     {
-        return $this->getData(ApiOrderInterface::ADJUSTMENT_POSITIVE);
+        return $this->getData(OrderInterface::ADJUSTMENT_POSITIVE);
     }
 
     /**
@@ -2133,7 +2032,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getAppliedRuleIds()
     {
-        return $this->getData(ApiOrderInterface::APPLIED_RULE_IDS);
+        return $this->getData(OrderInterface::APPLIED_RULE_IDS);
     }
 
     /**
@@ -2143,7 +2042,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseAdjustmentNegative()
     {
-        return $this->getData(ApiOrderInterface::BASE_ADJUSTMENT_NEGATIVE);
+        return $this->getData(OrderInterface::BASE_ADJUSTMENT_NEGATIVE);
     }
 
     /**
@@ -2153,7 +2052,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseAdjustmentPositive()
     {
-        return $this->getData(ApiOrderInterface::BASE_ADJUSTMENT_POSITIVE);
+        return $this->getData(OrderInterface::BASE_ADJUSTMENT_POSITIVE);
     }
 
     /**
@@ -2163,7 +2062,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseCurrencyCode()
     {
-        return $this->getData(ApiOrderInterface::BASE_CURRENCY_CODE);
+        return $this->getData(OrderInterface::BASE_CURRENCY_CODE);
     }
 
     /**
@@ -2173,7 +2072,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseDiscountAmount()
     {
-        return $this->getData(ApiOrderInterface::BASE_DISCOUNT_AMOUNT);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -2183,7 +2082,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseDiscountCanceled()
     {
-        return $this->getData(ApiOrderInterface::BASE_DISCOUNT_CANCELED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_CANCELED);
     }
 
     /**
@@ -2193,7 +2092,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseDiscountInvoiced()
     {
-        return $this->getData(ApiOrderInterface::BASE_DISCOUNT_INVOICED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_INVOICED);
     }
 
     /**
@@ -2203,7 +2102,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseDiscountRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_DISCOUNT_REFUNDED);
+        return $this->getData(OrderInterface::BASE_DISCOUNT_REFUNDED);
     }
 
     /**
@@ -2213,7 +2112,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseGrandTotal()
     {
-        return $this->getData(ApiOrderInterface::BASE_GRAND_TOTAL);
+        return $this->getData(OrderInterface::BASE_GRAND_TOTAL);
     }
 
     /**
@@ -2223,7 +2122,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseHiddenTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_AMOUNT);
     }
 
     /**
@@ -2233,7 +2132,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseHiddenTaxInvoiced()
     {
-        return $this->getData(ApiOrderInterface::BASE_HIDDEN_TAX_INVOICED);
+        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_INVOICED);
     }
 
     /**
@@ -2243,7 +2142,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseHiddenTaxRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_HIDDEN_TAX_REFUNDED);
+        return $this->getData(OrderInterface::BASE_HIDDEN_TAX_REFUNDED);
     }
 
     /**
@@ -2253,7 +2152,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingAmount()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_AMOUNT);
+        return $this->getData(OrderInterface::BASE_SHIPPING_AMOUNT);
     }
 
     /**
@@ -2263,7 +2162,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingCanceled()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_CANCELED);
+        return $this->getData(OrderInterface::BASE_SHIPPING_CANCELED);
     }
 
     /**
@@ -2273,7 +2172,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingDiscountAmount()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_DISCOUNT_AMOUNT);
+        return $this->getData(OrderInterface::BASE_SHIPPING_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -2283,7 +2182,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingHiddenTaxAmnt()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT);
+        return $this->getData(OrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT);
     }
 
     /**
@@ -2293,7 +2192,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingInclTax()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_INCL_TAX);
+        return $this->getData(OrderInterface::BASE_SHIPPING_INCL_TAX);
     }
 
     /**
@@ -2303,7 +2202,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingInvoiced()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_INVOICED);
+        return $this->getData(OrderInterface::BASE_SHIPPING_INVOICED);
     }
 
     /**
@@ -2313,7 +2212,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_REFUNDED);
+        return $this->getData(OrderInterface::BASE_SHIPPING_REFUNDED);
     }
 
     /**
@@ -2323,7 +2222,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_TAX_AMOUNT);
+        return $this->getData(OrderInterface::BASE_SHIPPING_TAX_AMOUNT);
     }
 
     /**
@@ -2333,7 +2232,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseShippingTaxRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_SHIPPING_TAX_REFUNDED);
+        return $this->getData(OrderInterface::BASE_SHIPPING_TAX_REFUNDED);
     }
 
     /**
@@ -2343,7 +2242,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseSubtotal()
     {
-        return $this->getData(ApiOrderInterface::BASE_SUBTOTAL);
+        return $this->getData(OrderInterface::BASE_SUBTOTAL);
     }
 
     /**
@@ -2353,7 +2252,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseSubtotalCanceled()
     {
-        return $this->getData(ApiOrderInterface::BASE_SUBTOTAL_CANCELED);
+        return $this->getData(OrderInterface::BASE_SUBTOTAL_CANCELED);
     }
 
     /**
@@ -2363,7 +2262,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseSubtotalInclTax()
     {
-        return $this->getData(ApiOrderInterface::BASE_SUBTOTAL_INCL_TAX);
+        return $this->getData(OrderInterface::BASE_SUBTOTAL_INCL_TAX);
     }
 
     /**
@@ -2373,7 +2272,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseSubtotalInvoiced()
     {
-        return $this->getData(ApiOrderInterface::BASE_SUBTOTAL_INVOICED);
+        return $this->getData(OrderInterface::BASE_SUBTOTAL_INVOICED);
     }
 
     /**
@@ -2383,7 +2282,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseSubtotalRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_SUBTOTAL_REFUNDED);
+        return $this->getData(OrderInterface::BASE_SUBTOTAL_REFUNDED);
     }
 
     /**
@@ -2393,7 +2292,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::BASE_TAX_AMOUNT);
+        return $this->getData(OrderInterface::BASE_TAX_AMOUNT);
     }
 
     /**
@@ -2403,7 +2302,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTaxCanceled()
     {
-        return $this->getData(ApiOrderInterface::BASE_TAX_CANCELED);
+        return $this->getData(OrderInterface::BASE_TAX_CANCELED);
     }
 
     /**
@@ -2413,7 +2312,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTaxInvoiced()
     {
-        return $this->getData(ApiOrderInterface::BASE_TAX_INVOICED);
+        return $this->getData(OrderInterface::BASE_TAX_INVOICED);
     }
 
     /**
@@ -2423,7 +2322,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTaxRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_TAX_REFUNDED);
+        return $this->getData(OrderInterface::BASE_TAX_REFUNDED);
     }
 
     /**
@@ -2433,7 +2332,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalCanceled()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_CANCELED);
+        return $this->getData(OrderInterface::BASE_TOTAL_CANCELED);
     }
 
     /**
@@ -2443,7 +2342,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalInvoiced()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_INVOICED);
+        return $this->getData(OrderInterface::BASE_TOTAL_INVOICED);
     }
 
     /**
@@ -2453,7 +2352,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalInvoicedCost()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_INVOICED_COST);
+        return $this->getData(OrderInterface::BASE_TOTAL_INVOICED_COST);
     }
 
     /**
@@ -2463,7 +2362,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalOfflineRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_OFFLINE_REFUNDED);
+        return $this->getData(OrderInterface::BASE_TOTAL_OFFLINE_REFUNDED);
     }
 
     /**
@@ -2473,7 +2372,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalOnlineRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_ONLINE_REFUNDED);
+        return $this->getData(OrderInterface::BASE_TOTAL_ONLINE_REFUNDED);
     }
 
     /**
@@ -2483,7 +2382,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalPaid()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_PAID);
+        return $this->getData(OrderInterface::BASE_TOTAL_PAID);
     }
 
     /**
@@ -2493,7 +2392,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalQtyOrdered()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_QTY_ORDERED);
+        return $this->getData(OrderInterface::BASE_TOTAL_QTY_ORDERED);
     }
 
     /**
@@ -2503,7 +2402,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseTotalRefunded()
     {
-        return $this->getData(ApiOrderInterface::BASE_TOTAL_REFUNDED);
+        return $this->getData(OrderInterface::BASE_TOTAL_REFUNDED);
     }
 
     /**
@@ -2513,7 +2412,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseToGlobalRate()
     {
-        return $this->getData(ApiOrderInterface::BASE_TO_GLOBAL_RATE);
+        return $this->getData(OrderInterface::BASE_TO_GLOBAL_RATE);
     }
 
     /**
@@ -2523,7 +2422,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBaseToOrderRate()
     {
-        return $this->getData(ApiOrderInterface::BASE_TO_ORDER_RATE);
+        return $this->getData(OrderInterface::BASE_TO_ORDER_RATE);
     }
 
     /**
@@ -2533,7 +2432,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getBillingAddressId()
     {
-        return $this->getData(ApiOrderInterface::BILLING_ADDRESS_ID);
+        return $this->getData(OrderInterface::BILLING_ADDRESS_ID);
     }
 
     /**
@@ -2543,7 +2442,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCanShipPartially()
     {
-        return $this->getData(ApiOrderInterface::CAN_SHIP_PARTIALLY);
+        return $this->getData(OrderInterface::CAN_SHIP_PARTIALLY);
     }
 
     /**
@@ -2553,7 +2452,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCanShipPartiallyItem()
     {
-        return $this->getData(ApiOrderInterface::CAN_SHIP_PARTIALLY_ITEM);
+        return $this->getData(OrderInterface::CAN_SHIP_PARTIALLY_ITEM);
     }
 
     /**
@@ -2563,7 +2462,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCouponCode()
     {
-        return $this->getData(ApiOrderInterface::COUPON_CODE);
+        return $this->getData(OrderInterface::COUPON_CODE);
     }
 
     /**
@@ -2573,7 +2472,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(ApiOrderInterface::CREATED_AT);
+        return $this->getData(OrderInterface::CREATED_AT);
     }
 
     /**
@@ -2583,7 +2482,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerDob()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_DOB);
+        return $this->getData(OrderInterface::CUSTOMER_DOB);
     }
 
     /**
@@ -2593,7 +2492,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerEmail()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_EMAIL);
+        return $this->getData(OrderInterface::CUSTOMER_EMAIL);
     }
 
     /**
@@ -2603,7 +2502,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerFirstname()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_FIRSTNAME);
+        return $this->getData(OrderInterface::CUSTOMER_FIRSTNAME);
     }
 
     /**
@@ -2613,7 +2512,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerGender()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_GENDER);
+        return $this->getData(OrderInterface::CUSTOMER_GENDER);
     }
 
     /**
@@ -2623,7 +2522,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerGroupId()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_GROUP_ID);
+        return $this->getData(OrderInterface::CUSTOMER_GROUP_ID);
     }
 
     /**
@@ -2633,7 +2532,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerId()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_ID);
+        return $this->getData(OrderInterface::CUSTOMER_ID);
     }
 
     /**
@@ -2643,7 +2542,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerIsGuest()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_IS_GUEST);
+        return $this->getData(OrderInterface::CUSTOMER_IS_GUEST);
     }
 
     /**
@@ -2653,7 +2552,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerLastname()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_LASTNAME);
+        return $this->getData(OrderInterface::CUSTOMER_LASTNAME);
     }
 
     /**
@@ -2663,7 +2562,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerMiddlename()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_MIDDLENAME);
+        return $this->getData(OrderInterface::CUSTOMER_MIDDLENAME);
     }
 
     /**
@@ -2673,7 +2572,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerNote()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_NOTE);
+        return $this->getData(OrderInterface::CUSTOMER_NOTE);
     }
 
     /**
@@ -2683,7 +2582,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerNoteNotify()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_NOTE_NOTIFY);
+        return $this->getData(OrderInterface::CUSTOMER_NOTE_NOTIFY);
     }
 
     /**
@@ -2693,7 +2592,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerPrefix()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_PREFIX);
+        return $this->getData(OrderInterface::CUSTOMER_PREFIX);
     }
 
     /**
@@ -2703,7 +2602,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerSuffix()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_SUFFIX);
+        return $this->getData(OrderInterface::CUSTOMER_SUFFIX);
     }
 
     /**
@@ -2713,7 +2612,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getCustomerTaxvat()
     {
-        return $this->getData(ApiOrderInterface::CUSTOMER_TAXVAT);
+        return $this->getData(OrderInterface::CUSTOMER_TAXVAT);
     }
 
     /**
@@ -2723,7 +2622,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getDiscountAmount()
     {
-        return $this->getData(ApiOrderInterface::DISCOUNT_AMOUNT);
+        return $this->getData(OrderInterface::DISCOUNT_AMOUNT);
     }
 
     /**
@@ -2733,7 +2632,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getDiscountCanceled()
     {
-        return $this->getData(ApiOrderInterface::DISCOUNT_CANCELED);
+        return $this->getData(OrderInterface::DISCOUNT_CANCELED);
     }
 
     /**
@@ -2743,7 +2642,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getDiscountDescription()
     {
-        return $this->getData(ApiOrderInterface::DISCOUNT_DESCRIPTION);
+        return $this->getData(OrderInterface::DISCOUNT_DESCRIPTION);
     }
 
     /**
@@ -2753,7 +2652,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getDiscountInvoiced()
     {
-        return $this->getData(ApiOrderInterface::DISCOUNT_INVOICED);
+        return $this->getData(OrderInterface::DISCOUNT_INVOICED);
     }
 
     /**
@@ -2763,7 +2662,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getDiscountRefunded()
     {
-        return $this->getData(ApiOrderInterface::DISCOUNT_REFUNDED);
+        return $this->getData(OrderInterface::DISCOUNT_REFUNDED);
     }
 
     /**
@@ -2773,7 +2672,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getEditIncrement()
     {
-        return $this->getData(ApiOrderInterface::EDIT_INCREMENT);
+        return $this->getData(OrderInterface::EDIT_INCREMENT);
     }
 
     /**
@@ -2783,7 +2682,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getEmailSent()
     {
-        return $this->getData(ApiOrderInterface::EMAIL_SENT);
+        return $this->getData(OrderInterface::EMAIL_SENT);
     }
 
     /**
@@ -2793,7 +2692,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getExtCustomerId()
     {
-        return $this->getData(ApiOrderInterface::EXT_CUSTOMER_ID);
+        return $this->getData(OrderInterface::EXT_CUSTOMER_ID);
     }
 
     /**
@@ -2803,7 +2702,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getExtOrderId()
     {
-        return $this->getData(ApiOrderInterface::EXT_ORDER_ID);
+        return $this->getData(OrderInterface::EXT_ORDER_ID);
     }
 
     /**
@@ -2813,7 +2712,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getForcedShipmentWithInvoice()
     {
-        return $this->getData(ApiOrderInterface::FORCED_SHIPMENT_WITH_INVOICE);
+        return $this->getData(OrderInterface::FORCED_SHIPMENT_WITH_INVOICE);
     }
 
     /**
@@ -2823,7 +2722,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getGlobalCurrencyCode()
     {
-        return $this->getData(ApiOrderInterface::GLOBAL_CURRENCY_CODE);
+        return $this->getData(OrderInterface::GLOBAL_CURRENCY_CODE);
     }
 
     /**
@@ -2833,7 +2732,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getGrandTotal()
     {
-        return $this->getData(ApiOrderInterface::GRAND_TOTAL);
+        return $this->getData(OrderInterface::GRAND_TOTAL);
     }
 
     /**
@@ -2843,7 +2742,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getHiddenTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::HIDDEN_TAX_AMOUNT);
     }
 
     /**
@@ -2853,7 +2752,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getHiddenTaxInvoiced()
     {
-        return $this->getData(ApiOrderInterface::HIDDEN_TAX_INVOICED);
+        return $this->getData(OrderInterface::HIDDEN_TAX_INVOICED);
     }
 
     /**
@@ -2863,7 +2762,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getHiddenTaxRefunded()
     {
-        return $this->getData(ApiOrderInterface::HIDDEN_TAX_REFUNDED);
+        return $this->getData(OrderInterface::HIDDEN_TAX_REFUNDED);
     }
 
     /**
@@ -2873,7 +2772,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getHoldBeforeState()
     {
-        return $this->getData(ApiOrderInterface::HOLD_BEFORE_STATE);
+        return $this->getData(OrderInterface::HOLD_BEFORE_STATE);
     }
 
     /**
@@ -2883,7 +2782,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getHoldBeforeStatus()
     {
-        return $this->getData(ApiOrderInterface::HOLD_BEFORE_STATUS);
+        return $this->getData(OrderInterface::HOLD_BEFORE_STATUS);
     }
 
     /**
@@ -2893,7 +2792,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getIsVirtual()
     {
-        return $this->getData(ApiOrderInterface::IS_VIRTUAL);
+        return $this->getData(OrderInterface::IS_VIRTUAL);
     }
 
     /**
@@ -2903,7 +2802,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getOrderCurrencyCode()
     {
-        return $this->getData(ApiOrderInterface::ORDER_CURRENCY_CODE);
+        return $this->getData(OrderInterface::ORDER_CURRENCY_CODE);
     }
 
     /**
@@ -2913,7 +2812,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getOriginalIncrementId()
     {
-        return $this->getData(ApiOrderInterface::ORIGINAL_INCREMENT_ID);
+        return $this->getData(OrderInterface::ORIGINAL_INCREMENT_ID);
     }
 
     /**
@@ -2923,7 +2822,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getPaymentAuthorizationAmount()
     {
-        return $this->getData(ApiOrderInterface::PAYMENT_AUTHORIZATION_AMOUNT);
+        return $this->getData(OrderInterface::PAYMENT_AUTHORIZATION_AMOUNT);
     }
 
     /**
@@ -2933,7 +2832,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getPaymentAuthExpiration()
     {
-        return $this->getData(ApiOrderInterface::PAYMENT_AUTH_EXPIRATION);
+        return $this->getData(OrderInterface::PAYMENT_AUTH_EXPIRATION);
     }
 
     /**
@@ -2943,7 +2842,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getProtectCode()
     {
-        return $this->getData(ApiOrderInterface::PROTECT_CODE);
+        return $this->getData(OrderInterface::PROTECT_CODE);
     }
 
     /**
@@ -2953,7 +2852,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getQuoteAddressId()
     {
-        return $this->getData(ApiOrderInterface::QUOTE_ADDRESS_ID);
+        return $this->getData(OrderInterface::QUOTE_ADDRESS_ID);
     }
 
     /**
@@ -2963,7 +2862,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getQuoteId()
     {
-        return $this->getData(ApiOrderInterface::QUOTE_ID);
+        return $this->getData(OrderInterface::QUOTE_ID);
     }
 
     /**
@@ -2973,7 +2872,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getRelationChildId()
     {
-        return $this->getData(ApiOrderInterface::RELATION_CHILD_ID);
+        return $this->getData(OrderInterface::RELATION_CHILD_ID);
     }
 
     /**
@@ -2983,7 +2882,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getRelationChildRealId()
     {
-        return $this->getData(ApiOrderInterface::RELATION_CHILD_REAL_ID);
+        return $this->getData(OrderInterface::RELATION_CHILD_REAL_ID);
     }
 
     /**
@@ -2993,7 +2892,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getRelationParentId()
     {
-        return $this->getData(ApiOrderInterface::RELATION_PARENT_ID);
+        return $this->getData(OrderInterface::RELATION_PARENT_ID);
     }
 
     /**
@@ -3003,7 +2902,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getRelationParentRealId()
     {
-        return $this->getData(ApiOrderInterface::RELATION_PARENT_REAL_ID);
+        return $this->getData(OrderInterface::RELATION_PARENT_REAL_ID);
     }
 
     /**
@@ -3013,7 +2912,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getRemoteIp()
     {
-        return $this->getData(ApiOrderInterface::REMOTE_IP);
+        return $this->getData(OrderInterface::REMOTE_IP);
     }
 
     /**
@@ -3023,7 +2922,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingAddressId()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_ADDRESS_ID);
+        return $this->getData(OrderInterface::SHIPPING_ADDRESS_ID);
     }
 
     /**
@@ -3033,7 +2932,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingAmount()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_AMOUNT);
+        return $this->getData(OrderInterface::SHIPPING_AMOUNT);
     }
 
     /**
@@ -3043,7 +2942,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingCanceled()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_CANCELED);
+        return $this->getData(OrderInterface::SHIPPING_CANCELED);
     }
 
     /**
@@ -3053,7 +2952,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingDescription()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_DESCRIPTION);
+        return $this->getData(OrderInterface::SHIPPING_DESCRIPTION);
     }
 
     /**
@@ -3063,7 +2962,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingDiscountAmount()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_DISCOUNT_AMOUNT);
+        return $this->getData(OrderInterface::SHIPPING_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -3073,7 +2972,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingHiddenTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT);
+        return $this->getData(OrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT);
     }
 
     /**
@@ -3083,7 +2982,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingInclTax()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_INCL_TAX);
+        return $this->getData(OrderInterface::SHIPPING_INCL_TAX);
     }
 
     /**
@@ -3093,7 +2992,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingInvoiced()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_INVOICED);
+        return $this->getData(OrderInterface::SHIPPING_INVOICED);
     }
 
     /**
@@ -3103,7 +3002,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingRefunded()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_REFUNDED);
+        return $this->getData(OrderInterface::SHIPPING_REFUNDED);
     }
 
     /**
@@ -3113,7 +3012,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_TAX_AMOUNT);
+        return $this->getData(OrderInterface::SHIPPING_TAX_AMOUNT);
     }
 
     /**
@@ -3123,7 +3022,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getShippingTaxRefunded()
     {
-        return $this->getData(ApiOrderInterface::SHIPPING_TAX_REFUNDED);
+        return $this->getData(OrderInterface::SHIPPING_TAX_REFUNDED);
     }
 
     /**
@@ -3133,7 +3032,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getState()
     {
-        return $this->getData(ApiOrderInterface::STATE);
+        return $this->getData(OrderInterface::STATE);
     }
 
     /**
@@ -3143,7 +3042,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStatus()
     {
-        return $this->getData(ApiOrderInterface::STATUS);
+        return $this->getData(OrderInterface::STATUS);
     }
 
     /**
@@ -3153,7 +3052,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStoreCurrencyCode()
     {
-        return $this->getData(ApiOrderInterface::STORE_CURRENCY_CODE);
+        return $this->getData(OrderInterface::STORE_CURRENCY_CODE);
     }
 
     /**
@@ -3163,7 +3062,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStoreId()
     {
-        return $this->getData(ApiOrderInterface::STORE_ID);
+        return $this->getData(OrderInterface::STORE_ID);
     }
 
     /**
@@ -3173,7 +3072,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStoreName()
     {
-        return $this->getData(ApiOrderInterface::STORE_NAME);
+        return $this->getData(OrderInterface::STORE_NAME);
     }
 
     /**
@@ -3183,7 +3082,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStoreToBaseRate()
     {
-        return $this->getData(ApiOrderInterface::STORE_TO_BASE_RATE);
+        return $this->getData(OrderInterface::STORE_TO_BASE_RATE);
     }
 
     /**
@@ -3193,7 +3092,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStoreToOrderRate()
     {
-        return $this->getData(ApiOrderInterface::STORE_TO_ORDER_RATE);
+        return $this->getData(OrderInterface::STORE_TO_ORDER_RATE);
     }
 
     /**
@@ -3203,7 +3102,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getSubtotal()
     {
-        return $this->getData(ApiOrderInterface::SUBTOTAL);
+        return $this->getData(OrderInterface::SUBTOTAL);
     }
 
     /**
@@ -3213,7 +3112,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getSubtotalCanceled()
     {
-        return $this->getData(ApiOrderInterface::SUBTOTAL_CANCELED);
+        return $this->getData(OrderInterface::SUBTOTAL_CANCELED);
     }
 
     /**
@@ -3223,7 +3122,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getSubtotalInclTax()
     {
-        return $this->getData(ApiOrderInterface::SUBTOTAL_INCL_TAX);
+        return $this->getData(OrderInterface::SUBTOTAL_INCL_TAX);
     }
 
     /**
@@ -3233,7 +3132,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getSubtotalInvoiced()
     {
-        return $this->getData(ApiOrderInterface::SUBTOTAL_INVOICED);
+        return $this->getData(OrderInterface::SUBTOTAL_INVOICED);
     }
 
     /**
@@ -3243,7 +3142,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getSubtotalRefunded()
     {
-        return $this->getData(ApiOrderInterface::SUBTOTAL_REFUNDED);
+        return $this->getData(OrderInterface::SUBTOTAL_REFUNDED);
     }
 
     /**
@@ -3253,7 +3152,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTaxAmount()
     {
-        return $this->getData(ApiOrderInterface::TAX_AMOUNT);
+        return $this->getData(OrderInterface::TAX_AMOUNT);
     }
 
     /**
@@ -3263,7 +3162,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTaxCanceled()
     {
-        return $this->getData(ApiOrderInterface::TAX_CANCELED);
+        return $this->getData(OrderInterface::TAX_CANCELED);
     }
 
     /**
@@ -3273,7 +3172,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTaxInvoiced()
     {
-        return $this->getData(ApiOrderInterface::TAX_INVOICED);
+        return $this->getData(OrderInterface::TAX_INVOICED);
     }
 
     /**
@@ -3283,7 +3182,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTaxRefunded()
     {
-        return $this->getData(ApiOrderInterface::TAX_REFUNDED);
+        return $this->getData(OrderInterface::TAX_REFUNDED);
     }
 
     /**
@@ -3293,7 +3192,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalCanceled()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_CANCELED);
+        return $this->getData(OrderInterface::TOTAL_CANCELED);
     }
 
     /**
@@ -3303,7 +3202,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalInvoiced()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_INVOICED);
+        return $this->getData(OrderInterface::TOTAL_INVOICED);
     }
 
     /**
@@ -3313,7 +3212,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalItemCount()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_ITEM_COUNT);
+        return $this->getData(OrderInterface::TOTAL_ITEM_COUNT);
     }
 
     /**
@@ -3323,7 +3222,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalOfflineRefunded()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_OFFLINE_REFUNDED);
+        return $this->getData(OrderInterface::TOTAL_OFFLINE_REFUNDED);
     }
 
     /**
@@ -3333,7 +3232,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalOnlineRefunded()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_ONLINE_REFUNDED);
+        return $this->getData(OrderInterface::TOTAL_ONLINE_REFUNDED);
     }
 
     /**
@@ -3343,7 +3242,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalPaid()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_PAID);
+        return $this->getData(OrderInterface::TOTAL_PAID);
     }
 
     /**
@@ -3353,7 +3252,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalQtyOrdered()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_QTY_ORDERED);
+        return $this->getData(OrderInterface::TOTAL_QTY_ORDERED);
     }
 
     /**
@@ -3363,7 +3262,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getTotalRefunded()
     {
-        return $this->getData(ApiOrderInterface::TOTAL_REFUNDED);
+        return $this->getData(OrderInterface::TOTAL_REFUNDED);
     }
 
     /**
@@ -3373,7 +3272,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getUpdatedAt()
     {
-        return $this->getData(ApiOrderInterface::UPDATED_AT);
+        return $this->getData(OrderInterface::UPDATED_AT);
     }
 
     /**
@@ -3383,7 +3282,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getWeight()
     {
-        return $this->getData(ApiOrderInterface::WEIGHT);
+        return $this->getData(OrderInterface::WEIGHT);
     }
 
     /**
@@ -3393,7 +3292,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getXForwardedFor()
     {
-        return $this->getData(ApiOrderInterface::X_FORWARDED_FOR);
+        return $this->getData(OrderInterface::X_FORWARDED_FOR);
     }
 
     /**
@@ -3401,12 +3300,1091 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getStatusHistories()
     {
-        if ($this->getData(ApiOrderInterface::STATUS_HISTORIES) == null) {
+        if ($this->getData(OrderInterface::STATUS_HISTORIES) == null) {
             $this->setData(
-                ApiOrderInterface::STATUS_HISTORIES,
+                OrderInterface::STATUS_HISTORIES,
                 $this->getStatusHistoryCollection()->getItems()
             );
         }
-        return $this->getData(ApiOrderInterface::STATUS_HISTORIES);
+        return $this->getData(OrderInterface::STATUS_HISTORIES);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatusHistories(array $statusHistories = null)
+    {
+        return $this->setData(OrderInterface::STATUS_HISTORIES, $statusHistories);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(OrderInterface::STATUS, $status);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCouponCode($code)
+    {
+        return $this->setData(OrderInterface::COUPON_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProtectCode($code)
+    {
+        return $this->setData(OrderInterface::PROTECT_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingDescription($description)
+    {
+        return $this->setData(OrderInterface::SHIPPING_DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVirtual($isVirtual)
+    {
+        return $this->setData(OrderInterface::IS_VIRTUAL, $isVirtual);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($id)
+    {
+        return $this->setData(OrderInterface::STORE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerId($id)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountAmount($amount)
+    {
+        return $this->setData(OrderInterface::BASE_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountCanceled($baseDiscountCanceled)
+    {
+        return $this->setData(OrderInterface::BASE_DISCOUNT_CANCELED, $baseDiscountCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountInvoiced($baseDiscountInvoiced)
+    {
+        return $this->setData(OrderInterface::BASE_DISCOUNT_INVOICED, $baseDiscountInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountRefunded($baseDiscountRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_DISCOUNT_REFUNDED, $baseDiscountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseGrandTotal($amount)
+    {
+        return $this->setData(OrderInterface::BASE_GRAND_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingAmount($amount)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingCanceled($baseShippingCanceled)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_CANCELED, $baseShippingCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingInvoiced($baseShippingInvoiced)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_INVOICED, $baseShippingInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingRefunded($baseShippingRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_REFUNDED, $baseShippingRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingTaxRefunded($baseShippingTaxRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_TAX_REFUNDED, $baseShippingTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotal($amount)
+    {
+        return $this->setData(OrderInterface::BASE_SUBTOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotalCanceled($baseSubtotalCanceled)
+    {
+        return $this->setData(OrderInterface::BASE_SUBTOTAL_CANCELED, $baseSubtotalCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotalInvoiced($baseSubtotalInvoiced)
+    {
+        return $this->setData(OrderInterface::BASE_SUBTOTAL_INVOICED, $baseSubtotalInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotalRefunded($baseSubtotalRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_SUBTOTAL_REFUNDED, $baseSubtotalRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::BASE_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxCanceled($baseTaxCanceled)
+    {
+        return $this->setData(OrderInterface::BASE_TAX_CANCELED, $baseTaxCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxInvoiced($baseTaxInvoiced)
+    {
+        return $this->setData(OrderInterface::BASE_TAX_INVOICED, $baseTaxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxRefunded($baseTaxRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_TAX_REFUNDED, $baseTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseToGlobalRate($rate)
+    {
+        return $this->setData(OrderInterface::BASE_TO_GLOBAL_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseToOrderRate($rate)
+    {
+        return $this->setData(OrderInterface::BASE_TO_ORDER_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalCanceled($baseTotalCanceled)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_CANCELED, $baseTotalCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalInvoiced($baseTotalInvoiced)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_INVOICED, $baseTotalInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalInvoicedCost($baseTotalInvoicedCost)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_INVOICED_COST, $baseTotalInvoicedCost);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalOfflineRefunded($baseTotalOfflineRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_OFFLINE_REFUNDED, $baseTotalOfflineRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalOnlineRefunded($baseTotalOnlineRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_ONLINE_REFUNDED, $baseTotalOnlineRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalPaid($baseTotalPaid)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_PAID, $baseTotalPaid);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalQtyOrdered($baseTotalQtyOrdered)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_QTY_ORDERED, $baseTotalQtyOrdered);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalRefunded($baseTotalRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_REFUNDED, $baseTotalRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountAmount($amount)
+    {
+        return $this->setData(OrderInterface::DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountCanceled($discountCanceled)
+    {
+        return $this->setData(OrderInterface::DISCOUNT_CANCELED, $discountCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountInvoiced($discountInvoiced)
+    {
+        return $this->setData(OrderInterface::DISCOUNT_INVOICED, $discountInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountRefunded($discountRefunded)
+    {
+        return $this->setData(OrderInterface::DISCOUNT_REFUNDED, $discountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGrandTotal($amount)
+    {
+        return $this->setData(OrderInterface::GRAND_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAmount($amount)
+    {
+        return $this->setData(OrderInterface::SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingCanceled($shippingCanceled)
+    {
+        return $this->setData(OrderInterface::SHIPPING_CANCELED, $shippingCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingInvoiced($shippingInvoiced)
+    {
+        return $this->setData(OrderInterface::SHIPPING_INVOICED, $shippingInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingRefunded($shippingRefunded)
+    {
+        return $this->setData(OrderInterface::SHIPPING_REFUNDED, $shippingRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::SHIPPING_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingTaxRefunded($shippingTaxRefunded)
+    {
+        return $this->setData(OrderInterface::SHIPPING_TAX_REFUNDED, $shippingTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreToBaseRate($rate)
+    {
+        return $this->setData(OrderInterface::STORE_TO_BASE_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreToOrderRate($rate)
+    {
+        return $this->setData(OrderInterface::STORE_TO_ORDER_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotal($amount)
+    {
+        return $this->setData(OrderInterface::SUBTOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotalCanceled($subtotalCanceled)
+    {
+        return $this->setData(OrderInterface::SUBTOTAL_CANCELED, $subtotalCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotalInvoiced($subtotalInvoiced)
+    {
+        return $this->setData(OrderInterface::SUBTOTAL_INVOICED, $subtotalInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotalRefunded($subtotalRefunded)
+    {
+        return $this->setData(OrderInterface::SUBTOTAL_REFUNDED, $subtotalRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxCanceled($taxCanceled)
+    {
+        return $this->setData(OrderInterface::TAX_CANCELED, $taxCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxInvoiced($taxInvoiced)
+    {
+        return $this->setData(OrderInterface::TAX_INVOICED, $taxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxRefunded($taxRefunded)
+    {
+        return $this->setData(OrderInterface::TAX_REFUNDED, $taxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalCanceled($totalCanceled)
+    {
+        return $this->setData(OrderInterface::TOTAL_CANCELED, $totalCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalInvoiced($totalInvoiced)
+    {
+        return $this->setData(OrderInterface::TOTAL_INVOICED, $totalInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalOfflineRefunded($totalOfflineRefunded)
+    {
+        return $this->setData(OrderInterface::TOTAL_OFFLINE_REFUNDED, $totalOfflineRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalOnlineRefunded($totalOnlineRefunded)
+    {
+        return $this->setData(OrderInterface::TOTAL_ONLINE_REFUNDED, $totalOnlineRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalPaid($totalPaid)
+    {
+        return $this->setData(OrderInterface::TOTAL_PAID, $totalPaid);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalQtyOrdered($totalQtyOrdered)
+    {
+        return $this->setData(OrderInterface::TOTAL_QTY_ORDERED, $totalQtyOrdered);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalRefunded($totalRefunded)
+    {
+        return $this->setData(OrderInterface::TOTAL_REFUNDED, $totalRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCanShipPartially($flag)
+    {
+        return $this->setData(OrderInterface::CAN_SHIP_PARTIALLY, $flag);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCanShipPartiallyItem($flag)
+    {
+        return $this->setData(OrderInterface::CAN_SHIP_PARTIALLY_ITEM, $flag);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerIsGuest($customerIsGuest)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_IS_GUEST, $customerIsGuest);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerNoteNotify($customerNoteNotify)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBillingAddressId($id)
+    {
+        return $this->setData(OrderInterface::BILLING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerGroupId($id)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_GROUP_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEditIncrement($editIncrement)
+    {
+        return $this->setData(OrderInterface::EDIT_INCREMENT, $editIncrement);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmailSent($emailSent)
+    {
+        return $this->setData(OrderInterface::EMAIL_SENT, $emailSent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setForcedShipmentWithInvoice($forcedShipmentWithInvoice)
+    {
+        return $this->setData(OrderInterface::FORCED_SHIPMENT_WITH_INVOICE, $forcedShipmentWithInvoice);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPaymentAuthExpiration($paymentAuthExpiration)
+    {
+        return $this->setData(OrderInterface::PAYMENT_AUTH_EXPIRATION, $paymentAuthExpiration);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteAddressId($id)
+    {
+        return $this->setData(OrderInterface::QUOTE_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteId($id)
+    {
+        return $this->setData(OrderInterface::QUOTE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAddressId($id)
+    {
+        return $this->setData(OrderInterface::SHIPPING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdjustmentNegative($adjustmentNegative)
+    {
+        return $this->setData(OrderInterface::ADJUSTMENT_NEGATIVE, $adjustmentNegative);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdjustmentPositive($adjustmentPositive)
+    {
+        return $this->setData(OrderInterface::ADJUSTMENT_POSITIVE, $adjustmentPositive);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAdjustmentNegative($baseAdjustmentNegative)
+    {
+        return $this->setData(OrderInterface::BASE_ADJUSTMENT_NEGATIVE, $baseAdjustmentNegative);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAdjustmentPositive($baseAdjustmentPositive)
+    {
+        return $this->setData(OrderInterface::BASE_ADJUSTMENT_POSITIVE, $baseAdjustmentPositive);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingDiscountAmount($amount)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotalInclTax($amount)
+    {
+        return $this->setData(OrderInterface::BASE_SUBTOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTotalDue($baseTotalDue)
+    {
+        return $this->setData(OrderInterface::BASE_TOTAL_DUE, $baseTotalDue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPaymentAuthorizationAmount($amount)
+    {
+        return $this->setData(OrderInterface::PAYMENT_AUTHORIZATION_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingDiscountAmount($amount)
+    {
+        return $this->setData(OrderInterface::SHIPPING_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotalInclTax($amount)
+    {
+        return $this->setData(OrderInterface::SUBTOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalDue($totalDue)
+    {
+        return $this->setData(OrderInterface::TOTAL_DUE, $totalDue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(OrderInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerDob($customerDob)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_DOB, $customerDob);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIncrementId($id)
+    {
+        return $this->setData(OrderInterface::INCREMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAppliedRuleIds($appliedRuleIds)
+    {
+        return $this->setData(OrderInterface::APPLIED_RULE_IDS, $appliedRuleIds);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseCurrencyCode($code)
+    {
+        return $this->setData(OrderInterface::BASE_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_EMAIL, $customerEmail);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerFirstname($customerFirstname)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_FIRSTNAME, $customerFirstname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerLastname($customerLastname)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_LASTNAME, $customerLastname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerMiddlename($customerMiddlename)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_MIDDLENAME, $customerMiddlename);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerPrefix($customerPrefix)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_PREFIX, $customerPrefix);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerSuffix($customerSuffix)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_SUFFIX, $customerSuffix);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerTaxvat($customerTaxvat)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_TAXVAT, $customerTaxvat);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountDescription($description)
+    {
+        return $this->setData(OrderInterface::DISCOUNT_DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtCustomerId($id)
+    {
+        return $this->setData(OrderInterface::EXT_CUSTOMER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtOrderId($id)
+    {
+        return $this->setData(OrderInterface::EXT_ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGlobalCurrencyCode($code)
+    {
+        return $this->setData(OrderInterface::GLOBAL_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHoldBeforeState($holdBeforeState)
+    {
+        return $this->setData(OrderInterface::HOLD_BEFORE_STATE, $holdBeforeState);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHoldBeforeStatus($holdBeforeStatus)
+    {
+        return $this->setData(OrderInterface::HOLD_BEFORE_STATUS, $holdBeforeStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderCurrencyCode($code)
+    {
+        return $this->setData(OrderInterface::ORDER_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOriginalIncrementId($id)
+    {
+        return $this->setData(OrderInterface::ORIGINAL_INCREMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRelationChildId($id)
+    {
+        return $this->setData(OrderInterface::RELATION_CHILD_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRelationChildRealId($realId)
+    {
+        return $this->setData(OrderInterface::RELATION_CHILD_REAL_ID, $realId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRelationParentId($id)
+    {
+        return $this->setData(OrderInterface::RELATION_PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRelationParentRealId($realId)
+    {
+        return $this->setData(OrderInterface::RELATION_PARENT_REAL_ID, $realId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRemoteIp($remoteIp)
+    {
+        return $this->setData(OrderInterface::REMOTE_IP, $remoteIp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingMethod($shippingMethod)
+    {
+        return $this->setData(OrderInterface::SHIPPING_METHOD, $shippingMethod);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreCurrencyCode($code)
+    {
+        return $this->setData(OrderInterface::STORE_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreName($storeName)
+    {
+        return $this->setData(OrderInterface::STORE_NAME, $storeName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setXForwardedFor($xForwardedFor)
+    {
+        return $this->setData(OrderInterface::X_FORWARDED_FOR, $xForwardedFor);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerNote($customerNote)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_NOTE, $customerNote);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(OrderInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalItemCount($totalItemCount)
+    {
+        return $this->setData(OrderInterface::TOTAL_ITEM_COUNT, $totalItemCount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerGender($customerGender)
+    {
+        return $this->setData(OrderInterface::CUSTOMER_GENDER, $customerGender);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingHiddenTaxAmount($amount)
+    {
+        return $this->setData(OrderInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingHiddenTaxAmnt($amnt)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxInvoiced($hiddenTaxInvoiced)
+    {
+        return $this->setData(OrderInterface::HIDDEN_TAX_INVOICED, $hiddenTaxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced)
+    {
+        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_INVOICED, $baseHiddenTaxInvoiced);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxRefunded($hiddenTaxRefunded)
+    {
+        return $this->setData(OrderInterface::HIDDEN_TAX_REFUNDED, $hiddenTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded)
+    {
+        return $this->setData(OrderInterface::BASE_HIDDEN_TAX_REFUNDED, $baseHiddenTaxRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingInclTax($amount)
+    {
+        return $this->setData(OrderInterface::SHIPPING_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingInclTax($amount)
+    {
+        return $this->setData(OrderInterface::BASE_SHIPPING_INCL_TAX, $amount);
+    }
+    //@codeCoverageIgnoreEnd
 }

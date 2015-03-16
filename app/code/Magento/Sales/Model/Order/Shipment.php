@@ -15,19 +15,9 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Shipment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment getResource()
- * @method \Magento\Sales\Model\Order\Shipment setStoreId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setTotalWeight(float $value)
- * @method \Magento\Sales\Model\Order\Shipment setTotalQty(float $value)
- * @method \Magento\Sales\Model\Order\Shipment setEmailSent(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setCustomerId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setShippingAddressId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setBillingAddressId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setShipmentStatus(int $value)
- * @method \Magento\Sales\Model\Order\Shipment setIncrementId(string $value)
  * @method \Magento\Sales\Model\Order\Shipment setCreatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Shipment setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Shipment extends AbstractModel implements EntityInterface, ShipmentInterface
 {
@@ -102,7 +92,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -119,7 +109,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -140,7 +130,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $localeDate,
             $dateTime,
@@ -550,6 +540,14 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setPackages(array $packages = null)
+    {
+        return $this->setData(ShipmentInterface::PACKAGES, $packages);
+    }
+
+    /**
      * Returns items
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemInterface[]
@@ -569,6 +567,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
+     * Sets items
+     *
+     * @param mixed $items
+     * @return $this
+     */
+    public function setItems($items)
+    {
+        return $this->setData(ShipmentInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns tracks
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[]
@@ -585,6 +594,17 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
             }
         }
         return $this->getData(ShipmentInterface::TRACKS);
+    }
+
+    /**
+     * Returns tracks
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $tracks
+     * @return $this
+     */
+    public function setTracks($tracks)
+    {
+        return $this->setData(ShipmentInterface::TRACKS, $tracks);
     }
 
     /**
@@ -706,4 +726,126 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         return $this->getData(ShipmentInterface::COMMENTS);
     }
+
+    /**
+     * Sets comments
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments(array $comments = null)
+    {
+        return $this->setData(ShipmentInterface::COMMENTS, $comments);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($id)
+    {
+        return $this->setData(ShipmentInterface::STORE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalWeight($totalWeight)
+    {
+        return $this->setData(ShipmentInterface::TOTAL_WEIGHT, $totalWeight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTotalQty($qty)
+    {
+        return $this->setData(ShipmentInterface::TOTAL_QTY, $qty);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmailSent($emailSent)
+    {
+        return $this->setData(ShipmentInterface::EMAIL_SENT, $emailSent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(ShipmentInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerId($id)
+    {
+        return $this->setData(ShipmentInterface::CUSTOMER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAddressId($id)
+    {
+        return $this->setData(ShipmentInterface::SHIPPING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBillingAddressId($id)
+    {
+        return $this->setData(ShipmentInterface::BILLING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShipmentStatus($shipmentStatus)
+    {
+        return $this->setData(ShipmentInterface::SHIPMENT_STATUS, $shipmentStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIncrementId($id)
+    {
+        return $this->setData(ShipmentInterface::INCREMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(ShipmentInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

@@ -30,9 +30,21 @@ interface StockStatusInterface extends ExtensibleDataInterface
     public function getProductId();
 
     /**
+     * @param int $productId
+     * @return $this
+     */
+    public function setProductId($productId);
+
+    /**
      * @return int
      */
     public function getWebsiteId();
+
+    /**
+     * @param int $websiteId
+     * @return $this
+     */
+    public function setWebsiteId($websiteId);
 
     /**
      * @return int
@@ -40,9 +52,21 @@ interface StockStatusInterface extends ExtensibleDataInterface
     public function getStockId();
 
     /**
+     * @param int $stockId
+     * @return $this
+     */
+    public function setStockId($stockId);
+
+    /**
      * @return int
      */
     public function getQty();
+
+    /**
+     * @param int $qty
+     * @return $this
+     */
+    public function setQty($qty);
 
     /**
      * @return int
@@ -50,7 +74,30 @@ interface StockStatusInterface extends ExtensibleDataInterface
     public function getStockStatus();
 
     /**
+     * @param int $stockStatus
+     * @return $this
+     */
+    public function setStockStatus($stockStatus);
+
+    /**
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      */
     public function getStockItem();
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CatalogInventory\Api\Data\StockStatusExtensionInterface $extensionAttributes
+    );
 }

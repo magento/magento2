@@ -5,13 +5,24 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Customer\Test\Repository\Customer">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Customer\Test\Repository\Customer">
         <dataset name="default">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="group_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+        </dataset>
+
+        <dataset name="customer_with_new_customer_group">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">customer_group_retail_customer</item>
             </field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123q</field>
@@ -183,5 +194,16 @@
                 <item name="presets" xsi:type="string">address_UK</item>
             </field>
         </dataset>
-    </storage>
-</repository>
+
+        <dataset name="customer_UK_1_default_billing_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">address_UK_default_billing_address</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

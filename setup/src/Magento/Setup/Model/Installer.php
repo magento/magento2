@@ -13,25 +13,35 @@ use Magento\Framework\App\DeploymentConfig\InstallConfig;
 use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 use Magento\Framework\App\DeploymentConfig\SessionConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\DeploymentConfig;
+use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Module\ConnectionFactory;
-use Magento\Setup\Module\SetupFactory;
+use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Model\Resource\Db\Context;
 
 /**
  * Class Installer contains the logic to install Magento application.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Installer
 {
@@ -64,6 +74,15 @@ class Installer
     const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
     /**#@- */
 
+    /**#@+
+     * Instance types for schema and data handler
+     */
+    const SCHEMA_INSTALL = 'Magento\Framework\Setup\InstallSchemaInterface';
+    const SCHEMA_UPGRADE = 'Magento\Framework\Setup\UpgradeSchemaInterface';
+    const DATA_INSTALL = 'Magento\Framework\Setup\InstallDataInterface';
+    const DATA_UPGRADE = 'Magento\Framework\Setup\UpgradeDataInterface';
+    /**#@- */
+
     const INFO_MESSAGE = 'message';
 
     /**
@@ -86,11 +105,11 @@ class Installer
     private $deploymentConfigWriter;
 
     /**
-     * Resource setup factory
+     * Deployment configuration reader
      *
-     * @var SetupFactory;
+     * @var Writer
      */
-    private $setupFactory;
+    private $deploymentConfigReader;
 
     /**
      * Module list
@@ -98,6 +117,13 @@ class Installer
      * @var ModuleListInterface
      */
     private $moduleList;
+
+    /**
+     * Factory for module deployment config
+     *
+     * @var DeploymentConfigFactory
+     */
+    private $deploymentConfigFactory;
 
     /**
      * Module list loader
@@ -192,12 +218,18 @@ class Installer
     private $objectManagerProvider;
 
     /**
+     * @var Context
+     */
+    private $context;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
      * @param Writer $deploymentConfigWriter
+     * @param Reader $deploymentConfigReader
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param SetupFactory $setupFactory
+     * @param DeploymentConfigFactory $deploymentConfigFactory
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
      * @param DirectoryList $directoryList
@@ -209,14 +241,16 @@ class Installer
      * @param Filesystem $filesystem
      * @param SampleData $sampleData
      * @param ObjectManagerProvider $objectManagerProvider
-     *
+     * @param Context $context
+     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FilePermissions $filePermissions,
         Writer $deploymentConfigWriter,
+        Reader $deploymentConfigReader,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        SetupFactory $setupFactory,
+        DeploymentConfigFactory $deploymentConfigFactory,
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
         DirectoryList $directoryList,
@@ -227,11 +261,13 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         SampleData $sampleData,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        Context $context
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
-        $this->setupFactory = $setupFactory;
+        $this->deploymentConfigReader = $deploymentConfigReader;
+        $this->deploymentConfigFactory = $deploymentConfigFactory;
         $this->moduleList = $moduleList;
         $this->moduleLoader = $moduleLoader;
         $this->directoryList = $directoryList;
@@ -246,6 +282,7 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
+        $this->context = $context;
     }
 
     /**
@@ -282,7 +319,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
         $estimatedModules = $this->createModulesConfig($request);
-        $total = count($script) + count(array_filter($estimatedModules->getData()));
+        $total = count($script) + 3 * count(array_filter($estimatedModules->getData()));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
@@ -321,7 +358,7 @@ class Installer
             $key = array_search($module, $toEnable);
             $result[$module] = false !== $key;
         }
-        return new DeploymentConfig($result);
+        return $this->deploymentConfigFactory->create($result);
     }
 
     /**
@@ -538,31 +575,254 @@ class Installer
     }
 
     /**
+     * Set up setup_module table to register modules' versions, skip this process if it already exists
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function setupModuleRegistry(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+
+        if (!$connection->isTableExists($setup->getTable('setup_module'))) {
+            /**
+             * Create table 'setup_module'
+             */
+            $table = $connection->newTable($setup->getTable('setup_module'))
+                ->addColumn(
+                    'module',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    50,
+                    ['nullable' => false, 'primary' => true],
+                    'Module'
+                )->addColumn(
+                    'schema_version',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    50,
+                    [],
+                    'Schema Version'
+                )->addColumn(
+                    'data_version',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    50,
+                    [],
+                    'Data Version'
+                )->setComment('Module versions registry');
+            $connection->createTable($table);
+        }
+    }
+
+    /**
+     * Set up core tables
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function setupCoreTables(SchemaSetupInterface $setup)
+    {
+        /* @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connection = $setup->getConnection();
+
+        $setup->startSetup();
+
+        $this->setupSessionTable($setup, $connection);
+        $this->setupCacheTable($setup, $connection);
+        $this->setupCacheTagTable($setup, $connection);
+        $this->setupFlagTable($setup, $connection);
+
+        $setup->endSetup();
+    }
+
+    /**
+     * Create table 'session'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupSessionTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('session')
+        )->addColumn(
+            'session_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false, 'primary' => true],
+            'Session Id'
+        )->addColumn(
+            'session_expires',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Date of Session Expiration'
+        )->addColumn(
+            'session_data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+            '2M',
+            ['nullable' => false],
+            'Session Data'
+        )->setComment(
+            'Database Sessions Storage'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
+     * Create table 'cache'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupCacheTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('cache')
+        )->addColumn(
+            'id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            200,
+            ['nullable' => false, 'primary' => true],
+            'Cache Id'
+        )->addColumn(
+            'data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+            '2M',
+            [],
+            'Cache Data'
+        )->addColumn(
+            'create_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Cache Creation Time'
+        )->addColumn(
+            'update_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Time of Cache Updating'
+        )->addColumn(
+            'expire_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [],
+            'Cache Expiration Time'
+        )->addIndex(
+            $setup->getIdxName('cache', ['expire_time']),
+            ['expire_time']
+        )->setComment(
+            'Caches'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
+     * Create table 'cache_tag'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupCacheTagTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('cache_tag')
+        )->addColumn(
+            'tag',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            100,
+            ['nullable' => false, 'primary' => true],
+            'Tag'
+        )->addColumn(
+            'cache_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            200,
+            ['nullable' => false, 'primary' => true],
+            'Cache Id'
+        )->addIndex(
+            $setup->getIdxName('cache_tag', ['cache_id']),
+            ['cache_id']
+        )->setComment(
+            'Tag Caches'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
+     * Create table 'flag'
+     *
+     * @param SchemaSetupInterface $setup
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @return void
+     */
+    private function setupFlagTable(
+        SchemaSetupInterface $setup,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection
+    ) {
+        $table = $connection->newTable(
+            $setup->getTable('flag')
+        )->addColumn(
+            'flag_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Flag Id'
+        )->addColumn(
+            'flag_code',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => false],
+            'Flag Code'
+        )->addColumn(
+            'state',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Flag State'
+        )->addColumn(
+            'flag_data',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            '64k',
+            [],
+            'Flag Data'
+        )->addColumn(
+            'last_update',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            'Date of Last Flag Update'
+        )->addIndex(
+            $setup->getIdxName('flag', ['last_update']),
+            ['last_update']
+        )->setComment(
+            'Flag'
+        );
+        $connection->createTable($table);
+    }
+
+    /**
      * Installs DB schema
      *
      * @return void
      */
     public function installSchema()
     {
-        $this->assertDeploymentConfigExists();
-        $this->assertDbAccessible();
-
-        $moduleNames = $this->moduleList->getNames();
-
+        $setup = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Module\Setup',
+            ['resource' => $this->context->getResources()]
+        );
+        $this->setupModuleRegistry($setup);
+        $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
-        foreach ($moduleNames as $moduleName) {
-            $this->log->log("Module '{$moduleName}':");
-            $setup = $this->setupFactory->createSetupModule($this->log, $moduleName);
-            $setup->applyUpdates();
-            $this->logProgress();
-        }
-
-        $this->log->log('Schema post-updates:');
-        foreach ($moduleNames as $moduleName) {
-            $this->log->log("Module '{$moduleName}':");
-            $setup = $this->setupFactory->createSetupModule($this->log, $moduleName);
-            $setup->applyRecurringUpdates();
-        }
+        $this->handleDBSchemaData($setup, 'schema');
     }
 
     /**
@@ -573,13 +833,89 @@ class Installer
      */
     public function installDataFixtures()
     {
+        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\DataSetup');
         $this->checkInstallationFilePermissions();
+        $this->log->log('Data install/update:');
+        $this->handleDBSchemaData($setup, 'data');
+    }
+
+    /**
+     * Handles database schema and data (install/upgrade/backup/uninstall etc)
+     *
+     * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
+     * @param string $type
+     * @return void
+     * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function handleDBSchemaData($setup, $type)
+    {
+        if (!(($type === 'schema') || ($type === 'data'))) {
+            throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
+        }
+
         $this->assertDeploymentConfigExists();
         $this->assertDbAccessible();
 
-        /** @var \Magento\Framework\Module\Updater $updater */
-        $updater = $this->objectManagerProvider->get()->create('Magento\Framework\Module\Updater');
-        $updater->updateData();
+        $resource = new \Magento\Framework\Module\Resource($this->context);
+        $verType = $type . '-version';
+        $installType = $type . '-install';
+        $upgradeType = $type . '-upgrade';
+        $moduleNames = $this->moduleList->getNames();
+        $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
+        foreach ($moduleNames as $moduleName) {
+            $this->log->log("Module '{$moduleName}':");
+            $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
+            $currentVersion = $moduleContextList[$moduleName]->getVersion();
+            // Schema/Data is installed
+            if ($currentVersion !== '') {
+                $status = version_compare($configVer, $currentVersion);
+                if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
+                    $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
+                    if ($upgrader) {
+                        $this->log->logInline("Upgrading $type.. ");
+                        $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                    }
+                    if ($type === 'schema') {
+                        $resource->setDbVersion($moduleName, $configVer);
+                    } elseif ($type === 'data') {
+                        $resource->setDataVersion($moduleName, $configVer);
+                    }
+                }
+            } elseif ($configVer) {
+                $installer = $this->getSchemaDataHandler($moduleName, $installType);
+                if ($installer) {
+                    $this->log->logInline("Installing $type.. ");
+                    $installer->install($setup, $moduleContextList[$moduleName]);
+                }
+                $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
+                if ($upgrader) {
+                    $this->log->logInline("Upgrading $type.. ");
+                    $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                }
+                if ($type === 'schema') {
+                    $resource->setDbVersion($moduleName, $configVer);
+                } elseif ($type === 'data') {
+                    $resource->setDataVersion($moduleName, $configVer);
+                }
+            }
+            $this->logProgress();
+        }
+
+        if ($type === 'schema') {
+            $this->log->log('Schema post-updates:');
+            foreach ($moduleNames as $moduleName) {
+                $this->log->log("Module '{$moduleName}':");
+                $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
+                if ($modulePostUpdater) {
+                    $this->log->logInline("Running recurring.. ");
+                    $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
+                }
+                $this->logProgress();
+            }
+        }
     }
 
     /**
@@ -615,7 +951,10 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->setupFactory->createSetup($this->log);
+        $setup = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Module\Setup',
+            ['resource' => $this->context->getResources()]
+        );
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -658,9 +997,39 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->setupFactory->createSetup($this->log);
+        $setup = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Module\Setup',
+            ['resource' => $this->context->getResources()]
+        );
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
+    }
+
+    /**
+     * Updates modules in deployment configuration
+     *
+     * @return void
+     */
+    public function updateModulesSequence()
+    {
+        $this->assertDeploymentConfigExists();
+        $this->log->log('File system cleanup:');
+        $this->deleteDirContents(DirectoryList::GENERATION);
+        $this->deleteDirContents(DirectoryList::CACHE);
+        $this->log->log('Updating modules:');
+        $allModules = array_keys($this->moduleLoader->load());
+        $deploymentConfig = $this->deploymentConfigReader->load();
+        $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
+        $result = [];
+        foreach ($allModules as $module) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
+                $result[$module] = 0;
+            } else {
+                $result[$module] = 1;
+            }
+        }
+        $segment = $this->deploymentConfigFactory->create($result);
+        $this->deploymentConfigWriter->update($segment);
     }
 
     /**
@@ -749,6 +1118,24 @@ class Installer
                 }
             }
         }
+        return true;
+    }
+
+    /**
+     * Check if database table prefix is valid
+     *
+     * @param string $prefix
+     * @return boolean
+     * @throws \InvalidArgumentException
+     */
+    public function checkDatabaseTablePrefix($prefix)
+    {
+        //The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_);
+        // the first character should be a letter.
+        if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]_]+)$/', $prefix)) {
+            throw new \InvalidArgumentException('Please correct the table prefix format.');
+        }
+
         return true;
     }
 
@@ -871,6 +1258,9 @@ class Installer
             $config[DbConfig::KEY_USER],
             $config[DbConfig::KEY_PASS]
         );
+        if (isset($config[DbConfig::KEY_PREFIX])) {
+            $this->checkDatabaseTablePrefix($config[DbConfig::KEY_PREFIX]);
+        }
     }
 
     /**
@@ -885,5 +1275,112 @@ class Installer
     {
         $userName = isset($request[AdminAccount::KEY_USERNAME]) ? $request[AdminAccount::KEY_USERNAME] : '';
         $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
+    }
+
+    /**
+     * Get handler for schema or data install/upgrade/backup/uninstall etc.
+     *
+     * @param string $moduleName
+     * @param string $type
+     * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
+     * @throws \Magento\Setup\Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getSchemaDataHandler($moduleName, $type)
+    {
+        $className = str_replace('_', '\\', $moduleName) . '\Setup';
+        switch ($type) {
+            case 'schema-install':
+                $className .= '\InstallSchema';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::SCHEMA_INSTALL)
+                        && $className !== self::SCHEMA_INSTALL) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
+                    } else {
+                        return $this->objectManagerProvider->get()->create($className);
+                    }
+                }
+                break;
+            case 'schema-upgrade':
+                $className .= '\UpgradeSchema';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::SCHEMA_UPGRADE)
+                        && $className !== self::SCHEMA_UPGRADE
+                    ) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_UPGRADE);
+                    } else {
+                        return $this->objectManagerProvider->get()->create($className);
+                    }
+                }
+                break;
+            case 'schema-recurring':
+                $className .= '\Recurring';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::SCHEMA_INSTALL)
+                        && $className !== self::SCHEMA_INSTALL) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
+                    } else {
+                        return $this->objectManagerProvider->get()->create($className);
+                    }
+                }
+                break;
+            case 'data-install':
+                $className .= '\InstallData';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::DATA_INSTALL)
+                        && $className !== self::DATA_INSTALL
+                    ) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_INSTALL);
+                    } else {
+                        return $this->objectManagerProvider->get()->create($className);
+                    }
+                }
+                break;
+            case 'data-upgrade':
+                $className .= '\UpgradeData';
+                if (class_exists($className)) {
+                    if (false == is_subclass_of($className, self::DATA_UPGRADE)
+                        && $className !== self::DATA_UPGRADE
+                    ) {
+                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_UPGRADE);
+                    } else {
+                        return $this->objectManagerProvider->get()->create($className);
+                    }
+                }
+                break;
+            default:
+                throw  new \Magento\Setup\Exception("$className does not exist");
+        }
+
+        return null;
+    }
+
+    /**
+     * Generates list of ModuleContext
+     *
+     * @param \Magento\Framework\Module\Resource $resource
+     * @param string $type
+     * @return ModuleContext[]
+     * @throws \Magento\Setup\Exception
+     */
+    private function generateListOfModuleContext($resource, $type)
+    {
+        $moduleContextList = [];
+        foreach ($this->moduleList->getNames() as $moduleName) {
+            if ($type === 'schema-version') {
+                $dbVer = $resource->getDbVersion($moduleName);
+            } elseif ($type === 'data-version') {
+                $dbVer = $resource->getDataVersion($moduleName);
+            } else {
+                throw  new \Magento\Setup\Exception("Unsupported version type $type is requested");
+            }
+            if ($dbVer !== false) {
+                $moduleContextList[$moduleName] = new ModuleContext($dbVer);
+            } else {
+                $moduleContextList[$moduleName] = new ModuleContext('');
+            }
+        }
+        return $moduleContextList;
     }
 }

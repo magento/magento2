@@ -9,7 +9,7 @@
 ?>
 <?php $_orders = $block->getOrders(); ?>
 <?php echo $block->getChildHtml('info');?>
-<?php if ($_orders->getSize()): ?>
+<?php if ($_orders && count($_orders)): ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
             <caption class="table-caption"><?php echo __('Orders') ?></caption>

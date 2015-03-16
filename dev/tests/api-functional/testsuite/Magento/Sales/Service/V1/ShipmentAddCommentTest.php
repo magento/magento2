@@ -7,7 +7,6 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 /**
  * Class ShipmentAddCommentTest
@@ -62,8 +61,8 @@ class ShipmentAddCommentTest extends WebapiAbstract
         $requestData = ['entity' => $commentData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/shipment/comment',
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'resourcePath' => '/V1/shipment/' . $shipment->getId() . '/comments',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

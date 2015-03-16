@@ -3,252 +3,8 @@
 //  * See COPYING.txt for license details.
 //  */
 
-.search-global {
-    &.miniform {
-        position: relative;
-        z-index: 1000;
-        display: inline-block;
-        vertical-align: top;
-        margin:6px 10px 0;
-        .mage-suggest {
-            border: 0;
-            border-radius: 0;
-        }
-    }
-    &-actions {
-        display: none;
-    }
-    &-field {
-        margin: 0;
-        .label {
-            position: absolute;
-            right: 4px;
-            z-index: 2;
-            cursor: pointer;
-            .icon-font(
-                "\e01f",
-                @_icon-font: 'MUI-Icons',
-                @_icon-font-size: 18px,
-                @_icon-font-line-height: 29px,
-                @_icon-font-color: #cac3b4,
-                @_icon-font-text-hide: true
-                );
-        }
-        .control {
-            width:48px;
-            overflow: hidden;
-            opacity: 0;
-            transition: all .3s ease;
-            input[type="text"] {
-                background: transparent;
-                border: none;
-                width: 100%;
-            }
-        }
-    }
-    &-field.active {
-        z-index: 2;
-        .label:before {
-            display: none;
-        }
-        .control {
-            overflow: visible;
-            opacity: 1;
-            transition: all .3s ease;
-            width:300px;
-        }
-    }
-    &-menu {
-        box-sizing: border-box;
-        display: block;
-        width: 100%;
-    }
-}
-
-.notifications {
-    &-summary {
-        display: inline-block;
-        text-align: left;
-        position: relative;
-        z-index: 1;
-        &.active {
-            z-index: 999;
-        }
-    }
-    &-action {
-        color: @primary7;
-        display: inline-block;
-        padding: 12px 22px 11px 22px;
-        text-transform: capitalize;
-        .icon-font(
-            "\e06e",
-            @_icon-font: "MUI-Icons",
-            @_icon-font-size: 18px,
-            @_icon-font-line-height: 18px
-        );
-        &:visited,
-        &:focus,
-        &:active,
-        &:hover {
-            color: @primary7;
-            text-decoration: none;
-        }
-        &.active {
-            background-color: #FFF; // @todo: color;
-            color: #676056; // @todo: color;
-        }
-        .text {
-            .visually-hidden();
-        }
-        .qty.counter {
-            display: inline-block;
-            background: #ed4f2e;
-            color: @primary7;
-            font-size: 12px;
-            line-height: 12px;
-            font-weight: bold;
-            padding: 1px 3px;
-            position: absolute;
-            top: 6px;
-            left: 50%;
-            border-radius: 4px;
-        }
-    }
-    &-list {
-        width: 300px;
-        padding: 0;
-        margin: 0;
-        .last {
-            padding:10px;
-            text-align: center;
-            font-size: 12px;
-        }
-    }
-    &-summary &-entry {
-        padding: 15px;
-        .style14();
-
-    }
-    &-entry {
-        &:hover .action {
-            display: block;
-        }
-        position: relative;
-        z-index: 1;
-        &-title {
-            padding-right:15px;
-            .style33();
-            display: block;
-            margin-bottom: 10px;
-            }
-        &-description {
-            line-height:1.3;
-            display: block;
-            max-height: 1.3*3em;
-            overflow: hidden;
-            margin-bottom: 10px;
-            text-overflow: ellipsis;
-        }
-    }
-    &-close.action {
-        position: absolute;
-        z-index: 1;
-        top: 12px;
-        right: 12px;
-        .icon-font(
-            "\e07f",
-            @_icon-font: 'MUI-Icons',
-            @_icon-font-text-hide: true,
-            @_icon-font-size: 16px
-            );
-        .button-reset();
-        display: none;
-    }
-    &-dialog-content {
-        display:none;
-    }
-    &-critical &-entry-title {
-        padding-left: 25px;
-        .icon-font(
-            "\e086",
-            @_icon-font: 'MUI-Icons',
-            @_icon-font-size: 18px,
-            @_icon-font-line-height: 18px,
-            @_icon-font-color: #c00815
-        )
-    }
-    &-critical &-entry-title:before {
-        position: absolute;
-        margin-left: -25px;
-    }
-    &-dialog-content &-entry-time {
-        color: #8c867e;
-        font-size: 13px;
-        font-family: Helvetica, Arial, sans-serif;
-        position: absolute;
-        right: 17px;
-        bottom: 27px;
-        text-align: right;
-    }
-    &-url {
-        .icon-font(
-            "\e084",
-            @_icon-font: 'MUI-Icons',
-            @_icon-font-text-hide: true,
-            @_icon-font-size: 16px,
-            @_icon-font-position: after,
-            @_icon-font-margin: -2px 0 0 10px
-        );
-    }
-    &-dialog-content &-entry-title {
-        font-size: 15px;
-    }
-}
-
-.locale-switcher {
-    &-field {
-        white-space: nowrap;
-        float: left;
-        .control,
-        .label {
-            vertical-align: middle;
-            margin: 0 10px 0 0;
-            display: inline-block;
-        }
-    }
-    &-select {
-        .css(appearance, none, 1);
-        appearance: none;
-        border: 1px solid #ada89e;
-        max-width: 200px;
-        height: 31px;
-        background: url("@{baseDir}images/select-bg.svg") no-repeat 100% 50%;
-        background-size:30px 60px;
-        padding-right:29px;
-        text-indent: .01px;
-        text-overflow: '';
-        &::-ms-expand{
-          display:none;
-        }
-        .lt-ie10 & {
-            background-image: none;
-            padding-right: 4px;
-        }
-    }
-}
-@-moz-document url-prefix() {
-    .locale-switcher-select {
-        background-image: none;
-    }
-}
-
-@-moz-document url-prefix() {
-    .locale-switcher-select {
-        background-image: none;
-    }
-}
-
-.autocomplete-results {
+.link-copyright {
+    display: none;
 }
 
 .mage-suggest {
@@ -261,6 +17,15 @@
     background-color: #fff;
     border: 1px solid #ada89e;
     border-radius: 2px;
+    .search-global-field & {
+        position: static;
+        display: block;
+        vertical-align: baseline;
+        width: auto;
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+    }
     &:after {
         position: absolute;
         top: 3px;
@@ -276,6 +41,9 @@
         content: '\e01f'; // search icon
         font-size: 18px;
         color: #b2b2b2;
+        .search-global-field & {
+            display: none;
+        }
     }
     input[type="search"],
     input.search {

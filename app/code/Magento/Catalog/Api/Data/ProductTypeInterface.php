@@ -1,13 +1,17 @@
 <?php
 /**
- * Product type details
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api\Data;
 
-interface ProductTypeInterface
+use Magento\Framework\Api\ExtensibleDataInterface;
+
+/**
+ * Product type details
+ */
+interface ProductTypeInterface extends ExtensibleDataInterface
 {
     /**
      * Get product type code
@@ -17,9 +21,42 @@ interface ProductTypeInterface
     public function getName();
 
     /**
+     * Set product type code
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * Get product type label
      *
      * @return string
      */
     public function getLabel();
+
+    /**
+     * Set product type label
+     *
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductTypeExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Catalog\Api\Data\ProductTypeExtensionInterface $extensionAttributes
+    );
 }

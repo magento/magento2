@@ -22,7 +22,7 @@ $id = $block->escapeHtml($attribute['attribute_id']);
             <?php echo $havePriceVariation ? ' have-price' : '' ?>
             " <?php echo $block->getUiId('attribute-container', $attribute['attribute_code']) ?>
      data-role="configurable-attribute"
-     data-attribute="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attribute));?>">
+     data-attribute="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attribute));?>">
     <input name="attributes[]" id="configurable_attribute_<?php echo $id ?>"
         value="<?php echo $id; ?>" type="hidden"/>
     <input value="<?php echo $block->escapeHtml($attribute['id']); ?>" type="hidden"

@@ -6,21 +6,21 @@
 namespace Magento\TestModule5\Service\V2;
 
 use Magento\TestModule5\Service\V2\Entity\AllSoapAndRest as AllSoapAndRestEntity;
-use Magento\TestModule5\Service\V2\Entity\AllSoapAndRestBuilder;
+use Magento\TestModule5\Service\V2\Entity\AllSoapAndRestFactory;
 
 class AllSoapAndRest implements AllSoapAndRestInterface
 {
     /**
-     * @var AllSoapAndRestBuilder
+     * @var AllSoapAndRestFactory
      */
-    protected $builder;
+    protected $factory;
 
     /**
-     * @param AllSoapAndRestBuilder $builder
+     * @param AllSoapAndRestFactory $factory
      */
-    public function __construct(AllSoapAndRestBuilder $builder)
+    public function __construct(AllSoapAndRestFactory $factory)
     {
-        $this->builder = $builder;
+        $this->factory = $factory;
     }
 
     /**
@@ -28,7 +28,7 @@ class AllSoapAndRest implements AllSoapAndRestInterface
      */
     public function item($id)
     {
-        return $this->builder->setPrice(1)->setId($id)->setName('testItemName')->create();
+        return $this->factory->create()->setPrice(1)->setId($id)->setName('testItemName');
     }
 
     /**
@@ -36,8 +36,8 @@ class AllSoapAndRest implements AllSoapAndRestInterface
      */
     public function items()
     {
-        $allSoapAndRest1 = $this->builder->setPrice(1)->setId(1)->setName('testProduct1')->create();
-        $allSoapAndRest2 = $this->builder->setPrice(1)->setId(2)->setName('testProduct2')->create();
+        $allSoapAndRest1 = $this->factory->create()->setPrice(1)->setId(1)->setName('testProduct1');
+        $allSoapAndRest2 = $this->factory->create()->setPrice(1)->setId(2)->setName('testProduct2');
         return [$allSoapAndRest1, $allSoapAndRest2];
     }
 
@@ -46,7 +46,7 @@ class AllSoapAndRest implements AllSoapAndRestInterface
      */
     public function create(\Magento\TestModule5\Service\V2\Entity\AllSoapAndRest $item)
     {
-        return $this->builder->populate($item)->create();
+        return $this->factory->create()->setPrice($item->getPrice());
     }
 
     /**
@@ -55,16 +55,16 @@ class AllSoapAndRest implements AllSoapAndRestInterface
     public function update(\Magento\TestModule5\Service\V2\Entity\AllSoapAndRest $item)
     {
         $item->setName('Updated' . $item->getName());
-        return $this->builder->populate($item)->create();
+        return $item;
     }
 
     /**
      * @param string $id
      * @return AllSoapAndRestEntity
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function delete($id)
     {
-        return $this->builder->setPrice(1)->setId($id)->setName('testItemName')->create();
+        return $this->factory->create()->setPrice(1)->setId($id)->setName('testItemName');
     }
 }

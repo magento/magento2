@@ -25,11 +25,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $eavAttributeRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeInterfaceDataBuilder
-     */
-    protected $attributeBuilder;
-
-    /**
      * @var \Magento\Eav\Model\Config
      */
     protected $eavConfig;
@@ -50,12 +45,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $filterManager;
 
     /**
-     * @var \Magento\Framework\Api\Config\MetadataConfig
-     */
-    protected $metadataConfig;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -66,37 +56,31 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * @param \Magento\Catalog\Model\Resource\Attribute $attributeResource
-     * @param \Magento\Catalog\Api\Data\ProductAttributeDataBuilder $attributeBuilder
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
-     * @param \Magento\Framework\Api\Config\MetadataConfig $metadataConfig
-     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Attribute $attributeResource,
-        \Magento\Catalog\Api\Data\ProductAttributeDataBuilder $attributeBuilder,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Framework\Api\Config\MetadataConfig $metadataConfig,
-        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->attributeResource = $attributeResource;
-        $this->attributeBuilder = $attributeBuilder;
         $this->productHelper = $productHelper;
         $this->filterManager = $filterManager;
         $this->eavAttributeRepository = $eavAttributeRepository;
         $this->eavConfig = $eavConfig;
         $this->inputtypeValidatorFactory = $validatorFactory;
-        $this->metadataConfig = $metadataConfig;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
     }
@@ -130,8 +114,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
-        $this->attributeBuilder->populate($attribute);
-
         if ($attribute->getAttributeId()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
@@ -139,23 +121,23 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 throw NoSuchEntityException::singleField('attribute_code', $existingModel->getAttributeCode());
             }
 
-            $this->attributeBuilder->setAttributeId($existingModel->getAttributeId());
-            $this->attributeBuilder->setIsUserDefined($existingModel->getIsUserDefined());
-            $this->attributeBuilder->setFrontendInput($existingModel->getFrontendInput());
+            $attribute->setAttributeId($existingModel->getAttributeId());
+            $attribute->setIsUserDefined($existingModel->getIsUserDefined());
+            $attribute->setFrontendInput($existingModel->getFrontendInput());
 
             if (is_array($attribute->getFrontendLabels())) {
                 $frontendLabel[0] = $existingModel->getDefaultFrontendLabel();
                 foreach ($attribute->getFrontendLabels() as $item) {
                     $frontendLabel[$item->getStoreId()] = $item->getLabel();
                 }
-                $this->attributeBuilder->setDefaultFrontendLabel($frontendLabel);
+                $attribute->setDefaultFrontendLabel($frontendLabel);
             }
             if (!$attribute->getIsUserDefined()) {
                 // Unset attribute field for system attributes
-                $this->attributeBuilder->setApplyTo(null);
+                $attribute->setApplyTo(null);
             }
         } else {
-            $this->attributeBuilder->setAttributeId(null);
+            $attribute->setAttributeId(null);
 
             if (!$attribute->getFrontendLabels() && !$attribute->getDefaultFrontendLabel()) {
                 throw InputException::requiredField('frontend_label');
@@ -173,31 +155,30 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                     throw InputException::invalidFieldValue('frontend_label', null);
                 }
 
-                $this->attributeBuilder->setDefaultFrontendLabel($frontendLabels);
+                $attribute->setDefaultFrontendLabel($frontendLabels);
             }
-            $this->attributeBuilder->setAttributeCode(
+            $attribute->setAttributeCode(
                 $attribute->getAttributeCode() ?: $this->generateCode($frontendLabels[0])
             );
             $this->validateCode($attribute->getAttributeCode());
             $this->validateFrontendInput($attribute->getFrontendInput());
 
-            $this->attributeBuilder->setBackendType(
+            $attribute->setBackendType(
                 $attribute->getBackendTypeByInput($attribute->getFrontendInput())
             );
-            $this->attributeBuilder->setSourceModel(
+            $attribute->setSourceModel(
                 $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
             );
-            $this->attributeBuilder->setBackendModel(
+            $attribute->setBackendModel(
                 $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
             );
-            $this->attributeBuilder->setEntityTypeId(
+            $attribute->setEntityTypeId(
                 $this->eavConfig
                     ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
                     ->getId()
             );
-            $this->attributeBuilder->setIsUserDefined(1);
+            $attribute->setIsUserDefined(1);
         }
-        $attribute = $this->attributeBuilder->create();
         $this->attributeResource->save($attribute);
         return $attribute;
     }
@@ -224,25 +205,23 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
+        $defaultAttributeSetId = $this->eavConfig
+            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
         $searchCriteria = $this->searchCriteriaBuilder->addFilter(
             [
                 $this->filterBuilder
                     ->setField('attribute_set_id')
-                    ->setValue(\Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID)
+                    ->setValue($defaultAttributeSetId)
                     ->create(),
             ]
         );
 
-        $customAttributes = [];
-        $entityAttributes = $this->getList($searchCriteria->create())->getItems();
-
-        foreach ($entityAttributes as $attributeMetadata) {
-            $customAttributes[] = $attributeMetadata;
-        }
-        return array_merge($customAttributes, $this->metadataConfig->getCustomAttributesMetadata($dataObjectClassName));
+        return $this->getList($searchCriteria->create())->getItems();
     }
 
     /**

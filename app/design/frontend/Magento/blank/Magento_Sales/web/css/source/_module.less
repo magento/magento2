@@ -88,7 +88,7 @@
     &:extend(.abs-status all);
 }
 
-.page-title {
+.page-title-wrapper {
     .order-date {
         margin: 0 0 @indent__base;
     }
@@ -96,8 +96,8 @@
 
 .account,
 .sales-guest-view {
-    .page-title {
-        .title {
+    .page-title-wrapper {
+        .page-title {
             margin-right: @indent__m;
         }
     }
@@ -261,7 +261,7 @@
         }
     }
 
-    .page-title {
+    .page-title-wrapper {
         .order-date {
             @order-status-indent: ceil(@h1__margin-bottom__desktop/2);
             .css(margin-top, -@order-status-indent);

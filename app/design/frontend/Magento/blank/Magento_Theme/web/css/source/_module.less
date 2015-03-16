@@ -3,7 +3,7 @@
 //  * See COPYING.txt for license details.
 //  */
 
-@import 'module/_collapsible_navigation';
+@import 'module/_collapsible_navigation.less';
 
 @message-global-note__color: @text__color;
 @message-global-note__background: @color-yellow-light2;
@@ -78,8 +78,8 @@ body {
 }
 
 .page-main {
-    > .page-title {
-        .title + .action {
+    > .page-title-wrapper {
+        .page-title + .action {
             margin-top: @indent__l;
         }
     }
@@ -254,12 +254,15 @@ body {
     .navigation ul {
         padding: 0 8px;
     }
+
     .header {
         &.panel {
             > .header.links {
                 float: right;
+                font-size: 0;
                 .list-inline();
                 > li {
+                    font-size: @font-size__base;
                     margin: 0 0 0 15px;
                     &.welcome,
                     a {
@@ -275,7 +278,7 @@ body {
             }
         }
         &.content {
-            padding: 30px 20px 0;
+            padding: @indent__l @indent__base 0;
             &:extend(.abs-add-clearfix-desktop all);
         }
     }
@@ -287,8 +290,8 @@ body {
             border-bottom: 1px solid @secondary__color;
         }
         .header.panel {
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding-top: @indent__s;
+            padding-bottom: @indent__s;
             &:extend(.abs-add-clearfix-desktop all);
         }
         .switcher {
@@ -297,11 +300,11 @@ body {
     }
 
     .page-main {
-        > .page-title {
-            .title {
+        > .page-title-wrapper {
+            .page-title {
                 display: inline-block;
             }
-            .title + .action {
+            .page-title + .action {
                 float: right;
                 margin-top: @indent__base;
             }

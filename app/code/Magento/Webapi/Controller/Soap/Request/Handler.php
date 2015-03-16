@@ -6,13 +6,14 @@
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Webapi\Controller\ServiceArgsSerializer;
+use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Webapi\Controller\Soap\Request as SoapRequest;
-use Magento\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 
 /**
@@ -41,8 +42,8 @@ class Handler
     /** @var SimpleDataObjectConverter */
     protected $_dataObjectConverter;
 
-    /** @var ServiceArgsSerializer */
-    protected $_serializer;
+    /** @var ServiceInputProcessor */
+    protected $serviceInputProcessor;
 
     /** @var DataObjectProcessor */
     protected $_dataObjectProcessor;
@@ -55,7 +56,7 @@ class Handler
      * @param SoapConfig $apiConfig
      * @param AuthorizationInterface $authorization
      * @param SimpleDataObjectConverter $dataObjectConverter
-     * @param ServiceArgsSerializer $serializer
+     * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
@@ -64,7 +65,7 @@ class Handler
         SoapConfig $apiConfig,
         AuthorizationInterface $authorization,
         SimpleDataObjectConverter $dataObjectConverter,
-        ServiceArgsSerializer $serializer,
+        ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor
     ) {
         $this->_request = $request;
@@ -72,7 +73,7 @@ class Handler
         $this->_apiConfig = $apiConfig;
         $this->_authorization = $authorization;
         $this->_dataObjectConverter = $dataObjectConverter;
-        $this->_serializer = $serializer;
+        $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
     }
 
@@ -131,7 +132,7 @@ class Handler
         /** SoapServer wraps parameters into array. Thus this wrapping should be removed to get access to parameters. */
         $arguments = reset($arguments);
         $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
-        return $this->_serializer->getInputData($serviceClass, $serviceMethod, $arguments);
+        return $this->serviceInputProcessor->process($serviceClass, $serviceMethod, $arguments);
     }
 
     /**
@@ -154,7 +155,7 @@ class Handler
         } elseif (is_array($data)) {
             $dataType = substr($dataType, 0, -2);
             foreach ($data as $key => $value) {
-                if ($value instanceof ExtensibleDataInterface) {
+                if ($value instanceof ExtensibleDataInterface || $value instanceof MetadataObjectInterface) {
                     $result[] = $this->_dataObjectConverter
                         ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($value, $dataType));
                 } else {

@@ -6,15 +6,33 @@
  */
 namespace Magento\Bundle\Model;
 
+/**
+ * Class Link
+ * @codeCoverageIgnore
+ */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Bundle\Api\Data\LinkInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_SKU = 'sku';
+    const KEY_OPTION_ID = 'option_id';
+    const KEY_QTY = 'qty';
+    const KEY_POSITION = 'position';
+    const KEY_IS_DEFINED = 'is_defined';
+    const KEY_IS_DEFAULT = 'is_default';
+    const KEY_PRICE = 'price';
+    const KEY_PRICE_TYPE = 'price_type';
+    const KEY_CAN_CHANGE_QUANTITY = 'can_change_quantity';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getSku()
     {
-        return $this->getData('sku');
+        return $this->getData(self::KEY_SKU);
     }
 
     /**
@@ -22,7 +40,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getOptionId()
     {
-        return $this->getData('option_id');
+        return $this->getData(self::KEY_OPTION_ID);
     }
 
     /**
@@ -30,7 +48,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return $this->getData(self::KEY_QTY);
     }
 
     /**
@@ -38,7 +56,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getPosition()
     {
-        return $this->getData('position');
+        return $this->getData(self::KEY_POSITION);
     }
 
     /**
@@ -46,7 +64,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getIsDefined()
     {
-        return $this->getData('is_defined');
+        return $this->getData(self::KEY_IS_DEFINED);
     }
 
     /**
@@ -54,7 +72,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getIsDefault()
     {
-        return $this->getData('is_default');
+        return $this->getData(self::KEY_IS_DEFAULT);
     }
 
     /**
@@ -62,7 +80,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getPrice()
     {
-        return $this->getData('price');
+        return $this->getData(self::KEY_PRICE);
     }
 
     /**
@@ -70,7 +88,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getPriceType()
     {
-        return $this->getData('price_type');
+        return $this->getData(self::KEY_PRICE_TYPE);
     }
 
     /**
@@ -78,6 +96,126 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getCanChangeQuantity()
     {
-        return $this->getData('can_change_quantity');
+        return $this->getData(self::KEY_CAN_CHANGE_QUANTITY);
+    }
+
+    /**
+     * Set linked product sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::KEY_SKU, $sku);
+    }
+
+    /**
+     * Set option id
+     *
+     * @param int $optionId
+     * @return $this
+     */
+    public function setOptionId($optionId)
+    {
+        return $this->setData(self::KEY_OPTION_ID, $optionId);
+    }
+
+    /**
+     * Set qty
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(self::KEY_QTY, $qty);
+    }
+
+    /**
+     * Set position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * Set is defined
+     *
+     * @param bool $isDefined
+     * @return $this
+     */
+    public function setIsDefined($isDefined)
+    {
+        return $this->setData(self::KEY_IS_DEFINED, $isDefined);
+    }
+
+    /**
+     * Set is default
+     *
+     * @param bool $isDefault
+     * @return $this
+     */
+    public function setIsDefault($isDefault)
+    {
+        return $this->setData(self::KEY_IS_DEFAULT, $isDefault);
+    }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::KEY_PRICE, $price);
+    }
+
+    /**
+     * Set price type
+     *
+     * @param int $priceType
+     * @return $this
+     */
+    public function setPriceType($priceType)
+    {
+        return $this->setData(self::KEY_PRICE_TYPE, $priceType);
+    }
+
+    /**
+     * Set whether quantity could be changed
+     *
+     * @param int $canChangeQuantity
+     * @return $this
+     */
+    public function setCanChangeQuantity($canChangeQuantity)
+    {
+        return $this->setData(self::KEY_CAN_CHANGE_QUANTITY, $canChangeQuantity);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Bundle\Api\Data\LinkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Bundle\Api\Data\LinkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertReorderStatusIsCorrect extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that status is correct on order page in backend (same with value of orderStatus variable)
      *
@@ -40,8 +36,8 @@ class AssertReorderStatusIsCorrect extends AbstractConstraint
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
             $previousOrderStatus,
+            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
             'Order status is incorrect on order page in backend.'
         );
     }

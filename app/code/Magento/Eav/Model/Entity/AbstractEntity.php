@@ -15,6 +15,8 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Eav\Exception as EavException;
+use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -191,29 +193,29 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     protected $_universalFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @var TransactionManagerInterface
+     */
+    protected $transactionManager;
+
+    /**
+     * @var ObjectRelationProcessor
+     */
+    protected $objectRelationProcessor;
+
+    /**
+     * @param Context $context
      * @param array $data
      */
-    public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        $data = []
-    ) {
-        $this->_eavConfig = $eavConfig;
-        $this->_resource = $resource;
-        $this->_attrSetEntity = $attrSetEntity;
-        $this->_localeFormat = $localeFormat;
-        $this->_resourceHelper = $resourceHelper;
-        $this->_universalFactory = $universalFactory;
+    public function __construct(Context $context, $data = [])
+    {
+        $this->_eavConfig = $context->getEavConfig();
+        $this->_resource = $context->getResource();
+        $this->_attrSetEntity = $context->getAttributeSetEntity();
+        $this->_localeFormat = $context->getLocaleFormat();
+        $this->_resourceHelper = $context->getResourceHelper();
+        $this->_universalFactory = $context->getUniversalFactory();
+        $this->transactionManager = $context->getTransactionManager();
+        $this->objectRelationProcessor = $context->getObjectRelationProcessor();
         parent::__construct();
         $properties = get_object_vars($this);
         foreach ($data as $key => $value) {
@@ -953,8 +955,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         } else {
             $value = $object->getData($attribute->getAttributeCode());
             if ($attribute->getBackend()->getType() == 'datetime') {
-                $date = new \Magento\Framework\Stdlib\DateTime\Date($value, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
-                $value = $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+                $value = (new \DateTime($value))->format('Y-m-d H:i:s');
             }
             $bind = [
                 'attribute_id' => $attribute->getId(),
@@ -1023,6 +1024,9 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         if (empty($attributes)) {
             $this->loadAllAttributes($object);
         } else {
+            if (!is_array($attributes)) {
+                $attributes = [$attributes];
+            }
             foreach ($attributes as $attrCode) {
                 $this->getAttribute($attrCode);
             }
@@ -1179,6 +1183,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                 }
 
                 $object->setParentId((int)$object->getParentId());
+
+                $this->objectRelationProcessor->validateDataIntegrity($this->getEntityTable(), $object->getData());
 
                 $this->_beforeSave($object);
                 $this->_processSaveData($this->_collectSaveData($object));
@@ -1714,19 +1720,24 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     public function delete($object)
     {
         try {
-            $this->beginTransaction();
+            $connection = $this->transactionManager->start($this->_getWriteAdapter());
             if (is_numeric($object)) {
                 $id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Object) {
                 $object->beforeDelete();
                 $id = (int) $object->getId();
             }
-
             $this->_beforeDelete($object);
-
             try {
                 $where = [$this->getEntityIdField() . '=?' => $id];
-                $this->_getWriteAdapter()->delete($this->getEntityTable(), $where);
+                $this->objectRelationProcessor->delete(
+                    $this->transactionManager,
+                    $connection,
+                    $this->getEntityTable(),
+                    $this->_getWriteAdapter()->quoteInto($this->getEntityIdField() . '=?', $id),
+                    [$this->getEntityIdField() => $id]
+                );
+
                 $this->loadAllAttributes($object);
                 foreach ($this->getAttributesByTable() as $table => $attributes) {
                     $this->_getWriteAdapter()->delete($table, $where);
@@ -1741,12 +1752,12 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                 $object->isDeleted(true);
                 $object->afterDelete();
             }
-            $this->commit();
+            $this->transactionManager->commit();
             if ($object instanceof \Magento\Framework\Object) {
                 $object->afterDeleteCommit();
             }
         } catch (\Exception $e) {
-            $this->rollBack();
+            $this->transactionManager->rollBack();
             throw $e;
         }
         return $this;

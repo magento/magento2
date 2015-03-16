@@ -97,7 +97,7 @@ $productByUsedAttributes = $block->getAssociatedProducts();
 
                         <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
                     ?>"
-                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
+                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
                     ?>">
                             <span><?php echo __('Choose');
                     ?></span>
@@ -181,12 +181,12 @@ $productByUsedAttributes = $block->getAssociatedProducts();
                                class="<?php echo $block->getAttributeFrontendClass('name');
                     ?>"<?php echo $disabled?>/>
                         <input type="hidden" name="variations-matrix[<?php echo $key?>][configurable_attribute]"
-                               value="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
+                               value="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
                     ?>"<?php echo $disabled?>/>
 
                         <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
                     ?>"
-                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attributeValues));
+                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
                     ?>"<?php echo $disabled;
                     ?>>
                             <span><?php echo __('Choose');
@@ -255,7 +255,7 @@ $productByUsedAttributes = $block->getAssociatedProducts();
     </div>
 </div>
 <script data-template-for="variation-image" type="text/x-magento-template">
-    <img src="<%= data.url %>" class="variation" data-role="image"/>
+    <img src="<%- data.url %>" class="variation" data-role="image"/>
 </script>
 <script>
 require([

@@ -56,6 +56,22 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'catalog_category';
 
+    /**#@+
+     * Constants
+     */
+    const KEY_PARENT_ID = 'parent_id';
+    const KEY_NAME = 'name';
+    const KEY_IS_ACTIVE = 'is_active';
+    const KEY_POSITION = 'position';
+    const KEY_LEVEL = 'level';
+    const KEY_UPDATED_AT = 'updated_at';
+    const KEY_PATH = 'path';
+    const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
+    const KEY_INCLUDE_IN_MENU = 'include_in_menu';
+    const KEY_PRODUCT_COUNT = 'product_count';
+    const KEY_CHILDREN_DATA = 'children_data';
+    /**#@-*/
+
     /**
      * Prefix of model events names
      *
@@ -174,11 +190,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * @var \Magento\Framework\Api\MetadataServiceInterface
+     */
+    protected $metadataService;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
      * @param Resource\Category\Tree $categoryTreeResource
      * @param Resource\Category\TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
@@ -199,9 +221,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTreeResource,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
@@ -218,6 +241,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
+        $this->metadataService = $metadataService;
         $this->_treeModel = $categoryTreeResource;
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_storeCollectionFactory = $storeCollectionFactory;
@@ -233,7 +257,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $storeManager,
             $resource,
@@ -256,6 +280,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         } else {
             $this->_init('Magento\Catalog\Model\Resource\Category');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        if ($this->customAttributesCodes === null) {
+            $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+        }
+        return $this->customAttributesCodes;
     }
 
     /**
@@ -623,7 +658,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getParentId()
     {
-        $parentId = $this->getData('parent_id');
+        $parentId = $this->getData(self::KEY_PARENT_ID);
         if (isset($parentId)) {
             return $parentId;
         }
@@ -767,7 +802,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasLevel()) {
             return count(explode('/', $this->getPath())) - 1;
         }
-        return $this->getData('level');
+        return $this->getData(self::KEY_LEVEL);
     }
 
     /**
@@ -808,7 +843,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getName()
     {
-        return $this->_getData('name');
+        return $this->_getData(self::KEY_NAME);
     }
 
     /**
@@ -865,9 +900,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasProductCount()) {
             $count = $this->_getResource()->getProductCount($this);
             // load product count
-            $this->setData('product_count', $count);
+            $this->setData(self::KEY_PRODUCT_COUNT, $count);
         }
-        return $this->getData('product_count');
+        return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 
     /**
@@ -934,7 +969,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getAvailableSortBy()
     {
-        $available = $this->getData('available_sort_by');
+        $available = $this->getData(self::KEY_AVAILABLE_SORT_BY);
         if (empty($available)) {
             return [];
         }
@@ -1064,7 +1099,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getPath()
     {
-        return $this->getData('path');
+        return $this->getData(self::KEY_PATH);
     }
 
     /**
@@ -1072,7 +1107,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getPosition()
     {
-        return $this->getData('position');
+        return $this->getData(self::KEY_POSITION);
     }
 
     /**
@@ -1096,7 +1131,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getUpdatedAt()
     {
-        return $this->getData('updated_at');
+        return $this->getData(self::KEY_UPDATED_AT);
     }
 
     /**
@@ -1105,7 +1140,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIsActive()
     {
-        return $this->getData('is_active');
+        return $this->getData(self::KEY_IS_ACTIVE);
     }
 
     /**
@@ -1129,7 +1164,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIncludeInMenu()
     {
-        return $this->getData('include_in_menu');
+        return $this->getData(self::KEY_INCLUDE_IN_MENU);
     }
 
     /**
@@ -1145,7 +1180,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getChildrenData()
     {
-        return $this->getData('children_data');
+        return $this->getData(self::KEY_CHILDREN_DATA);
     }
     //@codeCoverageIgnoreEnd
 
@@ -1196,4 +1231,138 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         return ConvertArray::toFlatArray($dataArray);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * Set parent category ID
+     *
+     * @param int $parentId
+     * @return $this
+     */
+    public function setParentId($parentId)
+    {
+        return $this->setData(self::KEY_PARENT_ID, $parentId);
+    }
+
+    /**
+     * Set category name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::KEY_NAME, $name);
+    }
+
+    /**
+     * Set whether category is active
+     *
+     * @param bool $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::KEY_IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * Set category position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * Set category level
+     *
+     * @param int $level
+     * @return $this
+     */
+    public function setLevel($level)
+    {
+        return $this->setData(self::KEY_LEVEL, $level);
+    }
+
+    /**
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData(self::KEY_UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     */
+    public function setPath($path)
+    {
+        return $this->setData(self::KEY_PATH, $path);
+    }
+
+    /**
+     * @param string[]|string $availableSortBy
+     * @return $this
+     */
+    public function setAvailableSortBy($availableSortBy)
+    {
+        return $this->setData(self::KEY_AVAILABLE_SORT_BY, $availableSortBy);
+    }
+
+    /**
+     * @param bool $includeInMenu
+     * @return $this
+     */
+    public function setIncludeInMenu($includeInMenu)
+    {
+        return $this->setData(self::KEY_INCLUDE_IN_MENU, $includeInMenu);
+    }
+
+    /**
+     * Set product count
+     *
+     * @param int $productCount
+     * @return $this
+     */
+    public function setProductCount($productCount)
+    {
+        return $this->setData(self::KEY_PRODUCT_COUNT, $productCount);
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
+     * @return $this
+     */
+    public function setChildrenData(array $childrenData = null)
+    {
+        return $this->setData(self::KEY_CHILDREN_DATA, $childrenData);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\CategoryExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

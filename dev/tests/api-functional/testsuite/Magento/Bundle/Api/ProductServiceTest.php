@@ -7,10 +7,9 @@
 namespace Magento\Bundle\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * Class ProductServiceTest for testing Bundle Product API
@@ -62,18 +61,19 @@ class ProductServiceTest extends WebapiAbstract
      */
     public function testCreateBundle()
     {
+        $this->markTestSkipped('Processing of custom attributes has been changed in MAGETWO-34448.');
         $bundleProductOptions = [
-            "attribute_code" => "bundle_product_options",
-            "value" => [
-                [
-                    "title" => "test option",
-                    "type" => "checkbox",
-                    "required" => 1,
-                    "product_links" => [
-                        [
-                            "sku" => 'simple',
-                            "qty" => 1,
-                        ],
+            [
+                "title" => "test option",
+                "type" => "checkbox",
+                "required" => true,
+                "product_links" => [
+                    [
+                        "sku" => 'simple',
+                        "qty" => 1,
+                        'is_default' => false,
+                        'price' => 1.0,
+                        'price_type' => 1
                     ],
                 ],
             ],
@@ -86,36 +86,25 @@ class ProductServiceTest extends WebapiAbstract
             "type_id" => "bundle",
             "price" => 50,
             'attribute_set_id' => 4,
-            "custom_attributes" => [
-                "price_type" => [
-                    'attribute_code' => 'price_type',
-                    'value' => \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
-                ],
+            "extension_attributes" => [
+                "price_type" => \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC,
                 "bundle_product_options" => $bundleProductOptions,
-                "price_view" => [
-                    "attribute_code" => "price_view",
-                    "value" => "test",
-                ],
+                "price_view" => "test"
             ],
         ];
 
         $response = $this->createProduct($product);
 
         $this->assertEquals($uniqueId, $response[ProductInterface::SKU]);
-        $this->assertEquals(
-            $bundleProductOptions,
-            $response[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY]["bundle_product_options"]
-        );
+        $resultBundleProductOptions
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"];
+        $this->assertEquals($bundleProductOptions, $resultBundleProductOptions);
+        $this->assertEquals('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
 
         $response = $this->getProduct($uniqueId);
-        $foundBundleProductOptions = false;
-        foreach ($response[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY] as $customAttribute) {
-            if ($customAttribute["attribute_code"] === 'bundle_product_options') {
-                $this->assertEquals('simple', $customAttribute["value"][0]["product_links"][0]["sku"]);
-                $foundBundleProductOptions = true;
-            }
-        }
-        $this->assertTrue($foundBundleProductOptions);
+        $resultBundleProductOptions
+            = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["bundle_product_options"];
+        $this->assertEquals('simple', $resultBundleProductOptions[0]["product_links"][0]["sku"]);
     }
 
     /**
@@ -129,7 +118,7 @@ class ProductServiceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -139,7 +128,7 @@ class ProductServiceTest extends WebapiAbstract
         ];
 
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, ['productSku' => $productSku]) : $this->_webApiCall($serviceInfo);
+            $this->_webApiCall($serviceInfo, ['sku' => $productSku]) : $this->_webApiCall($serviceInfo);
 
         return $response;
     }
@@ -153,7 +142,10 @@ class ProductServiceTest extends WebapiAbstract
     protected function createProduct($product)
     {
         $serviceInfo = [
-            'rest' => ['resourcePath' => self::RESOURCE_PATH, 'httpMethod' => RestConfig::HTTP_METHOD_POST],
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,

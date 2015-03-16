@@ -28,9 +28,9 @@ class Full
     protected $separator = ' | ';
 
     /**
-     * Array of \Magento\Framework\Stdlib\DateTime\DateInterface objects per store
+     * Array of \DateTime objects per store
      *
-     * @var array
+     * @var \DateTime[]
      */
     protected $dates = [];
 
@@ -140,7 +140,7 @@ class Full
     /**
      * @var \Magento\Framework\Search\Request\Config
      */
-    private $searchRequestConfig;
+    protected $searchRequestConfig;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -443,12 +443,8 @@ class Full
             $this->searchableAttributes = [];
 
             $productAttributes = $this->productAttributeCollectionFactory->create();
+            $productAttributes->addToIndexFilter(true);
 
-            if ($this->engineProvider->get() && $this->engineProvider->get()->allowAdvancedIndex()) {
-                $productAttributes->addToIndexFilter(true);
-            } else {
-                $productAttributes->addSearchableAttributeFilter();
-            }
             /** @var \Magento\Eav\Model\Entity\Attribute[] $attributes */
             $attributes = $productAttributes->getItems();
 
@@ -672,7 +668,7 @@ class Full
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValue) {
                 $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
-                if (!is_null($value) && $value !== false) {
+                if (!empty($value)) {
                     $attributeCode = $this->getSearchableAttribute($attributeId)->getAttributeCode();
 
                     if (isset($index[$attributeCode])) {
@@ -684,19 +680,17 @@ class Full
             }
         }
 
-        if ($this->engineProvider->get()->allowAdvancedIndex()) {
-            $product = $this->getProductEmulator(
-                $productData['type_id']
-            )->setId(
-                $productData['entity_id']
-            )->setStoreId(
-                $storeId
-            );
-            $typeInstance = $this->getProductTypeInstance($productData['type_id']);
-            $data = $typeInstance->getSearchableData($product);
-            if ($data) {
-                $index['options'] = $data;
-            }
+        $product = $this->getProductEmulator(
+            $productData['type_id']
+        )->setId(
+            $productData['entity_id']
+        )->setStoreId(
+            $storeId
+        );
+        $typeInstance = $this->getProductTypeInstance($productData['type_id']);
+        $data = $typeInstance->getSearchableData($product);
+        if ($data) {
+            $index['options'] = $data;
         }
 
         if ($this->engineProvider->get()) {
@@ -721,6 +715,7 @@ class Full
 
         if ($attribute->getIsSearchable()
             && $attribute->usesSource()
+            && $this->engineProvider->get()->allowAdvancedIndex()
         ) {
             $attribute->setStoreId($storeId);
             $valueText = $attribute->getSource()->getIndexOptionText($valueId);
@@ -768,23 +763,20 @@ class Full
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-            $locale = $this->scopeConfig->getValue(
-                $this->localeResolver->getDefaultLocalePath(),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $locale = new \Zend_Locale($locale);
+            
+            $this->localeResolver->emulate($storeId);
 
-            $dateObj = new \Magento\Framework\Stdlib\DateTime\Date(null, null, $locale);
-            $dateObj->setTimezone($timezone);
-            $this->dates[$storeId] = [$dateObj, $locale->getTranslation(null, 'date', $locale)];
+            $dateObj = new \DateTime();
+            $dateObj->setTimezone(new \DateTimeZone($timezone));
+            $this->dates[$storeId] = $dateObj;
+
+            $this->localeResolver->revert();
         }
 
         if (!$this->dateTime->isEmptyDate($date)) {
-            list($dateObj, $format) = $this->dates[$storeId];
-            $dateObj->setDate($date, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-
-            return $dateObj->toString($format);
+            /** @var \DateTime $dateObj */
+            $dateObj = $this->dates[$storeId];
+            return $this->localeDate->formatDateTime($dateObj, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE);
         }
 
         return null;

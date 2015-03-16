@@ -197,6 +197,14 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the hidden tax amount for the invoice item.
      *
      * @return float Hidden tax amount.
@@ -279,4 +287,203 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return float Tax amount.
      */
     public function getTaxAmount();
+
+    /**
+     * Sets the parent ID for the invoice item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the base price for the invoice item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setBasePrice($price);
+
+    /**
+     * Sets the tax amount for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setTaxAmount($amount);
+
+    /**
+     * Sets the base row total for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseRowTotal($amount);
+
+    /**
+     * Sets the discount amount for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setDiscountAmount($amount);
+
+    /**
+     * Sets the row total for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setRowTotal($amount);
+
+    /**
+     * Sets the base discount amount for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseDiscountAmount($amount);
+
+    /**
+     * Sets the price including tax for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setPriceInclTax($amount);
+
+    /**
+     * Sets the base tax amount for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseTaxAmount($amount);
+
+    /**
+     * Sets the base price including tax for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBasePriceInclTax($amount);
+
+    /**
+     * Sets the quantity for the invoice item.
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setQty($qty);
+
+    /**
+     * Sets the base cost for the invoice item.
+     *
+     * @param float $baseCost
+     * @return $this
+     */
+    public function setBaseCost($baseCost);
+
+    /**
+     * Sets the price for the invoice item.
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price);
+
+    /**
+     * Sets the base row total including tax for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseRowTotalInclTax($amount);
+
+    /**
+     * Sets the row total including tax for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setRowTotalInclTax($amount);
+
+    /**
+     * Sets the product ID for the invoice item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setProductId($id);
+
+    /**
+     * Sets the order item ID for the invoice item.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderItemId($id);
+
+    /**
+     * Sets the additional data for the invoice item.
+     *
+     * @param string $additionalData
+     * @return $this
+     */
+    public function setAdditionalData($additionalData);
+
+    /**
+     * Sets the description for the invoice item.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description);
+
+    /**
+     * Sets the SKU for the invoice item.
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
+
+    /**
+     * Sets the name for the invoice item.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
+     * Sets the hidden tax amount for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setHiddenTaxAmount($amount);
+
+    /**
+     * Sets the base hidden tax amount for the invoice item.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseHiddenTaxAmount($amount);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes);
 }

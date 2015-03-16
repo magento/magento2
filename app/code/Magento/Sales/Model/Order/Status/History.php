@@ -14,10 +14,6 @@ use Magento\Sales\Model\AbstractModel;
  *
  * @method \Magento\Sales\Model\Resource\Order\Status\History _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Status\History getResource()
- * @method \Magento\Sales\Model\Order\Status\History setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Status\History setIsVisibleOnFront(int $value)
- * @method \Magento\Sales\Model\Order\Status\History setComment(string $value)
- * @method \Magento\Sales\Model\Order\Status\History setStatus(string $value)
  * @method \Magento\Sales\Model\Order\Status\History setCreatedAt(string $value)
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
@@ -49,7 +45,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -62,7 +58,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -74,7 +70,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $localeDate,
             $dateTime,
@@ -264,4 +260,68 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     {
         return $this->getData(OrderStatusHistoryInterface::STATUS);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(OrderStatusHistoryInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront)
+    {
+        return $this->setData(OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT, $isVisibleOnFront);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComment($comment)
+    {
+        return $this->setData(OrderStatusHistoryInterface::COMMENT, $comment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(OrderStatusHistoryInterface::STATUS, $status);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEntityName($entityName)
+    {
+        return $this->setData(OrderStatusHistoryInterface::ENTITY_NAME, $entityName);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\OrderStatusHistoryExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

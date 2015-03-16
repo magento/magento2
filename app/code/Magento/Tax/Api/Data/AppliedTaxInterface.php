@@ -78,4 +78,19 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return $this
      */
     public function setRates(array $rates = null);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Tax\Api\Data\AppliedTaxExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes);
 }

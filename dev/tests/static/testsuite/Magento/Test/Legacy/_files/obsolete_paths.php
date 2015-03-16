@@ -232,6 +232,7 @@ return [
         '/dev/tests/integration/testsuite/Magento/Core/Model/Resource/Theme',
         '/dev/tests/integration/testsuite/Magento/Theme/Model/Resource/Theme'
     ],
+    ['/dev/tests/unit/testsuite/Magento/Webapi/Service/Entity'],
     ['/app/code/Magento/Install'],
     ['/dev/tests/integration/testsuite/Magento/Install'],
     ['/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Install'],
@@ -254,5 +255,5 @@ return [
     ['/app/code/Magento/Checkout/etc/sales.xml'],
     ['/app/code/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
     ['/dev/tests/unit/testsuite/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
-
+    ['/dev/tests/unit/testsuite'],
 ];

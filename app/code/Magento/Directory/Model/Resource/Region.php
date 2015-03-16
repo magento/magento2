@@ -26,12 +26,16 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_localeResolver;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Locale\ResolverInterface $localeResolver)
-    {
-        parent::__construct($resource);
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $resourcePrefix = null
+    ) {
+        parent::__construct($context, $resourcePrefix);
         $this->_localeResolver = $localeResolver;
     }
 
@@ -59,7 +63,7 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
         $adapter = $this->_getReadAdapter();
 
-        $locale = $this->_localeResolver->getLocaleCode();
+        $locale = $this->_localeResolver->getLocale();
         $systemLocale = \Magento\Framework\AppInterface::DISTRO_LOCALE_CODE;
 
         $regionField = $adapter->quoteIdentifier($this->getMainTable() . '.' . $this->getIdFieldName());
@@ -98,7 +102,7 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _loadByCountry($object, $countryId, $value, $field)
     {
         $adapter = $this->_getReadAdapter();
-        $locale = $this->_localeResolver->getLocaleCode();
+        $locale = $this->_localeResolver->getLocale();
         $joinCondition = $adapter->quoteInto('rname.region_id = region.region_id AND rname.locale = ?', $locale);
         $select = $adapter->select()->from(
             ['region' => $this->getMainTable()]

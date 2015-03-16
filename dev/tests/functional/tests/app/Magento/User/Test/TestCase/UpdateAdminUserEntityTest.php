@@ -15,9 +15,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for UpdateAdminUserEntity
- *
- * Test Flow:
  * Preconditions:
  * 1. Admin user with assigned full access role is created.
  * 2. Custom role with restricted permission: Sales is created
@@ -38,35 +35,46 @@ class UpdateAdminUserEntityTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'PS';
+    const TEST_TYPE = 'acceptance_test';
     /* end tags */
 
     /**
+     * User list page on backend.
+     *
      * @var UserIndex
      */
     protected $userIndex;
 
     /**
+     * User edit page on backend.
+     *
      * @var UserEdit
      */
     protected $userEdit;
 
     /**
+     * Dashboard page on backend.
+     *
      * @var Dashboard
      */
     protected $dashboard;
 
     /**
+     * Authorization page on backend.
+     *
      * @var AdminAuthLogin
      */
     protected $adminAuth;
 
     /**
+     * Fixture factory.
+     *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Setup necessary data for test
+     * Setup necessary data for test.
      *
      * @param UserIndex $userIndex
      * @param UserEdit $userEdit
@@ -90,16 +98,17 @@ class UpdateAdminUserEntityTest extends Injectable
     }
 
     /**
-     * Runs Update Admin User test
+     * Runs Update Admin User test.
      *
-     * @param User $user
      * @param User $initialUser
+     * @param User $user
      * @param string $loginAsDefaultAdmin
      * @return array
+     * @throws \Exception
      */
     public function testUpdateAdminUser(
-        User $user,
         User $initialUser,
+        User $user,
         $loginAsDefaultAdmin
     ) {
         // Precondition
@@ -117,20 +126,18 @@ class UpdateAdminUserEntityTest extends Injectable
         $this->userEdit->getUserForm()->fill($user);
         $this->userEdit->getPageActions()->save();
 
-        return ['customAdmin' => $this->mergeUsers($user, $initialUser)];
+        return ['user' => $this->mergeUsers($initialUser, $user)];
     }
 
     /**
-     * Merging user data and returns custom user
+     * Merging user data and returns custom user.
      *
-     * @param User $user
      * @param User $initialUser
+     * @param User $user
      * @return User
      */
-    protected function mergeUsers(
-        User $user,
-        User $initialUser
-    ) {
+    protected function mergeUsers(User $initialUser, User $user)
+    {
         $data = array_merge($initialUser->getData(), $user->getData());
         if (isset($data['role_id'])) {
             $data['role_id'] = [
@@ -144,7 +151,7 @@ class UpdateAdminUserEntityTest extends Injectable
     }
 
     /**
-     * Logout Admin User from account
+     * Logout Admin User from account.
      *
      * @return void
      */

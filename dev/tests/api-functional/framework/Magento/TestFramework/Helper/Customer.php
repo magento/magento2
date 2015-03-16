@@ -9,7 +9,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
 
 class Customer extends WebapiAbstract
 {
@@ -83,7 +83,7 @@ class Customer extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => RestRequest::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -176,7 +176,11 @@ class Customer extends WebapiAbstract
             ],
         ];
         $customer = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($customer, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customer,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         return $customer;
     }
 }

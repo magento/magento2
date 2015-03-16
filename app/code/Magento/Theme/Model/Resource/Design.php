@@ -22,13 +22,17 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, DateTime $dateTime)
-    {
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        DateTime $dateTime,
+        $resourcePrefix = null
+    ) {
         $this->dateTime = $dateTime;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
@@ -62,15 +66,10 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $object->setDateTo(null);
         }
 
-        if (!is_null(
-            $object->getDateFrom()
-        ) && !is_null(
-            $object->getDateTo()
-        ) && $this->dateTime->toTimestamp(
-            $object->getDateFrom()
-        ) > $this->dateTime->toTimestamp(
-            $object->getDateTo()
-        )
+        if (!is_null($object->getDateFrom())
+            && !is_null($object->getDateTo())
+            && (new \DateTime($object->getDateFrom()))->getTimestamp()
+            > (new \DateTime($object->getDateTo()))->getTimestamp()
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Start date cannot be greater than end date.'));
         }

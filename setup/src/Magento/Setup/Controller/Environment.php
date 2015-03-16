@@ -66,7 +66,13 @@ class Environment extends AbstractActionController
             );
         }
         $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        $currentPhpVersion = $this->versionParser->parseConstraints(PHP_VERSION);
+        try {
+            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
+        } catch (\UnexpectedValueException $e) {
+            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
+            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
+        }
+        $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         if (!$multipleConstraints->matches($currentPhpVersion)) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
@@ -78,6 +84,29 @@ class Environment extends AbstractActionController
                 'current' => PHP_VERSION,
             ],
         ];
+        return new JsonModel($data);
+    }
+
+    /**
+     * Checks if PHP version >= 5.6.0 and always_populate_raw_post_data is set
+     *
+     * @return JsonModel
+     */
+    public function phpRawpostAction()
+    {
+        $iniSetting = ini_get('always_populate_raw_post_data');
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        if (version_compare(PHP_VERSION, '5.6.0') >= 0 && (int)$iniSetting > -1) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+        }
+        $data = [
+            'responseType' => $responseType,
+            'data' => [
+                'version' => PHP_VERSION,
+                'ini' => ini_get('always_populate_raw_post_data')
+            ]
+        ];
+
         return new JsonModel($data);
     }
 

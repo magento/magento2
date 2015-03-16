@@ -37,7 +37,7 @@ class Bestsellers extends AbstractReport
     ];
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
@@ -46,9 +46,11 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Sales\Model\Resource\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
+     * @param string|null $resourcePrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
@@ -56,9 +58,18 @@ class Bestsellers extends AbstractReport
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Sales\Model\Resource\Helper $salesResourceHelper,
+        $resourcePrefix = null,
         array $ignoredProductTypes = []
     ) {
-        parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
+        parent::__construct(
+            $context,
+            $logger,
+            $localeDate,
+            $reportsFlagFactory,
+            $dateTime,
+            $timezoneValidator,
+            $resourcePrefix
+        );
         $this->_productResource = $productResource;
         $this->_salesResourceHelper = $salesResourceHelper;
         $this->ignoredProductTypes = array_merge($this->ignoredProductTypes, $ignoredProductTypes);
@@ -77,8 +88,8 @@ class Bestsellers extends AbstractReport
     /**
      * Aggregate Orders data by order created at
      *
-     * @param string|int|\Zend_Date|array|null $from
-     * @param string|int|\Zend_Date|array|null $to
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
      * @return $this
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -89,7 +100,6 @@ class Bestsellers extends AbstractReport
         $from = $this->_dateToUtc($from);
         $to = $this->_dateToUtc($to);
 
-        $this->_checkDates($from, $to);
         $adapter = $this->_getWriteAdapter();
         //$this->_getWriteAdapter()->beginTransaction();
 

@@ -1,0 +1,43 @@
+namespace Magento\Catalog\Api\Data;
+
+/**
+ * Extension class for @see \Magento\Catalog\Api\Data\ProductInterface
+ */
+class ProductExtension extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\Catalog\Api\Data\ProductExtensionInterface
+{
+    /**
+     * @return string
+     */
+    public function getStringAttribute()
+    {
+        return $this->_get('string_attribute');
+    }
+
+    /**
+     * @param string $stringAttribute
+     * @return $this
+     */
+    public function setStringAttribute($stringAttribute)
+    {
+        $this->setData('string_attribute', $stringAttribute);
+        return $this;
+    }
+
+    /**
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     */
+    public function getComplexObjectAttribute()
+    {
+        return $this->_get('complex_object_attribute');
+    }
+
+    /**
+     * @param \Magento\Bundle\Api\Data\OptionInterface[] $complexObjectAttribute
+     * @return $this
+     */
+    public function setComplexObjectAttribute($complexObjectAttribute)
+    {
+        $this->setData('complex_object_attribute', $complexObjectAttribute);
+        return $this;
+    }
+}

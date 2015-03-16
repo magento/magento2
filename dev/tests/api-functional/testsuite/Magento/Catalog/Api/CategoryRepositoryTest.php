@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 class CategoryRepositoryTest extends WebapiAbstract
 {
@@ -63,7 +62,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $id,
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -167,13 +166,13 @@ class CategoryRepositoryTest extends WebapiAbstract
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
+            'include_in_menu' => "1",
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Custom description'],
                 ['attribute_code' => 'meta_title', 'value' => ''],
                 ['attribute_code' => 'meta_keywords', 'value' => ''],
                 ['attribute_code' => 'meta_description', 'value' => ''],
-                ['attribute_code' => 'include_in_menu', 'value' => '1'],
                 ['attribute_code' => 'display_mode', 'value' => 'PRODUCTS'],
                 ['attribute_code' => 'landing_page', 'value' => ''],
                 ['attribute_code' => 'is_anchor', 'value' => '0'],
@@ -196,7 +195,10 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function createCategory($category)
     {
         $serviceInfo = [
-            'rest' => ['resourcePath' => self::RESOURCE_PATH, 'httpMethod' => Config::HTTP_METHOD_POST],
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
@@ -218,7 +220,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             [
                 'rest' => [
                     'resourcePath' => self::RESOURCE_PATH . '/' . $id,
-                    'httpMethod' => Config::HTTP_METHOD_DELETE,
+                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
                 ],
                 'soap' => [
                     'service' => self::SERVICE_NAME,
@@ -235,7 +237,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             [
                 'rest' => [
                     'resourcePath' => self::RESOURCE_PATH . '/' . $id,
-                    'httpMethod' => Config::HTTP_METHOD_PUT,
+                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 ],
                 'soap' => [
                     'service' => self::SERVICE_NAME,
@@ -248,6 +250,8 @@ class CategoryRepositoryTest extends WebapiAbstract
             $data['id'] = $id;
             return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
         } else {
+            $data['id'] = $id;
+            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
             return $this->_webApiCall($serviceInfo, ['category' => $data]);
         }
     }

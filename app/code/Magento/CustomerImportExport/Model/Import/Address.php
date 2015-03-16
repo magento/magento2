@@ -213,7 +213,6 @@ class Address extends AbstractCustomer
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -234,7 +233,6 @@ class Address extends AbstractCustomer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
@@ -265,7 +263,6 @@ class Address extends AbstractCustomer
             $data['attribute_collection'] = $attributeCollection;
         }
         parent::__construct(
-            $coreData,
             $string,
             $scopeConfig,
             $importFactory,
@@ -502,8 +499,8 @@ class Address extends AbstractCustomer
         $entityRow = [
             'entity_id' => $addressId,
             'parent_id' => $customerId,
-            'created_at' => $this->dateTime->now(),
-            'updated_at' => $this->dateTime->now(),
+            'created_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
 
         // attribute values

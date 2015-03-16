@@ -8,10 +8,9 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Catalog product option select type model
@@ -23,12 +22,23 @@ use Magento\Framework\Api\AttributeValueFactory;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
+class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {
     /**
      * Option type percent
      */
     const TYPE_PERCENT = 'percent';
+
+    /**#@+
+     * Constants
+     */
+    const KEY_TITLE = 'title';
+    const KEY_SORT_ORDER = 'sort_order';
+    const KEY_PRICE = 'price';
+    const KEY_PRICE_TYPE = 'price_type';
+    const KEY_SKU = 'sku';
+    const KEY_OPTION_TYPE_ID = 'option_type_id';
+    /**#@-*/
 
     /**
      * @var array
@@ -55,8 +65,6 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -65,8 +73,6 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -76,8 +82,6 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -228,10 +232,10 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     {
         if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
             $basePrice = $this->getOption()->getProduct()->getFinalPrice();
-            $price = $basePrice * ($this->_getData('price') / 100);
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }
-        return $this->_getData('price');
+        return $this->_getData(self::KEY_PRICE);
     }
 
     /**
@@ -312,7 +316,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      */
     public function getTitle()
     {
-        return $this->_getData('title');
+        return $this->_getData(self::KEY_TITLE);
     }
 
     /**
@@ -322,7 +326,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      */
     public function getSortOrder()
     {
-        return $this->_getData('sort_order');
+        return $this->_getData(self::KEY_SORT_ORDER);
     }
 
     /**
@@ -332,7 +336,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      */
     public function getPriceType()
     {
-        return $this->_getData('price_type');
+        return $this->_getData(self::KEY_PRICE_TYPE);
     }
 
     /**
@@ -342,7 +346,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      */
     public function getSku()
     {
-        return $this->_getData('sku');
+        return $this->_getData(self::KEY_SKU);
     }
 
     /**
@@ -352,7 +356,72 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      */
     public function getOptionTypeId()
     {
-        return $this->_getData('option_type_id');
+        return $this->_getData(self::KEY_OPTION_TYPE_ID);
+    }
+    /**
+     * Set option title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::KEY_PRICE, $price);
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return $this
+     */
+    public function setPriceType($priceType)
+    {
+        return $this->setData(self::KEY_PRICE_TYPE, $priceType);
+    }
+
+    /**
+     * Set Sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::KEY_SKU, $sku);
+    }
+
+    /**
+     * Set Option type id
+     *
+     * @param int $optionTypeId
+     * @return int|null
+     */
+    public function setOptionTypeId($optionTypeId)
+    {
+        return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
     //@codeCoverageIgnoreEnd
 }

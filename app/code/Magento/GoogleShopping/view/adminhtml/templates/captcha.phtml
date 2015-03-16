@@ -9,9 +9,11 @@
 ?>
 
 <?php if ($block->getGcontentCaptchaToken() && $block->getGcontentCaptchaUrl()): ?>
-<div class="messages">
-    <div class="message error">
-        <div><img src="<?php echo $block->getGcontentCaptchaUrl() ?>"> <input type="text" id="user_confirm"> <?php echo $block->getConfirmButtonHtml() ?></div>
+<div class="admin__scope">
+    <div class="messages">
+        <div class="message message-error error">
+            <div><img src="<?php echo $block->getGcontentCaptchaUrl() ?>"> <input type="text" id="user_confirm"> <?php echo $block->getConfirmButtonHtml() ?></div>
+        </div>
     </div>
 </div>
 <?php endif; ?>

@@ -62,31 +62,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
             $data
         );
         $this->currentCustomer = $currentCustomer;
-    }
-
-    /**
-     * Initialize review collection
-     *
-     * @return $this
-     */
-    protected function _initCollection()
-    {
-        $this->_collection = $this->_collectionFactory->create();
-        $this->_collection
-            ->addStoreFilter($this->_storeManager->getStore()->getId())
-            ->addCustomerFilter($this->currentCustomer->getCustomerId())
-            ->setDateOrder();
-        return $this;
-    }
-
-    /**
-     * Gets collection items count
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->_getCollection()->getSize();
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -106,38 +82,37 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     protected function _prepareLayout()
     {
-        $toolbar = $this->getLayout()->createBlock(
-            'Magento\Theme\Block\Html\Pager',
-            'customer_review_list.toolbar'
-        )->setCollection(
-            $this->getCollection()
-        );
+        if ($this->getReviews()) {
+            $toolbar = $this->getLayout()->createBlock(
+                'Magento\Theme\Block\Html\Pager',
+                'customer_review_list.toolbar'
+            )->setCollection(
+                $this->getReviews()
+            );
 
-        $this->setChild('toolbar', $toolbar);
+            $this->setChild('toolbar', $toolbar);
+        }
         return parent::_prepareLayout();
     }
 
     /**
-     * Get collection
+     * Get reviews
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return bool|\Magento\Review\Model\Resource\Review\Product\Collection
      */
-    protected function _getCollection()
+    public function getReviews()
     {
+        if (!($customerId = $this->currentCustomer->getCustomerId())) {
+            return false;
+        }
         if (!$this->_collection) {
-            $this->_initCollection();
+            $this->_collection = $this->_collectionFactory->create();
+            $this->_collection
+                ->addStoreFilter($this->_storeManager->getStore()->getId())
+                ->addCustomerFilter($customerId)
+                ->setDateOrder();
         }
         return $this->_collection;
-    }
-
-    /**
-     * Get collection
-     *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
-     */
-    public function getCollection()
-    {
-        return $this->_getCollection();
     }
 
     /**
@@ -168,7 +143,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->formatDate($date, \IntlDateFormatter::SHORT);
     }
 
     /**
@@ -178,7 +153,10 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     protected function _beforeToHtml()
     {
-        $this->_getCollection()->load()->addReviewSummary();
+        $reviews = $this->getReviews();
+        if ($reviews) {
+            $reviews->load()->addReviewSummary();
+        }
         return parent::_beforeToHtml();
     }
 }

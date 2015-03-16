@@ -30,7 +30,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Psr\Log\LoggerInterface as Logger;
+use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Mail\Exception as MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
@@ -132,7 +132,7 @@ class AccountManagement implements AccountManagementInterface
     private $url;
 
     /**
-     * @var Logger
+     * @var PsrLogger
      */
     protected $logger;
 
@@ -215,7 +215,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerMetadataInterface $customerMetadataService
      * @param CustomerRegistry $customerRegistry
      * @param \Magento\Framework\Url $url
-     * @param Logger $logger
+     * @param PsrLogger $logger
      * @param Encryptor $encryptor
      * @param ConfigShare $configShare
      * @param StringHelper $stringHelper
@@ -243,7 +243,7 @@ class AccountManagement implements AccountManagementInterface
         CustomerMetadataInterface $customerMetadataService,
         CustomerRegistry $customerRegistry,
         \Magento\Framework\Url $url,
-        Logger $logger,
+        PsrLogger $logger,
         Encryptor $encryptor,
         ConfigShare $configShare,
         StringHelper $stringHelper,
@@ -981,8 +981,8 @@ class AccountManagement implements AccountManagementInterface
 
         $expirationPeriod = $this->customerModel->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($rpTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime($rpTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }
@@ -1016,7 +1016,9 @@ class AccountManagement implements AccountManagementInterface
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt($this->dateTime->now());
+            $customerSecure->setRpTokenCreatedAt(
+                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            );
             $this->customerRepository->save($customer);
         }
         return true;

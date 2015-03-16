@@ -101,9 +101,11 @@
         > .header.links {
             .list-inline();
             float: right;
+            font-size: 0;
             margin-left: auto;
             margin-right: @indent__base;
             > li {
+                font-size: @font-size__base;
                 margin: 0 0 0 15px;
                 > a {
                     .link(
@@ -146,8 +148,8 @@
     }
 
     .page-main {
-        > .page-title {
-            .title + .action {
+        > .page-title-wrapper {
+            .page-title + .action {
                 margin-top: @indent__l;
             }
         }
@@ -422,11 +424,11 @@
     }
 
     .page-main {
-        > .page-title {
-            .title {
+        > .page-title-wrapper {
+            .page-title {
                 display: inline-block;
             }
-            .title + .action {
+            .page-title + .action {
                 float: right;
                 margin-top: @indent__base;
             }

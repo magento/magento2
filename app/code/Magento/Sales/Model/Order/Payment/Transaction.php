@@ -19,12 +19,8 @@ use Magento\Sales\Api\Data\TransactionInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
- * @method \Magento\Sales\Model\Order\Payment\Transaction setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Payment\Transaction setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Payment\Transaction setPaymentId(int $value)
- * @method \Magento\Sales\Model\Order\Payment\Transaction setIsClosed(int $value)
  * @method \Magento\Sales\Model\Order\Payment\Transaction setCreatedAt(string $value)
- *
+
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -115,7 +111,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * Event object prefix
      *
      * @var string
-     * @see \Magento\Core\Model\Absctract::$_eventPrefix
+     * @see \Magento\Framework\Model\AbstractModel::$_eventPrefix
      */
     protected $_eventPrefix = 'sales_order_payment_transaction';
 
@@ -123,7 +119,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * Event object prefix
      *
      * @var string
-     * @see \Magento\Core\Model\Absctract::$_eventObject
+     * @see \Magento\Framework\Model\AbstractModel::$_eventObject
      */
     protected $_eventObject = 'order_payment_transaction';
 
@@ -157,7 +153,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -171,7 +167,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -188,7 +184,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -1015,4 +1011,59 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
     {
         return $this->getData(TransactionInterface::CREATED_AT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(TransactionInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(TransactionInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPaymentId($id)
+    {
+        return $this->setData(TransactionInterface::PAYMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsClosed($isClosed)
+    {
+        return $this->setData(TransactionInterface::IS_CLOSED, $isClosed);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

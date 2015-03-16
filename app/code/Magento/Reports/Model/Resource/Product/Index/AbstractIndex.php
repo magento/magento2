@@ -24,16 +24,18 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
     }
@@ -82,14 +84,14 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                 $data = [
                     'visitor_id' => $object->getVisitorId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => $this->dateTime->now(),
+                    'added_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
                 ];
             } else {
                 $where = ['index_id = ?' => $row['index_id']];
                 $data = [
                     'customer_id' => $object->getCustomerId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => $this->dateTime->now(),
+                    'added_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
                 ];
             }
 
@@ -200,7 +202,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             'customer_id' => $object->getCustomerId(),
             'store_id' => $object->getStoreId(),
         ];
-        $addedAt = $this->dateTime->toTimestamp(true);
+        $addedAt = (new \DateTime())->getTimestamp();
         $data = [];
         foreach ($productIds as $productId) {
             $productId = (int)$productId;

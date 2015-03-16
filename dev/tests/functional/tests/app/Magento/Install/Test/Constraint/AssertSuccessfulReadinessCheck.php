@@ -14,10 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertSuccessfulReadinessCheck extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * PHP version message.
      */
@@ -26,12 +22,12 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
     /**
      * PHP extensions message.
      */
-    const PHP_EXTENSIONS_MESSAGE = 'You meet 9 out of 9 PHP extensions requirements.';
+    const PHP_EXTENSIONS_REGEXP = '/You meet (\d+) out of \1 PHP extensions requirements\./';
 
     /**
      * File permission message.
      */
-    const FILE_PERMISSION_MESSAGE = 'You meet 4 out of 4 writable file permission requirements.';
+    const FILE_PERMISSION_REGEXP = '/You meet (\d+) out of \1 writable file permission requirements\./';
 
     /**
      * Assert that PHP Version, PHP Extensions and File Permission are ok.
@@ -46,13 +42,13 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
             $installPage->getReadinessBlock()->getPhpVersionCheck(),
             'PHP version is incorrect.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
-            self::PHP_EXTENSIONS_MESSAGE,
+        \PHPUnit_Framework_Assert::assertRegExp(
+            self::PHP_EXTENSIONS_REGEXP,
             $installPage->getReadinessBlock()->getPhpExtensionsCheck(),
             'PHP extensions missed.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
-            self::FILE_PERMISSION_MESSAGE,
+        \PHPUnit_Framework_Assert::assertRegExp(
+            self::FILE_PERMISSION_REGEXP,
             $installPage->getReadinessBlock()->getFilePermissionCheck(),
             'File permissions does not meet requirements.'
         );

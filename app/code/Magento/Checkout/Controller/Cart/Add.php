@@ -86,7 +86,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode()]
+                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
@@ -107,8 +107,6 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
 
             $this->cart->save();
-
-            $this->_checkoutSession->setCartWasUpdated(true);
 
             /**
              * @todo remove wishlist observer processAddToCart
@@ -193,7 +191,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         }
 
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
         );
     }
 }
