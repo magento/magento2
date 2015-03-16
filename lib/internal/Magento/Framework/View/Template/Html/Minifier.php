@@ -113,22 +113,26 @@ class Minifier implements MinifierInterface
     {
         $file = $this->rootDirectory->getRelativePath($file);
         $content = preg_replace(
-            '#((?:<\?php\s+(?!echo)[^\?]*)\?>)\s+#',
-            '$1',
+            '#\s+</#',
+            '</',
             preg_replace(
-                '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
-                '><',
+                '#((?:<\?php\s+(?!echo)[^\?]*)\?>)\s+#',
+                '$1',
                 preg_replace(
-                    '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
-                    . '(?:<(?>textarea|pre|script)\b|\z))#',
-                    ' ',
+                    '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
+                    '><',
                     preg_replace(
-                        '#(?<!:)//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
-                        '',
+                        '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
+                        . '(?:<(?>textarea|pre|script)\b|\z))#',
+                        ' ',
                         preg_replace(
-                            '#(?<!:)//[^\n\r]*(\s\?\>)#',
-                            '$1',
-                            $this->rootDirectory->readFile($file)
+                            '#(?<!:)//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
+                            '',
+                            preg_replace(
+                                '#(?<!:)//[^\n\r]*(\s\?\>)#',
+                                '$1',
+                                $this->rootDirectory->readFile($file)
+                            )
                         )
                     )
                 )
