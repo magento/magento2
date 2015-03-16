@@ -44,17 +44,17 @@ class Actions implements RowInterface
     /**
      * Get data
      *
-     * @param array $dataRow
-     * @param array $data
-     * @return mixed
+     * @param array $rowData
+     * @param array $rowActionConfig
+     * @return array
      */
-    public function getData(array $dataRow, array $data = [])
+    public function getData(array $rowData, array $rowActionConfig = [])
     {
         return [
             'edit' => [
                 'href' => $this->urlBuilder->getUrl(
-                    isset($data['url_path']) ? $data['url_path'] : static::URL_PATH,
-                    ['page_id' => $dataRow['page_id']]
+                    isset($rowActionConfig['url_path']) ? $rowActionConfig['url_path'] : static::URL_PATH,
+                    ['page_id' => $rowData['page_id']]
                 ),
                 'label' => __('Edit'),
                 'hidden' => true,
@@ -62,9 +62,9 @@ class Actions implements RowInterface
             ],
             'preview' => [
                 'href' => $this->actionUrlBuilder->getUrl(
-                    $dataRow['identifier'],
-                    isset($dataRow['_first_store_id']) ? $dataRow['_first_store_id'] : null,
-                    isset($dataRow['store_code']) ? $dataRow['store_code'] : null
+                    $rowData['identifier'],
+                    isset($rowData['_first_store_id']) ? $rowData['_first_store_id'] : null,
+                    isset($rowData['store_code']) ? $rowData['store_code'] : null
                 ),
                 'label' => __('Preview'),
             ]

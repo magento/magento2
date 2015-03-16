@@ -36,7 +36,7 @@ class Actions implements RowInterface
      *
      * @param array $rowData
      * @param array $rowActionConfig
-     * @return mixed
+     * @return array
      */
     public function getData(array $rowData, array $rowActionConfig = [])
     {
