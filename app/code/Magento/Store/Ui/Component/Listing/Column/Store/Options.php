@@ -90,10 +90,10 @@ class Options implements OptionSourceInterface
             if (!empty($groups)) {
                 $name = $this->escaper->escapeHtml($website->getName());
                 $currentOptions[$name]['label'] = $name;
-                $currentOptions[$name]['value'] = $groups;
+                $currentOptions[$name]['value'] = array_values($groups);
             }
         }
-        $this->options = $currentOptions;
+        $this->options = array_values($currentOptions);
 
         return $this->options;
     }
