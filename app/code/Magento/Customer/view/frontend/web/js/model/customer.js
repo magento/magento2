@@ -23,7 +23,7 @@ define(['mage/storage'], function(storage) {
             return this.customerData.addresses;
         },
         getShippingAddressList: function () {
-            return storage.get('/rest/default/V1/customers/me');
+            return this.customerData.addresses;
         }
     }
 });
