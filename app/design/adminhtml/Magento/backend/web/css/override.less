@@ -2791,6 +2791,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   margin: 0 0 3rem;
 }
 .page-layout-admin-login {
+  align-items: center;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -4269,80 +4270,122 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   font-weight: 600;
 }
 .admin__section-nav {
-  padding-bottom: 51px;
+  background: #f1f1f1;
+  border: 1px solid #e3e3e3;
+}
+.admin__section-nav._collapsed:first-child {
+  border-bottom: none;
+}
+.admin__section-nav._collapsed._show {
+  border-bottom: 1px solid #e3e3e3;
+}
+.admin__section-nav._collapsed._show ._collapsible {
+  background: #f1f1f1;
+}
+.admin__section-nav._collapsed._show ._collapsible:after {
+  content: '\e62b';
+}
+.admin__section-nav._collapsed._show ._collapsible + .admin__section-nav-items {
+  display: block;
+}
+.admin__section-nav + ._collapsed {
+  border-bottom: none;
+  border-top: none;
 }
 .admin__section-nav-title {
-  padding: 0;
-  margin: 0 0 -1px;
+  border-bottom: 1px solid #e3e3e3;
   color: #303030;
   display: block;
-  padding: 20px 13px;
-  background: #f1f1f1;
-  text-transform: uppercase;
-  border: 1px solid #e3e3e3;
   line-height: 1.2;
+  margin: 0 0 -1px;
+  padding: 1.8rem 1.5rem;
+  position: relative;
+  text-transform: uppercase;
 }
 .admin__section-nav-title._collapsible {
+  background: #ffffff;
+  cursor: pointer;
+  margin: 0;
   padding-right: 35px;
+}
+.admin__section-nav-title._collapsible + .admin__section-nav-items {
+  display: none;
+  margin-top: -1px;
+}
+.admin__section-nav-title._collapsible:last-child {
+  margin: 0 0 -1px;
 }
 .admin__section-nav-title._collapsible:after {
   content: '\e628';
   font-family: 'Admin Icons';
-  -webkit-font-smoothing: antialiased;
-  font-weight: normal;
-  speak: none;
-  position: absolute;
-  right: 18px;
-  top: 22px;
   font-size: 1.3rem;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 700;
+  position: absolute;
+  right: 1.8rem;
+  speak: none;
+  top: 1.8rem;
+}
+.admin__section-nav-title._collapsible:hover {
+  background: #f1f1f1;
 }
 .admin__section-nav-title strong {
   font-weight: 700;
 }
 .admin__section-nav-items {
   list-style-type: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 .admin__section-nav-item {
-  padding: 0;
   border-left: 3px solid transparent;
-  margin: 0 0 -1px;
+  margin-left: .7rem;
+  padding: 0;
 }
+.admin__section-nav-item:hover,
 .admin__section-nav-item._active {
   border-color: #eb5202;
 }
+.admin__section-nav-item:hover .admin__section-nav-link,
 .admin__section-nav-item._active .admin__section-nav-link {
+  background: #ffffff;
   border-color: #e3e3e3;
-  margin: 0;
+  border-right: 1px solid #ffffff;
+  margin-right: -1px;
 }
+.admin__section-nav-item:hover .admin__section-nav-link:hover,
 .admin__section-nav-item._active .admin__section-nav-link:hover {
   text-decoration: none;
+}
+.admin__section-nav-item._active .admin__section-nav-link {
+  font-weight: 600;
 }
 .admin__section-nav-item._loading {
   position: relative;
   z-index: 1;
 }
 .admin__section-nav-item._loading:before {
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: 2;
   background: url('../images/loader-2.gif') no-repeat 50% 50%;
   background-size: 120px;
-  width: 2rem;
+  content: '';
+  display: block;
   height: 2rem;
-  top: 2.1rem;
+  position: absolute;
   right: .5rem;
+  top: 2.1rem;
+  width: 2rem;
+  z-index: 2;
 }
 .admin__section-nav-link {
   border: 1px solid transparent;
   border-width: 1px 0;
-  line-height: 1.2;
-  font-weight: 500;
   color: #303030;
   display: block;
-  padding: 20px 30px 20px 10px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0 0 -1px;
+  padding: 2rem 3rem 2rem 1rem;
+  word-break: break-all;
 }
 .admin__section-nav-link:hover {
   color: #303030;
@@ -4352,21 +4395,18 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: relative;
   z-index: 1;
 }
-.admin__section-nav-link._changed:before {
-  content: '\e623';
+.admin__section-nav-link._changed:after {
+  color: #666666;
+  content: '\e631';
+  display: inline-block;
   font-family: 'Admin Icons';
+  font-size: 1.5rem;
   -webkit-font-smoothing: antialiased;
   font-style: normal;
   font-weight: normal;
+  padding-left: 1.5rem;
   speak: none;
-  position: absolute;
-  z-index: 2;
-  font-size: 17px;
-  color: #eb5202;
-  width: 20px;
-  height: 20px;
-  top: 15px;
-  right: 5px;
+  vertical-align: top;
 }
 @media all and (max-width: 1023px) {
   .admin__menu .submenu li {

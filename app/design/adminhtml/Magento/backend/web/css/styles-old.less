@@ -1813,13 +1813,11 @@ address {
 
 .col-2-left-layout,
 .col-1-layout {
-    background: #f7f3eb;
     margin: 0 auto;
     position: relative;
 }
 
 .col-2-left-layout {
-    padding-top: 20px;
     &:before {
         position: absolute;
         content: "";
@@ -2042,83 +2040,6 @@ address {
 .tabs-horiz > .ui-state-active .ui-tabs-anchor {
     background: #fff;
 }
-
-/*
-    System -> Configuration page navigation in sidebar
--------------------------------------- */
-.config-nav,
-.config-nav .items {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.config-nav-block {
-
-}
-
-.config-nav-block:last-child {
-    margin-bottom: 30px;
-}
-
-.config-nav .item {
-    border-top: 1px solid #E5E1DB;
-}
-
-.config-nav .item:first-child {
-    border-top: 0;
-}
-
-.config-nav .title {
-    margin-bottom: 0;
-    text-transform: uppercase;
-    color: #444;
-    border: solid #CCC;
-    border-width: 1px 0;
-    opacity: .8;
-    padding: 7px 17px;
-    background: #E6E3DE;
-}
-
-.config-nav .item-nav {
-    display: block;
-    padding: 8px 18px;
-    text-decoration: none;
-    color: #676056;
-    transition: background .3s ease-in-out;
-}
-
-.config-nav .item-nav:hover {
-    background: #fff;
-}
-
-.config-nav .item-nav.active {
-    position: relative;
-    border-left: 3px solid #d87e34;
-    padding-left: 15px;
-    background: #dedcd8;
-    box-shadow: 0 1px 2px #ccc inset;
-}
-
-.config-nav .item-nav.active:after {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 14px;
-    margin-top: -14px;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e02b'; /* left turned triangle icon */
-    font-size: 22px;
-    text-shadow: -1px 1px 0 #bdbbb7;
-    color: #fff;
-    overflow: hidden;
-    z-index: 3;
-}
-
 
 /*
     Switcher
