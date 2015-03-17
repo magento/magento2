@@ -504,7 +504,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
             $this->_varDirectory->delete($sourceFileRelative);
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         }
         return $sourceFile;
     }

@@ -67,7 +67,7 @@ class AlgorithmFactory
         $calculationType = $this->scopeConfig->getValue(self::XML_PATH_RANGE_CALCULATION, ScopeInterface::SCOPE_STORE);
 
         if (!isset($this->algorithms[$calculationType])) {
-            throw new LocalizedException($calculationType . ' was not found in algorithms');
+            throw new LocalizedException(__('%1 was not found in algorithms', $calculationType));
         }
 
         $className = $this->algorithms[$calculationType];
@@ -75,7 +75,7 @@ class AlgorithmFactory
 
         if (!$model instanceof AlgorithmInterface) {
             throw new LocalizedException(
-                $className . ' doesn\'t extends \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmInterface'
+                __('%1 doesn\'t extend \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmInterface', $className)
             );
         }
 

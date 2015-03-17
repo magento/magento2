@@ -81,10 +81,11 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
             'getAttributeMetadata'
         )->will(
             $this->throwException(new NoSuchEntityException(
+                __(
                     NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            )
+            ))
         );
         $this->assertSame(false, $this->_block->isEnabled());
     }
@@ -118,10 +119,11 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
             'getAttributeMetadata'
         )->will(
             $this->throwException(new NoSuchEntityException(
+                __(
                     NoSuchEntityException::MESSAGE_SINGLE_FIELD,
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            )
+            ))
         );
         $this->assertSame(false, $this->_block->isRequired());
     }

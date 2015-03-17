@@ -6,6 +6,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Class LocalizedExceptionTest
@@ -20,6 +21,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     private $renderedMessage;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
@@ -33,18 +37,26 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Phrase::setRenderer($rendererMock);
     }
 
+    /**
+     * @return void
+     */
     public function tearDown()
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
 
-    /** @dataProvider constructorParametersDataProvider */
+    /**
+     * @param string $message
+     * @param array $params
+     * @param string $expectedLogMessage
+     * @return void
+     * @dataProvider constructorParametersDataProvider
+     */
     public function testConstructor($message, $params, $expectedLogMessage)
     {
         $cause = new \Exception();
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
 
@@ -57,6 +69,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($cause, $localizeException->getPrevious());
     }
 
+    /**
+     * @return array
+     */
     public function constructorParametersDataProvider()
     {
         return [
@@ -81,6 +96,9 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetRawMessage()
     {
         $message =  'message %1 %2';
@@ -90,13 +108,15 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         ];
         $cause = new \Exception();
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
         $this->assertEquals($message, $localizeException->getRawMessage());
     }
 
+    /**
+     * @return void
+     */
     public function testGetParameters()
     {
         $message =  'message %1 %2';
@@ -106,14 +126,16 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         ];
         $cause = new \Exception();
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
 
         $this->assertEquals($params, $localizeException->getParameters());
     }
 
+    /**
+     * @return void
+     */
     public function testGetLogMessage()
     {
         $message =  'message %1 %2';
@@ -124,8 +146,7 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         $cause = new \Exception();
 
         $localizeException = new LocalizedException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
         $expectedLogMessage = 'message parameter1 parameter2';

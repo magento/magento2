@@ -40,20 +40,13 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     protected $structureMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfigMock;
-
-    /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeResolverMock;
-
-    /**
      * @var GeneratorPool
      */
     protected $model;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         // ScheduledStructure
@@ -79,18 +72,13 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeResolverMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->model = new GeneratorPool(
-            $this->helperMock,
-            $this->scopeConfigMock,
-            $this->scopeResolverMock,
-            $this->getGeneratorsMocks()
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $helper->getObject(
+            'Magento\Framework\View\Layout\GeneratorPool',
+            [
+                'helper' => $this->helperMock,
+                'generators' => $this->getGeneratorsMocks()
+            ]
         );
     }
 
@@ -110,6 +98,9 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $schedule
+     * @param array $expectedSchedule
+     * @return void
      * @dataProvider processDataProvider
      */
     public function testProcess($schedule, $expectedSchedule)

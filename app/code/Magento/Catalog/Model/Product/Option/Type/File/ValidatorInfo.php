@@ -98,7 +98,7 @@ class ValidatorInfo extends Validator
             $errors = $this->getValidatorErrors($validatorChain->getErrors(), $optionValue, $option);
 
             if (count($errors) > 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\LocalizedException(__(implode("\n", $errors)));
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(

@@ -156,6 +156,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 break;
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type supplied'));
+                break;
         }
 
         $this->joinCalculationData('cd');

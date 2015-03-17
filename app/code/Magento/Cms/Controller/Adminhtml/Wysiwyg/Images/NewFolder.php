@@ -9,19 +9,19 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($context, $coreRegistry);
@@ -42,7 +42,7 @@ class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         }
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($result);
     }

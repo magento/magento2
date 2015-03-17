@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+use Magento\Framework\View\Asset\LocalInterface;
+
 /**
  * An object that's passed to preprocessors to carry current and original information for processing
  * Encapsulates complexity of all necessary context and parameters
@@ -13,7 +15,7 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 class Chain
 {
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface
+     * @var LocalInterface
      */
     private $asset;
 
@@ -25,7 +27,7 @@ class Chain
     /**
      * @var string
      */
-    private $origContentType;
+    protected $origContentType;
 
     /**
      * @var string
@@ -40,51 +42,36 @@ class Chain
     /**
      * @var string
      */
-    private $targetContentType;
-
-    /**
-     * @var string
-     */
-    private $appMode;
+    protected $targetContentType;
 
     /**
      * @var null|string
      */
-    private $targetAssetPath;
+    protected $targetAssetPath;
 
     /**
-     * @param \Magento\Framework\View\Asset\LocalInterface $asset
+     * @param LocalInterface $asset
      * @param string $origContent
      * @param string $origContentType
-     * @param null $origAssetPath
-     * @param string $appMode
      */
     public function __construct(
-        \Magento\Framework\View\Asset\LocalInterface $asset,
+        LocalInterface $asset,
         $origContent,
-        $origContentType,
-        $origAssetPath = null,
-        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+        $origContentType
     ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
         $this->content = $origContent;
         $this->origContentType = $origContentType;
         $this->contentType = $origContentType;
-        $this->appMode = $appMode;
         $this->targetContentType = $asset->getContentType();
         $this->targetAssetPath = $asset->getPath();
-
-        if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            $this->targetContentType = $this->origContentType;
-            $this->targetAssetPath = $origAssetPath;
-        }
     }
 
     /**
      * Get asset object
      *
-     * @return \Magento\Framework\View\Asset\LocalInterface
+     * @return LocalInterface
      */
     public function getAsset()
     {

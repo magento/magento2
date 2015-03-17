@@ -66,10 +66,15 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonFactoryMock;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -135,7 +140,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -151,6 +156,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $orderId = 1;
@@ -247,6 +257,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultRaw, $this->controller->execute());
     }
 
+    /**
+     * Test execute model exception
+     *
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $message = 'Cannot update item quantity.';
@@ -271,8 +286,8 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
-        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -285,6 +300,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultJsonMock, $this->controller->execute());
     }
 
+    /**
+     * Test execute exception
+     *
+     * @return void
+     */
     public function testExecuteException()
     {
         $message = 'Cannot update item quantity.';
@@ -309,8 +329,8 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
-        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+        $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

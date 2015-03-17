@@ -12,6 +12,11 @@ use Magento\Framework\Interception;
 class PluginList extends Interception\PluginList\PluginList
 {
     /**
+     * @var array
+     */
+    private $interceptedClasses;
+
+    /**
      * Returns plugins config
      *
      * @return array
