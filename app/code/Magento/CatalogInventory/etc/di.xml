@@ -49,4 +49,7 @@
     <type name="Magento\Store\Model\Resource\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="\Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Catalog\Block\Product\View">
+        <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
+    </type>
 </config>
