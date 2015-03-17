@@ -67,7 +67,7 @@ class Field extends AbstractComponent
     public function prepare()
     {
         parent::prepare();
-        $dataType = $this->getData('dataType');
+        $dataType = $this->getData('config/dataType');
         if ($dataType) {
             $this->wrappedComponent = $this->uiComponentFactory->create(
                 $this->getName(),
@@ -75,10 +75,9 @@ class Field extends AbstractComponent
                 ['context' => $this->getContext()]
             );
             $this->wrappedComponent->prepare();
+            $jsConfig = $this->getJsConfiguration($this->wrappedComponent);
+            $this->getContext()->addComponentDefinition($this->wrappedComponent->getComponentName(), $jsConfig);
         }
-
-        $jsConfig = $this->getJsConfiguration($this->wrappedComponent);
-        $this->getContext()->addComponentDefinition($this->wrappedComponent->getComponentName(), $jsConfig);
     }
 
     /**

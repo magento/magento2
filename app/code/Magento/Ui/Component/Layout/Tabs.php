@@ -91,6 +91,8 @@ class Tabs extends Generic implements LayoutInterface
         $this->initGroups();
         $this->initElements();
 
+        $this->processDataSource();
+
         $this->processChildBlocks();
 
         $topNode = $this->structure;
@@ -162,21 +164,22 @@ class Tabs extends Generic implements LayoutInterface
         $dataProvider = $this->component->getContext()->getDataProvider();
 
         foreach ($dataProvider->getMeta() as $name => $meta) {
-            $areName = $name;
-            $areaConfig = $meta;
+            $areName = $groupName = $name;
+            $areaConfig = $groupConfig = [
+                'config' => isset($meta['config']) ? $meta['config'] : []
+            ];
             $areaConfig['insertTo'] = [
                 "{$this->namespace}.sections" => ['position' => $this->getNextSortIncrement()]
             ];
             $this->addArea($areName, $areaConfig);
 
-            $groupName = $name;
-            $groupConfig = $meta;
             $groupReferenceName = $this->addGroup($groupName, $groupConfig);
             $this->addToArea($name, $groupReferenceName);
             $fieldSet = $this->component->getComponent($name);
             if (!$fieldSet) {
                 continue;
             }
+
             $elements = $fieldSet->getChildComponents();
             uasort($elements, [$this, 'sortChildren']);
 
@@ -202,8 +205,6 @@ class Tabs extends Generic implements LayoutInterface
                     ],
                 ];
 
-                $groupName = $templateGroupName;
-
                 foreach ($elements as $elementName => $component) {
                     if ($component instanceof DataSourceInterface) {
                         continue;
@@ -216,16 +217,17 @@ class Tabs extends Generic implements LayoutInterface
                     $this->addToCollection($itemTemplate, $elementName, "{$this->namespace}.{$elementName}", $component->getData());
 
                     $referenceName = "{$name}.elements.{$elementName}";
-                    $this->addToGroup($groupName, $elementName, $referenceName, $component->getData());
+                    $this->addToGroup($templateGroupName, $elementName, $referenceName, $component->getData());
                 }
                 $groupConfig['children']['item_template'] = $itemTemplate;
-                $this->addGroup($templateGroupName, $groupConfig);
+                $templateGroupReferenceName = $this->addGroup($templateGroupName, $groupConfig);
+                $this->addToGroup($groupName, $templateGroupName, $templateGroupReferenceName);
             } else {
                 foreach ($elements as $elementName => $component) {
                     if ($component instanceof DataSourceInterface) {
                         continue;
                     }
-                    $visibility = $component->getData('visible');
+                    $visibility = $component->getData('config/visible');
                     if (isset($visibility) && $visibility === 'false') {
                         continue;
                     }
@@ -237,70 +239,6 @@ class Tabs extends Generic implements LayoutInterface
                 }
             }
         }
-    }
-
-    /**
-     * Process child data source
-     *
-     * @param string $dataSource
-     * @param string $childName
-     * @param Metadata $childMeta
-     * @return void
-     */
-    protected function processChildDataSource($dataSource, $childName, Metadata $childMeta)
-    {
-        $this->addArea(
-            $childName,
-            [
-                'insertTo' => [
-                    "{$this->namespace}.sections" => ['position' => $this->getNextSortIncrement()]
-                ],
-                'config' => ['label' => $childMeta->getLabel()]
-            ]
-        );
-
-        $referenceChildGroupName = $this->addGroup($childName, [
-            'config' => [
-                'label' => $childMeta->getLabel()
-            ]
-        ]);
-        $this->addToArea($childName, $referenceChildGroupName);
-
-        $itemTemplate = [
-            'type' => $this->namespace,
-            'isTemplate' => true,
-            'component' => 'Magento_Ui/js/form/components/collection/item',
-            'childType' => 'group',
-            'config' => [
-                'label' => __('New ' . $childMeta->getLabel()),
-            ],
-        ];
-
-        $elements = $childMeta->getFields();
-        uasort($elements, [$this, 'sortChildren']);
-        foreach ($elements as $name => $element) {
-            if (isset($element['visible']) && $element['visible'] === 'false') {
-                continue;
-            }
-            $this->addToCollection($itemTemplate, $name, $name, $element);
-        }
-
-        $referenceCollectionName = $this->addCollection(
-            "{$childName}Collection",
-            "{$dataSource}.{$childName}",
-            [
-                'active' => 1,
-                'label' => $childMeta->getLabel(),
-                'removeLabel' => __('Remove ' . $childMeta->getLabel()),
-                'removeMessage' => __('Are you sure you want to delete this item?'),
-                'addLabel' => __('Add New ' . $childMeta->getLabel()),
-                'itemTemplate' => 'item_template'
-            ]
-        );
-        $this->addTemplateToCollection("{$childName}Collection", 'item_template', $itemTemplate);
-
-        $groups = & $this->structure[static::GROUPS_KEY];
-        $groups['children'][$childName]['children'][] = $referenceCollectionName;
     }
 
     /**
@@ -528,12 +466,12 @@ class Tabs extends Generic implements LayoutInterface
      */
     public function sortChildren(UiComponentInterface $one, UiComponentInterface $two)
     {
-        if (!$one->getData('sortOrder')) {
+        if (!$one->getData('config/sortOrder')) {
             return 1;
         }
-        if (!$two->getData('sortOrder')) {
+        if (!$two->getData('config/sortOrder')) {
             return -1;
         }
-        return intval($one->getData('sortOrder')) - intval($two->getData('sortOrder'));
+        return intval($one->getData('config/sortOrder')) - intval($two->getData('config/sortOrder'));
     }
 }

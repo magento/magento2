@@ -32,6 +32,26 @@ class Fieldset extends AbstractComponent
     }
 
     /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+        foreach ($this->getChildComponents() as $field) {
+            if ($field instanceof Field) {
+                $meta = $this->getContext()->getDataProvider()->getFieldMetaInfo($this->getName(), $field->getName());
+                if ($meta) {
+                    $config = $field->getData('config');
+                    $config = array_replace_recursive($config, $meta);
+                    $field->setData('config', $config);
+                }
+            }
+        }
+    }
+
+    /**
      * @return string
      */
     public function getLegendText()

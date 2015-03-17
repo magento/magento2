@@ -79,6 +79,16 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * @param string $fieldSetName
+     * @param string $fieldName
+     * @return array
+     */
+    public function getFieldMetaInfo($fieldSetName, $fieldName)
+    {
+        return isset($this->meta[$fieldSetName][$fieldName]) ? $this->meta[$fieldSetName][$fieldName] : [];
+    }
+
+    /**
      * Get field name in request
      *
      * @return string
