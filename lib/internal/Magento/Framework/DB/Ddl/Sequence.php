@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\DB\Sequence;
+namespace Magento\Framework\DB\Ddl;
 
 /**
- * Class SequenceDDL represents DDL for manage sequences
+ * Class Sequence represents DDL for manage sequences
  */
-class SequenceDDL
+class Sequence
 {
     /**
      * Return SQL for create sequence
@@ -19,12 +19,12 @@ class SequenceDDL
      */
     public function createSequence($name, $startNumber = 1)
     {
-        $format = "CREATE TABLE IF NOT EXISTS %s (
-                     sequence_value MEDIUMINT NOT NULL AUTO_INCREMENT,
+        $format = "CREATE TABLE %s (
+                     sequence_value %s UNSIGNED NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
             ) AUTO_INCREMENT = %d";
 
-        return sprintf($format, $name, $startNumber);
+        return sprintf($format, $name, Table::TYPE_INTEGER, $startNumber);
     }
 
     /**
@@ -35,7 +35,7 @@ class SequenceDDL
      */
     public function dropSequence($name)
     {
-        $format = "DROP TABLE IF EXISTS %s";
+        $format = "DROP TABLE %s";
         return sprintf($format, $name);
     }
 }
