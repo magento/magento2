@@ -5,7 +5,7 @@
 define([
     'underscore',
     'jquery',
-    'mage/utils',
+    'mageUtils',
     'Magento_Ui/js/lib/class',
     'Magento_Ui/js/lib/registry/registry'
 ], function (_, $, utils, Class, registry) {
@@ -45,7 +45,7 @@ define([
     }
 
     function mergeNode(node, config) {
-        return $.extend(true, {}, config, node);
+        return utils.extend({}, config, node);
     }
 
     function additional(node) {

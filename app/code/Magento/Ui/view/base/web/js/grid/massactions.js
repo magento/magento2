@@ -1,6 +1,6 @@
 define([
     'underscore',
-    'Magento_Ui/js/lib/component/component'
+    'uiComponent'
 ], function (_, Component) {
     'use strict';
 
@@ -10,6 +10,7 @@ define([
             bodyTmpl: 'ui/grid/cells/massactions',
             template: 'ui/grid/actions',
             menuVisible: false,
+            actionsVisible: false,
             allSelected: false,
             selected: [],
             excluded: [],
@@ -43,7 +44,7 @@ define([
 
         initObservable: function () {
             this._super()
-                .observe('menuVisible selected excluded allSelected');
+                .observe('menuVisible actionsVisible selected excluded allSelected');
 
             return this;
         },
@@ -137,12 +138,28 @@ define([
             this.totalSelected(count);
         },
 
+        applyAction: function (action) {
+            var confirmed = true;
+
+            if (action.confirm) {
+                confirmed = window.confirm(action.confirm);
+            }
+        },
+
         toggleMenu: function () {
             this.menuVisible(!this.menuVisible());
         },
 
+        toggleActions: function () {
+            this.actionsVisible(!this.actionsVisible());
+        },
+
         hideMenu: function () {
             this.menuVisible(false);
+        },
+
+        hideActions: function () {
+            this.actionsVisible(false);
         },
 
         getHeader: function () {
@@ -151,6 +168,21 @@ define([
 
         getBody: function () {
             return this.bodyTmpl;
+        },
+
+        isSelectVisible: function (action) {
+            var onPage = this.getIds().length,
+                total = this.totalRecords();
+
+            switch (action) {
+                case 'selectPage':
+                case 'deselectPage':
+                    return  onPage < total;
+                    break;
+
+                default:
+                    return true;
+            }
         },
 
         onSelectedChange: function (selected) {
