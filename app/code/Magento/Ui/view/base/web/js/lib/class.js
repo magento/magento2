@@ -4,9 +4,8 @@
  */
 define([
     'underscore',
-    'mage/utils',
-    'jquery'
-], function (_, utils, $) {
+    'mageUtils'
+], function (_, utils) {
     'use strict';
 
     var superReg = /\b_super\b/;
@@ -75,7 +74,7 @@ define([
             };
         }
 
-        defaults = $.extend(true, {}, parent.defaults, defaults);
+        defaults = utils.extend({}, parent.defaults, defaults);
 
         child.prototype = Object.create(parentProto);
         child.prototype.constructor = child;

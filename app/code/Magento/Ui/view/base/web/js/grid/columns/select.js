@@ -4,18 +4,14 @@ define([
     'use strict';
 
     return Text.extend({
-        defaults: {
-            bodyTmpl: 'ui/grid/cells/select'
-        },
-
-        getLabel: function (value) {
-            var label = '',
-                options = this.options || [];
+        getLabel: function (data) {
+            var options = this.options || [],
+                label = '';
 
             options.some(function (item) {
                 label = item.label;
 
-                return item.value == value;
+                return item.value == data;
             });
 
             return label;

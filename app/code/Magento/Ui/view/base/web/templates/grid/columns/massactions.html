@@ -8,7 +8,7 @@
         </button>
         <ul class="mass-select-menu" data-bind="css: {active: menuVisible}, click: hideMenu">
             <!-- ko foreach: columnActions -->
-            <li data-bind="click: $parent[value].bind($parent)">
+            <li data-bind="click: $parent[value].bind($parent), visible: $parent.isSelectVisible(value)">
                 <span data-bind="text: label"></span>
             </li>
             <!-- /ko -->

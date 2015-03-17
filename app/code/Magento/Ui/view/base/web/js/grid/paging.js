@@ -1,6 +1,6 @@
 define([
     'ko',
-    'Magento_Ui/js/lib/component/component'
+    'uiComponent'
 ], function (ko, Component) {
     'use strict';
 

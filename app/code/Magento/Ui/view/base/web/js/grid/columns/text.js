@@ -1,5 +1,5 @@
 define([
-    'Magento_Ui/js/lib/component/component'
+    'uiComponent'
 ], function (Component) {
     'use strict';
 
@@ -24,6 +24,8 @@ define([
             this._super()
                 .observe('sorting sortClass');
 
+            this.setSortClass(this.sorting());
+
             return this;
         },
 
@@ -39,13 +41,15 @@ define([
             this.sorting(direction);
         },
 
-        push: function () {
-            if (!this.sorting()) {
+        push: function (sorting) {
+            if (!sorting) {
                 return;
             }
-            
-            this.source.set('params.sorting.field', this.index);
-            this.source.set('params.sorting.direction', this.sorting());
+
+            this.source.set('params.sorting', {
+                field: this.index,
+                direction: sorting
+            });
         },
 
         toggleDirection: function () {
@@ -54,9 +58,8 @@ define([
                 'asc';
         },
 
-        setSortClass: function () {
-            var direction = this.sorting(),
-                sortClass = this.classes[direction] || '';
+        setSortClass: function (sorting) {
+            var sortClass = this.classes[sorting] || '';
 
             this.sortClass(sortClass);
         },
@@ -65,6 +68,10 @@ define([
             if (field !== this.index) {
                 this.sort(false);
             }
+        },
+
+        getLabel: function (data) {
+            return data;
         },
 
         getHeader: function () {

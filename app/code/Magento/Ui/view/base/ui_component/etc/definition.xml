@@ -13,7 +13,7 @@
             <item name="save_parameters_in_session" xsi:type="string">1</item>
             <item name="client_root" xsi:type="string">mui/index/render</item>
             <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/lib/component/component</item>
+                <item name="component" xsi:type="string">uiComponent</item>
             </item>
         </argument>
         <paging name="listing_paging"/>

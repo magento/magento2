@@ -1,6 +1,6 @@
 define([
     'ko',
-    'mage/utils',
+    'mageUtils',
     'underscore',
     'Magento_Ui/js/lib/registry/registry'
 ], function (ko, utils, _, registry) {

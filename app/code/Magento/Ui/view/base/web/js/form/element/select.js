@@ -4,7 +4,7 @@
  */
 define([
     'underscore',
-    'mage/utils',
+    'mageUtils',
     './abstract'
 ], function (_, utils, Abstract) {
     'use strict';

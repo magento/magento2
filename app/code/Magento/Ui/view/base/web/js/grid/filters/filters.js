@@ -1,6 +1,6 @@
 define([
     'underscore',
-    'Magento_Ui/js/lib/component/component'
+    'uiComponent'
 ], function (_, Component) {
     'use strict';
 
