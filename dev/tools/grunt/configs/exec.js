@@ -6,39 +6,33 @@
 'use strict';
 
 var combo = require('./combo'),
-    theme = require('./theme');
+    themes = require('./themes'),
+    _      = require('underscore');
 
-/**
- * Execution into cmd
- */
-module.exports = {
-    blank: {
-        cmd: function () {
-            return combo.collector('blank');
-        }
-    },
-    luma: {
-        cmd: function () {
-            return combo.collector('luma');
-        }
-    },
-    backend: {
-        cmd: function () {
-            return combo.collector('backend');
-        }
-    },
-    all: {
-        cmd: function () {
-            var command = '',
-                cmdPlus = /^win/.test(process.platform) ? ' & ' : ' && ',
-                themes = Object.keys(theme),
-                i = 0;
+var themeOptions = {};
 
-            for (i; i < themes.length; i++) {
-                command += combo.collector(themes[i]) + cmdPlus;
-            }
+_.each(themes, function(theme, name) {
+    themeOptions[name] = {
+        cmd: combo.collector.bind(combo, name)
+    };
+});
+
+var execOptions = {
+    all : {
+        cmd: function () {
+            var cmdPlus = (/^win/.test(process.platform) == true) ? ' & ' : ' && ',
+                command;
+
+            command = _.map(themes, function(theme, name) {
+                return combo.collector(name);
+            }).join(cmdPlus);
 
             return 'echo ' + command;
         }
     }
 };
+
+/**
+ * Execution into cmd
+ */
+module.exports = _.extend(themeOptions, execOptions);
