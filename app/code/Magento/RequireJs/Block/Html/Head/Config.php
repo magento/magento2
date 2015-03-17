@@ -6,13 +6,15 @@
 
 namespace Magento\RequireJs\Block\Html\Head;
 
+use Magento\Framework\RequireJs\Config as RequireJsConfig;
+
 /**
  * Block responsible for including RequireJs config on the page
  */
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
-     * @var \Magento\Framework\RequireJs\Config
+     * @var RequireJsConfig
      */
     private $config;
 
@@ -28,7 +30,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
 
     /**
      * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Framework\RequireJs\Config $config
+     * @param RequireJsConfig $config
      * @param \Magento\RequireJs\Model\FileManager $fileManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
@@ -36,7 +38,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
-        \Magento\Framework\RequireJs\Config $config,
+        RequireJsConfig $config,
         \Magento\RequireJs\Model\FileManager $fileManager,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
@@ -59,27 +61,24 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
         $assetCollection = $this->pageConfig->getAssetCollection();
 
-        if ($this->bundleConfig->isBundlingJsFiles()) {
-            $after = \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME;
+        $assetCollection->insert(
+            $requireJsConfig->getFilePath(),
+            $requireJsConfig,
+            RequireJsConfig::REQUIRE_JS_FILE_NAME
+        );
 
+        if ($this->bundleConfig->isBundlingJsFiles()) {
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
 
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
             if (!empty($bundleAssets) && $staticAsset !== false) {
                 foreach ($bundleAssets as $bundleAsset) {
-                    $assetCollection->insert($bundleAsset->getFilePath(), $bundleAsset, $after);
-                    $after = $bundleAsset->getFilePath();
+                    $assetCollection->insert($bundleAsset->getFilePath(), $bundleAsset, RequireJsConfig::REQUIRE_JS_FILE_NAME);
                 }
-                $assetCollection->insert($staticAsset->getFilePath(), $staticAsset, $after);
+                $assetCollection->insert($staticAsset->getFilePath(), $staticAsset, RequireJsConfig::CONFIG_FILE_NAME);
             }
         }
-
-        $assetCollection->insert(
-            $requireJsConfig->getFilePath(),
-            $requireJsConfig,
-            \Magento\Framework\RequireJs\Config::REQUIRE_JS_FILE_NAME
-        );
 
         return parent::_prepareLayout();
     }
