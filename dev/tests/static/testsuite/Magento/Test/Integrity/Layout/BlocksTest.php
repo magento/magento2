@@ -97,7 +97,7 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         foreach (Files::init()->getPhpFiles(true, false, true, false, false) as $file) {
-            $aliases = \Magento\Framework\Test\Utility\Classes::getAllMatches(
+            $aliases = \Magento\Framework\App\Utility\Classes::getAllMatches(
                 file_get_contents($file),
                 '/\->getChildBlock\(\'([^\']+)\'\)/x'
             );
