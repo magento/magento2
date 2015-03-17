@@ -81,15 +81,15 @@ class IoTest extends \PHPUnit_Framework_TestCase
             ->method('filePutContents')
             ->with(
                 $this->stringContains(self::FILE_NAME),
-                $this->equalTo("<?php\n" . self::FILE_CONTENT)
-            )->will($this->returnValue(true));
+                "<?php\n" . self::FILE_CONTENT
+            )->willReturn(true);
 
         $this->_filesystemDriverMock->expects($this->once())
             ->method('rename')
             ->with(
                 $this->stringContains(self::FILE_NAME),
-                $this->equalTo(self::FILE_NAME)
-            )->will($this->returnValue(true));
+                self::FILE_NAME
+            )->willReturn(true);
 
         $this->assertTrue($this->_object->writeResultFile(self::FILE_NAME, self::FILE_CONTENT));
     }
