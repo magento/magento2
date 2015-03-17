@@ -5,10 +5,7 @@
  */
 namespace Magento\Ui\Component\Filter\Type;
 
-use Magento\Ui\Component\Filter\DataProvider;
 use Magento\Ui\Component\Filter\AbstractFilter;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
 
 /**

@@ -5,14 +5,13 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Framework\View\Element\BlockInterface;
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
-
 use Magento\Ui\DataProvider\Metadata;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\BlockInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
+use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Class Layout
