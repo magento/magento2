@@ -34,8 +34,9 @@ class MassAction extends AbstractComponent
         $this->prepareConfiguration();
         $config = $this->getData('config');
         if (isset($config['actions'])) {
+            $config['actions'] = array_values($config['actions']);
             array_walk_recursive(
-                $config,
+                $config['actions'],
                 function (&$item, $key, $context) {
                     /** @var ContextInterface $context */
                     if ($key === 'url') {
