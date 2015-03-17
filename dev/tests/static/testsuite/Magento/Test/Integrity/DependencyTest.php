@@ -535,7 +535,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareMapLayoutBlocks()
     {
-        $files = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles([], false);
+        $files = \Magento\Framework\App\Utility\Files::init()->getLayoutFiles([], false);
         foreach ($files as $file) {
             $area = 'default';
             if (preg_match('/[\/](?<area>adminhtml|frontend)[\/]/', $file, $matches)) {
@@ -563,7 +563,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareMapLayoutHandles()
     {
-        $files = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles([], false);
+        $files = \Magento\Framework\App\Utility\Files::init()->getLayoutFiles([], false);
         foreach ($files as $file) {
             $area = 'default';
             if (preg_match('/\/(?<area>adminhtml|frontend)\//', $file, $matches)) {
@@ -628,7 +628,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _initDependencies()
     {
-        $jsonFiles = \Magento\Framework\Test\Utility\Files::init()->getComposerFiles('code/Magento/*/', false);
+        $jsonFiles = \Magento\Framework\App\Utility\Files::init()->getComposerFiles('code/Magento/*/', false);
         foreach ($jsonFiles as $file) {
             $contents = file_get_contents($file);
             $decodedJson = json_decode($contents);
