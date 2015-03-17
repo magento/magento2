@@ -7,10 +7,10 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['../model/order'],
+    ['../model/quote'],
     function(order) {
         return function(billingAddressId, shipToSame, formKey) {
-            return order.setBillingAddress(billingAddressId, shipToSame);
+            return quote.setBillingAddress(billingAddressId, shipToSame);
         }
     }
 );

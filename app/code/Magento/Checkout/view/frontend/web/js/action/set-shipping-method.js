@@ -6,6 +6,6 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(['../model/order'], function(order, shippingMethodCode) {
-    return order.setShippingMethod(shippingMethodCode);
+define(['../model/quote'], function(quote, shippingMethodCode) {
+    return quote.setShippingMethod(shippingMethodCode);
 });

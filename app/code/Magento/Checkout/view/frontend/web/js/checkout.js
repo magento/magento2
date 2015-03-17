@@ -22,17 +22,34 @@ define(
         'Magento_Ui/js/view/errors',
         './view/authentication',
         './view/billing-address',
+        './view/shipping-address',
         './view/shipping-method',
         './view/payment',
         './view/review',
         './view/progress',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        './model/quote'
     ],
-    function($, composite, url, errors, authentication, billingAddress, shipping, payment, review, progress, customer) {
+    function(
+        $,
+        composite,
+        url,
+        errors,
+        authentication,
+        billingAddress,
+        shippingAddress,
+        shipping,
+        payment,
+        review,
+        progress,
+        customer,
+        quote
+    ) {
         var first = composite();
         var accordion = composite();
         accordion.addChild(authentication, 'authentication');
         accordion.addChild(billingAddress, 'billingAddress');
+        accordion.addChild(shippingAddress, 'shippingAddress');
         accordion.addChild(shipping, 'shipping');
         accordion.addChild(payment, 'payment');
         accordion.addChild(review, 'review');
@@ -43,6 +60,7 @@ define(
             authentication.setFormKey(options.formKey);
             url.setBaseUrl(options.baseUrl);
             customer.setIsLoggedIn(options.isLoggedIn);
+            quote.setData(options.cartData);
             return first.render($(element));
         }
     }

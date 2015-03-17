@@ -17,6 +17,9 @@ define(['mage/storage'], function(storage) {
         },
         getBillingAddressList: function () {
             return storage.get('/rest/default/V1/customers/me');
+        },
+        getShippingAddressList: function () {
+            return storage.get('/rest/default/V1/customers/me');
         }
     }
 });

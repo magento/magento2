@@ -10,11 +10,11 @@ define(
     [
         'underscore',
         'text!./templates/billing-address.html',
-        '../model/order',
+        '../model/quote',
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Customer/js/model/customer'
     ],
-    function(_, template, order, selectBillingAddress, customer) {
+    function(_, template, quote, selectBillingAddress, customer) {
         var root;
         var template = _.template(template);
         var object = {
@@ -36,10 +36,10 @@ define(
                 }
             }
         };
-        order.setBillingAddress = _.wrap(_.bind(order.setBillingAddress, order),
+        quote.setBillingAddress = _.wrap(_.bind(quote.setBillingAddress, quote),
             function (func, addressId, shipToSame) {
                 return func(addressId, shipToSame).done(function() {
-                    if (order.getBillingAddress()) {
+                    if (quote.getBillingAddress()) {
                         root.hide(1000);
                     }
                 });

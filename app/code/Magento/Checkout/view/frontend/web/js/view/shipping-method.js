@@ -10,14 +10,14 @@ define(
     [
         'underscore',
         'text!./templates/shipping-method.html',
-        '../model/order',
+        '../model/quote',
         '../model/shipping-service',
         '../action/set-shipping-method'
     ],
-    function(_, template, order, shippingService, setShippingMethod) {
+    function(_, template, quote, shippingService, setShippingMethod) {
         var root;
         template = _.template(template);
-        order.setBillingAddress = _.wrap(_.bind(order.setBillingAddress, order), function(func, addressId, shipToSame) {
+        quote.setBillingAddress = _.wrap(_.bind(quote.setBillingAddress, quote), function(func, addressId, shipToSame) {
             return func(addressId, shipToSame).done(function() {
                 view.render();
             });
@@ -25,8 +25,8 @@ define(
         var view = {
             render: function (newRoot) {
                 root = newRoot || root;
-                if (order.getBillingAddress()) {
-                    shippingService.getAvailableShippingMethods(order).then(function(methods) {
+                if (quote.getBillingAddress()) {
+                    shippingService.getAvailableShippingMethods(quote).then(function(methods) {
                         root.html(template({'shippingRateGroups': methods}));
                     });
                     root.find('#shipping-method-form').on('submit', function (e) {
