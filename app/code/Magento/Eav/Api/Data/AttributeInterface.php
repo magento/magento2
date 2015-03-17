@@ -6,7 +6,7 @@
  */
 namespace Magento\Eav\Api\Data;
 
-interface AttributeInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface AttributeInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     const ATTRIBUTE_ID = 'attribute_id';
 
@@ -297,4 +297,9 @@ interface AttributeInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setValidationRules(array $validationRules = null);
+
+    /**
+     * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null
+     */
+    public function getExtensionAttributes();
 }

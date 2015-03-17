@@ -1024,6 +1024,9 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         if (empty($attributes)) {
             $this->loadAllAttributes($object);
         } else {
+            if (!is_array($attributes)) {
+                $attributes = [$attributes];
+            }
             foreach ($attributes as $attrCode) {
                 $this->getAttribute($attrCode);
             }

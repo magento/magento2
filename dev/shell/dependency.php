@@ -19,8 +19,6 @@ const KEY_COMPONENT_NAME = 'name';
 const KEY_COMPONENT_DEPENDENCIES = 'dependencies';
 const KEY_COMPONENT_DEPENDENTS = 'dependents';
 
-const KEY_MAGENTO_CORE_MODULE = 'magento/module-core';
-
 $modules = [];
 $componentsByName = [];
 
@@ -256,8 +254,6 @@ function initialize()
         if (count($component[KEY_COMPONENT_MODULES]) == 1) {
             $component[KEY_COMPONENT_NAME] = $component[KEY_COMPONENT_MODULES][0];
             $modules[$component[KEY_COMPONENT_MODULES][0]][KEY_MODULE_COMPONENT] = $component[KEY_COMPONENT_NAME];
-        } elseif (in_array(KEY_MAGENTO_CORE_MODULE, $component[KEY_COMPONENT_MODULES])) {
-            $component[KEY_COMPONENT_NAME] = KEY_MAGENTO_CORE_MODULE;
         } else {
             $component[KEY_COMPONENT_NAME] = implode(':', $component[KEY_COMPONENT_MODULES]);
         }

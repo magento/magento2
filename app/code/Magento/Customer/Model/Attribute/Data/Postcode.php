@@ -9,7 +9,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\ResolverInterface;
-use Psr\Log\LoggerInterface as Logger;
+use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
 
 /**
@@ -25,13 +25,13 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * @param MagentoTimezone $localeDate
-     * @param Logger $logger
+     * @param PsrLogger $logger
      * @param ResolverInterface $localeResolver
      * @param DirectoryHelper $directoryHelper
      */
     public function __construct(
         MagentoTimezone $localeDate,
-        Logger $logger,
+        PsrLogger $logger,
         ResolverInterface $localeResolver,
         DirectoryHelper $directoryHelper
     ) {
@@ -108,6 +108,7 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param string $format
      * @return string|array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function outputValue($format = AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {

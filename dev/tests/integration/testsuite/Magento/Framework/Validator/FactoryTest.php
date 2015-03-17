@@ -23,11 +23,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         // Check that default translator was set
         $translator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
         $this->assertInstanceOf('Magento\Framework\Translate\AdapterInterface', $translator);
-        $this->assertEquals('Message', __('Message'));
+        $this->assertEquals('Message', new \Magento\Framework\Phrase('Message'));
         $this->assertEquals('Message', $translator->translate('Message'));
         $this->assertEquals(
             'Message with "placeholder one" and "placeholder two"',
-            (string)__('Message with "%1" and "%2"', 'placeholder one', 'placeholder two')
+            (string)new \Magento\Framework\Phrase('Message with "%1" and "%2"', ['placeholder one', 'placeholder two'])
         );
     }
 }

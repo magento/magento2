@@ -6,7 +6,7 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Tax\Api\Data\TaxRuleInterface;
 
 /**
@@ -72,7 +72,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param MetadataServiceInterface $metadataService
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
@@ -85,7 +85,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        MetadataServiceInterface $metadataService,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
@@ -99,7 +99,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -376,5 +376,26 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     public function setCalculateSubtotal($calculateSubtotal)
     {
         return $this->setData(self::KEY_CALCULATE_SUBTOTAL, $calculateSubtotal);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxRuleExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

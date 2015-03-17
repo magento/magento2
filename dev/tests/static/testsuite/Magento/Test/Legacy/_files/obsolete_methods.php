@@ -1905,7 +1905,7 @@ return [
     ['_isVatValidationEnabled', 'Magento\Customer\Controller\Account'],
     ['_createUrl', 'Magento\Customer\Controller\Account'],
     ['_extractAddress', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::extractAddress'],
-    ['_loginPostRedirect', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Controller\Account\LoginPost::loginPostRedirect'],
+    ['_loginPostRedirect', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Model\Account\Redirect::getRedirect'],
     ['_getAllowedActions', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::getAllowedActions'],
     ['isRegistrationAllowed', 'Magento\Customer\Controller\Account\CreatePost'],
     ['isRegistrationAllowed', 'Magento\Invitation\Controller\Customer\Account\CreatePost'],
@@ -2104,6 +2104,12 @@ return [
         'validateCredentials',
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
+    ],
+    ['getSuccessRedirect', 'Magento\Customer\Controller\Account\CreatePost'],
+    [
+        'loginPostRedirect',
+        'Magento\Customer\Controller\Account\LoginPost',
+        'Magento\Customer\Model\Account\Redirect::getRedirect'
     ],
     ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
     ['getRegistration', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getRegistration'],

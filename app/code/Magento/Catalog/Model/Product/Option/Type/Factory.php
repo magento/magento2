@@ -42,7 +42,7 @@ class Factory
 
         if (!$option instanceof \Magento\Catalog\Model\Product\Option\Type\DefaultType) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType'
+                __('%1 doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType', $className)
             );
         }
         return $option;

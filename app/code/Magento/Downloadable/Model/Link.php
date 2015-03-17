@@ -6,7 +6,6 @@
 namespace Magento\Downloadable\Model;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
-use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Downloadable\Model\Resource\Link as Resource;
 
 /**
@@ -51,14 +50,9 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     /**#@-*/
 
     /**
-     * @var MetadataServiceInterface
-     */
-    protected $metadataService;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -67,7 +61,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -76,7 +70,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -366,6 +360,27 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     public function setSampleUrl($sampleUrl)
     {
         return $this->setData(self::KEY_SAMPLE_URL, $sampleUrl);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Downloadable\Api\Data\LinkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

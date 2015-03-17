@@ -24,12 +24,6 @@
             <resource ref="Magento_TestModule3::resource1" />
         </resources>
     </route>
-    <route method="POST" url="/V1/errortest/parameterizedserviceexception">
-        <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="parameterizedServiceException" />
-        <resources>
-            <resource ref="Magento_TestModule3::resource1" />
-        </resources>
-    </route>
     <route method="GET" url="/V1/errortest/unauthorized">
         <service class="Magento\TestModule3\Service\V1\ErrorInterface" method="authorizationException" />
         <resources>

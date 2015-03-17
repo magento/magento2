@@ -162,4 +162,25 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     {
         return $this->setData(self::KEY_BASE_TO_QUOTE_RATE, $baseToQuoteRate);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\CurrencyExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\CurrencyExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

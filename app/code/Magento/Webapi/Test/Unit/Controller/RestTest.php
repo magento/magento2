@@ -82,7 +82,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $areaMock;
-
+    
     /**
      * @var \Magento\Webapi\Controller\Rest\ParamsOverrider|\PHPUnit_Framework_MockObject_MockObject
      */

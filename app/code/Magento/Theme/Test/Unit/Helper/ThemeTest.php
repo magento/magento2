@@ -54,11 +54,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments>
-                            <argument name="file" xsi:type="string">Magento_Core::test3.css</argument>
+                            <argument name="file" xsi:type="string">Magento_Theme::test3.css</argument>
                         </arguments>
                     </block>
                 </block>',
-                ['Magento_Core::test3.css' => 'Magento_Core::test3.css'],
+                ['Magento_Theme::test3.css' => 'Magento_Theme::test3.css'],
             ],
             [
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
@@ -67,7 +67,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     </block>
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments>
-                            <argument name="file" xsi:type="string">Magento_Core::test.css</argument>
+                            <argument name="file" xsi:type="string">Magento_Theme::test.css</argument>
                         </arguments>
                     </block>
                 </block>
@@ -76,7 +76,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         <arguments><argument name="file" xsi:type="string">testh.css</argument></arguments>
                     </block>
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
-                        <arguments><argument name="file" xsi:type="string">Magento_Core::test.css</argument></arguments>
+                        <arguments><argument name="file" xsi:type="string">Magento_Theme::test.css</argument></arguments>
                     </block>
                 </referenceBlock>
                 <block type="Some_Block_Class">
@@ -85,7 +85,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     </block>
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments>
-                            <argument name="file" xsi:type="string">Magento_Core::testa.css</argument>
+                            <argument name="file" xsi:type="string">Magento_Theme::testa.css</argument>
                         </arguments>
                     </block>
                 </block>
@@ -95,12 +95,12 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     </block>
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments>
-                            <argument name="file" xsi:type="string">Magento_Core::testb.css</argument>
+                            <argument name="file" xsi:type="string">Magento_Theme::testb.css</argument>
                         </arguments>
                     </block>
                 </referenceBlock>',
                 [
-                    'Magento_Core::test.css' => 'Magento_Core::test.css',
+                    'Magento_Theme::test.css' => 'Magento_Theme::test.css',
                     'test.css' => 'test.css',
                     'testh.css' => 'testh.css',
                 ],

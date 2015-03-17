@@ -75,7 +75,9 @@ class AclRetriever
         try {
             $role = $this->_getUserRole($userType, $userId);
             if (!$role) {
-                throw new AuthorizationException('The role associated with the specified user cannot be found.');
+                throw new AuthorizationException(
+                    __('The role associated with the specified user cannot be found.')
+                );
             }
             $allowedResources = $this->getAllowedResourcesByRole($role->getId());
         } catch (AuthorizationException $e) {

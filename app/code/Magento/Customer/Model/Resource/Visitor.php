@@ -58,6 +58,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $visitor)
     {
         return [
+            'customer_id' => $visitor->getCustomerId(),
             'session_id' => $visitor->getSessionId(),
             'last_visit_at' => $visitor->getLastVisitAt()
         ];

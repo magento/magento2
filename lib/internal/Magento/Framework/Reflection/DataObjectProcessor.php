@@ -8,7 +8,7 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
@@ -108,7 +108,7 @@ class DataObjectProcessor
                     continue;
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
-                if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES) {
+                if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
                     $value = $this->convertCustomAttributes($value, $dataObjectType);
                 } elseif (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
@@ -304,10 +304,7 @@ class DataObjectProcessor
         $isSuitableMethodType = !($method->isConstructor() || $method->isFinal()
             || $method->isStatic() || $method->isDestructor());
 
-        $isExcludedMagicMethod = in_array(
-            $method->getName(),
-            ['__sleep', '__wakeup', '__clone']
-        );
+        $isExcludedMagicMethod = strpos($method->getName(), '__') === 0;
         return $isSuitableMethodType && !$isExcludedMagicMethod;
     }
 }

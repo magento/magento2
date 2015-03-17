@@ -9,11 +9,9 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -28,7 +26,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
+class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
 {
     const OPTION_GROUP_TEXT = 'text';
 
@@ -118,8 +116,6 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
      * @param Option\Value $productOptionValue
      * @param Option\Type\Factory $optionFactory
      * @param \Magento\Framework\Stdlib\String $string
@@ -132,8 +128,6 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
         Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Framework\Stdlib\String $string,
@@ -149,8 +143,6 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data

@@ -79,6 +79,11 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultJson;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -142,11 +147,11 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRaw);
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
-        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -166,6 +171,11 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $this->request->expects($this->once())
@@ -182,6 +192,11 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRaw, $this->controller->execute());
     }
 
+    /**
+     * Test validate minimum amount
+     *
+     * @return void
+     */
     public function testValidateMinimumAmount()
     {
         $expectedResult = [
@@ -254,6 +269,11 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
+    /**
+     * Test validate minimum amount negative
+     *
+     * @return void
+     */
     public function testValidateMinimumAmountNegative()
     {
         $errorMessage = 'error_message';

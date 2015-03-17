@@ -11,7 +11,7 @@ interface ProductTierPriceManagementInterface
     /**
      * Create tier price for product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param string $customerGroupId
      * @param float $price
      * @param float $qty
@@ -19,27 +19,27 @@ interface ProductTierPriceManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function add($productSku, $customerGroupId, $price, $qty);
+    public function add($sku, $customerGroupId, $price, $qty);
 
     /**
      * Remove tire price from product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param string $customerGroupId
      * @param float $qty
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function remove($productSku, $customerGroupId, $qty);
+    public function remove($sku, $customerGroupId, $qty);
 
     /**
      * Get tire price of product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param string $customerGroupId
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getList($productSku, $customerGroupId);
+    public function getList($sku, $customerGroupId);
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Resource;
 
-use Magento\Framework\Validator\ValidatorException;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
@@ -131,7 +131,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Customer\Model\Customer $customer
      * @return void
-     * @throws \Magento\Framework\Validator\ValidatorException
+     * @throws \Magento\Framework\Validator\Exception
      */
     protected function _validate($customer)
     {
@@ -139,8 +139,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 
         if (!$validator->isValid($customer)) {
             throw new ValidatorException(
-                ValidatorException::DEFAULT_MESSAGE,
-                [],
+                null,
                 null,
                 $validator->getMessages()
             );

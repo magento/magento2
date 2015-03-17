@@ -32,12 +32,12 @@ interface ProductLinkRepositoryInterface
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity);
 
     /**
-     * @param string $productSku
+     * @param string $sku
      * @param string $type
      * @param string $linkedProductSku
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
      */
-    public function deleteById($productSku, $type, $linkedProductSku);
+    public function deleteById($sku, $type, $linkedProductSku);
 }

@@ -19,8 +19,8 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Exception as EavException;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeValueFactory;
 
 /**
@@ -47,6 +47,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * Prefix of model events names
+     *
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute_set';
@@ -74,7 +75,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param GroupFactory $attrGroupFactory
@@ -88,7 +89,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $attrGroupFactory,
@@ -101,7 +102,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -438,6 +439,27 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setEntityTypeId($entityTypeId)
     {
         return $this->setData(self::KEY_ENTITY_TYPE_ID, $entityTypeId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeSetExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

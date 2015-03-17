@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +26,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected $_emailConfig;
 
     /**
-     * @var /Magento\Core\Model\Resource\Email\Template\CollectionFactory
+     * @var \Magento\Email\Model\Resource\Email\Template\CollectionFactory
      */
     protected $_templatesFactory;
 

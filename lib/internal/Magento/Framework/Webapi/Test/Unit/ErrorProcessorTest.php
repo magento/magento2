@@ -12,6 +12,7 @@ use \Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Framework\Phrase;
 
 class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,6 +67,8 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in JSON format.
+     *
+     * @return void
      */
     public function testRenderJson()
     {
@@ -93,7 +96,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
      *
      * Method encodes data to JSON and returns it.
      *
-     * @param $data
+     * @param array $data
      * @return string
      */
     public function callbackJsonEncode($data)
@@ -103,6 +106,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in JSON format with turned on developer mode.
+     * @return void
      */
     public function testRenderJsonInDeveloperMode()
     {
@@ -127,6 +131,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in XML format.
+     * @return void
      */
     public function testRenderXml()
     {
@@ -144,6 +149,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test render method in XML format with turned on developer mode.
+     * @return void
      */
     public function testRenderXmlInDeveloperMode()
     {
@@ -164,6 +170,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test default render format is JSON.
+     * @return void
      */
     public function testRenderDefaultFormat()
     {
@@ -176,6 +183,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test maskException method with turned on developer mode.
+     * @return void
      */
     public function testMaskExceptionInDeveloperMode()
     {
@@ -197,6 +205,11 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test sendResponse method with various exceptions
      *
+     * @param \Exception $exception
+     * @param int $expectedHttpCode
+     * @param string $expectedMessage
+     * @param array $expectedDetails
+     * @return void
      * @dataProvider dataProviderForSendResponseExceptions
      */
     public function testMaskException($exception, $expectedHttpCode, $expectedMessage, $expectedDetails)
@@ -212,18 +225,23 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForSendResponseExceptions()
     {
         return [
             'NoSuchEntityException' => [
                 new NoSuchEntityException(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                    [
-                        'fieldName' => 'detail1',
-                        'fieldValue' => 'value1',
-                        'field2Name' => 'resource_id',
-                        'field2Value' => 'resource10',
-                    ]
+                    new Phrase(
+                        NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                        [
+                            'fieldName' => 'detail1',
+                            'fieldValue' => 'value1',
+                            'field2Name' => 'resource_id',
+                            'field2Value' => 'resource10',
+                        ]
+                    )
                 ),
                 \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND,
                 NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
@@ -242,8 +260,10 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             ],
             'AuthorizationException' => [
                 new AuthorizationException(
-                    AuthorizationException::NOT_AUTHORIZED,
-                    ['consumer_id' => '3', 'resources' => '4']
+                    new Phrase(
+                        AuthorizationException::NOT_AUTHORIZED,
+                        ['consumer_id' => '3', 'resources' => '4']
+                    )
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
                 AuthorizationException::NOT_AUTHORIZED,
@@ -265,6 +285,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
      * @param int $expectedHttpCode
      * @param string $expectedMessage
      * @param array $expectedDetails
+     * @return void
      */
     public function assertMaskedException(
         $maskedException,

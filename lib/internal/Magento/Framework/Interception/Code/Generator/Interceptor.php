@@ -83,7 +83,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getDefaultConstructorDefinition()
     {
-        $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
+        $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $constructor = $reflectionClass->getConstructor();
         $parameters = [];
         if ($constructor) {
@@ -201,7 +201,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "return \$result;\n",
         ];
 
-        $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
+        $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
             if ($this->isInterceptedMethod($method)) {
@@ -283,7 +283,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _generateCode()
     {
-        $typeName = $this->_getSourceClassName();
+        $typeName = $this->getSourceClassName();
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
@@ -302,7 +302,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $result = parent::_validateData();
 
         if ($result) {
-            $sourceClassName = $this->_getSourceClassName();
+            $sourceClassName = $this->getSourceClassName();
             $resultClassName = $this->_getResultClassName();
 
             if ($resultClassName !== $sourceClassName . '\\Interceptor') {

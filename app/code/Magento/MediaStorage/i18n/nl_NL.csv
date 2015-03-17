@@ -1,0 +1,10 @@
+"Requested resource not found","Requested resource not found"
+"File %1 does not exist","File %1 does not exist"
+"File %1 is not readable","File %1 is not readable"
+"Parent directory does not exist: %1","Parent directory does not exist: %1"
+"File system",Bestandssysteem
+"Unable to save file ""%1"" at ""%2""","Unable to save file ""%1"" at ""%2"""
+"Wrong file info format","Verkeerde bestandsinformatiebestand"
+"Please set available and/or protected paths list(s) before validation.","Stel beschikbare en/of beschermde pad lijst(en) in voor validatie."
+"Unable to create directory: %1","Unable to create directory: %1"
+"Unable to save file: %1","Unable to save file: %1"

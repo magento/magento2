@@ -81,6 +81,9 @@ class EditPost extends \Magento\Customer\Controller\Account
             $customerId = $this->_getSession()->getCustomerId();
             $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
             $customer->setId($customerId);
+            if ($customer->getAddresses() == null) {
+                $customer->setAddresses($this->customerRepository->getById($customerId)->getAddresses());
+            }
 
             if ($this->getRequest()->getParam('change_password')) {
                 $currPass = $this->getRequest()->getPost('current_password');
