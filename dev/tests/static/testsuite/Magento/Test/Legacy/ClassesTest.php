@@ -22,7 +22,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $classes = \Magento\Framework\Test\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
                 $this->_assertNonFactoryName($classes, $file);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
         );
     }
 
