@@ -56,29 +56,7 @@ define([
 
             return this;
         },
-
-        /**
-         * Assignes props to this.data based on incoming params
-         * @param  {String|*} path
-         * @param  {*} value
-         * @return {Object}
-         */
-        _override: function (path, value) {
-            if (arguments.length > 1) {
-                utils.nested(this.data, path, value);
-            } else {
-                value = path;
-                path = false;
-
-                this.data = value;
-            }
-
-            return {
-                path: path,
-                value: value
-            };
-        },
-
+        
         reload: function () {
 
         }
