@@ -68,14 +68,12 @@ require([
         isLocked = function (element) {
             return element.is('[data-locked]');
         },
-        disableElement = function (element) {
+        setElementDisabled = function (element, state, triggerEvent) {
             if (!isLocked(element)) {
-                element.prop('disabled', true).trigger('change');
-            }
-        },
-        enableElement = function (element) {
-            if (!isLocked(element)) {
-                element.removeProp('disabled').trigger('change');
+                element.prop('disabled', state);
+                if (triggerEvent) {
+                    element.trigger('change')
+                }
             }
         };
 
@@ -89,8 +87,8 @@ require([
 
             inventoryQty.prop('disabled', true);
             inventoryAvailabilityField.removeProp('disabled');
-            disableElement(qtyField);
-            enableElement(stockAvailabilityField);
+            setElementDisabled(qtyField, true, true);
+            setElementDisabled(stockAvailabilityField, false, false);
             $.each($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes(), function() {
                 $('#attribute-' + this.code + '-container select').prop('disabled', true);
             })
@@ -104,8 +102,8 @@ require([
                 .removeProp('disabled');
             inventoryQty.removeProp('disabled');
             inventoryAvailabilityField.prop('disabled', true);
-            disableElement(stockAvailabilityField);
-            enableElement(qtyField);
+            setElementDisabled(stockAvailabilityField, true, false);
+            setElementDisabled(qtyField, false, true);
         })
         .collapse(hasVariations ? 'show' : 'hide');
 
