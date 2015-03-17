@@ -27,15 +27,23 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
         $model = $objectManager->get('Magento\Framework\Translate');
 
         $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND); // this is supposed to cache the fixture
-        $this->assertEquals('Fixture Db Translation', __('Fixture String'));
+        $this->assertEquals('Fixture Db Translation', new \Magento\Framework\Phrase('Fixture String'));
 
         /** @var \Magento\Translation\Model\Resource\String $translateString */
         $translateString = $objectManager->create('Magento\Translation\Model\Resource\String');
         $translateString->saveTranslate('Fixture String', 'New Db Translation');
 
-        $this->assertEquals('Fixture Db Translation', __('Fixture String'), 'Translation is expected to be cached');
+        $this->assertEquals(
+            'Fixture Db Translation',
+            new \Magento\Framework\Phrase('Fixture String'),
+            'Translation is expected to be cached'
+        );
 
         $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND, true);
-        $this->assertEquals('New Db Translation', __('Fixture String'), 'Forced load should not use cache');
+        $this->assertEquals(
+            'New Db Translation',
+            new \Magento\Framework\Phrase('Fixture String'),
+            'Forced load should not use cache'
+        );
     }
 }

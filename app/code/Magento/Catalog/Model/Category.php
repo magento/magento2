@@ -356,7 +356,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                     'Sorry, but we can\'t move the category because we can\'t find the new parent category you'
                     . ' selected.'
                 ),
-                [],
                 $e
             );
         }

@@ -5,15 +5,16 @@
  */
 namespace Magento\Tools\Di\Test\Unit\App;
 
-use \Magento\Tools\Di\App\Compiler;
-use \Magento\Tools\Di\App\Task;
+use Magento\Framework\App\Console\Response;
+use Magento\Tools\Di\App\Compiler;
+use Magento\Tools\Di\App\Task;
 
 class CompilerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Compiler
      */
-    private $model;
+    private $application;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -26,7 +27,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     private $taskManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Console\Response | \PHPUnit_Framework_MockObject_MockObject
+     * @var Response | \PHPUnit_Framework_MockObject_MockObject
      */
     private $responseMock;
 
@@ -43,7 +44,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->model = new Compiler(
+        $this->application = new Compiler(
             $this->taskManagerMock,
             $this->objectManagerMock,
             $this->responseMock
@@ -65,9 +66,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->taskManagerMock->expects($this->at($index))->method('process');
         $this->responseMock->expects($this->once())
             ->method('setCode')
-            ->with(\Magento\Framework\App\Console\Response::SUCCESS);
+            ->with(Response::SUCCESS);
 
-        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->model->launch());
+        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->application->launch());
     }
 
     public function testLaunchException()
@@ -90,9 +91,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->taskManagerMock->expects($this->never())->method('process');
         $this->responseMock->expects($this->once())
             ->method('setCode')
-            ->with(\Magento\Framework\App\Console\Response::ERROR);
+            ->with(Response::ERROR);
 
-        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->model->launch());
+        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->application->launch());
     }
 
     /**
@@ -113,12 +114,23 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             'Magento\Tools\Di\Compiler\Config\ModificationChain' => [
                 'arguments' => [
                     'modificationsList' => [
-                        'PreferencesResolving' =>
-                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                         'BackslashTrim' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim'],
+                        'PreferencesResolving' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
+                        'InterceptorSubstitution' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\InterceptorSubstitution'],
+                        'InterceptionPreferencesResolving' =>
+                            ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving'],
                         'ArgumentsSerialization' =>
                             ['instance' => 'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization'],
+                    ]
+                ]
+            ],
+            'Magento\Tools\Di\Code\Generator\PluginList' => [
+                'arguments' => [
+                    'cache' => [
+                        'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
                     ]
                 ]
             ]
@@ -137,11 +149,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 'path' => BP . '/' . 'app/code',
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
-            Task\OperationFactory::AREA => [
+            Task\OperationFactory::APPLICATION_CODE_GENERATOR => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
             ],
             Task\OperationFactory::INTERCEPTION =>
                 BP . '/var/generation',
+            Task\OperationFactory::AREA_CONFIG_GENERATOR => [
+                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+            ],
             Task\OperationFactory::INTERCEPTION_CACHE => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
             ]
