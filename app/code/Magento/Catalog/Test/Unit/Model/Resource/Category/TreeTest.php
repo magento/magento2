@@ -158,12 +158,12 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $attributeConfig->expects(
             $this->once()
         )->method(
-                'getAttributeNames'
-            )->with(
-                'catalog_category'
-            )->will(
-                $this->returnValue($attributes)
-            );
+            'getAttributeNames'
+        )->with(
+            'catalog_category'
+        )->will(
+            $this->returnValue($attributes)
+        );
 
         $collection = $this->getMock('Magento\Catalog\Model\Resource\Category\Collection', [], [], '', false);
         $collection->expects($this->never())->method('getAllIds')->will($this->returnValue([]));
@@ -182,6 +182,22 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
+        $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $category
+            ->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn(12);
+        $category
+            ->expects($this->once())
+            ->method('__call')
+            ->with('setIsCurrentCategory', [true]);
+        $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $registry
+            ->expects($this->once())
+            ->method('registry')
+            ->with('current_category')
+            ->willReturn($category);
+
         $model = $objectHelper->getObject(
             'Magento\Catalog\Model\Resource\Category\Tree',
             [
@@ -189,13 +205,15 @@ class TreeTest extends \PHPUnit_Framework_TestCase
                 'resource' => $resource,
                 'eventManager' => $eventManager,
                 'attributeConfig' => $attributeConfig,
-                'collectionFactory' => $collectionFactory
+                'collectionFactory' => $collectionFactory,
+                'registry' => $registry
             ]
         );
 
         $nodeMock = $this->getMock('\Magento\Framework\Data\Tree\Node', ['getId', 'getPath'], [], '', false);
         $nodeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
         $nodeMock->expects($this->once())->method('getPath')->will($this->returnValue([]));
+        $nodeMock->setData('id', 12);
 
         $model->addNode($nodeMock);
 

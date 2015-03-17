@@ -35,7 +35,7 @@ class NodeFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\Data\\Tree\\Node'
+        $instanceName = '\Magento\Framework\Data\Tree\Node'
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

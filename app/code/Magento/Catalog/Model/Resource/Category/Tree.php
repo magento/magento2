@@ -5,15 +5,6 @@
  */
 namespace Magento\Catalog\Model\Resource\Category;
 
-use Magento\Framework\Registry;
-use Magento\Catalog\Model\Resource\Category;
-use Magento\Framework\App\CacheInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Resource;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Catalog\Model\Attribute\Config;
-use Magento\Catalog\Model\Resource\Category\Collection\Factory;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -104,25 +95,25 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     /**
      * Construct
      *
-     * @param Registry $registry
-     * @param Category $catalogCategory
-     * @param CacheInterface $cache
-     * @param StoreManagerInterface $storeManager
-     * @param Resource $resource
-     * @param ManagerInterface $eventManager
-     * @param Config $attributeConfig
-     * @param Factory $collectionFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
+     * @param Collection\Factory $collectionFactory
      * @throws \Exception
      */
     public function __construct(
-        Registry $registry,
-        Category $catalogCategory,
-        CacheInterface $cache,
-        StoreManagerInterface $storeManager,
-        Resource $resource,
-        ManagerInterface $eventManager,
-        Config $attributeConfig,
-        Factory $collectionFactory
+        \Magento\Framework\Registry $registry,
+        \Magento\Catalog\Model\Resource\Category $catalogCategory,
+        \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Catalog\Model\Attribute\Config $attributeConfig,
+        \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
     ) {
         $this->registry = $registry;
         $this->_catalogCategory = $catalogCategory;
@@ -235,20 +226,12 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             }
         }
 
-        $this->markNodeAsCurrentCategory();
-
-        return $this;
-    }
-
-    /**
-     * @return void
-     */
-    protected function markNodeAsCurrentCategory()
-    {
         $category = $this->registry->registry('current_category');
         if ($category && $category->getId()) {
-            $this->getNodeById($category->getId())->setIsCurrentCategory(true);
+            $this->getNodeById($category->getId())->setIsCurrentItem(true);
         }
+
+        return $this;
     }
 
     /**

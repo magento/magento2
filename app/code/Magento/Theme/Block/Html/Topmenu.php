@@ -28,7 +28,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @var \Magento\Framework\Data\Tree\Node
      */
-    protected $menu;
+    protected $_menu;
 
     /**
      * Core registry
@@ -50,7 +50,7 @@ class Topmenu extends Template implements IdentityInterface
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->menu = $nodeFactory->create(
+        $this->_menu = $nodeFactory->create(
             [
                 'data' => [],
                 'idField' => 'root',
@@ -71,18 +71,18 @@ class Topmenu extends Template implements IdentityInterface
     {
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_before',
-            ['menu' => $this->menu, 'block' => $this]
+            ['menu' => $this->_menu, 'block' => $this]
         );
 
-        $this->menu->setOutermostClass($outermostClass);
-        $this->menu->setChildrenWrapClass($childrenWrapClass);
+        $this->_menu->setOutermostClass($outermostClass);
+        $this->_menu->setChildrenWrapClass($childrenWrapClass);
 
-        $html = $this->_getHtml($this->menu, $childrenWrapClass, $limit);
+        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
 
         $transportObject = new \Magento\Framework\Object(['html' => $html]);
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_after',
-            ['menu' => $this->menu, 'transportObject' => $transportObject]
+            ['menu' => $this->_menu, 'transportObject' => $transportObject]
         );
         $html = $transportObject->getHtml();
 
@@ -292,11 +292,11 @@ class Topmenu extends Template implements IdentityInterface
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive() && !$item->getIsCurrentCategory()) {
+        if ($item->getIsActive() && !$item->getIsCurrentItem()) {
             $classes[] = 'has-active';
         }
 
-        if ($item->getIsCurrentCategory()) {
+        if ($item->getIsCurrentItem()) {
             $classes[] = 'active';
         }
 
