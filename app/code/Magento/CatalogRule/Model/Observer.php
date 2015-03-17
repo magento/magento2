@@ -267,7 +267,7 @@ class Observer
         if ($observer->getEvent()->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = new \DateTime('@' . $this->_localeDate->scopeTimeStamp($store));
+            $date = (new \DateTime())->setTimestamp($this->_localeDate->scopeTimeStamp($store));
         }
 
         $productIds = [];
