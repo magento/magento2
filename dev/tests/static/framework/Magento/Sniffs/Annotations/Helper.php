@@ -502,7 +502,7 @@ class Helper
             // Skip all phtml files
             $shouldFilter = true;
         }
-        
+
         return $shouldFilter;
     }
 
