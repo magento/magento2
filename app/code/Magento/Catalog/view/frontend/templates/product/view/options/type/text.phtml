@@ -33,9 +33,9 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             <input type="text"
                    id="options_<?php echo $_option->getId() ?>_text"
                    class="input-text product-custom-option"
-                   <?php if (!empty($_textValidate)) {
-    echo 'data-validate=' . json_encode($_textValidate);
-} ?>
+                   <?php if (!empty($_textValidate)) {?>
+                   data-validate='<?php echo json_encode($_textValidate);?>'
+                   <?php } ?>
                    name="options[<?php echo $_option->getId() ?>]"
                    value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>"/>
         <?php elseif ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA): ?>
