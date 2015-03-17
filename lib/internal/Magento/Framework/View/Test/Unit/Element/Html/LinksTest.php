@@ -49,6 +49,31 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($blocks, $this->_block->getLinks());
     }
 
+    public function testSetActive()
+    {
+        $link = $this->getMock('Magento\Framework\View\Element\Html\Link', [], [], '', false);
+        $link
+            ->expects($this->at(1))
+            ->method('__call')
+            ->with('setIsHighlighted', [true]);
+        $link
+            ->expects($this->at(0))
+            ->method('__call')
+            ->with('getPath', [])
+            ->willReturn('test/path');
+
+        $name = 'test_name';
+        $this->_context->getLayout()
+            ->expects($this->once())
+            ->method('getChildBlocks')
+            ->with($name)
+            ->willReturn([$link]);
+
+        $this->_block->setNameInLayout($name);
+
+        $this->_block->setActive('test/path');
+    }
+
     public function testRenderLink()
     {
         $blockHtml = 'test';
