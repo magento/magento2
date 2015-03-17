@@ -15,7 +15,7 @@ interface JsConfigInterface extends UiComponentInterface
     /**
      * Get JS config
      *
-     * @return array
+     * @return array|string
      */
     public function getJsConfig();
 }

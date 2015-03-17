@@ -40,13 +40,13 @@
     <massaction name="listing_massaction">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="actions" xsi:type="array">-->
-                    <!--<item name="delete" xsi:type="array">-->
-                        <!--<item name="label" xsi:type="string" translate="true">Delete</item>-->
-                        <!--<item name="url" xsi:type="string">cms/page/massDelete</item>-->
-                    <!--</item>-->
-                <!--</item>-->
-                <!--<item name="indexField" xsi:type="string">page_id</item>-->
+                <item name="actions" xsi:type="array">
+                    <item name="delete" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="string">cms/page/massDelete</item>
+                    </item>
+                </item>
+                <item name="indexField" xsi:type="string">page_id</item>
             </item>
         </argument>
     </massaction>
@@ -210,6 +210,11 @@
         </filterRange>
     </filters>
     <columns name="cms_page_columns">
+        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="string">listing_massaction</item>
+            </argument>
+        </column>
         <column name="page_id" dataType="text">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">

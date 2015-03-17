@@ -64,15 +64,21 @@ class Generic implements LayoutInterface
         }
         /** @var JsConfigInterface $component */
         $config = $component->getJsConfig();
-        $nodeData = [
-            'type' => $componentType,
-            'name' => $component->getName(),
-            'dataScope' => $component->getContext()->getNamespace(),
-            'children' => $childrenNode
-        ];
-        if (!empty($config)) {
-            $nodeData['config'] = $config;
+        if (is_string($config)) {
+            $topNode[] = $config;
+        } else {
+            $nodeData = [
+                'type' => $componentType,
+                'name' => $component->getName(),
+                'dataScope' => isset($config['dataScope'])
+                    ? $config['dataScope']
+                    : $component->getContext()->getNamespace(),
+                'children' => $childrenNode
+            ];
+            if (!empty($config)) {
+                $nodeData['config'] = $config;
+            }
+            $topNode[] = $nodeData;
         }
-        $topNode[] = $nodeData;
     }
 }

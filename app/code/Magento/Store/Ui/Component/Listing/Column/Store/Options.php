@@ -6,8 +6,8 @@
 namespace Magento\Store\Ui\Component\Listing\Column\Store;
 
 use Magento\Framework\Escaper;
-use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Store\Model\System\Store as SystemStore;
 
 /**
  * Class Options
@@ -94,6 +94,7 @@ class Options implements OptionSourceInterface
             }
         }
         $this->options = $currentOptions;
+
         return $this->options;
     }
 }

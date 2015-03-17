@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Component;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+
 /**
  * Class MassAction
  */
@@ -34,12 +36,13 @@ class MassAction extends AbstractComponent
         if (isset($config['actions'])) {
             array_walk_recursive(
                 $config,
-                function (&$item, $key, $object) {
+                function (&$item, $key, $context) {
+                    /** @var ContextInterface $context */
                     if ($key === 'url') {
-                        $item = $object->getUrl($item);
+                        $item = $context->getUrl($item);
                     }
                 },
-                $this
+                $this->getContext()
             );
             $this->setData('config', $config);
         }
