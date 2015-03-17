@@ -90,7 +90,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $path
@@ -105,7 +105,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     public function testLayoutFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $path
@@ -190,7 +190,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     public function testClassNamespaces()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Assert PHP classes have valid formal namespaces according to file locations
@@ -301,7 +301,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     public function testClassReferences()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
