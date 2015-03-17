@@ -72,7 +72,7 @@ class Factory
     {
         if (!isset($this->_rendererByElement[$elementClassName])) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                sprintf('No renderer registered for elements of class "%s"', $elementClassName)
+                __('No renderer registered for elements of class "%1"', $elementClassName)
             );
         }
         $rendererClass = $this->_rendererByElement[$elementClassName];

@@ -44,7 +44,7 @@ class ContentValidator
     public function isValid(SampleContentInterface $sampleContent)
     {
         if (!is_int($sampleContent->getSortOrder()) || $sampleContent->getSortOrder() < 0) {
-            throw new InputException('Sort order must be a positive integer.');
+            throw new InputException(__('Sort order must be a positive integer.'));
         }
 
         $this->validateSampleResource($sampleContent);
@@ -64,13 +64,13 @@ class ContentValidator
         if ($sampleContent->getSampleType() == 'file'
             && (!$sampleFile || !$this->fileContentValidator->isValid($sampleFile))
         ) {
-            throw new InputException('Provided file content must be valid base64 encoded data.');
+            throw new InputException(__('Provided file content must be valid base64 encoded data.'));
         }
 
         if ($sampleContent->getSampleType() == 'url'
             && !$this->urlValidator->isValid($sampleContent->getSampleUrl())
         ) {
-            throw new InputException('Sample URL must have valid format.');
+            throw new InputException(__('Sample URL must have valid format.'));
         }
     }
 }

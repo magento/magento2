@@ -53,7 +53,7 @@ class OptionManagement implements \Magento\Catalog\Api\ProductAttributeOptionMan
     public function delete($attributeCode, $optionId)
     {
         if (empty($optionId)) {
-            throw new InputException(sprintf('Invalid option id %s', $optionId));
+            throw new InputException(__('Invalid option id %1', $optionId));
         }
 
         return $this->eavOptionManagement->delete(

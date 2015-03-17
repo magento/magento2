@@ -15,6 +15,7 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements ShipmentItemInterface
 {
@@ -158,7 +159,9 @@ class Item extends AbstractExtensibleModel implements ShipmentItemInterface
         if ($qty <= $this->getOrderItem()->getQtyToShip() || $this->getOrderItem()->isDummy(true)) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid qty to ship for item "%1".', $this->getName()));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid qty to ship for item "%1".', $this->getName())
+            );
         }
         return $this;
     }

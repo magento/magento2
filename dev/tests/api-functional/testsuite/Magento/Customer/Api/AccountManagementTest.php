@@ -147,8 +147,10 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
                 $expectedException->addError(
-                    InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => 'email', 'value' => $invalidEmail]
+                    __(
+                        InputException::INVALID_FIELD_VALUE,
+                        ['fieldName' => 'email', 'value' => $invalidEmail]
+                    )
                 );
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
