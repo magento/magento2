@@ -117,18 +117,17 @@ define([
          */
         _applyQtyFix: function applyQtyFix() {
             var config = this.options.optionConfig;
-            if (!config.isFixedPrice) {
-                return; // Fix touches only Bundle with Fixed price.
-            }
-            _.each(config.options, function (option) {
-                _.each(option.selections, function (item) {
-                    if (item.qty && item.qty !== 1) {
-                        _.each(item.prices, function (price) {
-                            price.amount = price.amount / item.qty;
-                        });
-                    }
+            if (config.isFixedPrice) {
+                _.each(config.options, function (option) {
+                    _.each(option.selections, function (item) {
+                        if (item.qty && item.qty !== 1) {
+                            _.each(item.prices, function (price) {
+                                price.amount = price.amount / item.qty;
+                            });
+                        }
+                    });
                 });
-            });
+            }
         },
 
         /**
