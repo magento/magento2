@@ -158,13 +158,14 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $serviceBackendModelDataInterfaceMapData = [
             'ServiceA' => ['BackedA' => 'ServiceDataInterfaceA'],
-            'ServiceB' => ['BackedB' => 'ServiceDataInterfaceB'],
-            'ServiceC' => ['BackedC' => 'ServiceDataInterfaceC']
+            'ServiceB' => ['BackedB' => 'ServiceDataInterfaceB', 'BackedC' => 'ServiceDataInterfaceC'],
+            'ServiceC' => ['BackedD' => 'ServiceDataInterfaceD']
         ];
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
-            $this->attributeRepository, [], $serviceBackendModelDataInterfaceMapData);
+            $this->attributeRepository, [], $serviceBackendModelDataInterfaceMapData
+        );
         $this->assertEquals(
-            ['ServiceDataInterfaceA', 'ServiceDataInterfaceB', 'ServiceDataInterfaceC'],
+            ['ServiceDataInterfaceA', 'ServiceDataInterfaceB', 'ServiceDataInterfaceC', 'ServiceDataInterfaceD'],
             $this->eavCustomAttributeTypeLocator->getAllServiceDataInterfaces()
         );
     }

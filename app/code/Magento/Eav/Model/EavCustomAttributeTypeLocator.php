@@ -80,7 +80,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
             return [];
         } else {
             foreach ($this->serviceBackendModelDataInterfaceMap as $serviceArray) {
-                foreach ($serviceArray as $backendModel => $dataInterface) {
+                foreach ($serviceArray as $dataInterface) {
                     $dataInterfaceArray[] = $dataInterface;
                 }
             }
