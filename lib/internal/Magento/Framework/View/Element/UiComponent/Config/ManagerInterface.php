@@ -18,11 +18,6 @@ interface ManagerInterface
     const SEARCH_PATTERN = '%s.xml';
 
     /**
-     * The name of the root node UI components
-     */
-    const UI_COMPONENTS_ROOT_NODE = 'ui_components';
-
-    /**
      * The anonymous template name
      */
     const ANONYMOUS_TEMPLATE = 'anonymous_%s_component_%d';
