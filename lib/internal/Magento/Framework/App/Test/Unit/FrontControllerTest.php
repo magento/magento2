@@ -38,7 +38,8 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->router = $this->getMock('Magento\Framework\App\RouterInterface');
         $this->routerList = $this->getMock('Magento\Framework\App\RouterList', [], [], '', false);
-        $this->model = new \Magento\Framework\App\FrontController($this->routerList);
+        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+            ->getObject('Magento\Framework\App\FrontController', ['routerList' => $this->routerList]);
     }
 
     /**

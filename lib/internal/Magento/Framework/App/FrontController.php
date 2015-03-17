@@ -15,11 +15,40 @@ class FrontController implements FrontControllerInterface
     protected $_routerList;
 
     /**
-     * @param RouterList $routerList
+     * Application state
+     *
+     * @var State
      */
-    public function __construct(RouterList $routerList)
-    {
+    protected $appState;
+
+    /**
+     * Message manager
+     *
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @param RouterList $routerList
+     * @param State $appState
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        RouterList $routerList,
+        State $appState,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Psr\Log\LoggerInterface $logger
+    ) {
         $this->_routerList = $routerList;
+        $this->appState = $appState;
+        $this->messageManager = $messageManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -50,6 +79,16 @@ class FrontController implements FrontControllerInterface
                     $request->setActionName('noroute');
                     $request->setDispatched(false);
                     break;
+                } catch (\Magento\Framework\LocalizedException $e) {
+                    $result = $this->handleException($e, $actionInstance, $e->getMessage());
+                    break;
+                } catch (\Exception $e) {
+                    // @todo Message should be clarified
+                    $message = $this->appState->getMode() == State::MODE_DEVELOPER
+                        ? $e->getMessage()
+                        : (string)__('An error occurred while processing your request');
+                    $result = $this->handleException($e, $actionInstance, $message);
+                    break;
                 }
             }
         }
@@ -58,5 +97,20 @@ class FrontController implements FrontControllerInterface
             throw new \LogicException('Front controller reached 100 router match iterations');
         }
         return $result;
+    }
+
+    /**
+     * Handle exception
+     *
+     * @param \Exception $e
+     * @param \Magento\Framework\App\ActionInterface $actionInstance
+     * @param string $message
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    protected function handleException($e, $actionInstance, $message)
+    {
+        $this->messageManager->addError($message);
+        $this->logger->critical($e->getMessage());
+        return $actionInstance->getDefaultRedirect();
     }
 }
