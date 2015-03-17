@@ -7,7 +7,9 @@ namespace Magento\Theme\Block\Html;
 
 use Magento\Framework\View\Block\IdentityInterface;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\Registry;
+use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\Data\Tree\NodeFactory;
 
 /**
  * Html page top menu block
@@ -36,27 +38,25 @@ class Topmenu extends Template implements IdentityInterface
     protected $registry;
 
     /**
-     * @param Registry $registry
      * @param Template\Context $context
+     * @param NodeFactory $nodeFactory
+     * @param TreeFactory $treeFactory
      * @param array $data
      */
     public function __construct(
-        Registry $registry,
         Template\Context $context,
+        NodeFactory $nodeFactory,
+        TreeFactory $treeFactory,
         array $data = []
     ) {
-        $this->registry = $registry;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Init top menu tree structure
-     *
-     * @return void
-     */
-    public function _construct()
-    {
-        $this->_menu = new \Magento\Framework\Data\Tree\Node([], 'root', new \Magento\Framework\Data\Tree());
+        $this->_menu = $nodeFactory->create(
+            [
+                'data' => [],
+                'idField' => 'root',
+                'tree' => $treeFactory->create()
+            ]
+        );
     }
 
     /**
@@ -288,18 +288,14 @@ class Topmenu extends Template implements IdentityInterface
         $classes[] = 'level' . $item->getLevel();
         $classes[] = $item->getPositionClass();
 
-        $currentCategoryName = $this->registry->registry('current_category')->getName();
-
         if ($item->getIsFirst()) {
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive() && $currentCategoryName != $item->getName()) {
-            $classes[] = 'has-active';
-        }
-
-        if ($currentCategoryName == $item->getName()) {
+        if ($item->getIsActive()) {
             $classes[] = 'active';
+        } elseif ($item->getHasActive()) {
+            $classes[] = 'has-active';
         }
 
         if ($item->getIsLast()) {
