@@ -351,6 +351,18 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
     }
 
     /**
+     * Get Validation Rules for Quantity field
+     *
+     * @return array
+     */
+    public function getQuantityValidators()
+    {
+        $validators = [];
+        $validators['required-number'] = true;
+        return $validators;
+    }
+
+    /**
      * Return identifiers for produced content
      *
      * @return array
