@@ -51,8 +51,8 @@ class Chain
 
     /**
      * @param LocalInterface $asset
-     * @param $origContent
-     * @param $origContentType
+     * @param string $origContent
+     * @param string $origContentType
      */
     public function __construct(
         LocalInterface $asset,
