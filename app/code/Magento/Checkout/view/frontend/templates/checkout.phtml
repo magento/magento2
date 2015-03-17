@@ -6,19 +6,13 @@
  * @license     {license_link}
  */
 ?>
-<div id="checkout">
+<div id="checkout" data-bind="scope:'checkout'">
     <h1>Checkout</h1>
+    <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
         {
             "#checkout": {
-                "Magento_Checkout/js/checkout": {
-                    "formKey": "<?php echo $this->getFormKey(); ?>",
-                    "baseUrl": "<?php echo $this->getBaseUrl();?>",
-                    "isLoggedIn": <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>,
-                    "layout": <?php echo $this->getJsLayout();?>,
-                    "customerData": <?php echo $this->getCustomerData();?>,
-                    "cartData": <?php echo $this->getCart();?>
-                }
+                "Magento_Ui/js/core/app": <?php echo $this->getJsLayout();?>
             }
         }
     </script>

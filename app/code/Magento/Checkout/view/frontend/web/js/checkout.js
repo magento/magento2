@@ -60,8 +60,7 @@ define(
             authentication.setFormKey(options.formKey);
             url.setBaseUrl(options.baseUrl);
             customer.setIsLoggedIn(options.isLoggedIn);
-            quote.setData(options.cartData);
-            return first.render($(element));
+            return first.render(element);
         }
     }
 );

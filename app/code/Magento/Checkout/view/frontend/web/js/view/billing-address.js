@@ -8,13 +8,20 @@
 /*global alert*/
 define(
     [
+        'Magento_Ui/js/form/component'
+        /*
         'underscore',
         'text!./templates/billing-address.html',
         '../model/quote',
         'Magento_Checkout/js/action/select-billing-address',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer' */
     ],
+    function (Component) {
+    /*
     function(_, template, quote, selectBillingAddress, customer) {
+    function (Component) {
+/*
+    function(_, template, order, handlebars, selectBillingAddress, customer) {
         var root;
         var template = _.template(template);
         var object = {
@@ -55,5 +62,12 @@ define(
             }
         );
         return object;
+*/
+
+        return Component.extend({
+            defaults: {
+                template: 'Magento_Checkout/billing-address'
+            }
+        });
     }
 );

@@ -6,10 +6,12 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(['text!./templates/review.html'], function(template) {
-    return {
-        render: function (root) {
-            return root.append(template);
-        }
+define(['Magento_Ui/js/form/component'],
+    function (Component) {
+        return Component.extend({
+            defaults: {
+                template: 'Magento_Checkout/review'
+            }
+        });
     }
-});
+);

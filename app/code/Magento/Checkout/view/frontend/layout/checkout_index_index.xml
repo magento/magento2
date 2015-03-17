@@ -11,20 +11,23 @@
             <block class="Magento\Checkout\Block\Checkout" name="checkout.root" template="checkout.phtml"  cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
-                        <item name="components" xsi:type="array">
-                            <item name="root" xsi:type="array">
-                                <item name="component" xsi:type="string">mage/view/composite</item>
-                                <item name="children" xsi:type="array">
-                                    <item name="errors" xsi:type="array"><item name="component" xsi:type="string">Magento_Ui/js/view/errors</item></item>
-                                    <item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>
-                                    <item name="accordion" xsi:type="array">
-                                        <item name="component" xsi:type="string">mage/view/composite</item>
-                                        <item name="children" xsi:type="array">
-                                            <item name="authentication" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item></item>
-                                            <item name="billingAddress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item></item>
-                                            <item name="shipping" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item></item>
-                                            <item name="payment" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item></item>
-                                            <item name="review" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review</item></item>
+                        <item name="renderer" xsi:type="array">
+                            <item name="types" xsi:type="array" />
+                            <item name="layout" xsi:type="array">
+                                <item name="checkout" xsi:type="array">
+                                    <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
+                                    <item name="children" xsi:type="array">
+                                        <item name="errors" xsi:type="array"><item name="component" xsi:type="string">Magento_Ui/js/view/errors</item></item>
+                                        <item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>
+                                        <item name="steps" xsi:type="array">
+                                            <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
+                                            <item name="children" xsi:type="array">
+                                                <item name="authentication" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item></item>
+                                                <item name="billingAddress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item></item>
+                                                <item name="shipping" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item></item>
+                                                <item name="payment" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item></item>
+                                                <item name="review" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review</item></item>
+                                            </item>
                                         </item>
                                     </item>
                                 </item>
