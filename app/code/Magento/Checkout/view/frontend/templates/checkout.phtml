@@ -15,7 +15,9 @@
                     "formKey": "<?php echo $this->getFormKey(); ?>",
                     "baseUrl": "<?php echo $this->getBaseUrl();?>",
                     "isLoggedIn": <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>,
-                    "layout": <?php echo $this->getJsLayout();?>
+                    "layout": <?php echo $this->getJsLayout();?>,
+                    "customerData": <?php echo $this->getCustomerData();?>,
+                    "cartData": <?php echo $this->getCart();?>
                 }
             }
         }

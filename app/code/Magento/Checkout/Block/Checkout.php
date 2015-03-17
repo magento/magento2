@@ -31,6 +31,11 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $jsLayout;
 
     /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface
+     */
+    protected $cartRepositoryInterface;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
@@ -43,6 +48,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Data\Form\FormKey $formKey
+     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface
      * @param array $data
      */
     public function __construct(
@@ -58,6 +64,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Framework\Data\Form\FormKey $formKey,
+        \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
         array $data = []
     ) {
         parent::__construct(
@@ -77,6 +84,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->formKey = $formKey;
         $this->_isScopePrivate = true;
         $this->jsLayout = is_array($data['jsLayout']) ? $data['jsLayout'] : [];
+        $this->cartRepositoryInterface = $cartRepositoryInterface;
     }
 
 
@@ -127,5 +135,26 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     public function getFormKey()
     {
         return $this->formKey->getFormKey();
+    }
+
+    /**
+     * Retrieve current customer data.
+     *
+     * @return string
+     */
+    public function getCustomerData()
+    {
+        return \Zend_Json::encode($this->_getCustomer()->__toArray());
+    }
+
+    /**
+     * Retrieve current active quote.
+     *
+     * @return string
+     */
+    public function getCart()
+    {
+        $quoteId = $this->getQuote()->getId();
+        return \Zend_Json::encode($this->cartRepositoryInterface->get($quoteId));
     }
 }
