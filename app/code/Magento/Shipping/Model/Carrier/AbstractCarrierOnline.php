@@ -607,4 +607,25 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             $cost
         );
     }
+
+    /**
+     * Parse XML string and return XML document object or false
+     *
+     * @param string $xmlContent
+     * @return \Magento\Shipping\Model\Simplexml\Element|bool
+     * @throws \Exception
+     */
+    public function parseXml($xmlContent)
+    {
+        try {
+            try {
+                return simplexml_load_string($xmlContent);
+            } catch (\Exception $e) {
+                throw new \Exception(__('Failed to parse xml document: %1', $xmlContent));
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            return false;
+        }
+    }
 }

@@ -706,7 +706,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $priceArr = [];
 
         if (strlen(trim($response)) > 0) {
-            if ($xml = $this->_parseXml($response)) {
+            if ($xml = $this->parseXml($response)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
                     $errorTitle = (string)$xml->Error->Message;
                 } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
@@ -758,27 +758,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
         }
         return $result;
-    }
-
-    /**
-     * Parse XML string and return XML document object or false
-     *
-     * @param string $xmlContent
-     * @return \Magento\Shipping\Model\Simplexml\Element|bool
-     * @throws \Exception
-     */
-    protected function _parseXml($xmlContent)
-    {
-        try {
-            try {
-                return simplexml_load_string($xmlContent);
-            } catch (\Exception $e) {
-                throw new \Exception(__('Failed to parse xml document: %1', $xmlContent));
-            }
-        } catch (\Exception $e) {
-            $this->_logger->critical($e);
-            return false;
-        }
     }
 
     /**
