@@ -56,7 +56,7 @@ define([
 
             return this;
         },
-        
+
         reload: function () {
 
         }

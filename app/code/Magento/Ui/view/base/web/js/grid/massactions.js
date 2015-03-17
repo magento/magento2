@@ -34,7 +34,7 @@ define([
 
             imports: {
                 totalRecords: '<%= provider %>:data.totalRecords',
-                rows: '<%= provider %>:data.cms_grid.listing'
+                rows: '<%= provider %>:data.items'
             },
 
             listens: {
@@ -184,13 +184,17 @@ define([
 
         isSelectVisible: function (action) {
             var onPage = this.getIds().length,
+                selected = this.selected(),
                 total = this.totalRecords();
 
             switch (action) {
                 case 'selectPage':
                 case 'deselectPage':
                     return onPage < total;
-                    break;
+
+                case 'deselectAll':
+                case 'deselectPage':
+                    return !!selected.length;
 
                 default:
                     return true;
