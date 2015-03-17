@@ -22,7 +22,7 @@ define(
                 root = newRoot || root;
                 if (customer.isLoggedIn()) {
                     customer.getBillingAddressList().then(function(addressList) {
-                        root.html(template({addresses: addressList}));
+                        root.html(template({addresses: addressList.addresses}));
                         root.find('#billing-address-form').on('submit', function (e) {
                             e.preventDefault();
                             selectBillingAddress(

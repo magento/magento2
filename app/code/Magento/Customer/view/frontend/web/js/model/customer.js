@@ -16,7 +16,7 @@ define(['mage/storage'], function(storage) {
             isLoggedIn = flag;
         },
         getBillingAddressList: function () {
-            return storage.get('customer/address/billingList');
+            return storage.get('/rest/default/V1/customers/me');
         }
     }
 });
