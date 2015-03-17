@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Design\FileResolution\Fallback;
 
 use Magento\Framework\App\State;
+use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Template\Html\MinifierInterface;
 
@@ -26,17 +27,25 @@ class TemplateFile extends File
     protected $templateMinifier;
 
     /**
+     * @var ConfigInterface
+     */
+    protected $assetConfig;
+
+    /**
      * @param ResolverInterface $resolver
      * @param MinifierInterface $templateMinifier
      * @param State $appState
+     * @param ConfigInterface $assetConfig
      */
     public function __construct(
         ResolverInterface $resolver,
         MinifierInterface $templateMinifier,
-        State $appState
+        State $appState,
+        ConfigInterface $assetConfig
     ) {
         $this->appState = $appState;
         $this->templateMinifier = $templateMinifier;
+        $this->assetConfig = $assetConfig;
         parent::__construct($resolver);
     }
 
@@ -60,16 +69,18 @@ class TemplateFile extends File
     public function getFile($area, ThemeInterface $themeModel, $file, $module = null)
     {
         $template = parent::getFile($area, $themeModel, $file, $module);
-        switch ($this->appState->getMode()) {
-            case State::MODE_PRODUCTION:
-                return $this->templateMinifier->getPathToMinified($template);
-                break;
-            case State::MODE_DEFAULT:
-                return $this->templateMinifier->getMinified($template);
-                break;
-            case State::MODE_DEVELOPER:
-                return $template;
-                break;
+
+        if ($template && $this->assetConfig->isMinifyHtml()) {
+            switch ($this->appState->getMode()) {
+                case State::MODE_PRODUCTION:
+                    return $this->templateMinifier->getPathToMinified($template);
+                case State::MODE_DEFAULT:
+                    return $this->templateMinifier->getMinified($template);
+                case State::MODE_DEVELOPER:
+                default:
+                    return $template;
+            }
         }
+        return $template;
     }
 }

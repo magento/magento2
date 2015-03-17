@@ -141,8 +141,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->will($this->throwException(
                     new NoSuchEntityException(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-                        ['fieldName' => 'customerId', 'value' => 'value']
+                        __(
+                            NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                            ['fieldName' => 'customerId', 'value' => 'value']
+                        )
                     )
                 )
             );

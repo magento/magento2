@@ -11,7 +11,7 @@ class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variab
     /**
      * WYSIWYG Plugin Action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -22,7 +22,7 @@ class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variab
         )->toOptionArray(
             true
         );
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([$storeContactVariabls, $customVariables]);
     }

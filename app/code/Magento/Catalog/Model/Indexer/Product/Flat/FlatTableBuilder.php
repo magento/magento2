@@ -113,9 +113,9 @@ class FlatTableBuilder
         if ($maxIndex && count($indexesNeed) > $maxIndex) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    "The Flat Catalog module has a limit of %2\$d filterable and/or sortable attributes." .
-                    "Currently there are %1\$d of them." .
-                    "Please reduce the number of filterable/sortable attributes in order to use this module",
+                    'The Flat Catalog module has a limit of %2$d filterable and/or sortable attributes.'
+                    . 'Currently there are %1$d of them.'
+                    . 'Please reduce the number of filterable/sortable attributes in order to use this module',
                     count($indexesNeed),
                     $maxIndex
                 )

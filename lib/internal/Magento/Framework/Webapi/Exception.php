@@ -67,7 +67,7 @@ class Exception extends \RuntimeException
     /**
      * List of errors
      *
-     * @var null|ErrorMessage[]
+     * @var null|\Magento\Framework\Exception\LocalizedException[]
      */
     protected $_errors;
 
@@ -79,7 +79,7 @@ class Exception extends \RuntimeException
      * @param int $httpCode
      * @param array $details Additional exception details
      * @param string $name Exception name
-     * @param ErrorMessage[]|null $errors Array of errors messages
+     * @param \Magento\Framework\Exception\LocalizedException[]|null $errors Array of errors messages
      * @param string $stackTrace
      *
      * @throws \InvalidArgumentException
@@ -148,7 +148,7 @@ class Exception extends \RuntimeException
     /**
      * Retrieve list of errors.
      *
-     * @return null|ErrorMessage[]
+     * @return null|\Magento\Framework\Exception\LocalizedException[]
      */
     public function getErrors()
     {

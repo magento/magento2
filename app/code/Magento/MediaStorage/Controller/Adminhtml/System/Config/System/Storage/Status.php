@@ -9,17 +9,17 @@ namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\System\Storage
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -28,7 +28,7 @@ class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\Sy
     /**
      * Retrieve synchronize process state and it's parameters in json format
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -111,7 +111,7 @@ class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\Sy
             $state = \Magento\MediaStorage\Model\File\Storage\Flag::STATE_INACTIVE;
         }
         $result['state'] = $state;
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($result);
     }

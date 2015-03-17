@@ -97,7 +97,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         try {
             $this->productRepository->save($product, true);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save product option');
+            throw new CouldNotSaveException(__('Could not save product option'));
         }
 
         $product = $this->productRepository->get($sku, true);
@@ -106,7 +106,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
             $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
             if (empty($newID)) {
-                throw new CouldNotSaveException('Could not save product option');
+                throw new CouldNotSaveException(__('Could not save product option'));
             }
             $newID = current($newID);
         } else {
@@ -134,7 +134,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 $this->productRepository->save($product);
             }
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not remove custom option');
+            throw new CouldNotSaveException(__('Could not remove custom option'));
         }
         return true;
     }
