@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Model\Order\Invoice;
+namespace Magento\Sales\Test\Unit\Model\Order\Invoice;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
 {

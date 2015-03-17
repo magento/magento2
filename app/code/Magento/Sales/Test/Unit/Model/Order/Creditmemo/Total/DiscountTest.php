@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Model\Order\Creditmemo\Total;
+namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 /**
  * Class DiscountTest

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Model\Order\Grid\Row;
+namespace Magento\Sales\Test\Unit\Model\Order\Grid\Row;
 
 class UrlGeneratorTest extends  \PHPUnit_Framework_TestCase
 {
