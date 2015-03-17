@@ -49,7 +49,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Validator\ValidatorException
+     * @expectedException \Magento\Framework\Validator\Exception
      * @return void
      */
     public function testRunValidationException()

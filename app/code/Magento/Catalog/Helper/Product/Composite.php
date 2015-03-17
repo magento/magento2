@@ -145,7 +145,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     {
         try {
             if (!$configureResult->getOk()) {
-                throw new \Magento\Framework\Exception\LocalizedException($configureResult->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(__($configureResult->getMessage()));
             }
 
             $currentStoreId = (int)$configureResult->getCurrentStoreId();

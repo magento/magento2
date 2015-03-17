@@ -19,7 +19,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -28,14 +28,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;

@@ -321,7 +321,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     {
         if (!$this->_validator->validate($this)) {
             $messages = $this->_validator->getErrorMessages();
-            throw new \Magento\Framework\Exception\LocalizedException(implode(PHP_EOL, reset($messages)));
+            throw new \Magento\Framework\Exception\LocalizedException(__(implode(PHP_EOL, reset($messages))));
         }
         return $this;
     }
