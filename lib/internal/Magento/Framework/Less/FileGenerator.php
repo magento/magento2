@@ -8,9 +8,10 @@ namespace Magento\Framework\Less;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\SourceFileGeneratorInterface;
 
-class FileGenerator
+class FileGenerator implements SourceFileGeneratorInterface
 {
     /**
      * Temporary directory prefix
@@ -43,6 +44,11 @@ class FileGenerator
     private $assetRepo;
 
     /**
+     * @var \Magento\Framework\View\Asset\Source
+     */
+    private $assetSource;
+
+    /**
      * @var \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport
      */
     private $magentoImportProcessor;
@@ -53,34 +59,47 @@ class FileGenerator
     private $importProcessor;
 
     /**
+     * @var \Magento\Framework\App\View\Asset\Publisher
+     */
+    private $publisher;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor
      * @param \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
+     * @param \Magento\Framework\View\Asset\Source $assetSource
+     * @param \Magento\Framework\App\View\Asset\Publisher $publisher
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor,
-        \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
+        \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor,
+        \Magento\Framework\View\Asset\Source $assetSource,
+        \Magento\Framework\App\View\Asset\Publisher $publisher
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->lessDirectory = DirectoryList::TMP_MATERIALIZATION_DIR . '/' . self::TMP_LESS_DIR;
         $this->assetRepo = $assetRepo;
+        $this->assetSource = $assetSource;
+
         $this->magentoImportProcessor = $magentoImportProcessor;
         $this->importProcessor = $importProcessor;
+        $this->publisher = $publisher;
     }
 
     /**
      * Create a tree of self-sustainable files and return the topmost LESS file, ready for passing to 3rd party library
      *
-     * @param \Magento\Framework\View\Asset\PreProcessor\Chain $chain
+     * @param Chain $chain
      * @return string Absolute path of generated LESS file
      */
-    public function generateLessFileTree(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
+    public function generateFileTree(Chain $chain)
     {
         /**
-         * @bug This logic is duplicated at \Magento\Framework\View\Asset\PreProcessor\Pool::process()
+         * @bug This logic is duplicated at \Magento\Framework\View\Asset\PreProcessor\Pool
          * If you need to extend or modify behavior of LESS preprocessing, you must account for both places
          */
 
@@ -98,6 +117,9 @@ class FileGenerator
         $this->generateRelatedFiles();
         $lessRelativePath = preg_replace('#\.css$#', '.less', $chain->getAsset()->getPath());
         $tmpFilePath = $this->createFile($lessRelativePath, $chain->getContent());
+
+        $this->createFileMain($lessRelativePath, $chain->getContent());
+
         $this->tmpDirectory->delete($lockFilePath);
         return $tmpFilePath;
     }
@@ -148,7 +170,11 @@ class FileGenerator
     protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
     {
         $relatedAsset = $this->assetRepo->createRelated($relatedFileId, $asset);
+        $relatedAsset->getFilePath();
+
         $this->createFile($relatedAsset->getPath(), $relatedAsset->getContent());
+        $relatedAsset->getSourceFile();
+        $this->publisher->publish($relatedAsset);
     }
 
     /**
@@ -158,7 +184,7 @@ class FileGenerator
      * @param string $contents
      * @return string
      */
-    protected function createFile($relativePath, $contents)
+    private function createFile($relativePath, $contents)
     {
         $filePath = $this->lessDirectory . '/' . $relativePath;
 
@@ -166,5 +192,19 @@ class FileGenerator
             $this->tmpDirectory->writeFile($filePath, $contents);
         }
         return $this->tmpDirectory->getAbsolutePath($filePath);
+    }
+
+    /**
+     * @param string $relativePath
+     * @param string $contents
+     *
+     * @return void
+     */
+    private function createFileMain($relativePath, $contents)
+    {
+        $filePath = '/static/' . $relativePath;
+        $contents .= '@urls-resolved: true;' . PHP_EOL . PHP_EOL;
+        $this->pubDirectory->writeFile($filePath, $contents);
+        return;
     }
 }

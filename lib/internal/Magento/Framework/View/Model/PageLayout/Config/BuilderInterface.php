@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\View\Model\PageLayout\Config;
 
-use Magento\Framework\View\LayoutInterface;
-
 /**
  * Interface BuilderInterface
  */

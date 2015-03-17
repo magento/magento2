@@ -11,7 +11,6 @@ namespace Magento\Framework\Interception;
  */
 abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -21,6 +20,26 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $applicationObjectManager;
+
+    public function setUp()
+    {
+        if (!$this->_objectManager) {
+            return;
+        }
+
+        $this->applicationObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        \Magento\Framework\App\ObjectManager::setInstance($this->_objectManager);
+    }
+
+    public function tearDown()
+    {
+        \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
+    }
 
     public function setUpInterceptionConfig($pluginConfig)
     {
@@ -68,6 +87,7 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             $sharedInstances
         );
         $factory->setObjectManager($this->_objectManager);
+
         $config->setInterceptionConfig($interceptionConfig);
         $config->extend(
             [
