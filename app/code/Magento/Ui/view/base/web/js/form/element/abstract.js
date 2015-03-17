@@ -4,8 +4,8 @@
  */
 define([
     'underscore',
-    'mage/utils',
-    'Magento_Ui/js/lib/component/component',
+    'mageUtils',
+    'uiComponent',
     'Magento_Ui/js/lib/validation/validator'
 ], function (_, utils, Component, validator) {
     'use strict';
@@ -32,7 +32,7 @@ define([
             },
 
             links: {
-                value: '<%= provider %>:data.<%= dataScope %>'
+                value: '<%= provider %>:<%= dataScope %>'
             },
 
             exports: {

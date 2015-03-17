@@ -1,6 +1,6 @@
 define([
     'ko',
-    'Magento_Ui/js/lib/component/component'
+    'uiComponent'
 ], function (ko, Component) {
     'use strict';
 
@@ -21,19 +21,27 @@ define([
             current: 1,
 
             imports: {
-                pages: '<%= provider %>:data.pages',
                 totalSelected: '<%= provider %>:params.totalSelected',
                 totalRecords: '<%= provider %>:data.totalRecords'
             },
 
             exports: {
                 pageSize: '<%= provider %>:data.paging.pageSize',
-                current: '<%= provider %>:data.paging.current'
+                current: '<%= provider %>:data.paging.current',
+                pages: '<%= provider %>:data.pages'
             },
 
             listens: {
-                'pageSize current': 'reload'
+                'pageSize current': 'reload',
+                'pageSize totalRecords': 'countPages'
             }
+        },
+
+        initialize: function () {
+            this._super()
+                .countPages();
+
+            return this;
         },
 
         initObservable: function () {
@@ -107,6 +115,12 @@ define([
 
         reload: function () {
             this.source.reload();
+        },
+
+        countPages: function () {
+            var pages = Math.ceil(this.totalRecords() / this.pageSize());
+
+            this.pages(pages);
         },
 
         /**

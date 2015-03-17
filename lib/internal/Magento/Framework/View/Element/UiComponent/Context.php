@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
+use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Ui\Component\Control\ActionPoolFactory;
 use Magento\Ui\Component\Control\ActionPoolInterface;
@@ -82,11 +83,19 @@ class Context implements ContextInterface
     protected $componentsDefinitions = [];
 
     /**
+     * Url Builder
+     *
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
      * @param ButtonProviderFactory $buttonProviderFactory
      * @param ActionPoolFactory $actionPoolFactory
      * @param ContentTypeFactory $contentTypeFactory
+     * @param UrlInterface $urlBuilder
      * @param DataProviderInterface|null $dataProvider
      * @param string $namespace
      */
@@ -96,6 +105,7 @@ class Context implements ContextInterface
         ButtonProviderFactory $buttonProviderFactory,
         ActionPoolFactory $actionPoolFactory,
         ContentTypeFactory $contentTypeFactory,
+        UrlInterface $urlBuilder,
         DataProviderInterface $dataProvider = null,
         $namespace = null
     ) {
@@ -104,12 +114,9 @@ class Context implements ContextInterface
         $this->buttonProviderFactory = $buttonProviderFactory;
         $this->dataProvider = $dataProvider;
         $this->pageLayout = $pageLayout;
-        $this->actionPool = $actionPoolFactory->create(
-            [
-                'context' => $this
-            ]
-        );
+        $this->actionPool = $actionPoolFactory->create(['context' => $this]);
         $this->contentTypeFactory = $contentTypeFactory;
+        $this->urlBuilder = $urlBuilder;
 
         $this->setAcceptType();
     }
@@ -281,5 +288,17 @@ class Context implements ContextInterface
     public function setDataProvider(DataProviderInterface $dataProvider)
     {
         $this->dataProvider = $dataProvider;
+    }
+
+    /**
+     * Generate url by route and parameters
+     *
+     * @param   string $route
+     * @param   array $params
+     * @return  string
+     */
+    public function getUrl($route = '', $params = [])
+    {
+        return $this->urlBuilder->getUrl($route, $params);
     }
 }

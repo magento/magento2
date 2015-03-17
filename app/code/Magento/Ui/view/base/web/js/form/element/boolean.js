@@ -4,7 +4,7 @@
  */
 define([
     './abstract',
-    'mage/utils'
+    'mageUtils'
 ], function (Abstract, utils) {
     'use strict';
 

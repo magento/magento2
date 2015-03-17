@@ -94,4 +94,11 @@ interface DataProviderInterface
      * @return void
      */
     public function removeAllFields();
+
+    /**
+     * Retrieve count of loaded items
+     *
+     * @return int
+     */
+    public function count();
 }

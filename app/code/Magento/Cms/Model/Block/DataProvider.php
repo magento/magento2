@@ -166,4 +166,14 @@ class DataProvider implements DataProviderInterface
     {
         $this->collection->removeAllFieldsFromSelect();
     }
+
+    /**
+     * Retrieve count of loaded items
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->collection->count();
+    }
 }

@@ -4,7 +4,7 @@
  */
 define([
     'underscore',
-    'mage/utils',
+    'mageUtils',
     'Magento_Ui/js/lib/class',
     'Magento_Ui/js/lib/events'
 ], function (_, utils, Class, EventsBus) {
@@ -35,16 +35,18 @@ define([
          * @return {Object} reference to instance
          */
         set: function (path, value) {
-            var result = this._override.apply(this, arguments);
+            var data = utils.nested(this.data, path),
+                diffs = utils.compare(data, value, path);
 
-            value = result.value;
-            path = result.path;
+            utils.nested(this.data, path, value);
 
-            this.trigger('update', value);
+            diffs.changes.forEach(function (change) {
+                this.trigger(change.name, change.value, change);
+            }, this);
 
-            if (path) {
-                this.trigger('update:' + path, value);
-            }
+            _.each(diffs.containers, function (changes, name) {
+                this.trigger(name, changes);
+            }, this);
 
             return this;
         },
@@ -53,28 +55,6 @@ define([
             utils.nestedRemove(this.data, path);
 
             return this;
-        },
-
-        /**
-         * Assignes props to this.data based on incoming params
-         * @param  {String|*} path
-         * @param  {*} value
-         * @return {Object}
-         */
-        _override: function (path, value) {
-            if (arguments.length > 1) {
-                utils.nested(this.data, path, value);
-            } else {
-                value = path;
-                path = false;
-
-                this.data = value;
-            }
-
-            return {
-                path: path,
-                value: value
-            };
         },
 
         reload: function () {

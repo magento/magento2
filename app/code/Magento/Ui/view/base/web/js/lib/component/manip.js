@@ -1,6 +1,6 @@
 define([
     'underscore',
-    'mage/utils',
+    'mageUtils',
     'Magento_Ui/js/lib/registry/registry'
 ], function (_, utils, registry) {
     'use strict';

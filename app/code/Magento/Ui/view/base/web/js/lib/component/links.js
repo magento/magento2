@@ -1,7 +1,7 @@
 define([
     'ko',
     'underscore',
-    'mage/utils',
+    'mageUtils',
     'Magento_Ui/js/lib/registry/registry'
 ], function (ko, _, utils, registry) {
     'use strict';
@@ -26,7 +26,7 @@ define([
     }
 
     function imports(owner, target, ownerProp, targetProp, auto) {
-        var from = update.bind(null, owner, ownerProp),
+        var callback = update.bind(null, owner, ownerProp),
             value;
 
         value = target.get ?
@@ -34,14 +34,14 @@ define([
             utils.nested(target, targetProp);
 
         if (ko.isObservable(value)) {
-            value.subscribe(from);
+            value.subscribe(callback);
             value = value();
         } else if (target.on) {
-            target.on('update:' + targetProp, from);
+            target.on(targetProp, callback);
         }
 
         if (auto) {
-            from(value);
+            callback(value);
         }
     }
 

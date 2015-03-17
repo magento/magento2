@@ -1,1 +1,22 @@
-define([    'Magento_Ui/js/lib/component/component'], function (Component) {    'use strict';    return Component.extend({        defaults: {            template: 'ui/grid/listing',            rows: [],            imports: {                rows: '<%= provider %>:data.items'            }        },        getColspan: function () {            return this.elems().length;        },        hasData: function () {            return !!this.rows().length;        }    });});
+define([
+    'uiComponent'
+], function (Component) {
+    'use strict';
+
+    return Component.extend({
+        defaults: {
+            template: 'ui/grid/listing',
+            imports: {
+                rows: '<%= provider %>:data.items'
+            }
+        },
+
+        getColspan: function () {
+            return this.elems().length;
+        },
+
+        hasData: function () {
+            return !!this.rows().length;
+        }
+    });
+});

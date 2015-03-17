@@ -4,9 +4,8 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/lib/component/component',
-    'mage/utils'
-], function (_, Component, utils) {
+    'uiComponent'
+], function (_, Component) {
     'use strict';
 
     function extractData(container, field, orig) {
@@ -39,8 +38,6 @@ define([
         /**
          * Extends this with defaults and config.
          * Then calls initObservable, iniListenes and extractData methods.
-         *
-         * @param  {Object} config
          */
         initialize: function () {
             _.bindAll(this, 'toggle');
@@ -64,7 +61,7 @@ define([
         /**
          * Assignes onUpdate callback to update event of incoming element.
          * Calls extractData method.
-         * @param  {Object} element
+         * @param  {Object} elem
          * @return {Object} - reference to instance
          */
         initElement: function (elem) {
