@@ -41,7 +41,7 @@ class ObjectManagerFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Magento\Framework\App\Test\Unit\FactoryStub::__construct
+     * @expectedExceptionMessage Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct
      */
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
