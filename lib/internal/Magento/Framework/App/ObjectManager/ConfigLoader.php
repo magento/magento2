@@ -7,7 +7,9 @@
  */
 namespace Magento\Framework\App\ObjectManager;
 
-class ConfigLoader
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+
+class ConfigLoader implements ConfigLoaderInterface
 {
     /**
      * Config reader
@@ -56,10 +58,7 @@ class ConfigLoader
     }
 
     /**
-     * Load modules DI configuration
-     *
-     * @param string $area
-     * @return array
+     * {inheritdoc}
      */
     public function load($area)
     {
