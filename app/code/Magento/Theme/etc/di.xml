@@ -76,4 +76,7 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\View\Model\PageLayout\Config\BuilderInterface" type="Magento\Theme\Model\PageLayout\Config\Builder"/>
+    <type name="Magento\Framework\View\Element\Html\Link\Current">
+        <plugin name="saleOrderViewMenu" type="Magento\Framework\View\Plugin\Element\Html\Link\Current"/>
+    </type>
 </config>
