@@ -12,7 +12,7 @@
     <type name="Magento\Store\Model\Resource\Group">
         <plugin name="group_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\Group"/>
     </type>
-    <type name="Magento\Catalog\Model\Category">
+    <type name="\Magento\Catalog\Model\CategoryRepository">
         <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
     </type>
     <type name="Magento\CatalogImportExport\Model\Import\Product">
