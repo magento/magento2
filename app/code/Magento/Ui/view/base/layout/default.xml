@@ -8,11 +8,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="footer">
-            <block class="Magento\Ui\Context\DataProvider" name="ui.global.config" after="-">
-                <arguments>
-                    <argument name="content_template" xsi:type="string">Magento_Ui::context/default.phtml</argument>
-                </arguments>
-            </block>
+            <!--<block class="Magento\Ui\Context\PageDataProvider" name="ui.global.config" after="-">-->
+                <!--<arguments>-->
+                    <!--<argument name="content_template" xsi:type="string">Magento_Ui::context/default.phtml</argument>-->
+                <!--</arguments>-->
+            <!--</block>-->
         </referenceContainer>
     </body>
 </page>

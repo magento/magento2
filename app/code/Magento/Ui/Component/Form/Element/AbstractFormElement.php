@@ -5,12 +5,12 @@
  */
 namespace Magento\Ui\Component\Form\Element;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class AbstractFormElement
  */
-abstract class AbstractFormElement extends AbstractView implements ElementInterface
+abstract class AbstractFormElement extends AbstractComponent implements ElementInterface
 {
     /**
      * @return string

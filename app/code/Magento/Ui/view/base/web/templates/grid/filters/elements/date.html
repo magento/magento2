@@ -1,0 +1,17 @@
+<div class="field">
+    <label class="label" data-bind="attr: {for: uid}">
+        <span data-bind="text: label"></span>
+    </label>
+    <div class="control">
+        <input class="control-text" type="text" data-bind="
+            hasFocus: focused,
+            datepicker: { storage: value, options: options },
+            attr: {
+                value: value,
+                name: inputName,
+                placeholder: placeholder,
+                'aria-describedby': noticeId,
+                disabled: disabled
+            }" />
+    </div>
+</div>

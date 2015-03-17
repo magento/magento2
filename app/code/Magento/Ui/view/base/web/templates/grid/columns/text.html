@@ -1,0 +1,9 @@
+<th>
+    <!-- ko if: sortable -->
+        <a href="#" data-bind="text: label, css: sortClass, click: sort"></a>
+    <!-- /ko -->
+
+    <!-- ko ifnot: sortable -->
+        <span data-bind="text: label"></span>
+    <!-- /ko -->
+</th>

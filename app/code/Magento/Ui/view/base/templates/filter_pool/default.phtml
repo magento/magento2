@@ -7,13 +7,7 @@
  * @var \Magento\Ui\Component\FilterPool $block
  */
 ?>
-<script type="text/x-magento-init">
-    {
-        "*": {
-            "Magento_Ui/js/listing/filter": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
-        }
-    }
-</script>
+<script data-mage-init='{"Magento_Ui/js/listing/filter": ""}' type="application/json"></script>
 <div data-bind="scope: '<?php echo $block->getParentName(); ?>:<?php echo $block->getName(); ?>'">
     <!-- ko template: 'ui/filter' --><!-- /ko -->
 </div>

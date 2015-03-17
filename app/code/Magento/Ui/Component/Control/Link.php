@@ -5,12 +5,22 @@
  */
 namespace Magento\Ui\Component\Control;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Link
  */
-class Link extends AbstractView implements ControlInterface
+class Link extends AbstractComponent
 {
-    //
+    const NAME = 'link';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 }

@@ -14,10 +14,9 @@
         </arguments>
         <container label="Listing Head" name="listing_head"/>
         <container label="Listing Before" name="listing_before">
-            <ui_component name="sorting" component="component_sorting" />
-            <ui_component name="paging" component="component_paging" />
-            <ui_component name="filters" component="component_filter_pool" />
-            <ui_component name="massactions" component="component_control_massaction" />
+            <!--<ui_component name="sorting" component="component_sorting" />-->
+            <!--<ui_component name="paging" component="component_paging" />-->
+            <!--<ui_component name="massactions" component="component_control_massaction" />-->
         </container>
     </block>
     <block class="Magento\Ui\Component\Paging" name="component_paging">

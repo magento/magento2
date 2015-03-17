@@ -4,45 +4,45 @@
  */
 define([
     'underscore',
-    '../component',
+    'Magento_Ui/js/lib/component/component',
     'mage/utils'
-], function(_, Component, utils) {
+], function (_, Component, utils) {
     'use strict';
-    
-    function extractData(container, field){
+
+    function extractData(container, field, orig) {
         var data,
             value;
 
-        container.some(function(item){
+        container.some(function (item) {
             value = item[field];
 
-            if(_.isFunction(value)){
+            if (_.isFunction(value)) {
                 value = value();
             }
 
             return !item.hidden() && (data = value);
         });
 
-        return data || '';
+        return data || orig;
     }
 
     return Component.extend({
         defaults: {
-            hidden:         false,
-            label:          '',
-            required:       false,
-            template:       'ui/group/group',
-            fieldTemplate:  'ui/group/field',
-            breakLine:      true
+            hidden: false,
+            label: '',
+            required: false,
+            template: 'ui/group/group',
+            fieldTemplate: 'ui/group/field',
+            breakLine: true
         },
 
         /**
          * Extends this with defaults and config.
          * Then calls initObservable, iniListenes and extractData methods.
-         * 
+         *
          * @param  {Object} config
          */
-        initialize: function() {            
+        initialize: function () {
             _.bindAll(this, 'toggle');
 
             return this._super();
@@ -51,12 +51,12 @@ define([
         /**
          * Calls initObservable of parent class.
          * Defines observable properties of instance.
-         * 
+         *
          * @return {Object} - reference to instance
          */
-        initObservable: function(){
+        initObservable: function () {
             this._super()
-                .observe('hidden label required');
+                .observe('hidden required');
 
             return this;
         },
@@ -67,7 +67,7 @@ define([
          * @param  {Object} element
          * @return {Object} - reference to instance
          */
-        initElement: function(elem){
+        initElement: function (elem) {
             this._super();
 
             elem.on({
@@ -81,24 +81,23 @@ define([
 
         /**
          * Extracts label and required properties from child elements
-         * 
+         *
          * @return {Object} - reference to instance
          */
-        extractData: function(){
+        extractData: function () {
             var elems = this.elems();
 
-            this.label(extractData(elems, 'label'));
-            this.required(extractData(elems, 'required'));
+            this.required(extractData(elems, 'required', this.required()));
 
             return this;
         },
 
         /**
          * Sets incoming value to hidden observable, calls extractData method
-         * 
+         *
          * @param  {Boolean} value
          */
-        toggle: function(value){
+        toggle: function (value) {
             this.extractData()
                 .hidden(value);
         },

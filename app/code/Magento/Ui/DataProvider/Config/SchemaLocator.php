@@ -5,10 +5,13 @@
  */
 namespace Magento\Ui\DataProvider\Config;
 
+use Magento\Framework\Config\SchemaLocatorInterface;
+use Magento\Framework\Module\Dir\Reader as DirReader;
+
 /**
  * Class SchemaLocator
  */
-class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
+class SchemaLocator implements SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for both individual and merged configs
@@ -18,9 +21,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     private $_schema;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param DirReader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
+    public function __construct(DirReader $moduleReader)
     {
         $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Ui') . '/data_source.xsd';
     }

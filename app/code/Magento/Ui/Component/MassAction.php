@@ -8,30 +8,44 @@ namespace Magento\Ui\Component;
 /**
  * Class MassAction
  */
-class MassAction extends AbstractView
+class MassAction extends AbstractComponent
 {
+    const NAME = 'massaction';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
     /**
      * Prepare component data
      *
-     * @return $this|void
+     * @return void
      */
     public function prepare()
     {
-        $configData = $this->getDefaultConfiguration();
-        if ($this->hasData('config')) {
-            $configData = array_merge($configData, $this->getData('config'));
+        $this->prepareConfiguration();
+        $config = $this->getData('config');
+        if (isset($config['actions'])) {
+            array_walk_recursive(
+                $config,
+                function (&$item, $key, $object) {
+                    if ($key === 'url') {
+                        $item = $object->getUrl($item);
+                    }
+                },
+                $this
+            );
+            $this->setData('config', $config);
         }
-        array_walk_recursive(
-            $configData,
-            function (&$item, $key, $object) {
-                if ($key === 'url') {
-                    $item = $object->getUrl($item);
-                }
-            },
-            $this
-        );
 
-        $this->prepareConfiguration($configData);
+        $jsConfig = $this->getJsConfiguration($this);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
     /**

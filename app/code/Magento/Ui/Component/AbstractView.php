@@ -5,17 +5,16 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
-use Magento\Framework\View\Element\UiComponent\ConfigFactory;
-use Magento\Framework\View\Element\UiComponent\ConfigInterface;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\ContentType\ContentTypeFactory;
-use Magento\Ui\DataProvider\Factory as DataProviderFactory;
 use Magento\Ui\DataProvider\Manager;
+use Magento\Framework\View\Element\Template;
+use \Magento\Ui\Component\Control\ActionPoolInterface;
+use Magento\Ui\Component\Control\ButtonProviderFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Framework\View\Element\UiComponent\Context as RenderContext;
 
 /**
  * Abstract class AbstractView
@@ -25,32 +24,11 @@ use Magento\Ui\DataProvider\Manager;
 abstract class AbstractView extends Template implements UiComponentInterface
 {
     /**
-     * Config builder
-     *
-     * @var ConfigBuilderInterface
-     */
-    protected $configBuilder;
-
-    /**
-     * View configuration data
-     *
-     * @var ConfigInterface
-     */
-    protected $config;
-
-    /**
      * Render context
      *
-     * @var Context
+     * @var RenderContext
      */
     protected $renderContext;
-
-    /**
-     * Config factory
-     *
-     * @var ConfigFactory
-     */
-    protected $configFactory;
 
     /**
      * Content type factory
@@ -60,60 +38,61 @@ abstract class AbstractView extends Template implements UiComponentInterface
     protected $contentTypeFactory;
 
     /**
-     * Asset service
-     *
-     * @var Repository
-     */
-    protected $assetRepo;
-
-    /**
-     * Data provider factory
-     *
-     * @var DataProviderFactory
-     */
-    protected $dataProviderFactory;
-
-    /**
-     * @var \Magento\Ui\DataProvider\Manager
+     * @var Manager
      */
     protected $dataManager;
 
     /**
-     * Elements for the render
+     * Layouts for the render
      *
-     * @var ElementRendererInterface[]
+     * @var UiComponentInterface
      */
-    protected $elements = [];
+    protected $uiLayout;
+
+    /**
+     * @var \ArrayObject
+     */
+    protected $componentData;
+
+    /**
+     * @var ButtonProviderFactory
+     */
+    protected $buttonProviderFactory;
+
+    /**
+     * @var ActionPoolInterface
+     */
+    protected $actionPool;
 
     /**
      * Constructor
      *
      * @param TemplateContext $context
-     * @param Context $renderContext
+     * @param RenderContext $renderContext
      * @param ContentTypeFactory $contentTypeFactory
-     * @param ConfigFactory $configFactory
-     * @param ConfigBuilderInterface $configBuilder
-     * @param DataProviderFactory $dataProviderFactory
      * @param Manager $dataProviderManager
+     * @param ArrayObjectFactory $arrayObjectFactory
+     * @param ButtonProviderFactory $buttonProviderFactory
+     * @param ActionPoolInterface $actionPool
      * @param array $data
      */
     public function __construct(
         TemplateContext $context,
-        Context $renderContext,
+        RenderContext $renderContext,
         ContentTypeFactory $contentTypeFactory,
-        ConfigFactory $configFactory,
-        ConfigBuilderInterface $configBuilder,
-        DataProviderFactory $dataProviderFactory,
         Manager $dataProviderManager,
+        ArrayObjectFactory $arrayObjectFactory,
+        ButtonProviderFactory $buttonProviderFactory,
+        ActionPoolInterface $actionPool,
         array $data = []
     ) {
         $this->renderContext = $renderContext;
         $this->contentTypeFactory = $contentTypeFactory;
-        $this->assetRepo = $context->getAssetRepository();
-        $this->configFactory = $configFactory;
-        $this->configBuilder = $configBuilder;
-        $this->dataProviderFactory = $dataProviderFactory;
         $this->dataManager = $dataProviderManager;
+        $this->componentData = $arrayObjectFactory->create();
+        $this->actionPool = $actionPool;
+        $this->buttonProviderFactory = $buttonProviderFactory;
+
         parent::__construct($context, $data);
     }
 
@@ -151,8 +130,7 @@ abstract class AbstractView extends Template implements UiComponentInterface
         $prevData = $this->getData();
         $this->update($data);
 
-        $renderResult = $this->contentTypeFactory->get($this->renderContext->getAcceptType())
-            ->render($this, $this->getContentTemplate());
+        $renderResult = $this->getRenderEngine()->render($this, $this->getContentTemplate());
 
         $this->setData($prevData);
 
@@ -166,8 +144,7 @@ abstract class AbstractView extends Template implements UiComponentInterface
      */
     public function renderLabel()
     {
-        return $this->contentTypeFactory->get($this->renderContext->getAcceptType())
-            ->render($this, $this->getLabelTemplate());
+        return $this->getRenderEngine()->render($this, $this->getLabelTemplate());
     }
 
     /**
@@ -181,6 +158,7 @@ abstract class AbstractView extends Template implements UiComponentInterface
     {
         $element = $this->renderContext->getRender()->getUiElementView($elementName);
         $result = $element->render($arguments);
+
         return $result;
     }
 
@@ -198,6 +176,7 @@ abstract class AbstractView extends Template implements UiComponentInterface
         $element->update($arguments);
         $result = $element->renderLabel();
         $element->setData($prevData);
+
         return $result;
     }
 
@@ -247,67 +226,52 @@ abstract class AbstractView extends Template implements UiComponentInterface
     /**
      * Get name component instance
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
-        return $this->config->getName();
+        return isset($this->componentData['config']['name']) ? $this->componentData['config']['name'] : null;
     }
 
     /**
      * Get parent name component instance
      *
-     * @return string
+     * @return string|null
      */
     public function getParentName()
     {
-        return $this->config->getParentName();
-    }
-
-    /**
-     * Get configuration builder
-     *
-     * @return ConfigBuilderInterface
-     */
-    public function getConfigBuilder()
-    {
-        return $this->configBuilder;
+        return isset($this->componentData['config']['parent_name'])
+            ? $this->componentData['config']['parent_name']
+            : null;
     }
 
     /**
      * Set component configuration
      *
-     * @param null $configData
-     * @param null $name
-     * @param null $parentName
+     * @param string|null $name
+     * @param string|null $parentName
      * @return void
      */
-    public function prepareConfiguration($configData = null, $name = null, $parentName = null)
+    public function prepareConfiguration($name = null, $parentName = null)
     {
-        $arguments = [];
-        $arguments['name'] = $name ?: $this->renderContext->getNamespace() . '_' . $this->getNameInLayout();
-        $arguments['parentName'] = $parentName ?: $this->renderContext->getNamespace();
-        if ($configData) {
-            $arguments['configuration'] = $configData;
+        $defaultConfig = $this->getDefaultConfiguration();
+        if ($this->hasData('config')) {
+            $defaultConfig = array_merge($defaultConfig, $this->getData('config'));
         }
-        $this->config = $this->configFactory->create($arguments);
-        $this->renderContext->getStorage()->addComponentsData($this->config);
-    }
+        $config = [];
+        $config['name'] = $name ?: $this->renderContext->getNamespace() . '_' . $this->getNameInLayout();
+        $config['parent_name'] = $parentName ?: $this->renderContext->getNamespace();
+        if (!empty($defaultConfig)) {
+            $config['configuration'] = $defaultConfig;
+        }
 
-    /**
-     * Get component configuration
-     *
-     * @return ConfigInterface
-     */
-    public function getConfig()
-    {
-        return $this->config;
+        $this->componentData['config'] = $config;
     }
 
     /**
      * Get render context
      *
-     * @return Context
+     * @return RenderContext
      */
     public function getRenderContext()
     {
@@ -315,24 +279,34 @@ abstract class AbstractView extends Template implements UiComponentInterface
     }
 
     /**
-     * Get elements to the render
+     * Set layout for the render
      *
-     * @return ElementRendererInterface[]
+     * @return UiComponentInterface
      */
-    public function getElements()
+    public function getUiLayout()
     {
-        return $this->elements;
+        return $this->uiLayout;
     }
 
     /**
-     * Set elements for the render
+     * Set layout for the render
      *
-     * @param ElementRendererInterface[] $elements
-     * @return mixed|void
+     * @param UiComponentInterface $uiLayout
+     * @return void
      */
-    public function setElements(array $elements)
+    public function setUiLayout(UiComponentInterface $uiLayout)
     {
-        $this->elements = $elements;
+        $this->uiLayout = $uiLayout;
+    }
+
+    /**
+     * Component data
+     *
+     * @return \ArrayObject
+     */
+    public function getComponentData()
+    {
+        return $this->componentData;
     }
 
     /**
@@ -356,20 +330,78 @@ abstract class AbstractView extends Template implements UiComponentInterface
     }
 
     /**
-     * Create data provider
+     * Add button in the actions toolbar
      *
      * @return void
      */
-    protected function createDataProviders()
+    protected function addButtons()
     {
-        if ($this->hasData('data_provider_pool')) {
-            foreach ($this->getData('data_provider_pool') as $name => $config) {
-                $arguments = empty($config['arguments']) ? [] : $config['arguments'];
-                $arguments['params'] = $this->renderContext->getRequestParams();
+        $buttons = $this->getData('buttons');
+        if ($buttons) {
+            foreach ($buttons as $buttonId => $buttonData) {
+                if (is_array($buttonData)) {
+                    $buttons[$buttonId] = $buttonData;
+                    continue;
+                }
+                /** @var ButtonProviderInterface $button */
+                $button = $this->buttonProviderFactory->create($buttonData);
+                $buttonData = $button->getButtonData();
+                if (!$buttonData) {
+                    unset($buttons[$buttonId]);
+                    continue;
+                }
+                $buttons[$buttonId] = $buttonData;
+            }
+            uasort($buttons, [$this, 'sortButtons']);
 
-                $dataProvider = $this->dataProviderFactory->create($config['class'], $arguments);
-                $this->renderContext->getStorage()->addDataProvider($name, $dataProvider);
+            foreach ($buttons as $buttonId => $buttonData) {
+                $this->actionPool->add($buttonId, $buttonData, $this);
             }
         }
+    }
+
+    /**
+     * Sort buttons by sort order
+     *
+     * @param array $itemA
+     * @param array $itemB
+     * @return int
+     */
+    public function sortButtons(array $itemA, array $itemB)
+    {
+        $sortOrderA = isset($itemA['sort_order']) ? intval($itemA['sort_order']) : 0;
+        $sortOrderB = isset($itemB['sort_order']) ? intval($itemB['sort_order']) : 0;
+
+        return $sortOrderA - $sortOrderB;
+    }
+
+    /**
+     * Method is called before rendering
+     *
+     * @return void
+     */
+    public function beforeRender()
+    {
+        //
+    }
+
+    /**
+     * Method is called after rendering
+     *
+     * @return void
+     */
+    public function afterRender()
+    {
+        //
+    }
+
+    /**
+     * Get component instance name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        //
     }
 }

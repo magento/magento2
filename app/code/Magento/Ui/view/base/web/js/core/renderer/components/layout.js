@@ -8,7 +8,7 @@ define([
     'mage/utils',
     'Magento_Ui/js/lib/class',
     'Magento_Ui/js/lib/registry/registry'
-], function(_, $, utils, Class, registry) {
+], function (_, $, utils, Class, registry) {
     'use strict';
 
     function getNodeName(parent, node, name) {
@@ -25,56 +25,56 @@ define([
         return name;
     }
 
-    function getNodeType(parent, node){
+    function getNodeType(parent, node) {
         return node.type || (parent && parent.childType);
     }
 
-    function getDataScope(parent, node){
-        var dataScope   = node.dataScope,
-            parentScope = parent && parent.dataScope;
-
-        return notEmpty(parentScope) ?
-                ( notEmpty(dataScope) ?
-                    (parentScope + '.' + dataScope) :
-                    parentScope ) :
-                (dataScope || '');
-    }
-
-    function notEmpty(value){
+    function notEmpty(value) {
         return !_.isUndefined(value) && value !== '';
     }
 
-    function mergeNode(node, config){
+    function getDataScope(parent, node) {
+        var dataScope = node.dataScope,
+            parentScope = parent && parent.dataScope;
+
+        return notEmpty(parentScope) ?
+            (notEmpty(dataScope) ?
+                (parentScope + '.' + dataScope) :
+                parentScope) :
+            (dataScope || '');
+    }
+
+    function mergeNode(node, config) {
         return $.extend(true, {}, config, node);
     }
 
-    function additional(node){
+    function additional(node) {
         return _.pick(node, 'name', 'index', 'dataScope');
     }
 
-    function loadDeps(node){
+    function loadDeps(node) {
         var loaded = $.Deferred();
 
-        registry.get(node.deps, function(){
+        registry.get(node.deps, function () {
             loaded.resolve(node);
         });
 
         return loaded.promise();
     }
 
-    function loadSource(node){
+    function loadSource(node) {
         var loaded = $.Deferred(),
             source = node.component;
 
-        require([source], function(constr){
+        require([source], function (constr) {
             loaded.resolve(node, constr);
         });
 
         return loaded.promise();
     }
 
-    function initComponent(node, constr){
-        var component = new constr(
+    function initComponent(node, Constr) {
+        var component = new Constr(
             node.config,
             additional(node)
         );
@@ -82,21 +82,21 @@ define([
         registry.set(node.name, component);
     }
 
-    function Layout(nodes, types){
-        this.types      = types;
-        this.registry   = registry.create();
+    function Layout(nodes, types) {
+        this.types = types;
+        this.registry = registry.create();
 
         this.run(nodes);
     }
 
     _.extend(Layout.prototype, {
-        run: function(nodes, parent){
+        run: function (nodes, parent) {
             _.each(nodes || [], this.iterator.bind(this, parent));
 
             return this;
         },
 
-        iterator: function(parent, node, name){
+        iterator: function (parent, node) {
             var action = _.isString(node) ?
                 this.addChild :
                 this.process;
@@ -104,18 +104,18 @@ define([
             action.apply(this, arguments);
         },
 
-        process: function(parent, node, name) {
-            if(!parent && node.parent){
+        process: function (parent, node, name) {
+            if (!parent && node.parent) {
                 return this.waitParent(node, name);
             }
 
-            if(node.template){
-                return this.waitTemplate.apply(this, arguments);      
+            if (node.template) {
+                return this.waitTemplate.apply(this, arguments);
             }
 
             node = this.build.apply(this, arguments);
 
-            if(node){
+            if (node) {
                 this.addChild(parent, node.name)
                     .manipulate(node)
                     .initComponent(node)
@@ -125,15 +125,15 @@ define([
             return this;
         },
 
-        build: function(parent, node, name){
+        build: function (parent, node, name) {
             var type;
 
             type = getNodeType.apply(null, arguments);
             node = mergeNode(node, this.types.get(type));
 
-            node.index      = node.name || name;
-            node.name       = getNodeName(parent, node, name);
-            node.dataScope  = getDataScope(parent, node);
+            node.index = node.name || name;
+            node.name = getNodeName(parent, node, name);
+            node.dataScope = getDataScope(parent, node);
 
             delete node.type;
 
@@ -144,8 +144,8 @@ define([
                 node;
         },
 
-        initComponent: function(node){
-            if(!node.component){
+        initComponent: function (node) {
+            if (!node.component) {
                 return this;
             }
 
@@ -156,31 +156,31 @@ define([
             return this;
         }
     });
-        
+
     _.extend(Layout.prototype, {
-        waitTemplate: function(parent, node, name){
+        waitTemplate: function (parent, node, name) {
             var args = _.toArray(arguments);
 
-            this.registry.get(node.template, function(){
+            this.registry.get(node.template, function () {
                 this.applyTemplate.apply(this, args);
             }.bind(this));
 
             return this;
         },
 
-        waitParent: function(node, name){
+        waitParent: function (node, name) {
             var process = this.process.bind(this);
 
-            this.registry.get(node.parent, function(parent){
+            this.registry.get(node.parent, function (parent) {
                 process(parent, node, name);
             });
 
             return this;
         },
 
-        applyTemplate: function(parent, node, name){
+        applyTemplate: function (parent, node, name) {
             var template = this.registry.get(node.template);
-            
+
             node = mergeNode(node, template);
 
             delete node.template;
@@ -190,7 +190,7 @@ define([
     });
 
     _.extend(Layout.prototype, {
-        manipulate: function(node) {
+        manipulate: function (node) {
             var name = node.name;
 
             if (node.appendTo) {
@@ -201,38 +201,38 @@ define([
                 this.insert(name, node.prependTo, 0);
             }
 
-            if(node.insertTo){
+            if (node.insertTo) {
                 this.insertTo(name, node.insertTo);
             }
 
             return this;
         },
 
-        insert: function(item, target, position){
-            registry.get(target, function(target){            
+        insert: function (item, target, position) {
+            registry.get(target, function (target) {
                 target.insert(item, position);
             });
 
             return this;
         },
 
-        insertTo: function(item, targets){
-            _.each(targets, function(info, target){
+        insertTo: function (item, targets) {
+            _.each(targets, function (info, target) {
                 this.insert(item, target, info.position);
             }, this);
 
             return this;
         },
 
-        addChild: function(parent, child){
-            if(parent && parent.component){
+        addChild: function (parent, child) {
+            if (parent && parent.component) {
                 this.insert(child, parent.name);
             }
 
             return this;
         },
 
-        clear: function(name){
+        clear: function (name) {
             this.registry.remove(name);
         }
     });

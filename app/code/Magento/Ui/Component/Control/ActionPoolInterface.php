@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Control;
 
+use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
@@ -38,4 +39,11 @@ interface ActionPoolInterface
      * @return void
      */
     public function update($key, array $data);
+
+    /**
+     * Get toolbar block
+     *
+     * @return bool|BlockInterface
+     */
+    public function getToolbar();
 }

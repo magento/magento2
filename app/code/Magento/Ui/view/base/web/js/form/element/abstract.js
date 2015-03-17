@@ -5,58 +5,58 @@
 define([
     'underscore',
     'mage/utils',
-    'Magento_Ui/js/form/component',
+    'Magento_Ui/js/lib/component/component',
     'Magento_Ui/js/lib/validation/validator'
 ], function (_, utils, Component, validator) {
     'use strict';
-    
-    /**
-     * Checks wether the incoming value is not empty,
-     * e.g. not 'null' or 'undefined'
-     *
-     * @param {*} value - Value to check.
-     * @returns {Boolean}
-     */
-    function isEmpty(value){
-        return _.isUndefined(value) || _.isNull(value);
-    }
 
     return Component.extend({
         defaults: {
-            hidden:             false,
-            preview:            '',
-            focused:            false,
-            required:           false,
-            disabled:           false,
-            tmpPath:            'ui/form/element/',
-            tooltipTpl:         'ui/form/element/helper/tooltip',
-            input_type:         'input',
-            placeholder:        '',
-            description:        '',
-            label:              '',
-            error:              '',
-            notice:             ''
+            hidden: false,
+            preview: '',
+            focused: false,
+            required: false,
+            disabled: false,
+            tmpPath: 'ui/form/element/',
+            tooltipTpl: 'ui/form/element/helper/tooltip',
+            input_type: 'input',
+            placeholder: '',
+            description: '',
+            label: '',
+            error: '',
+            notice: '',
+
+            listens: {
+                value: 'setPreview onUpdate',
+                hidden: 'setPreview'
+            },
+
+            links: {
+                value: '<%= provider %>:data.<%= dataScope %>'
+            },
+
+            exports: {
+                hidden: '<%= provider %>:params.<%= name %>.hidden'
+            }
         },
 
         /**
          * Invokes initialize method of parent class, contains initialization
          *     logic
-         *     
+         *
          * @param {Object} config - form element configuration
          */
         initialize: function () {
-            _.bindAll(this, 'onUpdate', 'reset');
+            _.bindAll(this, 'reset');
 
-            this._super()
-                .setHidden(this.hidden())
-                .store(this.value());
+            this._super();
 
             return this;
         },
 
         /**
          * Initializes observable properties of instance
-         * 
+         *
          * @returns {Abstract} Chainable.
          */
         initObservable: function () {
@@ -68,7 +68,7 @@ define([
 
             this.observe('error disabled focused preview hidden')
                 .observe({
-                    'value':    this.initialValue,
+                    'value': this.initialValue,
                     'required': !!rules['required-entry']
                 });
 
@@ -77,7 +77,7 @@ define([
 
         /**
          * Initializes regular properties of instance.
-         * 
+         *
          * @returns {Abstract} Chainable.
          */
         initProperties: function () {
@@ -86,9 +86,9 @@ define([
             this._super();
 
             _.extend(this, {
-                'uid':          uid,
-                'noticeId':     'notice-' + this.uid,
-                'inputName':    utils.serializeName(this.dataScope)
+                'uid': uid,
+                'noticeId': 'notice-' + this.uid,
+                'inputName': utils.serializeName(this.dataScope)
             });
 
             _.defaults(this, {
@@ -100,45 +100,39 @@ define([
 
         /**
          * Initializes instance's listeners.
-         * 
+         *
          * @returns {Abstract} Chainable.
          */
-        initListeners: function(){
-            var provider  = this.provider,
-                data      = provider.data;
-
+        initListeners: function () {
             this._super();
 
-            data.on('reset', this.reset, this.name);
-            
-            this.value.subscribe(this.onUpdate);
+            this.source.on('reset', this.reset, this.name);
 
             return this;
         },
 
         /**
          * Gets initial value of element
-         * 
+         *
          * @returns {*} Elements' value.
          */
-        getInititalValue: function(){
-            var data    = this.provider.data,
-                values  = [data.get(this.dataScope), this.default],
+        getInititalValue: function () {
+            var values = [this.source.get('data.' + this.dataScope), this.default],
                 value;
 
-            values.some(function(v){
-                return !isEmpty(value = v);
+            values.some(function (v) {
+                return !utils.isEmpty(value = v);
             });
 
-            return isEmpty(value) ? '': value;
+            return utils.isEmpty(value) ? '' : value;
         },
 
         /**
          * Sets value to preview observable
-         * 
+         *
          * @returns {Abstract} Chainable.
          */
-        setPreview: function(value){
+        setPreview: function (value) {
             this.preview(this.hidden() ? '' : value);
 
             return this;
@@ -146,17 +140,17 @@ define([
 
         /**
          * Returnes unwrapped preview observable.
-         * 
+         *
          * @returns {String} Value of the preview observable.
          */
-        getPreview: function(){
+        getPreview: function () {
             return this.preview();
         },
 
         /**
          * Calls 'setHidden' passing true to it.
          */
-        hide: function(){
+        hide: function () {
             this.setHidden(true);
 
             return this;
@@ -165,7 +159,7 @@ define([
         /**
          * Calls 'setHidden' passing false to it.
          */
-        show: function(){
+        show: function () {
             this.setHidden(false);
 
             return this;
@@ -175,25 +169,20 @@ define([
          * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
          * 'value'.
-         * 
+         *
          * @returns {Abstract} Chainable.
          */
-        setHidden: function(isHidden){
-            var params = this.provider.params;
-
+        setHidden: function (isHidden) {
             this.hidden(isHidden);
-    
-            this.setPreview(this.value())
-                .trigger('toggle', isHidden);
 
-            params.set(this.name + '.hidden', isHidden);
+            this.trigger('toggle', isHidden);
 
             return this;
         },
 
         /**
          * Checkes if element has addons
-         * 
+         *
          * @returns {Boolean}
          */
         hasAddons: function () {
@@ -205,29 +194,20 @@ define([
          *
          * @returns {Boolean}
          */
-        hasChanged: function(){
+        hasChanged: function () {
             var notEqual = this.value() != this.initialValue;
 
             return this.hidden() ? false : notEqual;
         },
 
-        /**
-         * Stores element's value to registry by element's path value
-         * @param  {*} value - current value of form element
-         * @returns {Abstract} Chainable.
-         */
-        store: function (value) {
-            var data = this.provider.data;
-
-            data.set(this.dataScope, value);
-
-            return this;
+        hasData: function () {
+            return !utils.isEmpty(this.value());
         },
 
         /**
          * Sets value observable to initialValue property.
          */
-        reset: function(){
+        reset: function () {
             this.value(this.initialValue);
         },
 
@@ -235,18 +215,18 @@ define([
          * Validates itself by it's validation rules using validator object.
          * If validation of a rule did not pass, writes it's message to
          * 'error' observable property.
-         *     
+         *
          * @returns {Boolean} True, if element is invalid.
          */
         validate: function () {
-            var value   = this.value(),
-                msg     = validator(this.validation, value),
+            var value = this.value(),
+                msg = validator(this.validation, value),
                 isValid = this.hidden() || !msg;
 
             this.error(msg);
 
             return {
-                valid:  isValid,
+                valid: isValid,
                 target: this
             };
         },
@@ -254,10 +234,8 @@ define([
         /**
          * Callback that fires when 'value' property is updated.
          */
-        onUpdate: function (value) {            
-            this.store(value)
-                .setPreview(value)
-                .trigger('update', this.hasChanged());
+        onUpdate: function () {
+            this.trigger('update', this.hasChanged());
 
             this.validate();
         }

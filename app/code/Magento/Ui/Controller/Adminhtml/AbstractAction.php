@@ -1,14 +1,13 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Controller\Adminhtml;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Controller\UiActionInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Class Render

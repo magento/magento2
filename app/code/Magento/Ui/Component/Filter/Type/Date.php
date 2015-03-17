@@ -5,96 +5,95 @@
  */
 namespace Magento\Ui\Component\Filter\Type;
 
-use Magento\Framework\Locale\ResolverInterface;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
-use Magento\Framework\View\Element\UiComponent\ConfigFactory;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Ui\Component\Filter\FilterAbstract;
-use Magento\Ui\Component\Filter\FilterPool;
-use Magento\Ui\ContentType\ContentTypeFactory;
-use Magento\Ui\DataProvider\Factory as DataProviderFactory;
-use Magento\Ui\DataProvider\Manager;
+use Magento\Ui\Component\Filter\DataProvider;
+use Magento\Ui\Component\Filter\AbstractFilter;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
  * Class Date
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Date extends FilterAbstract
+class Date extends AbstractFilter
 {
-    /**
-     * Timezone library
-     *
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $localeDate;
+    const NAME = 'filter_date';
+
+    const COMPONENT = 'date';
 
     /**
-     * Scope config
+     * Wrapped component
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var DataTypeDate
      */
-    protected $scopeConfig;
+    protected $wrappedComponent;
 
     /**
-     * Locale resolver
+     * Get component name
      *
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @return string
      */
-    protected $localeResolver;
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 
     /**
-     * Constructor
+     * Prepare component configuration
      *
-     * @param TemplateContext $context
-     * @param Context $renderContext
-     * @param ContentTypeFactory $contentTypeFactory
-     * @param ConfigFactory $configFactory
-     * @param ConfigBuilderInterface $configBuilder
-     * @param DataProviderFactory $dataProviderFactory
-     * @param Manager $dataProviderManager
-     * @param FilterPool $filterPool
-     * @param ResolverInterface $localeResolver
-     * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @return void
      */
-    public function __construct(
-        TemplateContext $context,
-        Context $renderContext,
-        ContentTypeFactory $contentTypeFactory,
-        ConfigFactory $configFactory,
-        ConfigBuilderInterface $configBuilder,
-        DataProviderFactory $dataProviderFactory,
-        Manager $dataProviderManager,
-        FilterPool $filterPool,
-        ResolverInterface $localeResolver,
-        array $data = []
-    ) {
-        $this->localeDate = $context->getLocaleDate();
-        $this->scopeConfig = $context->getScopeConfig();
-        $this->localeResolver = $localeResolver;
-        parent::__construct(
-            $context,
-            $renderContext,
-            $contentTypeFactory,
-            $configFactory,
-            $configBuilder,
-            $dataProviderFactory,
-            $dataProviderManager,
-            $filterPool,
-            $data
+    public function prepare()
+    {
+        parent::prepare();
+
+        $this->wrappedComponent = $this->uiComponentFactory->create(
+            $this->getName(),
+            static::COMPONENT,
+            ['context' => $this->getContext()]
+        );
+        $this->wrappedComponent->prepare();
+
+        $this->applyFilter();
+        $jsConfig = array_replace_recursive(
+            $this->getJsConfiguration($this->wrappedComponent),
+            $this->getJsConfiguration($this)
+        );
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+    }
+
+    /**
+     * Get JS config
+     *
+     * @return array
+     */
+    public function getJsConfig()
+    {
+        return array_replace_recursive(
+            (array) $this->wrappedComponent->getData('config'),
+            (array) $this->getData('config')
         );
     }
 
     /**
-     * Get condition by data type
+     * Apply filter
      *
-     * @param string|array $value
+     * @return void
+     */
+    protected function applyFilter()
+    {
+        $condition = $this->getCondition();
+        if ($condition !== null) {
+            $this->getContext()->getDataProvider()->addFilter($this->getName(), $condition);
+        }
+    }
+
+    /**
+     * Get condition
+     *
      * @return array|null
      */
-    public function getCondition($value)
+    protected function getCondition()
     {
-        return $this->convertValue($value);
+        return $this->convertValue($this->dataProvider->getData($this->getName()));
     }
 
     /**
@@ -106,41 +105,26 @@ class Date extends FilterAbstract
     protected function convertValue($value)
     {
         if (!empty($value['from']) || !empty($value['to'])) {
-            $locale = $this->localeResolver->getLocale();
             if (!empty($value['from'])) {
                 $value['orig_from'] = $value['from'];
-                $value['from'] = $this->convertDate(strtotime($value['from']), $locale);
+                $value['from'] = $this->wrappedComponent->convertDate(
+                    strtotime($value['from']),
+                    $this->wrappedComponent->getLocale()
+                );
             }
             if (!empty($value['to'])) {
                 $value['orig_to'] = $value['to'];
-                $value['to'] = $this->convertDate(strtotime($value['to']), $locale);
+                $value['to'] = $this->wrappedComponent->convertDate(
+                    strtotime($value['to']),
+                    $this->wrappedComponent->getLocale()
+                );
             }
             $value['datetime'] = true;
-            $value['locale'] = $this->localeResolver->getLocale();
+            $value['locale'] = $this->wrappedComponent->getLocale();
         } else {
             $value = null;
         }
 
         return $value;
-    }
-
-    /**
-     * Convert given date to default (UTC) timezone
-     *
-     * @param int $date
-     * @param string $locale
-     * @return \DateTime|null
-     */
-    protected function convertDate($date, $locale)
-    {
-        try {
-            $dateObj = $this->localeDate->date(new \DateTime($date), $locale, false);
-            $dateObj->setTime(0, 0, 0);
-            //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone(new \DateTimeZone('UTC'));
-            return $dateObj;
-        } catch (\Exception $e) {
-            return null;
-        }
     }
 }

@@ -6,28 +6,30 @@
 namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Registry;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Ui\Component\Control\ActionPoolFactory;
+use Magento\Ui\Component\Control\ActionPoolInterface;
+use Magento\Ui\Component\Control\ButtonProviderFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 
 /**
  * Class Context
  */
-class Context extends Registry
+class Context implements ContextInterface
 {
     /**
-     * Configuration storage builder
-     *
-     * @var ConfigStorageBuilderInterface
+     * @var string
      */
-    protected $configStorageBuilder;
+    protected $namespace;
 
     /**
-     * Configuration storage
-     *
-     * @var ConfigStorageInterface
+     * @var DataProviderInterface
      */
-    protected $configStorage;
+    protected $dataProvider;
 
     /**
      * Application request
@@ -37,6 +39,13 @@ class Context extends Registry
     protected $request;
 
     /**
+     * Factory renderer for a content type
+     *
+     * @var ContentTypeFactory
+     */
+    protected $contentTypeFactory;
+
+    /**
      * Accept type
      *
      * @var string
@@ -44,60 +53,107 @@ class Context extends Registry
     protected $acceptType;
 
     /**
-     * @var LayoutInterface
+     * Config provider
+     *
+     * @var ConfigProviderInterface
+     */
+    protected $configProvider;
+
+    /**
+     * @var PageLayoutInterface
      */
     protected $pageLayout;
 
     /**
-     * @var LayoutInterface
+     * @var ButtonProviderFactory
      */
-    protected $layout;
+    protected $buttonProviderFactory;
 
     /**
-     * @var UiComponentFactory
+     * @var ActionPoolInterface
      */
-    protected $factory;
+    protected $actionPool;
 
     /**
-     * Data Namespace
+     * Registry components
      *
-     * @var string
+     * @var array
      */
-    protected $namespace;
+    protected $componentsDefinitions = [];
 
     /**
-     * Constructor
-     *
-     * @param ConfigStorageInterface $configStorage
-     * @param ConfigStorageBuilderInterface $configStorageBuilder
+     * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
+     * @param ButtonProviderFactory $buttonProviderFactory
+     * @param ActionPoolFactory $actionPoolFactory
+     * @param ContentTypeFactory $contentTypeFactory
+     * @param DataProviderInterface|null $dataProvider
+     * @param string $namespace
      */
     public function __construct(
-        ConfigStorageInterface $configStorage,
-        ConfigStorageBuilderInterface $configStorageBuilder,
-        RequestInterface $request
+        PageLayoutInterface $pageLayout,
+        RequestInterface $request,
+        ButtonProviderFactory $buttonProviderFactory,
+        ActionPoolFactory $actionPoolFactory,
+        ContentTypeFactory $contentTypeFactory,
+        DataProviderInterface $dataProvider = null,
+        $namespace = null
     ) {
-        $this->configStorage = $configStorage;
-        $this->configStorageBuilder = $configStorageBuilder;
+        $this->namespace = $namespace;
         $this->request = $request;
+        $this->buttonProviderFactory = $buttonProviderFactory;
+        $this->dataProvider = $dataProvider;
+        $this->pageLayout = $pageLayout;
+        $this->actionPool = $actionPoolFactory->create(
+            [
+                'context' => $this
+            ]
+        );
+        $this->contentTypeFactory = $contentTypeFactory;
+
         $this->setAcceptType();
     }
 
     /**
-     * Getting requested accept type
+     * Add component into registry
      *
+     * @param string $name
+     * @param array $config
      * @return void
      */
-    protected function setAcceptType()
+    public function addComponentDefinition($name, array $config)
     {
-        $this->acceptType = 'xml';
-
-        $rawAcceptType = $this->request->getHeader('Accept');
-        if (strpos($rawAcceptType, 'json') !== false) {
-            $this->acceptType = 'json';
-        } elseif (strpos($rawAcceptType, 'html') !== false) {
-            $this->acceptType = 'html';
+        if (!isset($this->componentsDefinitions[$name])) {
+            $this->componentsDefinitions[$name] = $config;
         }
+    }
+
+    /**
+     * To get the registry components
+     *
+     * @return array
+     */
+    public function getComponentsDefinitions()
+    {
+        return $this->componentsDefinitions;
+    }
+
+    /**
+     * Get render engine
+     *
+     * @return ContentTypeInterface
+     */
+    public function getRenderEngine()
+    {
+        return $this->contentTypeFactory->get($this->getAcceptType());
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**
@@ -108,69 +164,6 @@ class Context extends Registry
     public function getAcceptType()
     {
         return $this->acceptType;
-    }
-
-    /**
-     * Set Ui Components Factory
-     *
-     * @param UiComponentFactory $render
-     * @return void
-     */
-    public function setRender(UiComponentFactory $render)
-    {
-        $this->factory = $render;
-    }
-
-    /**
-     * Get Ui Components Factory
-     *
-     * @return UiComponentFactory
-     */
-    public function getRender()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * Set root layout
-     *
-     * @param LayoutInterface $layout
-     * @return void
-     */
-    public function setPageLayout(LayoutInterface $layout)
-    {
-        $this->pageLayout = $layout;
-    }
-
-    /**
-     * Get root layout
-     *
-     * @return LayoutInterface
-     */
-    public function getPageLayout()
-    {
-        return $this->pageLayout;
-    }
-
-    /**
-     * Set root view
-     *
-     * @param string $namespace
-     * @return void
-     */
-    public function setNamespace($namespace)
-    {
-        $this->namespace = $namespace;
-    }
-
-    /**
-     * Get root view
-     *
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return $this->namespace;
     }
 
     /**
@@ -196,39 +189,97 @@ class Context extends Registry
     }
 
     /**
-     * Get storage configuration
+     * Get data provider
      *
-     * @return ConfigStorageInterface
+     * @return DataProviderInterface
      */
-    public function getStorage()
+    public function getDataProvider()
     {
-        return $this->configStorage;
+        return $this->dataProvider;
     }
 
     /**
-     * Get configuration builder
+     * Get page layout
      *
-     * @return ConfigStorageBuilderInterface
+     * @return PageLayoutInterface
      */
-    public function getConfigBuilder()
+    public function getPageLayout()
     {
-        return $this->configStorageBuilder;
+        return $this->pageLayout;
     }
 
     /**
-     * @param LayoutInterface $layout
+     * Add button in the actions toolbar
+     *
+     * @param array $buttons
+     * @param UiComponentInterface $component
      * @return void
      */
-    public function setLayout(LayoutInterface $layout)
+    public function addButtons(array $buttons, UiComponentInterface $component)
     {
-        $this->layout = $layout;
+        if (!empty($buttons)) {
+            foreach ($buttons as $buttonId => $buttonData) {
+                if (is_array($buttonData)) {
+                    $buttons[$buttonId] = $buttonData;
+                    continue;
+                }
+                /** @var ButtonProviderInterface $button */
+                $button = $this->buttonProviderFactory->create($buttonData);
+                $buttonData = $button->getButtonData();
+                if (!$buttonData) {
+                    unset($buttons[$buttonId]);
+                    continue;
+                }
+                $buttons[$buttonId] = $buttonData;
+            }
+            uasort($buttons, [$this, 'sortButtons']);
+
+            foreach ($buttons as $buttonId => $buttonData) {
+                $this->actionPool->add($buttonId, $buttonData, $component);
+            }
+        }
     }
 
     /**
-     * @return LayoutInterface
+     * Sort buttons by sort order
+     *
+     * @param array $itemA
+     * @param array $itemB
+     * @return int
      */
-    public function getLayout()
+    public function sortButtons(array $itemA, array $itemB)
     {
-        return $this->layout;
+        $sortOrderA = isset($itemA['sort_order']) ? intval($itemA['sort_order']) : 0;
+        $sortOrderB = isset($itemB['sort_order']) ? intval($itemB['sort_order']) : 0;
+
+        return $sortOrderA - $sortOrderB;
+    }
+
+    /**
+     * Getting requested accept type
+     *
+     * @return void
+     */
+    protected function setAcceptType()
+    {
+        $this->acceptType = 'xml';
+
+        $rawAcceptType = $this->request->getHeader('Accept');
+        if ($this->request->getParam('isAjax') === 'true' || strpos($rawAcceptType, 'json') !== false) {
+            $this->acceptType = 'json';
+        } elseif (strpos($rawAcceptType, 'html') !== false) {
+            $this->acceptType = 'html';
+        }
+    }
+
+    /**
+     * Set data provider
+     *
+     * @param DataProviderInterface $dataProvider
+     * @return void
+     */
+    public function setDataProvider(DataProviderInterface $dataProvider)
+    {
+        $this->dataProvider = $dataProvider;
     }
 }

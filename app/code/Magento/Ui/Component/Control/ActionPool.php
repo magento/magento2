@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Control;
 
+use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;
 
@@ -54,8 +55,18 @@ class ActionPool implements ActionPoolInterface
     {
         $this->context = $context;
         $this->itemFactory = $itemFactory;
-        $this->toolbarBlock = $this->context->getPageLayout()
-            ? $this->context->getPageLayout()->getBlock(static::ACTIONS_PAGE_TOOLBAR) : false;
+    }
+
+    /**
+     * Get toolbar block
+     *
+     * @return bool|BlockInterface
+     */
+    public function getToolbar()
+    {
+        return $this->context->getPageLayout()
+            ? $this->context->getPageLayout()->getBlock(static::ACTIONS_PAGE_TOOLBAR)
+            : false;
     }
 
     /**
@@ -70,11 +81,12 @@ class ActionPool implements ActionPoolInterface
     {
         $data['id'] = isset($data['id']) ? $data['id'] : $key;
 
-        if ($this->toolbarBlock !== false) {
+        $toolbar = $this->getToolbar();
+        if ($toolbar !== false) {
             $this->items[$key] = $this->itemFactory->create();
             $this->items[$key]->setData($data);
             $container = $this->createContainer($key, $view);
-            $this->toolbarBlock->setChild($key, $container);
+            $toolbar->setChild($key, $container);
         }
     }
 
@@ -122,6 +134,7 @@ class ActionPool implements ActionPoolInterface
                 ]
             ]
         );
+
         return $container;
     }
 }

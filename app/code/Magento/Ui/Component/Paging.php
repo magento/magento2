@@ -8,8 +8,20 @@ namespace Magento\Ui\Component;
 /**
  * Class Paging
  */
-class Paging extends AbstractView
+class Paging extends AbstractComponent
 {
+    const NAME = 'paging';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
     /**
      * Prepare component data
      *
@@ -17,27 +29,15 @@ class Paging extends AbstractView
      */
     public function prepare()
     {
-        $configData = $this->getDefaultConfiguration();
-        if ($this->hasData('config')) {
-            $configData = array_merge($configData, $this->getData('config'));
-        }
+        $this->prepareConfiguration();
+        $defaultPage = $this->getData('config/current') ?: 1;
+        $offset = $this->getContext()->getRequestParam('page', $defaultPage);
+        $defaultLimit = $this->getData('config/pageSize') ?: 20;
+        $size = $this->getContext()->getRequestParam('limit', $defaultLimit);
+        $this->getContext()->getDataProvider()->setLimit($offset, $size);
 
-        $this->prepareConfiguration($configData);
-        $this->updateDataCollection();
-    }
-
-    /**
-     * Update data collection
-     *
-     * @return void
-     */
-    protected function updateDataCollection()
-    {
-        $defaultPage = $this->config->getData('current');
-        $offset = $this->renderContext->getRequestParam('page', $defaultPage);
-        $defaultLimit = $this->config->getData('pageSize');
-        $size = $this->renderContext->getRequestParam('limit', $defaultLimit);
-        $this->renderContext->getStorage()->getDataCollection($this->getParentName())->setLimit($offset, $size);
+        $jsConfig = $this->getJsConfiguration($this);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
     /**

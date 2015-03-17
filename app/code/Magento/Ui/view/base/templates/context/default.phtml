@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 /**
- * @var \Magento\Ui\Context\DataProvider $block
+ * @var \Magento\Ui\Context\PageDataProvider $this
  */
 ?>
-<script type="application/json">
-    <?php echo $block->getAsJson(); ?>
+<script data-mage-init='{ "Magento_Ui/js/core/app": "" }' type="application/json">
+    <?php echo $this->renderData(); ?>
 </script>

@@ -6,20 +6,252 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface" type="Magento\Ui\ContentType\Builder\ConfigJson" />
-    <preference for="Magento\Framework\View\Element\UiComponent\ConfigStorageBuilderInterface" type="Magento\Ui\ContentType\Builder\ConfigStorageJson" />
+    <preference for="Magento\Framework\View\Element\UiComponent\ConfigProviderInterface" type="Magento\Framework\View\Element\UiComponent\ConfigProvider" />
     <preference for="Magento\Framework\View\Element\UiComponent\ConfigInterface" type="Magento\Ui\Context\Configuration" />
     <preference for="Magento\Framework\View\Element\UiComponent\ConfigStorageInterface" type="Magento\Ui\Context\ConfigurationStorage" />
     <preference for="Magento\Ui\Component\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
+    <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
+    <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
+    <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Framework\View\Element\UiComponent\Config\Manager" />
+    <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
+    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Ui\Component\Layout\Generic"/>
+    <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
+    <type name="Magento\Framework\View\TemplateEngineFactory">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="xhtml" xsi:type="string">Magento\Ui\TemplateEngine\Xhtml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\TemplateEngine\Xhtml">
+        <arguments>
+            <argument name="compiler" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="html" xsi:type="string">Magento\Framework\View\Element\UiComponent\ContentType\Html</item>
+                <item name="json" xsi:type="string">Magento\Framework\View\Element\UiComponent\ContentType\Json</item>
+                <item name="xml" xsi:type="string">Magento\Framework\View\Element\UiComponent\ContentType\Xml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\TemplateEngine\Xhtml\Compiler\Text">
+        <arguments>
+            <argument name="directivePool" xsi:type="array">
+                <item name="variable" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
+                <item name="callableMethod" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\TemplateEngine\Xhtml\Compiler\Attribute">
+        <arguments>
+            <argument name="directivePool" xsi:type="array">
+                <item name="variable" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\Variable</item>
+                <item name="callableMethod" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Directive\CallableMethod</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\TemplateEngine\Xhtml\Compiler" shared="false">
+        <arguments>
+            <argument name="compilerText" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Text</argument>
+            <argument name="compilerAttribute" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Attribute</argument>
+            <argument name="compilerCdata" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Cdata</argument>
+            <argument name="compilerComment" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Comment</argument>
+            <argument name="elementCompilers" xsi:type="array">
+                <item name="render" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Render</item>
+                <item name="content" xsi:type="object">\Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Content</item>
+                <item name="form" xsi:type="object">Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\Form</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="uiConfigurationDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
+        <arguments>
+            <argument name="schemaFileType" xsi:type="string">etc</argument>
+            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
+            <argument name="schemaFileName" xsi:type="string">ui_configuration.xsd</argument>
+            <argument name="contextXPath" xsi:type="array">
+                <item name="ui_context" xsi:type="string">/</item>
+            </argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="attribute_name" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\Config\Manager">
+        <arguments>
+            <argument name="domMerger" xsi:type="object">uiConfigurationDomMerger</argument>
+        </arguments>
+    </type>
+    <virtualType name="uiTemplateDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
+        <arguments>
+            <argument name="schemaFileType" xsi:type="string">etc</argument>
+            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
+            <argument name="schemaFileName" xsi:type="string">ui_template.xsd</argument>
+            <argument name="contextXPath" xsi:type="array">
+                <item name="ui_context" xsi:type="string">/</item>
+            </argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="attribute_name" xsi:type="string">name</item>
+                <item name="attribute_id" xsi:type="string">id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\Config\Provider\Template">
+        <arguments>
+            <argument name="domMerger" xsi:type="object">uiTemplateDomMerger</argument>
+        </arguments>
+    </type>
+    <virtualType name="uiDefinitionDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
+        <arguments>
+            <argument name="schemaFileType" xsi:type="string">etc</argument>
+            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
+            <argument name="schemaFileName" xsi:type="string">ui_definition.xsd</argument>
+            <argument name="contextXPath" xsi:type="array">
+                <item name="ui_context" xsi:type="string">/components</item>
+            </argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="attribute_name" xsi:type="string">name</item>
+            </argument>
+            <argument name="isMergeSimpleXMLElement" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiDefinitionFileCollector" type="Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector">
+        <arguments>
+            <argument name="searchPattern" xsi:type="string">etc/definition.xml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiDefinitionReader" type="Magento\Framework\View\Element\UiComponent\Config\Reader">
+        <arguments>
+            <argument name="fileCollector" xsi:type="object">uiDefinitionFileCollector</argument>
+            <argument name="domMerger" xsi:type="object">uiDefinitionDomMerger</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition">
+        <arguments>
+            <argument name="uiReader" xsi:type="object">uiDefinitionReader</argument>
+        </arguments>
+    </type>
     <type name="Magento\Ui\Component\Filter\FilterPool">
         <arguments>
             <argument name="filters" xsi:type="array">
                 <item name="filter_input" xsi:type="string">Magento\Ui\Component\Filter\Type\Input</item>
                 <item name="filter_select" xsi:type="string">Magento\Ui\Component\Filter\Type\Select</item>
                 <item name="filter_range" xsi:type="string">Magento\Ui\Component\Filter\Type\Range</item>
-                <item name="filter_date" xsi:type="string">Magento\Ui\Component\Filter\Type\Date</item>
                 <item name="filter_store" xsi:type="string">Magento\Ui\Component\Filter\Type\Store</item>
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\Component\Layout\LayoutPool">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="generic" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Generic</item>
+                    <item name="template" xsi:type="string">templates/layout/generic</item>
+                </item>
+                <item name="tabs" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Tabs</item>
+                    <item name="template" xsi:type="string">templates/layout/tabs</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="arrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\Data\Argument\Interpreter\ArrayType</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="configurableObjectArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\View\Element\UiComponent\Argument\Interpreter\ConfigurableObject</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="object" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Object</item>
+                <item name="configurableObject" xsi:type="object">configurableObjectArgumentInterpreterProxy</item>
+                <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+            </argument>
+            <argument name="discriminator" xsi:type="string">xsi:type</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollector">
+        <arguments>
+            <argument name="collectorAggregated" xsi:type="object">uiComponentAggregatedCollector</argument>
+        </arguments>
+    </type>
+    <virtualType name="uiComponentAggregatedCollector" type="Magento\Framework\View\Layout\File\Collector\Aggregated">
+        <arguments>
+            <argument name="baseFiles" xsi:type="object">uiComponentAggregatedSourceBaseSorted</argument>
+            <argument name="themeFiles" xsi:type="object">uiComponentAggregatedSourceThemeSorted</argument>
+            <argument name="overrideBaseFiles" xsi:type="object">uiComponentAggregatedSourceOverrideBaseSorted</argument>
+            <argument name="overrideThemeFiles" xsi:type="object">uiComponentAggregatedSourceOverrideThemeSorted</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceBase" type="Magento\Framework\View\File\Collector\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">ui_component</argument>
+        </arguments>
+    </virtualType>
+    <virtualType shared="false" name="uiComponentAggregatedSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceTheme" type="Magento\Framework\View\File\Collector\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">ui_component</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">layout/override/base</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">layout/override/theme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="uiComponentAggregatedSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideThemeFiltered</argument>
+        </arguments>
+    </virtualType>
 </config>

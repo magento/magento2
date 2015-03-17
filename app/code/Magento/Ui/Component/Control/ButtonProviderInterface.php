@@ -7,7 +7,6 @@ namespace Magento\Ui\Component\Control;
 
 /**
  * Interface ButtonProviderInterface
- * @package Magento\Ui\Component\Control
  */
 interface ButtonProviderInterface
 {

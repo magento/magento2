@@ -10,6 +10,18 @@ namespace Magento\Ui\Component\Form\Element;
  */
 class Multiline extends AbstractFormElement
 {
+    const NAME = 'multiline';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
     /**
      * @return mixed|string
      */

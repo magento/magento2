@@ -115,8 +115,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:key name="uiElementArgumentName">
-            <xs:selector xpath="./arguments/argument"></xs:selector>
-            <xs:field xpath="@name"></xs:field>
+            <xs:selector xpath="./argument"/>
+            <xs:field xpath="@name"/>
         </xs:key>
     </xs:element>
 
@@ -238,8 +238,8 @@
                 Part of view that can generate appropriate content.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+        <xs:sequence>
+            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="componentNameType" name="component" use="optional"/>
         <xs:attribute type="elementNameType" name="name" use="optional"/>

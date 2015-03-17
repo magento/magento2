@@ -11,7 +11,6 @@ use \Magento\Ui\Component\Listing;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Ui\Component\Control\ActionPool;
 use Magento\Ui\Component\Listing\OptionsFactory;
-use Magento\Ui\Component\Listing\RowPool;
 use Magento\Ui\Context\ConfigurationFactory;
 
 /**
@@ -28,11 +27,6 @@ class ListingTest extends \PHPUnit_Framework_TestCase
      * @var OptionsFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionsFactory;
-
-    /**
-     * @var RowPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $rowPool;
 
     /**
      * @var Context
@@ -89,7 +83,6 @@ class ListingTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->actionPool = $this->getMock('\Magento\Ui\Component\Control\ActionPool', [], [], '', false);
         $this->optionsFactory = $this->getMock('\Magento\Ui\Component\Listing\OptionsFactory', [], [], '', false);
-        $this->rowPool = $this->getMock('\Magento\Ui\Component\Listing\RowPool', [], [], '', false);
         $this->renderContext = $this->getMock('\Magento\Framework\View\Element\UiComponent\Context', [], [], '', false);
         $this->templateContext = $this->getMock(
             'Magento\Framework\View\Element\Template\Context',
@@ -142,8 +135,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
                 'configFactory' => $this->configurationFactory,
                 'configBuilder' => $configurationBuilder,
                 'optionsFactory' => $this->optionsFactory,
-                'actionPool' => $this->actionPool,
-                'dataProviderRowPool' => $this->rowPool
+                'actionPool' => $this->actionPool
             ]
         );
     }

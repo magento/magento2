@@ -5,19 +5,31 @@
  */
 namespace Magento\Ui\Component\Form;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Fieldset
  */
-class Fieldset extends AbstractView
+class Fieldset extends AbstractComponent
 {
     const UI_ELEMENT_FIELDSET = 'fieldset';
+
+    const NAME = 'date';
 
     /**
      * @var bool
      */
     protected $collapsible = false;
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 
     /**
      * @return string
