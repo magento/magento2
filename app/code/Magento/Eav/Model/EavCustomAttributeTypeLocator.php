@@ -73,7 +73,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
     /**
      * {@inheritdoc}
      */
-    public function getAllServiceDataInterface()
+    public function getAllServiceDataInterfaces()
     {
         $dataInterfaceArray = [];
         if (!$this->serviceBackendModelDataInterfaceMap) {

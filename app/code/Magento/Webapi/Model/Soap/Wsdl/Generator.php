@@ -178,7 +178,7 @@ class Generator
      */
     protected function addCustomAttributeTypes($wsdl)
     {
-        foreach ($this->customAttributeTypeLocator->getAllServiceDataInterface() as $customAttributeClass) {
+        foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
             $typeName = $this->_typeProcessor->register($customAttributeClass);
             $wsdl->addComplexType($typeName);
         }

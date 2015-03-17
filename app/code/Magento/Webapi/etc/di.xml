@@ -27,7 +27,6 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Webapi</argument>
         </arguments>
     </type>
-    <type name="Magento\Webapi\Model\Soap\Wsdl\Generator" />
     <type name="Magento\Integration\Model\ConfigBasedIntegrationManager">
         <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
     </type>

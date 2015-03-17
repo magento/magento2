@@ -23,7 +23,7 @@ interface CustomAttributeTypeLocatorInterface
     /**
      * Get list of all Data Interface corresponding to complex custom attribute types
      *
-     * @return array
+     * @return string[] array of Data Interface class names
      */
-    public function getAllServiceDataInterface();
+    public function getAllServiceDataInterfaces();
 }
