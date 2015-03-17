@@ -37,8 +37,8 @@ class Observer
     public function aggregateSalesReportShipmentData()
     {
         $this->_localeResolver->emulate(0);
-        $currentDate = $this->_coreLocale->date();
-        $date = $currentDate->subHour(25);
+        $currentDate = new \DateTime();
+        $date = $currentDate->modify('-25 hours');
         $this->_shippingFactory->create()->aggregate($date);
         $this->_localeResolver->revert();
         return $this;

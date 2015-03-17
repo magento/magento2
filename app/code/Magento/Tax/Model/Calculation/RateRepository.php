@@ -233,17 +233,19 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 
         $countryCode = $taxRate->getTaxCountryId();
         if (!\Zend_Validate::is($countryCode, 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'country_id']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'country_id']));
         } elseif (!\Zend_Validate::is(
             $this->countryFactory->create()->loadByCode($countryCode)->getId(),
             'NotEmpty'
         )) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                [
-                    'fieldName' => 'country_id',
-                    'value' => $countryCode
-                ]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    [
+                        'fieldName' => 'country_id',
+                        'value' => $countryCode
+                    ]
+                )
             );
         }
 
@@ -256,17 +258,19 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             )
         ) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                ['fieldName' => 'region_id', 'value' => $regionCode]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName' => 'region_id', 'value' => $regionCode]
+                )
             );
         }
 
         if (!\Zend_Validate::is($taxRate->getRate(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'percentage_rate']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'percentage_rate']));
         }
 
         if (!\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'code']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'code']));
         }
 
         if ($taxRate->getZipIsRange()) {
@@ -277,17 +281,19 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             foreach ($zipRangeFromTo as $key => $value) {
                 if (!is_numeric($value) || $value < 0) {
                     $exception->addError(
-                        InputException::INVALID_FIELD_VALUE,
-                        ['fieldName' => $key, 'value' => $value]
+                        __(
+                            InputException::INVALID_FIELD_VALUE,
+                            ['fieldName' => $key, 'value' => $value]
+                        )
                     );
                 }
             }
             if ($zipRangeFromTo['zip_from'] > $zipRangeFromTo['zip_to']) {
-                $exception->addError('Range To should be equal or greater than Range From.');
+                $exception->addError(__('Range To should be equal or greater than Range From.'));
             }
         } else {
             if (!\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')) {
-                $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode']);
+                $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode']));
             }
         }
 

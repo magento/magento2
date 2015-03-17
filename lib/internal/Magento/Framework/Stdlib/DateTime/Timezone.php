@@ -233,7 +233,7 @@ class Timezone implements TimezoneInterface
      * @param null $locale
      * @param null $timezone
      * @param string|null $pattern
-     * @return mixed
+     * @return string
      */
     public function formatDateTime(
         \DateTimeInterface $date,

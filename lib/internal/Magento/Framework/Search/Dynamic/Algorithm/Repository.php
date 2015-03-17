@@ -49,7 +49,9 @@ class Repository
     {
         if (!isset($this->instances[$algorithmType])) {
             if (!isset($this->algorithms[$algorithmType])) {
-                throw new LocalizedException($algorithmType . ' was not found in algorithms');
+                throw new LocalizedException(
+                    new \Magento\Framework\Phrase('%1 was not found in algorithms', [$algorithmType])
+                );
             }
 
             $className = $this->algorithms[$algorithmType];
@@ -57,7 +59,10 @@ class Repository
 
             if (!$model instanceof AlgorithmInterface) {
                 throw new LocalizedException(
-                    $className . ' doesn\'t extends \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface'
+                    new \Magento\Framework\Phrase(
+                        '%1 doesn\'t extends \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface',
+                        [$className]
+                    )
                 );
             }
             $this->instances[$algorithmType] = $model;

@@ -6,6 +6,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 
 /**
  * Class NoSuchEntityExceptionTest
@@ -25,6 +26,9 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $rendererMock;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
@@ -34,11 +38,17 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    /**
+     * @return void
+     */
     public function tearDown()
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $this->renderedMessage = 'rendered message';
@@ -54,8 +64,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         $expectedLogMessage = 'message parameter1 parameter2';
         $cause = new \Exception();
         $localizeException = new NoSuchEntityException(
-            $message,
-            $params,
+            new Phrase($message, $params),
             $cause
         );
 
@@ -69,8 +78,9 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $message
-     * @param $expectedMessage
+     * @param string $message
+     * @param string $expectedMessage
+     * @return void
      * @dataProvider constantsDataProvider
      */
     public function testConstants($message, $expectedMessage)
@@ -82,12 +92,17 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Phrase::setRenderer($this->rendererMock);
 
         $exception = new NoSuchEntityException(
-            $message,
-            ['consumer_id' => 1, 'resources' => 'record2']
+            new Phrase(
+                $message,
+                ['consumer_id' => 1, 'resources' => 'record2']
+            )
         );
         $this->assertSame($expectedMessage, $exception->getMessage());
     }
 
+    /**
+     * @return array
+     */
     public function constantsDataProvider()
     {
         return [
@@ -102,6 +117,9 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSingleField()
     {
         $fieldName = 'storeId';
@@ -112,6 +130,9 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testDoubleField()
     {
         $website = 'website';

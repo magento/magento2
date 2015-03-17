@@ -7,12 +7,15 @@
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
 /**
- * Class JSONTest
+ * Class JsonTest
  *
- * covers Magento\Framework\Controller\Result\JSON
+ * covers Magento\Framework\Controller\Result\Json
  */
-class JSONTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testRenderResult()
     {
         $json = '{"data":"data"}';
@@ -29,9 +32,9 @@ class JSONTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMock('Magento\Framework\App\Response\Http', ['representJson'], [], '', false);
         $response->expects($this->atLeastOnce())->method('representJson')->with($json)->will($this->returnSelf());
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\Controller\Result\JSON', ['translateInline' => $translateInline]);
+            ->getObject('Magento\Framework\Controller\Result\Json', ['translateInline' => $translateInline]);
         $resultJson->setJsonData($json);
         $this->assertSame($resultJson, $resultJson->renderResult($response));
     }

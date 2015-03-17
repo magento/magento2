@@ -82,19 +82,19 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         try {
             $attributeSet = $this->setRepository->get($attributeSetId);
         } catch (NoSuchEntityException $ex) {
-            throw new NoSuchEntityException(sprintf('AttributeSet with id "%s" does not exist.', $attributeSetId));
+            throw new NoSuchEntityException(__('AttributeSet with id "%1" does not exist.', $attributeSetId));
         }
 
         $setEntityType = $this->entityTypeFactory->create()->getEntityType($attributeSet->getEntityTypeId());
         if ($setEntityType->getEntityTypeCode() != $entityTypeCode) {
-            throw new InputException('Wrong attribute set id provided');
+            throw new InputException(__('Wrong attribute set id provided'));
         }
 
         //Check if group exists. If not - expected exception
         $attributeGroup = $this->groupRepository->get($attributeGroupId);
 
         if ($attributeGroup->getAttributeSetId() != $attributeSetId) {
-            throw new InputException('Attribute group does not belong to attribute set');
+            throw new InputException(__('Attribute group does not belong to attribute set'));
         }
 
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
@@ -119,7 +119,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         try {
             $attributeSet = $this->setRepository->get($attributeSetId);
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException('Attribute set not found: ' . $attributeSetId);
+            throw new NoSuchEntityException(__('Attribute set not found: %1', $attributeSetId));
         }
         $setEntityType = $this->entityTypeFactory->create()->getEntityType($attributeSet->getEntityTypeId());
 
@@ -132,11 +132,11 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
 
         if (!$attribute->getEntityAttributeId()) {
             throw new InputException(
-                sprintf('Attribute "%s" not found in attribute set %s.', $attributeCode, $attributeSetId)
+                __('Attribute "%1" not found in attribute set %2.', $attributeCode, $attributeSetId)
             );
         }
         if (!$attribute->getIsUserDefined()) {
-            throw new StateException('System attribute can not be deleted');
+            throw new StateException(__('System attribute can not be deleted'));
         }
         $attribute->deleteEntity();
         return true;
