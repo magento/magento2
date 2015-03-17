@@ -325,7 +325,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param QuoteValidator $quoteValidator
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -363,7 +363,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Quote\Model\QuoteValidator $quoteValidator,
         \Magento\Catalog\Helper\Product $catalogProduct,
@@ -428,7 +428,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -1588,7 +1588,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             }
         }
         if (!empty($errors)) {
-            throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
+            throw new \Magento\Framework\Exception\LocalizedException(__(implode("\n", $errors)));
         }
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
@@ -1685,7 +1685,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $resultItem = $this->addProduct($product, $buyRequest);
 
         if (is_string($resultItem)) {
-            throw new \Magento\Framework\Exception\LocalizedException($resultItem);
+            throw new \Magento\Framework\Exception\LocalizedException(__($resultItem));
         }
 
         if ($resultItem->getParentItem()) {
@@ -2524,5 +2524,26 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function isMultipleShippingAddresses()
     {
         return \count($this->getAllShippingAddresses()) > 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\CartExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\CartExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\CartExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

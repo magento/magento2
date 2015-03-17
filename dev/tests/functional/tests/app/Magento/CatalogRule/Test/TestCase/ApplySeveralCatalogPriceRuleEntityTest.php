@@ -58,12 +58,14 @@ class ApplySeveralCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTe
             $this->catalogRuleNew->getFormPageActions()->saveAndApply();
         }
         // Create product
-        $productSimple = $this->fixtureFactory->createByCode(
-            'catalogProductSimple',
-            ['dataSet' => 'simple_for_salesrule_1']
-        );
-        $productSimple->persist();
+        $products = $this->objectManager->create(
+            '\Magento\Catalog\Test\TestStep\CreateProductsStep',
+            ['products' => 'catalogProductSimple::simple_for_salesrule_1']
+        )->run();
 
-        return ['product' => $productSimple];
+        return [
+            'products' => $products['products'],
+            'category' => $products['products'][0]->getDataFieldConfig('category_ids')['source']->getCategories()[0],
+        ];
     }
 }

@@ -6,49 +6,60 @@
 
 namespace Magento\CatalogRule\Test\Constraint;
 
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCatalogPriceRuleAppliedCatalogPage
+ * Assert that Catalog Price Rule is applied for product(s) in Catalog.
  */
 class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
 {
     /**
      * Assert that Catalog Price Rule is applied for product(s) in Catalog
-     * according to Priority(Priority/Stop Further Rules Processing)
+     * according to Priority(Priority/Stop Further Rules Processing).
      *
-     * @param CatalogProductSimple $product
-     * @param CmsIndex $cmsIndex
-     * @param CatalogCategoryView $catalogCategoryView
-     * @param array $price
+     * @param CmsIndex $cmsIndexPage
+     * @param CatalogCategoryView $catalogCategoryViewPage
+     * @param array $products
+     * @param array $productPrice
+     * @param Customer $customer
      * @return void
      */
     public function processAssert(
-        CatalogProductSimple $product,
-        CmsIndex $cmsIndex,
-        CatalogCategoryView $catalogCategoryView,
-        array $price
+        CmsIndex $cmsIndexPage,
+        CatalogCategoryView $catalogCategoryViewPage,
+        array $products,
+        array $productPrice,
+        Customer $customer = null
     ) {
-        $cmsIndex->open();
-        $categoryName = $product->getCategoryIds()[0];
-        $productName = $product->getName();
-        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $productPriceBlock = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($productName);
-        $actualPrice['regular'] = $productPriceBlock->getRegularPrice();
-        $actualPrice['special'] = $productPriceBlock->getSpecialPrice();
-        $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
-        $diff = $this->verifyData($actualPrice, $price);
-        \PHPUnit_Framework_Assert::assertTrue(
-            empty($diff),
-            implode(' ', $diff)
-        );
+        if ($customer !== null) {
+            $this->objectManager->create(
+                '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                ['customer' => $customer]
+            )->run();
+        }
+        $cmsIndexPage->open();
+        foreach ($products as $key => $product) {
+            $categoryName = $product->getCategoryIds()[0];
+            $productName = $product->getName();
+            $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
+            $productPriceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductPriceBlock($productName);
+            $actualPrice['regular'] = $productPriceBlock->getRegularPrice();
+            $actualPrice['special'] = $productPriceBlock->getSpecialPrice();
+            $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+            $diff = $this->verifyData($actualPrice, $productPrice[$key]);
+            \PHPUnit_Framework_Assert::assertTrue(
+                empty($diff),
+                implode(' ', $diff)
+            );
+        }
     }
 
     /**
-     * Check if arrays have equal values
+     * Check if arrays have equal values.
      *
      * @param array $formData
      * @param array $fixtureData
@@ -59,16 +70,16 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
         $errorMessage = [];
         foreach ($formData as $key => $value) {
             if ($value != $fixtureData[$key]) {
-                $errorMessage[] = "Data not equal."
+                $errorMessage[] = "Value " . $key . " is not equal."
                     . "\nExpected: " . $fixtureData[$key]
-                    . "\nActual: " . $value;
+                    . "\nActual: " . $value . "\n";
             }
         }
         return $errorMessage;
     }
 
     /**
-     * Text of catalog price rule visibility on catalog page (frontend)
+     * Text of catalog price rule visibility on catalog page (frontend).
      *
      * @return string
      */

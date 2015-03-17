@@ -21,4 +21,12 @@ interface CreditmemoItemSearchResultInterface extends \Magento\Framework\Api\Sea
      * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

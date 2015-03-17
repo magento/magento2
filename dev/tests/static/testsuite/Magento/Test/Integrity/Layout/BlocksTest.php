@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Layout;
 
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
 
 class BlocksTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +48,7 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
 
     public function testBlocksNotContainers()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check that containers are not used as blocks in templates

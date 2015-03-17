@@ -120,14 +120,14 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         $validatorLength->setName('Consumer Key');
         if (!$validatorLength->isValid($this->getKey())) {
             $messages = $validatorLength->getMessages();
-            throw new \Magento\Framework\Exception\LocalizedException(array_shift($messages));
+            throw new \Magento\Framework\Exception\LocalizedException(__(array_shift($messages)));
         }
 
         $validatorLength->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
         $validatorLength->setName('Consumer Secret');
         if (!$validatorLength->isValid($this->getSecret())) {
             $messages = $validatorLength->getMessages();
-            throw new \Magento\Framework\Exception\LocalizedException(array_shift($messages));
+            throw new \Magento\Framework\Exception\LocalizedException(__(array_shift($messages)));
         }
         return true;
     }

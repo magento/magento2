@@ -24,7 +24,7 @@ class OrderEmailTest extends WebapiAbstract
         $order->loadByIncrementId('100000001');
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId() . '/email',
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/emails',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

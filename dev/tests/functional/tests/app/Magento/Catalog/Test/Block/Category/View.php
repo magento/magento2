@@ -11,34 +11,33 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class View
- * Category view block on the category page
+ * Category view block on the category page.
  */
 class View extends Block
 {
     /**
-     * Recently Viewed Products selectors
+     * Recently Viewed Products selectors.
      *
      * @var string
      */
     protected $recentlyViewedProducts = './/*[contains(@class,"widget")]//strong[@class="product-item-name"]';
 
     /**
-     * Description CSS selector
+     * Description CSS selector.
      *
      * @var string
      */
     protected $description = '.category-description';
 
     /**
-     * Locator for category content
+     * Locator for category content.
      *
      * @var string
      */
     protected $content = '.category-cms';
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -48,17 +47,18 @@ class View extends Block
     }
 
     /**
-     * Get Category Content
+     * Get Category Content.
      *
      * @return string
      */
     public function getContent()
     {
-        return $this->_rootElement->find($this->content)->getText();
+        $categoryContent = $this->_rootElement->find($this->content);
+        return $categoryContent->isVisible() ? $categoryContent->getText() : '';
     }
 
     /**
-     * Get products from Recently Viewed block
+     * Get products from Recently Viewed block.
      *
      * @return array
      */

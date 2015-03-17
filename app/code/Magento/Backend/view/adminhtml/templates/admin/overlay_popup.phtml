@@ -17,7 +17,9 @@
                 </div>
                 <div class="main-col" id="content">
                     <div class="main-col-inner">
-                        <div id="messages" data-container-for="messages"><?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?></div>
+                        <div id="messages" class="messages" data-container-for="messages">
+                            <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+                        </div>
                         <?php echo $block->getChildHtml('content') ?>
                     </div>
                 </div>

@@ -70,7 +70,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * Test entity stores
      *
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetEntityStores()
     {
@@ -91,7 +91,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * Check exception is thrown when product does not associated with stores
      *
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetEntityStoresProductStoresException()
     {

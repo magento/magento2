@@ -79,7 +79,7 @@ class FallbackContext extends Context
      *
      * @return string
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
         return $this->locale;
     }

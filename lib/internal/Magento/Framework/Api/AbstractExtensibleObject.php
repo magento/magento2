@@ -10,8 +10,9 @@ use \Magento\Framework\Api\AttributeValueFactory;
 /**
  * Base Class for extensible data Objects
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * TODO: This class can be split into Custom attribute and Extension attribute implementation classes
  */
-abstract class AbstractExtensibleObject extends AbstractSimpleObject implements ExtensibleDataInterface
+abstract class AbstractExtensibleObject extends AbstractSimpleObject implements CustomAttributesDataInterface
 {
     /**
      * Array key for custom attributes
@@ -19,14 +20,14 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
     const CUSTOM_ATTRIBUTES_KEY = 'custom_attributes';
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     */
+    protected $extensionFactory;
+
+    /**
      * @var AttributeValueFactory
      */
     protected $attributeValueFactory;
-
-    /**
-     * @var MetadataServiceInterface
-     */
-    protected $metadataService;
 
     /**
      * @var string[]
@@ -36,16 +37,16 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
     /**
      * Initialize internal storage
      *
-     * @param MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
      */
     public function __construct(
-        MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $attributeValueFactory,
         $data = []
     ) {
-        $this->metadataService = $metadataService;
+        $this->extensionFactory = $extensionFactory;
         $this->attributeValueFactory = $attributeValueFactory;
         parent::__construct($data);
     }
@@ -118,23 +119,57 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
     }
 
     /**
+     * Get a list of custom attribute codes.
+     *
+     * By default, entity can be extended only using extension attributes functionality.
      *
      * @return string[]
      */
     protected function getCustomAttributesCodes()
     {
-        if (!is_null($this->customAttributesCodes)) {
-            return $this->customAttributesCodes;
-        }
+        return isset($this->customAttributesCodes) ? $this->customAttributesCodes : [];
+    }
+
+    /**
+     * Receive a list of EAV attributes using provided metadata service.
+     *
+     * Can be used in child classes, which represent EAV entities.
+     *
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @return string[]
+     */
+    protected function getEavAttributesCodes(\Magento\Framework\Api\MetadataServiceInterface $metadataService)
+    {
         $attributeCodes = [];
-        $customAttributesMetadata = $this->metadataService->getCustomAttributesMetadata(get_class($this));
+        $customAttributesMetadata = $metadataService->getCustomAttributesMetadata(get_class($this));
         if (is_array($customAttributesMetadata)) {
             /** @var $attribute \Magento\Framework\Api\MetadataObjectInterface */
             foreach ($customAttributesMetadata as $attribute) {
                 $attributeCodes[] = $attribute->getAttributeCode();
             }
         }
-        $this->customAttributesCodes = $attributeCodes;
         return $attributeCodes;
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Framework\Api\ExtensionAttributesInterface
+     */
+    protected function _getExtensionAttributes()
+    {
+        return $this->_get(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes
+     * @return $this
+     */
+    protected function _setExtensionAttributes(\Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes)
+    {
+        $this->_data[self::EXTENSION_ATTRIBUTES_KEY] = $extensionAttributes;
+        return $this;
     }
 }

@@ -99,7 +99,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
         $this->assetRepo->updateDesignParams($params);
         /** @var $currentTheme \Magento\Framework\View\Design\ThemeInterface */
         $currentTheme = $params['themeModel'];
-        $key = $currentTheme->getId();
+        $key = $currentTheme->getCode();
         if (isset($this->viewConfigs[$key])) {
             return $this->viewConfigs[$key];
         }

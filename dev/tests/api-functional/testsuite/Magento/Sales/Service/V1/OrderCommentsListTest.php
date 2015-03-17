@@ -28,7 +28,7 @@ class OrderCommentsListTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId() . '/comments',
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/comments',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [

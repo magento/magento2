@@ -20,7 +20,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
     public function testGetAttributes()
     {
-        $attributeSetId = \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID;
+        $attributeSetId = 4;
 
         $serviceInfo = [
             'rest' => [
@@ -59,7 +59,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
         $payload = $this->getAttributeData();
         $payload['attributeSetId'] = -1;
 
-        $expectedMessage = 'AttributeSet with id "' . $payload['attributeSetId'] . '" does not exist.';
+        $expectedMessage = 'AttributeSet with id "%1" does not exist.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
@@ -73,6 +73,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$payload['attributeSetId']], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
@@ -81,7 +82,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     {
         $payload = $this->getAttributeData();
         $payload['attributeGroupId'] = -1;
-        $expectedMessage = 'Group with id "' . $payload['attributeGroupId'] . '" does not exist.';
+        $expectedMessage = 'Group with id "%1" does not exist.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
@@ -95,6 +96,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$payload['attributeGroupId']], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
@@ -103,7 +105,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     {
         $payload = $this->getAttributeData();
         $payload['attributeCode'] = 'badCode';
-        $expectedMessage = 'Attribute with attributeCode "' . $payload['attributeCode'] . '" does not exist.';
+        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
@@ -117,6 +119,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$payload['attributeCode']], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }
@@ -155,7 +158,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 $serviceInfo,
                 [
                     'attributeSetId' => $payload['attributeSetId'],
-                    'attributeCode' => $payload['attributeCode']
+                    'attributeCode' => $payload['attributeCode'],
                 ]
             )
         );
@@ -164,10 +167,10 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     protected function getAttributeData()
     {
         return [
-            'attributeSetId' => \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID,
+            'attributeSetId' => 4,
             'attributeGroupId' => 8,
             'attributeCode' => 'cost',
-            'sortOrder' => 3
+            'sortOrder' => 3,
         ];
     }
 

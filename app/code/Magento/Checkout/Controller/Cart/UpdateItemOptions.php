@@ -29,22 +29,22 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode()]
+                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("We can't find the quote item."));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the quote item.'));
             }
 
             $item = $this->cart->updateItem($id, new \Magento\Framework\Object($params));
             if (is_string($item)) {
-                throw new \Magento\Framework\Exception\LocalizedException($item);
+                throw new \Magento\Framework\Exception\LocalizedException(__($item));
             }
             if ($item->getHasError()) {
-                throw new \Magento\Framework\Exception\LocalizedException($item->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
             }
 
             $related = $this->getRequest()->getParam('related_product');
@@ -53,8 +53,6 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
             }
 
             $this->cart->save();
-
-            $this->_checkoutSession->setCartWasUpdated(true);
 
             $this->_eventManager->dispatch(
                 'checkout_cart_update_item_complete',

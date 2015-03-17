@@ -16,6 +16,7 @@ class EstimateUpdatePost extends \Magento\Checkout\Controller\Cart
         $code = (string)$this->getRequest()->getParam('estimate_method');
         if (!empty($code)) {
             $this->cart->getQuote()->getShippingAddress()->setShippingMethod($code)->save();
+            $this->cart->save();
         }
         return $this->_goBack();
     }

@@ -133,7 +133,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$_namespaces = implode('|', \Magento\Framework\Test\Utility\Files::init()->getNamespaces());
+        self::$_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
         self::_prepareListRoutesXml();
@@ -227,7 +227,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
     public function testUndeclared()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check undeclared modules dependencies for specified file
@@ -372,7 +372,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _getRelativeFilename($absoluteFilename)
     {
-        $pathToSource = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
+        $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         $relativeFileName = str_replace($pathToSource, '', $absoluteFilename);
         return trim(str_replace('\\', '/', $relativeFileName), '/');
     }
@@ -427,7 +427,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $files,
             $this->_prepareFiles(
                 'php',
-                \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, true, false),
+                \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, false, false, true, false),
                 true
             )
         );
@@ -435,19 +435,19 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         // Get all configuration files
         $files = array_merge(
             $files,
-            $this->_prepareFiles('config', \Magento\Framework\Test\Utility\Files::init()->getConfigFiles())
+            $this->_prepareFiles('config', \Magento\Framework\App\Utility\Files::init()->getConfigFiles())
         );
 
         //Get all layout updates files
         $files = array_merge(
             $files,
-            $this->_prepareFiles('layout', \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles())
+            $this->_prepareFiles('layout', \Magento\Framework\App\Utility\Files::init()->getLayoutFiles())
         );
 
         // Get all template files
         $files = array_merge(
             $files,
-            $this->_prepareFiles('template', \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles())
+            $this->_prepareFiles('template', \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles())
         );
 
         return $files;
@@ -458,7 +458,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareListConfigXml()
     {
-        $files = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('config.xml', [], false);
+        $files = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('config.xml', [], false);
         foreach ($files as $file) {
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -472,7 +472,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareListRoutesXml()
     {
-        $files = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('*/routes.xml', [], false);
+        $files = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('*/routes.xml', [], false);
         foreach ($files as $file) {
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -489,7 +489,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/' .
             '(?<path>[\/\w]*).php/';
 
-        $files = \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false, false);
+        $files = \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, false, false, false, false);
         foreach ($files as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];

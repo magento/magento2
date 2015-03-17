@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
      * Constants defined for keys of  data array
@@ -214,4 +214,19 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setWeight($weight);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes);
 }

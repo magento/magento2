@@ -24,14 +24,14 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
              */
             function ($file) {
                 $contents = file_get_contents($file);
-                $classes = \Magento\Framework\Test\Utility\Classes::getAllMatches(
+                $classes = \Magento\Framework\App\Utility\Classes::getAllMatches(
                     $contents,
                     '/
                 # ::getResourceModel ::getBlockSingleton ::getModel ::getSingleton
@@ -57,7 +57,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 );
 
                 // without modifier "i". Starting from capital letter is a significant characteristic of a class name
-                \Magento\Framework\Test\Utility\Classes::getAllMatches(
+                \Magento\Framework\App\Utility\Classes::getAllMatches(
                     $contents,
                     '/(?:\-> | parent\:\:)(?:_init | setType)\(\s*
                     \'([A-Z][a-z\d][A-Za-z\d\\\\]+)\'(?:,\s*\'([A-Z][a-z\d][A-Za-z\d\\\\]+)\')
@@ -69,7 +69,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $this->_assertClassesExist($classes, $file);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
+            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
         );
     }
 

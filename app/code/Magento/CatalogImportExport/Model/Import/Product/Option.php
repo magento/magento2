@@ -472,7 +472,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['product_entity'])) {
             $this->_productEntity = $data['product_entity'];
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Option entity must have a parent product entity.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Option entity must have a parent product entity.')
+            );
         }
         if (isset($data['collection_by_pages_iterator'])) {
             $this->_byPagesIterator = $data['collection_by_pages_iterator'];
@@ -1348,7 +1350,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             'entity_id' => $productId,
             'has_options' => 1,
             'required_options' => 0,
-            'updated_at' => $this->dateTime->now(),
+            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
 
         if (!empty($rowData[self::COLUMN_IS_REQUIRED])) {

@@ -89,18 +89,4 @@ class Widget extends \Magento\Backend\Block\Template
             $dataAttr
         )->toHtml();
     }
-
-    /**
-     * @return string
-     */
-    public function getGlobalIcon()
-    {
-        return '<img src="' . $this->getViewFileUrl(
-            'images/fam_link.gif'
-        ) . '" alt="' . __(
-            'Global Attribute'
-        ) . '" title="' . __(
-            'This attribute shares the same value in all stores.'
-        ) . '" class="attribute-global"/>';
-    }
 }

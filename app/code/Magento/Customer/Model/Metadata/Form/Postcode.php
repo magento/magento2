@@ -9,7 +9,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Locale\ResolverInterface;
-use Psr\Log\LoggerInterface as Logger;
+use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
 
 /**
@@ -24,7 +24,7 @@ class Postcode extends AbstractData
 
     /**
      * @param MagentoTimezone $localeDate
-     * @param Logger $logger
+     * @param PsrLogger $logger
      * @param AttributeMetadataInterface $attribute
      * @param ResolverInterface $localeResolver
      * @param string $value
@@ -34,7 +34,7 @@ class Postcode extends AbstractData
      */
     public function __construct(
         MagentoTimezone $localeDate,
-        Logger $logger,
+        PsrLogger $logger,
         AttributeMetadataInterface $attribute,
         ResolverInterface $localeResolver,
         $value,

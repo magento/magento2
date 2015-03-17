@@ -91,4 +91,21 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setMessage($message);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\GiftMessage\Api\Data\MessageExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes
+    );
 }

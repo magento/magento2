@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="cmsPage" module="Magento_Cms" type="flat" entity_type="cms_page" collection="Magento\Cms\Model\Resource\Page\Grid\Collection" identifier="identifier"
+             repository_class="Magento\Cms\Test\Repository\CmsPage" handler_interface="Magento\Cms\Test\Handler\CmsPage\CmsPageInterface" class="Magento\Cms\Test\Fixture\CmsPage">
+        <dataset name="default">
+            <field name="title" xsi:type="string">CMS Page%isolation%</field>
+            <field name="identifier" xsi:type="string">identifier%isolation%</field>
+            <field name="store_id" xsi:type="string">All Store Views</field>
+            <field name="is_actice" xsi:type="string">Enabled</field>
+            <field name="content" xsi:type="array">
+                <item name="content" xsi:type="string">description_%isolation%</item>
+            </field>
+        </dataset>
+        <field name="page_id" is_required="1">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="title" is_required="" group="page_information">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="is_active" is_required="" group="page_information">
+            <default_value xsi:type="string">Enabled</default_value>
+        </field>
+        <field name="page_layout" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="meta_keywords" is_required="" group="meta_data">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="meta_description" is_required="" group="meta_data">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="identifier" group="page_information" is_required="">
+            <default_value xsi:type="string">identifier%isolation%</default_value>
+        </field>
+        <field name="content_heading" is_required="" group="content">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="content" is_required="" group="content" source="Magento\Cms\Test\Fixture\CmsPage\Content">
+            <default_value xsi:type="array">
+                <item name="content" xsi:type="string">Text %isolation%</item>
+            </default_value>
+        </field>
+        <field name="creation_time" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="update_time" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="sort_order" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+        <field name="layout_update_xml" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="custom_theme" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="custom_page_layout" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="custom_layout_update_xml" is_required="">
+            <default_value xsi:type="null" />
+        </field>
+        <field name="custom_theme_from" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="custom_theme_to" source="Magento\Backend\Test\Fixture\Source\Date" />
+        <field name="website_root" is_required="">
+            <default_value xsi:type="string">1</default_value>
+        </field>
+        <field name="store_id" is_required="1" group="page_information">
+            <default_value xsi:type="string">All Store Views</default_value>
+        </field>
+    </fixture>
+</config>

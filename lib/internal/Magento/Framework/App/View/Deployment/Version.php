@@ -21,9 +21,6 @@ class Version
      */
     private $versionStorage;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
-    private $dateTime;
-
     /**
      * @var string
      */
@@ -32,16 +29,13 @@ class Version
     /**
      * @param \Magento\Framework\App\State $appState
      * @param Version\StorageInterface $versionStorage
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
     ) {
         $this->appState = $appState;
         $this->versionStorage = $versionStorage;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -70,13 +64,13 @@ class Version
                 try {
                     $result = $this->versionStorage->load();
                 } catch (\UnexpectedValueException $e) {
-                    $result = $this->dateTime->toTimestamp(true);
+                    $result = (new \DateTime())->getTimestamp();
                     $this->versionStorage->save($result);
                 }
                 break;
 
             case \Magento\Framework\App\State::MODE_DEVELOPER:
-                $result = $this->dateTime->toTimestamp(true);
+                $result = (new \DateTime())->getTimestamp();
                 break;
 
             default:

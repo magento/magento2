@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
      * @return int|null
@@ -149,4 +149,19 @@ interface CategoryInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setIncludeInMenu($includeInMenu);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Catalog\Api\Data\CategoryExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes);
 }

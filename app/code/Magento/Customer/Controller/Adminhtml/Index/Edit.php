@@ -73,7 +73,11 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
                 $formData = $customerForm->extractData($request, 'account');
                 $customerData['account'] = $customerForm->restoreData($formData);
                 $customer = $this->customerDataFactory->create();
-                $this->dataObjectHelper->populateWithArray($customer, $customerData['account']);
+                $this->dataObjectHelper->populateWithArray(
+                    $customer,
+                    $customerData['account'],
+                    '\Magento\Customer\Api\Data\CustomerInterface'
+                );
             }
 
             if (isset($data['address']) && is_array($data['address'])) {
