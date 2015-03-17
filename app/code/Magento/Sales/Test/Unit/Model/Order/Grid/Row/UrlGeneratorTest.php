@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Grid\Row;
 
-class UrlGeneratorTest extends  \PHPUnit_Framework_TestCase
+class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Grid\Row\UrlGenerator
@@ -24,10 +24,22 @@ class UrlGeneratorTest extends  \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->urlMock = $this->getMockForAbstractClass(
-            'Magento\Backend\Model\UrlInterface', [], '', false, false, true, []
+            'Magento\Backend\Model\UrlInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $this->authorizationMock = $this->getMockForAbstractClass(
-            'Magento\Framework\AuthorizationInterface', [], '', false, false, true, []
+            'Magento\Framework\AuthorizationInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            []
         );
         $this->urlGenerator = new \Magento\Sales\Model\Order\Grid\Row\UrlGenerator(
             $this->urlMock,

@@ -36,25 +36,29 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->orderItemFactoryMock = $this->getMock('Magento\Sales\Model\Order\ItemFactory',
+        $this->orderItemFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Order\ItemFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->invoiceMock = $this->getMock('Magento\Sales\Model\Order\Invoice',
+        $this->invoiceMock = $this->getMock(
+            'Magento\Sales\Model\Order\Invoice',
             [],
             [],
             '',
             false
         );
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order',
+        $this->orderMock = $this->getMock(
+            'Magento\Sales\Model\Order',
             [],
             [],
             '',
             false
         );
-        $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item',
+        $this->orderItemMock = $this->getMock(
+            'Magento\Sales\Model\Order\Item',
             [
                 'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
                 'getBaseTaxInvoiced', 'getHiddenTaxInvoiced', 'getBaseHiddenTaxInvoiced', 'getDiscountInvoiced',
@@ -67,7 +71,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->item = $this->objectManager->getObject('Magento\Sales\Model\Order\Invoice\Item',
+        $this->item = $this->objectManager->getObject(
+            'Magento\Sales\Model\Order\Invoice\Item',
             [
                 'orderItemFactory' => $this->orderItemFactoryMock
             ]
