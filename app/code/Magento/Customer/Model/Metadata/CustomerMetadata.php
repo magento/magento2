@@ -78,13 +78,15 @@ class CustomerMetadata implements CustomerMetadataInterface
             return $attributeMetadata;
         } else {
             throw new NoSuchEntityException(
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                [
-                    'fieldName' => 'entityType',
-                    'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
-                    'field2Name' => 'attributeCode',
-                    'field2Value' => $attributeCode,
-                ]
+                __(
+                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    [
+                        'fieldName' => 'entityType',
+                        'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
+                        'field2Name' => 'attributeCode',
+                        'field2Value' => $attributeCode,
+                    ]
+                )
             );
         }
     }

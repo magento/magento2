@@ -53,7 +53,7 @@ class CouponManagement implements CouponManagementInterface
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
-            throw new NoSuchEntityException("Cart $cartId doesn't contain products");
+            throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
 
@@ -61,10 +61,10 @@ class CouponManagement implements CouponManagementInterface
             $quote->setCouponCode($couponCode);
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not apply coupon code');
+            throw new CouldNotSaveException(__('Could not apply coupon code'));
         }
         if ($quote->getCouponCode() != $couponCode) {
-            throw new NoSuchEntityException('Coupon code is not valid');
+            throw new NoSuchEntityException(__('Coupon code is not valid'));
         }
         return true;
     }
@@ -77,17 +77,17 @@ class CouponManagement implements CouponManagementInterface
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
-            throw new NoSuchEntityException("Cart $cartId doesn't contain products");
+            throw new NoSuchEntityException(__('Cart %1 doesn\'t contain products', $cartId));
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
         try {
             $quote->setCouponCode('');
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotDeleteException('Could not delete coupon code');
+            throw new CouldNotDeleteException(__('Could not delete coupon code'));
         }
         if ($quote->getCouponCode() != '') {
-            throw new CouldNotDeleteException('Could not delete coupon code');
+            throw new CouldNotDeleteException(__('Could not delete coupon code'));
         }
         return true;
     }

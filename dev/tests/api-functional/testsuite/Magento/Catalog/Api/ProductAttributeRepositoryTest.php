@@ -159,7 +159,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     public function testDeleteNoSuchEntityException()
     {
         $attributeCode = 'some_test_code';
-        $expectedMessage = 'Attribute with attributeCode "' . $attributeCode . '" does not exist.';
+        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
 
         $serviceInfo = [
             'rest' => [
@@ -185,6 +185,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$attributeCode], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }

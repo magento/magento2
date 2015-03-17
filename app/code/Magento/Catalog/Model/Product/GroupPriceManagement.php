@@ -75,7 +75,7 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     public function add($sku, $customerGroupId, $price)
     {
         if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($price, 'Float')) {
-            throw new InputException('Please provide valid data');
+            throw new InputException(__('Please provide valid data'));
         }
         $customerGroup = $this->groupRepository->getById($customerGroupId);
         $product = $this->productRepository->get($sku, true);
@@ -108,13 +108,13 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         if (is_array($errors) && count($errors)) {
             $errorAttributeCodes = implode(', ', array_keys($errors));
             throw new InputException(
-                sprintf('Values of following attributes are invalid: %s', $errorAttributeCodes)
+                __('Values of following attributes are invalid: %1', $errorAttributeCodes)
             );
         }
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save group price');
+            throw new CouldNotSaveException(__('Could not save group price'));
         }
         return true;
     }

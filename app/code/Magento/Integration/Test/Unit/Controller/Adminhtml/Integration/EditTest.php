@@ -71,7 +71,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
                 $this->returnValue(['name' => 'nonExistentInt'])
             );
 
-        $invalidIdException = new IntegrationException($exceptionMessage);
+        $invalidIdException = new IntegrationException(__($exceptionMessage));
         $this->_integrationSvcMock->expects(
             $this->any()
         )->method(
