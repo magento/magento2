@@ -96,13 +96,13 @@ class Io
          * multiple processes are attempting to access the generated file simultaneously.
          */
         $content = "<?php\n" . $content;
-        $rand = rand(0,1024);
+        $rand = rand(0, 1024);
         $tmpFile = $fileName . ".$rand";
         $this->filesystemDriver->filePutContents($tmpFile, $content);
 
         try {
             $result = $this->filesystemDriver->rename($tmpFile, $fileName);
-        } catch(FilesystemException $e) {
+        } catch (FilesystemException $e) {
             if (!file_exists($fileName)) {
                 throw $e;
             } else {
