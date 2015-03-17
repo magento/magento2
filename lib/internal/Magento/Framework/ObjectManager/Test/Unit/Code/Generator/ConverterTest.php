@@ -92,16 +92,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->classGenerator->expects($this->once())
             ->method('setName')
             ->with(self::RESULT_CLASS_NAME)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('addProperties')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('addMethods')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('setClassDocBlock')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('generate')
             ->will($this->returnValue($generatedCode));
