@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Controller\Guest;
+namespace Magento\Sales\Test\Unit\Controller\Guest;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
