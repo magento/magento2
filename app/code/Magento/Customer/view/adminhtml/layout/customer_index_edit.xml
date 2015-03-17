@@ -9,7 +9,7 @@
       xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <ui_component name="customer_form"/>
+            <uiComponent name="customer_form"/>
         </referenceContainer>
     </body>
 </page>

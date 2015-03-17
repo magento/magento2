@@ -25,7 +25,7 @@ class UiComponent implements GeneratorInterface
     /**
      * Generator type
      */
-    const TYPE = 'ui_component';
+    const TYPE = 'uiComponent';
 
     /**
      * Block adapter

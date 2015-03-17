@@ -18,7 +18,7 @@ class UiComponent implements Layout\ReaderInterface
     /**#@+
      * Supported types
      */
-    const TYPE_UI_COMPONENT = 'ui_component';
+    const TYPE_UI_COMPONENT = 'uiComponent';
     /**#@-*/
 
     /**

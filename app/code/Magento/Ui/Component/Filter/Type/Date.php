@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Component\Filter\Type;
 
-use Magento\Ui\Component\Filter\DataProvider;
 use Magento\Ui\Component\Filter\AbstractFilter;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
