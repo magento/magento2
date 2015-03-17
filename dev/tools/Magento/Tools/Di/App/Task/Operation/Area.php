@@ -7,7 +7,6 @@ namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Framework\App;
-use Magento\Tools\Di\Code\Reader\ClassesScanner;
 use Magento\Tools\Di\Compiler\Config;
 use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
 

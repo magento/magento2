@@ -8,7 +8,7 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
@@ -42,7 +42,7 @@ class Http implements \Magento\Framework\AppInterface
     protected $_request;
 
     /**
-     * @var ConfigLoader
+     * @var ConfigLoaderInterface
      */
     protected $_configLoader;
 
@@ -72,7 +72,7 @@ class Http implements \Magento\Framework\AppInterface
      * @param AreaList $areaList
      * @param RequestHttp $request
      * @param ResponseHttp $response
-     * @param ConfigLoader $configLoader
+     * @param ConfigLoaderInterface $configLoader
      * @param State $state
      * @param Filesystem $filesystem,
      * @param \Magento\Framework\Registry $registry
@@ -83,7 +83,7 @@ class Http implements \Magento\Framework\AppInterface
         AreaList $areaList,
         RequestHttp $request,
         ResponseHttp $response,
-        ConfigLoader $configLoader,
+        ConfigLoaderInterface $configLoader,
         State $state,
         Filesystem $filesystem,
         \Magento\Framework\Registry $registry

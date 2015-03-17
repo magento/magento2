@@ -35,6 +35,8 @@ class GeneralTest extends AbstractPlugin
                     ],
             ]
         );
+
+        parent::setUp();
     }
 
     public function testMethodCanBePluginized()
