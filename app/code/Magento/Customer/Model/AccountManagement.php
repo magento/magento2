@@ -1077,7 +1077,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if (!$storeId) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
