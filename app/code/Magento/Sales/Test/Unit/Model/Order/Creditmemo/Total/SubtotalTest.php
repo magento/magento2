@@ -30,13 +30,15 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order',
+        $this->orderMock = $this->getMock(
+            'Magento\Sales\Model\Order',
             ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount'],
             [],
             '',
             false
         );
-        $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order',
+        $this->orderItemMock = $this->getMock(
+            'Magento\Sales\Model\Order',
             [
                 'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
                 'getDiscountRefunded', 'getQtyRefunded'
@@ -45,7 +47,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo',
+        $this->creditmemoMock = $this->getMock(
+            '\Magento\Sales\Model\Order\Creditmemo',
             [
                 'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
                 'setDiscountAmount', 'setBaseDiscountAmount', 'setSubtotal', 'setBaseSubtotal',
