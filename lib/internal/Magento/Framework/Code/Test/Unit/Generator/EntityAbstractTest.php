@@ -77,14 +77,13 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(self::SOURCE_CLASS . 'Abstract', '_resultClassName', $this->_model);
 
         // with all arguments
-        $ioObject = $this->getMock('Magento\Framework\Code\Generator\Io', [], [], '', false);
-        $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\ClassGenerator',
-            [],
-            [],
-            '',
-            false
-        );
+        // Configure IoObject mock
+        $ioObject = $this->getMockBuilder('Magento\Framework\Code\Generator\Io')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $codeGenerator = $this->getMockBuilder('Magento\Framework\Code\Generator\ClassGenerator')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Code\Generator\EntityAbstract',
@@ -114,19 +113,11 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 '$sourceClassExists' => true,
                 '$resultClassExists' => true,
             ],
-            'cant_create_generation_directory' => [
-                '$errors' => ['Can\'t create directory ' . self::GENERATION_DIRECTORY . '.'],
-                '$validationSuccess' => false,
-                '$sourceClassExists' => true,
-                '$resultClassExists' => false,
-                '$makeGenerationDirSuccess' => false,
-            ],
             'cant_create_result_directory' => [
                 '$errors' => ['Can\'t create directory ' . self::RESULT_DIRECTORY . '.'],
                 '$validationSuccess' => false,
                 '$sourceClassExists' => true,
                 '$resultClassExists' => false,
-                '$makeGenerationDirSuccess' => true,
                 '$makeResultDirSuccess' => false,
             ],
             'result_file_exists' => [
@@ -134,7 +125,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 '$validationSuccess' => true,
                 '$sourceClassExists' => true,
                 '$resultClassExists' => false,
-                '$makeGenerationDirSuccess' => false,
                 '$makeResultDirSuccess' => false,
                 '$resultFileExists' => true,
             ],
@@ -143,7 +133,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 '$validationSuccess' => true,
                 '$sourceClassExists' => true,
                 '$resultClassExists' => false,
-                '$makeGenerationDirSuccess' => true,
                 '$makeResultDirSuccess' => true,
                 '$resultFileExists' => true,
                 '$willWriteCode' => false,
@@ -157,7 +146,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * @param bool $validationSuccess
      * @param bool $sourceClassExists
      * @param bool $resultClassExists
-     * @param bool $makeGenerationDirSuccess
      * @param bool $makeResultDirSuccess
      * @param bool $resultFileExists
      * @param bool $willWriteCode
@@ -180,7 +168,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $validationSuccess = true,
         $sourceClassExists = true,
         $resultClassExists = false,
-        $makeGenerationDirSuccess = true,
         $makeResultDirSuccess = true,
         $resultFileExists = false,
         $willWriteCode = true
@@ -191,7 +178,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             $arguments = $this->_prepareMocksForValidateData(
                 $sourceClassExists,
                 $resultClassExists,
-                $makeGenerationDirSuccess,
                 $makeResultDirSuccess,
                 $resultFileExists
             );
@@ -226,7 +212,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      *
      * @param bool $sourceClassExists
      * @param bool $resultClassExists
-     * @param bool $makeGenerationDirSuccess
      * @param bool $makeResultDirSuccess
      * @param bool $resultFileExists
      * @return array
@@ -235,7 +220,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     protected function _prepareMocksForValidateData(
         $sourceClassExists = true,
         $resultClassExists = false,
-        $makeGenerationDirSuccess = true,
         $makeResultDirSuccess = true,
         $resultFileExists = false
     ) {
@@ -253,31 +237,13 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         }
 
         // Configure IoObject mock
-        $ioObject = $this->getMock(
-            'Magento\Framework\Code\Generator\Io',
-            [
-                'getResultFileName',
-                'makeGenerationDirectory',
-                'makeResultFileDirectory',
-                'fileExists',
-                'getGenerationDirectory',
-                'getResultFileDirectory',
-                'writeResultFile',
-                'rename'
-            ],
-            [],
-            '',
-            false
-        );
+        $ioObject = $this->getMockBuilder('Magento\Framework\Code\Generator\Io')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $ioObject->expects($this->any())->method('getGenerationDirectory')->willReturn(self::GENERATION_DIRECTORY);
         $ioObject->expects($this->any())->method('getResultFileDirectory')->willReturn(self::RESULT_DIRECTORY);
-        $makeGenDirInvocations = (!$sourceClassExists || $resultClassExists) ? 0 : 1;
-        $ioObject->expects($this->exactly($makeGenDirInvocations))
-            ->method('makeGenerationDirectory')
-            ->willReturn($makeGenerationDirSuccess);
         $ioObject->expects($this->any())->method('fileExists')->willReturn($resultFileExists);
-        if ($sourceClassExists && !$resultClassExists && $makeGenerationDirSuccess) {
+        if ($sourceClassExists && !$resultClassExists) {
             $ioObject->expects($this->once())
                 ->method('makeResultFileDirectory')
                 ->with(self::RESULT_CLASS)
@@ -304,13 +270,10 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         // Configure mocks for the validation step
         $mocks = $this->_prepareMocksForValidateData();
 
-        $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\ClassGenerator',
-            ['setName', 'addProperties', 'addMethods', 'setClassDocBlock', 'generate'],
-            [],
-            '',
-            false
-        );
+        $codeGenerator = $this->getMockBuilder('Magento\Framework\Code\Generator\ClassGenerator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $codeGenerator->expects($this->once())->method('setName')->with(self::RESULT_CLASS)->will($this->returnSelf());
         $codeGenerator->expects($this->once())->method('addProperties')->will($this->returnSelf());
         $codeGenerator->expects($this->once())->method('addMethods')->will($this->returnSelf());

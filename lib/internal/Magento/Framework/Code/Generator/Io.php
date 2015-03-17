@@ -91,17 +91,16 @@ class Io
     {
         /**
          * Rename is atomic on *nix systems, while file_put_contents is not. Writing to a
-         * temporary file and renaming to the real location helps avoid race conditions on
-         * some systems. Race condition can occur if the compiler has not been run, when
+         * temporary file whose name is process-unique and renaming to the real location helps
+         * avoid race conditions. Race condition can occur if the compiler has not been run, when
          * multiple processes are attempting to access the generated file simultaneously.
          */
         $content = "<?php\n" . $content;
-        $rand = rand(0, 1024);
-        $tmpFile = $fileName . ".$rand";
+        $tmpFile = $fileName . "." . getmypid();
         $this->filesystemDriver->filePutContents($tmpFile, $content);
 
         try {
-            $result = $this->filesystemDriver->rename($tmpFile, $fileName);
+            $success = $this->filesystemDriver->rename($tmpFile, $fileName);
         } catch (FilesystemException $e) {
             if (!file_exists($fileName)) {
                 throw $e;
@@ -110,11 +109,11 @@ class Io
                  * Due to race conditions, file may have already been written, causing rename to fail. As long as
                  * the file exists, everything is okay.
                  */
-                $result = true;
+                $success = true;
             }
         }
 
-        return $result;
+        return $success;
     }
 
     /**

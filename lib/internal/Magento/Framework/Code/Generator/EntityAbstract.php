@@ -247,7 +247,6 @@ abstract class EntityAbstract
     {
         $sourceClassName = $this->getSourceClassName();
         $resultClassName = $this->_getResultClassName();
-        $generationDir = $this->_ioObject->getGenerationDirectory();
         $resultDir = $this->_ioObject->getResultFileDirectory($resultClassName);
 
         if (!$this->definedClasses->classLoadable($sourceClassName)) {
@@ -257,12 +256,10 @@ abstract class EntityAbstract
             $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
         } elseif (
-            !$this->_ioObject->makeGenerationDirectory()
-            && !$this->_ioObject->fileExists($generationDir)
-        ) {
-            $this->_addError('Can\'t create directory ' . $generationDir . '.');
-            return false;
-        } elseif (
+            /**
+             * If makeResultFileDirectory only fails because the file is already created,
+             * a competing process has generated the file, no exception should be thrown.
+             */
             !$this->_ioObject->makeResultFileDirectory($resultClassName)
             && !$this->_ioObject->fileExists($resultDir)
         ) {

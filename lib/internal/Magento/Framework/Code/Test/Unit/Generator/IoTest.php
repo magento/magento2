@@ -43,11 +43,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
-        $this->_filesystemDriverMock = $this->getMock(
-            'Magento\Framework\Filesystem\Driver\File',
-            ['isWritable', 'filePutContents', 'createDirectory', 'isExists', 'rename'],
-            []
-        );
+        $this->_filesystemDriverMock = $this->getMock('Magento\Framework\Filesystem\Driver\File');
 
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
