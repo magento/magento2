@@ -72,12 +72,12 @@ class Save extends AbstractConfig
         $groups = $this->getRequest()->getPost('groups');
         $files = $this->getRequest()->getFiles('groups');
 
-        if (isset($files['name']) && is_array($files['name'])) {
+        if ($files && is_array($files)) {
             /**
              * Carefully merge $_FILES and $_POST information
              * None of '+=' or 'array_merge_recursive' can do this correct
              */
-            foreach ($files['name'] as $groupName => $group) {
+            foreach ($files as $groupName => $group) {
                 $data = $this->_processNestedGroups($group);
                 if (!empty($data)) {
                     if (!empty($groups[$groupName])) {
