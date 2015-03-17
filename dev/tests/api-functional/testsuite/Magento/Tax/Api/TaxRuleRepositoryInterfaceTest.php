@@ -178,6 +178,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 
     public function testCreateTaxRuleExistingCode()
     {
+        $expectedMessage = '%1 already exists.';
         $requestData = [
             'rule' => [
                 'code' => 'Test Rule ' . microtime(),
@@ -205,13 +206,16 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
-            $expectedMessage = 'Code already exists.';
+        } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Exception does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['Code'], $errorObj['parameters']);
         }
 
         // Clean up the new tax rule so it won't affect other tests

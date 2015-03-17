@@ -8,6 +8,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
  * CookieManager helps manage the setting, retrieving and deleting of cookies.
@@ -125,9 +126,13 @@ class PhpCookieManager implements CookieManagerInterface
         if (!$phpSetcookieSuccess) {
             $params['name'] = $name;
             if ($value == '') {
-                throw new FailureToSendException('Unable to delete the cookie with cookieName = %name', $params);
+                throw new FailureToSendException(
+                    new Phrase('Unable to delete the cookie with cookieName = %name', $params)
+                );
             } else {
-                throw new FailureToSendException('Unable to send the cookie with cookieName = %name', $params);
+                throw new FailureToSendException(
+                    new Phrase('Unable to send the cookie with cookieName = %name', $params)
+                );
             }
         }
     }
@@ -160,7 +165,9 @@ class PhpCookieManager implements CookieManagerInterface
     {
         if ($name == '' || preg_match("/[=,; \t\r\n\013\014]/", $name)) {
             throw new InputException(
-                'Cookie name cannot be empty and cannot contain these characters: =,; \\t\\r\\n\\013\\014'
+                new Phrase(
+                    'Cookie name cannot be empty and cannot contain these characters: =,; \\t\\r\\n\\013\\014'
+                )
             );
         }
 
@@ -174,17 +181,19 @@ class PhpCookieManager implements CookieManagerInterface
 
         if ($numCookies > PhpCookieManager::MAX_NUM_COOKIES) {
             throw new CookieSizeLimitReachedException(
-                'Unable to send the cookie. Maximum number of cookies would be exceeded.'
+                new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.')
             );
         }
 
         if ($sizeOfCookie > PhpCookieManager::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
-                "Unable to send the cookie. Size of '%name' is %size bytes.",
-                [
-                    'name' => $name,
-                    'size' => $sizeOfCookie,
-                ]
+                new Phrase(
+                    'Unable to send the cookie. Size of \'%name\' is %size bytes.',
+                    [
+                        'name' => $name,
+                        'size' => $sizeOfCookie,
+                    ]
+                )
             );
         }
     }

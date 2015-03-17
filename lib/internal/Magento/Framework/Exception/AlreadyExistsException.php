@@ -6,6 +6,6 @@
 
 namespace Magento\Framework\Exception;
 
-class AlreadyExistsException extends \Magento\Framework\Exception\LocalizedException
+class AlreadyExistsException extends LocalizedException
 {
 }

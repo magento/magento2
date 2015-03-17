@@ -23,11 +23,8 @@
                        maxlength="12"
                        value="<?php echo $block->getProductDefaultQty() * 1 ?>"
                        title="<?php echo __('Qty') ?>" class="input-text qty"
-                    <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
-                        data-validate="{'required-number':true, 'validate-greater-than-zero':true}"
-                    <?php else: ?>
-                        data-validate="{'required-number':true, digits:true}"
-                    <?php endif; ?> />
+                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       />
             </div>
         </div>
         <?php endif; ?>

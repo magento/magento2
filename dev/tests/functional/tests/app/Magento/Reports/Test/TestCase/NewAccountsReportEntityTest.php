@@ -70,7 +70,7 @@ class NewAccountsReportEntityTest extends Injectable
      */
     public function test(Customer $customer, array $customersReport)
     {
-        $this->markTestIncomplete('MAGETWO-26663');
+        $this->markTestIncomplete('Bug: MAGETWO-35037');
         // Preconditions
         $this->customerIndexPage->open();
         $this->customerIndexPage->getCustomerGridBlock()->massaction([], 'Delete', true, 'Select All');

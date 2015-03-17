@@ -5,6 +5,11 @@
  */
 namespace Magento\OfflinePayments\Model;
 
+/**
+ * Class Purchaseorder
+ *
+ * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**

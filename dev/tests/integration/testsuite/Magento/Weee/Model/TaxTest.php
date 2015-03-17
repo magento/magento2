@@ -65,7 +65,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             $customerRepository->getById(1), [], '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $customerDataSet = $customerFactory->create();
-        $dataObjectHelper->populateWithArray($customerDataSet, $expected);
+        $dataObjectHelper->populateWithArray(
+            $customerDataSet,
+            $expected,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $fixtureGroupCode = 'custom_group';
         $fixtureTaxClassId = 3;
         /** @var \Magento\Customer\Model\Group $group */

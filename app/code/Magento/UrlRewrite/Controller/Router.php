@@ -85,6 +85,7 @@ class Router implements \Magento\Framework\App\RouterInterface
             return $this->processRedirect($request, $rewrite);
         }
 
+        $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $rewrite->getRequestPath());
         $request->setPathInfo('/' . $rewrite->getTargetPath());
         return $this->actionFactory->create('Magento\Framework\App\Action\Forward', ['request' => $request]);
     }

@@ -34,8 +34,12 @@ Model1
 Model3
 \Magento\Wonderland\Api\Data\FakeRegionInterface
 \Magento\Wonderland\Api\Data\FakeAddressInterface
+\Magento\Wonderland\Api\Data\FakeExtensibleOneInterface
+\Magento\Wonderland\Api\Data\FakeExtensibleTwoInterface
 \Magento\Wonderland\Model\Data\FakeRegion
 \Magento\Wonderland\Model\Data\FakeAddress
+\Magento\Wonderland\Model\Data\FakeExtensibleOne
+\Magento\Wonderland\Model\Data\FakeExtensibleTwo
 \Magento\Framework\Error\Processor
 \Magento\TestModule3\Service\V1\Entity\Parameter
 \Magento\TestModule3\Service\V1\Entity\ParameterBuilder

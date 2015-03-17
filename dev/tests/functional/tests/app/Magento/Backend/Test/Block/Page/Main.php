@@ -9,7 +9,7 @@ namespace Magento\Backend\Test\Block\Page;
 use Magento\Mtf\Block\Block;
 
 /**
- * Main block.
+ * Main dashboard block.
  */
 class Main extends Block
 {

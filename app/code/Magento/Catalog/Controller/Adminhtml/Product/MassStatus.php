@@ -74,7 +74,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
                 ->updateAttributes($productIds, ['status' => $status], $storeId);
             $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
             $this->_productPriceIndexerProcessor->reindexList($productIds);
-        } catch (\Magento\Core\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

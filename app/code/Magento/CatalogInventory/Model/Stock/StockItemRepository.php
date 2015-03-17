@@ -138,8 +138,7 @@ class StockItemRepository implements StockItemRepositoryInterface
                 $stockItem->setLowStockDate(null);
                 if ($this->stockStateProvider->verifyNotification($stockItem)) {
                     $stockItem->setLowStockDate(
-                        $this->localeDate->date(null, null, null, false)
-                            ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                        (new \DateTime())->format('Y-m-d H:i:s')
                     );
                 }
                 $stockItem->setStockStatusChangedAuto(0);
@@ -157,7 +156,7 @@ class StockItemRepository implements StockItemRepositoryInterface
 
             $this->indexProcessor->reindexRow($stockItem->getProductId());
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException($exception->getMessage());
+            throw new CouldNotSaveException(__($exception->getMessage()));
         }
         return $stockItem;
     }
@@ -170,7 +169,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         $stockItem = $this->stockItemFactory->create();
         $this->resource->load($stockItem, $stockItemId);
         if (!$stockItem->getItemId()) {
-            throw new NoSuchEntityException(sprintf('Stock Item with id "%s" does not exist.', $stockItemId));
+            throw new NoSuchEntityException(__('Stock Item with id "%1" does not exist.', $stockItemId));
         }
         return $stockItem;
     }
@@ -196,7 +195,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         try {
             $this->resource->delete($stockItem);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException($exception->getMessage());
+            throw new CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;
     }
@@ -210,7 +209,7 @@ class StockItemRepository implements StockItemRepositoryInterface
             $stockItem = $this->get($id);
             $this->delete($stockItem);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException($exception->getMessage());
+            throw new CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;
     }

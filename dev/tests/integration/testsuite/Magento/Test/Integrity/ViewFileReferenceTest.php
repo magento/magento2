@@ -89,8 +89,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $patternDir = self::_getLocalePatternDir($theme);
-        $localeModel = new \Zend_Locale();
-        foreach (array_keys($localeModel->getLocaleList()) as $locale) {
+        foreach (\ResourceBundle::getLocales('') as $locale) {
             $dir = str_replace('<locale_placeholder>', $locale, $patternDir);
             if (is_dir($dir)) {
                 $result[] = $locale;

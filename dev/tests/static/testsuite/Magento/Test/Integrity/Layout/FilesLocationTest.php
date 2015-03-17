@@ -37,7 +37,7 @@ class FilesLocationTest extends \PHPUnit_Framework_TestCase
 
     public function pageLayoutFilesDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getPageLayoutFiles();
+        return \Magento\Framework\App\Utility\Files::init()->getPageLayoutFiles();
     }
 
     /**
@@ -73,6 +73,6 @@ class FilesLocationTest extends \PHPUnit_Framework_TestCase
 
     public function pageConfigurationAndGenericLayoutFilesDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles();
+        return \Magento\Framework\App\Utility\Files::init()->getLayoutFiles();
     }
 }

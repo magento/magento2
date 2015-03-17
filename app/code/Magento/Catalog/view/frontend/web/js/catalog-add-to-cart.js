@@ -39,6 +39,16 @@ define([
 
         submitForm: function(form) {
             var self = this;
+            if (form.has('input[type="file"]').length) {
+                self.element.off('submit');
+                form.submit();
+            } else {
+                self.ajaxSubmit(form);
+            }
+        },
+
+        ajaxSubmit: function(form) {
+            var self = this;
             $.ajax({
                 url: form.attr('action'),
                 data: form.serialize(),
@@ -63,6 +73,7 @@ define([
                     }
                     if (res.minicart) {
                         $(self.options.minicartSelector).replaceWith(res.minicart);
+                        $(self.options.minicartSelector).trigger('contentUpdated');
                     }
                     if (res.product && res.product.statusText) {
                         $(self.options.productStatusSelector)

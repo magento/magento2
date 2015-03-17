@@ -77,7 +77,11 @@ class CustomerExtractor
             $customerData[$attributeCode] = $request->getParam($attributeCode);
         }
         $customerDataObject = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerDataObject, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $store = $this->storeManager->getStore();
         if ($isGroupIdEmpty) {
             $customerDataObject->setGroupId(

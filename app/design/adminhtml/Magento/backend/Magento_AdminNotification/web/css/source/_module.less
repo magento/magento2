@@ -1,0 +1,46 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@message-system__background-color: @color-lazy-sun;
+@message-system-short-message__padding-vertical: 1.8rem;
+
+//
+//  Message system
+//  ---------------------------------------------
+
+.message-system-inner {
+    background: @message-system__background-color;
+    .extend__clearfix();
+    .message-system-list {
+        float: left;
+        width: 75%;
+    }
+}
+
+.message-system-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.message-system-short {
+    overflow: hidden;
+    text-align: right;
+    .message-system-short-label {
+        display: inline-block;
+        padding: @message-system-short-message__padding-vertical .3rem @message-system-short-message__padding-vertical 1rem;
+    }
+    .message {
+        display: inline-block;
+        padding: @message-system-short-message__padding-vertical 2rem @message-system-short-message__padding-vertical 3.3rem;
+        &:before {
+            left: .3rem;
+        }
+    }
+}

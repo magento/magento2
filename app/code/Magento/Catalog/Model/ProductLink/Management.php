@@ -70,14 +70,14 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function getLinkedItemsByType($productSku, $type)
+    public function getLinkedItemsByType($sku, $type)
     {
         $output = [];
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         try {
             $collection = $this->entityCollectionProvider->getCollection($product, $type);
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException('Unknown link type: ' . (string)$type);
+            throw new NoSuchEntityException(__('Unknown link type: %1', (string)$type));
         }
         foreach ($collection as $item) {
             /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
@@ -89,10 +89,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
                 ->setPosition($item['position']);
             if (isset($item['custom_attributes'])) {
                 foreach ($item['custom_attributes'] as $option) {
-                    $productLink->setCustomAttribute(
-                        $option['attribute_code'],
-                        $option['value']
-                    );
+                    $productLink->getExtensionAttributes()->setQty($option['value']);
                 }
             }
             $output[] = $productLink;
@@ -103,17 +100,17 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function setProductLinks($productSku, $type, array $items)
+    public function setProductLinks($sku, $type, array $items)
     {
         $linkTypes = $this->linkTypeProvider->getLinkTypes();
 
         if (!isset($linkTypes[$type])) {
             throw new NoSuchEntityException(
-                sprintf("Provided link type \"%s\" does not exist", $type)
+                __('Provided link type "%1" does not exist', $type)
             );
         }
 
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $assignedSkuList = [];
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
         foreach ($items as $link) {
@@ -128,7 +125,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
             $linkedSku = $link->getLinkedProductSku();
             if (!isset($linkedProductIds[$linkedSku])) {
                 throw new NoSuchEntityException(
-                    sprintf("Product with SKU \"%s\" does not exist", $linkedSku)
+                    __('Product with SKU "%1" does not exist', $linkedSku)
                 );
             }
             $data['product_id'] = $linkedProductIds[$linkedSku];
@@ -138,7 +135,7 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
         try {
             $product->save();
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException('Invalid data provided for linked products');
+            throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
         return true;
     }

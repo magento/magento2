@@ -45,6 +45,7 @@ class LandingPage implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
+        $this->data = $data;
 
         if (isset($data['preset'])) {
             /** @var CmsBlock $cmsBlock */

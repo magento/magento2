@@ -43,9 +43,13 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
                 unset($data['website_id']);
             }
 
-            $this->dataObjectHelper->populateWithArray($customer, $data);
+            $this->dataObjectHelper->populateWithArray(
+                $customer,
+                $data,
+                '\Magento\Customer\Api\Data\CustomerInterface'
+            );
             $errors = $this->customerAccountManagement->validate($customer);
-        } catch (\Magento\Framework\Validator\ValidatorException $exception) {
+        } catch (\Magento\Framework\Validator\Exception $exception) {
             /* @var $error Error */
             foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
@@ -98,7 +102,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * AJAX customer validation action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {

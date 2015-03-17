@@ -30,7 +30,7 @@
     echo 'validate-one-required-by-name' ?>"
                     id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"
                     type="checkbox"
-                    name="bundle_option[<?php echo $_option->getId() ?>][]"<?php if ($block->isSelected($_selection)) {
+                    name="bundle_option[<?php echo $_option->getId() ?>][<?php echo $_selection ?>]"<?php if ($block->isSelected($_selection)) {
     echo ' checked="checked"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) {
     echo ' disabled="disabled"' ?>
                     value="<?php echo $_selection->getSelectionId() ?>"
