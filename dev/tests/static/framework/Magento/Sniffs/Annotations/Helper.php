@@ -501,9 +501,8 @@ class Helper
         } elseif (preg_match('/\\.phtml$/', $filename)) {
             // Skip all phtml files
             $shouldFilter = true;
-        } elseif (preg_match('#(?:/|\\\\)Test(?:/|\\\\)Unit(?:/|\\\\)#', $filename)) {
-
         }
+        
         return $shouldFilter;
     }
 

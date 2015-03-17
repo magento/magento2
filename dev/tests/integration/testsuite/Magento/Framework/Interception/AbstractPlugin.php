@@ -5,6 +5,15 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\App;
+use Magento\Framework\Config\Scope;
+use Magento\Framework\Interception\ObjectManager\Config\Developer;
+use Magento\Framework\ObjectManager\Definition;
+use Magento\Framework\ObjectManager\Factory\Dynamic\Developer as DeveloperFactory;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\ObjectManager\Relations;
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Class GeneralTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -17,12 +26,12 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
     protected $_configReader;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $applicationObjectManager;
 
@@ -32,19 +41,19 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        $this->applicationObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        \Magento\Framework\App\ObjectManager::setInstance($this->_objectManager);
+        $this->applicationObjectManager = App\ObjectManager::getInstance();
+        App\ObjectManager::setInstance($this->_objectManager);
     }
 
     public function tearDown()
     {
-        \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
+        App\ObjectManager::setInstance($this->applicationObjectManager);
     }
 
     public function setUpInterceptionConfig($pluginConfig)
     {
-        $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
-        $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config, null);
+        $config = new Developer();
+        $factory = new DeveloperFactory($config, null);
 
         $this->_configReader = $this->getMock('Magento\Framework\Config\ReaderInterface');
         $this->_configReader->expects(
@@ -57,11 +66,11 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
 
         $areaList = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
         $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
-        $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
+        $configScope = new Scope($areaList, 'global');
         $cache = $this->getMock('Magento\Framework\Config\CacheInterface');
         $cache->expects($this->any())->method('load')->will($this->returnValue(false));
-        $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
-        $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $definitions = new Definition\Runtime();
+        $relations = new Relations\Runtime();
         $interceptionConfig = new Config\Config(
             $this->_configReader,
             $configScope,
@@ -81,7 +90,7 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             'Magento\Framework\ObjectManager\DefinitionInterface'          => $definitions,
             'Magento\Framework\Interception\DefinitionInterface'           => $interceptionDefinitions
         ];
-        $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
+        $this->_objectManager = new ObjectManager(
             $factory,
             $config,
             $sharedInstances
