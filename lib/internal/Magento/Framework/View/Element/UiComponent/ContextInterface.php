@@ -98,4 +98,13 @@ interface ContextInterface
      * @return ContentTypeInterface
      */
     public function getRenderEngine();
+
+    /**
+     * Generate url by route and parameters
+     *
+     * @param   string $route
+     * @param   array $params
+     * @return  string
+     */
+    public function getUrl($route = '', $params = []);
 }

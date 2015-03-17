@@ -8,7 +8,6 @@ namespace Magento\Ui\Component\Layout;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
-
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
@@ -64,17 +63,21 @@ class Generic implements LayoutInterface
         }
         /** @var JsConfigInterface $component */
         $config = $component->getJsConfig();
-        $nodeData = [
-            'type' => $componentType,
-            'name' => $component->getName(),
-            'dataScope' => isset($config['dataScope'])
+        if (is_string($config)) {
+            $topNode[] = $config;
+        } else {
+            $nodeData = [
+                'type' => $componentType,
+                'name' => $component->getName(),
+                'dataScope' => isset($config['dataScope'])
                     ? $config['dataScope']
                     : $component->getContext()->getNamespace(),
-            'children' => $childrenNode
-        ];
-        if (!empty($config)) {
-            $nodeData['config'] = $config;
+                'children' => $childrenNode
+            ];
+            if (!empty($config)) {
+                $nodeData['config'] = $config;
+            }
+            $topNode[] = $nodeData;
         }
-        $topNode[] = $nodeData;
     }
 }

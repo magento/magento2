@@ -222,7 +222,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     /**
      * Get JS config
      *
-     * @return array
+     * @return array|string
      */
     public function getJsConfig()
     {

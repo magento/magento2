@@ -71,8 +71,9 @@ class Listing extends AbstractComponent
                     'name' => $component->getName(),
                     'dataScope' => $component->getContext()->getNamespace(),
                     'config' => [
-                        'data' => $data
-                    ]
+                        'data' => $data,
+                        'totalCount' => $component->getDataProvider()->count(),
+                    ],
                 ];
             }
         }
