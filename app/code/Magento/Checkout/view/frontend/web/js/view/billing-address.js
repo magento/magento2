@@ -8,7 +8,8 @@
 /*global alert*/
 define(
     [
-        'Magento_Ui/js/form/component'
+        'Magento_Ui/js/form/component',
+        'Magento_Customer/js/model/customer'
         /*
         'underscore',
         'text!./templates/billing-address.html',
@@ -16,7 +17,7 @@ define(
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Customer/js/model/customer' */
     ],
-    function (Component) {
+    function (Component, customer) {
     /*
     function(_, template, quote, selectBillingAddress, customer) {
     function (Component) {
@@ -63,10 +64,11 @@ define(
         );
         return object;
 */
-
+        customer.load();
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/billing-address'
+                template: 'Magento_Checkout/billing-address',
+                addresses: customer.getBillingAddressList()
             }
         });
     }

@@ -9,6 +9,10 @@
 define(['mage/storage'], function(storage) {
     var isLoggedIn = false;
     return {
+        customerData: [],
+        load: function () {
+            this.customerData = window.customerData;
+        },
         isLoggedIn: function() {
             return isLoggedIn;
         },
@@ -16,7 +20,7 @@ define(['mage/storage'], function(storage) {
             isLoggedIn = flag;
         },
         getBillingAddressList: function () {
-            return storage.get('/rest/default/V1/customers/me');
+            return this.customerData.addresses;
         },
         getShippingAddressList: function () {
             return storage.get('/rest/default/V1/customers/me');
