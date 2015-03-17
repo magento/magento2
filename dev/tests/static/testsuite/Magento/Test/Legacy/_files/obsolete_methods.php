@@ -2105,6 +2105,7 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getGlobalIcon', '\Magento\Backend\Block\Widget'],
     ['getSuccessRedirect', 'Magento\Customer\Controller\Account\CreatePost'],
     [
         'loginPostRedirect',
