@@ -10,6 +10,7 @@ define(['mage/storage'], function(storage) {
     var billingAddress,
         shippingAddress,
         shippingMethod,
+        paymentMethod,
         quoteData;
     return {
         getQuoteId: function() {
@@ -59,6 +60,31 @@ define(['mage/storage'], function(storage) {
                     billingAddress = billingAddressId;
                 }
             );
+        },
+        setPaymentMethod: function(paymentMethodCode, additionalData) {
+            // TODO add support of additional payment data for more complex payments
+            var paymentMethodData = {
+                "cartId": this.getQuoteId(),
+                "method": {
+                    "method": paymentMethodCode,
+                    "po_number": null,
+                    "cc_owner": null,
+                    "cc_number": null,
+                    "cc_type": null,
+                    "cc_exp_year": null,
+                    "cc_exp_month": null,
+                    "additional_data": null
+                }
+            };
+            return storage.put(
+                '/rest/default/V1/carts/' + this.getQuoteId() + '/selected-payment-methods',
+                JSON.stringify(paymentMethodData)
+            ).done(function() {
+                paymentMethod = paymentMethodCode;
+            });
+        },
+        getPaymentMethod: function() {
+            return paymentMethod;
         }
     };
 });

@@ -1,2 +1,51 @@
-<h2>Payment</h2>
-<p>Here we will do payment</p>
+<li id="opc-payment" class="section allow active" role="presentation" data-collapsible="true">
+    <div class="step-title" data-role="title" aria-controls="checkout-step-payment" role="tab" aria-selected="true" aria-expanded="true" tabindex="0">
+        <span class="number">4</span>
+        <h2>Payment Information</h2>
+    </div>
+    <div id="checkout-step-payment" class="step-content" data-role="content" role="tabpanel" aria-hidden="false" style="display: block;">
+        <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
+            <fieldset class="fieldset">
+                <legend class="legend payments-title">
+                    <span>Payment Information</span>
+                </legend>
+                <br>
+                <div id="checkout-payment-method-load" class="opc-payment">
+                    <dl class="items methods-payment">
+                        <!-- ko foreach: getAvailablePaymentMethods() -->
+                        <dt data-bind='attr: {class: "item-title " + $data.code}'>
+                            <!-- ko if: $parent.getAvailablePaymentMethodCount() == 1 -->
+                            <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code}' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
+                            <!-- /ko -->
+                            <!-- ko ifnot: $parent.getAvailablePaymentMethodCount() == 1 -->
+                            <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code, title: $data.title}' type="radio" name="payment[method]" class="radio" />
+                            <!-- /ko -->
+                            <label data-bind='attr: {for: "p_method_" + $data.code}, text: $data.title'></label>
+                        </dt>
+                        <dd data-bind='attr: {class: "item-content $data.code"}'><!-- TODO Additional content is inserted here --></dd>
+                        <!-- /ko -->
+                        <!-- ko ifnot: getAvailablePaymentMethodCount() > 0 -->
+                        <dt class="item-title">No Payment Methods</dt>
+                        <!-- /ko -->
+                    </dl>
+                    <!-- TODO Add checkout price calculated based on previous steps
+                    <div class="no-display" data-checkout-price="1024"></div>
+                    -->
+                    <!-- TODO g1ftcardacc0unt module injects its content here -->
+                </div>
+            </fieldset>
+            <div class="actions-toolbar" id="payment-buttons-container">
+                <div class="primary">
+                    <button data-role="opc-continue"
+                            type="submit"
+                            class="button action continue primary">
+                        <span>Continue</span>
+                    </button>
+                </div>
+                <div class="secondary">
+                    <a class="action back" href="#"><span>Back</span></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</li>
