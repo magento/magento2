@@ -8,7 +8,7 @@ namespace Magento\Tools\Di\Code\Reader;
 use Magento\Framework\Filesystem\FilesystemException;
 use Zend\Code\Scanner\FileScanner;
 
-class ClassesScanner
+class ClassesScanner implements ClassesScannerInterface
 {
     /**
      * @var array

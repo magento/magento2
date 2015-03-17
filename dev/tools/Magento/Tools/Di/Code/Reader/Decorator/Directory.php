@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tools\Di\Code\Reader\InstancesNamesList;
+namespace Magento\Tools\Di\Code\Reader\Decorator;
 
 use Magento\Tools\Di\Compiler\Log\Log;
 
 /**
  * Class Directory
  *
- * @package Magento\Tools\Di\Code\Reader\InstancesNamesList
+ * @package Magento\Tools\Di\Code\Reader\Decorator
  */
-class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInterface
+class Directory implements \Magento\Tools\Di\Code\Reader\ClassesScannerInterface
 {
     /**
      * @var string
@@ -78,6 +78,16 @@ class Directory implements \Magento\Tools\Di\Code\Reader\InstancesNamesListInter
     public function errorHandler($errorNumber, $msg)
     {
         $this->log->add(Log::COMPILATION_ERROR, $this->current, '#' . $errorNumber . ' ' . $msg);
+    }
+
+    /**
+     * Adds exclude patterns
+     *
+     * @param array $excludePatterns
+     * @return void
+     */
+    public function addExcludePatterns(array $excludePatterns)
+    {
     }
 
     /**

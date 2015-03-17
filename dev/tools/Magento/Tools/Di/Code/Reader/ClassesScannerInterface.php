@@ -6,11 +6,11 @@
 namespace Magento\Tools\Di\Code\Reader;
 
 /**
- * Interface InstancesNamesList
+ * Interface ClassesScannerInterface
  *
  * @package Magento\Tools\Di\Code\Reader
  */
-interface InstancesNamesListInterface
+interface ClassesScannerInterface
 {
 
     /**
@@ -21,4 +21,12 @@ interface InstancesNamesListInterface
      * @return array
      */
     public function getList($path);
+
+    /**
+     * Adds exclude patterns
+     *
+     * @param array $excludePatterns
+     * @return void
+     */
+    public function addExcludePatterns(array $excludePatterns);
 }
