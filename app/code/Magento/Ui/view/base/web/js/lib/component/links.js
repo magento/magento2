@@ -68,15 +68,18 @@ define([
             var args = [owner, component, ownerProp, target.prop, true];
 
             switch (direction) {
-            case 'imports':
-            case 'both':
-                imports.apply(null, args);
-                break;
+                case 'imports':
+                    imports.apply(null, args);
+                    break;
 
-            case 'exports':
-            case 'both':
-                exports.apply(null, args);
-                break;
+                case 'exports':
+                    exports.apply(null, args);
+                    break;
+
+                case 'both':
+                    imports.apply(null, args);
+                    exports.apply(null, args);
+                    break;
             }
         });
     }
