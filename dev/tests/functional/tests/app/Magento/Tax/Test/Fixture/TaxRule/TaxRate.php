@@ -6,8 +6,8 @@
 
 namespace Magento\Tax\Test\Fixture\TaxRule;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class TaxRate
@@ -15,23 +15,17 @@ use Magento\Mtf\Fixture\FixtureInterface;
  * Data keys:
  *  - dataSet
  */
-class TaxRate implements FixtureInterface
+class TaxRate extends DataSource
 {
     /**
-     * Array with tax rates codes
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * Array with tax rate fixtures
+     * Array with tax rate fixtures.
      *
      * @var array
      */
     protected $fixture;
 
     /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -42,51 +36,16 @@ class TaxRate implements FixtureInterface
         if (isset($data['dataSet'])) {
             $dataSets = $data['dataSet'];
             foreach ($dataSets as $dataSet) {
-                if ($dataSet !== '-') {
-                    /** @var \Magento\Tax\Test\Fixture\TaxRate $taxRate */
-                    $taxRate = $fixtureFactory->createByCode('taxRate', ['dataSet' => $dataSet]);
-                    $this->fixture[] = $taxRate;
-                    $this->data[] = $taxRate->getCode();
-                }
+                /** @var \Magento\Tax\Test\Fixture\TaxRate $taxRate */
+                $taxRate = $fixtureFactory->createByCode('taxRate', ['dataSet' => $dataSet]);
+                $this->fixture[] = $taxRate;
+                $this->data[] = $taxRate->getCode();
             }
         }
     }
 
     /**
-     * Persist custom selections tax rates
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return string
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return tax rate fixtures
+     * Return tax rate fixtures.
      *
      * @return array
      */

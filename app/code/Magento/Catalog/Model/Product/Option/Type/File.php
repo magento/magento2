@@ -36,7 +36,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -75,7 +75,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param File\ValidatorInfo $validatorInfo
      * @param File\ValidatorFile $validatorFile
      * @param array $data
@@ -85,7 +85,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo $validatorInfo,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
@@ -224,7 +224,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $this->setUserValue($value);
         } catch (\Magento\Framework\Exception\File\LargeSizeException $largeSizeException) {
             $this->setIsValid(false);
-            throw new LocalizedException($largeSizeException->getMessage());
+            throw new LocalizedException(__($largeSizeException->getMessage()));
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
@@ -234,16 +234,16 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $this->setUserValue(null);
                     break;
             }
-        } catch (\Magento\Framework\Validator\ValidatorException $e) {
+        } catch (\Magento\Framework\Validator\Exception $e) {
             $this->setUserValue(null);
         } catch (\Magento\Framework\Exception\File\ValidatorException $e) {
             $this->setIsValid(false);
-            throw new LocalizedException($e->getMessage());
+            throw new LocalizedException(__($e->getMessage()));
         } catch (\Exception $e) {
             if ($this->getSkipCheckRequiredOption()) {
                 $this->setUserValue(null);
             } else {
-                throw new LocalizedException($e->getMessage());
+                throw new LocalizedException(__($e->getMessage()));
             }
         }
         return $this;
@@ -341,7 +341,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $sizes
             );
         } catch (\Exception $e) {
-            throw new LocalizedException(__("The file options format is not valid."));
+            throw new LocalizedException(__('The file options format is not valid.'));
         }
     }
 
@@ -399,6 +399,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue
      * @param array $productOptionValues Values for product option
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -495,7 +497,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $sizes = '';
         if (!empty($value['width']) && !empty($value['height']) && $value['width'] > 0 && $value['height'] > 0) {
             $sizes = $value['width'] . ' x ' . $value['height'] . ' ' . __('px.');
-            return [$value, $sizes];
         }
         return $sizes;
     }

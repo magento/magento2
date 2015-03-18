@@ -350,6 +350,14 @@ interface DriverInterface
     public function getRealPath($path);
 
     /**
+     * Return correct path for link
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function getRealPathSafety($path);
+
+    /**
      * @param string $basePath
      * @param null $path
      * @return mixed

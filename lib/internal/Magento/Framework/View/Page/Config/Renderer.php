@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Page\Config;
 
 use Magento\Framework\View\Asset\GroupedCollection;
@@ -14,7 +13,7 @@ use Magento\Framework\View\Page\Config;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer
+class Renderer implements RendererInterface
 {
     /**
      * @var array
@@ -57,16 +56,6 @@ class Renderer
     protected $urlBuilder;
 
     /**
-     * @var string
-     */
-    private $appMode;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Repository
-     */
-    private $assetRepo;
-
-    /**
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
@@ -74,8 +63,6 @@ class Renderer
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param string $appMode
      */
     public function __construct(
         Config $pageConfig,
@@ -84,9 +71,7 @@ class Renderer
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Stdlib\String $string,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMinifyService = $assetMinifyService;
@@ -95,8 +80,6 @@ class Renderer
         $this->escaper = $escaper;
         $this->string = $string;
         $this->logger = $logger;
-        $this->assetRepo = $assetRepo;
-        $this->appMode = $appMode;
     }
 
     /**
@@ -121,7 +104,7 @@ class Renderer
         $result .= $this->renderMetadata();
         $result .= $this->renderTitle();
         $this->prepareFavicon();
-        $result .= $this->renderAssets();
+        $result .= $this->renderAssets($this->getAvailableResultGroups());
         $result .= $this->pageConfig->getIncludes();
         return $result;
     }
@@ -232,13 +215,12 @@ class Renderer
     /**
      * Returns rendered HTML for all Assets (CSS before)
      *
+     * @param array $resultGroups
+     *
      * @return string
      */
-    public function renderAssets()
+    public function renderAssets($resultGroups = [])
     {
-        $resultGroups = array_fill_keys($this->assetTypeOrder, '');
-        // less js have to be injected before any *.js in developer mode
-        $resultGroups = $this->renderLessJsScripts($resultGroups);
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
             $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
@@ -328,10 +310,6 @@ class Renderer
             case 'css':
                 $attributes = ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
                 break;
-
-            case 'less':
-                $attributes = ' rel="stylesheet/less" type="text/css" ' . ($attributes ?: ' media="all"');
-                break;
         }
         return $attributes;
     }
@@ -381,22 +359,9 @@ class Renderer
     {
         $result = '';
         try {
+            /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             foreach ($assets as $asset) {
-                /** @var $asset \Magento\Framework\View\Asset\File */
-                // todo will be fixed in MAGETWO-33631
-                if ($this->appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    if ($asset instanceof \Magento\Framework\View\Asset\File &&
-                        $asset->getSourceUrl() != $asset->getUrl()
-                    ) {
-                        $attributes = $this->addDefaultAttributes('less', []);
-                        $groupTemplate = $this->getAssetTemplate('less', $attributes);
-                        $result .= sprintf($groupTemplate, $asset->getUrl());
-                    } else {
-                        $result .= sprintf($template, $asset->getUrl());
-                    }
-                } else {
-                    $result .= sprintf($template, $asset->getUrl());
-                }
+                $result .= sprintf($template, $asset->getUrl());
             }
         } catch (\Magento\Framework\Exception $e) {
             $this->logger->critical($e);
@@ -406,22 +371,10 @@ class Renderer
     }
 
     /**
-     * Injecting less.js compiler
-     *
-     * @param array $resultGroups
-     *
-     * @return mixed
+     * @return array
      */
-    private function renderLessJsScripts($resultGroups)
+    public function getAvailableResultGroups()
     {
-        if (\Magento\Framework\App\State::MODE_DEVELOPER == $this->appMode) {
-            // less js have to be injected before any *.js in developer mode
-            $lessJsConfigAsset = $this->assetRepo->createAsset('less/config.less.js');
-            $resultGroups['js'] .= sprintf('<script src="%s"></script>' . "\n", $lessJsConfigAsset->getUrl()) ;
-            $lessJsAsset = $this->assetRepo->createAsset('less/less.min.js');
-            $resultGroups['js'] .= sprintf('<script src="%s"></script>' . "\n", $lessJsAsset->getUrl()) ;
-        }
-
-        return $resultGroups;
+        return array_fill_keys($this->assetTypeOrder, '');
     }
 }

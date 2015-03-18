@@ -53,9 +53,9 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     protected $dataObjectProcessor;
 
     /**
-     * @var \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder
+     * @var \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
@@ -68,7 +68,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
      * @param \Magento\Customer\Model\Resource\Group $groupResourceModel
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @param \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
      */
     public function __construct(
@@ -77,7 +77,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory,
         \Magento\Customer\Model\Resource\Group $groupResourceModel,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder $searchResultsBuilder,
+        \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
     ) {
         $this->groupRegistry = $groupRegistry;
@@ -85,7 +85,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $this->groupDataFactory = $groupDataFactory;
         $this->groupResourceModel = $groupResourceModel;
         $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->taxClassRepository = $taxClassRepositoryInterface;
     }
 
@@ -125,7 +125,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
              *  difficult to do without imposing more database calls
              */
             if ($e->getMessage() == (string)__('Customer Group already exists.')) {
-                throw new InvalidTransitionException('Customer Group already exists.');
+                throw new InvalidTransitionException(__('Customer Group already exists.'));
             }
             throw $e;
         }
@@ -159,7 +159,8 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
 
         /** @var \Magento\Customer\Model\Resource\Group\Collection $collection */
         $collection = $this->groupFactory->create()->getCollection();
@@ -169,7 +170,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
+        $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         /** @var \Magento\Framework\Api\SortOrder $sortOrder */
         if ($sortOrders) {
@@ -195,7 +196,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
                 ->setTaxClassName($group->getTaxClassName());
             $groups[] = $groupDataObject;
         }
-        return $this->searchResultsBuilder->setItems($groups)->create();
+        return $searchResults->setItems($groups);
     }
 
     /**
@@ -265,7 +266,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $groupModel = $this->groupRegistry->retrieve($id);
 
         if ($id <= 0 || $groupModel->usesAsDefault()) {
-            throw new \Magento\Framework\Exception\StateException('Cannot delete group.');
+            throw new \Magento\Framework\Exception\StateException(__('Cannot delete group.'));
         }
 
         $groupModel->delete();
@@ -287,7 +288,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     {
         $exception = new InputException();
         if (!\Zend_Validate::is($group->getCode(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'code']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'code']));
         }
 
         if ($exception->wasErrorAdded()) {

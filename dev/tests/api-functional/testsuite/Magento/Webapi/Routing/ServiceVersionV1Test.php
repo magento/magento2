@@ -12,7 +12,8 @@ namespace Magento\Webapi\Routing;
 use Magento\Framework\Api\AttributeValue;
 use Magento\TestFramework\Authentication\OauthHelper;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestModule1\Service\V1\Entity\ItemBuilder;
+use Magento\TestModule1\Service\V1\Entity\Item;
+use Magento\TestModule1\Service\V1\Entity\ItemFactory;
 
 class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
 {
@@ -29,11 +30,11 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
      */
     protected $_soapService = 'testModule1AllSoapAndRest';
 
-    /** @var \Magento\Framework\Api\AttributeDataBuilder */
-    protected $valueBuilder;
+    /** @var \Magento\Framework\Api\AttributeValueFactory */
+    protected $valueFactory;
 
-    /** @var ItemBuilder */
-    protected $itemBuilder;
+    /** @var ItemFactory */
+    protected $itemFactory;
 
     protected function setUp()
     {
@@ -41,12 +42,12 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
         $this->_soapService = 'testModule1AllSoapAndRestV1';
         $this->_restResourcePath = "/{$this->_version}/testmodule1/";
 
-        $this->valueBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\AttributeDataBuilder'
+        $this->valueFactory = Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Api\AttributeValueFactory'
         );
 
-        $this->itemBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\TestModule1\Service\V1\Entity\ItemBuilder'
+        $this->itemFactory = Bootstrap::getObjectManager()->create(
+            'Magento\TestModule1\Service\V1\Entity\ItemFactory'
         );
     }
 
@@ -76,38 +77,34 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
     {
         $this->_markTestAsRestOnly('Test will fail for SOAP because attribute values get converted to strings.');
         $customerAttributes = [
-            ItemBuilder::CUSTOM_ATTRIBUTE_1 => [
-                AttributeValue::ATTRIBUTE_CODE => ItemBuilder::CUSTOM_ATTRIBUTE_1,
+            Item::CUSTOM_ATTRIBUTE_1 => [
+                AttributeValue::ATTRIBUTE_CODE => Item::CUSTOM_ATTRIBUTE_1,
                 AttributeValue::VALUE => '12345',
             ],
-            ItemBuilder::CUSTOM_ATTRIBUTE_2 => [
-                AttributeValue::ATTRIBUTE_CODE => ItemBuilder::CUSTOM_ATTRIBUTE_2,
+            Item::CUSTOM_ATTRIBUTE_2 => [
+                AttributeValue::ATTRIBUTE_CODE => Item::CUSTOM_ATTRIBUTE_2,
                 AttributeValue::VALUE => 12345,
             ],
-            ItemBuilder::CUSTOM_ATTRIBUTE_3 => [
-                AttributeValue::ATTRIBUTE_CODE => ItemBuilder::CUSTOM_ATTRIBUTE_3,
+            Item::CUSTOM_ATTRIBUTE_3 => [
+                AttributeValue::ATTRIBUTE_CODE => Item::CUSTOM_ATTRIBUTE_3,
                 AttributeValue::VALUE => true,
             ],
         ];
 
-        $attributeValue1 = $this->valueBuilder
-            ->setAttributeCode(ItemBuilder::CUSTOM_ATTRIBUTE_1)
-            ->setValue('12345')
-            ->create();
-        $attributeValue2 = $this->valueBuilder
-            ->setAttributeCode(ItemBuilder::CUSTOM_ATTRIBUTE_2)
-            ->setValue(12345)
-            ->create();
-        $attributeValue3 = $this->valueBuilder
-            ->setAttributeCode(ItemBuilder::CUSTOM_ATTRIBUTE_3)
-            ->setValue(true)
-            ->create();
+        $attributeValue1 = $this->valueFactory->create()
+            ->setAttributeCode(Item::CUSTOM_ATTRIBUTE_1)
+            ->setValue('12345');
+        $attributeValue2 = $this->valueFactory->create()
+            ->setAttributeCode(Item::CUSTOM_ATTRIBUTE_2)
+            ->setValue(12345);
+        $attributeValue3 = $this->valueFactory->create()
+            ->setAttributeCode(Item::CUSTOM_ATTRIBUTE_3)
+            ->setValue(true);
 
-        $item = $this->itemBuilder
+        $item = $this->itemFactory->create()
             ->setItemId(1)
             ->setName('testProductAnyType')
-            ->setCustomAttributes([$attributeValue1, $attributeValue2, $attributeValue3])
-            ->create();
+            ->setCustomAttributes([$attributeValue1, $attributeValue2, $attributeValue3]);
 
         $serviceInfo = [
             'rest' => [

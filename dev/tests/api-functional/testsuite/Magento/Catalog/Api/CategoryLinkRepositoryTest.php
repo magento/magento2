@@ -121,7 +121,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall(
             $serviceInfo,
-            ['productSku' => 'simple', 'categoryId' => $this->categoryId]
+            ['sku' => 'simple', 'categoryId' => $this->categoryId]
         );
         $this->assertTrue($result);
         $this->assertFalse($this->isProductInCategory($this->categoryId, 333, 10));

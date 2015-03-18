@@ -196,7 +196,7 @@ class Fault extends \RuntimeException
      */
     public function getLanguage()
     {
-        return $this->_localeResolver->getLocale()->getLanguage();
+        return \Locale::getPrimaryLanguage($this->_localeResolver->getLocale());
     }
 
     /**
@@ -301,7 +301,6 @@ FAULT_MESSAGE;
         if (!is_array($parameters)) {
             return $result;
         }
-
         $paramsXml = '';
         foreach ($parameters as $parameterName => $parameterValue) {
             if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {

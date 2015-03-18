@@ -8,26 +8,26 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 class CanonicalUrlRewriteGenerator
 {
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder */
-    protected $urlRewriteBuilder;
+    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory */
+    protected $urlRewriteFactory;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder $urlRewriteBuilder
+     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        UrlRewriteBuilder $urlRewriteBuilder
+        UrlRewriteFactory $urlRewriteFactory
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
-        $this->urlRewriteBuilder = $urlRewriteBuilder;
+        $this->urlRewriteFactory = $urlRewriteFactory;
     }
 
     /**
@@ -39,13 +39,14 @@ class CanonicalUrlRewriteGenerator
      */
     public function generate($storeId, Category $category)
     {
-        return [
-            $this->urlRewriteBuilder->setStoreId($storeId)
+        $urlPath = $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
+        $result = [
+            $urlPath . '_' . $storeId => $this->urlRewriteFactory->create()->setStoreId($storeId)
                 ->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($category->getId())
-                ->setRequestPath($this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId))
+                ->setRequestPath($urlPath)
                 ->setTargetPath($this->categoryUrlPathGenerator->getCanonicalUrlPath($category))
-                ->create()
         ];
+        return $result;
     }
 }

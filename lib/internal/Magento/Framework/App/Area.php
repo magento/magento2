@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+
 /**
  * Application area model
  */
@@ -58,7 +60,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigLoader
+     * @var ConfigLoaderInterface
      */
     protected $_diConfigLoader;
 
@@ -89,7 +91,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\ObjectManager\ConfigLoader $diConfigLoader
+     * @param ConfigLoaderInterface $diConfigLoader
      * @param \Magento\Framework\App\DesignInterface $design
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\View\DesignExceptions $designExceptions
@@ -100,7 +102,7 @@ class Area implements \Magento\Framework\App\AreaInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\TranslateInterface $translator,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\ObjectManager\ConfigLoader $diConfigLoader,
+        ConfigLoaderInterface $diConfigLoader,
         \Magento\Framework\App\DesignInterface $design,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\View\DesignExceptions $designExceptions,

@@ -19,18 +19,26 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     protected $_quotesFactory;
 
     /**
+     * @var \Magento\Quote\Model\QueryResolver
+     */
+    protected $queryResolver;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Quote\CollectionFactory $quotesFactory
+     * @param \Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface $quotesFactory
+     * @param \Magento\Quote\Model\QueryResolver $queryResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Quote\CollectionFactory $quotesFactory,
+        \Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface $quotesFactory,
+        \Magento\Quote\Model\QueryResolver $queryResolver,
         array $data = []
     ) {
         $this->_quotesFactory = $quotesFactory;
+        $this->queryResolver = $queryResolver;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -48,11 +56,15 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      */
     protected function _prepareCollection()
     {
-        /** @var $collection \Magento\Reports\Model\Resource\Quote\Collection */
         $collection = $this->_quotesFactory->create();
-        $collection->prepareForProductsInCarts()->setSelectCountSqlType(
-            \Magento\Reports\Model\Resource\Quote\Collection::SELECT_COUNT_SQL_TYPE_CART
-        );
+        if ($this->queryResolver->isSingleQuery()) {
+            $collection->prepareForProductsInCarts();
+            $collection->setSelectCountSqlType(
+                \Magento\Reports\Model\Resource\Quote\Collection::SELECT_COUNT_SQL_TYPE_CART
+            );
+        } else {
+            $collection->prepareActiveCartItems();
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

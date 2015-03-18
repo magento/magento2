@@ -5,127 +5,120 @@
 
 define('globalNavigation', [
     'jquery',
-    'jquery/ui',
-    'jquery/hover-intent'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
     $.widget('mage.globalNavigation', {
         options: {
-            menuCategory: '.level-0',
-            menuLinks: 'a',
-            itemsConfig: null,
-            hoverIntentConfig: {
-                interval: 100,
-                timeout: 500 // number = milliseconds delay before onMouseOut
+            selectors: {
+                topLevelItem: '.level-0',
+                topLevelHref: '> a',
+                subMenu: '> .submenu',
+                closeSubmenuBtn: '[data-role="close-submenu"]'
             },
-            categoriesConfig: {
-                '[data-ui-id="menu-mage-adminhtml-system"]': {
-                    open: 'click'
-                },
-                '[data-ui-id="menu-mage-adminhtml-stores"]': {
-                    open: 'click'
-                }
-            }
+            overlayTmpl: '<div class="admin__menu-overlay"></div>'
         },
 
         _create: function () {
-            this.menu = this.element;
-            this.menuCategory = $(this.options.menuCategory, this.menu);
-            this.menuLinks = $(this.options.menuLinks, this.menuCategory);
-            this._bind();
+            var selectors = this.options.selectors;
+
+            this.menu      = this.element;
+            this.menuLinks = $(selectors.topLevelHref, selectors.topLevelItem);
+
+            this._initOverlay()
+                ._bind();
         },
 
-        _menuCategoryBind: function (category, config) {
-            category
-                .hoverIntent($.extend({}, this.options.hoverIntentConfig, {
-                    over: !config.open ? this._hoverEffects : $.noop,
-                    out: !config.close ? this._leaveEffects : $.noop
-                }));
-            
-            if (config.open) {
-                category.on(config.open, this._hoverEffects);
-            }
+        _initOverlay: function () {
+            var wrapper = $('<div />').addClass('admin__scope');
 
-            if (config.close) {
-                category.on(config.close, this._leaveEffects);
-            }
-        },
+            this.overlay = $(this.options.overlayTmpl).appendTo('body').hide(0);
 
-        _menuCategoryEvents: function () {
-            this.menuCategory.each($.proxy(function (i, category) {
-                var itemConfig = {};
-                if (this.options.categoriesConfig) {
-                    $.each(this.options.categoriesConfig, $.proxy(function (selector, conf) {
-                        if ($(category).is(selector)) {
-                            itemConfig = conf;
-                        }
-                    }, this));
-                }
-                this._menuCategoryBind($(category), itemConfig);
-            }, this));
+            /**
+             * @todo fix LESS and remove next line and wrapper definition
+             */
+            this.overlay.wrap(wrapper);
+
+            return this;
         },
 
         _bind: function () {
-            this._menuCategoryEvents();
+            var lighten = this._lighten.bind(this),
+                open    = this._open.bind(this),
+                darken  = this._darken.bind(this);
+
             this.menuLinks
-                .on('focus.tabFocus', function (e) {
-                    $(e.target).trigger('mouseenter');
-                })
-                .on('blur.tabFocus', function (e) {
-                    $(e.target).trigger('mouseleave');
-                });
+                .on('focus', lighten)
+                .on('click', open)
+                .on('blur',  darken);
         },
 
-        _hoverEffects: function (e) {
-            $(this)
-                .addClass('hover recent')
-                .siblings('.level-0').each(function () {
-                    clearTimeout($(this).prop('hoverIntent_t'));
-                    $(this).prop('hoverIntent_s', 0);
-                    $(this).removeClass('recent hover');
-                });
+        _lighten: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
 
-            var targetSubmenu = $(e.target).closest('.submenu');
-            if (targetSubmenu.length && targetSubmenu.is(':visible')) {
-                return;
-            }
-            var availableWidth = parseInt($(this).parent().css('width')) - $(this).position().left,
-                submenu = $('> .submenu', this),
-                colsWidth = 0;
-
-            submenu.show();
-
-            $.each($('> .submenu > ul li.column', this), function () {
-                colsWidth = colsWidth + parseInt($(this).css('width'));
-            });
-
-            var containerPaddings = parseInt(submenu.css('padding-left')) + parseInt(submenu.css('padding-right'));
-
-            $(this).toggleClass('reverse', (containerPaddings + colsWidth) > availableWidth);
-
-            submenu
-                .hide()
-                .slideDown('fast');
+            menuItem
+                .addClass('_active')
+                .siblings(selectors.topLevelItem)
+                .removeClass('_active');
         },
 
-        _leaveEffects: function (e) {
-            var targetSubmenu = $(e.target).closest('.submenu'),
-                self = $(this),
-                submenu = $('> .submenu', this);
+        _darken: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
 
-            if (targetSubmenu.length && targetSubmenu.is(':hidden')) {
-                return;
+            menuItem.removeClass('_active');
+        },
+
+        _closeSubmenu: function (e) {
+            var selectors = this.options.selectors,
+                menuItem  = $(e.target).closest(selectors.topLevelItem);
+
+            this._close(e);
+
+            $(selectors.topLevelHref, menuItem).focus();
+        },
+
+        _open: function (e) {
+            var selectors           = this.options.selectors,
+                menuItemSelector    = selectors.topLevelItem,
+                menuItem            = $(e.target).closest(menuItemSelector),
+                subMenu             = $(selectors.subMenu, menuItem),
+                close               = this._closeSubmenu.bind(this),
+                closeBtn            = subMenu.find(selectors.closeSubmenuBtn);
+
+            if (subMenu.length) {
+                e.preventDefault();
             }
 
-            if (submenu.length) {
-                submenu.slideUp('fast', function () {
-                    self.removeClass('hover');
-                });
-            } else {
-                self.removeClass('hover');
-            }
+            menuItem
+                .addClass('_hover _recent')
+                .siblings(menuItemSelector)
+                .removeClass('_hover _recent');
 
+            subMenu.attr('aria-expanded', 'true');
+
+            closeBtn.on('click', close);
+
+            this.overlay.show(0).on('click', close);
+        },
+
+        _close: function (e) {
+            var selectors   = this.options.selectors,
+                menuItem    = this.menu.find(selectors.topLevelItem + '._hover._recent'),
+                subMenu     = $(selectors.subMenu, menuItem),
+                closeBtn    = subMenu.find(selectors.closeSubmenuBtn);
+
+            e.preventDefault();
+
+            this.overlay.hide(0).off('click');
+
+            closeBtn.off('click');
+
+            subMenu.attr('aria-expanded', 'false');
+
+            menuItem.removeClass('_hover _recent');
         }
     });
 
@@ -141,7 +134,7 @@ define('globalSearch', [
     $.widget('mage.globalSearch', {
         options: {
             field: '.search-global-field',
-            fieldActiveClass: 'active',
+            fieldActiveClass: '_active',
             input: '#search-global'
         },
 

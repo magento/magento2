@@ -50,7 +50,8 @@ require([
     'jquery/jquery.tabs',
     'mage/mage',
     'mage/backend/menu',
-    'Magento_ConfigurableProduct/catalog/product-variation'
+    'Magento_ConfigurableProduct/catalog/product-variation',
+    'domReady!'
 ], function($, mageTemplate){
     'use strict';
 
@@ -67,14 +68,12 @@ require([
         isLocked = function (element) {
             return element.is('[data-locked]');
         },
-        disableElement = function (element) {
+        setElementDisabled = function (element, state, triggerEvent) {
             if (!isLocked(element)) {
-                element.prop('disabled', true).trigger('change');
-            }
-        },
-        enableElement = function (element) {
-            if (!isLocked(element)) {
-                element.removeProp('disabled').trigger('change');
+                element.prop('disabled', state);
+                if (triggerEvent) {
+                    element.trigger('change')
+                }
             }
         };
 
@@ -88,8 +87,8 @@ require([
 
             inventoryQty.prop('disabled', true);
             inventoryAvailabilityField.removeProp('disabled');
-            disableElement(qtyField);
-            enableElement(stockAvailabilityField);
+            setElementDisabled(qtyField, true, true);
+            setElementDisabled(stockAvailabilityField, false, false);
             $.each($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes(), function() {
                 $('#attribute-' + this.code + '-container select').prop('disabled', true);
             })
@@ -103,8 +102,8 @@ require([
                 .removeProp('disabled');
             inventoryQty.removeProp('disabled');
             inventoryAvailabilityField.prop('disabled', true);
-            disableElement(stockAvailabilityField);
-            enableElement(qtyField);
+            setElementDisabled(stockAvailabilityField, true, false);
+            setElementDisabled(qtyField, false, true);
         })
         .collapse(hasVariations ? 'show' : 'hide');
 
@@ -112,8 +111,23 @@ require([
         title: 'Select Associated Product',
         autoOpen: false,
         minWidth: 980,
+        width: '75%',
         modal: true,
-        resizable: true
+        resizable: true,
+        position: {
+            my: 'left top',
+            at: 'center top',
+            of: 'body'
+        },
+        open: function () {
+            $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+            var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+            $(this).closest('.ui-dialog').css('margin-top', topMargin);
+        },
+        close: function() {
+            $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+        }
     });
 
     $('[data-panel=product-variations]')

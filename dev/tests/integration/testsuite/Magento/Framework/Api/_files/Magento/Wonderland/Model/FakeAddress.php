@@ -200,4 +200,26 @@ class FakeAddress extends AbstractExtensibleModel implements FakeAddressInterfac
     {
         return $this->getData(self::DEFAULT_BILLING);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

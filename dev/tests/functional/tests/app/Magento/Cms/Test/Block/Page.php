@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Locator;
 class Page extends Block
 {
     /**
+     * Selector for uninitialized page.
+     *
+     * @var string
+     */
+    protected $uninitialized = '//body[(@data-mage-init) or (@aria-busy="true")]';
+
+    /**
      * Cms page content class.
      *
      * @var string
@@ -26,7 +33,7 @@ class Page extends Block
      *
      * @var string
      */
-    protected $cmsPageTitle = ".page-title";
+    protected $cmsPageTitle = ".page-title-wrapper";
 
     /**
      * Cms page text locator.
@@ -106,5 +113,22 @@ class Page extends Block
         } else {
             throw new \Exception('Determine how to find the widget on the page.');
         }
+    }
+
+    /**
+     * Waiting page initialization.
+     *
+     * @return void
+     */
+    public function waitPageInit()
+    {
+        $browser = $this->browser;
+        $uninitialized = $this->uninitialized;
+
+        $this->_rootElement->waitUntil(
+            function () use ($browser, $uninitialized) {
+                return $browser->find($uninitialized, Locator::SELECTOR_XPATH)->isVisible() == false ? true : null;
+            }
+        );
     }
 }

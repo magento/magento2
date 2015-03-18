@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Observer of Magento events triggered using Magento_Core_Model_\Magento\TestFramework\EventManager::dispatch()
- */
 namespace Magento\TestFramework\Event;
 
+/**
+ * Observer of Magento events triggered using \Magento\TestFramework\EventManager::dispatch()
+ */
 class Magento
 {
     /**

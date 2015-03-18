@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 /**
@@ -52,9 +53,9 @@ class Source
     private $themeList;
 
     /**
-     * @var string
+     * @var ChainFactoryInterface
      */
-    private $appMode;
+    private $chainFactory;
 
     /**
      * @param PreProcessor\Cache $cache
@@ -62,7 +63,7 @@ class Source
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param string $appMode
+     * @param ChainFactoryInterface $chainFactory
      */
     public function __construct(
         PreProcessor\Cache $cache,
@@ -70,7 +71,7 @@ class Source
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
-        $appMode = \Magento\Framework\App\State::MODE_DEFAULT
+        ChainFactoryInterface $chainFactory
     ) {
         $this->cache = $cache;
         $this->filesystem = $filesystem;
@@ -79,7 +80,7 @@ class Source
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
         $this->themeList = $themeList;
-        $this->appMode = $appMode;
+        $this->chainFactory = $chainFactory;
     }
 
     /**
@@ -129,9 +130,6 @@ class Source
     private function preProcess(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
-        if (!$sourceFile) {
-            return false;
-        }
         $dirCode = DirectoryList::ROOT;
         $path = $this->rootDir->getRelativePath($sourceFile);
         $cacheId = $path . ':' . $asset->getPath();
@@ -139,18 +137,17 @@ class Source
         if ($cached) {
             return unserialize($cached);
         }
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
-            $asset,
-            $this->rootDir->readFile($path),
-            $this->getContentType($path),
-            $path,
-            $this->appMode
+
+        $chain = $this->chainFactory->create(
+            [
+                'asset' => $asset,
+                'origContent' => $this->rootDir->readFile($path),
+                'origContentType' => $this->getContentType($path),
+                'origAssetPath' => $path
+            ]
         );
-        $preProcessors = $this->preProcessorPool
-            ->getPreProcessors($chain->getOrigContentType(), $chain->getTargetContentType());
-        foreach ($preProcessors as $processor) {
-            $processor->process($chain);
-        }
+
+        $this->preProcessorPool->process($chain);
         $chain->assertValid();
         if ($chain->isChanged()) {
             $dirCode = DirectoryList::VAR_DIR;
@@ -160,6 +157,15 @@ class Source
         $result = [$dirCode, $path];
         $this->cache->save(serialize($result), $cacheId);
         return $result;
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return bool|string
+     */
+    public function findSource(LocalInterface $asset)
+    {
+        return $this->findSourceFile($asset);
     }
 
     /**
@@ -209,7 +215,7 @@ class Source
         $sourceFile = $this->fallback->getFile(
             $context->getAreaCode(),
             $themeModel,
-            $context->getLocaleCode(),
+            $context->getLocale(),
             $asset->getFilePath(),
             $asset->getModule()
         );

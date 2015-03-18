@@ -12,7 +12,7 @@ namespace Magento\Framework\Stdlib;
 class DateTime
 {
     /**#@+
-     * Date format, used as default. Compatible with \Zend_Date
+     * Date format, used as default. Compatible with \DateTime
      */
     const DATETIME_INTERNAL_FORMAT = 'yyyy-MM-dd HH:mm:ss';
 
@@ -35,68 +35,27 @@ class DateTime
     const YEAR_MAX_VALUE = 10000;
 
     /**
-     * Convert date to UNIX timestamp
-     * Returns current UNIX timestamp if date is true
-     *
-     * @param \Magento\Framework\Stdlib\DateTime\DateInterface|bool $date
-     * @return int
-     */
-    public function toTimestamp($date)
-    {
-        if ($date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
-            return $date->getTimestamp();
-        }
-
-        if ($date === true) {
-            return time();
-        }
-
-        return strtotime($date);
-    }
-
-    /**
-     * Retrieve current date in internal format
-     *
-     * @param boolean $withoutTime day only flag
-     * @return string
-     */
-    public function now($withoutTime = false)
-    {
-        $format = $withoutTime ? self::DATE_PHP_FORMAT : self::DATETIME_PHP_FORMAT;
-        return date($format);
-    }
-
-    /**
      * Format date to internal format
      *
-     * @param string|\Zend_Date|bool|null $date
+     * @param string|\DateTime|bool|null $date
      * @param boolean $includeTime
      * @return string|null
      */
     public function formatDate($date, $includeTime = true)
     {
-        if ($date === true) {
-            return $this->now(!$includeTime);
-        }
-
-        if ($date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
-            if ($includeTime) {
-                return $date->toString(self::DATETIME_INTERNAL_FORMAT);
-            } else {
-                return $date->toString(self::DATE_INTERNAL_FORMAT);
-            }
-        }
-
-        if (empty($date)) {
+        if ($date instanceof \DateTime) {
+            $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
+            return $date->format($format);
+        } elseif (empty($date)) {
             return null;
-        }
-
-        if (!is_numeric($date)) {
-            $date = $this->toTimestamp($date);
+        } elseif ($date === true) {
+            $date = (new \DateTime())->getTimestamp();
+        } elseif (!is_numeric($date)) {
+            $date = (new \DateTime($date))->getTimestamp();
         }
 
         $format = $includeTime ? self::DATETIME_PHP_FORMAT : self::DATE_PHP_FORMAT;
-        return date($format, $date);
+        return (new \DateTime())->setTimestamp($date)->format($format);
     }
 
     /**

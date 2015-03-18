@@ -390,7 +390,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
             $page->drawText(__('Order # ') . $order->getRealOrderId(), 35, $top -= 30, 'UTF-8');
         }
         $page->drawText(
-            __('Order Date: ') . $this->_localeDate->formatDate($order->getCreatedAtStoreDate(), 'medium', false),
+            __('Order Date: ') . $this->_localeDate->formatDate($order->getCreatedAtStoreDate(), \IntlDateFormatter::MEDIUM, false),
             35,
             $top -= 15,
             'UTF-8'

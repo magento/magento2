@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
   <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnCreationTest">
     <variation name="ProductTypeSwitchingOnCreationTestVariation1">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
       <data name="createProduct" xsi:type="string">simple</data>
       <data name="product" xsi:type="string">configurableProduct::default</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -44,6 +45,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation6">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
       <data name="createProduct" xsi:type="string">virtual</data>
       <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
@@ -71,6 +73,7 @@
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
     </variation>
     <variation name="ProductTypeSwitchingOnCreationTestVariation9">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
       <data name="createProduct" xsi:type="string">downloadable</data>
       <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
       <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>

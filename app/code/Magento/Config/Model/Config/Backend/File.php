@@ -38,7 +38,7 @@ class File extends \Magento\Framework\App\Config\Value
     protected $_mediaDirectory;
 
     /**
-     * @var \Magento\Core\Model\File\UploaderFactory
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
@@ -46,7 +46,7 @@ class File extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
      * @param Filesystem $filesystem
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -57,7 +57,7 @@ class File extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         Filesystem $filesystem,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -98,7 +98,7 @@ class File extends \Magento\Framework\App\Config\Value
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
             }
 
             $filename = $result['file'];

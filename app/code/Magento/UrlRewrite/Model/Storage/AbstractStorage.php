@@ -6,22 +6,28 @@
 namespace Magento\UrlRewrite\Model\Storage;
 
 use Magento\UrlRewrite\Model\StorageInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewriteBuilder;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Abstract db storage
  */
 abstract class AbstractStorage implements StorageInterface
 {
-    /** @var UrlRewriteBuilder */
-    protected $urlRewriteBuilder;
+    /** @var UrlRewriteFactory */
+    protected $urlRewriteFactory;
+
+    /** @var  DataObjectHelper */
+    protected $dataObjectHelper;
 
     /**
-     * @param UrlRewriteBuilder $urlRewriteBuilder
+     * @param UrlRewriteFactory $urlRewriteFactory
+     * @param DataObjectHelper $dataObjectHelper
      */
-    public function __construct(UrlRewriteBuilder $urlRewriteBuilder)
+    public function __construct(UrlRewriteFactory $urlRewriteFactory, DataObjectHelper $dataObjectHelper)
     {
-        $this->urlRewriteBuilder = $urlRewriteBuilder;
+        $this->urlRewriteFactory = $urlRewriteFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -97,6 +103,12 @@ abstract class AbstractStorage implements StorageInterface
      */
     protected function createUrlRewrite($data)
     {
-        return $this->urlRewriteBuilder->populateWithArray($data)->create();
+        $dataObject = $this->urlRewriteFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $dataObject,
+            $data,
+            '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite'
+        );
+        return $dataObject;
     }
 }

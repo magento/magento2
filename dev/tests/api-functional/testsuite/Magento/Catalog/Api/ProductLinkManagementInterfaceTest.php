@@ -76,7 +76,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $actual = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'type' => $linkType]);
+        $actual = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'type' => $linkType]);
 
         $this->assertEquals('simple', $actual[0]['linked_product_type']);
         $this->assertEquals('simple', $actual[0]['linked_product_sku']);
@@ -112,7 +112,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
         ];
 
         $arguments = [
-            'productSku' => $productSku,
+            'sku' => $productSku,
             'items' => [$linkData],
             'type' => $linkType,
         ];

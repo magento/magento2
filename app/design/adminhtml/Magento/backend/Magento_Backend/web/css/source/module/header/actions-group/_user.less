@@ -1,0 +1,128 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Page header -> Actions group -> User menu
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@user__font-size: round(@font-size__base - .1rem, 1);
+
+@user-account__padding-bottom: .4rem;
+@user-account__padding-left: 4rem;
+@user-account__padding-top: .7rem;
+@user-account__padding-right: 2.8rem;
+
+@user-account-menu__min-width: 20rem;
+@user-account-menu__z-index: @notifications-action-menu__z-index - 10; // Should be lower than notifications
+
+//
+
+.admin-user {
+    float: right;
+    line-height: @line-height__base; // ToDo UI: Delete with admin scope
+    margin-left: .3rem;
+    position: relative;
+    z-index: @user-account-menu__z-index;
+    &.active {
+        .admin-user-account {
+            border-color: @page-header-action__active__border-color;
+            box-shadow: @component__box-shadow__base;
+        }
+        .admin-user-account-text-wrapper {
+            &:after {
+                background-color: @page-header-action__background-color;
+                content: '';
+                height: @component__shadow-size__base + 1;
+                left: -(@component__shadow-size__base + 1);
+                position: absolute;
+                right: 0;
+                top: 100%;
+            }
+        }
+        .admin-user-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
+
+.admin-user-account {
+    &:extend(.abs-page-header-action all);
+    .dropdown-triangle(
+        @_dropdown__padding-right: @user-account__padding-right;
+        @_triangle__color: @page-header-action__color;
+        @_triangle__hover__color: @page-header-action__hover__color;
+        @_triangle__right: 1.3rem;
+    );
+    font-size: @user__font-size;
+    letter-spacing: .05em;
+    padding-bottom: @user-account__padding-bottom;
+    padding-left: @user-account__padding-left;
+    padding-top: @user-account__padding-top;
+    z-index: 2;
+    &:before {
+        @_icon-user__size: 2rem;
+        
+        &:extend(.abs-icon all);
+        content: @icon-account__content;
+        font-size: @_icon-user__size;
+        left: 1.1rem;
+        margin-top: -(@_icon-user__size / 2) - .1rem;
+        position: absolute;
+        top: 50%;
+    }
+}
+
+.admin-user-account-text {
+    display: inline-block;
+    max-width: @user-account-menu__min-width - @user-account__padding-left - @user-account__padding-right - 2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-user-menu {
+    @_user-menu__inden-side: 1rem;
+    
+    &:extend(.abs-page-header-action-menu all);
+    line-height: @line-height__base;
+    min-width: @user-account-menu__min-width;
+    padding: .5em @_user-menu__inden-side;
+    z-index: 1;
+    &:before {
+        z-index: 1;
+    }
+    > li {
+        > a {
+            color: @page-header-action__color;
+            display: block;
+            padding: .6rem (@user-account__padding-right - @_user-menu__inden-side) .6rem .5em;
+            text-decoration: none;
+            transition: background-color .1s linear;
+            white-space: nowrap;
+            &:hover {
+                background-color: @dropdown-menu__hover__background-color;
+                color: @page-header-action__color;
+            }
+            &:active {
+                background-color: @dropdown-menu__active__background-color;
+                bottom: -1px;
+                position: relative;
+            }
+        }
+    }
+    .admin-user-name {
+        display: inline-block;
+        max-width: @user-account-menu__min-width;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: text-top;
+        white-space: nowrap;
+    }
+}

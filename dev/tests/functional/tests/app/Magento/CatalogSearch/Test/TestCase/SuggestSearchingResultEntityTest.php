@@ -11,10 +11,6 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Cover Suggest Searching Result (SearchEntity)
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Two "default" test simple products is created.
  * 2. Navigate to frontend.
@@ -36,7 +32,7 @@ class SuggestSearchingResultEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Run suggest searching result test
+     * Run suggest searching result test.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogSearchQuery $catalogSearch

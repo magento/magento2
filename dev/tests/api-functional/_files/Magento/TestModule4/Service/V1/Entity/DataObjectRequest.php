@@ -16,10 +16,28 @@ class DataObjectRequest extends \Magento\Framework\Api\AbstractExtensibleObject
     }
 
     /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
+    }
+
+    /**
      * @return int|null
      */
     public function getEntityId()
     {
         return $this->_get('entity_id');
+    }
+
+    /**
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData('entity_id', $entityId);
     }
 }

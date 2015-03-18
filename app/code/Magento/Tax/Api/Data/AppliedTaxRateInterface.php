@@ -62,4 +62,19 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setPercent($percent);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes);
 }

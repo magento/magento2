@@ -53,10 +53,10 @@ class Compiled extends AbstractFactory
      */
     public function create($requestedType, array $arguments = [])
     {
-        /** @TODO get rid of ltrim() usage and place it to client code */
         $args = $this->config->getArguments($requestedType);
         $type = $this->config->getInstanceType($requestedType);
-        if ($args === null) {
+
+        if (!$args) {
             return new $type();
         }
 
@@ -84,13 +84,6 @@ class Compiled extends AbstractFactory
         }
 
         $args = array_values($args);
-        if (substr($type, -12) == '\Interceptor') {
-            $args = array_merge([
-                $this->objectManager,
-                $this->get($this->config->getPreference('Magento\Framework\Interception\PluginListInterface')),
-                $this->get($this->config->getPreference('Magento\Framework\Interception\ChainInterface')),
-            ], $args);
-        }
 
         return $this->createObject($type, $args);
     }

@@ -46,7 +46,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get maximum upload size message
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getMaxUploadSizeMessage()
     {
