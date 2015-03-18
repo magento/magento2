@@ -7,6 +7,7 @@ namespace Magento\ToolkitFramework;
 
 /**
  * Class Application test
+ * @magentoDbIsolation enabled
  */
 class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
 {
