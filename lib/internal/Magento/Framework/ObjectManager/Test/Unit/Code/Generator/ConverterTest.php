@@ -81,9 +81,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->ioObjectMock->expects($this->once())
-            ->method('makeGenerationDirectory')
-            ->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->once())
             ->method('makeResultFileDirectory')
             ->with(self::RESULT_CLASS_NAME)
             ->will($this->returnValue(true));
