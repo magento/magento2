@@ -373,6 +373,7 @@ nav ol {
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after {
   left: 0;
   margin-left: 30px;
+  top: .2rem;
 }
 .admin__control-text {
   line-height: 3.3rem;
@@ -644,12 +645,13 @@ option:empty {
 ._required > .admin__field-label span:after {
   color: #eb5202;
   content: '*';
-  display: inline;
+  display: inline-block;
   font-size: 1.6rem;
   font-weight: 500;
+  line-height: 1;
   margin-left: 10px;
-  margin-top: 2px;
   position: absolute;
+  top: 1.2rem;
   z-index: 1;
 }
 ._disabled > .admin__field-label {
@@ -2789,6 +2791,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   margin: 0 0 3rem;
 }
 .page-layout-admin-login {
+  align-items: center;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -2810,6 +2813,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   position: relative;
   width: 100%;
   z-index: 1;
+}
+.ie9 .page-layout-admin-login .page-wrapper {
+  margin-top: 10%;
 }
 .page-layout-admin-login :-ms-input-placeholder {
   color: transparent;
@@ -3192,12 +3198,14 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .admin__menu .submenu .parent {
   margin-bottom: 4.5rem;
 }
-.admin__menu .submenu .parent > a {
+.admin__menu .submenu .parent > a,
+.admin__menu .submenu .parent .submenu-group-title {
   color: #a79d95;
   display: block;
   font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: .7rem;
+  padding: 1.25rem 1.5rem;
   pointer-events: none;
 }
 .admin__menu .submenu .column {
@@ -3338,7 +3346,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   transform: rotate(180deg);
 }
 .admin-user-account:hover:after {
-  border-color: #41362f transparent transparent transparent;
+  border-color: #060504 transparent transparent transparent;
 }
 .admin-user-account:before {
   content: '\e600';
@@ -4329,7 +4337,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   display: block;
   position: absolute;
   z-index: 2;
-  background: url("../images/loader-2.gif") no-repeat 50% 50%;
+  background: url('../images/loader-2.gif') no-repeat 50% 50%;
   background-size: 120px;
   width: 2rem;
   height: 2rem;
