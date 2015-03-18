@@ -9,7 +9,7 @@
 define([], function() {
     return function (addressData) {
         return {
-            id: addressData.id,
+            id: null,
             email: addressData.email,
             country_id: addressData.country_id,
             region_id: addressData.region.region_id,
@@ -30,6 +30,9 @@ define([], function() {
             vat_id: addressData.vat_id,
             getFullName: function() {
                 return addressData.region.region + ', ' + addressData.street[0] + ', ' + addressData.city;
+            },
+            getEntityId: function() {
+                return addressData.id;
             }
         }
     }

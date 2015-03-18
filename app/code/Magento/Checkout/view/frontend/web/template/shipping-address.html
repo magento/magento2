@@ -1,6 +1,6 @@
 <h2>Shipping Information </h2>
 <form method="post" id="shipping-address-form">
     <label for="shipping-address">Select a shipping address from your address book or enter a new address:</label>
-    <select name="shipping-address" id="shipping-address" data-bind="options: addresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: 'id', value: selectedAddressId"></select>
+    <select name="shipping-address" id="shipping-address" data-bind="options: addresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: function(item) { return item.getEntityId(); }, value: selectedAddressId"></select>
     <input type="button" value="Continue" data-bind="click: selectShippingAddress">
 </form>
