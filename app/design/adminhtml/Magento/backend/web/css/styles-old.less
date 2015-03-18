@@ -1366,7 +1366,8 @@ input.mage-error ~ .addafter {
     }
 }
 
-.field-weight {
+.field-weight,
+.field-base_price {
     .addon {
         input[type="text"] {
             border-width: 1px 0 1px 1px;
@@ -1768,23 +1769,6 @@ address {
     margin-top: inherit !important;
 }
 
-/*
-    Page Structure
--------------------------------------- */
-
-//.page-title-wrapper-wrapper.complex .title {
-//    float: left;
-//    width: 70%;
-//    overflow: hidden;
-//    text-overflow: ellipsis;
-//    white-space: nowrap;
-//}
-
-//.page-title-wrapper.complex .store-switcher-alt {
-//    float: right;
-//    margin: 12px 0 0;
-//}
-
 .side-col {
     padding-bottom: 20px;
     position: relative;
@@ -1852,164 +1836,6 @@ address {
 .col-2-right-layout .main-col {
     min-width: 730px;
 }
-
-/* Sidebar title */
-/* TODO: temporary styles */
-.side-col h3 {
-    padding: 0 17px;
-    margin-top: 16px;
-}
-
-.side-col .ui-tabs h3 {
-    margin-bottom: 5px;
-    color: #524c44;
-    text-shadow: 0 1px 0 #fff;
-}
-
-//
-//    Universal Sidebar Tabs
-// --------------------------------------
-// TODO: for "Product" page only while refactoring */
-.side-col .ui-tabs .ui-accordion-header {
-    margin: 10px 0 0;
-    padding: 0;
-    &:focus {
-        outline: none;
-    }
-    span {
-        color: #524c44;
-        cursor: pointer;
-        display: block;
-        position: relative;
-        padding: 5px 20px;
-        text-shadow: 0 1px 0 #fff;
-        &:before {
-            position: absolute;
-            left: 4px;
-            top: 7px;
-            font-family: 'MUI-Icons';
-            font-style: normal;
-            speak: none;
-            font-weight: normal;
-            -webkit-font-smoothing: antialiased;
-            content: '\e02a'; // arrow right icon
-            font-size: 14px;
-            color: #ada79e;
-        }
-    }
-    &:hover {
-        span:before {
-            color: #777;
-        }
-    }
-    &-active span:before {
-        content: '\e02c'; // arrow down icon
-    }
-}
-
-.side-col .tabs {
-    margin: 0 0 30px;
-    padding: 0;
-    list-style: none;
-    font-weight: 500;
-}
-
-.side-col > .ui-tabs > .tabs:first-child > li:first-child > a {
-    border-top-left-radius: 5px;
-}
-
-.side-col .tabs > li {
-    border-bottom: 1px solid #e5e1db;
-}
-
-.side-col .tabs > li:first-child {
-    border-top: 1px solid #e5e1db;
-}
-
-.side-col .tabs > li a {
-    position: relative;
-    display: block;
-    padding: 8px 18px;
-    text-decoration: none;
-    color: #676056;
-    transition: background .3s ease-in-out;
-}
-
-.side-col .tabs > li a:hover {
-    background: #fff;
-}
-
-.side-col .tabs > .ui-state-active a {
-    border-left: 3px solid #d87e34;
-    padding-left: 15px;
-    background: #dedcd8;
-    box-shadow: 0 1px 2px #ccc inset;
-}
-
-.side-col .tabs > .ui-state-active a:after,
-.side-col .tabs > .ui-state-active a:before {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 14px;
-    margin-top: -14px;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e02b'; /* left turned triangle icon */
-    font-size: 22px;
-    color: #fff;
-    overflow: hidden;
-    z-index: 4;
-}
-
-.side-col .tabs > .ui-state-active a:before {
-    color: #bdbbb7;
-    margin-top: -13px;
-    z-index: 3;
-}
-
-.side-col .tabs span.error,
-.side-col .tabs span.loader {
-    display: none;
-    position: absolute;
-    right: 12px;
-    top: 7px;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-}
-
-.side-col .tab-item-link.changed {
-    font-style: italic;
-}
-
-.side-col .tab-item-link.error span.error,
-.side-col .ui-tabs-loading span.loader {
-    display: block;
-}
-
-.side-col .tab-item-link.error span.error:after {
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e006'; /* warning icon */
-    color: #d87e34;
-}
-
-.side-col .ui-tabs-loading span.loader:after {
-    background: url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
-    display: block;
-    content: '';
-    width: 16px;
-    height: 16px;
-}
-
-/* TODO: styles for navigation on System > Configuration page */
 
 /*
     Horizontal Tabs
