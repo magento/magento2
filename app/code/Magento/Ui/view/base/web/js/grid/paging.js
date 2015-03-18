@@ -26,8 +26,8 @@ define([
             },
 
             exports: {
-                pageSize: '<%= provider %>:data.paging.pageSize',
-                current: '<%= provider %>:data.paging.current',
+                pageSize: '<%= provider %>:params.paging.pageSize',
+                current: '<%= provider %>:params.paging.current',
                 pages: '<%= provider %>:data.pages'
             },
 

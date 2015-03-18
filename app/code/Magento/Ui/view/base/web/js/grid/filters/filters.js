@@ -51,6 +51,7 @@ define([
 
         apply: function () {
             this.extractActive();
+            this.source.reload();
         },
 
         reset: function (filter) {

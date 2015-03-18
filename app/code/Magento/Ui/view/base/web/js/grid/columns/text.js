@@ -50,6 +50,8 @@ define([
                 field: this.index,
                 direction: sorting
             });
+
+            this.source.reload();
         },
 
         toggleDirection: function () {

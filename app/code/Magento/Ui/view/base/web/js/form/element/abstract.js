@@ -36,7 +36,7 @@ define([
             },
 
             exports: {
-                hidden: '<%= provider %>:params.<%= name %>.hidden'
+                hidden: '<%= provider %>:config.<%= name %>.hidden'
             }
         },
 
