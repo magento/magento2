@@ -153,6 +153,7 @@ class Ftp extends AbstractIo
      * @param int $mode
      * @param bool $recursive
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function mkdir($dir, $mode = 0777, $recursive = true)
     {
@@ -165,6 +166,7 @@ class Ftp extends AbstractIo
      * @param string $dir
      * @param bool $recursive
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -234,6 +236,7 @@ class Ftp extends AbstractIo
      * @param string|resource $src filename, string data or source stream
      * @param null $mode
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function write($filename, $src, $mode = null)
     {
@@ -300,6 +303,7 @@ class Ftp extends AbstractIo
      * @param null $grep ignored parameter
      * @return array
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function ls($grep = null)
     {

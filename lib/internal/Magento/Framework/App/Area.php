@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * Application area model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {

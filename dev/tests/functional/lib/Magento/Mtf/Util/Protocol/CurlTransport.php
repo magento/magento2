@@ -116,6 +116,7 @@ class CurlTransport implements CurlInterface
      * @param array $headers
      * @param array $params
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function write($method, $url, $httpVer = '1.1', $headers = [], $params = [])
     {
