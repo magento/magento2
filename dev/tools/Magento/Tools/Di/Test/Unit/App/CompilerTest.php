@@ -31,16 +31,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     private $responseMock;
 
-    /**
-     * @var array
-     */
-    private $compiledPathsList = [];
-
-    /**
-     * @var array
-     */
-    private $excludedPathsList = [];
-
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
