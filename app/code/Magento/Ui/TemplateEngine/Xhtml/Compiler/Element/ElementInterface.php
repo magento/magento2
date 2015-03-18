@@ -7,7 +7,6 @@ namespace Magento\Ui\TemplateEngine\Xhtml\Compiler\Element;
 
 use Magento\Framework\Object;
 use Magento\Ui\TemplateEngine\Xhtml\Compiler;
-use Magento\Ui\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**

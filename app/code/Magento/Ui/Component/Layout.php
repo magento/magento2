@@ -5,15 +5,10 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
-
 use Magento\Ui\Component\Layout\LayoutPool;
-use Magento\Framework\View\Element\UiComponent\LayoutInterface;
-
-use Magento\Ui\DataProvider\Metadata;
 use Magento\Framework\View\Element\Template;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Framework\View\Element\UiComponent\LayoutInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Layout

@@ -29,7 +29,20 @@ class Paging extends AbstractComponent
      */
     public function prepare()
     {
+        parent::prepare();
+
         $this->prepareConfiguration();
+        $config = $this->getData('config');
+        if (isset($config['options'])) {
+            $config['options'] = array_values($config['options']);
+            usort(
+                $config['options'],
+                function($a, $b) {
+                    return (int)$a['value'] - (int)$b['value'];
+                }
+            );
+            $this->setData('config', $config);
+        }
 
         $defaultPage = $this->getData('config/current') ?: 1;
         $defaultLimit = $this->getData('config/pageSize') ?: 20;
@@ -52,7 +65,28 @@ class Paging extends AbstractComponent
     protected function getDefaultConfiguration()
     {
         return  [
-            'sizes' => [20, 30, 50, 100, 200],
+            'options' => [
+                [
+                    'value' => 20,
+                    'label' => 20
+                ],
+                [
+                    'value' => 30,
+                    'label' => 30
+                ],
+                [
+                    'value' => 50,
+                    'label' => 50
+                ],
+                [
+                    'value' => 100,
+                    'label' => 100
+                ],
+                [
+                    'value' => 200,
+                    'label' => 200
+                ],
+            ],
             'pageSize' => 20,
             'current' => 1
         ];

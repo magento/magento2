@@ -15,21 +15,6 @@ class Filters extends AbstractComponent
     const NAME = 'filters';
 
     /**
-     * Constructor
-     *
-     * @param ContextInterface $context
-     * @param array $components
-     * @param array $data
-     */
-    public function __construct(
-        ContextInterface $context,
-        array $components = [],
-        array $data = []
-    ) {
-        parent::__construct($context, $components, $data);
-    }
-
-    /**
      * Get component name
      *
      * @return string

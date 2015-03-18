@@ -59,6 +59,12 @@ class Date extends AbstractDataType
     {
         parent::prepare();
 
+        $config = $this->getData('config');
+        if (!isset($config['dateFormat'])) {
+            $config['dateFormat'] = $this->localeDate->getDateTimeFormat(\IntlDateFormatter::MEDIUM);
+            $this->setData('config', $config);
+        }
+
         $jsConfig = $this->getJsConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
