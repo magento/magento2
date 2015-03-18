@@ -6,7 +6,9 @@
 namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Model\Resource\Customer\Collection;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
@@ -30,26 +32,56 @@ class DataProvider implements DataProviderInterface
     protected $collection;
 
     /**
+     * @var Config
+     */
+    protected $eavConfig;
+
+    /**
      * @var array
      */
     protected $meta = [];
 
     /**
+     * EAV attribute properties to fetch from meta storage
+     * @var array
+     */
+    protected $metaProperties = [
+        'dataType' => 'frontend_input',
+        'visible' => 'is_visible',
+        'required' => 'is_required',
+        'label' => 'frontend_label',
+        'sortOrder' => 'sort_order',
+        'notice' => 'note',
+        'default' => 'default_value',
+        'size' => 'scope_multiline_count'
+    ];
+
+    /**
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $collectionFactory
+     * @param CustomerCollectionFactory $customerCollectionFactory
+     * @param Config $eavConfig
      * @param array $meta
      */
     public function __construct(
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $collectionFactory,
+        CustomerCollectionFactory $customerCollectionFactory,
+        Config $eavConfig,
         array $meta = []
     ) {
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
-        $this->collection = $collectionFactory->create();
+        $this->collection = $customerCollectionFactory->create();
+        $this->eavConfig = $eavConfig;
         $this->meta = $meta;
+
+        $this->meta['customer']['fields'] = $this->getAttributesMeta(
+            $this->eavConfig->getEntityType('customer')
+        );
+        $this->meta['address']['fields'] = $this->getAttributesMeta(
+            $this->eavConfig->getEntityType('customer_address')
+        );
     }
 
     /**
@@ -58,6 +90,39 @@ class DataProvider implements DataProviderInterface
     public function getMeta()
     {
         return $this->meta;
+    }
+
+    /**
+     * @param string $fieldSetName
+     * @param string $fieldName
+     * @return array
+     */
+    public function getFieldMetaInfo($fieldSetName, $fieldName)
+    {
+        return isset($this->meta[$fieldSetName][$fieldName]) ? $this->meta[$fieldSetName][$fieldName] : [];
+    }
+
+    /**
+     * @param Type $entityType
+     * @return array
+     * @throws \Magento\Eav\Exception
+     */
+    protected function getAttributesMeta(Type $entityType)
+    {
+        $meta = [];
+        $attributes = $entityType->getAttributeCollection();
+        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        foreach ($attributes as $attribute) {
+            $code = $attribute->getAttributeCode();
+            // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
+            foreach ($this->metaProperties as $metaName => $origName) {
+                $meta[$code][$metaName] = $attribute->getDataUsingMethod($origName);
+                if ($attribute->usesSource()) {
+                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                }
+            }
+        }
+        return $meta;
     }
 
     /**

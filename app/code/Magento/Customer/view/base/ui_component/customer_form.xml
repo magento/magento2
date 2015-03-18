@@ -45,54 +45,490 @@
     </dataSource>
 
     <fieldset name="customer">
-        <field name="firstname" dataType="text" filterType="filter_input">
+        <field name="entity_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Firstname</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
                 </item>
             </argument>
         </field>
-        <field name="lastname" dataType="text" filterType="filter_input">
+        <field name="default_billing">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Lastname</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_shipping">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="website_id">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="link" xsi:type="string">http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</item>
+                        <item name="description" xsi:type="string">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="prefix">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="group_id">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="fieldGroup" xsi:type="string">group_id</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="disable_auto_group_change">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="fieldGroup" xsi:type="string">group_id</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="firstname">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="middlename">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="lastname">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="suffix">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="email">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">email</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                            <item name="validate-email" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="dob">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">date</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="taxvat">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="gender">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="sendemail">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Welcome Email</item>
+                    <item name="description" xsi:type="string">Send a Welcome email</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="optionProvider" xsi:type="string">Magento\Store\Model\System\Store::getStoreValuesForForm</item>
+                </item>
+            </argument>
+        </field>
+        <field name="sendemail_store_id">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Send From</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="optionProvider" xsi:type="string">Magento\Store\Model\System\Store::getStoreValuesForForm</item>
                 </item>
             </argument>
         </field>
     </fieldset>
 
     <fieldset name="address">
-        <field name="firstname" dataType="text" filterType="filter_input">
+        <field name="parent_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Firstname</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
                 </item>
             </argument>
         </field>
-        <field name="lastname" dataType="text" filterType="filter_input">
+        <field name="prefix">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Lastname</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                </item>
+            </argument>
+        </field>
+        <field name="firstname">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="middlename">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                </item>
+            </argument>
+        </field>
+        <field name="lastname">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/input</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="suffix">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                </item>
+            </argument>
+        </field>
+        <field name="company">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                </item>
+            </argument>
+        </field>
+        <field name="street">
+            <argument name="data" xsi:type="array">
+                <item name="size" xsi:type="number">2</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="city">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="country_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="region_id">
+            <argument name="data" xsi:type="array">
+                <item name="customEntry" xsi:type="string">region</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                        <item name="filters" xsi:type="array">
+                            <item name="validators" xsi:type="array">
+                                <item name="on" xsi:type="string">parentScope}.country_id</item>
+                                <item name="by" xsi:type="string">country_id</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="region">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </field>
+        <field name="postcode">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="telephone">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="constraints" xsi:type="array">
+                        <item name="validators" xsi:type="array">
+                            <item name="required-entry" xsi:type="string"/>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="fax">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                </item>
+            </argument>
+        </field>
+        <field name="vat_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_billing">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="displayArea" xsi:type="string">head</item>
+                    <item name="uniqueNs" xsi:type="string">default_billing</item>
+                    <item name="uniqueProp" xsi:type="string">value</item>
+                    <item name="description" xsi:type="string" translate="true">Default Billing Address</item>
+                    <item name="source" xsi:type="array">
+                        <item name="target" xsi:type="string">customer</item>
+                        <item name="targetField" xsi:type="string">default_billing</item>
+                        <item name="referencedField" xsi:type="string">entity_id</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="default_shipping">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="displayArea" xsi:type="string">head</item>
+                    <item name="uniqueNs" xsi:type="string">default_shipping</item>
+                    <item name="uniqueProp" xsi:type="string">value</item>
+                    <item name="description" xsi:type="string" translate="true">Default Shipping Address</item>
+                    <item name="source" xsi:type="array">
+                        <item name="target" xsi:type="string">customer</item>
+                        <item name="targetField" xsi:type="string">default_shipping</item>
+                        <item name="referencedField" xsi:type="string">entity_id</item>
+                    </item>
                 </item>
             </argument>
         </field>

@@ -183,20 +183,7 @@
             <xs:extension base="ui_element">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:group ref="configurable"/>
-                    <xs:element type="fieldReferenceType" name="reference" maxOccurs="1" minOccurs="0"/>
-                    <xs:element type="fieldConstraintsType" name="constraints" maxOccurs="unbounded" minOccurs="0"/>
-                    <xs:element type="fieldTooltipType" name="tooltip" maxOccurs="unbounded" minOccurs="0"/>
                 </xs:choice>
-                <xs:attribute type="textAttributeType" name="dataType" use="optional"/>
-                <xs:attribute type="textAttributeType" name="filterType" use="optional"/>
-                <xs:attribute type="textAttributeType" name="formElement" use="optional"/>
-                <xs:attribute type="textAttributeType" name="displayArea" use="optional"/>
-                <xs:attribute type="textAttributeType" name="fieldGroup" use="optional"/>
-                <xs:attribute type="textAttributeType" name="source" use="optional"/>
-                <xs:attribute type="textAttributeType" name="optionProvider" use="optional"/>
-                <xs:attribute type="textAttributeType" name="default_value" use="optional"/>
-                <xs:attribute type="textAttributeType" name="label" use="optional"/>
-                <xs:attribute type="textAttributeType" name="description" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -312,55 +299,6 @@
         <xs:attribute type="xs:string" name="layout" use="optional"/>
         <xs:attribute type="xs:string" name="dataSource" use="optional"/>
         <xs:attribute type="xs:string" name="class" use="optional"/>
-    </xs:complexType>
-    <!-- Filed types -->
-    <xs:complexType name="fieldReferenceType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute type="referenceAttributeType" name="target" use="required"/>
-                <xs:attribute type="referenceAttributeType" name="referencedField" use="required"/>
-                <xs:attribute type="referenceAttributeType" name="targetField" use="required"/>
-                <xs:attribute type="referenceAttributeType" name="neededField" use="required"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    <xs:complexType name="fieldConstraintsType">
-        <xs:choice maxOccurs="unbounded">
-            <xs:element type="constraintValidateType" name="validate" maxOccurs="unbounded" minOccurs="0"/>
-            <xs:element type="constraintFilterType" name="filter" maxOccurs="unbounded" minOccurs="0"/>
-            <xs:element type="constraintReadonlyType" name="readonly" maxOccurs="unbounded" minOccurs="0"/>
-        </xs:choice>
-    </xs:complexType>
-    <xs:complexType name="constraintValidateType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="name" use="required"/>
-                <xs:attribute type="xs:string" name="value" use="optional"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    <xs:complexType name="constraintFilterType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="on" use="required"/>
-                <xs:attribute type="xs:string" name="by" use="required"/>
-                <xs:attribute type="xs:string" name="value" use="optional"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    <xs:complexType name="constraintReadonlyType">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="on" use="required"/>
-                <xs:attribute type="xs:string" name="value" use="optional"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    <xs:complexType name="fieldTooltipType">
-        <xs:sequence>
-            <xs:element type="xs:string" name="link" maxOccurs="1" minOccurs="1"/>
-            <xs:element type="xs:string" name="description" maxOccurs="1" minOccurs="1"/>
-        </xs:sequence>
     </xs:complexType>
     <!-- Simple types -->
     <xs:simpleType name="referenceAttributeType">

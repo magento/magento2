@@ -56,7 +56,7 @@ class Column extends AbstractComponent
      */
     public function getComponentName()
     {
-        return static::NAME . '.' . $this->getData('dataType');
+        return static::NAME . '.' . $this->getData('config/dataType');
     }
 
     /**
@@ -68,7 +68,7 @@ class Column extends AbstractComponent
     {
         parent::prepare();
 
-        $dataType = $this->getData('dataType');
+        $dataType = $this->getData('config/dataType');
         $wrappedComponentConfig = [];
         if ($dataType) {
             $this->wrappedComponent = $this->uiComponentFactory->create(

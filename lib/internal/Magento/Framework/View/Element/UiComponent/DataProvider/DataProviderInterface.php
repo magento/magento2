@@ -16,6 +16,13 @@ interface DataProviderInterface
     public function getMeta();
 
     /**
+     * @param string $fieldSetName
+     * @param string $fieldName
+     * @return array
+     */
+    public function getFieldMetaInfo($fieldSetName, $fieldName);
+
+    /**
      * Get data
      *
      * @return mixed
