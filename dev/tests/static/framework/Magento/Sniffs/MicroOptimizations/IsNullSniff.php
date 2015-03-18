@@ -30,7 +30,7 @@ class IsNullSniff implements PHP_CodeSniffer_Sniff
     {
         $tokens = $sourceFile->getTokens();
         if ($tokens[$stackPtr]['content'] === $this->blacklist) {
-            $sourceFile->addError("is_null should be avoided. Use strict comparison instead.", $stackPtr);
+            $sourceFile->addError("is_null must be avoided. Use strict comparison instead.", $stackPtr);
         }
     }
 }
