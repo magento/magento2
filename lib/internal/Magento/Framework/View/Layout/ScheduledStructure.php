@@ -256,6 +256,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param string $configPath
      * @param string $scopeType
+     * @return void
      */
     public function setElementToIfconfigList($elementName, $configPath, $scopeType)
     {
@@ -424,6 +425,7 @@ class ScheduledStructure
      * Set element to broken parent list
      *
      * @param string $elementName
+     * @return void
      */
     public function setElementToBrokenParentList($elementName)
     {
