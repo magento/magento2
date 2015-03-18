@@ -234,10 +234,10 @@
         </arguments>
     </block>
 
-    <block class="Magento\Ui\Component\Form\Element\DataType\PostCodeFix" name="post_code_fix">
+    <block class="Magento\Ui\Component\Form\Element\Input" name="post_code">
         <arguments>
             <argument name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code-fix</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
                 <item name="dependentFiled" xsi:type="string">country_id</item>
             </argument>
         </arguments>
