@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Filter\Type;
+namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\Filter\DataProvider;
-use Magento\Ui\Component\Filter\AbstractFilter;
+use Magento\Ui\Component\Filters\AbstractFilter;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -37,7 +36,6 @@ class Select extends AbstractFilter
      * Constructor
      *
      * @param ContextInterface $context
-     * @param DataProvider $dataProvider
      * @param UiComponentFactory $uiComponentFactory
      * @param OptionSourceInterface $optionsProvider
      * @param array $components
@@ -45,16 +43,14 @@ class Select extends AbstractFilter
      */
     public function __construct(
         ContextInterface $context,
-        DataProvider $dataProvider,
         UiComponentFactory $uiComponentFactory,
         OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
         $this->optionsProvider = $optionsProvider;
-        parent::__construct($context, $dataProvider, $uiComponentFactory, $components, $data);
+        parent::__construct($context, $uiComponentFactory, $components, $data);
     }
-
 
     /**
      * Get component name
@@ -109,7 +105,7 @@ class Select extends AbstractFilter
      */
     public function getCondition()
     {
-        $value = $this->dataProvider->getData($this->getName());
+        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         $condition = null;
         if (!empty($value) || is_numeric($value)) {
             $condition = ['eq' => $value];

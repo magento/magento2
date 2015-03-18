@@ -74,8 +74,7 @@ class ActionPool implements ActionPoolInterface
      *
      * @param string $key
      * @param array $data
-     * @param UiComponentInterface $view
-     * @return void
+     * @param UiComponentInterface $component
      */
     public function add($key, array $data, UiComponentInterface $component)
     {
@@ -120,7 +119,7 @@ class ActionPool implements ActionPoolInterface
      *
      * @param string $key
      * @param UiComponentInterface $view
-     * @return \Magento\Ui\Component\Control\Container
+     * @return Container
      */
     protected function createContainer($key, UiComponentInterface $view)
     {

@@ -28,10 +28,10 @@
         </argument>
     </paging>
     <filters class="Magento\Ui\Component\Filters"/>
-    <filterSelect class="Magento\Ui\Component\Filter\Type\Select"/>
-    <filterRange class="Magento\Ui\Component\Filter\Type\Range"/>
-    <filterInput class="Magento\Ui\Component\Filter\Type\Input"/>
-    <filterDate class="Magento\Ui\Component\Filter\Type\Date"/>
+    <filterSelect class="Magento\Ui\Component\Filters\Type\Select"/>
+    <filterRange class="Magento\Ui\Component\Filters\Type\Range"/>
+    <filterInput class="Magento\Ui\Component\Filters\Type\Input"/>
+    <filterDate class="Magento\Ui\Component\Filters\Type\Date"/>
     <massaction class="Magento\Ui\Component\MassAction">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">templates/listingcontainer/massaction/default</item>

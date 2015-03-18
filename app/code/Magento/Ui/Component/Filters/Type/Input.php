@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Filter\Type;
+namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\Filter\AbstractFilter;
+use Magento\Ui\Component\Filters\AbstractFilter;
 use Magento\Ui\Component\Form\Element\Input as ElementInput;
 
 /**
@@ -77,7 +77,7 @@ class Input extends AbstractFilter
      */
     public function getCondition()
     {
-        $value = $this->dataProvider->getData($this->getName());
+        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         $condition = null;
         if (!empty($value) || is_numeric($value)) {
             $condition = ['like' => sprintf('%%%s%%', $value)];
