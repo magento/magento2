@@ -41,4 +41,21 @@ interface FakeRegionInterface extends ExtensibleDataInterface
      * @return int
      */
     public function getRegionId();
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeRegionExtensionInterface $extensionAttributes
+    );
 }

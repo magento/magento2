@@ -5,12 +5,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
     <default>
         <dev>
             <restrict>
                 <allow_ips />
             </restrict>
+            <front_end_development_workflow>
+                <type>server_side_compilation</type>
+            </front_end_development_workflow>
         </dev>
     </default>
 </config>

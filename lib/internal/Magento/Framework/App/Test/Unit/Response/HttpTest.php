@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\App\Test\Unit\Response;
 
 use \Magento\Framework\App\Response\Http;
@@ -53,6 +56,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->model);
+        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
     }
 
     public function testSendVary()

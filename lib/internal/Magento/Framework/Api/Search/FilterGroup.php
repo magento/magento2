@@ -6,12 +6,12 @@
 
 namespace Magento\Framework\Api\Search;
 
-use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Groups two or more filters together using a logical OR
  */
-class FilterGroup extends AbstractExtensibleObject
+class FilterGroup extends AbstractSimpleObject
 {
     const FILTERS = 'filters';
 

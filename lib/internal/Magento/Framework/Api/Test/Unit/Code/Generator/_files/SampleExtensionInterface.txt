@@ -3,7 +3,7 @@ namespace Magento\Catalog\Api\Data;
 /**
  * ExtensionInterface class for @see \Magento\Catalog\Api\Data\ProductInterface
  */
-interface ProductExtensionInterface
+interface ProductExtensionInterface extends \Magento\Framework\Api\ExtensionAttributesInterface
 {
     /**
      * @return string

@@ -253,7 +253,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
      * @return $this
      */
-    public function setComments(array $comments = null);
+    public function setComments($comments = null);
 
     /**
      * Sets the store ID for the shipment.
@@ -350,4 +350,19 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setUpdatedAt($timestamp);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes);
 }

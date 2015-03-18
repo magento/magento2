@@ -83,6 +83,18 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->getConnection()->createTable($table);
 
+        $installer->getConnection()->addColumn(
+            $installer->getTable('catalog_eav_attribute'),
+            'search_weight',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_FLOAT,
+                'unsigned' => true,
+                'nullable' => false,
+                'default' => '3',
+                'comment' => 'Search Weight'
+            ]
+        );
+
         $installer->endSetup();
 
     }

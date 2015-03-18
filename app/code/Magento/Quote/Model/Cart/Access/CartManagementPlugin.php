@@ -51,7 +51,7 @@ class CartManagementPlugin
         $storeId
     ) {
         if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
-            throw new AuthorizationException('Access denied');
+            throw new AuthorizationException(__('Access denied'));
         }
     }
 }

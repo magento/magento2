@@ -96,13 +96,10 @@ abstract class AbstractType
         $this->_prodAttrColFac = $prodAttrColFac;
 
         if ($this->isSuitable()) {
-            if (!isset(
-                $params[0]
-            ) || !isset(
-                $params[1]
-            ) || !is_object(
-                $params[0]
-            ) || !$params[0] instanceof \Magento\CatalogImportExport\Model\Import\Product
+            if (!isset($params[0])
+                || !isset($params[1])
+                || !is_object($params[0])
+                || !$params[0] instanceof \Magento\CatalogImportExport\Model\Import\Product
             ) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the parameters.'));
             }

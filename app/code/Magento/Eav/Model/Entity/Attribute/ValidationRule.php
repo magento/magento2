@@ -9,7 +9,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 /**
  * @codeCoverageIgnore
  */
-class ValidationRule extends \Magento\Framework\Model\AbstractExtensibleModel implements
+class ValidationRule extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Eav\Api\Data\AttributeValidationRuleInterface
 {
     /**

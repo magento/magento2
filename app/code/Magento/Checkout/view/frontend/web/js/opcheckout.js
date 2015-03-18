@@ -198,9 +198,9 @@ define([
 
                                 $(this.options.countrySelector).trigger('change');
 
-                                alert($.mage.__(msg));
+                                alert(msg);
                             } else {
-                                alert($.mage.__(response.error));
+                                alert(response.error);
                             }
 
                             return;

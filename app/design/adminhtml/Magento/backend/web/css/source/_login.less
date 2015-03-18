@@ -26,6 +26,7 @@
 
 // Login box
 .page-layout-admin-login {
+    align-items: center;
     .vendor-prefix-display(flex);
     background-color: @login-page__background-color;
     padding: 2rem 0 20rem;
@@ -42,6 +43,9 @@
         position: relative;
         width: 100%;
         z-index: 1;
+        .ie9 & {
+            margin-top: 10%;
+        }
     }
     :-ms-input-placeholder {
         color: transparent;

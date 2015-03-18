@@ -32,6 +32,7 @@
         "magento/zendframework1": "1.12.10",
         "composer/composer": "1.0.0-alpha8",
         "monolog/monolog": "1.11.0",
+        "oyejorge/less.php": "1.7.0.3",
         "tubalmartin/cssmin": "2.4.8-p4",
         "magento/magento-composer-installer": "*"
     },
@@ -79,7 +80,6 @@
         "magento/module-configurable-product": "self.version",
         "magento/module-contact": "self.version",
         "magento/module-cookie": "self.version",
-        "magento/module-core": "self.version",
         "magento/module-cron": "self.version",
         "magento/module-currency-symbol": "self.version",
         "magento/module-customer": "self.version",
@@ -153,7 +153,6 @@
         "magento/language-pt_br": "self.version",
         "magento/language-zh_cn": "self.version",
         "magento/framework": "self.version",
-        "oyejorge/less.php": "1.7.0",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "dev-master#193d377b7fb2e88595578b282fa01a62d1185abc",
         "colinmollenhour/credis": "dev-master#f07bbfd4117294f462f0fb19c49221d350bf396f",
@@ -167,7 +166,6 @@
     },
     "extra": {
         "component_paths": {
-            "oyejorge/less.php": "lib/internal/Less",
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
             "colinmollenhour/cache-backend-redis": "lib/internal/Cm/Cache/Backend/Redis.php",
             "colinmollenhour/credis": "lib/internal/Credis",

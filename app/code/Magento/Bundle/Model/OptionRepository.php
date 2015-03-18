@@ -96,14 +96,14 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function get($productSku, $optionId)
+    public function get($sku, $optionId)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
 
         /** @var \Magento\Bundle\Model\Option $option */
         $option = $this->type->getOptionsCollection($product)->getItemById($optionId);
         if (!$option || !$option->getId()) {
-            throw new NoSuchEntityException('Requested option doesn\'t exist');
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
 
         $productLinks = $this->linkList->getItems($product, $optionId);
@@ -126,9 +126,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku)
+    public function getList($sku)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         return $this->productOptionList->getItems($product);
     }
 
@@ -141,8 +141,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $this->optionResource->delete($option);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\StateException(
-                'Cannot delete option with id %option_id',
-                ['option_id' => $option->getOptionId()],
+                __('Cannot delete option with id %1', $option->getOptionId()),
                 $exception
             );
         }
@@ -152,9 +151,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     /**
      * {@inheritdoc}
      */
-    public function deleteById($productSku, $optionId)
+    public function deleteById($sku, $optionId)
     {
-        $product = $this->getProduct($productSku);
+        $product = $this->getProduct($sku);
         $optionCollection = $this->type->getOptionsCollection($product);
         $optionCollection->setIdFilter($optionId);
         return $this->delete($optionCollection->getFirstItem());
@@ -182,7 +181,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $existingOption = $optionCollection->getFirstItem();
 
             if (!$existingOption->getOptionId()) {
-                throw new NoSuchEntityException('Requested option doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
             }
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
@@ -205,7 +204,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         try {
             $this->optionResource->save($option);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save option', [], $e);
+            throw new CouldNotSaveException(__('Could not save option'), $e);
         }
 
         /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
@@ -217,15 +216,15 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\InputException
      */
-    private function getProduct($productSku)
+    private function getProduct($sku)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException('Only implemented for bundle product');
+            throw new InputException(__('Only implemented for bundle product'));
         }
         return $product;
     }

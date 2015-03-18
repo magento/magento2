@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\TestFramework\Test\Unit\Unit\Helper;
 
 class ObjectManagerTest extends \PHPUnit_Framework_TestCase
@@ -76,7 +79,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             $this->assertAttributeInstanceOf($propertyType, '_' . $propertyName, $model);
         }
 
-        /** @var $resourceMock \Magento\Core\Model\Resource\Resource */
+        /** @var $resourceMock \Magento\Framework\Module\Resource */
         $resourceMock = $this->getMock(
             'Magento\Framework\Module\Resource',
             ['_getReadAdapter', 'getIdFieldName', '__sleep', '__wakeup'],

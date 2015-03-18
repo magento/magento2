@@ -12,6 +12,9 @@ use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Framework\Object as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     const TABLE_NAME = 'some_table';
@@ -76,6 +79,14 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->uut = $this->getUut();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
     }
 
     protected function getUut()

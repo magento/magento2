@@ -168,7 +168,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
                 }
             }
 
-            throw new \Magento\Framework\Exception\LocalizedException(join("\n", $errorMessages));
+            throw new \Magento\Framework\Exception\LocalizedException(__(join("\n", $errorMessages)));
         }
     }
 

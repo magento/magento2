@@ -7,6 +7,8 @@ namespace Magento\OfflinePayments\Model;
 
 /**
  * Cash on delivery payment method model
+ *
+ * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  */
 class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
 {

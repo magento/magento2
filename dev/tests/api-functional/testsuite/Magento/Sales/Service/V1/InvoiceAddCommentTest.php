@@ -47,7 +47,7 @@ class InvoiceAddCommentTest extends WebapiAbstract
         $requestData = ['entity' => $commentData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/invoice/comment',
+                'resourcePath' => '/V1/invoices/comments',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [

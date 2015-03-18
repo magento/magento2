@@ -23,6 +23,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method int setSearchWeight(int $value)
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
+ * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -88,7 +89,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
@@ -113,7 +114,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
@@ -141,7 +142,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $eavConfig,
             $eavTypeFactory,
@@ -186,7 +187,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
                 try {
                     $this->attrLockValidator->validate($this);
                 } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Do not change the scope. ' . $exception->getMessage()));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Do not change the scope. %1', $exception->getMessage())
+                    );
                 }
             }
         }

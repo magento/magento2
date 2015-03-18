@@ -6,12 +6,11 @@
 
 namespace Magento\Framework\Api;
 
-
 /**
  * Data object for sort order.
  * @codeCoverageIgnore
  */
-class SortOrder extends AbstractExtensibleObject
+class SortOrder extends AbstractSimpleObject
 {
     const FIELD = 'field';
     const DIRECTION = 'direction';

@@ -85,6 +85,7 @@
                 .css(line-height, @_nav-level0-item-line-height);
                 .css(padding, @_nav-level0-item-padding);
                 .css(text-transform, @_nav-level0-text-transform);
+                word-break: break-all;
             }
             > .level1 {
                 font-weight: @font-weight__semibold;
@@ -110,6 +111,9 @@
             }
         }
         .submenu {
+            > li {
+                word-break: break-all;
+            }
             &:not(:first-child) {
                 .css(background, @_submenu-background-color);
                 .css(border, @_submenu-border);
@@ -148,6 +152,7 @@
                 &.expanded {
                     display: block !important;
                     top: 0 !important;
+                    padding-right: 0;
                 }
                 .active {
                     > a {

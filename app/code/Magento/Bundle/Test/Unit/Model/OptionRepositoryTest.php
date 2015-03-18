@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Test\Unit\Model;
 
 class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -71,6 +74,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->optionFactoryMock = $this->getMockBuilder('\Magento\Bundle\Api\Data\OptionInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()

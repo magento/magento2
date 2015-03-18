@@ -49,15 +49,12 @@
     }
 
     .attribute-change-checkbox {
+        background: #fff;
         display: block;
         margin-top: 5px;
         .label {
             float: none;
             padding: 0;
-            width: auto;
-        }
-        .checkbox {
-            margin-right: 5px;
             width: auto;
         }
     }
@@ -66,15 +63,18 @@
     .field-special_price,
     .field-gift_wrapping_price,
     .field-msrp,
+    .field-cost,
     .field-gift_wrapping_price {
-        .addon > input {
-            padding-left: 23px;
-        }
-        .addafter {
-            > strong {
-                left: 5px;
-                position: absolute;
-                top: 3px;
+        .control {
+            .addon > input {
+                padding-left: 23px;
+            }
+            .addafter {
+                > strong {
+                    left: 5px;
+                    position: absolute;
+                    top: 3px;
+                }
             }
         }
     }
@@ -108,27 +108,17 @@
                 .addafter + .addafter {
                     border-width: 1px 1px 1px 0;
                     border-style: solid;
-                    height: 28px;
+                    height: 31px;
                     right: 0;
                     position: absolute;
                     top: 0;
                 }
                 .addafter strong {
-                    line-height: 28px;
+                    line-height: 31px;
                 }
                 > input:focus + .addafter + .addafter {
-                    box-shadow: 0 0 8px rgba(82, 168, 236, .6);
+                    border-color: #007bdb;
                 }
-            }
-        }
-    }
-
-    .field-gift_message_available,
-    .field-gift_wrapping_available {
-        .addon {
-            > input[type="checkbox"] {
-                width: auto;
-                margin-right: 5px;
             }
         }
     }
