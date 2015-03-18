@@ -233,4 +233,13 @@
             </argument>
         </arguments>
     </block>
+
+    <block class="Magento\Ui\Component\Form\Element\DataType\PostCodeFix" name="post_code_fix">
+        <arguments>
+            <argument name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code-fix</item>
+                <item name="dependentFiled" xsi:type="string">country_id</item>
+            </argument>
+        </arguments>
+    </block>
 </layout>
