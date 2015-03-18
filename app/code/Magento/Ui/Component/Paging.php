@@ -30,10 +30,14 @@ class Paging extends AbstractComponent
     public function prepare()
     {
         $this->prepareConfiguration();
+
         $defaultPage = $this->getData('config/current') ?: 1;
-        $offset = $this->getContext()->getRequestParam('page', $defaultPage);
         $defaultLimit = $this->getData('config/pageSize') ?: 20;
-        $size = $this->getContext()->getRequestParam('limit', $defaultLimit);
+        $paging = $this->getContext()->getRequestParam('paging');
+
+        $offset = isset($paging['current']) ? $paging['current'] : $defaultPage;
+        $size = isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit;
+
         $this->getContext()->getDataProvider()->setLimit($offset, $size);
 
         $jsConfig = $this->getJsConfiguration($this);

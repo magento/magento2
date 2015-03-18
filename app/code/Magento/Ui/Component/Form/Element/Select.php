@@ -64,7 +64,7 @@ class Select extends AbstractFormElement
             if ($this->options instanceof OptionSourceInterface) {
                 $options = $this->options->toOptionArray();
             } else {
-                $options = $this->options;
+                $options = array_values($this->options);
             }
             $config['options'] = array_values(array_merge_recursive($options, $config['options']));
         }
