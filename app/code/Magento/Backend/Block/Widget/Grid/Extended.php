@@ -949,7 +949,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             $collection->setPageSize($this->_exportPageSize);
             $collection->setCurPage($page);
             $collection->load();
-            if (is_null($count)) {
+            if ($count === null) {
                 $count = $collection->getSize();
                 $lPage = $collection->getLastPageNumber();
             }

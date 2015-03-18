@@ -105,7 +105,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
             $this->getTypeId()
         );
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('l.product_id IN(?)', $entityIds);
         }
 

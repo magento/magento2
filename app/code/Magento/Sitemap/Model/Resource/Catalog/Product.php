@@ -416,7 +416,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getMediaGalleryModel()
     {
-        if (is_null($this->_mediaGalleryModel)) {
+        if ($this->_mediaGalleryModel === null) {
             /** @var $eavConfig \Magento\Eav\Model\Config */
             $eavConfig = $this->_eavConfigFactory->create();
             /** @var $eavConfig \Magento\Eav\Model\Attribute */

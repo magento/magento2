@@ -208,10 +208,10 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     protected function _checkDependencyLayoutBlock($currentModule, $area, $block)
     {
-        if (isset($this->_mapLayoutBlocks[$area][$block]) || is_null($area)) {
+        if (isset($this->_mapLayoutBlocks[$area][$block]) || $area === null) {
             // CASE 1: No dependencies
             $modules = [];
-            if (is_null($area)) {
+            if ($area === null) {
                 foreach ($this->_mapLayoutBlocks as $blocks) {
                     if (array_key_exists($block, $blocks)) {
                         $modules += $blocks[$block];

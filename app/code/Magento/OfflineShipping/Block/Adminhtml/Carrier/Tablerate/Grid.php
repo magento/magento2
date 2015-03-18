@@ -87,7 +87,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getWebsiteId()
     {
-        if (is_null($this->_websiteId)) {
+        if ($this->_websiteId === null) {
             $this->_websiteId = $this->_storeManager->getWebsite()->getId();
         }
         return $this->_websiteId;

@@ -323,7 +323,7 @@ class Config extends \Magento\Framework\Object
      */
     public function load()
     {
-        if (is_null($this->_configData)) {
+        if ($this->_configData === null) {
             $this->initScope();
             $this->_configData = $this->_getConfig(false);
         }
@@ -389,13 +389,13 @@ class Config extends \Magento\Framework\Object
      */
     private function initScope()
     {
-        if (is_null($this->getSection())) {
+        if ($this->getSection() === null) {
             $this->setSection('');
         }
-        if (is_null($this->getWebsite())) {
+        if ($this->getWebsite() === null) {
             $this->setWebsite('');
         }
-        if (is_null($this->getStore())) {
+        if ($this->getStore() === null) {
             $this->setStore('');
         }
 
@@ -472,7 +472,7 @@ class Config extends \Magento\Framework\Object
     public function getConfigDataValue($path, &$inherit = null, $configData = null)
     {
         $this->load();
-        if (is_null($configData)) {
+        if ($configData === null) {
             $configData = $this->_configData;
         }
         if (isset($configData[$path])) {

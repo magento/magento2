@@ -108,10 +108,10 @@ class Category
      */
     public function getCategory()
     {
-        if (is_null($this->category)) {
+        if ($this->category === null) {
             /** @var CategoryModel|null $category */
             $category = null;
-            if (!is_null($this->categoryId)) {
+            if ($this->categoryId !== null) {
                 $category = $this->categoryFactory->create()
                     ->setStoreId(
                         $this->getLayer()
@@ -121,7 +121,7 @@ class Category
                     ->load($this->categoryId);
             }
 
-            if (is_null($category) || !$category->getId()) {
+            if ($category === null || !$category->getId()) {
                 $category = $this->getLayer()
                     ->getCurrentCategory();
             }

@@ -134,7 +134,7 @@ class Trigger
      */
     public function getTime()
     {
-        if (is_null($this->time)) {
+        if ($this->time === null) {
             throw new \Zend_Db_Exception((string)new \Magento\Framework\Phrase('Trigger time is not defined'));
         }
         return $this->time;
@@ -167,7 +167,7 @@ class Trigger
      */
     public function getEvent()
     {
-        if (is_null($this->event)) {
+        if ($this->event === null) {
             throw new \Zend_Db_Exception((string)new \Magento\Framework\Phrase('Trigger event is not defined'));
         }
         return $this->event;

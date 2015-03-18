@@ -80,7 +80,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
             $id = $this->getRequest()->getParam('id');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                if (!is_null($id)) {
+                if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                 } else {
                     $customerGroup = $this->groupDataFactory->create();

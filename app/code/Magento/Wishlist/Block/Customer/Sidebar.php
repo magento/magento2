@@ -71,7 +71,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\
      */
     public function getWishlistItems()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = clone $this->_createWishlistItemCollection();
             $this->_collection->clear();
             $this->_prepareCollection($this->_collection);
