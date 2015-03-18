@@ -3,18 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Filter\Type;
+namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\Filter\AbstractFilter;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Ui\Component\Filters\AbstractFilter;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
- * Class Date
+ * Class DateRange
  */
-class Date extends AbstractFilter
+class DateRange extends AbstractFilter
 {
-    const NAME = 'filter_date';
+    const NAME = 'filter_range';
 
     const COMPONENT = 'date';
 
@@ -52,24 +51,8 @@ class Date extends AbstractFilter
         $this->wrappedComponent->prepare();
 
         $this->applyFilter();
-        $jsConfig = array_replace_recursive(
-            $this->getJsConfiguration($this->wrappedComponent),
-            $this->getJsConfiguration($this)
-        );
+        $jsConfig = $this->getJsConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
-
-    /**
-     * Get JS config
-     *
-     * @return array
-     */
-    public function getJsConfig()
-    {
-        return array_replace_recursive(
-            (array) $this->wrappedComponent->getData('config'),
-            (array) $this->getData('config')
-        );
     }
 
     /**
@@ -86,23 +69,13 @@ class Date extends AbstractFilter
     }
 
     /**
-     * Get condition
+     * Get condition by data type
      *
      * @return array|null
      */
-    protected function getCondition()
+    public function getCondition()
     {
-        return $this->convertValue($this->dataProvider->getData($this->getName()));
-    }
-
-    /**
-     * Convert value
-     *
-     * @param array|string $value
-     * @return array|null
-     */
-    protected function convertValue($value)
-    {
+        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         if (!empty($value['from']) || !empty($value['to'])) {
             if (!empty($value['from'])) {
                 $value['orig_from'] = $value['from'];

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Filter;
+namespace Magento\Ui\Component\Filters;
 
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -15,9 +15,16 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 abstract class AbstractFilter extends AbstractComponent
 {
     /**
-     * @var DataProvider
+     * Filter variable name
      */
-    protected $dataProvider;
+    const FILTER_VAR = 'filters';
+
+    /**
+     * Filter data
+     *
+     * @var array
+     */
+    protected $filterData;
 
     /**
      * @var UiComponentFactory
@@ -28,20 +35,19 @@ abstract class AbstractFilter extends AbstractComponent
      * Constructor
      *
      * @param ContextInterface $context
-     * @param DataProvider $dataProvider
      * @param UiComponentFactory $uiComponentFactory
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        DataProvider $dataProvider,
         UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
     ) {
-        $this->dataProvider = $dataProvider;
         $this->uiComponentFactory = $uiComponentFactory;
         parent::__construct($context, $components, $data);
+
+        $this->filterData = $this->getContext()->getRequestParam(static::FILTER_VAR);
     }
 }

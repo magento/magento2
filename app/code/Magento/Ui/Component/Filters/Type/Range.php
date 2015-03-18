@@ -3,41 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Filter\Type;
+namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\AbstractComponent;
-use Magento\Ui\Component\Filter\DataProvider;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Filters\AbstractFilter;
 
 /**
  * Class Range
  */
-class Range extends AbstractComponent
+class Range extends AbstractFilter
 {
     const NAME = 'filter_range';
-
-    /**
-     * @var DataProvider
-     */
-    protected $dataProvider;
-
-    /**
-     * Constructor
-     *
-     * @param ContextInterface $context
-     * @param DataProvider $dataProvider
-     * @param array $components
-     * @param array $data
-     */
-    public function __construct(
-        ContextInterface $context,
-        DataProvider $dataProvider,
-        array $components = [],
-        array $data = []
-    ) {
-        $this->dataProvider = $dataProvider;
-        parent::__construct($context, $components, $data);
-    }
 
     /**
      * Get component name
@@ -82,7 +57,7 @@ class Range extends AbstractComponent
      */
     public function getCondition()
     {
-        $value = $value = $this->dataProvider->getData($this->getName());
+        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         if (!empty($value['from']) || !empty($value['to'])) {
             if (isset($value['from']) && empty($value['from']) && $value['from'] !== '0') {
                 $value['orig_from'] = $value['from'];

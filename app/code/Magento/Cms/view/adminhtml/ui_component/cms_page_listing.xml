@@ -157,7 +157,7 @@
                 </item>
             </argument>
         </filterSelect>
-        <filterRange name="creation_time">
+        <filterRange name="creation_time" class="Magento\Ui\Component\Filters\Type\DateRange">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
@@ -188,7 +188,7 @@
                 </argument>
             </filterDate>
         </filterRange>
-        <filterRange name="update_time">
+        <filterRange name="update_time" class="Magento\Ui\Component\Filters\Type\DateRange">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
@@ -235,6 +235,12 @@
         </argument>
     </massaction>
     <columns name="cms_page_columns">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="action_field" xsi:type="string">actions</item>
+                <item name="click_action" xsi:type="string">edit</item>
+            </item>
+        </argument>
         <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="string">listing_massaction</item>

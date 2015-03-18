@@ -6,10 +6,10 @@
 namespace Magento\Ui\Component;
 
 use Magento\Framework\Object;
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
+use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Abstract class AbstractComponent
