@@ -10,6 +10,9 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
+/**
+ * Class to locate types for Eav custom attributes
+ */
 class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterface
 {
     /**
