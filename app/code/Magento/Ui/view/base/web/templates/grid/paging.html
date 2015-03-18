@@ -8,7 +8,12 @@
         </span>
         <label class="view-pages">
             View
-            <select data-bind="options: sizes, value: pageSize"></select>
+            <select data-bind="
+                options: options,
+                value: pageSize,
+                optionsValue: 'value',
+                optionsText: 'label'"
+            ></select>
             per page.
         </label>
     </span>
