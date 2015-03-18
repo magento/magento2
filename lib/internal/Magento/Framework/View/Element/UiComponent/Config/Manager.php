@@ -143,8 +143,11 @@ class Manager implements ManagerInterface
      */
     public function prepareData($name)
     {
-        if ($this->hasData($name)) {
-            throw new Exception('This component "' . $name . '" is already initialized.');
+        if ($name === null || $this->hasData($name)) {
+            throw new Exception(
+                'Initialization error component, check the '
+                . 'spelling of the name or the correctness of the call.'
+            );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
 
