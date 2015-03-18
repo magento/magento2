@@ -13,7 +13,7 @@ define(['mage/storage'], function(storage) {
         quoteData;
     return {
         getQuoteId: function() {
-            return quoteData.entity_id;
+            return window.cartData.entity_id;
         },
         setData: function(cartData) {
             quoteData = cartData;

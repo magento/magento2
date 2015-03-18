@@ -23,6 +23,7 @@ class CartRepositoryPlugin
     protected $allowedUserTypes = [
         UserContextInterface::USER_TYPE_ADMIN,
         UserContextInterface::USER_TYPE_INTEGRATION,
+        UserContextInterface::USER_TYPE_CUSTOMER
     ];
 
     /**

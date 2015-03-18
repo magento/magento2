@@ -45,11 +45,26 @@ define(
 */
 
 
-define(['Magento_Ui/js/form/component'],
-    function (Component) {
+define(
+    [
+        'Magento_Ui/js/form/component',
+        '../model/shipping-service',
+        '../model/quote'
+    ],
+    function (Component, shippingService, quote) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-method'
+            },
+
+            initObservable: function() {
+                var methods = shippingService.getAvailableShippingMethods(quote) || [];
+                this._super()
+                    .observe({
+                        rates: methods
+                    });
+
+                return this;
             }
         });
     }

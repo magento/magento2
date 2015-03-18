@@ -6,10 +6,10 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(['mage/storage', ], function(storage) {
+define(['mage/storage', '../model/quote'], function(storage) {
     return {
-        getAvailableShippingMethods: function(order) {
-            return storage.get('checkout/shippingRates');
+        getAvailableShippingMethods: function(quote) {
+            return storage.get('rest/default/V1/carts/'+ quote.getQuoteId() + '/shipping-methods');
         }
     }
 });

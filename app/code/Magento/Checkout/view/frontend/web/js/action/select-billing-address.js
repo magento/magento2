@@ -8,7 +8,7 @@
 /*global alert*/
 define(
     ['../model/quote'],
-    function(order) {
+    function(quote) {
         return function(billingAddressId, shipToSame, formKey) {
             return quote.setBillingAddress(billingAddressId, shipToSame);
         }

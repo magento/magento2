@@ -19,5 +19,11 @@
     <script>
         window.customerData = <?php echo $this->getCustomerData(); ?>;
         window.cartData = <?php echo $this->getCart(); ?>;
+        window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
+    </script>
+    <script>
+        require(['mage/url'], function(url) {
+            return url.setBaseUrl('<?php echo $this->getBaseUrl();?>');
+        })
     </script>
 </div>
