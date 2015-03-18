@@ -122,6 +122,10 @@ class PageRepository implements PageRepositoryInterface
             $fields = [];
             $conditions = [];
             foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'store_id') {
+                    $collection->addStoreFilter($filter->getValue(), false);
+                    continue;
+                }
                 $condition = $filter->getConditionType() ?: 'eq';
                 $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
             }

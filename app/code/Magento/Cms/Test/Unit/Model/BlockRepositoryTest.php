@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
+use Magento\Cms\Model\BlockRepository;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
@@ -13,7 +14,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cms\Model\BlockRepository
+     * @var BlockRepository
      */
     protected $repository;
 
@@ -105,7 +106,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->repository = new \Magento\Cms\Model\BlockRepository(
+        $this->repository = new BlockRepository(
             $this->blockResource,
             $blockFactory,
             $blockDataFactory,
@@ -212,6 +213,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
         $criteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaInterface')->getMock();
         $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')->getMock();
         $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
+        $storeFilter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
         $sortOrder = $this->getMockBuilder('Magento\Framework\Api\SortOrder')->getMock();
 
         $criteria->expects($this->once())
@@ -228,16 +230,22 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($pageSize);
         $filterGroup->expects($this->once())
             ->method('getFilters')
-            ->willReturn([$filter]);
+            ->willReturn([$storeFilter, $filter]);
         $filter->expects($this->once())
             ->method('getConditionType')
             ->willReturn($condition);
-        $filter->expects($this->once())
+        $filter->expects($this->any())
             ->method('getField')
             ->willReturn($field);
         $filter->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
+        $storeFilter->expects($this->any())
+            ->method('getField')
+            ->willReturn('store_id');
+        $storeFilter->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
         $sortOrder->expects($this->once())
             ->method('getField')
             ->willReturn($sortField);
