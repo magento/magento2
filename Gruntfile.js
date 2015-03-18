@@ -65,7 +65,7 @@ module.exports = function (grunt) {
          */
         backend: [
             'less:backend',
-            'replace:example',
+            'replace:escapeCalc',
             'less:override'
         ],
         /**
