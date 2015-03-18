@@ -15,7 +15,7 @@ class DataProvider
     /**
      * Filter variable name
      */
-    const FILTER_VAR = 'filter';
+    const FILTER_VAR = 'filters';
 
     /**
      * Filter data
@@ -31,7 +31,7 @@ class DataProvider
      */
     public function __construct(RequestInterface $request)
     {
-        $this->filterData = $this->prepareFilterString($request->getParam(static::FILTER_VAR));
+        $this->filterData = $request->getParam(static::FILTER_VAR);
     }
 
     /**
