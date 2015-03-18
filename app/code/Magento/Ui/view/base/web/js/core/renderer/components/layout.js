@@ -126,7 +126,12 @@ define([
         },
 
         build: function (parent, node, name) {
-            var type;
+            var defaults = parent && parent.childDefaults,
+                type;
+
+            if (utils.isObject(defaults)) {
+                node = mergeNode(node, defaults);
+            }
 
             type = getNodeType.apply(null, arguments);
             node = mergeNode(node, this.types.get(type));

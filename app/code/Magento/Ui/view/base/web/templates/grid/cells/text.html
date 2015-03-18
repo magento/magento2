@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<td data-part="body.row.cell">
-    <span>
-        <span data-bind="text: getLabel(row[field.index])"></span>
-    </span>
+<!-- ko if: action -->
+<td data-bind="click: applyAction, html: getLabel(row[field.index])">
 </td>
+<!-- /ko -->
+<!-- ko ifnot: action -->
+<td data-bind="html: getLabel(row[field.index])">
+</td>
+<!-- /ko -->

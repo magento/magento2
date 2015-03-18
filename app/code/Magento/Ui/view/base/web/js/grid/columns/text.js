@@ -9,6 +9,7 @@ define([
             bodyTmpl: 'ui/grid/cells/text',
             sortable: true,
             sorting: false,
+            action: false,
             classes: {
                 'asc': 'sort-arrow-asc',
                 'desc': 'sort-arrow-desc'
@@ -64,6 +65,10 @@ define([
             var sortClass = this.classes[sorting] || '';
 
             this.sortClass(sortClass);
+        },
+
+        applyAction: function () {
+            location.href = this.action;
         },
 
         onSortUpdate: function (field) {
