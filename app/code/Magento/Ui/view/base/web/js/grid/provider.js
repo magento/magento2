@@ -26,6 +26,7 @@ define([
 
             $.ajax({
                 url: this.data.update_url,
+                method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
             }).done(this.onReload.bind(this));
