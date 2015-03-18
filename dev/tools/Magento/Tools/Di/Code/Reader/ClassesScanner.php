@@ -16,6 +16,14 @@ class ClassesScanner implements ClassesScannerInterface
     protected $excludePatterns = [];
 
     /**
+     * @param array $excludePatterns
+     */
+    public function __construct(array $excludePatterns = [])
+    {
+        $this->excludePatterns = $excludePatterns;
+    }
+
+    /**
      * Adds exclude patterns
      *
      * @param array $excludePatterns

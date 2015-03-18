@@ -21,12 +21,4 @@ interface ClassesScannerInterface
      * @return array
      */
     public function getList($path);
-
-    /**
-     * Adds exclude patterns
-     *
-     * @param array $excludePatterns
-     * @return void
-     */
-    public function addExcludePatterns(array $excludePatterns);
 }

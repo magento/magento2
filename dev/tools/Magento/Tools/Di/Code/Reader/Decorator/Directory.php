@@ -81,16 +81,6 @@ class Directory implements \Magento\Tools\Di\Code\Reader\ClassesScannerInterface
     }
 
     /**
-     * Adds exclude patterns
-     *
-     * @param array $excludePatterns
-     * @return void
-     */
-    public function addExcludePatterns(array $excludePatterns)
-    {
-    }
-
-    /**
      * Retrieves list of classes for given path
      *
      * @param string $path path to dir with files
