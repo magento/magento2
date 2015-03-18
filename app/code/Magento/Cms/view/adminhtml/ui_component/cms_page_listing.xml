@@ -37,7 +37,34 @@
             <item name="item_action" xsi:type="string">edit</item>
         </item>
     </argument>
-    <paging name="listing_paging"/>
+    <paging name="listing_paging">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="20" xsi:type="array">
+                        <item name="value" xsi:type="string">20</item>
+                        <item name="label" xsi:type="string" translate="true">20</item>
+                    </item>
+                    <item name="30" xsi:type="array">
+                        <item name="value" xsi:type="string">30</item>
+                        <item name="label" xsi:type="string" translate="true">30</item>
+                    </item>
+                    <item name="50" xsi:type="array">
+                        <item name="value" xsi:type="string">50</item>
+                        <item name="label" xsi:type="string" translate="true">50</item>
+                    </item>
+                    <item name="100" xsi:type="array">
+                        <item name="value" xsi:type="string">100</item>
+                        <item name="label" xsi:type="string" translate="true">100</item>
+                    </item>
+                    <item name="200" xsi:type="array">
+                        <item name="value" xsi:type="string">200</item>
+                        <item name="label" xsi:type="string" translate="true">200</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+    </paging>
     <dataSource name="cms_page_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Cms\Model\Page\DataProvider</argument>
@@ -295,7 +322,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Layout</item>
                 </item>
@@ -336,7 +363,6 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Created</item>
-                    <item name="dateFormat" xsi:type="string">MMM D, YYYY h:mm:ss A</item>
                 </item>
             </argument>
         </column>
@@ -349,7 +375,6 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Modified</item>
-                    <item name="dateFormat" xsi:type="string">MMM D, YYYY h:mm:ss A</item>
                 </item>
             </argument>
         </column>

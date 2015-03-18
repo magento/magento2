@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Class Listing

@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Ui\DataProvider\Metadata;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
