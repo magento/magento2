@@ -15,10 +15,10 @@ define([
          *
          * @return {this}
          */
-        initListeners: function(){
+        initListeners: function () {
             this._super()
                 .update()
-                .provider.data.on('update:'+this.parentScope+'.country_id', this.update.bind(this));
+                .provider.data.on('update:' + this.parentScope + '.country_id', this.update.bind(this));
 
             return this;
         },
@@ -30,8 +30,8 @@ define([
          *
          * @returns {this}
          */
-        update: function(){
-            var parentScope  = this.getPart(this.getPart(this.name, -2), -2),
+        update: function () {
+            var parentScope = this.getPart(this.getPart(this.name, -2), -2),
                 option,
                 postcode = this;
 
@@ -46,10 +46,11 @@ define([
                     .options()
                     .some(function (el) {
                         option = el;
+
                         return el.value === value;
                     });
 
-                if(!option.is_region_required) {
+                if (!option.is_region_required) {
                     postcode.error(false);
                     postcode.validation = _.omit(postcode.validation, 'required-entry');
                 } else {

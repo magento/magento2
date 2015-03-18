@@ -219,7 +219,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         foreach ($sort as $label => $value) {
             $option = ['value' => $value, 'label' => $label];
             if ($this->helperData->isRegionRequired($value)) {
-                $option['is_region_required'] = 'true';
+                $option['is_region_required'] = true;
             }
             $options[] = $option;
         }
