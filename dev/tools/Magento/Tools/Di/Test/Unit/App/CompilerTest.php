@@ -159,21 +159,21 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
             Task\OperationFactory::APPLICATION_CODE_GENERATOR => [
-                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
             Task\OperationFactory::INTERCEPTION => [
                 'intercepted_paths' => [
-                    BP . '/'  . 'app/code',
-                    BP . '/'  . 'lib/internal/Magento/Framework',
-                    BP . '/'  . 'var/generation'
+                    BP . '/' . 'app/code',
+                    BP . '/' . 'lib/internal/Magento/Framework',
+                    BP . '/' . 'var/generation'
                 ],
                 'path_to_store' => BP . '/var/generation',
             ],
             Task\OperationFactory::AREA_CONFIG_GENERATOR => [
-                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
             Task\OperationFactory::INTERCEPTION_CACHE => [
-                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ]
         ];
     }
