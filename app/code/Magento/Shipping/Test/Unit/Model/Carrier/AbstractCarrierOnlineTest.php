@@ -111,5 +111,8 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $simpleXmlElement = $this->carrier->parseXml($xmlString);
         $this->assertEquals('GetResponse', $simpleXmlElement->getName());
         $this->assertEquals(42, (int)$simpleXmlElement->value);
+        $this->assertInstanceOf('SimpleXMLElement', $simpleXmlElement);
+        $customSimpleXmlElement = $this->carrier->parseXml($xmlString, 'Magento\Shipping\Model\Simplexml\Element');
+        $this->assertInstanceOf('Magento\Shipping\Model\Simplexml\Element', $customSimpleXmlElement);
     }
 }

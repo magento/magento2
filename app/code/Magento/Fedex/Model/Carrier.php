@@ -706,7 +706,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $priceArr = [];
 
         if (strlen(trim($response)) > 0) {
-            $xml = $this->parseXml($response);
+            $xml = $this->parseXml($response, 'Magento\Shipping\Model\Simplexml\Element');
             if (is_object($xml)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
                     $errorTitle = (string)$xml->Error->Message;

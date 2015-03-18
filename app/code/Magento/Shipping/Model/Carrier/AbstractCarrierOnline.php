@@ -612,10 +612,12 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * Parse XML string and return XML document object or false
      *
      * @param string $xmlContent
-     * @return \Magento\Shipping\Model\Simplexml\Element|bool
+     * @param string $customSimplexml
+     *
+     * @return \SimpleXMLElement|bool
      */
-    public function parseXml($xmlContent)
+    public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
-        return simplexml_load_string($xmlContent, 'Magento\Shipping\Model\Simplexml\Element');
+        return simplexml_load_string($xmlContent, $customSimplexml);
     }
 }
