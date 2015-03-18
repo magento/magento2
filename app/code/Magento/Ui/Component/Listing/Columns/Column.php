@@ -118,11 +118,16 @@ class Column extends AbstractComponent
      */
     protected function applySorting()
     {
-        $direction = $this->getContext()->getRequestParam('dir', $this->getData('config/sorting'));
-        if (!empty($direction) ) {
+        $sorting = $this->getContext()->getRequestParam('sorting');
+        $isSortable = $this->getData('config/sortable');
+        if ($isSortable !== false
+            && !empty($sorting['field'])
+            && !empty($sorting['direction'])
+            && $sorting['field'] === $this->getName()
+        ) {
             $this->getContext()->getDataProvider()->addOrder(
                 $this->getName(),
-                strtoupper($direction)
+                strtoupper($sorting['direction'])
             );
         }
     }
