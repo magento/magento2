@@ -35,7 +35,22 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      *
      * @param AttributeRepositoryInterface $attributeRepository
      * @param array $serviceEntityTypeMap
+     * <pre>
+     * [
+     *      'ServiceInterfaceA' => 'EavEntityType1',
+     *      'ServiceInterfaceB' => 'EavEntityType2'
+     * ]
+     * </pre>
      * @param array $serviceBackendModelDataInterfaceMap
+     * <pre>
+     * [
+     *      'ServiceInterfaceA' => ['BackendType1' => 'ServiceDataInterface1'],
+     *      'ServiceInterfaceB' => [
+     *                              'BackendType2' => 'ServiceDataInterface2',
+     *                              'BackendType3' => 'ServiceDataInterface3'
+     *                             ]
+     * ]
+     * </pre>
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
