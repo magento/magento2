@@ -82,7 +82,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
             ['option_id' => 'bo.option_id', 'status' => $status]
         );
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('bo.parent_id IN(?)', $entityIds);
         }
 
@@ -174,7 +174,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
             ]
         );
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 

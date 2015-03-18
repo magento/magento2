@@ -38,7 +38,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
         // ID of the store where order is placed
         $storeId = $this->getRequest()->getParam('store_id');
         // Sanitize value if needed
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             $storeId = (int)$storeId;
         }
 

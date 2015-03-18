@@ -93,7 +93,7 @@ class Tree
     {
         $this->_nodes->add($node);
         $node->setParent($parent);
-        if (!is_null($parent) && $parent instanceof Node) {
+        if ($parent !== null && $parent instanceof Node) {
             $parent->addChild($node);
         }
         return $node;

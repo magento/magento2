@@ -36,7 +36,7 @@ class PriceModifier
     public function removeGroupPrice(\Magento\Catalog\Model\Product $product, $customerGroupId, $websiteId)
     {
         $prices = $product->getData('group_price');
-        if (is_null($prices)) {
+        if ($prices === null) {
             throw new NoSuchEntityException(__('This product doesn\'t have group price'));
         }
         $groupPriceQty = count($prices);
@@ -78,7 +78,7 @@ class PriceModifier
     {
         $prices = $product->getData('tier_price');
         // verify if price exist
-        if (is_null($prices)) {
+        if ($prices === null) {
             throw new NoSuchEntityException(__('This product doesn\'t have tier price'));
         }
         $tierPricesQty = count($prices);

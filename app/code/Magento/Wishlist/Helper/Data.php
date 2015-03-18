@@ -171,7 +171,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getWishlist()
     {
-        if (is_null($this->_wishlist)) {
+        if ($this->_wishlist === null) {
             if ($this->_coreRegistry->registry('shared_wishlist')) {
                 $this->_wishlist = $this->_coreRegistry->registry('shared_wishlist');
             } else {
@@ -228,7 +228,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getWishlistItemCollection()
     {
-        if (is_null($this->_wishlistItemCollection)) {
+        if ($this->_wishlistItemCollection === null) {
             $this->_wishlistItemCollection = $this->_createWishlistItemCollection();
         }
         return $this->_wishlistItemCollection;

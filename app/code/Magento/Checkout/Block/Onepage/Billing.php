@@ -138,7 +138,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getAddress()
     {
-        if (is_null($this->_address)) {
+        if ($this->_address === null) {
             if ($this->isCustomerLoggedIn()) {
                 $this->_address = $this->getQuote()->getBillingAddress();
                 if (!$this->_address->getFirstname()) {

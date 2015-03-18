@@ -83,7 +83,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         $groupId = $this->coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
-        if (is_null($groupId)) {
+        if ($groupId === null) {
             return __('New Customer Group');
         } else {
             $group = $this->groupRepository->getById($groupId);

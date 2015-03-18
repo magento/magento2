@@ -103,7 +103,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     public function getAddress()
     {
         $address = $this->getData('address');
-        if (is_null($address)) {
+        if ($address === null) {
             $address = $this->_multishipping->getQuote()->getBillingAddress();
             $this->setData('address', $address);
         }

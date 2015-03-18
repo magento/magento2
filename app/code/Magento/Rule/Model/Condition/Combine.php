@@ -84,7 +84,7 @@ class Combine extends AbstractCondition
      */
     public function getAggregatorElement()
     {
-        if (is_null($this->getAggregator())) {
+        if ($this->getAggregator() === null) {
             foreach (array_keys($this->getAggregatorOption()) as $key) {
                 $this->setAggregator($key);
                 break;

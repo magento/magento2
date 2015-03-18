@@ -106,7 +106,7 @@ class SkuProcessor
      */
     public function getNewSku($sku = null)
     {
-        if (!is_null($sku)) {
+        if ($sku !== null) {
             return isset($this->newSkus[$sku]) ? $this->newSkus[$sku] : null;
         }
         return $this->newSkus;
