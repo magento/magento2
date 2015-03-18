@@ -397,7 +397,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     public function getType()
     {
         $templateType = $this->getTemplateType();
-        if (is_null($templateType) && $this->getId()) {
+        if (null == $templateType && $this->getId()) {
             $templateType = $this->_emailConfig->getTemplateType($this->getId());
             $templateType = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         }
