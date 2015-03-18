@@ -241,7 +241,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      */
     public function getWebsites()
     {
-        if (!is_null($this->_websites)) {
+        if ($this->_websites !== null) {
             return $this->_websites;
         }
 

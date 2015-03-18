@@ -55,7 +55,7 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
             $configurable = $this->objectToArray($option);
             /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
             $attribute = $this->attributeRepository->get($option->getAttributeId());
-            $attributeOptions = !is_null($attribute->getOptions()) ? $attribute->getOptions() : [];
+            $attributeOptions = $attribute->getOptions() !== null ? $attribute->getOptions() : [];
 
             foreach ($attributeOptions as $attributeOption) {
                 $configurable['options'][] = $this->objectToArray($attributeOption);

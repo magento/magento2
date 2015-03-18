@@ -148,7 +148,7 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     public function getAddressHtml(\Magento\Customer\Api\Data\AddressInterface $address = null)
     {
-        if (!is_null($address)) {
+        if ($address !== null) {
             /** @var \Magento\Customer\Block\Address\Renderer\RendererInterface $renderer */
             $renderer = $this->_addressConfig->getFormatByCode('html')->getRenderer();
             return $renderer->renderArray($this->addressMapper->toFlatArray($address));
@@ -162,7 +162,7 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getCustomer()
     {
         $customer = $this->getData('customer');
-        if (is_null($customer)) {
+        if ($customer === null) {
             try {
                 $customer = $this->customerRepository->getById($this->currentCustomer->getCustomerId());
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
@@ -179,7 +179,7 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getDefaultBilling()
     {
         $customer = $this->getCustomer();
-        if (is_null($customer)) {
+        if ($customer === null) {
             return null;
         } else {
             return $customer->getDefaultBilling();
@@ -205,7 +205,7 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getDefaultShipping()
     {
         $customer = $this->getCustomer();
-        if (is_null($customer)) {
+        if ($customer === null) {
             return null;
         } else {
             return $customer->getDefaultShipping();

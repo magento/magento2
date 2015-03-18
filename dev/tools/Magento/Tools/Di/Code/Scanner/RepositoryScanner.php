@@ -33,8 +33,8 @@ class RepositoryScanner implements ScannerInterface
                 $forType = $node->attributes->getNamedItem('for');
                 $replacementType = $node->attributes->getNamedItem('type');
                 if (
-                    !is_null($forType)
-                    && !is_null($replacementType)
+                    $forType !== null
+                    && $replacementType !== null
                     && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
                 ) {
                     if (!class_exists($replacementType->nodeValue, $this->useAutoload)) {

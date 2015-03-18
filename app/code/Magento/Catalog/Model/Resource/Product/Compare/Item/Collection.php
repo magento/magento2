@@ -292,7 +292,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function getComparableAttributes()
     {
-        if (is_null($this->_comparableAttributes)) {
+        if ($this->_comparableAttributes === null) {
             $this->_comparableAttributes = [];
             $setIds = $this->_getAttributeSetIds();
             if ($setIds) {

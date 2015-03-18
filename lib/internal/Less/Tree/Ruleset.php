@@ -308,7 +308,7 @@ class Less_Tree_Ruleset extends Less_Tree{
 
 	public function variable($name){
 
-		if( is_null($this->_variables) ){
+		if( $this->_variables === null ){
 			$this->variables();
 		}
 		return isset($this->_variables[$name]) ? $this->_variables[$name] : null;

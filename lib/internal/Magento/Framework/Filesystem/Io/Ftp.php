@@ -207,7 +207,7 @@ class Ftp extends AbstractIo
         } else {
             if (is_resource($dest)) {
                 $stream = $dest;
-            } elseif (is_null($dest)) {
+            } elseif ($dest === null) {
                 $stream = tmpfile();
             } else {
                 $this->_error = self::ERROR_INVALID_DESTINATION;
@@ -216,7 +216,7 @@ class Ftp extends AbstractIo
 
             $result = ftp_fget($this->_conn, $stream, $filename, $this->_config['file_mode']);
 
-            if (is_null($dest)) {
+            if ($dest === null) {
                 fseek($stream, 0);
                 $result = '';
                 for ($result = ''; $s = fread($stream, 4096); $result .= $s) {

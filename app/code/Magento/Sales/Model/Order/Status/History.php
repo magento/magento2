@@ -112,7 +112,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      */
     public function setIsCustomerNotified($flag = null)
     {
-        if (is_null($flag)) {
+        if ($flag === null) {
             $flag = self::CUSTOMER_NOTIFICATION_NOT_APPLICABLE;
         }
 

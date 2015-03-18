@@ -109,7 +109,7 @@ class Option
             $option->getProduct()->getStore()->getWebsiteId()
         );
 
-        if (!is_null($result->getItemIsQtyDecimal())) {
+        if ($result->getItemIsQtyDecimal() !== null) {
             $option->setIsQtyDecimal($result->getItemIsQtyDecimal());
         }
 
@@ -122,11 +122,11 @@ class Option
              */
             $quoteItem->setData('qty', intval($qty));
         }
-        if (!is_null($result->getMessage())) {
+        if ($result->getMessage() !== null) {
             $option->setMessage($result->getMessage());
             $quoteItem->setMessage($result->getMessage());
         }
-        if (!is_null($result->getItemBackorders())) {
+        if ($result->getItemBackorders() !== null) {
             $option->setBackorders($result->getItemBackorders());
         }
 

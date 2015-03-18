@@ -58,7 +58,7 @@ class AbstractCollection extends \Magento\Reports\Model\Resource\Report\Collecti
      */
     protected function _applyOrderStatusFilter()
     {
-        if (is_null($this->_orderStatus)) {
+        if ($this->_orderStatus === null) {
             return $this;
         }
         $orderStatus = $this->_orderStatus;

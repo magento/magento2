@@ -121,7 +121,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function prepareResultPage(Action $action, $pageId = null)
     {
-        if (!is_null($pageId) && $pageId !== $this->_page->getId()) {
+        if ($pageId !== null && $pageId !== $this->_page->getId()) {
             $delimiterPosition = strrpos($pageId, '|');
             if ($delimiterPosition) {
                 $pageId = substr($pageId, 0, $delimiterPosition);
@@ -192,7 +192,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     {
         /** @var \Magento\Cms\Model\Page $page */
         $page = $this->_pageFactory->create();
-        if (!is_null($pageId) && $pageId !== $page->getId()) {
+        if ($pageId !== null && $pageId !== $page->getId()) {
             $page->setStoreId($this->_storeManager->getStore()->getId());
             if (!$page->load($pageId)) {
                 return null;

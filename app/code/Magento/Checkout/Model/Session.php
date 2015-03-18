@@ -326,7 +326,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function setStepData($step, $data, $value = null)
     {
         $steps = $this->getSteps();
-        if (is_null($value)) {
+        if ($value === null) {
             if (is_array($data)) {
                 $steps[$step] = $data;
             }
@@ -351,13 +351,13 @@ class Session extends \Magento\Framework\Session\SessionManager
     public function getStepData($step = null, $data = null)
     {
         $steps = $this->getSteps();
-        if (is_null($step)) {
+        if ($step === null) {
             return $steps;
         }
         if (!isset($steps[$step])) {
             return false;
         }
-        if (is_null($data)) {
+        if ($data === null) {
             return $steps[$step];
         }
         if (!is_string($data) || !isset($steps[$step][$data])) {

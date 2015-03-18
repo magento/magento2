@@ -80,7 +80,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $aspectAttributes = $aspect->attributes;
             $aspectName = $aspectAttributes->getNamedItem('name')->nodeValue;
             $targetField = $aspectAttributes->getNamedItem('targetField');
-            $result[$aspectName] = is_null($targetField) ? '*' : $targetField->nodeValue;
+            $result[$aspectName] = $targetField === null ? '*' : $targetField->nodeValue;
         }
         return $result;
     }

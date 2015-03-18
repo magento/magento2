@@ -170,7 +170,7 @@ class Save extends \Magento\Framework\Object
      */
     protected function _deleteOne($entityModel, $giftmessageModel = null)
     {
-        if (is_null($giftmessageModel)) {
+        if ($giftmessageModel === null) {
             $giftmessageModel = $this->_messageFactory->create()->load($entityModel->getGiftMessageId());
         }
         $giftmessageModel->delete();
