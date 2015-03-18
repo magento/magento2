@@ -31,13 +31,13 @@ define(['mage/storage'], function(storage) {
         getBillingAddress: function() {
             return billingAddress;
         },
-        setShippingAddress: function (shippingAddressId) {
+        setShippingAddress: function (address) {
             return storage.post(
-                '/checkout/onepage/saveShipping',
-                {'shipping_address_id': shippingAddressId}
+                'rest/default/V1/carts/' + this.getQuoteId() + '/shipping-address',
+                JSON.stringify({address: address})
             ).done(
                 function() {
-                    shippingAddress = shippingAddressId;
+                    shippingAddress = address;
                 }
             );
         },

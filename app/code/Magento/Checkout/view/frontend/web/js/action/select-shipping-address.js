@@ -7,10 +7,11 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['../model/quote'],
-    function(quote) {
+    ['../model/quote', '../model/addresslist'],
+    function(quote, addressList) {
         return function(shippingAddressId, formKey) {
-            return quote.setShippingAddress(shippingAddressId);
+            var address = addressList.getAddressById(shippingAddressId);
+            return quote.setShippingAddress(address);
         }
     }
 );
