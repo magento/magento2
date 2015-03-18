@@ -98,11 +98,9 @@ class Save extends \Magento\Framework\Object
             return $this;
         }
 
-        // types are 'quote', 'quote_item', etc
-        foreach ($giftMessages as $type => $giftMessageEntities) {
-            foreach ($giftMessageEntities as $entityId => $giftmessage) {
-                $this->_saveOne($entityId, $giftmessage, $type);
-            }
+        foreach ($giftMessages as $entityId => $giftMessage) {
+            $entityType = $this->getMappedType($giftMessage['type']);
+            $this->_saveOne($entityId, $giftMessage, $entityType);
         }
 
         return $this;
