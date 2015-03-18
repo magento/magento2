@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
+    'jquery',
     'underscore'
-], function (_) {
+], function ($, _) {
     'use strict';
 
     var globalPriceFormat = {
