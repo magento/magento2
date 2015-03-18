@@ -43,7 +43,7 @@ class Render extends AbstractAction
      */
     public function execute()
     {
-        $component = $this->uiComponentFactory->create($this->_request->getParam('component_name'));
+        $component = $this->uiComponentFactory->create($this->_request->getParam('namespace'));
         $this->prepareComponent($component);
         $this->_response->appendBody((string) $component->render());
     }
