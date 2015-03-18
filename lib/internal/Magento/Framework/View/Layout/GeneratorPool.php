@@ -198,6 +198,7 @@ class GeneratorPool
         }
         $structure->unsetChild($element, $alias)->setAsChild($element, $destination, $alias);
         $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
+        $scheduledStructure->unsetElementFromListToRemove($element);
         return $this;
     }
 }
