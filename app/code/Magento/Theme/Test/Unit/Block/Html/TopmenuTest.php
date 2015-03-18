@@ -53,8 +53,9 @@ HTML;
 
     // @codingStandardsIgnoreEnd
 
-    public function prepare($isCurrentCategory = false)
+    public function setUp()
     {
+        $isCurrentItem = $this->getName() == 'testGetHtmlWithSelectedCategory' ? true : false;
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->context = $objectManager->getObject('Magento\Framework\View\Element\Template\Context');
@@ -88,8 +89,8 @@ HTML;
                     'name' => "Category $i",
                     'id' => $id,
                     'url' => "http://magento2/category-$i.html",
-                    'is_active' => $i == 0 ? $isCurrentCategory : false,
-                    'is_current_category' => $i == 0 ? $isCurrentCategory : false,
+                    'is_active' => $i == 0 ? $isCurrentItem : false,
+                    'is_current_item' => $i == 0 ? $isCurrentItem : false,
 
                 ]
             );
@@ -123,21 +124,18 @@ HTML;
             ->willReturn($tree);
     }
 
-    public function getTopmenu()
+    protected function getTopmenu()
     {
         return new Topmenu($this->context, $this->nodeFactory, $this->treeFactory);
     }
 
     public function testGetHtmlWithoutSelectedCategory()
     {
-        $this->prepare(false);
         $this->assertEquals($this->htmlWithoutCategory, $this->getTopmenu()->getHtml());
     }
 
     public function testGetHtmlWithSelectedCategory()
     {
-        $this->prepare(true);
-        $result = $this->getTopmenu()->getHtml();
-        $this->assertEquals($this->htmlWithCategory, $result);
+        $this->assertEquals($this->htmlWithCategory, $this->getTopmenu()->getHtml());
     }
 }

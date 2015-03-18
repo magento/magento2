@@ -292,12 +292,10 @@ class Topmenu extends Template implements IdentityInterface
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive() && !$item->getIsCurrentItem()) {
-            $classes[] = 'has-active';
-        }
-
-        if ($item->getIsCurrentItem()) {
+        if ($item->getIsActive()) {
             $classes[] = 'active';
+        } elseif ($item->getHasActive()) {
+            $classes[] = 'has-active';
         }
 
         if ($item->getIsLast()) {

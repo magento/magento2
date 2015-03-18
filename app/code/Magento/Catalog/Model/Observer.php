@@ -141,8 +141,8 @@ class Observer
                 'name' => $category->getName(),
                 'id' => $nodeId,
                 'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'is_active' => $this->_isActiveMenuCategory($category),
-                'is_current_item' => $category->getIsCurrentItem()
+                'has_active' => $this->_isActiveMenuCategory($category),
+                'is_active' => $category->getIsCurrentItem()
             ];
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
