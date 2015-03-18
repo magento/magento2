@@ -99,7 +99,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getStoreId()
     {
-        if (is_null($this->_storeId)) {
+        if ($this->_storeId === null) {
             return $this->_storeManager->getStore()->getId();
         }
         return $this->_storeId;

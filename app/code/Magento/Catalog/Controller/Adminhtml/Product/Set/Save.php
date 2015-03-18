@@ -50,7 +50,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      */
     protected function _getEntityTypeId()
     {
-        if (is_null($this->_coreRegistry->registry('entityType'))) {
+        if ($this->_coreRegistry->registry('entityType') === null) {
             $this->_setTypeId();
         }
         return $this->_coreRegistry->registry('entityType');

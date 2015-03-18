@@ -178,7 +178,7 @@ class Topmenu extends Template implements IdentityInterface
 
         $children = $menuTree->getChildren();
         $parentLevel = $menuTree->getLevel();
-        $childLevel = is_null($parentLevel) ? 0 : $parentLevel + 1;
+        $childLevel = $parentLevel === null ? 0 : $parentLevel + 1;
 
         $counter = 1;
         $itemPosition = 1;

@@ -71,7 +71,7 @@ class Stock
      */
     public function assignStatusToProduct(\Magento\Catalog\Model\Product $product, $stockStatus = null)
     {
-        if (is_null($stockStatus)) {
+        if ($stockStatus === null) {
             $websiteId = $product->getStore()->getWebsiteId();
             $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();

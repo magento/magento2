@@ -73,7 +73,7 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSession()
     {
-        if (is_null($this->_sessionModel)) {
+        if ($this->_sessionModel === null) {
             $this->_sessionModel = $this->_sessionFactory->create();
             $this->_sessionModel->loadByCookieKey();
         }
@@ -109,10 +109,10 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isRememberMeChecked()
     {
-        if (is_null($this->_isRememberMeChecked)) {
+        if ($this->_isRememberMeChecked === null) {
             //Try to get from checkout session
             $isRememberMeChecked = $this->_checkoutSession->getRememberMeChecked();
-            if (!is_null($isRememberMeChecked)) {
+            if ($isRememberMeChecked !== null) {
                 $this->_isRememberMeChecked = $isRememberMeChecked;
                 $this->_checkoutSession->unsRememberMeChecked();
                 return $isRememberMeChecked;

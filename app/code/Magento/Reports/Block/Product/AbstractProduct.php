@@ -113,7 +113,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
      */
     public function getItemsCollection()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $attributes = $this->_catalogConfig->getProductAttributes();
 
             $this->_collection = $this->_getModel()->getCollection()->addAttributeToSelect($attributes);

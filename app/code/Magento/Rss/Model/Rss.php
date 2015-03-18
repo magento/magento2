@@ -37,7 +37,7 @@ class Rss
      */
     public function getFeeds()
     {
-        if (is_null($this->dataProvider)) {
+        if ($this->dataProvider === null) {
             return [];
         }
         $cache = false;

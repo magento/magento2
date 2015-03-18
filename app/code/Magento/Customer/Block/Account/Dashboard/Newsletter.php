@@ -60,7 +60,7 @@ class Newsletter extends \Magento\Framework\View\Element\Template
      */
     public function getSubscriptionObject()
     {
-        if (is_null($this->_subscription)) {
+        if ($this->_subscription === null) {
             $this->_subscription =
                 $this->_createSubscriber()->loadByCustomerId($this->_customerSession->getCustomerId());
         }

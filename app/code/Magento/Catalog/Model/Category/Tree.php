@@ -56,7 +56,7 @@ class Tree
      */
     public function getRootNode($category = null)
     {
-        if (!is_null($category) && $category->getId()) {
+        if ($category !== null && $category->getId()) {
             return $this->getNode($category);
         }
 
@@ -137,7 +137,7 @@ class Tree
         if ($node->hasChildren()) {
             $children = [];
             foreach ($node->getChildren() as $child) {
-                if (!is_null($depth) && $depth <= $currentLevel) {
+                if ($depth !== null && $depth <= $currentLevel) {
                     break;
                 }
                 $children[] = $this->getTree($child, $depth, $currentLevel + 1);

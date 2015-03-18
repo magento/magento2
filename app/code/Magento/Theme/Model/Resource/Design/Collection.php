@@ -65,7 +65,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addDateFilter($date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = $this->dateTime->formatDate(true);
         } else {
             $date = $this->dateTime->formatDate($date);

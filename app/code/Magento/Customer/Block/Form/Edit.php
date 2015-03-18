@@ -50,7 +50,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     protected function getFormData()
     {
         $data = $this->getData('form_data');
-        if (is_null($data)) {
+        if ($data === null) {
             $formData = $this->customerSession->getCustomerFormData(true);
             $data = [];
             if ($formData) {
