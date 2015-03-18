@@ -90,7 +90,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function canShipPartiallyItem()
     {
         $value = $this->getOrder()->getCanShipPartiallyItem();
-        if (!is_null($value) && !$value) {
+        if ($value !== null && !$value) {
             return false;
         }
         return true;

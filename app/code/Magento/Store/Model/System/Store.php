@@ -400,7 +400,7 @@ class Store extends \Magento\Framework\Object
      */
     public function reload($type = null)
     {
-        if (is_null($type)) {
+        if ($type === null) {
             $this->_loadWebsiteCollection();
             $this->_loadGroupCollection();
             $this->_loadStoreCollection();

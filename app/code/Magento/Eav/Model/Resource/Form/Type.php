@@ -38,7 +38,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
-        if (is_null($field) && !is_numeric($value)) {
+        if ($field === null && !is_numeric($value)) {
             $field = 'code';
         }
         return parent::load($object, $value, $field);

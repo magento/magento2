@@ -23,7 +23,7 @@ class PluginScanner implements ScannerInterface
             /** @var $node \DOMNode */
             foreach ($xpath->query('//type/plugin|//virtualType/plugin') as $node) {
                 $pluginTypeNode = $node->attributes->getNamedItem('type');
-                if (!is_null($pluginTypeNode)) {
+                if ($pluginTypeNode !== null) {
                     $pluginClassNames[] = $pluginTypeNode->nodeValue;
                 }
             }

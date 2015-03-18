@@ -43,7 +43,7 @@ class ExportTest extends \Magento\Backend\Utility\Controller
 
     protected function tearDown()
     {
-        if (!is_null($this->_httpXRequestedWith)) {
+        if ($this->_httpXRequestedWith !== null) {
             $_SERVER['HTTP_X_REQUESTED_WITH'] = $this->_httpXRequestedWith;
         }
 

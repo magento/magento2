@@ -187,7 +187,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
             $configurableAttribute->addData($option->getData());
             $configurableAttribute->setValues(
-                !is_null($option->getValues()) ? $option->getValues() : $configurableAttribute->getPrices()
+                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getPrices()
             );
 
             try {

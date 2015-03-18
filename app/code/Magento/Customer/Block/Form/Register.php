@@ -104,7 +104,7 @@ class Register extends \Magento\Directory\Block\Data
     public function getBackUrl()
     {
         $url = $this->getData('back_url');
-        if (is_null($url)) {
+        if ($url === null) {
             $url = $this->_customerUrl->getLoginUrl();
         }
         return $url;
@@ -118,7 +118,7 @@ class Register extends \Magento\Directory\Block\Data
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (is_null($data)) {
+        if ($data === null) {
             $formData = $this->_customerSession->getCustomerFormData(true);
             $data = new \Magento\Framework\Object();
             if ($formData) {

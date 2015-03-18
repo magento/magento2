@@ -539,7 +539,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
      */
     private function getFixtureTaxRates()
     {
-        if (is_null($this->fixtureTaxRates)) {
+        if ($this->fixtureTaxRates === null) {
             $this->fixtureTaxRates = [];
             if ($this->getFixtureTaxRules()) {
                 $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
@@ -560,7 +560,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
      */
     private function getFixtureTaxClasses()
     {
-        if (is_null($this->fixtureTaxClasses)) {
+        if ($this->fixtureTaxClasses === null) {
             $this->fixtureTaxClasses = [];
             if ($this->getFixtureTaxRules()) {
                 $taxClassIds = array_merge(
@@ -584,7 +584,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
      */
     private function getFixtureTaxRules()
     {
-        if (is_null($this->fixtureTaxRules)) {
+        if ($this->fixtureTaxRules === null) {
             $this->fixtureTaxRules = [];
             $taxRuleCodes = ['Test Rule Duplicate', 'Test Rule'];
             foreach ($taxRuleCodes as $taxRuleCode) {

@@ -21,7 +21,7 @@ class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     public function beforeSave($object)
     {
         $billingAddressId = $object->getBillingAddressId();
-        if (is_null($billingAddressId)) {
+        if ($billingAddressId === null) {
             $object->unsetBillingAddressId();
         }
     }

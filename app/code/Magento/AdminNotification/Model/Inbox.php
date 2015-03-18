@@ -55,7 +55,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
             MessageInterface::SEVERITY_NOTICE => __('notice'),
         ];
 
-        if (!is_null($severity)) {
+        if ($severity !== null) {
             if (isset($severities[$severity])) {
                 return $severities[$severity];
             }

@@ -144,7 +144,7 @@ class StorageFactory
 
         $scopeCode = $arguments['scopeCode'];
         $scopeType = $arguments['scopeType'] ?: ScopeInterface::SCOPE_STORE;
-        if (empty($scopeCode) && false == is_null($storage->getWebsite(true))) {
+        if (empty($scopeCode) && false == ($storage->getWebsite(true) === null)) {
             $scopeCode = $storage->getWebsite(true)->getCode();
             $scopeType = ScopeInterface::SCOPE_WEBSITE;
         }

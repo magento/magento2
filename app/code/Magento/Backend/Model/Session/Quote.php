@@ -166,7 +166,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore($this->getStoreId());
             $currencyId = $this->getCurrencyId();
             if ($currencyId) {
@@ -183,7 +183,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getOrder()
     {
-        if (is_null($this->_order)) {
+        if ($this->_order === null) {
             $this->_order = $this->_orderFactory->create();
             if ($this->getOrderId()) {
                 $this->_order->load($this->getOrderId());

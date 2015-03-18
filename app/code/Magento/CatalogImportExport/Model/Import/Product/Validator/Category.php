@@ -45,7 +45,7 @@ class Category extends AbstractValidator implements RowValidatorInterface
         $emptyRootCategory = empty($value[Product::COL_ROOT_CATEGORY]);
         $hasCategory = $emptyCategory
             ? false
-            : !is_null($this->categoryProcessor->getCategory($value[Product::COL_CATEGORY]));
+            : $this->categoryProcessor->getCategory($value[Product::COL_CATEGORY]) !== null;
         $category = $emptyRootCategory
             ? null
             : $this->categoryProcessor->getCategoryWithRoot($value[Product::COL_ROOT_CATEGORY]);

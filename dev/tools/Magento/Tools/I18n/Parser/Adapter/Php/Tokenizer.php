@@ -195,7 +195,7 @@ class Tokenizer
      */
     public function isEndOfLoop()
     {
-        return is_null(key($this->_tokens));
+        return key($this->_tokens) === null;
     }
 
     /**

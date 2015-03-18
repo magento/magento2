@@ -128,7 +128,7 @@ class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInt
      */
     public function load($id, $field = null)
     {
-        if (is_null($id)) {
+        if ($id === null) {
             return $this->noRoutePage();
         }
         return parent::load($id, $field);

@@ -116,7 +116,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             '\Magento\Bundle\Api\Data\OptionInterface'
         );
         $optionDataObject->setOptionId($option->getId())
-            ->setTitle(is_null($option->getTitle()) ? $option->getDefaultTitle() : $option->getTitle())
+            ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())
             ->setSku($product->getSku())
             ->setProductLinks($productLinks);
 
