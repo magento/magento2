@@ -5,48 +5,43 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
+use Magento\Framework\View\Element\Html\Links;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+
 class LinksTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerHelper;
+    protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\View\Element\Html\Links */
-    protected $_block;
+    /** @var Links|\PHPUnit_Framework_MockObject_MockObject */
+    protected $block;
 
-    /** @var \Magento\Framework\View\Element\Template\Context */
-    protected $_context;
+    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
 
     protected function setUp()
     {
-        $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
 
-        /** @var  \Magento\Framework\View\Element\Template\Context $context */
-        $this->_context = $this->_objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
-
-        /** @var \Magento\Framework\View\Element\Html\Links $block */
-        $this->_block = $this->_objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\Html\Links',
-            ['context' => $this->_context]
-        );
+        /** @var Context $context */
+        $this->context = $this->objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
+        $this->block = new Links($this->context);
     }
 
     public function testGetLinks()
     {
         $blocks = [0 => 'blocks'];
         $name = 'test_name';
-        $this->_context->getLayout()->expects(
-            $this->once()
-        )->method(
-            'getChildBlocks'
-        )->with(
-            $name
-        )->will(
-            $this->returnValue($blocks)
-        );
-        $this->_block->setNameInLayout($name);
-        $this->assertEquals($blocks, $this->_block->getLinks());
+        $this->context->getLayout()
+            ->expects($this->once())
+            ->method('getChildBlocks')
+            ->with($name)
+            ->willReturn($blocks);
+        $this->block->setNameInLayout($name);
+        $this->assertEquals($blocks, $this->block->getLinks());
     }
 
     public function testSetActive()
@@ -63,37 +58,35 @@ class LinksTest extends \PHPUnit_Framework_TestCase
             ->willReturn('test/path');
 
         $name = 'test_name';
-        $this->_context->getLayout()
+        $this->context->getLayout()
             ->expects($this->once())
             ->method('getChildBlocks')
             ->with($name)
             ->willReturn([$link]);
 
-        $this->_block->setNameInLayout($name);
-
-        $this->_block->setActive('test/path');
+        $this->block->setNameInLayout($name);
+        $this->block->setActive('test/path');
     }
 
     public function testRenderLink()
     {
         $blockHtml = 'test';
         $name = 'test_name';
-        $this->_context->getLayout()->expects(
-            $this->once()
-        )->method(
-            'renderElement'
-        )->with(
-            $name
-        )->will(
-            $this->returnValue($blockHtml)
-        );
+        $this->context->getLayout()
+            ->expects($this->once())
+            ->method('renderElement')
+            ->with($name)
+            ->willReturn($blockHtml);
 
         /** @var \Magento\Framework\View\Element\AbstractBlock $link */
         $link = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMock();
-        $link->expects($this->once())->method('getNameInLayout')->will($this->returnValue($name));
+        $link
+            ->expects($this->once())
+            ->method('getNameInLayout')
+            ->willReturn($name);
 
-        $this->assertEquals($blockHtml, $this->_block->renderLink($link));
+        $this->assertEquals($blockHtml, $this->block->renderLink($link));
     }
 }
