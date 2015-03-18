@@ -98,7 +98,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
             if (strip_tags($row) == $row) {
                 $row = preg_replace('/@ (.*)/', __('See \'\1\''), $row);
-                if (!is_null($product)) {
+                if ($product !== null) {
                     $row .= ' ' . __(
                         "for product '%1' (in '%2' store)",
                         $product->getName(),

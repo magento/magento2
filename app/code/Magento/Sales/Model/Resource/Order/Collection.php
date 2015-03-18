@@ -83,7 +83,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      */
     public function addItemCountExpr()
     {
-        if (is_null($this->_fieldsToSelect)) {
+        if ($this->_fieldsToSelect === null) {
             // If we select all fields from table, we need to add column alias
             $this->getSelect()->columns(['items_count' => 'total_item_count']);
         } else {

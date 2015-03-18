@@ -19,7 +19,7 @@ class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     public function beforeSave($object)
     {
         $defaultBilling = $object->getDefaultBilling();
-        if (is_null($defaultBilling)) {
+        if ($defaultBilling === null) {
             $object->unsetDefaultBilling();
         }
     }

@@ -104,7 +104,7 @@ class ProductUrlPathGenerator
      */
     protected function getProductUrlSuffix($storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
         }
 

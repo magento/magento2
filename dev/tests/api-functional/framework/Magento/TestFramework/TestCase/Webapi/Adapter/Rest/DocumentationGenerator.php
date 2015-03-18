@@ -24,7 +24,7 @@ class DocumentationGenerator
     {
         $content = $this->generateHtmlContent($httpMethod, $resourcePath, $arguments, $response);
         $filePath = $this->generateFileName($resourcePath);
-        if (is_null($filePath)) {
+        if ($filePath === null) {
             return;
         }
         if (!is_writable(dirname($filePath))) {
@@ -209,7 +209,7 @@ HTML;
                 throw new \RuntimeException('Unable to create missing directory for REST documentation generation');
             }
         }
-        if (!is_null($fileName)) {
+        if ($fileName !== null) {
             $filePath = $pathToFile . $fileName . '.html';
             return $filePath;
         }

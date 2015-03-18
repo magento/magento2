@@ -53,7 +53,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getTotals()
     {
-        if (is_null($this->_totals)) {
+        if ($this->_totals === null) {
             return parent::getTotals();
         }
         return $this->_totals;
@@ -113,7 +113,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         )->setColspan(
             $colspan
         )->setRenderingArea(
-            is_null($area) ? -1 : $area
+            $area === null ? -1 : $area
         )->toHtml();
     }
 

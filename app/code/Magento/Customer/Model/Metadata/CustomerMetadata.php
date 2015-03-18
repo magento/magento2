@@ -73,7 +73,7 @@ class CustomerMetadata implements CustomerMetadataInterface
     {
         /** @var AbstractAttribute $attribute */
         $attribute = $this->attributeMetadataDataProvider->getAttribute(self::ENTITY_TYPE_CUSTOMER, $attributeCode);
-        if ($attribute && ($attributeCode === 'id' || !is_null($attribute->getId()))) {
+        if ($attribute && ($attributeCode === 'id' || $attribute->getId() !== null)) {
             $attributeMetadata = $this->attributeMetadataConverter->createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {

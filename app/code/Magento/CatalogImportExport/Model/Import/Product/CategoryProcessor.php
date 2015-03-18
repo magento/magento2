@@ -75,7 +75,7 @@ class CategoryProcessor
     {
         $this->initCategories();
         $returnVal = isset($this->categoriesWithRoots[$root]) ? $this->categoriesWithRoots[$root] : null;
-        if (empty($returnVal) || is_null($index)) {
+        if (empty($returnVal) || $index === null) {
             return $returnVal;
         }
         return isset($returnVal[$index]) ? $returnVal[$index] : null;

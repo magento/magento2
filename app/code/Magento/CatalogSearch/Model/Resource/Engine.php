@@ -197,11 +197,11 @@ class Engine extends AbstractDb implements EngineInterface
     {
         $where = [];
 
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             $where[] = $this->_getWriteAdapter()
                 ->quoteInto('store_id=?', $storeId);
         }
-        if (!is_null($entityId)) {
+        if ($entityId !== null) {
             $where[] = $this->_getWriteAdapter()
                 ->quoteInto('product_id IN (?)', $entityId);
         }

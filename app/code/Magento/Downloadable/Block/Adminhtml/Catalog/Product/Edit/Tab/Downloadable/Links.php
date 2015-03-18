@@ -144,7 +144,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getPurchasedSeparatelyAttribute()
     {
-        if (is_null($this->_purchasedSeparatelyAttribute)) {
+        if ($this->_purchasedSeparatelyAttribute === null) {
             $_attributeCode = 'links_purchased_separately';
 
             $this->_purchasedSeparatelyAttribute = $this->_attributeFactory->create()->loadByCode(
@@ -438,7 +438,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $this->_config = new \Magento\Framework\Object();
         }
 

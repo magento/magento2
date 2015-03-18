@@ -55,7 +55,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             if (is_array($value)) {
                 // $key[]=$value1&$key[]=$value2 ...
                 $arrQueryParams[] = $key . '[]=' . implode('&' . $key . '[]=', $value);
-            } elseif (is_null($value)) {
+            } elseif ($value === null) {
                 $arrQueryParams[] = $key;
             } else {
                 $arrQueryParams[] = $key . '=' . $value;

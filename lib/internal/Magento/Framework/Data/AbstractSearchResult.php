@@ -259,7 +259,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     protected function addItem(\Magento\Framework\Object $item)
     {
         $itemId = $this->getItemId($item);
-        if (!is_null($itemId)) {
+        if ($itemId !== null) {
             if (isset($this->data['items'][$itemId])) {
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
