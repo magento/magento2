@@ -73,6 +73,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
 
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
             if (!empty($bundleAssets) && $staticAsset !== false) {
+                $bundleAssets = array_reverse($bundleAssets);
                 foreach ($bundleAssets as $bundleAsset) {
                     $assetCollection->insert(
                         $bundleAsset->getFilePath(),
