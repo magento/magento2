@@ -6,8 +6,8 @@
 namespace Magento\Ui\Component\Container;
 
 use Magento\Ui\Component\AbstractComponent;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Block
