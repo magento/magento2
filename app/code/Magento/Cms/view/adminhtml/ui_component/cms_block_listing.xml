@@ -226,13 +226,18 @@
         </argument>
         <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
             <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="string">listing_massaction</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">block_id</item>
+                </item>
             </argument>
         </column>
         <column name="block_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
@@ -245,7 +250,7 @@
         <column name="title">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
@@ -258,7 +263,7 @@
         <column name="identifier">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
@@ -271,7 +276,7 @@
         <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="sortable" xsi:type="boolean">false</item>
@@ -307,7 +312,7 @@
         <column name="creation_time">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">date</item>
@@ -319,7 +324,7 @@
         <column name="update_time">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">date</item>

@@ -17,7 +17,6 @@
             </item>
             <item name="deps" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
         </item>
-        <item name="save_parameters_in_session" xsi:type="string">1</item>
         <item name="spinner" xsi:type="string">cms_page_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
@@ -26,15 +25,6 @@
                 <item name="class" xsi:type="string">primary</item>
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
-        </item>
-        <item name="meta" xsi:type="array">
-            <item name="defaults" xsi:type="array">
-                <item name="visible" xsi:type="boolean">true</item>
-                <item name="filterable" xsi:type="boolean">true</item>
-                <item name="sortable" xsi:type="boolean">true</item>
-            </item>
-            <item name="index_field" xsi:type="string">page_id</item>
-            <item name="item_action" xsi:type="string">edit</item>
         </item>
     </argument>
     <paging name="listing_paging">

@@ -67,18 +67,9 @@ class Column extends AbstractComponent
     public function prepare()
     {
         parent::prepare();
-    }
 
-    /**
-     * Get JS config
-     *
-     * @return array|string
-     */
-    public function getJsConfig()
-    {
-        return (string) $this->getContext()->getNamespace()
-            . '.' . $this->getContext()->getNamespace()
-            . '.' . $this->getData('config');
+        $jsConfig = $this->getJsConfiguration($this);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
     /**
