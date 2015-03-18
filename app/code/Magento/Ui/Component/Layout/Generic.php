@@ -69,11 +69,12 @@ class Generic implements LayoutInterface
             $nodeData = [
                 'type' => $componentType,
                 'name' => $component->getName(),
-                'dataScope' => isset($config['dataScope'])
-                    ? $config['dataScope']
-                    : $component->getContext()->getNamespace(),
                 'children' => $childrenNode
             ];
+            if (isset($config['dataScope'])) {
+                $nodeData['dataScope'] = $config['dataScope'];
+                unset($config['dataScope']);
+            }
             if (!empty($config)) {
                 $nodeData['config'] = $config;
             }

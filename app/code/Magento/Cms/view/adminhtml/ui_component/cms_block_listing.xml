@@ -173,13 +173,13 @@
     <massaction name="listing_massaction">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <!--<item name="actions" xsi:type="array">-->
-                    <!--<item name="delete" xsi:type="array">-->
-                        <!--<item name="label" xsi:type="string" translate="true">Delete</item>-->
-                        <!--<item name="url" xsi:type="string">cms/block/massDelete</item>-->
-                    <!--</item>-->
-                <!--</item>-->
-                <!--<item name="indexField" xsi:type="string">block_id</item>-->
+                <item name="actions" xsi:type="array">
+                    <item name="delete" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="string">cms/block/massDelete</item>
+                    </item>
+                </item>
+                <item name="indexField" xsi:type="string">block_id</item>
             </item>
         </argument>
     </massaction>
@@ -200,6 +200,9 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+            <item name="config" xsi:type="array">
+                <item name="update_url" xsi:type="string">mui/index/render</item>
             </item>
         </argument>
     </dataSource>

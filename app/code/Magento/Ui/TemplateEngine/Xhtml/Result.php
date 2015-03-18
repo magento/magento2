@@ -5,9 +5,8 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
-use Magento\Framework\View\Element\UiComponent\LayoutInterface;
+use Magento\Ui\Component\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\Component\Layout\LayoutPool;
 
 /**
  * Class Result
@@ -30,9 +29,9 @@ class Result
     protected $component;
 
     /**
-     * @var LayoutPool
+     * @var Structure
      */
-    protected $layoutPool;
+    protected $structure;
 
     /**
      * Constructor
@@ -40,18 +39,18 @@ class Result
      * @param Template $template
      * @param Compiler $compiler
      * @param UiComponentInterface $component
-     * @param LayoutPool $layoutPool
+     * @param Structure $structure
      */
     public function __construct(
         Template $template,
         Compiler $compiler,
         UiComponentInterface $component,
-        LayoutPool $layoutPool
+        Structure $structure
     ) {
         $this->template = $template;
         $this->compiler = $compiler;
         $this->component = $component;
-        $this->layoutPool = $layoutPool;
+        $this->structure = $structure;
     }
 
     /**
@@ -71,17 +70,7 @@ class Result
      */
     public function appendLayoutConfiguration()
     {
-        /** @var LayoutInterface $layout */
-        if (!$layoutDefinition = $this->component->getData('layout')) {
-            $layoutDefinition = [
-                'type' => 'generic'
-            ];
-        }
-
-        $layout = $this->layoutPool->create($layoutDefinition['type'], $layoutDefinition);
-        $layoutConfiguration = $this->wrapContent(
-            json_encode($layout->build($this->component))
-        );
+        $layoutConfiguration = $this->wrapContent(json_encode($this->structure->generate($this->component)));
         $this->template->append($layoutConfiguration);
     }
 
