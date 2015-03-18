@@ -18,6 +18,7 @@
             <item name="deps" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
         </item>
         <item name="save_parameters_in_session" xsi:type="string">1</item>
+        <item name="spinner" xsi:type="string">cms_page_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>

@@ -11,12 +11,18 @@ define([
     'use strict';
 
     return Provider.extend({
+        initialize: function () {
+            _.bindAll(this, '_reload', 'onReload');
+
+            return this._super();
+        },
+
         reload: function () {
             if (this.timeoutID) {
                 window.clearTimeout(this.timeoutID);
             }
 
-            window.setTimeout(this._reload.bind(this), 200);
+            this.timeoutID = window.setTimeout(this._reload, 200);
         },
 
         _reload: function () {
@@ -29,12 +35,12 @@ define([
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
-            }).done(this.onReload.bind(this));
+            }).done(this.onReload);
         },
 
         onReload: function (data) {
             this.set('data', data);
-            this.tirgger('reloaded');
+            this.trigger('reloaded');
         }
     });
 });
