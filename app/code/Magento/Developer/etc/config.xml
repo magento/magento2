@@ -11,6 +11,9 @@
             <restrict>
                 <allow_ips />
             </restrict>
+            <front_end_development_workflow>
+                <type>server_side_compilation</type>
+            </front_end_development_workflow>
         </dev>
     </default>
 </config>

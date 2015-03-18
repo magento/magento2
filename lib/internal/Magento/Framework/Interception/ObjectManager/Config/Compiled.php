@@ -28,21 +28,6 @@ class Compiled extends \Magento\Framework\ObjectManager\Config\Compiled implemen
     }
 
     /**
-     * Retrieve instance type with interception processing
-     *
-     * @param string $instanceName
-     * @return string
-     */
-    public function getInstanceType($instanceName)
-    {
-        $type = parent::getInstanceType($instanceName);
-        if ($this->interceptionConfig && $this->interceptionConfig->hasPlugins($instanceName)) {
-            return $type . '\\Interceptor';
-        }
-        return $type;
-    }
-
-    /**
      * Retrieve instance type without interception processing
      *
      * @param string $instanceName

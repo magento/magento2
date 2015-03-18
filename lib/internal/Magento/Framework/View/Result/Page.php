@@ -37,7 +37,7 @@ class Page extends Layout
     protected $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\Config\Renderer
+     * @var \Magento\Framework\View\Page\Config\RendererInterface
      */
     protected $pageConfigRenderer;
 
