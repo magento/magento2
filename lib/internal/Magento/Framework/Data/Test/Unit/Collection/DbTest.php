@@ -324,7 +324,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Zend_Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage dbModel read resource does not implement \Zend_Db_Adapter_Abstract
      */
     public function testSetConnectionException()
