@@ -7,7 +7,8 @@
 namespace Magento\Setup\Console;
 
 use Symfony\Component\Console\Application as SymfonyApplication;
-use \Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\Shell\ComplexParameter;
 
 /**
  * Magento2 CLI Application
@@ -36,31 +37,47 @@ class Application extends SymfonyApplication
      */
     protected function getApplicationCommands()
     {
-        $commandsList = [];
+        // TODO: this application class should be moved and probably refactored in scope of MAGETWO-35132
 
-        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-            ->getServiceManager();
-        $setupFiles = glob(BP . '/setup/src/Magento/Setup/Console/Command/*Command.php');
-        if ($setupFiles) {
-            foreach ($setupFiles as $file) {
-                if (preg_match("#(Magento/Setup/Console/Command/.*Command).php#", $file, $parts)) {
-                    $class = str_replace('/', '\\', $parts[1]);
-                    $commandObject = null;
-                    try {
-                        $commandObject = $serviceManager->create($class);
-                    } catch (\Exception $e) {
-                        try {
-                            echo "Could not create command using service manager: " . $e->getMessage() . "\n";
-                            $commandObject = new $class();
-                        } catch (\Exception $e) {
-                        }
-                    }
-                    if (null !== $commandObject) {
-                        $commandsList[] = $commandObject;
-                    }
-                }
-            }
+        $setupCommands   = [];
+        $toolsCommands   = [];
+        $modulesCommands = [];
+
+        $bootstrapParam = new ComplexParameter('bootstrap');
+        $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
+        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+        $bootstrap = Bootstrap::create(BP, $params);
+
+        if (class_exists('Magento\Setup\Console\CommandList')) {
+            $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+                ->getServiceManager();
+            $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
+            $setupCommands = $setupCommandList->getCommands();
         }
+
+        if (class_exists('Magento\Tools\Console\CommandList')) {
+            $toolsCommandList = new \Magento\Tools\Console\CommandList();
+            $toolsCommands = $toolsCommandList->getCommands();
+        }
+
+        // TODO: do we need to change this for better solution?
+        if ($bootstrap->isInstalled()) {
+
+            $objectManager = $bootstrap->getObjectManager();
+            $commandList = $objectManager->create(
+                'Magento\Framework\Console\CommandList',
+                ['objectManager'=>$objectManager]
+                );
+
+            $modulesCommands = $commandList->getCommands();
+
+        }
+
+        $commandsList = array_merge(
+            $setupCommands,
+            $toolsCommands,
+            $modulesCommands
+        );
 
         return $commandsList;
     }
