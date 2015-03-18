@@ -44,6 +44,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+
         $this->application = new Compiler(
             $this->taskManagerMock,
             $this->objectManagerMock,
@@ -133,6 +134,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                         'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
                     ]
                 ]
+            ],
+            'Magento\Tools\Di\Code\Reader\ClassesScanner' => [
+                'arguments' => [
+                    'excludePatterns' => [
+                        'application' => '#^' . BP . '/app/code/[\\w]+/[\\w]+/Test#',
+                        'framework' => '#^' . BP . '/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#'
+                    ]
+                ]
             ]
         ];
     }
@@ -152,8 +161,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             Task\OperationFactory::APPLICATION_CODE_GENERATOR => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
             ],
-            Task\OperationFactory::INTERCEPTION =>
-                BP . '/var/generation',
+            Task\OperationFactory::INTERCEPTION => [
+                'intercepted_paths' => [
+                    BP . '/'  . 'app/code',
+                    BP . '/'  . 'lib/internal/Magento/Framework',
+                    BP . '/'  . 'var/generation'
+                ],
+                'path_to_store' => BP . '/var/generation',
+            ],
             Task\OperationFactory::AREA_CONFIG_GENERATOR => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
             ],
