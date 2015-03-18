@@ -8,11 +8,11 @@
 /*global alert*/
 define(
     [
-        'Magento_Ui/js/form/component',/*
-        'Magento_Customer/js/model/customer',
-        'Magento_Customer/js/action/login'*/
+        'Magento_Ui/js/form/component',
+        'Magento_Customer/js/action/login'
+        //'Magento_Customer/js/model/customer',
     ],
-    function(Component) {
+    function(Component, login) {
         /*var formKey;
          var root;
          wrapped = customer.setIsLoggedIn;
@@ -45,12 +45,13 @@ define(
          };
          */
         return Component.extend({
-            initialize: function () {
-                this._super();
-                return this;
-            },
+            username: '',
+            password: '',
             defaults: {
                 template: 'Magento_Checkout/authentication'
+            },
+            login: function() {
+                login(this.username, this.password);
             }
         });
     }

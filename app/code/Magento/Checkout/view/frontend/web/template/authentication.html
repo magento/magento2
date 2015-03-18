@@ -1,12 +1,12 @@
 <h2>Checkout Method</h2>
 <h3>Login</h3>
 <p>Already registered? Please log in below:</p>
-<form method="post" id="login-form">
+<form data-bind="submit:login">
     <fieldset>
         <label for="login">Login</label>
-        <input type="text" name="login" id="login"/>
+        <input type="text" name="login" id="login" data-bind="value:username"/>
         <label for="password">Password</label>
-        <input type="password" name="password" id="password"/>
+        <input type="password" name="password" id="password" data-bind="value:password"/>
         <input type="submit" />
         <a href="">Forgot your password?</a>
     </fieldset>
