@@ -48,7 +48,7 @@ class Options implements \Magento\Framework\Option\ArrayInterface
 
         $currentQueryId = $this->_registryManager->registry('current_catalog_search')->getId();
         $queryIds = [];
-        if (is_null($queries) && !empty($currentQueryId)) {
+        if ($queries === null && !empty($currentQueryId)) {
             $queryIds = $this->_searchResourceModel->getRelatedQueries($currentQueryId);
         }
         return $queryIds;
