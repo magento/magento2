@@ -98,7 +98,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      */
     public function getProducts()
     {
-        if (is_null($this->_products)) {
+        if ($this->_products === null) {
             $productsIds = $this->getProductIds();
 
             if (!is_array($productsIds)) {
@@ -156,7 +156,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
+        if ($this->_attributes === null) {
             $this->_attributes = $this->_eavConfig->getEntityType(
                 \Magento\Catalog\Model\Product::ENTITY
             )->getAttributeCollection()->addIsNotUniqueFilter()->setInAllAttributeSetsFilter(

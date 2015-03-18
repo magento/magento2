@@ -63,7 +63,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
                 ['layer' => $layer, 'resource' => $priceResource, 'priceAlgorithm' => $model]
             );
         $filter->setLayer($layer)->setAttributeModel(new Object(['attribute_code' => 'price']));
-        if (!is_null($request)) {
+        if ($request !== null) {
             $filter->apply(
                 $request,
                 Bootstrap::getObjectManager()->get(

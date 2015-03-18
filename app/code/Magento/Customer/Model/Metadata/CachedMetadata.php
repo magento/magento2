@@ -87,7 +87,7 @@ class CachedMetadata implements MetadataInterface
      */
     public function getAllAttributesMetadata()
     {
-        if (!is_null($this->allAttributeMetadataCache)) {
+        if ($this->allAttributeMetadataCache !== null) {
             return $this->allAttributeMetadataCache;
         }
 
@@ -100,7 +100,7 @@ class CachedMetadata implements MetadataInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
-        if (!is_null($this->customAttributesMetadataCache)) {
+        if ($this->customAttributesMetadataCache !== null) {
             return $this->customAttributesMetadataCache;
         }
 

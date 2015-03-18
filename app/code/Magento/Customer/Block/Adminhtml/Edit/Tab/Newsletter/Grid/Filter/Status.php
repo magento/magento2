@@ -51,6 +51,6 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      */
     public function getCondition()
     {
-        return is_null($this->getValue()) ? null : ['eq' => $this->getValue()];
+        return $this->getValue() === null ? null : ['eq' => $this->getValue()];
     }
 }

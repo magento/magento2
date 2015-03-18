@@ -104,7 +104,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      */
     public function updateCustomerType($visitorId, $customerId, $types = null)
     {
-        if (is_null($types)) {
+        if ($types === null) {
             $types = [];
             $typesCollection = $this->_eventTypeFactory->create()->getCollection();
             foreach ($typesCollection as $eventType) {

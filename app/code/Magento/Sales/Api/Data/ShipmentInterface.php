@@ -253,7 +253,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
      * @return $this
      */
-    public function setComments(array $comments = null);
+    public function setComments($comments = null);
 
     /**
      * Sets the store ID for the shipment.

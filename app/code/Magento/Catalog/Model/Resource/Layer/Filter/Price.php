@@ -100,7 +100,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->storeManager->getStore()->getWebsiteId()
         );
 
-        if (!is_null($collection->getCatalogPreparedSelect())) {
+        if ($collection->getCatalogPreparedSelect() !== null) {
             $select = clone $collection->getCatalogPreparedSelect();
         } else {
             $select = clone $collection->getSelect();
@@ -162,7 +162,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _replaceTableAlias($conditionString)
     {
-        if (is_null($conditionString)) {
+        if ($conditionString === null) {
             return null;
         }
         $adapter = $this->_getReadAdapter();
@@ -243,7 +243,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $this->_getSelect();
         $priceExpression = $this->_getPriceExpression($select);
         $select->columns('COUNT(*)')->where("{$priceExpression} < " . $this->_getComparingValue($price));
-        if (!is_null($lowerPrice)) {
+        if ($lowerPrice !== null) {
             $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice));
         }
         $offset = $this->_getReadAdapter()->fetchOne($select);
@@ -268,10 +268,10 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $this->_getSelect();
         $priceExpression = $this->_getPriceExpression($select);
         $select->columns(['min_price_expr' => $this->_getFullPriceExpression($select)]);
-        if (!is_null($lowerPrice)) {
+        if ($lowerPrice !== null) {
             $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice));
         }
-        if (!is_null($upperPrice)) {
+        if ($upperPrice !== null) {
             $select->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice));
         }
         $select->order("{$priceExpression} ASC")->limit($limit, $offset);
@@ -299,7 +299,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->where(
             "{$priceExpression} > " . $this->_getComparingValue($price, false)
         );
-        if (!is_null($upperPrice)) {
+        if ($upperPrice !== null) {
             $select->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice));
         }
         $offset = $this->_getReadAdapter()->fetchOne($select);
@@ -312,7 +312,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->where(
             "{$priceExpression} >= " . $this->_getComparingValue($price)
         );
-        if (!is_null($upperPrice)) {
+        if ($upperPrice !== null) {
             $pricesSelect->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice));
         }
         $pricesSelect->order("{$priceExpression} DESC")->limit($rightIndex - $offset + 1, $offset - 1);

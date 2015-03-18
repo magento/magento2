@@ -73,7 +73,7 @@ class TabWrapper extends ListText implements TabInterface
     public function isAjaxLoaded()
     {
         $flag = $this->getData('is_ajax_loaded');
-        return !is_null($flag) ? (bool) $flag : $this->isAjaxLoaded;
+        return $flag !== null ? (bool) $flag : $this->isAjaxLoaded;
     }
 
     /**
@@ -84,7 +84,7 @@ class TabWrapper extends ListText implements TabInterface
     public function canShowTab()
     {
         $flag = $this->getData('can_show_tab');
-        return !is_null($flag) ? (bool) $flag : $this->canShowTab;
+        return $flag !== null ? (bool) $flag : $this->canShowTab;
     }
 
     /**
@@ -95,6 +95,6 @@ class TabWrapper extends ListText implements TabInterface
     public function isHidden()
     {
         $flag = $this->getData('is_hidden');
-        return !is_null($flag) ? (bool) $flag : $this->isHidden;
+        return $flag !== null ? (bool) $flag : $this->isHidden;
     }
 }

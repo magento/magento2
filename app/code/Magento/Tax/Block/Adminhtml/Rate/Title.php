@@ -69,7 +69,7 @@ class Title extends \Magento\Framework\View\Element\Template
      */
     public function getTitles()
     {
-        if (is_null($this->_titles)) {
+        if ($this->_titles === null) {
             $this->_titles = [];
 
             $taxRateId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_ID);
@@ -97,7 +97,7 @@ class Title extends \Magento\Framework\View\Element\Template
     public function getStores()
     {
         $stores = $this->getData('stores');
-        if (is_null($stores)) {
+        if ($stores === null) {
             $stores = $this->_storeFactory->create()->getResourceCollection()->setLoadDefault(false)->load();
             $this->setData('stores', $stores);
         }

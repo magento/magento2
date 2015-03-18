@@ -54,7 +54,7 @@ class State extends Object
     public function getFilters()
     {
         $filters = $this->getData('filters');
-        if (is_null($filters)) {
+        if ($filters === null) {
             $filters = [];
             $this->setData('filters', $filters);
         }

@@ -607,4 +607,17 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             $cost
         );
     }
+
+    /**
+     * Parse XML string and return XML document object or false
+     *
+     * @param string $xmlContent
+     * @param string $customSimplexml
+     *
+     * @return \SimpleXMLElement|bool
+     */
+    public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
+    {
+        return simplexml_load_string($xmlContent, $customSimplexml);
+    }
 }

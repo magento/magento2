@@ -81,7 +81,7 @@ class Text extends AbstractData
             $validateRules,
             'min_text_length'
         );
-        if (!is_null($minTextLength) && $length < $minTextLength) {
+        if ($minTextLength !== null && $length < $minTextLength) {
             $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $minTextLength);
         }
 
@@ -89,7 +89,7 @@ class Text extends AbstractData
             $validateRules,
             'max_text_length'
         );
-        if (!is_null($maxTextLength) && $length > $maxTextLength) {
+        if ($maxTextLength !== null && $length > $maxTextLength) {
             $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $maxTextLength);
         }
 

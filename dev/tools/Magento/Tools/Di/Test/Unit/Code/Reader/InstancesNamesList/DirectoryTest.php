@@ -10,7 +10,7 @@ use Magento\Tools\Di\Compiler\Log\Log;
 /**
  * Class DirectoryTest
  *
- * @package Magento\Tools\Di\Code\Reader\InstancesNamesList
+ * @package Magento\Tools\Di\Code\Reader\Decorator
  */
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
     private $classReaderMock;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Directory
      */
     private $model;
 
@@ -61,7 +61,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validate'])
             ->getMock();
 
-        $this->model = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory(
+        $this->model = new \Magento\Tools\Di\Code\Reader\Decorator\Directory(
             $this->logMock,
             $this->classReaderMock,
             $this->classesScanner,

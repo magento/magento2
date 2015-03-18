@@ -37,7 +37,7 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function __construct($format = null, $localeResolver = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             $format = DateTime::DATE_INTERNAL_FORMAT;
         }
         $this->_dateFormat = $format;

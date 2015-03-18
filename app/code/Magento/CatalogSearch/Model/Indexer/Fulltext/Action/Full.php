@@ -349,7 +349,7 @@ class Full
                         }
                     }
                 }
-                if (!is_null($productChildren) && !$hasChildren) {
+                if ($productChildren !== null && !$hasChildren) {
                     continue;
                 }
 
@@ -396,7 +396,7 @@ class Full
                 []
             );
 
-        if (!is_null($productIds)) {
+        if ($productIds !== null) {
             $select->where('e.entity_id IN (?)', $productIds);
         }
 
@@ -462,7 +462,7 @@ class Full
             $this->searchableAttributes = $attributes;
         }
 
-        if (!is_null($backendType)) {
+        if ($backendType !== null) {
             $attributes = [];
             foreach ($this->searchableAttributes as $attributeId => $attribute) {
                 if ($attribute->getBackendType() == $backendType) {
@@ -608,7 +608,7 @@ class Full
                 $relation->getParentFieldName() . ' = ?',
                 $productId
             );
-            if (!is_null($relation->getWhere())) {
+            if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());
             }
             return $this->getReadAdapter()->fetchCol($select);
