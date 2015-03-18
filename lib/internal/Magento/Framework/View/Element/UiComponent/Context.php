@@ -242,6 +242,9 @@ class Context implements ContextInterface
             uasort($buttons, [$this, 'sortButtons']);
 
             foreach ($buttons as $buttonId => $buttonData) {
+                if (isset($buttonData['url'])) {
+                    $buttonData['url'] = $this->getUrl($buttonData['url']);
+                }
                 $this->actionPool->add($buttonId, $buttonData, $component);
             }
         }

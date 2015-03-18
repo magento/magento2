@@ -77,7 +77,7 @@ class ActionPool implements ActionPoolInterface
      * @param UiComponentInterface $view
      * @return void
      */
-    public function add($key, array $data, UiComponentInterface $view)
+    public function add($key, array $data, UiComponentInterface $component)
     {
         $data['id'] = isset($data['id']) ? $data['id'] : $key;
 
@@ -85,7 +85,7 @@ class ActionPool implements ActionPoolInterface
         if ($toolbar !== false) {
             $this->items[$key] = $this->itemFactory->create();
             $this->items[$key]->setData($data);
-            $container = $this->createContainer($key, $view);
+            $container = $this->createContainer($key, $component);
             $toolbar->setChild($key, $container);
         }
     }
