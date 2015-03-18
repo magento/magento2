@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Jasmine Spec Runner</title>
+        <link rel="shortcut icon" type="image/png" href="<%= temp %>/jasmine_favicon.png">
+        <% css.forEach(function (style) { %>
+        <link rel="stylesheet" href="<%= style %>">
+        <% }); %>
+        <% with (scripts) { %>
+            <% [].concat(polyfills, jasmine, boot, reporters).forEach(function (script) { %>
+            <script type="text/javascript" src="<%= script %>"></script>
+            <% }); %>
+        <% } %>
+        <script type="text/javascript" src="/vendor/requirejs/require.js"></script>
+        <script type="text/javascript">
+            var startTests = window.onload;
+            window.onload = null;
+
+            require.config({
+                paths: {
+                    ko: 'ko/ko',
+                    jquery: 'jquery/jquery.min'
+                }
+            });
+
+            require([
+                'dev/tests/js/jasmine/testsuite/adminhtml/Magento/backend/some_module'
+            ], startTests);
+        </script>
+    </head>
+    <body></body>
+</html>

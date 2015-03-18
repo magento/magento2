@@ -1,0 +1,10 @@
+{
+    "options": {
+        "host": "127.0.0.1:8000",
+        "template": "dev/tests/js/jasmine/spec_runner.html"
+    },
+
+    "frontend": {
+
+    }
+}

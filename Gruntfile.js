@@ -10,16 +10,20 @@ module.exports = function (grunt) {
     var _ = require('underscore'),
         path = require('path');
 
-    require('./dev/tools/grunt/tasks/mage-minify')(grunt);
-    require('time-grunt')(grunt);
+    [
+        './dev/tools/grunt/tasks/mage-minify',
+        './dev/tools/grunt/tasks/deploy',
+        'time-grunt'
+    ].forEach(function (task) {
+        require(task)(grunt);
+    });
 
     require('load-grunt-config')(grunt, {
         configPath: path.join(process.cwd(), 'dev/tools/grunt/configs'),
         init: true,
         loadGruntTasks: {
             pattern: [
-                'grunt-*',
-                '!grunt-template-jasmine-requirejs'
+                'grunt-*'
             ]
         }
     });
@@ -71,24 +75,6 @@ module.exports = function (grunt) {
             'clean:pub'
         ],
 
-        spec: [
-            'specRunner:lib',
-            'specRunner:backend',
-            'specRunner:frontend'
-        ],
-
-        unit: [
-            'jasmine:lib-unit',
-            'jasmine:backend-unit',
-            'jasmine:frontend-unit'
-        ],
-
-        integration: [
-            'jasmine:lib-integration',
-            'jasmine:backend-integration',
-            'jasmine:frontend-integration'
-        ],
-
         'legacy-build': [
             'mage-minify:legacy'
         ],
@@ -97,6 +83,11 @@ module.exports = function (grunt) {
             'usebanner:documentationCss',
             'usebanner:documentationLess',
             'usebanner:documentationHtml'
+        ],
+
+        spec: [
+            'connect:frontend',
+            'jasmine:frontend'
         ]
     }, function (task, name) {
         grunt.registerTask(name, task);
