@@ -1,9 +1,9 @@
 define([
-    './text'
-], function (Text) {
+    './sortable'
+], function (Sortable) {
     'use strict';
 
-    return Text.extend({
+    return Sortable.extend({
         getLabel: function (data) {
             var options = this.options || [],
                 label = '';

@@ -22,7 +22,7 @@ define([
                 window.clearTimeout(this.timeoutID);
             }
 
-            this.timeoutID = window.setTimeout(this._reload, 200);
+            this.timeoutID = window.setTimeout(this._reload, 100);
         },
 
         _reload: function () {

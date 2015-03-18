@@ -1,10 +1,10 @@
 define([
     'underscore',
-    './text'
-], function (_, Text) {
+    './column'
+], function (_, Column) {
     'use strict';
 
-    return Text.extend({
+    return Column.extend({
         defaults: {
             bodyTmpl: 'ui/grid/cells/actions'
         },

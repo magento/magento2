@@ -21,7 +21,7 @@ define([
             current: 1,
 
             imports: {
-                totalSelected: '<%= provider %>:params.totalSelected',
+                totalSelected: '<%= provider %>:data.totalSelected',
                 totalRecords: '<%= provider %>:data.totalRecords'
             },
 

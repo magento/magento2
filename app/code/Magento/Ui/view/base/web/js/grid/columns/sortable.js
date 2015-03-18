@@ -1,22 +1,18 @@
 define([
-    'uiComponent'
-], function (Component) {
+    './column'
+], function (Column) {
     'use strict';
 
-    return Component.extend({
+    return Column.extend({
         defaults: {
-            headerTmpl: 'ui/grid/columns/text',
-            bodyTmpl: 'ui/grid/cells/text',
             sortable: true,
             sorting: false,
-            action: false,
             classes: {
                 'asc': 'sort-arrow-asc',
                 'desc': 'sort-arrow-desc'
             },
-
             listens: {
-                '<%= provider %>:params.sorting.field': 'onSortUpdate',
+                '<%= provider %>:params.sorting.field': 'onSortChange',
                 sorting: 'setSortClass push'
             }
         },
@@ -67,30 +63,10 @@ define([
             this.sortClass(sortClass);
         },
 
-        applyAction: function () {
-            location.href = this.action;
-        },
-
-        redirect: function (url) {
-            window.location.href = url;
-        },
-
-        onSortUpdate: function (field) {
+        onSortChange: function (field) {
             if (field !== this.index) {
                 this.sort(false);
             }
-        },
-
-        getLabel: function (data) {
-            return data;
-        },
-
-        getHeader: function () {
-            return this.headerTmpl;
-        },
-
-        getBody: function () {
-            return this.bodyTmpl;
         }
     });
 });
