@@ -6,7 +6,7 @@ define([
 
     return Text.extend({
         defaults: {
-            dateFormat: 'MMM d, YYYY h:mm:ss A'
+            dateFormat: 'MMM D, YYYY h:mm:ss A'
         },
 
         getLabel: function (data) {

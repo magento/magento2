@@ -23,6 +23,17 @@ define([
             return this;
         },
 
+        getClickUrl: function (row) {
+            var field = row[this.action_field],
+                action = field && field[this.click_action];
+
+            return action ? action.href : '';
+        },
+
+        isClickable: function (row) {
+            return !!this.getClickUrl(row);
+        },
+
         hideLoader: function () {
             loader.get(this.name).hide();
         },

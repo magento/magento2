@@ -71,6 +71,10 @@ define([
             location.href = this.action;
         },
 
+        redirect: function (url) {
+            window.location.href = url;
+        },
+
         onSortUpdate: function (field) {
             if (field !== this.index) {
                 this.sort(false);
