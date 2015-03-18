@@ -92,10 +92,14 @@ class Column extends AbstractComponent
      */
     public function getJsConfig()
     {
-        return array_replace_recursive(
-            (array) $this->wrappedComponent->getData('config'),
-            (array) $this->getData('config')
-        );
+        if (isset($this->wrappedComponent)) {
+            return array_replace_recursive(
+                (array) $this->wrappedComponent->getData('config'),
+                (array) $this->getData('config')
+            );
+        }
+
+        return (array) $this->getData('config');
     }
 
     /**

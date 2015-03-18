@@ -70,10 +70,13 @@ class Listing extends AbstractComponent
                     'type' => $component->getComponentName(),
                     'name' => $component->getName(),
                     'dataScope' => $component->getContext()->getNamespace(),
-                    'config' => [
-                        'data' => $data,
-                        'totalCount' => $component->getDataProvider()->count(),
-                    ],
+                    'config' => array_replace_recursive(
+                        [
+                            'data' => $data,
+                            'totalCount' => $component->getDataProvider()->count(),
+                        ],
+                        (array) $component->getData('config')
+                    ),
                 ];
             }
         }

@@ -136,10 +136,11 @@ class UiComponentFactory extends Object
                 $identifier,
                 $bundleComponents[$identifier]
             );
-            if (!isset($arguments['context'])) {
+            $componentArguments = array_merge($componentArguments, $arguments);
+            if (!isset($componentArguments['context'])) {
                 throw new Exception('Context, is required argument.');
             }
-            $componentContext = $arguments['context'];
+            $componentContext = $componentArguments['context'];
             $components = [];
             foreach ($bundleComponents[$identifier]['children'] as $childrenIdentifier => $childrenData) {
                 $children = $this->createChildComponent(

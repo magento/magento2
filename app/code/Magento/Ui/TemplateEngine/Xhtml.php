@@ -6,14 +6,13 @@
 namespace Magento\Ui\TemplateEngine;
 
 use Magento\Ui\TemplateEngine\Xhtml\Result;
-use Magento\Ui\TemplateEngine\Xhtml\ResultFactory;
 use Magento\Ui\TemplateEngine\Xhtml\Template;
-use Magento\Ui\TemplateEngine\Xhtml\TemplateFactory;
 use Magento\Ui\TemplateEngine\Xhtml\Compiler;
-use Magento\Ui\TemplateEngine\Xhtml\CompilerFactory;
-
+use Magento\Ui\TemplateEngine\Xhtml\ResultFactory;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\TemplateEngineInterface;
+use Magento\Ui\TemplateEngine\Xhtml\CompilerFactory;
+use Magento\Ui\TemplateEngine\Xhtml\TemplateFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Template as TemplateProvider;
 
 /**

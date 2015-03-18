@@ -54,6 +54,9 @@
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
             </item>
+            <item name="config" xsi:type="array">
+                <item name="update_url" xsi:type="string">mui/index/render</item>
+            </item>
         </argument>
     </dataSource>
     <!-- filters -->
