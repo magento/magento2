@@ -60,6 +60,13 @@ class ScheduledStructure
     protected $_scheduledPaths;
 
     /**
+     * Elements with reference to non-existing parent element
+     *
+     * @var array
+     */
+    protected $_brokenParent = [];
+
+    /**
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -92,7 +99,10 @@ class ScheduledStructure
      */
     public function getListToRemove()
     {
-        return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledRemoves));
+        return array_keys(array_intersect_key(
+            $this->_scheduledElements,
+            array_merge($this->_scheduledRemoves, $this->_brokenParent)
+        ));
     }
 
     /**
@@ -397,6 +407,27 @@ class ScheduledStructure
     public function unsetPathElement($elementName)
     {
         unset($this->_scheduledPaths[$elementName]);
+    }
+
+    /**
+     * Remove element from broken parent list
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function unsetElementFromBrokenParentList($elementName)
+    {
+        unset($this->_brokenParent[$elementName]);
+    }
+
+    /**
+     * Set element to broken parent list
+     *
+     * @param string $elementName
+     */
+    public function setElementToBrokenParentList($elementName)
+    {
+        $this->_brokenParent[$elementName] = 1;
     }
 
     /**

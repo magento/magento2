@@ -211,7 +211,7 @@ class GeneratorPool
         } catch (\OutOfBoundsException $e) {
             $this->logger->critical('Broken reference: '. $e->getMessage());
         }
-        $scheduledStructure->unsetElementFromListToRemove($element);
+        $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;
     }
 }
