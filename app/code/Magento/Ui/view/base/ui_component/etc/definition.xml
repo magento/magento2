@@ -43,7 +43,7 @@
     <actions class="Magento\Ui\Component\Control\Action">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
             </item>
         </argument>
     </actions>

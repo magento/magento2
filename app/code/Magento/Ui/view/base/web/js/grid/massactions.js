@@ -42,18 +42,6 @@ define([
             }
         },
 
-        initProperties: function () {
-            var actions = this.actions || {};
-
-            this.actions = _.map(actions, function (value, key) {
-                value.type = key;
-
-                return value;
-            });
-
-            return this._super();
-        },
-
         initObservable: function () {
             this._super()
                 .observe('menuVisible actionsVisible selected excluded allSelected');
