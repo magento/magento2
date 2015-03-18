@@ -359,9 +359,8 @@ class Observer
         $now = time();
         /** @var Schedule $record */
         foreach ($history as $record) {
-            $checkTime = strtotime($record->getExecutedAt() ? $record->getExecutedAt() :
-                    (int)$record->getScheduledAt() + $scheduleLifetime
-            );
+            $checkTime = $record->getExecutedAt() ? strtotime($record->getExecutedAt()) :
+                strtotime($record->getScheduledAt()) + $scheduleLifetime;
             if ($checkTime < $now - $historyLifetimes[$record->getStatus()]) {
                 $record->delete();
             }
