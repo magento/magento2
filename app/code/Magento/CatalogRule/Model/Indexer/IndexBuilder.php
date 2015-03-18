@@ -7,7 +7,6 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\CatalogRuleException;
 use Magento\CatalogRule\Model\Resource\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -126,7 +125,7 @@ class IndexBuilder
      * Reindex by ids
      *
      * @param array $ids
-     * @throws \Magento\CatalogRule\CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function reindexByIds(array $ids)
@@ -135,7 +134,7 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new CatalogRuleException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -159,7 +158,7 @@ class IndexBuilder
     /**
      * Full reindex
      *
-     * @throws CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function reindexFull()
@@ -168,7 +167,7 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new CatalogRuleException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
         }
     }
 

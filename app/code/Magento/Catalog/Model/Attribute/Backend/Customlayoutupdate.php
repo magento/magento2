@@ -54,7 +54,7 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
             $messages = $validator->getMessages();
             //Add first message to exception
             $massage = array_shift($messages);
-            $eavExc = new Exception($massage);
+            $eavExc = new Exception(__($massage));
             $eavExc->setAttributeCode($attributeName);
             throw $eavExc;
         }

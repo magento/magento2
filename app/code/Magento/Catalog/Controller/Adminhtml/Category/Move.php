@@ -72,7 +72,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error.'));
-        } catch (\Magento\UrlRewrite\Model\Storage\DuplicateEntryException $e) {
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error. %1', $e->getMessage()));
         } catch (\Exception $e) {
