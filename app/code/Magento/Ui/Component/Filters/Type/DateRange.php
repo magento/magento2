@@ -80,14 +80,14 @@ class DateRange extends AbstractFilter
             if (!empty($value['from'])) {
                 $value['orig_from'] = $value['from'];
                 $value['from'] = $this->wrappedComponent->convertDate(
-                    strtotime($value['from']),
+                    $value['from'],
                     $this->wrappedComponent->getLocale()
                 );
             }
             if (!empty($value['to'])) {
                 $value['orig_to'] = $value['to'];
                 $value['to'] = $this->wrappedComponent->convertDate(
-                    strtotime($value['to']),
+                    $value['to'],
                     $this->wrappedComponent->getLocale()
                 );
             }

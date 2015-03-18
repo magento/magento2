@@ -331,7 +331,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Created</item>
-                    <item name="dateFormat" xsi:type="string">MMM d, YYYY h:mm:ss A</item>
+                    <item name="dateFormat" xsi:type="string">MMM D, YYYY h:mm:ss A</item>
                 </item>
             </argument>
         </column>
@@ -344,7 +344,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Modified</item>
-                    <item name="dateFormat" xsi:type="string">MMM d, YYYY h:mm:ss A</item>
+                    <item name="dateFormat" xsi:type="string">MMM D, YYYY h:mm:ss A</item>
                 </item>
             </argument>
         </column>
