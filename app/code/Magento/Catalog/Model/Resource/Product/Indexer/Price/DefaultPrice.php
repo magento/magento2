@@ -86,12 +86,14 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Retrieve Product Type Code
      *
      * @return string
-     * @throws \Magento\Catalog\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTypeId()
     {
         if (is_null($this->_typeId)) {
-            throw new \Magento\Catalog\Exception(__('A product type is not defined for the indexer.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('A product type is not defined for the indexer.')
+            );
         }
         return $this->_typeId;
     }

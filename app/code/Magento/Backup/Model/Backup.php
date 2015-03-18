@@ -273,20 +273,20 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      *
      * @param bool $write
      * @return $this
-     * @throws \Magento\Backup\Exception
+     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Backup\Exception\NotEnoughPermissions
      */
     public function open($write = false)
     {
         if (is_null($this->getPath())) {
-            throw new \Magento\Backup\Exception(__('The backup file path was not specified.'));
+            throw new \Magento\Framework\Exception\InputException(__('The backup file path was not specified.'));
         }
 
         if ($write && $this->varDirectory->isFile($this->_getFilePath())) {
             $this->varDirectory->delete($this->_getFilePath());
         }
         if (!$write && !$this->varDirectory->isFile($this->_getFilePath())) {
-            throw new \Magento\Backup\Exception(__('The backup file "%1" does not exist.', $this->getFileName()));
+            throw new \Magento\Framework\Exception\InputException(__('The backup file "%1" does not exist.', $this->getFileName()));
         }
 
         $mode = $write ? 'wb' . self::COMPRESS_RATE : 'rb';
@@ -311,12 +311,12 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      * Get zlib handler
      *
      * @return \Magento\Framework\Filesystem\File\WriteInterface
-     * @throws \Magento\Backup\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function _getStream()
     {
         if (is_null($this->_stream)) {
-            throw new \Magento\Backup\Exception(__('The backup file handler was unspecified.'));
+            throw new \Magento\Framework\Exception\InputException(__('The backup file handler was unspecified.'));
         }
         return $this->_stream;
     }
@@ -347,14 +347,14 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      *
      * @param string $string
      * @return $this
-     * @throws \Magento\Backup\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     public function write($string)
     {
         try {
             $this->_getStream()->write($string);
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
-            throw new \Magento\Backup\Exception(
+            throw new \Magento\Framework\Exception\InputException(
                 __('Something went wrong writing to the backup file "%1".', $this->getFileName())
             );
         }
