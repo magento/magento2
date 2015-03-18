@@ -225,16 +225,6 @@ class Engine extends AbstractDb implements EngineInterface
     }
 
     /**
-     * Define if Layered Navigation is allowed
-     *
-     * @return bool
-     */
-    public function isLayeredNavigationAllowed()
-    {
-        return true;
-    }
-
-    /**
      * Define if engine is available
      *
      * @return bool
