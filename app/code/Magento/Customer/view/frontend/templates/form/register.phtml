@@ -164,7 +164,7 @@
 require([
     'jquery',
     'mage/mage'
-], function(jQuery){
+], function($){
 
     var dataForm = $('#form-validate');
     var ignore = <?php echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
