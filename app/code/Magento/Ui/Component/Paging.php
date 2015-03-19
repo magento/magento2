@@ -35,6 +35,10 @@ class Paging extends AbstractComponent
         $config = $this->getData('config');
         if (isset($config['options'])) {
             $config['options'] = array_values($config['options']);
+            foreach ($config['options'] as &$item) {
+                $item['value'] = (int) $item['value'];
+            }
+            unset($item);
             $this->setData('config', $config);
         }
 
