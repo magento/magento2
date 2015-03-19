@@ -45,10 +45,11 @@ class Cli extends SymfonyApplication
         $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $bootstrap = Bootstrap::create(BP, $params);
-        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-            ->getServiceManager();
+        $objectManager = $bootstrap->getObjectManager();
 
         if (class_exists('Magento\Setup\Console\CommandList')) {
+            $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+                ->getServiceManager();
             $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
             $setupCommands = $setupCommandList->getCommands();
         }
@@ -58,8 +59,7 @@ class Cli extends SymfonyApplication
             $toolsCommands = $toolsCommandList->getCommands();
         }
 
-        if ($serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-            $objectManager = $bootstrap->getObjectManager();
+        if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             $commandList = $objectManager->create(
                 'Magento\Framework\Console\CommandList',
                 ['objectManager'=>$objectManager]
