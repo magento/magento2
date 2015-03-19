@@ -158,6 +158,7 @@ class DataFixture
      * Execute single fixture script
      *
      * @param string|array $fixture
+     * @throws \Exception
      */
     protected function _applyOneFixture($fixture)
     {
