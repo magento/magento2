@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Console;
+namespace Magento\Framework;
 
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Shell\ComplexParameter;
 
 /**
- * Magento2 CLI Application
+ * Magento2 CLI Application. This is the hood for all command line tools supported by Magento.
  *
  * {@inheritdoc}
  */
-class Application extends SymfonyApplication
+class Cli extends SymfonyApplication
 {
     /**
      * {@inheritdoc}
@@ -37,8 +37,6 @@ class Application extends SymfonyApplication
      */
     protected function getApplicationCommands()
     {
-        // TODO: this application class should be moved and probably refactored in scope of MAGETWO-35132
-
         $setupCommands   = [];
         $toolsCommands   = [];
         $modulesCommands = [];
@@ -47,10 +45,10 @@ class Application extends SymfonyApplication
         $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
         $bootstrap = Bootstrap::create(BP, $params);
+        $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
+            ->getServiceManager();
 
         if (class_exists('Magento\Setup\Console\CommandList')) {
-            $serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
-                ->getServiceManager();
             $setupCommandList = new \Magento\Setup\Console\CommandList($serviceManager);
             $setupCommands = $setupCommandList->getCommands();
         }
@@ -60,9 +58,7 @@ class Application extends SymfonyApplication
             $toolsCommands = $toolsCommandList->getCommands();
         }
 
-        // TODO: do we need to change this for better solution?
-        if ($bootstrap->isInstalled()) {
-
+        if ($serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             $objectManager = $bootstrap->getObjectManager();
             $commandList = $objectManager->create(
                 'Magento\Framework\Console\CommandList',
