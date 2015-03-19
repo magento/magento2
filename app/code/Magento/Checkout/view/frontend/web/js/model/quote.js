@@ -36,7 +36,8 @@ define(['mage/storage'], function(storage) {
                 'rest/default/V1/carts/' + this.getQuoteId() + '/shipping-address',
                 JSON.stringify({address: address})
             ).done(
-                function() {
+                function(quoteAddressId) {
+                    address.id = quoteAddressId;
                     shippingAddress = address;
                 }
             );

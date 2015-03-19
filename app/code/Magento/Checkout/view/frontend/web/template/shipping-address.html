@@ -8,11 +8,11 @@
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
                 <div class="control">
-                    <select name="shipping_address_id" id="shipping:address-select" data-bind="options: addresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: function(item) { return item.getEntityId(); }, value: selectedAddressId"></select>
+                    <select name="shipping_address_id" id="shipping:address-select" data-bind="options: addresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: 'customerAddressId', value: selectedAddressId"></select>
                 </div>
             </div>
             <div class="choice field">
-                <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1" checked="checked" class="checkbox" />
+                <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1" checked="checked" class="checkbox" data-bind="checked: sameAsBilling"/>
                 <label class="label" for="shipping:same_as_billing"><span>Use Billing Address</span></label>
             </div>
             <div class="actions-toolbar" id="shipping-buttons-container">

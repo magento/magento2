@@ -8,7 +8,7 @@
             <div class="field addresses">
                 <label class="label" for="billing:address-select"><span>Select a billing address from your address book or enter a new address.</span></label>
                 <div class="control">
-                    <select name="billing_address_id" id="billing:address-select" data-bind="options: billingAddresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: function(item) { return item.getEntityId(); }, value: selectedAddressId"></select>
+                    <select name="billing_address_id" id="billing:address-select" data-bind="options: billingAddresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: 'customerAddressId', value: selectedAddressId"></select>
                 </div>
             </div>
             <div class="field choice">

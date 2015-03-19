@@ -15,7 +15,7 @@ define(['jquery'], function($) {
         getAddressById: function(id) {
             var address = null;
             $.each(addresses, function(key, item) {
-                if (id == item.getEntityId()) {
+                if (id == item.customerAddressId) {
                     address = item;
                     return false;
                 }

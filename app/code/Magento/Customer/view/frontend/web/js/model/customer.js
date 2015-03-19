@@ -15,7 +15,7 @@ define(
     ],
     function($, storage, addressList, address) {
         var isLoaded = false;
-        var isLoggedIn = true;
+        var isLoggedIn = false;
         return {
             customerData: [],
             load: function () {
@@ -28,7 +28,7 @@ define(
                 }
             },
             isLoggedIn: function() {
-                return isLoggedIn;
+                return window.isLoggedIn;
             },
             setIsLoggedIn: function (flag) {
                 isLoggedIn = flag;

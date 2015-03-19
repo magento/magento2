@@ -11,11 +11,11 @@ define([], function() {
         return {
             id: null,
             email: addressData.email,
-            country_id: addressData.country_id,
-            region_id: addressData.region.region_id,
-            region_code: addressData.region.region_code,
+            countryId: addressData.country_id,
+            regionId: addressData.region.region_id,
+            regionCode: addressData.region.region_code,
             region: addressData.region.region,
-            customer_id: addressData.customer_id,
+            customerId: addressData.customer_id,
             street: addressData.street,
             company: addressData.company,
             telephone: addressData.telephone,
@@ -27,12 +27,11 @@ define([], function() {
             middlename: addressData.middlename,
             prefix: addressData.prefix,
             suffix: addressData.suffix,
-            vat_id: addressData.vat_id,
+            vatId: addressData.vat_id,
+            customerAddressId: addressData.id,
+            sameAsBilling: null,
             getFullName: function() {
                 return addressData.region.region + ', ' + addressData.street[0] + ', ' + addressData.city;
-            },
-            getEntityId: function() {
-                return addressData.id;
             }
         }
     }

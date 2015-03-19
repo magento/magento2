@@ -20,14 +20,10 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method Address setUpdatedAt(string $value)
  * @method int getSaveInAddressBook()
  * @method Address setSaveInAddressBook(int $value)
- * @method int getCustomerAddressId()
- * @method Address setCustomerAddressId(int $value)
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddress()
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @method string getAddressType()
  * @method Address setAddressType(string $value)
- * @method int getSameAsBilling()
- * @method Address setSameAsBilling(int $value)
  * @method int getFreeShipping()
  * @method Address setFreeShipping(int $value)
  * @method int getCollectShippingRates()
@@ -1608,6 +1604,38 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function setRegionCode($regionCode)
     {
         return $this->setData(self::KEY_REGION_CODE, $regionCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSameAsBilling()
+    {
+        return $this->getData(self::SAME_AS_BILLING);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSameAsBilling($sameAsBilling)
+    {
+        return $this->setData(self::SAME_AS_BILLING, $sameAsBilling);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerAddressId()
+    {
+        return $this->getData(self::CUSTOMER_ADDRESS_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerAddressId($customerAddressId)
+    {
+        return $this->setData(self::CUSTOMER_ADDRESS_ID, $customerAddressId);
     }
     //@codeCoverageIgnoreEnd
 

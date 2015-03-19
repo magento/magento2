@@ -9,8 +9,9 @@
 define(
     ['../model/quote', '../model/addresslist'],
     function(quote, addressList) {
-        return function(shippingAddressId, formKey) {
+        return function(shippingAddressId, sameAsBilling, formKey) {
             var address = addressList.getAddressById(shippingAddressId);
+            address.sameAsBilling = sameAsBilling;
             return quote.setShippingAddress(address);
         }
     }
