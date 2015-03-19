@@ -30,7 +30,7 @@ interface BlockInterface
     public function getId();
 
     /**
-     * Get Identifier
+     * Get identifier
      *
      * @return string
      */
@@ -80,7 +80,7 @@ interface BlockInterface
     public function setId($id);
 
     /**
-     * Set Identifier
+     * Set identifier
      *
      * @param string $identifier
      * @return BlockInterface

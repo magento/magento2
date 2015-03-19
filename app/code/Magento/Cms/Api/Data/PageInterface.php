@@ -41,7 +41,7 @@ interface PageInterface
     public function getId();
 
     /**
-     * Get Identifier
+     * Get identifier
      *
      * @return string
      */
@@ -168,7 +168,7 @@ interface PageInterface
     public function setId($id);
 
     /**
-     * Set Identifier
+     * Set identifier
      *
      * @param string $identifier
      * @return \Magento\Cms\Api\Data\PageInterface

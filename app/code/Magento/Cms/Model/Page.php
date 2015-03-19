@@ -127,7 +127,7 @@ class Page extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get Identifier
+     * Get identifier
      *
      * @return string
      */
@@ -308,7 +308,7 @@ class Page extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Set Identifier
+     * Set identifier
      *
      * @param string $identifier
      * @return \Magento\Cms\Api\Data\PageInterface

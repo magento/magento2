@@ -150,7 +150,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
     }
 
     /**
-     * Set Identifier
+     * Set identifier
      *
      * @param string $identifier
      * @return BlockInterface

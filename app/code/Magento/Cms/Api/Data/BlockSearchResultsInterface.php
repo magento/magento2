@@ -15,7 +15,7 @@ interface BlockSearchResultsInterface extends SearchResultsInterface
     /**
      * Get blocks list.
      *
-     * @return \Magento\Cms\Api\Data\PageInterface[]
+     * @return \Magento\Cms\Api\Data\BlockInterface[]
      */
     public function getItems();
 
