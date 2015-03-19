@@ -34,4 +34,11 @@ interface ActionInterface
      * @return ResponseInterface
      */
     public function getResponse();
+
+    /**
+     * Redirect to custom, previous or main page
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    public function getDefaultRedirect();
 }
