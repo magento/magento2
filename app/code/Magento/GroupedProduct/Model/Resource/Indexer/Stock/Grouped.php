@@ -89,7 +89,7 @@ class Grouped extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Def
 
         $select->columns(['status' => $stockStatusExpr]);
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 

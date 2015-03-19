@@ -43,11 +43,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
-        $this->_filesystemDriverMock = $this->getMock(
-            'Magento\Framework\Filesystem\Driver\File',
-            ['isWritable', 'filePutContents', 'createDirectory', 'isExists'],
-            []
-        );
+        $this->_filesystemDriverMock = $this->getMock('Magento\Framework\Filesystem\Driver\File');
 
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
@@ -77,16 +73,19 @@ class IoTest extends \PHPUnit_Framework_TestCase
 
     public function testWriteResultFile()
     {
-        $this->_filesystemDriverMock->expects(
-            $this->once()
-        )->method(
-            'filePutContents'
-        )->with(
-            $this->equalTo(self::FILE_NAME),
-            $this->equalTo("<?php\n" . self::FILE_CONTENT)
-        )->will(
-            $this->returnValue(true)
-        );
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('filePutContents')
+            ->with(
+                $this->stringContains(self::FILE_NAME),
+                "<?php\n" . self::FILE_CONTENT
+            )->willReturn(true);
+
+        $this->_filesystemDriverMock->expects($this->once())
+            ->method('rename')
+            ->with(
+                $this->stringContains(self::FILE_NAME),
+                self::FILE_NAME
+            )->willReturn(true);
 
         $this->assertTrue($this->_object->writeResultFile(self::FILE_NAME, self::FILE_CONTENT));
     }

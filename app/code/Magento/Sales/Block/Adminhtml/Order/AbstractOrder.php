@@ -73,7 +73,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     public function getPriceDataObject()
     {
         $obj = $this->getData('price_data_object');
-        if (is_null($obj)) {
+        if ($obj === null) {
             return $this->getOrder();
         }
         return $obj;

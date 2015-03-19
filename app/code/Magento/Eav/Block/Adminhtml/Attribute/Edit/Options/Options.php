@@ -247,7 +247,7 @@ class Options extends \Magento\Backend\Block\Template
     public function getStoreOptionValues($storeId)
     {
         $values = $this->getData('store_option_values_' . $storeId);
-        if (is_null($values)) {
+        if ($values === null) {
             $values = [];
             $valuesCollection = $this->_attrOptionCollectionFactory->create()->setAttributeFilter(
                 $this->getAttributeObject()->getId()

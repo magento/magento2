@@ -112,7 +112,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getTypeId()
     {
-        if (is_null($this->_typeId)) {
+        if ($this->_typeId === null) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Undefined product type'));
         }
         return $this->_typeId;
@@ -204,7 +204,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
 
         $select->columns(['status' => $statusExpr]);
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 

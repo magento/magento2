@@ -624,7 +624,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 $mockClass
             );
         }
-        if (is_null($this->_layout)) {
+        if ($this->_layout === null) {
             $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 'Magento\Framework\View\LayoutInterface'
             );

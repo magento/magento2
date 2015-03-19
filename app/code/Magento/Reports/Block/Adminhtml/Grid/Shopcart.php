@@ -45,7 +45,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getCurrentCurrencyCode()
     {
-        if (is_null($this->_currentCurrencyCode)) {
+        if ($this->_currentCurrencyCode === null) {
             reset($this->_storeIds);
             $this->_currentCurrencyCode = count(
                 $this->_storeIds

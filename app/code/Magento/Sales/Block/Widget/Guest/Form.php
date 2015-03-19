@@ -72,7 +72,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
     protected function _getFormOptions()
     {
         $options = $this->getData('identifymeby_options');
-        if (is_null($options)) {
+        if ($options === null) {
             $options = [];
             $options[] = ['value' => 'email', 'label' => 'Email Address'];
             $options[] = ['value' => 'zip', 'label' => 'ZIP Code'];

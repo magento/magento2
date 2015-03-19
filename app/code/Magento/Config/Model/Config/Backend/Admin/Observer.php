@@ -65,7 +65,7 @@ class Observer
      */
     public function afterCustomUrlChanged()
     {
-        if (is_null($this->_coreRegistry->registry('custom_admin_path_redirect'))) {
+        if ($this->_coreRegistry->registry('custom_admin_path_redirect') === null) {
             return;
         }
 

@@ -32,7 +32,7 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     public function beforeSave($object)
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        if ($object->isObjectNew() && is_null($object->getData($attributeCode))) {
+        if ($object->isObjectNew() && $object->getData($attributeCode) === null) {
             $object->setData(
                 $attributeCode,
                 (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)

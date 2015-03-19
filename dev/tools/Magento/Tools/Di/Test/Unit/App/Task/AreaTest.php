@@ -19,7 +19,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     private $areaListMock;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Area | \PHPUnit_Framework_MockObject_MockObject
      */
     private $areaInstancesNamesList;
 
@@ -43,7 +43,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->areaListMock = $this->getMockBuilder('Magento\Framework\App\AreaList')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->areaInstancesNamesList = $this->getMockBuilder('\Magento\Tools\Di\Code\Reader\InstancesNamesList\Area')
+        $this->areaInstancesNamesList = $this->getMockBuilder('\Magento\Tools\Di\Code\Reader\Decorator\Area')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configReaderMock = $this->getMockBuilder('Magento\Tools\Di\Compiler\Config\Reader')

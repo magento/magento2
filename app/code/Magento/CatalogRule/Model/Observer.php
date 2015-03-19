@@ -184,7 +184,7 @@ class Observer
             $pId = $product->getId();
 
             $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";
-        } elseif (!is_null($product->getWebsiteId()) && !is_null($product->getCustomerGroupId())) {
+        } elseif ($product->getWebsiteId() !== null && $product->getCustomerGroupId() !== null) {
             $wId = $product->getWebsiteId();
             $gId = $product->getCustomerGroupId();
             $pId = $product->getId();
@@ -267,7 +267,7 @@ class Observer
         if ($observer->getEvent()->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = new \DateTime('@' . $this->_localeDate->scopeTimeStamp($store));
+            $date = (new \DateTime())->setTimestamp($this->_localeDate->scopeTimeStamp($store));
         }
 
         $productIds = [];

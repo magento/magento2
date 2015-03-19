@@ -480,7 +480,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
 
         $array = $this->getData('products_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getProductsPosition($this);
             $this->setData('products_position', $array);
         }
@@ -784,7 +784,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getPathIds()
     {
         $ids = $this->getData('path_ids');
-        if (is_null($ids)) {
+        if ($ids === null) {
             $ids = explode('/', $this->getPath());
             $this->setData('path_ids', $ids);
         }

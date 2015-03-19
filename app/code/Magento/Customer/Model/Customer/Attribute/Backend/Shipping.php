@@ -19,7 +19,7 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     public function beforeSave($object)
     {
         $defaultShipping = $object->getDefaultShipping();
-        if (is_null($defaultShipping)) {
+        if ($defaultShipping === null) {
             $object->unsetDefaultShipping();
         }
     }

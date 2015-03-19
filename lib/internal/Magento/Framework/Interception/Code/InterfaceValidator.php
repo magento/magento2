@@ -50,7 +50,7 @@ class InterfaceValidator
         foreach ($plugin->getMethods(\ReflectionMethod::IS_PUBLIC) as $pluginMethod) {
             /** @var  $pluginMethod \ReflectionMethod */
             $originMethodName = $this->getOriginMethodName($pluginMethod->getName());
-            if (is_null($originMethodName)) {
+            if ($originMethodName === null) {
                 continue;
             }
             if (!$type->hasMethod($originMethodName)) {
@@ -75,9 +75,7 @@ class InterfaceValidator
             if (!$this->_argumentsReader->isCompatibleType(
                 $subject['type'],
                 $interceptedType
-            ) || is_null(
-                $subject['type']
-            )
+            ) || $subject['type'] === null
             ) {
                 throw new ValidatorException(
                     'Invalid [' .

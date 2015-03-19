@@ -88,7 +88,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function setStoreFilter($storeId = null, $useDefaultValue = true)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->_storeManager->getStore()->getId();
         }
         $adapter = $this->getConnection();
