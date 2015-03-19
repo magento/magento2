@@ -36,7 +36,7 @@ class Upload extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
