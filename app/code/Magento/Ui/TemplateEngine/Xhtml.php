@@ -72,6 +72,7 @@ class Xhtml implements TemplateEngineInterface
      * @param string $templateFile
      * @param array $dictionary
      * @return Result
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function render(BlockInterface $block, $templateFile, array $dictionary = [])
     {

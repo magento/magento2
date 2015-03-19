@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Element\UiComponent\ConfigProviderInterface" type="Magento\Framework\View\Element\UiComponent\ConfigProvider" />
+    <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Container\Component" />
     <preference for="Magento\Framework\View\Element\UiComponent\ConfigInterface" type="Magento\Ui\Context\Configuration" />
     <preference for="Magento\Framework\View\Element\UiComponent\ConfigStorageInterface" type="Magento\Ui\Context\ConfigurationStorage" />
     <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />

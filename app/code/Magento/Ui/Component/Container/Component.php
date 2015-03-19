@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Element\UiComponent;
+namespace Magento\Ui\Component\Container;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Ui\Component\Container\BlockFactory;
 
 /**
- * Class TemplateAdapter
+ * Class Component
  */
-class TemplateAdapter extends Template
+class Component extends Template implements ContainerInterface
 {
     /**
      * Ui component

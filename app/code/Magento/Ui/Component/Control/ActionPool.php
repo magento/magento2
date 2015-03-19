@@ -77,6 +77,7 @@ class ActionPool implements ActionPoolInterface
      * @param string $key
      * @param array $data
      * @param UiComponentInterface $component
+     * @return void
      */
     public function add($key, array $data, UiComponentInterface $component)
     {

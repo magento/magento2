@@ -65,7 +65,7 @@ interface ManagerInterface
     /**
      * Get UIReader and collect base files configuration
      *
-     * @param $name
+     * @param string $name
      * @return UiReaderInterface
      */
     public function getReader($name);

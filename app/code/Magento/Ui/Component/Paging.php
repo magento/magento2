@@ -32,6 +32,47 @@ class Paging extends AbstractComponent
         parent::prepare();
 
         $this->prepareConfiguration();
+        $this->prepareOptions();
+
+        $paging = $this->getContext()->getRequestParam('paging');
+
+        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging),  $this->getSize($paging));
+
+        $jsConfig = $this->getConfiguration($this);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+    }
+
+    /**
+     * Get offset
+     *
+     * @param array|null $paging
+     * @return int
+     */
+    protected function getOffset($paging)
+    {
+        $defaultPage = $this->getData('config/current') ?: 1;
+        return (int) (isset($paging['current']) ? $paging['current'] : $defaultPage);
+    }
+
+    /**
+     * Get size
+     *
+     * @param array|null $paging
+     * @return int
+     */
+    protected function getSize($paging)
+    {
+        $defaultLimit = $this->getData('config/pageSize') ?: 20;
+        return (int) (isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit);
+    }
+
+    /**
+     * Prepare paging options
+     *
+     * @return void
+     */
+    protected function prepareOptions()
+    {
         $config = $this->getData('config');
         if (isset($config['options'])) {
             $config['options'] = array_values($config['options']);
@@ -41,18 +82,6 @@ class Paging extends AbstractComponent
             unset($item);
             $this->setData('config', $config);
         }
-
-        $defaultPage = $this->getData('config/current') ?: 1;
-        $defaultLimit = $this->getData('config/pageSize') ?: 20;
-        $paging = $this->getContext()->getRequestParam('paging');
-
-        $offset = isset($paging['current']) ? $paging['current'] : $defaultPage;
-        $size = isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit;
-
-        $this->getContext()->getDataProvider()->setLimit($offset, $size);
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
     /**
