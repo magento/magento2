@@ -88,25 +88,17 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     protected $_catalogCategory;
 
     /**
-     * @var Registry
-     */
-    protected $registry;
-
-    /**
      * Construct
      *
-     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param Collection\Factory $collectionFactory
-     * @throws \Exception
+     * @param \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
      */
     public function __construct(
-        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Resource\Category $catalogCategory,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -115,7 +107,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\Category\Collection\Factory $collectionFactory
     ) {
-        $this->registry = $registry;
         $this->_catalogCategory = $catalogCategory;
         $this->_cache = $cache;
         $this->_storeManager = $storeManager;
@@ -224,11 +215,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
                     $this->removeNode($node);
                 }
             }
-        }
-
-        $category = $this->registry->registry('current_category');
-        if ($category && $category->getId()) {
-            $this->getNodeById($category->getId())->setIsCurrentItem(true);
         }
 
         return $this;
