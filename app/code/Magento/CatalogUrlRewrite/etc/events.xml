@@ -9,9 +9,6 @@
     <event name="catalog_category_prepare_save">
         <observer name="category_save_rewrites_history_setter" instance="Magento\CatalogUrlRewrite\Observer\CategorySaveRewritesHistorySetter" method="invoke"/>
     </event>
-    <event name="catalog_category_save_before">
-        <observer name="category_url_path_autogeneration" instance="Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogenerator" method="invoke"/>
-    </event>
     <event name="catalog_category_save_after">
         <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Model\Category\Observer" method="processUrlRewriteSaving"/>
     </event>
