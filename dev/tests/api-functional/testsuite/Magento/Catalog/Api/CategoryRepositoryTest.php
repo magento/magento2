@@ -110,7 +110,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function testDelete()
     {
         /** @var \Magento\UrlRewrite\Model\Storage\DbStorage $storage */
-        $storage = Bootstrap::getObjectManager()->get('Magento\UrlRewrite\Model\Storage\DbStorage');;
+        $storage = Bootstrap::getObjectManager()->get('Magento\UrlRewrite\Model\Storage\DbStorage');
         $categoryId = $this->modelId;
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
