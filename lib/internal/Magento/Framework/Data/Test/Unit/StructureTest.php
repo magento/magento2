@@ -206,6 +206,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([5], $this->_structure->getElement('five'));
 
         // recursively
+        $this->assertTrue($this->_structure->unsetElement('three'));
         $this->assertTrue($this->_structure->unsetElement('four'));
         $this->assertSame(['one' => [], 'five' => [5]], $this->_structure->exportElements());
     }
