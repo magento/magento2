@@ -16,6 +16,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
      * @param array|int|null $ids
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids = null)
     {
