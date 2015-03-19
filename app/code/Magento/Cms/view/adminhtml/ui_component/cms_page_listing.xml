@@ -132,11 +132,11 @@
                 </item>
             </argument>
         </filterInput>
-        <filterSelect name="layout">
+        <filterSelect name="page_layout">
             <argument name="optionsProvider" xsi:type="object">Magento\Cms\Model\Page\Source\PageLayout</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataScope" xsi:type="string">layout</item>
+                    <item name="dataScope" xsi:type="string">page_layout</item>
                     <item name="template" xsi:type="string" translate="true">ui/grid/filters/elements/select</item>
                     <item name="label" xsi:type="string" translate="true">Layout</item>
                     <item name="caption" xsi:type="string" translate="true">Select...</item>
