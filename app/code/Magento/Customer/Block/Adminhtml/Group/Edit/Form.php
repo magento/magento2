@@ -73,7 +73,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
-        if (is_null($groupId)) {
+        if ($groupId === null) {
             $customerGroup = $this->groupDataFactory->create();
             $defaultCustomerTaxClass = $this->_taxHelper->getDefaultCustomerTaxClass();
         } else {
@@ -120,7 +120,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        if (!is_null($customerGroup->getId())) {
+        if ($customerGroup->getId() !== null) {
             // If edit add id
             $form->addField('id', 'hidden', ['name' => 'id', 'value' => $customerGroup->getId()]);
         }

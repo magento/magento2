@@ -39,7 +39,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
         $resultPage->addBreadcrumb(__('Customers'), __('Customers'));
         $resultPage->addBreadcrumb(__('Customer Groups'), __('Customer Groups'), $this->getUrl('customer/group'));
 
-        if (is_null($groupId)) {
+        if ($groupId === null) {
             $resultPage->addBreadcrumb(__('New Group'), __('New Customer Groups'));
             $resultPage->getConfig()->getTitle()->prepend(__('New Customer Group'));
         } else {

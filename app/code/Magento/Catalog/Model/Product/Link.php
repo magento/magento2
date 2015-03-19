@@ -148,7 +148,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     public function getAttributes($type = null)
     {
-        if (is_null($type)) {
+        if ($type === null) {
             $type = $this->getLinkTypeId();
         }
         if (!isset($this->_attributes[$type])) {
@@ -167,15 +167,15 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function saveProductRelations($product)
     {
         $data = $product->getRelatedLinkData();
-        if (!is_null($data)) {
+        if ($data !== null) {
             $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_RELATED);
         }
         $data = $product->getUpSellLinkData();
-        if (!is_null($data)) {
+        if ($data !== null) {
             $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_UPSELL);
         }
         $data = $product->getCrossSellLinkData();
-        if (!is_null($data)) {
+        if ($data !== null) {
             $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_CROSSSELL);
         }
         return $this;

@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * Application area model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {
@@ -127,7 +129,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      */
     public function load($part = null)
     {
-        if (is_null($part)) {
+        if ($part === null) {
             $this->_loadPart(self::PART_CONFIG)->_loadPart(self::PART_DESIGN)->_loadPart(self::PART_TRANSLATE);
         } else {
             $this->_loadPart($part);

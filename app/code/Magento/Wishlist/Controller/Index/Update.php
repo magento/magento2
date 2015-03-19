@@ -88,7 +88,7 @@ class Update extends Action\Action implements IndexInterface
                 if (isset($post['qty'][$itemId])) {
                     $qty = $this->quantityProcessor->process($post['qty'][$itemId]);
                 }
-                if (is_null($qty)) {
+                if ($qty === null) {
                     $qty = $item->getQty();
                     if (!$qty) {
                         $qty = 1;

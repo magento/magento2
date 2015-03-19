@@ -72,15 +72,15 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
      */
     protected function getUserContext()
     {
-        if (is_null($this->chosenUserContext)) {
+        if ($this->chosenUserContext === null) {
             /** @var UserContextInterface $userContext */
             foreach ($this->userContexts as $userContext) {
-                if ($userContext->getUserType() && !is_null($userContext->getUserId())) {
+                if ($userContext->getUserType() && $userContext->getUserId() !== null) {
                     $this->chosenUserContext = $userContext;
                     break;
                 }
             }
-            if (is_null($this->chosenUserContext)) {
+            if ($this->chosenUserContext === null) {
                 $this->chosenUserContext = false;
             }
         }

@@ -88,7 +88,7 @@ class Comments extends \Magento\Framework\View\Element\Template
      */
     public function getComments()
     {
-        if (is_null($this->_commentCollection)) {
+        if ($this->_commentCollection === null) {
             $entity = $this->getEntity();
             if ($entity instanceof \Magento\Sales\Model\Order\Invoice) {
                 $this->_commentCollection = $this->_invoiceCollectionFactory->create();

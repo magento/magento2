@@ -705,7 +705,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         ];
         foreach ($dataInModel as $key => $value) {
             if (!in_array($key, $expectedDifferences)) {
-                if (is_null($value)) {
+                if ($value === null) {
                     $this->assertArrayNotHasKey($key, $dataInService);
                 } else {
                     $this->assertEquals($value, $dataInService[$key], 'Failed asserting value for ' . $key);

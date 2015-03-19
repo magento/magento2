@@ -6,11 +6,11 @@
 namespace Magento\Tools\Di\Code\Reader;
 
 /**
- * Interface InstancesNamesList
+ * Interface ClassesScannerInterface
  *
  * @package Magento\Tools\Di\Code\Reader
  */
-interface InstancesNamesListInterface
+interface ClassesScannerInterface
 {
 
     /**

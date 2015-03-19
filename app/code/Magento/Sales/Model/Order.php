@@ -367,7 +367,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function unsetData($key = null)
     {
         parent::unsetData($key);
-        if (is_null($key)) {
+        if ($key === null) {
             $this->setItems(null);
         }
         return $this;
@@ -1544,7 +1544,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getRealOrderId()
     {
         $id = $this->getData('real_order_id');
-        if (is_null($id)) {
+        if ($id === null) {
             $id = $this->getIncrementId();
         }
         return $id;
@@ -1557,7 +1557,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getOrderCurrency()
     {
-        if (is_null($this->_orderCurrency)) {
+        if ($this->_orderCurrency === null) {
             $this->_orderCurrency = $this->_currencyFactory->create();
             $this->_orderCurrency->load($this->getOrderCurrencyCode());
         }
@@ -1605,7 +1605,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getBaseCurrency()
     {
-        if (is_null($this->_baseCurrency)) {
+        if ($this->_baseCurrency === null) {
             $this->_baseCurrency = $this->_currencyFactory->create()->load($this->getBaseCurrencyCode());
         }
         return $this->_baseCurrency;
@@ -1685,7 +1685,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getInvoiceCollection()
     {
-        if (is_null($this->_invoices)) {
+        if ($this->_invoices === null) {
             $this->_invoices = $this->_invoiceCollectionFactory->create()->setOrderFilter($this);
 
             if ($this->getId()) {
@@ -1855,7 +1855,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getStoreGroupName()
     {
         $storeId = $this->getStoreId();
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             return $this->getStoreName(1);
         }
         return $this->getStore()->getGroup()->getName();

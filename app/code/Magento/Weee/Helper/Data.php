@@ -243,7 +243,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 break;
         }
 
-        if (is_null($compareTo)) {
+        if ($compareTo === null) {
             return $type;
         } else {
             if (is_array($compareTo)) {

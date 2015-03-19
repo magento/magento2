@@ -240,7 +240,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getAttributes()
     {
         $attributes = $this->getData('attributes');
-        if (is_null($attributes)) {
+        if ($attributes === null) {
             $product = $this->_productFactory->create();
             $attributes = $this->_attributeCollectionFactory
                 ->create()
@@ -264,7 +264,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      */
     public function getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
+        if ($this->_productCollection === null) {
             $collection = $this->productCollectionFactory->create();
             $this->prepareProductCollection($collection);
             if (!$collection) {

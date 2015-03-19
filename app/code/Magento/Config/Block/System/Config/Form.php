@@ -513,7 +513,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getScope()
     {
         $scope = $this->getData('scope');
-        if (is_null($scope)) {
+        if ($scope === null) {
             if ($this->getStoreCode()) {
                 $scope = self::SCOPE_STORES;
             } elseif ($this->getWebsiteCode()) {
@@ -554,7 +554,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getScopeCode()
     {
         $scopeCode = $this->getData('scope_code');
-        if (is_null($scopeCode)) {
+        if ($scopeCode === null) {
             if ($this->getStoreCode()) {
                 $scopeCode = $this->getStoreCode();
             } elseif ($this->getWebsiteCode()) {
@@ -576,7 +576,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getScopeId()
     {
         $scopeId = $this->getData('scope_id');
-        if (is_null($scopeId)) {
+        if ($scopeId === null) {
             if ($this->getStoreCode()) {
                 $scopeId = $this->_storeManager->getStore($this->getStoreCode())->getId();
             } elseif ($this->getWebsiteCode()) {
