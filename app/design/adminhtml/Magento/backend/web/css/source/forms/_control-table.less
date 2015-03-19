@@ -26,9 +26,9 @@
     }
     td,
     th {
-        background: #efefef;
+        background: @color-white-dark-smoke;
         border: 0;
-        border-bottom: 1px solid #fff;
+        border-bottom: 1px solid @color-white;
         padding: 1.3rem 2.5rem 1.3rem 0;
         text-align: left;
         &:first-child {
@@ -38,14 +38,16 @@
     th {
         border: 0;
         vertical-align: bottom;
-        color: #303030;
+        color: @color-very-dark-gray-black;
         font-size: @font-size__base;
         font-weight: @font-weight__semibold;
         padding-bottom: 0;
         &._required {
-            span:after {
-                color: @field-label__required__color;
-                content: '*';
+            span {
+                &:after {
+                    color: @field-label__required__color;
+                    content: '*';
+                }
             }
         }
     }
