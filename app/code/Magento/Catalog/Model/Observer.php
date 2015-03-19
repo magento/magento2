@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**
