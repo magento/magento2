@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FrontController implements FrontControllerInterface
 {
     /**
@@ -64,33 +67,7 @@ class FrontController implements FrontControllerInterface
         $routingCycleCounter = 0;
         $result = null;
         while (!$request->isDispatched() && $routingCycleCounter++ < 100) {
-            /** @var \Magento\Framework\App\RouterInterface $router */
-            foreach ($this->_routerList as $router) {
-                try {
-                    $actionInstance = $router->match($request);
-                    if ($actionInstance) {
-                        $request->setDispatched(true);
-                        $actionInstance->getResponse()->setNoCacheHeaders();
-                        $result = $actionInstance->dispatch($request);
-                        break;
-                    }
-                } catch (Action\NotFoundException $e) {
-                    $request->initForward();
-                    $request->setActionName('noroute');
-                    $request->setDispatched(false);
-                    break;
-                } catch (\Magento\Framework\LocalizedException $e) {
-                    $result = $this->handleException($e, $actionInstance, $e->getMessage());
-                    break;
-                } catch (\Exception $e) {
-                    // @todo Message should be clarified
-                    $message = $this->appState->getMode() == State::MODE_DEVELOPER
-                        ? $e->getMessage()
-                        : (string)new \Magento\Framework\Phrase('An error occurred while processing your request');
-                    $result = $this->handleException($e, $actionInstance, $message);
-                    break;
-                }
-            }
+            $result = $this->matchAction($request);
         }
         \Magento\Framework\Profiler::stop('routers_match');
         if ($routingCycleCounter > 100) {
@@ -112,5 +89,44 @@ class FrontController implements FrontControllerInterface
         $this->messageManager->addError($message);
         $this->logger->critical($e->getMessage());
         return $actionInstance->getDefaultRedirect();
+    }
+
+    /**
+     * Match action, dispatch
+     *
+     * @param RequestInterface $request
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    protected function matchAction(RequestInterface $request)
+    {
+        $result = null;
+        /** @var \Magento\Framework\App\RouterInterface $router */
+        foreach ($this->_routerList as $router) {
+            try {
+                $actionInstance = $router->match($request);
+                if ($actionInstance) {
+                    $request->setDispatched(true);
+                    $actionInstance->getResponse()->setNoCacheHeaders();
+                    $result = $actionInstance->dispatch($request);
+                    break;
+                }
+            } catch (Action\NotFoundException $e) {
+                $request->initForward();
+                $request->setActionName('noroute');
+                $request->setDispatched(false);
+                break;
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $result = $this->handleException($e, $actionInstance, $e->getMessage());
+                break;
+            } catch (\Exception $e) {
+                // @todo Message should be clarified
+                $message = $this->appState->getMode() == State::MODE_DEVELOPER
+                    ? $e->getMessage()
+                    : (string)new \Magento\Framework\Phrase('An error occurred while processing your request');
+                $result = $this->handleException($e, $actionInstance, $message);
+                break;
+            }
+        }
+        return $result;
     }
 }
