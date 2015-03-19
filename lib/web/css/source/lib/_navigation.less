@@ -87,6 +87,20 @@
                 .css(text-transform, @_nav-level0-text-transform);
                 word-break: break-all;
             }
+            &.active {
+                .all-category {
+                    .ui-state-focus {
+                        .css(background, @_nav-level0-item-background-color-active);
+                        .css(border-color, @_nav-level0-item__active__border-color);
+                        .css(border-style, @_nav-level0-item__active__border-style);
+                        .css(border-width, @_nav-level0-item__active__border-width);
+                        .css(color, @_nav-level0-item-color-active);
+                        .css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
+                        .css(text-decoration, @_nav-level0-item-text-decoration-active);
+                        display: inline-block;
+                    }
+                }
+            }
             > .level1 {
                 font-weight: @font-weight__semibold;
             }
@@ -161,8 +175,8 @@
                         .css(border-style, @_submenu-item__active__border-style);
                         .css(border-width, @_submenu-item__active__border-width);
                         .css(color, @_submenu-item-color-active);
+                        .css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
                         .css(text-decoration, @_submenu-item-text-decoration-active);
-                        padding-left: @_nav__indent-side - @_submenu-item__active__border;
                     }
                 }
                 .level1 {
