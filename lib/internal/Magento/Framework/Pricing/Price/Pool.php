@@ -102,7 +102,7 @@ class Pool implements \Iterator, \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->prices[] = $value;
         } else {
             $this->prices[$offset] = $value;

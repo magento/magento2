@@ -142,7 +142,7 @@ class InterceptionConfigurationBuilder
     {
         $filteredData = [];
         foreach ($pluginInheritance as $instance => $plugins) {
-            if (is_null($plugins) || !$this->typeReader->isConcrete($instance)) {
+            if ($plugins === null || !$this->typeReader->isConcrete($instance)) {
                 continue;
             }
 

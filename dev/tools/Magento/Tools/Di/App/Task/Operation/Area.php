@@ -18,7 +18,7 @@ class Area implements OperationInterface
     private $areaList;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Area
      */
     private $areaInstancesNamesList;
 
@@ -44,7 +44,7 @@ class Area implements OperationInterface
 
     /**
      * @param App\AreaList $areaList
-     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList
+     * @param \Magento\Tools\Di\Code\Reader\Decorator\Area $areaInstancesNamesList
      * @param Config\Reader $configReader
      * @param Config\WriterInterface $configWriter
      * @param \Magento\Tools\Di\Compiler\Config\ModificationChain $modificationChain
@@ -52,7 +52,7 @@ class Area implements OperationInterface
      */
     public function __construct(
         App\AreaList $areaList,
-        \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area $areaInstancesNamesList,
+        \Magento\Tools\Di\Code\Reader\Decorator\Area $areaInstancesNamesList,
         Config\Reader $configReader,
         Config\WriterInterface $configWriter,
         Config\ModificationChain $modificationChain,

@@ -45,7 +45,7 @@ class Cli
             return $default;
         }
         $value = static::$_getopt->getOption($key);
-        if (is_null($value)) {
+        if ($value === null) {
             return $default;
         }
         return $value;

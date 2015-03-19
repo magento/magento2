@@ -15,7 +15,7 @@ class InterceptionCacheTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tools\Di\Code\Reader\Decorator\Interceptions
      */
     private $interceptionsListMock;
 
@@ -26,7 +26,7 @@ class InterceptionCacheTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->interceptionsListMock = $this->getMockBuilder(
-            'Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions'
+            'Magento\Tools\Di\Code\Reader\Decorator\Interceptions'
         )
             ->setMethods([])
             ->disableOriginalConstructor()

@@ -41,9 +41,8 @@ class SuperProductsSku extends AbstractValidator implements RowValidatorInterfac
         $oldSku = $this->skuProcessor->getOldSkus();
         if (!empty($value['_super_products_sku']) && (!isset(
                 $oldSku[$value['_super_products_sku']]
-            ) && is_null(
-                $this->skuProcessor->getNewSku($value['_super_products_sku'])
-            ))
+            ) && $this->skuProcessor->getNewSku($value['_super_products_sku']) === null
+            )
         ) {
             $this->_addMessages([self::ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND]);
             return false;

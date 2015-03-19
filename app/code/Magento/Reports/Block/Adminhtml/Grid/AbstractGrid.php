@@ -98,7 +98,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getCollection()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->setCollection($this->_collectionFactory->create());
         }
         return $this->_collection;
@@ -109,7 +109,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _getAggregatedColumns()
     {
-        if (is_null($this->_aggregatedColumns)) {
+        if ($this->_aggregatedColumns === null) {
             foreach ($this->getColumns() as $column) {
                 if (!is_array($this->_aggregatedColumns)) {
                     $this->_aggregatedColumns = [];
@@ -354,7 +354,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getCurrentCurrencyCode()
     {
-        if (is_null($this->_currentCurrencyCode)) {
+        if ($this->_currentCurrencyCode === null) {
             $this->_currentCurrencyCode = count(
                 $this->_storeIds
             ) > 0 ? $this->_storeManager->getStore(

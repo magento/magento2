@@ -20,18 +20,18 @@ class InterceptionCache implements OperationInterface
     private $configInterface;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Interceptions
      */
     private $interceptionsInstancesNamesList;
 
     /**
      * @param \Magento\Framework\Interception\Config\Config $configInterface
-     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions $interceptionsInstancesNamesList
+     * @param \Magento\Tools\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
-        \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions $interceptionsInstancesNamesList,
+        \Magento\Tools\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList,
         array $data = []
     ) {
         $this->configInterface = $configInterface;

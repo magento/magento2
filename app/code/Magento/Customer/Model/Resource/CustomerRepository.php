@@ -306,17 +306,17 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
 
         $dob = $this->getAttributeMetadata('dob');
-        if (!is_null($dob) && $dob->isRequired() && '' == trim($customer->getDob())) {
+        if ($dob !== null && $dob->isRequired() && '' == trim($customer->getDob())) {
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']));
         }
 
         $taxvat = $this->getAttributeMetadata('taxvat');
-        if (!is_null($taxvat) && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
+        if ($taxvat !== null && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']));
         }
 
         $gender = $this->getAttributeMetadata('gender');
-        if (!is_null($gender) && $gender->isRequired() && '' == trim($customer->getGender())) {
+        if ($gender !== null && $gender->isRequired() && '' == trim($customer->getGender())) {
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']));
         }
 

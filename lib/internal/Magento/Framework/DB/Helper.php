@@ -218,7 +218,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                         $preparedColumns[strtoupper($col)] = [$correlationName, $col, null];
                     }
                 } else {
-                    $columnKey = is_null($alias) ? $column : $alias;
+                    $columnKey = $alias === null ? $column : $alias;
                     $preparedColumns[strtoupper($columnKey)] = [$correlationName, $column, $alias];
                 }
             }

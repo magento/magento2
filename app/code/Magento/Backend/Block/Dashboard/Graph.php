@@ -545,7 +545,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     protected function _prepareData()
     {
-        if (!is_null($this->_dataHelper)) {
+        if ($this->_dataHelper !== null) {
             $availablePeriods = array_keys($this->_dashboardData->getDatePeriods());
             $period = $this->getRequest()->getParam('period');
             $this->getDataHelper()->setParam(

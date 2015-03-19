@@ -320,7 +320,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
 
         $customAttributes = $customer->getCustomAttributes();
-        if (!is_null($customAttributes)) {
+        if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
                 $this->setDataUsingMethod($attribute->getAttributeCode(), $attribute->getValue());
             }

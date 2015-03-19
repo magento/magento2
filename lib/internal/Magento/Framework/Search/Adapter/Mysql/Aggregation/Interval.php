@@ -47,10 +47,10 @@ class Interval implements IntervalInterface
     {
         $select = clone $this->select;
         $value = $this->getValueFiled();
-        if (!is_null($lower)) {
+        if ($lower !== null) {
             $select->where("${value} >= ?", $lower - self::DELTA);
         }
-        if (!is_null($upper)) {
+        if ($upper !== null) {
             $select->where("${value} < ?", $upper - self::DELTA);
         }
         $select->order("value ASC")
@@ -72,7 +72,7 @@ class Interval implements IntervalInterface
         $value = $this->getValueFiled();
         $select->columns(['count' => 'COUNT(*)'])
             ->where("${value} <  ?", $data - self::DELTA);
-        if (!is_null($lower)) {
+        if ($lower !== null) {
             $select->where("${value} >= ?", $lower - self::DELTA);
         }
         $offset = $this->select->getAdapter()
@@ -95,7 +95,7 @@ class Interval implements IntervalInterface
         $select->columns(['count' => 'COUNT(*)'])
             ->where("${value} > ?", $data + self::DELTA);
 
-        if (!is_null($upper)) {
+        if ($upper !== null) {
             $select->where("${value} < ? ", $data - self::DELTA);
         }
 
@@ -108,7 +108,7 @@ class Interval implements IntervalInterface
 
         $select = clone $this->select;
         $select->where("${value} >= ?", $data - self::DELTA);
-        if (!is_null($upper)) {
+        if ($upper !== null) {
             $select->where("${value} < ? ", $data - self::DELTA);
         }
         $select->order("${value} DESC")

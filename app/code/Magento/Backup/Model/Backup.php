@@ -152,7 +152,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
                 'extension' => $this->_helper->getExtensionByType($backupData->getType()),
                 'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),
                 'name' => $backupData->getName(),
-                'date_object' => new \DateTime('@' . $backupData->getTime()),
+                'date_object' => (new \DateTime())->setTimestamp($backupData->getTime()),
             ]
         );
 
@@ -278,7 +278,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     public function open($write = false)
     {
-        if (is_null($this->getPath())) {
+        if ($this->getPath() === null) {
             throw new \Magento\Framework\Exception\InputException(__('The backup file path was not specified.'));
         }
 
@@ -315,7 +315,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     protected function _getStream()
     {
-        if (is_null($this->_stream)) {
+        if ($this->_stream === null) {
             throw new \Magento\Framework\Exception\InputException(__('The backup file handler was unspecified.'));
         }
         return $this->_stream;
@@ -398,7 +398,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     public function getSize()
     {
-        if (!is_null($this->getData('size'))) {
+        if ($this->getData('size') !== null) {
             return $this->getData('size');
         }
 

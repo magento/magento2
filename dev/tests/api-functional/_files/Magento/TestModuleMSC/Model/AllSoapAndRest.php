@@ -70,7 +70,7 @@ class AllSoapAndRest implements \Magento\TestModuleMSC\Api\AllSoapAndRestInterfa
 
     public function testOptionalParam($name = null)
     {
-        if (is_null($name)) {
+        if ($name === null) {
             return $this->itemDataFactory->create()->setItemId(3)->setName('No Name');
         } else {
             return $this->itemDataFactory->create()->setItemId(3)->setName($name);
