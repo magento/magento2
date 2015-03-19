@@ -10,6 +10,18 @@ namespace Magento\Ui\Component\Form\Element;
  */
 class Radio extends AbstractFormElement
 {
+    const NAME = 'radio';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)

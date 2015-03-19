@@ -5,11 +5,22 @@
  */
 namespace Magento\Ui\Component\Control;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Action
  */
-class Action extends AbstractView implements ControlInterface
+class Action extends AbstractComponent
 {
+    const NAME = 'action';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 }

@@ -9,6 +9,10 @@
     <block class="Magento\Ui\Component\Filter\Type\Select" name="filter_store">
         <arguments>
             <argument name="content_template" xsi:type="string">Magento_Ui::filter/type/select/default.phtml</argument>
+            <argument name="filter" xsi:type="array">
+                <item name="module" xsi:type="string">store</item>
+                <item name="control" xsi:type="string">Magento_Store/js/listing/filter/store</item>
+            </argument>
         </arguments>
     </block>
     <block class="Magento\Ui\Component\Form\Element\DataType\Text" name="store">

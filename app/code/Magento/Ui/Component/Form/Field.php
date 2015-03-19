@@ -5,29 +5,88 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Ui\Component\AbstractComponent;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\Component\AbstractView;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Class AbstractFormElement
+ * Class Field
  */
-class Field extends AbstractView implements UiComponentInterface
+class Field extends AbstractComponent
 {
+    const NAME = 'field';
+
     /**
-     * @return mixed
+     * Wrapped component
+     *
+     * @var UiComponentInterface
      */
-    public function renderHeader()
-    {
-        return $this->getRenderEngine()->render($this, $this->getHeaderTemplate());
+    protected $wrappedComponent;
+
+    /**
+     * UI component factory
+     *
+     * @var UiComponentFactory
+     */
+    protected $uiComponentFactory;
+
+    /**
+     * Constructor
+     *
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param UiComponentInterface[] $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->uiComponentFactory = $uiComponentFactory;
+        parent::__construct($context, $components, $data);
     }
 
     /**
-     * Getting template for field header section
+     * Get component name
      *
-     * @return string|false
+     * @return string
      */
-    public function getHeaderTemplate()
+    public function getComponentName()
     {
-        return isset($this->configuration['header_template']) ? $this->configuration['header_template'] : false;
+        return static::NAME;
+    }
+
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+        $dataType = $this->getData('config/dataType');
+        if ($dataType) {
+            $this->wrappedComponent = $this->uiComponentFactory->create(
+                $this->getName(),
+                $dataType,
+                ['context' => $this->getContext()]
+            );
+            $this->wrappedComponent->prepare();
+            $jsConfig = $this->getConfiguration($this->wrappedComponent);
+            $this->getContext()->addComponentDefinition($this->wrappedComponent->getComponentName(), $jsConfig);
+        }
+    }
+
+    /**
+     * Get JS config
+     *
+     * @return array
+     */
+    public function getJsConfig()
+    {
+        return $this->wrappedComponent->getJsConfig();
     }
 }

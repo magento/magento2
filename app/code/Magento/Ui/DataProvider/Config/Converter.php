@@ -66,30 +66,28 @@ class Converter implements ConverterInterface
                 $result = $source->nodeValue;
             }
         } else {
-            if ($source->hasChildNodes()) {
-                $groups = [];
-                foreach ($source->childNodes as $child) {
-                    if ($child->nodeType == XML_TEXT_NODE || $child->nodeType == XML_COMMENT_NODE) {
-                        continue;
-                    }
-                    if ($this->isTextNode($child)) {
-                        $result[$child->nodeName] = $this->getTextNode($child)->data;
+            $groups = [];
+            foreach ($source->childNodes as $child) {
+                if ($child->nodeType == XML_TEXT_NODE || $child->nodeType == XML_COMMENT_NODE) {
+                    continue;
+                }
+                if ($this->isTextNode($child)) {
+                    $result[$child->nodeName] = $this->getTextNode($child)->data;
+                } else {
+                    if (in_array($child->nodeName, ['validate', 'filter', 'readonly'])) {
+                        if (!isset($result[$child->nodeName])) {
+                            $result[$child->nodeName] = [];
+                        }
+                        $result[$child->nodeName][] = $this->toArray($child);
                     } else {
-                        if (in_array($child->nodeName, ['validate', 'filter', 'readonly'])) {
-                            if (!isset($result[$child->nodeName])) {
-                                $result[$child->nodeName] = [];
+                        if (isset($result[$child->nodeName])) {
+                            if (!isset($groups[$child->nodeName])) {
+                                $result[$child->nodeName] = [$result[$child->nodeName]];
+                                $groups[$child->nodeName] = 1;
                             }
                             $result[$child->nodeName][] = $this->toArray($child);
                         } else {
-                            if (isset($result[$child->nodeName])) {
-                                if (!isset($groups[$child->nodeName])) {
-                                    $result[$child->nodeName] = [$result[$child->nodeName]];
-                                    $groups[$child->nodeName] = 1;
-                                }
-                                $result[$child->nodeName][] = $this->toArray($child);
-                            } else {
-                                $result[$child->nodeName] = $this->toArray($child);
-                            }
+                            $result[$child->nodeName] = $this->toArray($child);
                         }
                     }
                 }

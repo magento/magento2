@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<th class="col-select col-massaction">
+    <div class="mass-select" data-bind="outerClick: hideMenu, stopPropagation: true">
+        <label class="field choice mass-select-field">
+            <input type="checkbox" id="mass-select-checkbox" data-bind="checked: allSelected, event: {change: toggleSelectAll}">
+        </label>
+        <button class="mass-select-toggle" data-bind="click: toggleMenu, css: {active: menuVisible}">
+            <span data-bind="text: $t('Options')"></span>
+        </button>
+        <ul class="mass-select-menu" data-bind="css: {active: menuVisible}, click: hideMenu">
+            <!-- ko foreach: actions -->
+            <li data-bind="click: $parent[value].bind($parent), visible: $parent.isSelectVisible(value)">
+                <span data-bind="text: label"></span>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</th>

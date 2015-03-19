@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\DataProvider;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -227,7 +226,7 @@ class Metadata implements \Iterator, \ArrayAccess
     {
         if (empty($this->attributes)) {
             foreach ($this->config['fields'] as $field) {
-                if (isset($field['source']) && $field['source'] == 'eav') {
+                if (isset($field['source']) && $field['source'] === 'eav') {
                     $attribute = $this->dataSet->getEntity()->getAttribute($field['name']);
                     if ($attribute) {
                         $this->attributes[$field['name']] = $attribute->getData();
@@ -253,37 +252,26 @@ class Metadata implements \Iterator, \ArrayAccess
      */
     protected function prepare($name, array & $field)
     {
-        if ($name == self::CHILD_DATA_SOURCES) {
-            foreach ($field as $childName => $childConfig) {
-                $field[$childName] = $this->manager->getMetadata($childName);
-            }
-            return;
-        }
-
         $options = [];
-        if (isset($field['source'])) {
-            if ($field['source'] == 'option') {
-                $rawOptions = $this->manager->getData(
-                    $field['reference']['target']
-                );
+        if (isset($field['source']) && $field['source'] === 'option') {
+            $rawOptions = $this->manager->getData(
+                $field['reference']['target']
+            );
+            $options[] = [
+                'label' => __('Please, select...'),
+                'value' => null,
+            ];
+            foreach ($rawOptions as $rawOption) {
                 $options[] = [
-                    'label' => __('Please, select...'),
-                    'value' => null,
-                ];
-                foreach ($rawOptions as $rawOption) {
-                    $options[] = [
-                        'label' => $rawOption[$field['reference']['neededField']],
-                        'value' => $rawOption[$field['reference']['targetField']],
+                    'label' => $rawOption[$field['reference']['neededField']],
+                    'value' => $rawOption[$field['reference']['targetField']],
 
-                    ];
-                }
+                ];
             }
-        } else {
-            if (isset($field['optionProvider'])) {
-                list($source, $method) = explode('::', $field['optionProvider']);
-                $sourceModel = $this->universalFactory->create($source);
-                $options = $sourceModel->$method();
-            }
+        } else if (isset($field['optionProvider'])) {
+            list($source, $method) = explode('::', $field['optionProvider']);
+            $sourceModel = $this->universalFactory->create($source);
+            $options = $sourceModel->$method();
         }
 
         $attributeCodes = [

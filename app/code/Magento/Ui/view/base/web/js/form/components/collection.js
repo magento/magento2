@@ -4,9 +4,9 @@
  */
 define([
     'underscore',
-    'mage/utils',
+    'mageUtils',
     'Magento_Ui/js/lib/registry/registry',
-    'Magento_Ui/js/form/component',
+    'uiComponent'
 ], function (_, utils, registry, Component) {
     'use strict';
 

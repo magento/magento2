@@ -9,32 +9,18 @@ define([
 ], function (_, Renderer, registry) {
     'use strict';
 
-    function load(config, name){
-        require([config.path], function(constr){
-            registry.set(name, new constr(config));
-        });
-    }
-
     var global = {
-        init: function(data){
+        init: function (data) {
             this.data = {};
 
             this.register()
-                .initRenderer(data.renderer)
-                .initProviders(data.providers)
-                .register();
+                .initRenderer(data);
         },
 
-        initRenderer: function(data){
+        initRenderer: function (data) {
             this.renderer = new Renderer(data);
 
             return this;
-        },
-        
-        initProviders: function(providers){
-            _.each(providers, load);  
-
-            return this; 
         },
 
         register: function () {

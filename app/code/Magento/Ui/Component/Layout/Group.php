@@ -5,13 +5,25 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Group
  */
-class Group extends AbstractView
+class Group extends AbstractComponent
 {
+    const NAME = 'group';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
     /**
      * @return string
      */
