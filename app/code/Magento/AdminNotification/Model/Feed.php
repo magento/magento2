@@ -114,7 +114,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     public function getFeedUrl()
     {
         $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-        if (is_null($this->_feedUrl)) {
+        if ($this->_feedUrl === null) {
             $this->_feedUrl = $httpPath . $this->_backendConfig->getValue(self::XML_FEED_URL_PATH);
         }
         return $this->_feedUrl;

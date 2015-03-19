@@ -73,7 +73,7 @@ class AddressMetadata implements AddressMetadataInterface
         /** @var AbstractAttribute $attribute */
         $attribute = $this->attributeMetadataDataProvider
             ->getAttribute(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, $attributeCode);
-        if ($attribute && ($attributeCode === 'id' || !is_null($attribute->getId()))) {
+        if ($attribute && ($attributeCode === 'id' || $attribute->getId() !== null)) {
             $attributeMetadata = $this->attributeMetadataConverter->createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {

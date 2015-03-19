@@ -24,7 +24,7 @@ class InterceptedInstancesScanner implements ScannerInterface
             /** @var $node \DOMNode */
             foreach ($xpath->query('//type/plugin|//virtualType/plugin') as $node) {
                 $parentTypeNode = $node->parentNode->attributes->getNamedItem('name');
-                if (is_null($parentTypeNode)) {
+                if ($parentTypeNode === null) {
                     continue;
                 }
 
@@ -33,7 +33,7 @@ class InterceptedInstancesScanner implements ScannerInterface
                 }
 
                 $pluginTypeNode = $node->attributes->getNamedItem('type');
-                if (!is_null($pluginTypeNode)) {
+                if ($pluginTypeNode !== null) {
                     $interceptedInstances[$parentTypeNode->nodeValue][] = $pluginTypeNode->nodeValue;
                 }
             }

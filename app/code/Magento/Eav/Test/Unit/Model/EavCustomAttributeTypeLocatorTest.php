@@ -147,4 +147,26 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+    public function testGetAllServiceDataInterfaceEmpty()
+    {
+        $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator($this->attributeRepository);
+        $this->assertEmpty($this->eavCustomAttributeTypeLocator->getAllServiceDataInterfaces());
+    }
+
+    public function testGetAllServiceDataInterface()
+    {
+        $serviceBackendModelDataInterfaceMapData = [
+            'ServiceA' => ['BackendA' => 'ServiceDataInterfaceA'],
+            'ServiceB' => ['BackendB' => 'ServiceDataInterfaceB', 'BackendC' => 'ServiceDataInterfaceC'],
+            'ServiceC' => ['BackendD' => 'ServiceDataInterfaceD']
+        ];
+        $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
+            $this->attributeRepository, [], $serviceBackendModelDataInterfaceMapData
+        );
+        $this->assertEquals(
+            ['ServiceDataInterfaceA', 'ServiceDataInterfaceB', 'ServiceDataInterfaceC', 'ServiceDataInterfaceD'],
+            $this->eavCustomAttributeTypeLocator->getAllServiceDataInterfaces()
+        );
+    }
 }

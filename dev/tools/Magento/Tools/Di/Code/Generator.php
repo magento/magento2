@@ -8,6 +8,8 @@
 namespace Magento\Tools\Di\Code;
 
 use Magento\Framework\Code\Generator as FrameworkGenerator;
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Generator
@@ -21,6 +23,23 @@ class Generator extends FrameworkGenerator
      * @var array
      */
     private $classMethods = [];
+
+    /**
+     * @param ObjectManagerInterface $objectManagerInterface
+     * @param FrameworkGenerator\Io $ioObject
+     * @param array $generatedEntities
+     * @param DefinedClasses $definedClasses
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManagerInterface,
+        \Magento\Framework\Code\Generator\Io $ioObject = null,
+        array $generatedEntities = [],
+        DefinedClasses $definedClasses = null
+    ) {
+        parent::__construct($ioObject, $generatedEntities, $definedClasses);
+        $this->setObjectManager($objectManagerInterface);
+    }
+
 
     /**
      * Create entity generator

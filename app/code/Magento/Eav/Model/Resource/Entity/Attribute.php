@@ -158,7 +158,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
-            if (!isset($frontendLabel[0]) || is_null($frontendLabel[0]) || $frontendLabel[0] == '') {
+            if (!isset($frontendLabel[0]) || $frontendLabel[0] === null || $frontendLabel[0] == '') {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Frontend label is not defined'));
             }
             $object->setFrontendLabel($frontendLabel[0])->setStoreLabels($frontendLabel);
@@ -272,10 +272,10 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $attributeGroupId = null,
         $attributeSortOrder = null
     ) {
-        $attributeId = is_null($attributeEntityId) ? (int)$object->getId() : (int)$attributeEntityId;
-        $setId = is_null($attributeSetId) ? (int)$object->getAttributeSetId() : (int)$attributeSetId;
-        $groupId = is_null($attributeGroupId) ? (int)$object->getAttributeGroupId() : (int)$attributeGroupId;
-        $attributeSortOrder = is_null($attributeSortOrder) ? (int)$object->getSortOrder() : (int)$attributeSortOrder;
+        $attributeId = $attributeEntityId === null ? (int)$object->getId() : (int)$attributeEntityId;
+        $setId = $attributeSetId === null ? (int)$object->getAttributeSetId() : (int)$attributeSetId;
+        $groupId = $attributeGroupId === null ? (int)$object->getAttributeGroupId() : (int)$attributeGroupId;
+        $attributeSortOrder = $attributeSortOrder === null ? (int)$object->getSortOrder() : (int)$attributeSortOrder;
 
         if ($setId && $groupId && $object->getEntityTypeId()) {
             $adapter = $this->_getWriteAdapter();

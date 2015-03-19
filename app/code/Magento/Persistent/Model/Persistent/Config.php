@@ -106,7 +106,7 @@ class Config
      */
     protected function _getConfigDomXPath()
     {
-        if (is_null($this->_configDomXPath)) {
+        if ($this->_configDomXPath === null) {
             $filePath = $this->_modulesDirectory->getRelativePath($this->_configFilePath);
             $isFile = $this->_modulesDirectory->isFile($filePath);
             $isReadable = $this->_modulesDirectory->isReadable($filePath);

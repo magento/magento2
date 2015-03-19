@@ -71,7 +71,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        if (!is_null($this->_coreRegistry->registry('current_item_type')->getId())) {
+        if ($this->_coreRegistry->registry('current_item_type')->getId() !== null) {
             return __('Edit attribute set mapping');
         } else {
             return __('New attribute set mapping');

@@ -191,7 +191,7 @@ class Layer extends \Magento\Framework\Object
     public function getCurrentCategory()
     {
         $category = $this->getData('current_category');
-        if (is_null($category)) {
+        if ($category === null) {
             $category = $this->registry->registry('current_category');
             if ($category) {
                 $this->setData('current_category', $category);
@@ -254,7 +254,7 @@ class Layer extends \Magento\Framework\Object
     public function getState()
     {
         $state = $this->getData('state');
-        if (is_null($state)) {
+        if ($state === null) {
             \Magento\Framework\Profiler::start(__METHOD__);
             $state = $this->_layerStateFactory->create();
             $this->setData('state', $state);

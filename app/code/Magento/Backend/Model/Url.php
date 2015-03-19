@@ -300,7 +300,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         $menuItem = $this->_getMenu()->get(
             $this->_scopeConfig->getValue(self::XML_PATH_STARTUP_MENU_ITEM, $this->_scopeType)
         );
-        if (!is_null($menuItem)) {
+        if ($menuItem !== null) {
             if ($menuItem->isAllowed() && $menuItem->getAction()) {
                 return $menuItem->getAction();
             }
@@ -336,7 +336,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     protected function _getMenu()
     {
-        if (is_null($this->_menu)) {
+        if ($this->_menu === null) {
             $this->_menu = $this->_menuConfig->getMenu();
         }
         return $this->_menu;

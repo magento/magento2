@@ -58,13 +58,13 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
 
         if ($quote->isVirtual()) {
             // check if billing address is set
-            if (is_null($quote->getBillingAddress()->getCountryId())) {
+            if ($quote->getBillingAddress()->getCountryId() === null) {
                 throw new InvalidTransitionException(__('Billing address is not set'));
             }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
         } else {
             // check if shipping address is set
-            if (is_null($quote->getShippingAddress()->getCountryId())) {
+            if ($quote->getShippingAddress()->getCountryId() === null) {
                 throw new InvalidTransitionException(__('Shipping address is not set'));
             }
             $quote->getShippingAddress()->setPaymentMethod($payment->getMethod());

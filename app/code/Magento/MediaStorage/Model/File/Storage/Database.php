@@ -91,7 +91,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      */
     public function getDirectoryModel()
     {
-        if (is_null($this->_directoryModel)) {
+        if ($this->_directoryModel === null) {
             $this->_directoryModel = $this->_directoryFactory->create(
                 ['connectionName' => $this->getConnectionName()]
             );

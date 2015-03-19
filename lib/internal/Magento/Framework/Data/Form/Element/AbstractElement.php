@@ -412,7 +412,7 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getLabelHtml($idSuffix = '')
     {
-        if (!is_null($this->getLabel())) {
+        if ($this->getLabel() !== null) {
             $html = '<label class="label" for="' . $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                 'label'
             ) . '><span>' . $this->_escape(
@@ -432,7 +432,7 @@ abstract class AbstractElement extends AbstractForm
     public function getDefaultHtml()
     {
         $html = $this->getData('default_html');
-        if (is_null($html)) {
+        if ($html === null) {
             $html = $this->getNoSpan() === true ? '' : '<span class="field-row">' . "\n";
             $html .= $this->getLabelHtml();
             $html .= $this->getElementHtml();

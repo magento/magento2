@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('tableName', $from[$dbTableName]);
         } else {
             $union = $this->_collection->getSelect()->getPart('union');
-            if (!is_null($period) && !is_null($dateFrom) && !is_null($dateTo) && $period != 'month') {
+            if ($period !== null && $dateFrom !== null && $dateTo !== null && $period != 'month') {
                 $count = count($union);
                 if ($period == 'year') {
                     if ($dbTableName == "report_viewed_product_aggregated_daily") {

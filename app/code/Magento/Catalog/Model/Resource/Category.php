@@ -216,7 +216,7 @@ class Category extends AbstractResource
         }
 
         if ($object->isObjectNew()) {
-            if (is_null($object->getPosition())) {
+            if ($object->getPosition() === null) {
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
             $path = explode('/', $object->getPath());

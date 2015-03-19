@@ -36,7 +36,7 @@ class Identity implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = [];
             /** @var $section \Magento\Config\Model\Config\Structure\Element\Section */
             $section = $this->_configStructure->getElement('trans_email');

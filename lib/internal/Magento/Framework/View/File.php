@@ -111,7 +111,7 @@ class File
      */
     public function isBase()
     {
-        return is_null($this->theme);
+        return $this->theme === null;
     }
 
     /**
