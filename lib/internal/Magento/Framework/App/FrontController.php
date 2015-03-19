@@ -68,7 +68,6 @@ class FrontController implements FrontControllerInterface
         $result = null;
         while (!$request->isDispatched() && $routingCycleCounter++ < 100) {
             $result = $this->matchAction($request);
-
         }
         \Magento\Framework\Profiler::stop('routers_match');
         if ($routingCycleCounter > 100) {
@@ -100,6 +99,7 @@ class FrontController implements FrontControllerInterface
      */
     protected function matchAction(RequestInterface $request)
     {
+        $result = null;
         /** @var \Magento\Framework\App\RouterInterface $router */
         foreach ($this->_routerList as $router) {
             try {
@@ -115,7 +115,7 @@ class FrontController implements FrontControllerInterface
                 $request->setActionName('noroute');
                 $request->setDispatched(false);
                 break;
-            } catch (\Magento\Framework\LocalizedException $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $result = $this->handleException($e, $actionInstance, $e->getMessage());
                 break;
             } catch (\Exception $e) {
