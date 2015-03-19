@@ -529,7 +529,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getItemsQty()
     {
-        if (is_null($this->_itemsQty)) {
+        if ($this->_itemsQty === null) {
             $this->_itemsQty = 0;
             foreach ($this as $wishlistItem) {
                 $qty = $wishlistItem->getQty();

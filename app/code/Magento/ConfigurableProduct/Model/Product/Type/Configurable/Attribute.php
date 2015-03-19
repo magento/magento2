@@ -49,7 +49,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function addPrice($priceData)
     {
         $data = $this->getPrices();
-        if (is_null($data)) {
+        if ($data === null) {
             $data = [];
         }
         $data[] = $priceData;
@@ -64,7 +64,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         if ($this->getData('use_default') && $this->getProductAttribute()) {
             return $this->getProductAttribute()->getStoreLabel();
-        } elseif (is_null($this->getData(self::KEY_LABEL)) && $this->getProductAttribute()) {
+        } elseif ($this->getData(self::KEY_LABEL) === null && $this->getProductAttribute()) {
             $this->setData(self::KEY_LABEL, $this->getProductAttribute()->getStoreLabel());
         }
 

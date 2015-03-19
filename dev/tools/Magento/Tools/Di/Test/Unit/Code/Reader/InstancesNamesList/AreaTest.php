@@ -5,12 +5,12 @@
  */
 namespace Magento\Tools\Di\Test\Unit\Code\Reader\InstancesNamesList;
 
-use \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area;
+use \Magento\Tools\Di\Code\Reader\Decorator\Area;
 
 /**
  * Class AreaTest
  *
- * @package Magento\Tools\Di\Code\Reader\InstancesNamesList
+ * @package Magento\Tools\Di\Code\Reader\Decorator
  */
 class AreaTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +41,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getConstructor'])
             ->getMock();
 
-        $this->model = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Area(
+        $this->model = new \Magento\Tools\Di\Code\Reader\Decorator\Area(
             $this->classesScannerMock,
             $this->classReaderDecoratorMock
         );

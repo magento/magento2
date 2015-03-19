@@ -163,7 +163,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function useIdxTable($value = null)
     {
-        if (!is_null($value)) {
+        if ($value !== null) {
             $this->_isNeedUseIdxTable = (bool)$value;
         }
         return $this->_isNeedUseIdxTable;

@@ -46,7 +46,7 @@ class GroupRegistry
         }
         $group = $this->groupFactory->create();
         $group->load($groupId);
-        if (is_null($group->getId()) || $group->getId() != $groupId) {
+        if ($group->getId() === null || $group->getId() != $groupId) {
             throw NoSuchEntityException::singleField(GroupInterface::ID, $groupId);
         }
         $this->registry[$groupId] = $group;

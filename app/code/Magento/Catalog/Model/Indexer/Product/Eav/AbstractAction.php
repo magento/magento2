@@ -54,7 +54,7 @@ abstract class AbstractAction
      */
     public function getIndexers()
     {
-        if (is_null($this->_types)) {
+        if ($this->_types === null) {
             $this->_types = [
                 'source' => $this->_eavSourceFactory->create(),
                 'decimal' => $this->_eavDecimalFactory->create(),
@@ -89,7 +89,7 @@ abstract class AbstractAction
     public function reindex($ids = null)
     {
         foreach ($this->getIndexers() as $indexer) {
-            if (is_null($ids)) {
+            if ($ids === null) {
                 $indexer->reindexAll();
             } else {
                 $indexer->reindexEntities($ids);
