@@ -104,10 +104,10 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             $time = strtotime($time);
         }
         $match = $this->matchCronExpression($e[0], strftime('%M', $time))
-        && $this->matchCronExpression($e[1], strftime('%H', $time))
-        && $this->matchCronExpression($e[2], strftime('%d', $time))
-        && $this->matchCronExpression($e[3], strftime('%m', $time))
-        && $this->matchCronExpression($e[4], strftime('%w', $time));
+            && $this->matchCronExpression($e[1], strftime('%H', $time))
+            && $this->matchCronExpression($e[2], strftime('%d', $time))
+            && $this->matchCronExpression($e[3], strftime('%m', $time))
+            && $this->matchCronExpression($e[4], strftime('%w', $time));
 
         return $match;
     }

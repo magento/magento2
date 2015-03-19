@@ -60,8 +60,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_cronGroupConfig;
 
     /**
-    * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-    */
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
     protected $timezone;
 
     /**
@@ -120,7 +120,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $lastRun = time() + 10000000;
         $this->_cache->expects($this->any())->method('load')->will($this->returnValue($lastRun));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
-        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_job1'));
+
         $this->_config->expects($this->once())->method('getJobs')->will($this->returnValue([]));
 
         $scheduleMock = $this->getMockBuilder('Magento\Cron\Model\Schedule')->disableOriginalConstructor()->getMock();

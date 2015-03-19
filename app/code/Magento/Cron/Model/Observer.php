@@ -148,7 +148,7 @@ class Observer
                         'system/cron/' . $groupId . '/use_separate_process',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ) == 1
-            )) {
+                )) {
                 $this->_shell->execute(
                     'php -f %s -- --group=%s --standaloneProcessStarted=%s',
                     [
