@@ -1588,7 +1588,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             }
         }
         if (!empty($errors)) {
-            throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
+            throw new \Magento\Framework\Exception\LocalizedException(__(implode("\n", $errors)));
         }
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
@@ -1685,7 +1685,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $resultItem = $this->addProduct($product, $buyRequest);
 
         if (is_string($resultItem)) {
-            throw new \Magento\Framework\Exception\LocalizedException($resultItem);
+            throw new \Magento\Framework\Exception\LocalizedException(__($resultItem));
         }
 
         if ($resultItem->getParentItem()) {

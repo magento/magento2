@@ -496,10 +496,13 @@ class Helper
             //       This block of the if should be removed leaving only the phtml condition when dev/tests is swept.
             // Skip all dev tests files
             $shouldFilter = true;
+        } elseif (preg_match('#(?:/|\\\\)Test(?:/|\\\\)Unit(?:/|\\\\)#', $filename)) {
+            $shouldFilter = true;
         } elseif (preg_match('/\\.phtml$/', $filename)) {
             // Skip all phtml files
             $shouldFilter = true;
         }
+
         return $shouldFilter;
     }
 

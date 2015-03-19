@@ -71,7 +71,7 @@ class History extends Entity implements OrderStatusHistoryResourceInterface
         $warnings = $this->validator->validate($object);
         if (!empty($warnings)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Cannot save comment') . ":\n" . implode("\n", $warnings)
+                __("Cannot save comment:\n%1", implode("\n", $warnings))
             );
         }
         return $this;

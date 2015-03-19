@@ -21,11 +21,11 @@ class ContentValidator
     {
         $decodedContent = @base64_decode($fileContent->getFileData(), true);
         if (empty($decodedContent)) {
-            throw new InputException('Provided content must be valid base64 encoded data.');
+            throw new InputException(__('Provided content must be valid base64 encoded data.'));
         }
 
         if (!$this->isFileNameValid($fileContent->getName())) {
-            throw new InputException('Provided file name contains forbidden characters.');
+            throw new InputException(__('Provided file name contains forbidden characters.'));
         }
         return true;
     }

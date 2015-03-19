@@ -132,7 +132,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
                 $this->attrLockValidator->validate($attribute, $result['attribute_set_id']);
             } catch (\Magento\Framework\Exception\LocalizedException $exception) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Attribute '%1' is locked. ", $attribute->getAttributeCode()) . $exception->getMessage()
+                    __('Attribute \'%1\' is locked. %2', $attribute->getAttributeCode(), $exception->getMessage())
                 );
             }
 

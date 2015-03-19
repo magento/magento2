@@ -51,7 +51,7 @@ class Tax extends \Magento\Backend\App\Action
     {
         $className = trim($this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($className));
         if ($className == '') {
-            throw new InputException('Invalid name of tax class specified.');
+            throw new InputException(__('Invalid name of tax class specified.'));
         }
         return $className;
     }

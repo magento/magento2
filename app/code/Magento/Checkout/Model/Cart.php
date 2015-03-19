@@ -286,7 +286,7 @@ class Cart extends Object implements CartInterface
             try {
                 $product = $this->productRepository->getById($productInfo, false, $storeId);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), [], $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), $e);
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'));
@@ -372,7 +372,7 @@ class Cart extends Object implements CartInterface
                 if ($this->_checkoutSession->getUseNotice() === null) {
                     $this->_checkoutSession->setUseNotice(true);
                 }
-                throw new \Magento\Framework\Exception\LocalizedException($result);
+                throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('The product does not exist.'));
@@ -502,7 +502,7 @@ class Cart extends Object implements CartInterface
                 $itemInQuote = $this->getQuote()->getItemById($item->getId());
 
                 if (!$itemInQuote && $item->getHasError()) {
-                    throw new \Magento\Framework\Exception\LocalizedException($item->getMessage());
+                    throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -698,7 +698,7 @@ class Cart extends Object implements CartInterface
             if ($this->_checkoutSession->getUseNotice() === null) {
                 $this->_checkoutSession->setUseNotice(true);
             }
-            throw new \Magento\Framework\Exception\LocalizedException($result);
+            throw new \Magento\Framework\Exception\LocalizedException(__($result));
         }
 
         $this->_eventManager->dispatch(

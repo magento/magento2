@@ -43,6 +43,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\GoogleShopping\Model\Flag|\PHPUnit_Framework_MockObject_MockObject */
     protected $flag;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder(
@@ -80,6 +83,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testAddProducts()
     {
         $products = ['1','2'];
@@ -93,6 +99,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->massOperations->addProducts($products, 1), $this->massOperations);
     }
 
+    /**
+     * @return void
+     */
     public function testAddProductsExpiredFlag()
     {
         $products = ['1','2'];
@@ -102,8 +111,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dataAddProductsExceptions
      * @param string $exception
+     * @return void
+     * @dataProvider dataAddProductsExceptions
      */
     public function testAddProductsExceptions($exception)
     {
@@ -113,7 +123,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->productRepository->expects($this->once())->method('getById')->will($this->returnValue($product));
         $this->itemFactory->expects($this->once())
             ->method('create')
-            ->willThrowException(new $exception('message'));
+            ->willThrowException(new $exception(__('message')));
         $this->massOperations->setFlag($this->flag);
         $this->massOperations->addProducts($products, 1);
     }
@@ -132,6 +142,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testSynchronizeItems()
     {
         $collection = $this->getMockBuilder('Magento\GoogleShopping\Model\Resource\Item\Collection')
@@ -154,6 +167,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->massOperations->synchronizeItems([1]);
     }
 
+    /**
+     * @return void
+     */
     public function testSynchronizeItemsWithException()
     {
         $collection = $this->getMockBuilder('Magento\GoogleShopping\Model\Resource\Item\Collection')
@@ -182,6 +198,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->massOperations->synchronizeItems([1]);
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteItems()
     {
         $item = $this->getMockBuilder('Magento\GoogleShopping\Model\Item')->disableOriginalConstructor()->getMock();
@@ -206,6 +225,9 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         $this->massOperations->deleteItems([1]);
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteItemsWitException()
     {
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()

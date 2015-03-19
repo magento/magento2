@@ -119,13 +119,15 @@ class CustomerRegistry
         if (!$customer->getEmail()) {
             // customer does not exist
             throw new NoSuchEntityException(
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                [
+                __(
+                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    [
                     'fieldName' => 'email',
-                    'fieldValue' => $customerEmail,
-                    'field2Name' => 'websiteId',
-                    'field2Value' => $websiteId,
-                ]
+                        'fieldValue' => $customerEmail,
+                        'field2Name' => 'websiteId',
+                        'field2Value' => $websiteId,
+                    ]
+                )
             );
         } else {
             $this->customerRegistryById[$customer->getId()] = $customer;

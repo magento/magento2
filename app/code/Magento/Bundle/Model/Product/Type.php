@@ -678,7 +678,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         try {
             if (is_string($result)) {
-                throw new \Magento\Framework\Exception\LocalizedException($result);
+                throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
 
             $selections = [];
@@ -1314,7 +1314,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function checkIsResult($_result)
     {
         if (is_string($_result)) {
-            throw new \Magento\Framework\Exception\LocalizedException($_result);
+            throw new \Magento\Framework\Exception\LocalizedException(__($_result));
         }
 
         if (!isset($_result[0])) {
