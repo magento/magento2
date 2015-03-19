@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Ui\Controller\UiActionInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -12,7 +13,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 /**
  * Class Render
  */
-abstract class AbstractAction extends \Magento\Backend\App\Action implements UiActionInterface
+abstract class AbstractAction extends Action implements UiActionInterface
 {
     /**
      * @var UiComponentFactory

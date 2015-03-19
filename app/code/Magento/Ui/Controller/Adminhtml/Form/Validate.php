@@ -5,10 +5,12 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Form;
 
+use Magento\Ui\Controller\Adminhtml\AbstractAction;
+
 /**
  * Class Validate
  */
-class Validate extends \Magento\Ui\Controller\Adminhtml\AbstractAction
+class Validate extends AbstractAction
 {
     /**
      * Action for AJAX request

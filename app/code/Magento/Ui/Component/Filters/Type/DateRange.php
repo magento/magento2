@@ -51,7 +51,7 @@ class DateRange extends AbstractFilter
         $this->wrappedComponent->prepare();
 
         $this->applyFilter();
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
@@ -83,6 +83,8 @@ class DateRange extends AbstractFilter
                     $value['from'],
                     $this->wrappedComponent->getLocale()
                 );
+            } else {
+                unset($value['from']);
             }
             if (!empty($value['to'])) {
                 $value['orig_to'] = $value['to'];
@@ -90,6 +92,8 @@ class DateRange extends AbstractFilter
                     $value['to'],
                     $this->wrappedComponent->getLocale()
                 );
+            } else {
+                unset($value['to']);
             }
             $value['datetime'] = true;
             $value['locale'] = $this->wrappedComponent->getLocale();
