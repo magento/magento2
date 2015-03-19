@@ -165,6 +165,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($layoutMock, $this->model->getLayout());
     }
 
+    /**
+     * @throws \Magento\Framework\Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testSetLayoutWithAlienAddress()
     {
         $addressId = 1;
