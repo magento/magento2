@@ -6,6 +6,7 @@
 namespace Magento\Framework\Less\FileGenerator;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Less\PreProcessor\Instruction\Import;
 use Magento\Framework\View\Asset\LocalInterface;
 
 class RelatedGenerator
@@ -21,11 +22,6 @@ class RelatedGenerator
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\Less\PreProcessor\Instruction\Import
-     */
-    private $importProcessor;
-
-    /**
      * @var \Magento\Framework\Less\File\Temporary
      */
     private $temporaryFile;
@@ -33,32 +29,31 @@ class RelatedGenerator
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
      * @param \Magento\Framework\Less\File\Temporary $temporaryFile
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor,
         \Magento\Framework\Less\File\Temporary $temporaryFile
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->assetRepo = $assetRepo;
 
-        $this->importProcessor = $importProcessor;
         $this->temporaryFile = $temporaryFile;
     }
 
     /**
      * Create all asset files, referenced from already processed ones
      *
+     * @param Import $importGenerator
+     *
      * @return void
      */
-    public function generate()
+    public function generate(Import $importGenerator)
     {
         do {
-            $relatedFiles = $this->importProcessor->getRelatedFiles();
-            $this->importProcessor->resetRelatedFiles();
+            $relatedFiles = $importGenerator->getRelatedFiles();
+            $importGenerator->resetRelatedFiles();
             foreach ($relatedFiles as $relatedFileInfo) {
                 list($relatedFileId, $asset) = $relatedFileInfo;
 

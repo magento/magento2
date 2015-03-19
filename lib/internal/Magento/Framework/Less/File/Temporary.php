@@ -42,7 +42,7 @@ class Temporary
      */
     public function createFile($relativePath, $contents)
     {
-        $filePath =  $this->config->getLessDirectory() . '/' . $relativePath;
+        $filePath =  $this->config->getLessMaterializationRelativePath() . '/' . $relativePath;
 
         if (!$this->tmpDirectory->isExist($filePath)) {
             $this->tmpDirectory->writeFile($filePath, $contents);

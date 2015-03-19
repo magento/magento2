@@ -71,6 +71,8 @@ class FileGenerator implements SourceFileGeneratorInterface
      * @param FileGenerator\RelatedGenerator $relatedGenerator
      * @param Config $config
      * @param File\Temporary $temporaryFile
+     *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -83,7 +85,6 @@ class FileGenerator implements SourceFileGeneratorInterface
         File\Temporary $temporaryFile
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->assetRepo = $assetRepo;
         $this->assetSource = $assetSource;
 
@@ -113,12 +114,12 @@ class FileGenerator implements SourceFileGeneratorInterface
         while ($this->isProcessLocked()) {
             sleep(1);
         }
-        $lockFilePath = $this->config->getLessDirectory() . '/' . self::LOCK_FILE;
+        $lockFilePath = $this->config->getLessMaterializationRelativePath() . '/' . self::LOCK_FILE;
         $this->tmpDirectory->writeFile($lockFilePath, time());
 
         $this->magentoImportProcessor->process($chain);
         $this->importProcessor->process($chain);
-        $this->relatedGenerator->generate();
+        $this->relatedGenerator->generate($this->importProcessor);
         $lessRelativePath = preg_replace('#\.css$#', '.less', $chain->getAsset()->getPath());
         $tmpFilePath = $this->temporaryFile->createFile($lessRelativePath, $chain->getContent());
 
@@ -133,7 +134,7 @@ class FileGenerator implements SourceFileGeneratorInterface
      */
     protected function isProcessLocked()
     {
-        $lockFilePath = $this->config->getLessDirectory() . '/' . self::LOCK_FILE;
+        $lockFilePath = $this->config->getLessMaterializationRelativePath() . '/' . self::LOCK_FILE;
         if ($this->tmpDirectory->isExist($lockFilePath)) {
             $lockTime = time() - (int)$this->tmpDirectory->readFile($lockFilePath);
             if ($lockTime >= self::MAX_LOCK_TIME) {

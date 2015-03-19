@@ -35,15 +35,15 @@ try {
     $logger = new Log($params->getVerbose());
 
 } catch (\Zend_Console_Getopt_Exception $e) {
-    echo $e->getUsageMessage();
-    echo 'Please, use quotes(") for wrapping strings.' . "\n";
+    echo $e->getMessage() . PHP_EOL;
+    echo 'Please, use quotes(") for wrapping strings.' . PHP_EOL;
     exit(1);
 }
 
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication(
-    'Magento\Tools\WebDev\App\FileAssembler',
+    'Magento\Tools\Webdev\App\FileAssembler',
     ['params' => $params, 'logger' => $logger]
 );
 $bootstrap->run($app);

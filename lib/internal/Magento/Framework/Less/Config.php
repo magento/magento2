@@ -14,7 +14,12 @@ class Config
      */
     const TMP_LESS_DIR = 'less';
 
-    public function getLessDirectory()
+    /**
+     * Returns relative path to less materialization directory
+     *
+     * @return string
+     */
+    public function getLessMaterializationRelativePath()
     {
         return DirectoryList::TMP_MATERIALIZATION_DIR . '/' . self::TMP_LESS_DIR;
     }
