@@ -14,19 +14,24 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
      * Clean JS/css files cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws LocalizedException
      */
     public function execute()
     {
-        try {
-            $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();
-            $this->_eventManager->dispatch('clean_catalog_images_cache_after');
-            $this->messageManager->addSuccess(__('The image cache was cleaned.'));
-        } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while clearing the image cache.'));
-        }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();
+        $this->_eventManager->dispatch('clean_catalog_images_cache_after');
+        $this->messageManager->addSuccess(__('The image cache was cleaned.'));
+
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * Redirect user to the previous or main page
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*');
     }

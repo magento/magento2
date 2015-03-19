@@ -31,15 +31,22 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
             return $redirectResult->setPath('*/*/editGroup', ['group_id' => $itemId]);
         }
 
-        try {
-            $model->delete();
-            $this->messageManager->addSuccess(__('The store has been deleted.'));
-            return $redirectResult->setPath('adminhtml/*/');
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to delete store. Please, try again later.'));
-        }
-        return $redirectResult->setPath('adminhtml/*/editGroup', ['group_id' => $itemId]);
+        $model->delete();
+        $this->messageManager->addSuccess(__('The store has been deleted.'));
+        return $redirectResult->setPath('adminhtml/*/');
+    }
+
+    /**
+     * Redirect user to the previous or main page
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath(
+            'adminhtml/*/editGroup',
+            ['group_id' => $this->getRequest()->getParam('item_id')]
+        );
     }
 }

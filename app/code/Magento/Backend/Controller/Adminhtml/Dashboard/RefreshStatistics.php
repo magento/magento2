@@ -31,16 +31,23 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
      */
     public function execute()
     {
-        try {
-            $collectionsNames = array_values($this->reportTypes);
-            foreach ($collectionsNames as $collectionName) {
-                $this->_objectManager->create($collectionName)->aggregate();
-            }
-            $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
-            $this->logger->critical($e);
+        $collectionsNames = array_values($this->reportTypes);
+        foreach ($collectionsNames as $collectionName) {
+            $this->_objectManager->create($collectionName)->aggregate();
         }
-        return $this->resultRedirectFactory->create()->setPath('*/*');
+        $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
+
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * Redirect user to the previous or main page
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('*/*');
     }
 }
