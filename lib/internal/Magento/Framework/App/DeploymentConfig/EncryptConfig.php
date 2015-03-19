@@ -6,18 +6,10 @@
 
 namespace Magento\Framework\App\DeploymentConfig;
 
+use Magento\Setup\Model\ConfigOptionsList;
+
 class EncryptConfig extends AbstractSegment
 {
-    /**
-     * Array Key for encryption key in deployment config file
-     */
-    const KEY_ENCRYPTION_KEY = 'key';
-
-    /**
-     * Segment key
-     */
-    const CONFIG_KEY = 'crypt';
-
     /**
      * Constructor
      *
@@ -26,7 +18,7 @@ class EncryptConfig extends AbstractSegment
      */
     public function __construct(array $data)
     {
-        if (!isset($data[self::KEY_ENCRYPTION_KEY])) {
+        if (!isset($data[ConfigOptionsList::KEY_ENCRYPTION_KEY])) {
             throw new \InvalidArgumentException('No encryption key provided');
         }
         parent::__construct($data);
@@ -37,6 +29,6 @@ class EncryptConfig extends AbstractSegment
      */
     public function getKey()
     {
-        return self::CONFIG_KEY;
+        return ConfigOptionsList::ENCRYPT_CONFIG_KEY;
     }
 }

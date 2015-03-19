@@ -3117,4 +3117,10 @@ return [
     ['Magento\LocaleFactory'],
     ['Magento\Framework\LocaleFactory'],
     ['Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data'],
+    ['Magento\Framework\App\DeploymentConfig\BackendConfig'],
+    ['Magento\Framework\App\DeploymentConfig\DbConfig'],
+    ['Magento\Framework\App\DeploymentConfig\InstallConfig'],
+    ['Magento\Framework\App\DeploymentConfig\ResourceConfig'],
+    ['Magento\Framework\App\DeploymentConfig\SessionConfig'],
+    ['Magento\Framework\App\DeploymentConfig\CacheConfig'],
 ];

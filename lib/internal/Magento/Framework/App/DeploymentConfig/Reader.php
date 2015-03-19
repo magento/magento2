@@ -85,4 +85,19 @@ class Reader
         // TODO: add multi config functionality here
         return $this->load();
     }
+
+    /**
+     *  Gets a value specified key from config data
+     *
+     * @param $key
+     * @return null
+     */
+    public function getConfigData($key)
+    {
+        $config = $this->load();
+        if (!isset($config[$key])) {
+            return null;
+        }
+        return $config[$key];
+    }
 }

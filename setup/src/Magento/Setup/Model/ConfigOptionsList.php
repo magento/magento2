@@ -44,6 +44,63 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     const SESSION_SAVE_FILES = 'files';
     const SESSION_SAVE_DB = 'db';
+
+    /**
+     * Array Key for session save method
+     */
+    const KEY_SAVE = 'save';
+
+    /**#@+
+     * Array keys for Database configuration
+     */
+    const KEY_HOST = 'host';
+    const KEY_NAME = 'dbname';
+    const KEY_USER = 'username';
+    const KEY_PASS = 'password';
+    const KEY_PREFIX = 'table_prefix';
+    const KEY_MODEL = 'model';
+    const KEY_INIT_STATEMENTS = 'initStatements';
+    const KEY_ACTIVE = 'active';
+    /**
+     * Segment key
+     */
+    const CONFIG_KEY = 'db';
+    /**
+     * Array Key for encryption key in deployment config file
+     */
+    const KEY_ENCRYPTION_KEY = 'key';
+    /**
+     * Segment key
+     */
+    const ENCRYPT_CONFIG_KEY = 'crypt';
+    /**
+     * Array Key for install date
+     */
+    const KEY_DATE = 'date';
+    /**
+     * Array Key for connection
+     */
+    const KEY_CONNECTION = 'connection';
+    /**
+     * Segment key
+     */
+    const KEY_RESOURCE = 'resource';
+    /**
+     * Array key for cache frontend
+     */
+    const KEY_FRONTEND = 'frontend';
+    /**
+     * Array key for cache type
+     */
+    const KEY_TYPE = 'type';
+    /**
+     * Segment key
+     */
+    const KEY_CACHE = 'cache';
+    /**
+     * Segment key
+     */
+    const KEY_MODULES = 'modules';
     /**#@-*/
 
     /**

@@ -8,7 +8,7 @@
 
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
-use Magento\Framework\App\DeploymentConfig\ResourceConfig;
+use Magento\Setup\Model\ConfigOptionsList;
 
 /**
  * Class DatabaseTest
@@ -21,27 +21,28 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $mediaDatabase;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configMock;
+    protected $readerMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->configMock->expects(
+        $this->readerMock = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->readerMock->expects(
             $this->any()
         )->method(
-            'getSegment'
+            'getConfigData'
         )->with(
-            ResourceConfig::CONFIG_KEY
+                ConfigOptionsList::KEY_RESOURCE
         )->will(
             $this->returnValue(
-            ['default_setup' => ['name' => 'default_setup', ResourceConfig::KEY_CONNECTION => 'connect1'],
-                'custom_resource' => ['name' => 'custom_resource', ResourceConfig::KEY_CONNECTION => 'connect2'],
+            [
+                'default_setup' => ['name' => 'default_setup', ConfigOptionsList::KEY_CONNECTION => 'connect1'],
+                'custom_resource' => ['name' => 'custom_resource', ConfigOptionsList::KEY_CONNECTION => 'connect2'],
             ]
         )
         );
-        $this->mediaDatabase = new \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database($this->configMock);
+        $this->mediaDatabase = new \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database($this->readerMock);
     }
 
     /**

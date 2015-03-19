@@ -10,11 +10,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\DbConfig;
-use Magento\Framework\App\DeploymentConfig\EncryptConfig;
-use Magento\Framework\App\DeploymentConfig\InstallConfig;
-use Magento\Framework\App\DeploymentConfig\SessionConfig;
-use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 
 /**
  * Creates deployment config data based on user input array
@@ -27,17 +22,17 @@ class ConfigGenerator
      * @var array
      */
     public static $paramMap = [
-        ConfigOptionsList::INPUT_KEY_DB_HOST => DbConfig::KEY_HOST,
-        ConfigOptionsList::INPUT_KEY_DB_NAME => DbConfig::KEY_NAME,
-        ConfigOptionsList::INPUT_KEY_DB_USER => DbConfig::KEY_USER,
-        ConfigOptionsList::INPUT_KEY_DB_PASS => DbConfig::KEY_PASS,
-        ConfigOptionsList::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
-        ConfigOptionsList::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
-        ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
-        ConfigOptionsList::INPUT_KEY_ACTIVE => DbConfig::KEY_ACTIVE,
-        ConfigOptionsList::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
-        ConfigOptionsList::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
-        ConfigOptionsList::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
+        ConfigOptionsList::INPUT_KEY_DB_HOST => ConfigOptionsList::KEY_HOST,
+        ConfigOptionsList::INPUT_KEY_DB_NAME => ConfigOptionsList::KEY_NAME,
+        ConfigOptionsList::INPUT_KEY_DB_USER => ConfigOptionsList::KEY_USER,
+        ConfigOptionsList::INPUT_KEY_DB_PASS => ConfigOptionsList::KEY_PASS,
+        ConfigOptionsList::INPUT_KEY_DB_PREFIX => ConfigOptionsList::KEY_PREFIX,
+        ConfigOptionsList::INPUT_KEY_DB_MODEL => ConfigOptionsList::KEY_MODEL,
+        ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => ConfigOptionsList::KEY_INIT_STATEMENTS,
+        ConfigOptionsList::INPUT_KEY_ACTIVE => ConfigOptionsList::KEY_ACTIVE,
+        ConfigOptionsList::INPUT_KEY_CRYPT_KEY => ConfigOptionsList::KEY_ENCRYPTION_KEY,
+        ConfigOptionsList::INPUT_KEY_SESSION_SAVE => ConfigOptionsList::KEY_SAVE,
+        ConfigOptionsList::INPUT_KEY_RESOURCE => ConfigOptionsList::KEY_RESOURCE,
     ];
 
     /**

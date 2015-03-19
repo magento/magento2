@@ -29,16 +29,16 @@ class ResourceFactory
     }
 
     /**
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
      * @return Resource
      */
-    public function create(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
+    public function create(\Magento\Framework\App\DeploymentConfig\Reader $reader)
     {
         $connectionFactory = $this->serviceLocator->get('Magento\Setup\Module\ConnectionFactory');
         $resource = new Resource(
             new ResourceConfig(),
             $connectionFactory,
-            $deploymentConfig
+            $reader
         );
         return $resource;
     }

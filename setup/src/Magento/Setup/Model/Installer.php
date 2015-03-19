@@ -25,6 +25,7 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
+use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
@@ -394,8 +395,8 @@ class Installer
         }
         // retrieve old encryption keys
         if ($this->deploymentConfig->isAvailable()) {
-            $encryptInfo = $this->deploymentConfig->getSegment(EncryptConfig::CONFIG_KEY);
-            $oldKeys = $encryptInfo[EncryptConfig::KEY_ENCRYPTION_KEY];
+            $encryptInfo = $this->deploymentConfig->getSegment(ModuleLoader::ENCRYPT_CONFIG_KEY);
+            $oldKeys = $encryptInfo[ModuleLoader::KEY_ENCRYPTION_KEY];
             $key = empty($key) ? $oldKeys : $oldKeys . "\n" . $key;
         } else if (empty($key)) {
             $key = md5($this->random->getRandomString(10));
@@ -405,7 +406,7 @@ class Installer
 
         // find the latest key to display
         $keys = explode("\n", $key);
-        $this->installInfo[EncryptConfig::KEY_ENCRYPTION_KEY] = array_pop($keys);
+        $this->installInfo[ModuleLoader::KEY_ENCRYPTION_KEY] = array_pop($keys);
         return new EncryptConfig($cryptConfigData);
     }
 
@@ -560,7 +561,7 @@ class Installer
     public function installDeploymentConfig($data)
     {
         $this->checkInstallationFilePermissions();
-        $data[InstallConfig::KEY_DATE] = date('r');
+        $data[DeploymentConfigMapper::KEY_DATE] = date('r');
 
         $configs = [
             $this->createBackendConfig($data),
@@ -1166,7 +1167,7 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = new DbConfig($this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+            $dbConfig = new DbConfig($this->deploymentConfig->getSegment(ModuleLoader::CONFIG_KEY));
             $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
             if ($config) {
                 try {
@@ -1257,17 +1258,17 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $segment = $this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY);
+        $segment = $this->deploymentConfig->getSegment(ModuleLoader::CONFIG_KEY);
         $dbConfig = new DbConfig($segment);
         $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
         $this->checkDatabaseConnection(
-            $config[DbConfig::KEY_NAME],
-            $config[DbConfig::KEY_HOST],
-            $config[DbConfig::KEY_USER],
-            $config[DbConfig::KEY_PASS]
+            $config[ModuleLoader::KEY_NAME],
+            $config[ModuleLoader::KEY_HOST],
+            $config[ModuleLoader::KEY_USER],
+            $config[ModuleLoader::KEY_PASS]
         );
-        if (isset($config[DbConfig::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($config[DbConfig::KEY_PREFIX]);
+        if (isset($config[ModuleLoader::KEY_PREFIX])) {
+            $this->checkDatabaseTablePrefix($config[ModuleLoader::KEY_PREFIX]);
         }
     }
 

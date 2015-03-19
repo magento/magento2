@@ -10,6 +10,8 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\Resource;
 
+use Magento\Setup\Model\ConfigOptionsList;
+
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE;
@@ -27,9 +29,9 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
     protected $_connectionFactory;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $deploymentConfig;
+    private $reader;
 
     /**
      * @var \Magento\Framework\App\Resource
@@ -56,10 +58,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->with(self::RESOURCE_NAME)
             ->will($this->returnValue(self::CONNECTION_NAME));
 
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->deploymentConfig->expects($this->any())
-            ->method('getSegment')
-            ->with(\Magento\Framework\App\DeploymentConfig\DbConfig::CONFIG_KEY)
+        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->reader->expects($this->any())
+            ->method('getConfigData')
+            ->with(ConfigOptionsList::CONFIG_KEY)
             ->will($this->returnValue(
                     [
                         'connection' => [
@@ -86,7 +88,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->resource = new Resource(
             $this->_config,
             $this->_connectionFactory,
-            $this->deploymentConfig,
+            $this->reader,
             self::TABLE_PREFIX
         );
     }

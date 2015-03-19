@@ -79,10 +79,7 @@ class InstallerFactory
      */
     private function getResource()
     {
-        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
-            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
-            []
-        );
-        return $this->resourceFactory->create($deploymentConfig);
+        $reader = $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader');
+        return $this->resourceFactory->create($reader);
     }
 }
