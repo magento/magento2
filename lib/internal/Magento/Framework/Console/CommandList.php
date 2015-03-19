@@ -7,6 +7,7 @@
 namespace Magento\Framework\Console;
 
 use Magento\Framework\ObjectManagerInterface;
+use Symfony\Component\Console\Command\Command;
 
 class CommandList
 {
@@ -42,7 +43,10 @@ class CommandList
         $commands = [];
         foreach ($this->commands as $class) {
             if (class_exists($class)) {
-                $commands[] = $this->objectManager->get($class);
+                $command = $this->objectManager->get($class);
+                if ($command instanceof Command) {
+                    $commands[] = $command;
+                }
             }
         }
 

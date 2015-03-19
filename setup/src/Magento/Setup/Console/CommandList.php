@@ -7,6 +7,7 @@
 namespace Magento\Setup\Console;
 
 use Zend\ServiceManager\ServiceManager;
+use Symfony\Component\Console\Command\Command;
 
 class CommandList
 {
@@ -50,7 +51,10 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $commands[] = $this->serviceManager->create($class);
+                $command = $this->serviceManager->create($class);
+                if ($command instanceof Command) {
+                    $commands[] = $command;
+                }
             }
         }
 

@@ -6,6 +6,8 @@
 
 namespace Magento\Tools\Console;
 
+use Symfony\Component\Console\Command\Command;
+
 class CommandList
 {
     /**
@@ -29,7 +31,10 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $commands[] = new $class;
+                $command = new $class;;
+                if ($command instanceof Command) {
+                    $commands[] = $command;
+                }
             }
         }
 
