@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Control;
+namespace Magento\Framework\View\Element\UiComponent\Control;
 
 use Magento\Framework\View\Element\AbstractBlock;
 
@@ -15,19 +15,19 @@ class Container extends AbstractBlock
     /**
      * Default button class
      */
-    const DEFAULT_BUTTON = 'Magento\Ui\Component\Control\Button';
+    const DEFAULT_CONTROL = 'Magento\Framework\View\Element\UiComponent\Control\ControlInterface';
 
     /**
      * Create button renderer
      *
      * @param string $blockName
      * @param string $blockClassName
-     * @return \Magento\Ui\Component\Control\Button
+     * @return ControlInterface
      */
     protected function createButton($blockName, $blockClassName = null)
     {
         if (null === $blockClassName) {
-            $blockClassName = static::DEFAULT_BUTTON;
+            $blockClassName = static::DEFAULT_CONTROL;
         }
 
         return $this->getLayout()->createBlock($blockClassName, $blockName);
@@ -40,7 +40,7 @@ class Container extends AbstractBlock
      */
     protected function _toHtml()
     {
-        /** @var \Magento\Ui\Component\Control\Item $item */
+        /** @var Item $item */
         $item = $this->getButtonItem();
         $data = $item->getData();
 

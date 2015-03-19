@@ -242,7 +242,8 @@
             <item name="config" xsi:type="array">
                 <item name="actions" xsi:type="array">
                     <item name="delete" xsi:type="array">
-                        <item name="type" xsi:type="string" translate="true">delete</item>
+                        <item name="confirm" xsi:type="string" translate="true">cscscscscscs!!!!!!!!</item>
+                        <item name="type" xsi:type="string">delete</item>
                         <item name="label" xsi:type="string" translate="true">Delete</item>
                         <item name="url" xsi:type="string">cms/page/massDelete</item>
                     </item>

@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Control;
+namespace Magento\Framework\View\Element\UiComponent\Control;
 
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -41,7 +42,7 @@ class ActionPool implements ActionPoolInterface
     protected $itemFactory;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock
+     * @var AbstractBlock
      */
     protected $toolbarBlock;
 
@@ -124,7 +125,7 @@ class ActionPool implements ActionPoolInterface
     protected function createContainer($key, UiComponentInterface $view)
     {
         $container = $this->context->getPageLayout()->createBlock(
-            'Magento\Ui\Component\Control\Container',
+            'Magento\Framework\View\Element\UiComponent\Control\Container',
             'container-' . $key,
             [
                 'data' => [
