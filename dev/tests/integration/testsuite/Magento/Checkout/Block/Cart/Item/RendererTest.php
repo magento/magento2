@@ -39,6 +39,17 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->_block->setItem($item);
     }
 
+    protected function tearDown()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $objectManager->removeSharedInstance('Magento\Checkout\Model\Session');
+        $objectManager->removeSharedInstance('Magento\Checkout\Model\Session\Storage');
+
+        unset($_SESSION);
+    }
+
     public function testThumbnail()
     {
         $size = $this->_block->getThumbnailSize();
