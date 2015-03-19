@@ -18,11 +18,11 @@
                                     <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
                                     <item name="children" xsi:type="array">
                                         <item name="errors" xsi:type="array"><item name="component" xsi:type="string">Magento_Ui/js/view/errors</item></item>
-                                        <item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>
+                                        <!--<item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>-->
                                         <item name="steps" xsi:type="array">
                                             <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
                                             <item name="children" xsi:type="array">
-                                                <item name="authentication" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item></item>
+                                                <!--<item name="authentication" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item></item>-->
                                                 <item name="billingAddress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item></item>
                                                 <item name="shippingAddress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item></item>
                                                 <item name="shipping" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item></item>

@@ -1,8 +1,30 @@
-<h2>Billing Information </h2>
-<form method="post" id="billing-address-form">
-    <label for="billing-address">Select a billing address from your address book or enter a new address:</label>
-    <select name="billing-address" id="billing-address" data-bind="options: addresses, optionsText: function(item) { return item.city + ', ' + item.street[0] }, optionsValue: function(item) {return item.id}"></select>
-    <input type="checkbox" name="billing[use_for_shipping]" id="use_for_shipping" />
-    <label for="use_for_shipping">Ship to this address</label>
-    <input type="submit" value="Continue">
-</form>
+<li id="opc-billing" class="section allow active">
+    <div class="step-title" data-role="title">
+        <span class="number">2</span>
+        <h2>Billing Information</h2>
+    </div>
+    <div id="checkout-step-billing" class="step-content" data-role="content">
+        <form class="form billing" id="co-billing-form" data-hasrequired="* Required Fields">
+            <div class="field addresses">
+                <label class="label" for="billing:address-select"><span>Select a billing address from your address book or enter a new address.</span></label>
+                <div class="control">
+                    <select name="billing_address_id" id="billing:address-select" data-bind="options: billingAddresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: function(item) { return item.getEntityId(); }, value: selectedAddressId"></select>
+                </div>
+            </div>
+            <div class="field choice">
+                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" />
+                <label class="label" for="billing:use_for_shipping_yes"><span>Ship to this address</span></label>
+            </div>
+            <div class="field choice">
+                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" checked="checked" class="radio" />
+                <label class="label" for="billing:use_for_shipping_no"><span>Ship to different address</span></label>
+            </div>
+            <input type="hidden" name="billing[use_for_shipping]" value="1" />
+            <div class="actions" id="billing-buttons-container">
+                <div class="primary">
+                    <button data-role="opc-continue" type="button" class="button action continue primary"><span>Continue</span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</li>

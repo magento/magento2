@@ -6,24 +6,26 @@
  * @license     {license_link}
  */
 ?>
-<div id="checkout" data-bind="scope:'checkout'">
-    <h1>Checkout</h1>
-    <!-- ko template: getTemplate() --><!-- /ko -->
-    <script type="text/x-magento-init">
-        {
-            "#checkout": {
-                "Magento_Ui/js/core/app": <?php echo $this->getJsLayout();?>
+
+<div class="opc-wrapper">
+    <ol class="opc" id="checkout" data-bind="scope:'checkout'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <script type="text/x-magento-init">
+            {
+                "#checkout": {
+                    "Magento_Ui/js/core/app": <?php echo $this->getJsLayout();?>
+                }
             }
-        }
-    </script>
-    <script>
-        window.customerData = <?php echo $this->getCustomerData(); ?>;
-        window.cartData = <?php echo $this->getCart(); ?>;
-        window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
-    </script>
-    <script>
-        require(['mage/url'], function(url) {
-            return url.setBaseUrl('<?php echo $this->getBaseUrl();?>');
-        })
-    </script>
+        </script>
+        <script>
+            window.customerData = <?php echo $this->getCustomerData(); ?>;
+            window.cartData = <?php echo $this->getCart(); ?>;
+            window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
+        </script>
+        <script>
+            require(['mage/url'], function(url) {
+                return url.setBaseUrl('<?php echo $this->getBaseUrl();?>');
+            })
+        </script>
+    </ol>
 </div>

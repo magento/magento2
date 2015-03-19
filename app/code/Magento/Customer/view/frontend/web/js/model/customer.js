@@ -34,7 +34,7 @@ define(
                 isLoggedIn = flag;
             },
             getBillingAddressList: function () {
-                return this.customerData.addresses;
+                return addressList.getAddresses();
             },
             getShippingAddressList: function () {
                 return addressList.getAddresses();

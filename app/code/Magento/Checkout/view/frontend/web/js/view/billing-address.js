@@ -68,7 +68,8 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address',
-                addresses: customer.getBillingAddressList()
+                billingAddresses: customer.getBillingAddressList(),
+                selectedAddressId: null
             }
         });
     }
