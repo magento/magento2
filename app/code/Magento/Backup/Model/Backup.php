@@ -286,7 +286,9 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
             $this->varDirectory->delete($this->_getFilePath());
         }
         if (!$write && !$this->varDirectory->isFile($this->_getFilePath())) {
-            throw new \Magento\Framework\Exception\InputException(__('The backup file "%1" does not exist.', $this->getFileName()));
+            throw new \Magento\Framework\Exception\InputException(
+                __('The backup file "%1" does not exist.', $this->getFileName())
+            );
         }
 
         $mode = $write ? 'wb' . self::COMPRESS_RATE : 'rb';
