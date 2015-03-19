@@ -104,6 +104,7 @@ class Date extends AbstractFilter
      */
     public function convertValue($value)
     {
+        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         if (!empty($value['from']) || !empty($value['to'])) {
             if (!empty($value['from'])) {
                 $value['orig_from'] = $value['from'];
@@ -111,6 +112,8 @@ class Date extends AbstractFilter
                     $value['from'],
                     $this->wrappedComponent->getLocale()
                 );
+            } else {
+                unset($value['from']);
             }
             if (!empty($value['to'])) {
                 $value['orig_to'] = $value['to'];
@@ -118,12 +121,16 @@ class Date extends AbstractFilter
                     $value['to'],
                     $this->wrappedComponent->getLocale()
                 );
+            } else {
+                unset($value['to']);
             }
             $value['datetime'] = true;
             $value['locale'] = $this->wrappedComponent->getLocale();
         } else {
             $value = null;
         }
+
+        return $value;
 
         return $value;
     }
