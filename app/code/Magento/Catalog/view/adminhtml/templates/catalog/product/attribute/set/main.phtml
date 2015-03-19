@@ -39,7 +39,7 @@ require([
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
             <script>
-require(["jquery", "extjs/ext-tree-checkbox", "prototype"], function(jQuery){
+define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], function(jQuery){
 
             //<![CDATA[
             var allowDragAndDrop = <?php echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
@@ -406,6 +406,7 @@ require(["jquery", "extjs/ext-tree-checkbox", "prototype"], function(jQuery){
             //]]>
 
 });
+require(["tree-panel"]);
 </script>
     </div>
 </div>
