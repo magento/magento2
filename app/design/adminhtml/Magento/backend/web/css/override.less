@@ -4419,6 +4419,11 @@ fieldset[disabled] .downloadable-form .action-remove {
   vertical-align: middle;
   text-align: center;
 }
+@-moz-document url-prefix() {
+  .downloadable-form {
+    display: table-column;
+  }
+}
 .admin__section-nav {
   padding-bottom: 51px;
 }

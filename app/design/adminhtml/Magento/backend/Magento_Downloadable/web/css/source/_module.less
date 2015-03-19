@@ -72,3 +72,9 @@
         margin-top: .5rem;
     }
 }
+
+@-moz-document url-prefix() { // Firefox fieldset overflow bug fix
+    .downloadable-form {
+        display: table-column;
+    }
+}
