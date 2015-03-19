@@ -78,7 +78,7 @@ class Sharing extends \Magento\Framework\View\Element\Template
      */
     public function getEnteredData($key)
     {
-        if (is_null($this->_enteredData)) {
+        if ($this->_enteredData === null) {
             $this->_enteredData = $this->_wishlistSession->getData('sharing_form', true);
         }
 

@@ -58,7 +58,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'data_attribute', []);
 
         $this->buttonList->update('save', 'id', 'submit_order_top_button');
-        if (is_null($customerId) || !$storeId) {
+        if ($customerId === null || !$storeId) {
             $this->buttonList->update('save', 'style', 'display:none');
         }
 
@@ -67,7 +67,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->buttonList->update('reset', 'id', 'reset_order_top_button');
 
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             $this->buttonList->update('reset', 'style', 'display:none');
         } else {
             $this->buttonList->update('back', 'style', 'display:none');
@@ -91,8 +91,8 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     protected function _prepareLayout()
     {
         $pageTitle = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Header')->toHtml();
-        if (is_object($this->getLayout()->getBlock('page-title'))) {
-            $this->getLayout()->getBlock('page-title')->setPageTitle($pageTitle);
+        if (is_object($this->getLayout()->getBlock('page.title'))) {
+            $this->getLayout()->getBlock('page.title')->setPageTitle($pageTitle);
         }
         return parent::_prepareLayout();
     }

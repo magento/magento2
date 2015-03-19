@@ -142,7 +142,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -172,7 +172,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Image\Factory $imageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -189,7 +189,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Image\Factory $imageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -394,7 +394,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getNeedMemoryForFile($file = null)
     {
-        $file = is_null($file) ? $this->getBaseFile() : $file;
+        $file = $file === null ? $this->getBaseFile() : $file;
         if (!$file) {
             return 0;
         }
@@ -580,7 +580,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function resize()
     {
-        if (is_null($this->getWidth()) && is_null($this->getHeight())) {
+        if ($this->getWidth() === null && $this->getHeight() === null) {
             return $this;
         }
         $this->getImageProcessor()->resize($this->_width, $this->_height);

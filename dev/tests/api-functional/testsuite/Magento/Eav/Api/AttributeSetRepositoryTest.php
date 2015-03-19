@@ -73,7 +73,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $attributeSet = $this->getAttributeSetByName($attributeSetName);
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/eav/attribute-sets',
+                'resourcePath' => '/V1/eav/attribute-sets/' . $attributeSet->getId(),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [

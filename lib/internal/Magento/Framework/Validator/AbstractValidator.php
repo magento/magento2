@@ -66,7 +66,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     public function getTranslator()
     {
-        if (is_null($this->_translator)) {
+        if ($this->_translator === null) {
             return self::getDefaultTranslator();
         }
         return $this->_translator;
@@ -79,7 +79,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     public function hasTranslator()
     {
-        return !is_null($this->_translator);
+        return $this->_translator !== null;
     }
 
     /**

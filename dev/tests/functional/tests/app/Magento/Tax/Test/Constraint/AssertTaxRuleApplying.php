@@ -141,7 +141,9 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $checkoutCart->open()->getCartBlock()->clearShoppingCart();
         $browser->open($_ENV['app_frontend_url'] . $this->productSimple->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCart();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
         // Estimate Shipping and Tax
+        $checkoutCart->open();
         $checkoutCart->getShippingBlock()->openEstimateShippingAndTax();
         $checkoutCart->getShippingBlock()->fill($address);
         $checkoutCart->getShippingBlock()->clickGetQuote();

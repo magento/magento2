@@ -13,7 +13,7 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/carts" method="PUT">
+    <route url="/V1/carts" method="GET">
         <service class="Magento\Quote\Api\CartRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="anonymous" />

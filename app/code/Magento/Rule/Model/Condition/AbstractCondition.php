@@ -397,14 +397,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
         if ($this->getInputType() == 'date' && !$this->getIsValueParsed()) {
             // date format intentionally hard-coded
             $this->setValue(
-                $this->_localeDate->date(
-                    $this->getData('value'),
-                    \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
-                    null,
-                    false
-                )->toString(
-                    \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT
-                )
+                (new \DateTime($this->getData('value')))->format('Y-m-d H:i:s')
             );
             $this->setIsValueParsed(true);
         }
@@ -418,7 +411,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getValueName()
     {
         $value = $this->getValue();
-        if (is_null($value) || '' === $value) {
+        if ($value === null || '' === $value) {
             return '...';
         }
 
@@ -558,7 +551,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getOperatorElement()
     {
         $options = $this->getOperatorSelectOptions();
-        if (is_null($this->getOperator())) {
+        if ($this->getOperator() === null) {
             foreach ($options as $option) {
                 $this->setOperator($option['value']);
                 break;

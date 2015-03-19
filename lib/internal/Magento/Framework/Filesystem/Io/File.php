@@ -89,39 +89,6 @@ class File extends AbstractIo
     }
 
     /**
-     * Open file in stream mode
-     * For set folder for file use open method
-     *
-     * @param string $fileName
-     * @param string $mode
-     * @param int $chmod
-     * @return true
-     * @throws \Exception
-     */
-    public function streamOpen($fileName, $mode = 'w+', $chmod = 0666)
-    {
-        $writeableMode = preg_match('#^[wax]#i', $mode);
-        if ($writeableMode && !is_writeable($this->_cwd)) {
-            throw new \Exception('Permission denied for write to ' . $this->_cwd);
-        }
-
-        if (!ini_get('auto_detect_line_endings')) {
-            ini_set('auto_detect_line_endings', 1);
-        }
-
-        $this->_cwd();
-        $this->_streamHandler = @fopen($fileName, $mode);
-        $this->_iwd();
-        if ($this->_streamHandler === false) {
-            throw new \Exception('Error write to file ' . $fileName);
-        }
-
-        $this->_streamFileName = $fileName;
-        $this->_streamChmod = $chmod;
-        return true;
-    }
-
-    /**
      * Lock file
      *
      * @param bool $exclusive
@@ -246,7 +213,7 @@ class File extends AbstractIo
             return false;
         }
         $stat = @fstat($this->_streamHandler);
-        if (!is_null($part)) {
+        if ($part !== null) {
             return isset($stat[$part]) ? $stat[$part] : $default;
         }
         return $stat;
@@ -446,7 +413,7 @@ class File extends AbstractIo
     public function read($filename, $dest = null)
     {
         $this->_cwd();
-        if (!is_null($dest)) {
+        if ($dest !== null) {
             $result = @copy($filename, $dest);
         } else {
             $result = @file_get_contents($filename);
@@ -493,7 +460,7 @@ class File extends AbstractIo
         } else {
             $result = @file_put_contents($filename, $src);
         }
-        if (!is_null($mode) && $result) {
+        if ($mode !== null && $result) {
             @chmod($filename, $mode);
         }
         $this->_iwd();

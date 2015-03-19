@@ -9,7 +9,7 @@ namespace Magento\Framework\Api;
 /**
  * SearchResults Service Data Object used for the search service requests
  */
-class SearchResults extends \Magento\Framework\Api\AbstractExtensibleObject
+class SearchResults extends AbstractSimpleObject
 {
     const KEY_ITEMS = 'items';
     const KEY_SEARCH_CRITERIA = 'search_criteria';
@@ -22,7 +22,7 @@ class SearchResults extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getItems()
     {
-        return is_null($this->_get(self::KEY_ITEMS)) ? [] : $this->_get(self::KEY_ITEMS);
+        return $this->_get(self::KEY_ITEMS) === null ? [] : $this->_get(self::KEY_ITEMS);
     }
 
     /**

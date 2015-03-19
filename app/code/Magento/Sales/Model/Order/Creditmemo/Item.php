@@ -45,7 +45,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -55,7 +55,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -65,7 +65,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -126,7 +126,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
      */
     public function getOrderItem()
     {
-        if (is_null($this->_orderItem)) {
+        if ($this->_orderItem === null) {
             if ($this->getCreditmemo()) {
                 $this->_orderItem = $this->getCreditmemo()->getOrder()->getItemById($this->getOrderItemId());
             } else {
@@ -167,7 +167,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
     /**
      * Applying qty to order item
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Item
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item
      */
     public function register()
     {
@@ -820,6 +820,28 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
     public function setWeeeTaxAppliedRowAmount($amount)
     {
         return $this->setData(CreditmemoItemInterface::WEEE_TAX_APPLIED_ROW_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\CreditmemoItemExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

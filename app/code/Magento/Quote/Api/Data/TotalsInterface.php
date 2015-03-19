@@ -402,4 +402,19 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setItems(array $items = null);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Quote\Api\Data\TotalsExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Quote\Api\Data\TotalsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\TotalsExtensionInterface $extensionAttributes);
 }

@@ -84,4 +84,21 @@ interface SampleContentInterface extends \Magento\Framework\Api\ExtensibleDataIn
      * @return $this
      */
     public function setSampleUrl($sampleUrl);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Downloadable\Api\Data\SampleContentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Downloadable\Api\Data\SampleContentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Downloadable\Api\Data\SampleContentExtensionInterface $extensionAttributes
+    );
 }

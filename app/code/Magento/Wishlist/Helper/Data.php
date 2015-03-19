@@ -171,7 +171,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getWishlist()
     {
-        if (is_null($this->_wishlist)) {
+        if ($this->_wishlist === null) {
             if ($this->_coreRegistry->registry('shared_wishlist')) {
                 $this->_wishlist = $this->_coreRegistry->registry('shared_wishlist');
             } else {
@@ -228,7 +228,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getWishlistItemCollection()
     {
-        if (is_null($this->_wishlistItemCollection)) {
+        if ($this->_wishlistItemCollection === null) {
             $this->_wishlistItemCollection = $this->_createWishlistItemCollection();
         }
         return $this->_wishlistItemCollection;
@@ -387,7 +387,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getCartUrlParameters($item)
     {
         $continueUrl = $this->urlEncoder->encode(
-            $this->_getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
+            $this->_getUrl(
+                'wishlist/index/index',
+                [
+                    '_current' => true,
+                    '_use_rewrite' => true,
+                    '_scope_to_url' => true
+                ]
+            )
         );
 
         return [

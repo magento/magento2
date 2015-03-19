@@ -7,7 +7,7 @@
 namespace Magento\TestFramework;
 
 /**
- * Class that implements CRUD tests for \Magento\Core\Model\AbstractModel based objects
+ * Class that implements CRUD tests for \Magento\Framework\Model\AbstractModel based objects
  */
 class Entity
 {

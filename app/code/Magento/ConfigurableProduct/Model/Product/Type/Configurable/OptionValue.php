@@ -9,6 +9,10 @@ namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 use Magento\ConfigurableProduct\Api\Data\OptionValueInterface;
 
+/**
+ * Class OptionValue
+ *
+ */
 class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\ConfigurableProduct\Api\Data\OptionValueInterface
 {
@@ -44,6 +48,7 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     {
         return $this->getData(self::KEY_VALUE_INDEX);
     }
+
     /**
      * @param float $pricingValue
      * @return $this
@@ -69,6 +74,28 @@ class OptionValue extends \Magento\Framework\Model\AbstractExtensibleModel imple
     public function setValueIndex($valueIndex)
     {
         return $this->setData(self::KEY_VALUE_INDEX, $valueIndex);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\ConfigurableProduct\Api\Data\OptionValueExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionValueExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\ConfigurableProduct\Api\Data\OptionValueExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

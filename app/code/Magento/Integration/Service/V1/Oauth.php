@@ -108,7 +108,7 @@ class Oauth implements OauthInterface
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
-                'Unexpected error. Unable to create oAuth consumer account.'
+                __('Unexpected error. Unable to create oAuth consumer account.')
             );
         }
     }
@@ -165,7 +165,7 @@ class Oauth implements OauthInterface
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
-                'Unexpected error. Unable to load oAuth consumer account.'
+                __('Unexpected error. Unable to load oAuth consumer account.')
             );
         }
     }
@@ -181,7 +181,7 @@ class Oauth implements OauthInterface
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Oauth\Exception(
-                'Unexpected error. Unable to load oAuth consumer account.'
+                __('Unexpected error. Unable to load oAuth consumer account.')
             );
         }
     }
@@ -195,8 +195,7 @@ class Oauth implements OauthInterface
             $consumer = $this->_consumerFactory->create()->load($consumerId);
             if (!$consumer->getId()) {
                 throw new \Magento\Framework\Oauth\Exception(
-                    __('A consumer with ID %1 does not exist', $consumerId),
-                    OauthInterface::ERR_PARAMETER_REJECTED
+                    __('A consumer with ID %1 does not exist', $consumerId)
                 );
             }
             $consumerData = $consumer->getData();
@@ -223,7 +222,7 @@ class Oauth implements OauthInterface
         } catch (\Exception $exception) {
             $this->_logger->critical($exception);
             throw new \Magento\Framework\Oauth\Exception(
-                'Unable to post data to consumer due to an unexpected error'
+                __('Unable to post data to consumer due to an unexpected error')
             );
         }
     }

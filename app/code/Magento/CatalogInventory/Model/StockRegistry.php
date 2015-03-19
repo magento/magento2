@@ -205,7 +205,10 @@ class StockRegistry implements StockRegistryInterface
         $productId = $product->getIdBySku($productSku);
         if (!$productId) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                "Product with SKU \"{$productSku}\" does not exist"
+                __(
+                    'Product with SKU "%1" does not exist',
+                    $productSku
+                )
             );
         }
         return $productId;

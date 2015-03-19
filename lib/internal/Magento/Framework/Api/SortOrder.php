@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Api;
 
-
 /**
  * Data object for sort order.
+ * @codeCoverageIgnore
  */
-class SortOrder extends AbstractExtensibleObject
+class SortOrder extends AbstractSimpleObject
 {
     const FIELD = 'field';
     const DIRECTION = 'direction';
@@ -26,6 +26,17 @@ class SortOrder extends AbstractExtensibleObject
     }
 
     /**
+     * Set sorting field.
+     *
+     * @param string $field
+     * @return $this
+     */
+    public function setField($field)
+    {
+        return $this->setData(SortOrder::FIELD, $field);
+    }
+
+    /**
      * Get sorting direction.
      *
      * @return string
@@ -33,5 +44,16 @@ class SortOrder extends AbstractExtensibleObject
     public function getDirection()
     {
         return $this->_get(SortOrder::DIRECTION);
+    }
+
+    /**
+     * Set sorting direction.
+     *
+     * @param string $direction
+     * @return $this
+     */
+    public function setDirection($direction)
+    {
+        return $this->setData(SortOrder::DIRECTION, $direction);
     }
 }

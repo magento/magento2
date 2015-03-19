@@ -7,12 +7,10 @@ var config = {
     "waitSeconds": 0,
     "shim": {
         "jquery/jquery-migrate": ["jquery"],
-        "jquery/jquery.hashchange": ["jquery"],
+        "jquery/jquery.hashchange": ["jquery", "jquery/jquery-migrate"],
         "jquery/jstree/jquery.hotkeys": ["jquery"],
         "jquery/hover-intent": ["jquery"],
         "mage/adminhtml/backup": ["prototype"],
-        "mage/adminhtml/tools": ["prototype"],
-        "mage/adminhtml/varienLoader": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
@@ -36,7 +34,7 @@ var config = {
         "jquery/hover-intent": "jquery/jquery.hoverIntent",
         "jquery/file-uploader": "jquery/fileUploader/jquery.fileupload-fp",
         "jquery/jquery.hashchange": "jquery/jquery.ba-hashchange.min",
-        "prototype": "prototype/prototype-amd",
+        "prototype": "legacy-build.min",
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
         "ko": "ko/ko",
@@ -46,3 +44,7 @@ var config = {
         "jquery/jquery-migrate"
     ]
 };
+
+require(['jquery'], function ($) {
+    $.noConflict();
+});

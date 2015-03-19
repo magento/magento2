@@ -174,4 +174,21 @@ interface LinkContentInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setSampleType($sampleType);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Downloadable\Api\Data\LinkContentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Downloadable\Api\Data\LinkContentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Downloadable\Api\Data\LinkContentExtensionInterface $extensionAttributes
+    );
 }

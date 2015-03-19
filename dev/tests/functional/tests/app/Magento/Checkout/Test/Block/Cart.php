@@ -48,7 +48,7 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $updateShoppingCart = '[name="update_cart_action"]';
+    protected $updateShoppingCart = '.update[name="update_cart_action"]';
 
     /**
      * Cart empty block selector
@@ -56,6 +56,13 @@ class Cart extends Block
      * @var string
      */
     protected $cartEmpty = '.cart-empty';
+
+    /**
+     * Cart container selector
+     *
+     * @var string
+     */
+    protected $cartContainer = '.cart-container';
 
     /**
      * Get cart item block
@@ -169,5 +176,13 @@ class Cart extends Block
     public function cartIsEmpty()
     {
         return $this->_rootElement->find($this->cartEmpty, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Wait while cart container is loaded
+     */
+    public function waitCartContainerLoading()
+    {
+        $this->waitForElementVisible($this->cartContainer);
     }
 }

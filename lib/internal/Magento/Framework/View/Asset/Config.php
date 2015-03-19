@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Asset;
+
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * View asset configuration interface
@@ -34,14 +35,24 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     const XML_PATH_MINIFICATION_ADAPTER = 'dev/%s/minify_adapter';
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * XML path for asset minification adapter configuration
+     */
+    const XML_PATH_JS_BUNDLING = 'dev/js/enable_js_bundling';
+
+    /**
+     * XML path for HTML minification configuration
+     */
+    const XML_PATH_MINIFICATION_HTML = 'dev/template/minify_html';
+
+    /**
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
@@ -53,7 +64,23 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeCssFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_CSS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_MERGE_CSS_FILES,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Check whether bundling of JavScript files is on
+     *
+     * @return bool
+     */
+    public function isBundlingJsFiles()
+    {
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_JS_BUNDLING,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -63,7 +90,10 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      */
     public function isMergeJsFiles()
     {
-        return (bool)$this->scopeConfig->isSetFlag(self::XML_PATH_MERGE_JS_FILES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_MERGE_JS_FILES,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -76,7 +106,7 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (bool)$this->scopeConfig->isSetFlag(
             sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -90,7 +120,20 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (string)$this->scopeConfig->getValue(
             sprintf(self::XML_PATH_MINIFICATION_ADAPTER, $contentType),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Check whether minify of HTML is on
+     *
+     * @return bool
+     */
+    public function isMinifyHtml()
+    {
+        return (bool)$this->scopeConfig->isSetFlag(
+            self::XML_PATH_MINIFICATION_HTML,
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

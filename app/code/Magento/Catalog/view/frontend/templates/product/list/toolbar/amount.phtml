@@ -15,7 +15,7 @@
  */
 use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
-<p class="toolbar-amount">
+<p class="toolbar-amount" id="toolbar-amount">
     <?php if ($block->getLastPageNum() > 1): ?>
         <?php echo __('Items %1-%2 of %3',
             '<span class="toolbar-number">' . $block->getFirstNum() . '</span>',

@@ -77,7 +77,7 @@ class TransactionRepository
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException('ID required');
+            throw new \Magento\Framework\Exception\InputException(__('ID required'));
         }
         if (!isset($this->registry[$id])) {
             $filter = $this->filterBuilder->setField('transaction_id')->setValue($id)->setConditionType('eq')->create();
@@ -85,7 +85,9 @@ class TransactionRepository
             $this->find($this->searchCriteriaBuilder->create());
 
             if (!isset($this->registry[$id])) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException('Requested entity doesn\'t exist');
+                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                    __('Requested entity doesn\'t exist')
+                );
             }
         }
         return $this->registry[$id];

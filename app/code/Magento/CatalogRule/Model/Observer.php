@@ -133,9 +133,9 @@ class Observer
         $storeId = $product->getStoreId();
 
         if ($observer->hasDate()) {
-            $date = $observer->getEvent()->getDate();
+            $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = $this->_localeDate->scopeTimeStamp($storeId);
+            $date = $this->_localeDate->scopeDate($storeId);
         }
 
         if ($observer->hasWebsiteId()) {
@@ -152,7 +152,7 @@ class Observer
             $gId = $this->_customerSession->getCustomerGroupId();
         }
 
-        $key = "{$date}|{$wId}|{$gId}|{$pId}";
+        $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";
         if (!isset($this->_rulePrices[$key])) {
             $rulePrice = $this->_resourceRuleFactory->create()->getRulePrice($date, $wId, $gId, $pId);
             $this->_rulePrices[$key] = $rulePrice;
@@ -183,12 +183,12 @@ class Observer
             $gId = $ruleData->getCustomerGroupId();
             $pId = $product->getId();
 
-            $key = "{$date}|{$wId}|{$gId}|{$pId}";
-        } elseif (!is_null($product->getWebsiteId()) && !is_null($product->getCustomerGroupId())) {
+            $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";
+        } elseif ($product->getWebsiteId() !== null && $product->getCustomerGroupId() !== null) {
             $wId = $product->getWebsiteId();
             $gId = $product->getCustomerGroupId();
             $pId = $product->getId();
-            $key = "{$date}|{$wId}|{$gId}|{$pId}";
+            $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";
         }
 
         if ($key) {
@@ -265,15 +265,15 @@ class Observer
             }
         }
         if ($observer->getEvent()->hasDate()) {
-            $date = $observer->getEvent()->getDate();
+            $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = $this->_localeDate->scopeTimeStamp($store);
+            $date = new \DateTime('@' . $this->_localeDate->scopeTimeStamp($store));
         }
 
         $productIds = [];
         /* @var $product Product */
         foreach ($collection as $product) {
-            $key = implode('|', [$date, $websiteId, $groupId, $product->getId()]);
+            $key = implode('|', [$date->format('Y-m-d H:i:s'), $websiteId, $groupId, $product->getId()]);
             if (!isset($this->_rulePrices[$key])) {
                 $productIds[] = $product->getId();
             }
@@ -287,7 +287,7 @@ class Observer
                 $productIds
             );
             foreach ($productIds as $productId) {
-                $key = implode('|', [$date, $websiteId, $groupId, $productId]);
+                $key = implode('|', [$date->format('Y-m-d H:i:s'), $websiteId, $groupId, $productId]);
                 $this->_rulePrices[$key] = isset($rulePrices[$productId]) ? $rulePrices[$productId] : false;
             }
         }

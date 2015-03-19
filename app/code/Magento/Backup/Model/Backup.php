@@ -152,10 +152,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
                 'extension' => $this->_helper->getExtensionByType($backupData->getType()),
                 'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),
                 'name' => $backupData->getName(),
-                'date_object' => new \Magento\Framework\Stdlib\DateTime\Date(
-                    (int)$backupData->getTime(),
-                    $this->_localeResolver->getLocaleCode()
-                ),
+                'date_object' => new \DateTime('@' . $backupData->getTime()),
             ]
         );
 
@@ -249,7 +246,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     public function &getFile()
     {
         if (!$this->exists()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__("The backup file does not exist."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
         return $this->varDirectory->read($this->_getFilePath());
@@ -264,7 +261,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     public function deleteFile()
     {
         if (!$this->exists()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__("The backup file does not exist."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
         $this->varDirectory->delete($this->_getFilePath());
@@ -281,7 +278,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     public function open($write = false)
     {
-        if (is_null($this->getPath())) {
+        if ($this->getPath() === null) {
             throw new \Magento\Backup\Exception(__('The backup file path was not specified.'));
         }
 
@@ -318,7 +315,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     protected function _getStream()
     {
-        if (is_null($this->_stream)) {
+        if ($this->_stream === null) {
             throw new \Magento\Backup\Exception(__('The backup file handler was unspecified.'));
         }
         return $this->_stream;
@@ -401,7 +398,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     public function getSize()
     {
-        if (!is_null($this->getData('size'))) {
+        if ($this->getData('size') !== null) {
             return $this->getData('size');
         }
 

@@ -8,7 +8,7 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_layout.xsd">
     <block class="Magento\Framework\View\Element\Text" name="block_with_object_updater_args">
         <arguments>
-            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="object">Magento\Core\Model\DataSource</argument>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="one" xsi:type="object">Magento\Store\Model\DataSource</argument>
             <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="two" xsi:type="number">0</argument>
         </arguments>
     </block>

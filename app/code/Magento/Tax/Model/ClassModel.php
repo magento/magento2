@@ -37,7 +37,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param TaxClass\Factory $classFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -47,7 +47,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Tax\Model\TaxClass\Factory $classFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -57,7 +57,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -83,22 +83,26 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
     protected function checkClassCanBeDeleted()
     {
         if (!$this->getId()) {
-            throw new CouldNotDeleteException('This class no longer exists.');
+            throw new CouldNotDeleteException(__('This class no longer exists.'));
         }
 
         $typeModel = $this->_classFactory->create($this);
 
         if ($typeModel->getAssignedToRules()->getSize() > 0) {
             throw new CouldNotDeleteException(
-                'You cannot delete this tax class because it is used in Tax Rules.' .
-                ' You have to delete the rules it is used in first.'
+                __(
+                    'You cannot delete this tax class because it is used in Tax Rules.'
+                    . ' You have to delete the rules it is used in first.'
+                )
             );
         }
 
         if ($typeModel->isAssignedToObjects()) {
             throw new CouldNotDeleteException(
-                'You cannot delete this tax class because it is used in existing %object(s).',
-                ['object' => $typeModel->getObjectTypeName()]
+                __(
+                    'You cannot delete this tax class because it is used in existing %1(s).',
+                    $typeModel->getObjectTypeName()
+                )
             );
         }
 
@@ -174,4 +178,25 @@ class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implem
         return $this->setData(self::KEY_TYPE, $classType);
     }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxClassExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

@@ -243,4 +243,26 @@ class Content extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->setData(self::SAMPLE_TYPE, $sampleType);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Downloadable\Api\Data\LinkContentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Downloadable\Api\Data\LinkContentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Downloadable\Api\Data\LinkContentExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

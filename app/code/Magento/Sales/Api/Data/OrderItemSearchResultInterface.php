@@ -20,4 +20,12 @@ interface OrderItemSearchResultInterface extends \Magento\Framework\Api\SearchRe
      * @return \Magento\Sales\Api\Data\OrderItemInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

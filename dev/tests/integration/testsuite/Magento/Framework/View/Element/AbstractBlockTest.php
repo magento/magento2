@@ -35,7 +35,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     'Magento\Framework\View\Element\Context'
                 ),
-                ['module_name' => 'Magento_Core']
+                ['module_name' => 'Magento_Theme']
             ]
         );
     }
@@ -391,7 +391,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \OutOfBoundsException
      */
     public function testInsertWithoutCreateBlock()
     {
@@ -481,27 +481,10 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertStringMatchesFormat('http://localhost/pub/static/frontend/%s/en_US/css/styles.css', $actualResult);
     }
 
-    public function testFormatDate()
-    {
-        $locale = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
-        );
-        $this->assertEquals($locale->formatDate(), $this->_block->formatDate());
-    }
-
-    public function testFormatTime()
-    {
-        $locale = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
-        );
-        $time = new \Magento\Framework\Stdlib\DateTime\Date(time());
-        $this->assertEquals($locale->formatTime($time), $this->_block->formatTime($time));
-    }
-
     public function testGetModuleName()
     {
-        $this->assertEquals('Magento_Core', $this->_block->getModuleName());
-        $this->assertEquals('Magento_Core', $this->_block->getData('module_name'));
+        $this->assertEquals('Magento_Theme', $this->_block->getModuleName());
+        $this->assertEquals('Magento_Theme', $this->_block->getData('module_name'));
     }
 
     /**
@@ -636,12 +619,12 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                         'Magento\Framework\View\Element\Context'
                     ),
-                    ['module_name' => 'Magento_Core']
+                    ['module_name' => 'Magento_Theme']
                 ],
                 $mockClass
             );
         }
-        if (is_null($this->_layout)) {
+        if ($this->_layout === null) {
             $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 'Magento\Framework\View\LayoutInterface'
             );

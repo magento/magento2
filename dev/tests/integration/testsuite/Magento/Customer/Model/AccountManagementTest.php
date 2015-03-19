@@ -590,7 +590,11 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $customerEntity = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerEntity, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customerEntity,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         $customerAfter = $this->accountManagement->createAccount($customerEntity, 'aPassword');
         $this->assertGreaterThan(0, $customerAfter->getId());
@@ -701,7 +705,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         ];
         foreach ($dataInModel as $key => $value) {
             if (!in_array($key, $expectedDifferences)) {
-                if (is_null($value)) {
+                if ($value === null) {
                     $this->assertArrayNotHasKey($key, $dataInService);
                 } else {
                     $this->assertEquals($value, $dataInService[$key], 'Failed asserting value for ' . $key);

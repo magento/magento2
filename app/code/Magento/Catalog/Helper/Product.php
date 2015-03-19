@@ -350,7 +350,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
             'boolean' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
         ];
 
-        if (is_null($inputType)) {
+        if ($inputType === null) {
             return $inputTypes;
         } else {
             if (isset($inputTypes[$inputType])) {

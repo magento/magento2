@@ -40,10 +40,10 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     {
         $format = $this->getColumn()->getFormat();
         if (!$format) {
-            if (is_null(self::$_format)) {
+            if (self::$_format === null) {
                 try {
                     self::$_format = $this->_localeDate->getDateFormat(
-                        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
+                        \IntlDateFormatter::MEDIUM
                     );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
@@ -64,30 +64,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             $format = $this->_getFormat();
-            try {
-                if ($this->getColumn()->getGmtoffset()) {
-                    $data = $this->_localeDate->date(
-                        $data,
-                        \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                    )->toString(
-                        $format
-                    );
-                } else {
-                    $data = $this->_localeDate->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
-                }
-            } catch (\Exception $e) {
-                if ($this->getColumn()->getTimezone()) {
-                    $data = $this->_localeDate->date(
-                        $data,
-                        \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                    )->toString(
-                        $format
-                    );
-                } else {
-                    $data = $this->_localeDate->date($data, null, null, false)->toString($format);
-                }
-            }
-            return $data;
+            return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($data)), $format);
         }
         return $this->getColumn()->getDefault();
     }

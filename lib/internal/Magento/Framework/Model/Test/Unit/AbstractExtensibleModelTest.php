@@ -1,0 +1,229 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+namespace Magento\Framework\Model\Test\Unit;
+
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
+class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\Framework\Model\AbstractExtensibleModel
+     */
+    protected $model;
+
+    /**
+     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contextMock;
+
+    /**
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $registryMock;
+
+    /**
+     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resourceMock;
+
+    /**
+     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resourceCollectionMock;
+
+    /** @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $metadataServiceMock;
+
+    /** @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $attributeValueFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $actionValidatorMock;
+
+    protected function setUp()
+    {
+        $this->actionValidatorMock = $this->getMock(
+            '\Magento\Framework\Model\ActionValidator\RemoveAction',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->contextMock = new \Magento\Framework\Model\Context(
+            $this->getMock('Psr\Log\LoggerInterface'),
+            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\App\State', [], [], '', false),
+            $this->actionValidatorMock
+        );
+        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->resourceMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            [
+                '_construct',
+                '_getReadAdapter',
+                '_getWriteAdapter',
+                '__wakeup',
+                'commit',
+                'delete',
+                'getIdFieldName',
+                'rollBack'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->resourceCollectionMock = $this->getMock(
+            'Magento\Framework\Data\Collection\Db',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->metadataServiceMock = $this->getMockBuilder('Magento\Framework\Api\MetadataServiceInterface')->getMock();
+        $this->metadataServiceMock
+            ->expects($this->any())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn(
+                [
+                    new \Magento\Framework\Object(['attribute_code' => 'attribute1']),
+                    new \Magento\Framework\Object(['attribute_code' => 'attribute2']),
+                    new \Magento\Framework\Object(['attribute_code' => 'attribute3']),
+                ]
+            );
+        $extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = $this->getMockForAbstractClass(
+            'Magento\Framework\Model\AbstractExtensibleModel',
+            [
+                $this->contextMock,
+                $this->registryMock,
+                $extensionAttributesFactory,
+                $this->attributeValueFactoryMock,
+                $this->resourceMock,
+                $this->resourceCollectionMock
+            ]
+        );
+    }
+
+    /**
+     * Test implementation of interface for work with custom attributes.
+     */
+    public function testCustomAttributes()
+    {
+        $this->assertEquals(
+            [],
+            $this->model->getCustomAttributes(),
+            "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
+        );
+        $this->assertEquals(
+            null,
+            $this->model->getCustomAttribute('not_existing_custom_attribute'),
+            "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
+        );
+        $attributesAsArray = ['attribute1' => true, 'attribute2' => 'Attribute Value', 'attribute3' => 333];
+        $this->addCustomAttributesToModel($attributesAsArray, $this->model);
+        $this->assertEquals(
+            [],
+            $this->model->getCustomAttributes(),
+            'Custom attributes retrieved from the model using getCustomAttributes() are invalid.'
+        );
+    }
+
+    /**
+     * Test if getData works with custom attributes as expected
+     */
+    public function testGetDataWithCustomAttributes()
+    {
+        $attributesAsArray = [
+            'attribute1' => true,
+            'attribute2' => 'Attribute Value',
+            'attribute3' => 333,
+            'invalid' => true,
+        ];
+        $modelData = ['key1' => 'value1', 'key2' => 222];
+        $this->model->setData($modelData);
+        $this->addCustomAttributesToModel($attributesAsArray, $this->model);
+        $this->assertEquals(
+            $modelData,
+            $this->model->getData(),
+            'All model data should be represented as a flat array, including custom attributes.'
+        );
+        foreach ($modelData as $field => $value) {
+            $this->assertEquals(
+                $value,
+                $this->model->getData($field),
+                "Model data item '{$field}' was retrieved incorrectly."
+            );
+        }
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testRestrictedCustomAttributesGet()
+    {
+        $this->model->getData(\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES);
+    }
+
+    public function testSetCustomAttributesAsLiterals()
+    {
+        $attributeCode = 'attribute2';
+        $attributeValue = 'attribute_value';
+        $attributeMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock->expects($this->never())
+            ->method('setAttributeCode')
+            ->with($attributeCode)
+            ->will($this->returnSelf());
+        $attributeMock->expects($this->never())
+            ->method('setValue')
+            ->with($attributeValue)
+            ->will($this->returnSelf());
+        $this->attributeValueFactoryMock->expects($this->never())->method('create')
+            ->willReturn($attributeMock);
+        $this->model->setData(
+            \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES,
+            [$attributeCode => $attributeValue]
+        );
+    }
+
+    /**
+     * @param string[] $attributesAsArray
+     * @param \Magento\Framework\Model\AbstractExtensibleModel $model
+     * @return \Magento\Framework\Api\AttributeInterface[]
+     */
+    protected function addCustomAttributesToModel($attributesAsArray, $model)
+    {
+        $addedAttributes = [];
+        foreach ($attributesAsArray as $attributeCode => $attributeValue) {
+            $addedAttributes[$attributeCode] = new AttributeValue(
+                [
+                    AttributeValue::ATTRIBUTE_CODE => $attributeCode,
+                    AttributeValue::VALUE => $attributeValue,
+                ]
+            );
+        }
+        $model->setData(
+            array_merge(
+                $model->getData(),
+                [\Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => $addedAttributes]
+            )
+        );
+        return $addedAttributes;
+    }
+}

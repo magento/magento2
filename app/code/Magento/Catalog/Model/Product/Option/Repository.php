@@ -44,20 +44,20 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku)
+    public function getList($sku)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         return $product->getOptions();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($productSku, $optionId)
+    public function get($sku, $optionId)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $option = $product->getOptionById($optionId);
-        if (is_null($option)) {
+        if ($option === null) {
             throw NoSuchEntityException::singleField('optionId', $optionId);
         }
         return $option;
@@ -77,8 +77,8 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $productSku = $option->getProductSku();
-        $product = $this->productRepository->get($productSku, true);
+        $sku = $option->getProductSku();
+        $product = $this->productRepository->get($sku, true);
         $optionData = $this->converter->toArray($option);
         if ($option->getOptionId()) {
             if (!$product->getOptionById($option->getOptionId())) {
@@ -97,34 +97,34 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         try {
             $this->productRepository->save($product, true);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save product option');
+            throw new CouldNotSaveException(__('Could not save product option'));
         }
 
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         if (!$option->getOptionId()) {
             $currentOptions = $product->getOptions();
 
             $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
             if (empty($newID)) {
-                throw new CouldNotSaveException('Could not save product option');
+                throw new CouldNotSaveException(__('Could not save product option'));
             }
             $newID = current($newID);
         } else {
             $newID = $option->getOptionId();
         }
-        $option = $this->get($productSku, $newID);
+        $option = $this->get($sku, $newID);
         return $option;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function deleteByIdentifier($productSku, $optionId)
+    public function deleteByIdentifier($sku, $optionId)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $options = $product->getOptions();
         $option = $product->getOptionById($optionId);
-        if (is_null($option)) {
+        if ($option === null) {
             throw NoSuchEntityException::singleField('optionId', $optionId);
         }
         unset($options[$optionId]);
@@ -134,7 +134,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 $this->productRepository->save($product);
             }
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not remove custom option');
+            throw new CouldNotSaveException(__('Could not remove custom option'));
         }
         return true;
     }

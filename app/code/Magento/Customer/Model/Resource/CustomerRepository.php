@@ -48,9 +48,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $customerMetadata;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -74,7 +74,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Customer\Model\Resource\AddressRepository $addressRepository
      * @param \Magento\Customer\Model\Resource\Customer $customerResourceModel
      * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
-     * @param \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder $searchResultsDataBuilder
+     * @param \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
@@ -87,7 +87,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Model\Resource\AddressRepository $addressRepository,
         \Magento\Customer\Model\Resource\Customer $customerResourceModel,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
-        \Magento\Customer\Api\Data\CustomerSearchResultsDataBuilder $searchResultsDataBuilder,
+        \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
@@ -98,7 +98,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->addressRepository = $addressRepository;
         $this->customerResourceModel = $customerResourceModel;
         $this->customerMetadata = $customerMetadata;
-        $this->searchResultsBuilder = $searchResultsDataBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
@@ -209,7 +209,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
         /** @var \Magento\Customer\Model\Resource\Customer\Collection $collection */
         $collection = $this->customerFactory->create()->getCollection();
         // This is needed to make sure all the attributes are properly loaded
@@ -229,7 +230,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
+        $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
             foreach ($searchCriteria->getSortOrders() as $sortOrder) {
@@ -246,8 +247,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         foreach ($collection as $customerModel) {
             $customers[] = $customerModel->getDataModel();
         }
-        $this->searchResultsBuilder->setItems($customers);
-        return $this->searchResultsBuilder->create();
+        $searchResults->setItems($customers);
+        return $searchResults;
     }
 
     /**
@@ -282,11 +283,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $exception = new InputException();
         if (!\Zend_Validate::is(trim($customer->getFirstname()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']));
         }
 
         if (!\Zend_Validate::is(trim($customer->getLastname()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']));
         }
 
         $isEmailAddress = \Zend_Validate::is(
@@ -297,24 +298,26 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
         if (!$isEmailAddress) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                ['fieldName' => 'email', 'value' => $customer->getEmail()]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName' => 'email', 'value' => $customer->getEmail()]
+                )
             );
         }
 
         $dob = $this->getAttributeMetadata('dob');
-        if (!is_null($dob) && $dob->isRequired() && '' == trim($customer->getDob())) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']);
+        if ($dob !== null && $dob->isRequired() && '' == trim($customer->getDob())) {
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']));
         }
 
         $taxvat = $this->getAttributeMetadata('taxvat');
-        if (!is_null($taxvat) && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']);
+        if ($taxvat !== null && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']));
         }
 
         $gender = $this->getAttributeMetadata('gender');
-        if (!is_null($gender) && $gender->isRequired() && '' == trim($customer->getGender())) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']);
+        if ($gender !== null && $gender->isRequired() && '' == trim($customer->getGender())) {
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']));
         }
 
         if ($exception->wasErrorAdded()) {

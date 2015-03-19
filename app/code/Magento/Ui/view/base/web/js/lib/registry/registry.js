@@ -6,7 +6,7 @@ define([
     'mage/utils',
     './storage',
     './events'
-], function(utils, Storage, Events) {
+], function (utils, Storage, Events) {
     'use strict';
 
     function Registry() {
@@ -20,22 +20,21 @@ define([
         /**
          * Retrieves data from registry.
          *
-         * @params {(String|Array)} elems -
-         *      An array of elements' names or a string of names divided by spaces.
-         * @params {Function} [callback] -
-         *      Callback function that will be triggered
+         * @param {(String|Array)} elems - An array of elements' names or
+         *      a string of names divided by spaces.
+         * @param {Function} [callback] - Callback function that will be triggered
          *      when all of the elements are registered.
          * @returns {Array|*|Undefined}
          *      Returns either an array of elements
          *      or an element itself if only is requested.
          *      If callback function is specified then returns 'undefined'.
          */
-        get: function(elems, callback) {
+        get: function (elems, callback) {
             var records;
 
             elems = utils.stringToArray(elems) || [];
 
-            if (typeof callback !== 'undefined') {
+            if (typeof callback == 'function') {
                 this.events.wait(elems, callback);
             } else {
                 records = this.storage.get(elems);
@@ -46,15 +45,14 @@ define([
             }
         },
 
-
-       /**
+        /**
          * Sets data to registry.
          *
-         * @params {String} elems - Elements' name.
-         * @params {*} value - Value that will be assigned to the element.
-         * @returns {registry} Chainable.  
+         * @param {String} elem - Elements' name.
+         * @param {*} value - Value that will be assigned to the element.
+         * @returns {registry} Chainable.
          */
-        set: function(elem, value) {
+        set: function (elem, value) {
             this.storage.set(elem, value);
             this.events.resolve(elem);
 
@@ -63,12 +61,12 @@ define([
 
         /**
          * Removes specified elements from a storage.
-         * @params {(String|Array)} elems -
-         *      An array of elements' names or a string of names divided by spaces.
+         * @param {(String|Array)} elems - An array of elements' names or
+         *      a string of names divided by spaces.
          * @returns {registry} Chainable.
          */
-        remove: function(elems) {
-            elems = utils.stringToArray(elems)
+        remove: function (elems) {
+            elems = utils.stringToArray(elems);
 
             this.storage.remove(elems);
 
@@ -78,17 +76,17 @@ define([
        /**
          * Checks whether specified elements has been registered.
          *
-         * @params {(String|Array)} elems -
-         *      An array of elements' names or a string of names divided by spaces.
+         * @param {(String|Array)} elems - An array of elements' names or
+         *      a string of names divided by spaces.
          * @returns {Boolean}
          */
-        has: function(elems) {
+        has: function (elems) {
             elems = utils.stringToArray(elems);
 
             return this.storage.has(elems);
         },
 
-        create: function(){
+        create: function () {
             return new Registry;
         }
     };

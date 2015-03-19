@@ -61,25 +61,25 @@ require([
     registry.get('downloadable', function (Downloadable) {
         var sampleTemplate = '<tr>'+
                             '<td>'+
-                                '<input type="hidden" class="__delete__" name="downloadable[sample][<%= data.id %>][is_delete]" value="" />'+
-                                '<input type="hidden" name="downloadable[sample][<%= data.id %>][sample_id]" value="<%= data.sample_id %>" />'+
-                                '<input type="text" class="required-entry input-text" name="downloadable[sample][<%= data.id %>][title]" value="<%= data.title %>" />'+
-                                '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_<%= data.id %>_title" name="downloadable[sample][<%= data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_<%= data.id %>_title">Use Default Value</label>' : '' ?>'+
+                                '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
+                                '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
+                                '<input type="text" class="required-entry input-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
+                                '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_<%- data.id %>_title">Use Default Value</label>' : '' ?>'+
                             '</td>'+
                             '<td>'+
                                 '<div class="files-wide">'+
                                     '<div class="row">'+
-                                        '<label for="downloadable_sample_<%= data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%= data.id %>_file_type" name="downloadable[sample][<%= data.id %>][type]" value="file"<%= data.file_checked %> /> File:</label>'+
-                                        '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_<%= data.id %>_file_save" name="downloadable[sample][<%= data.id %>][file]" value="<%= data.file_save %>" />'+
-                                        '<div id="downloadable_sample_<%= data.id %>_file" class="uploader">'+
-                                            '<div id="downloadable_sample_<%= data.id %>_file-old" class="file-row-info"></div>'+
-                                            '<div id="downloadable_sample_<%= data.id %>_file-new" class="file-row-info new-file"></div>'+
+                                        '<label for="downloadable_sample_<%- data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_file_type" name="downloadable[sample][<%- data.id %>][type]" value="file"<%- data.file_checked %> /> File:</label>'+
+                                        '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_<%- data.id %>_file_save" name="downloadable[sample][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
+                                        '<div id="downloadable_sample_<%- data.id %>_file" class="uploader">'+
+                                            '<div id="downloadable_sample_<%- data.id %>_file-old" class="file-row-info"></div>'+
+                                            '<div id="downloadable_sample_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
                                             '<div class="fileinput-button form-buttons">'+
                                                 '<span><?php echo __('Browse Files...') ?></span>' +
-                                                '<input id="downloadable_sample_<%= data.id %>_file" type="file" name="<?php echo $block->getConfig()->getFileField() ?>" data-url="<?php echo $block->getConfig()->getUrl() ?>">' +
+                                                '<input id="downloadable_sample_<%- data.id %>_file" type="file" name="<?php echo $block->getConfig()->getFileField() ?>" data-url="<?php echo $block->getConfig()->getUrl() ?>">' +
                                                 '<script>' +
                                                 '/*<![CDATA[*/' +
-                                                    'sampleUploader("#downloadable_sample_<%= data.id %>_file"); ' +
+                                                    'sampleUploader("#downloadable_sample_<%- data.id %>_file"); ' +
                                                 '/*]]>*/' +
                                                 '</scr'+'ipt>'+
                                             '</div>'+
@@ -87,15 +87,15 @@ require([
                                         '</div>'+
                                     '</div>'+
                                     '<div class="row">'+
-                                        '<label for="downloadable_sample_<%= data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%= data.id %>_url_type" name="downloadable[sample][<%= data.id %>][type]" value="url"<%= data.url_checked %> /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[sample][<%= data.id %>][sample_url]" value="<%= data.sample_url %>" />'+
+                                        '<label for="downloadable_sample_<%- data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" />'+
                                     '</div>'+
                                     '<div>'+
-                                        '<span id="downloadable_sample_<%= data.id %>_container"></span>'+
+                                        '<span id="downloadable_sample_<%- data.id %>_container"></span>'+
                                     '</div>'+
                                 '</div>'+
 
                             '</td>'+
-                            '<td><input type="text" name="downloadable[sample][<%= data.id %>][sort_order]" value="<%= data.sort_order %>" class="input-text sort" /></td>'+
+                            '<td><input type="text" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort" /></td>'+
                             '<td class="col-delete">'+
                                 '<button type="button" class="action- scalable delete icon-btn delete-sample-item"><span>Delete</span></button>'+
                             '</td>'+

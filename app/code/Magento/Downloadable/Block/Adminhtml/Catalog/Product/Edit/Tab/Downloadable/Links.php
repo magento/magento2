@@ -42,7 +42,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDb = null;
 
@@ -81,7 +81,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Config\Model\Config\Source\Yesno $sourceModel
@@ -94,7 +94,7 @@ class Links extends \Magento\Backend\Block\Template
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Config\Model\Config\Source\Yesno $sourceModel,
@@ -144,7 +144,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getPurchasedSeparatelyAttribute()
     {
-        if (is_null($this->_purchasedSeparatelyAttribute)) {
+        if ($this->_purchasedSeparatelyAttribute === null) {
             $_attributeCode = 'links_purchased_separately';
 
             $this->_purchasedSeparatelyAttribute = $this->_attributeFactory->create()->loadByCode(
@@ -438,7 +438,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $this->_config = new \Magento\Framework\Object();
         }
 

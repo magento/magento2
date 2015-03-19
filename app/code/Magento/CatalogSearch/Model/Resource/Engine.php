@@ -197,11 +197,11 @@ class Engine extends AbstractDb implements EngineInterface
     {
         $where = [];
 
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             $where[] = $this->_getWriteAdapter()
                 ->quoteInto('store_id=?', $storeId);
         }
-        if (!is_null($entityId)) {
+        if ($entityId !== null) {
             $where[] = $this->_getWriteAdapter()
                 ->quoteInto('product_id IN (?)', $entityId);
         }
@@ -222,16 +222,6 @@ class Engine extends AbstractDb implements EngineInterface
     public function prepareEntityIndex($index, $separator = ' ')
     {
         return $this->_catalogSearchData->prepareIndexdata($index, $separator);
-    }
-
-    /**
-     * Define if Layered Navigation is allowed
-     *
-     * @return bool
-     */
-    public function isLayeredNavigationAllowed()
-    {
-        return true;
     }
 
     /**

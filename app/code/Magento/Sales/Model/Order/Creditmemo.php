@@ -20,9 +20,6 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustmentNegative(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustmentPositive(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setTransactionId(string $value)
  * @method \Magento\Sales\Model\Order\Creditmemo setCreatedAt(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -117,7 +114,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -137,7 +134,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -164,7 +161,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $localeDate,
             $dateTime,
@@ -857,6 +854,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Set base_adjustment_negative
+     *
+     * @param float $baseAdjustmentNegative
+     * @return $this
+     */
+    public function setBaseAdjustmentNegative($baseAdjustmentNegative)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE, $baseAdjustmentNegative);
+    }
+
+    /**
      * Returns base_adjustment_positive
      *
      * @return float
@@ -864,6 +872,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getBaseAdjustmentPositive()
     {
         return $this->getData(CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE);
+    }
+
+    /**
+     * Set base_adjustment_positive
+     *
+     * @param float $baseAdjustmentPositive
+     * @return $this
+     */
+    public function setBaseAdjustmentPositive($baseAdjustmentPositive)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE, $baseAdjustmentPositive);
     }
 
     /**
@@ -1247,6 +1266,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Sets the credit memo transaction ID.
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        return $this->setData(CreditmemoInterface::TRANSACTION_ID, $transactionId);
+    }
+
+    /**
      * Returns updated_at
      *
      * @return string
@@ -1599,6 +1629,27 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function setDiscountDescription($description)
     {
         return $this->setData(CreditmemoInterface::DISCOUNT_DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

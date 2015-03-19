@@ -153,7 +153,7 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if (is_array($translations)) {
             foreach ($translations as $storeId => $translate) {
-                if (is_null($translate) || $translate == '') {
+                if ($translate === null || $translate == '') {
                     $where = ['store_id = ?' => $storeId, 'string = ?' => $object->getString()];
                     $adapter->delete($this->getMainTable(), $where);
                 } else {
@@ -180,8 +180,8 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteTranslate($string, $locale = null, $storeId = null)
     {
-        if (is_null($locale)) {
-            $locale = $this->_localeResolver->getLocaleCode();
+        if ($locale === null) {
+            $locale = $this->_localeResolver->getLocale();
         }
 
         $where = ['locale = ?' => $locale, 'string = ?' => $string];
@@ -211,11 +211,11 @@ class String extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $write = $this->_getWriteAdapter();
         $table = $this->getMainTable();
 
-        if (is_null($locale)) {
-            $locale = $this->_localeResolver->getLocaleCode();
+        if ($locale === null) {
+            $locale = $this->_localeResolver->getLocale();
         }
 
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->getStoreId();
         }
 

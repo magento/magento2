@@ -1,0 +1,126 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+//
+//  Main elements -> Actions bar
+//  _____________________________________________
+
+//  ToDo UI: Consist old styles, should be changed with new design
+
+//
+//  Components
+//  ---------------------------------------------
+
+@import 'actions_bar/_store-switcher.less';
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@page-main-actions__background-color: @color-white-fog;
+@page-main-actions__border-color: @color-gray89;
+@page-main-actions__padding-side: @content__indent / 2;
+
+//
+
+.page-main-actions,
+.page-actions.fixed {
+    .extend__clearfix();
+    background: @page-main-actions__background-color;
+    border-bottom: 1px solid @page-main-actions__border-color;
+    border-top: 1px solid @page-main-actions__border-color;
+    padding: @page-main-actions__padding-side;
+}
+
+.page-main-actions {
+    margin: 0 0 2rem;
+}
+
+//
+//  Page actions group
+//  ---------------------------------------------
+
+.page-actions {
+    @_page-action__indent: 1.3rem;
+    float: right;
+    &.fixed {
+        left: @page-wrapper__indent-left;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: @page-actions__fixed__z-index;
+        .page-actions-inner {
+            &:before {
+                color: @page-title__color;
+                content: attr(data-title);
+                float: left;
+                font-size: @page-title__font-size;
+                margin-top: .3rem;
+                max-width: 50%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+    button,
+    .page-actions-buttons > button {
+        &:extend(.abs-action-l all);
+    }
+    > button,
+    .page-actions-buttons > button {
+        &:extend(.abs-action-quaternary all);
+        float: right;
+        margin-left: @_page-action__indent;
+        &.back,
+        &.action-back {
+            //  ToDo UI: Should be changed to ._back
+            float: left;
+            .vendor-prefix-order(-1);
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-back-arrow__content;
+                margin-right: .5em;
+                position: relative;
+                top: 1px;
+            }
+        }
+        &.action-primary,
+        &.primary {
+            //  ToDo UI: Should be changed to .action-primary
+            &:extend(.abs-action-primary all);
+            &:extend(.abs-action-l all);
+            .vendor-prefix-order(2);
+        }
+        &.save {
+            //  ToDo UI: Should be changed to ._save
+            &:not(.primary) {
+                .vendor-prefix-order(1);
+            }
+        }
+        &.delete {
+            //  ToDo UI: Should be changed to ._delete
+            .vendor-prefix-order(-1);
+        }
+    }
+    .actions-split {
+        float: right;
+        margin-left: @_page-action__indent;
+        .vendor-prefix-order(2);
+        .dropdown-menu {
+            .item {
+                display: block;
+            }
+        }
+    }
+}
+
+.page-actions-buttons {
+    float: right;
+    justify-content: flex-end;
+    .vendor-prefix-display(flex);
+    .customer-index-edit & {
+        background-color: transparent;
+    }
+}

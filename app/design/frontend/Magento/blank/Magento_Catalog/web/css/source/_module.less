@@ -30,8 +30,8 @@
 @toolbar-mode-icon-font-size: 26px;
 @product-h1-margin-bottom-desktop: @indent__base;
 
-@import 'module/_listings';
-@import 'module/_toolbar';
+@import 'module/_listings.less';
+@import 'module/_toolbar.less';
 
 //
 //    Common
@@ -45,6 +45,12 @@
 .old-price,
 .old.price {
     text-decoration: line-through;
+}
+.msrp-price-wrapper {
+    text-decoration: none;
+    .price-wrapper {
+        text-decoration: line-through;
+    }
 }
 
 .price-tier_price {
@@ -160,8 +166,8 @@
 }
 
 .product-info-main {
-    .page-title {
-        .title {
+    .page-title-wrapper {
+        .page-title {
             margin-bottom: @indent__s;
             line-height: @line-height__base;
         }
@@ -203,6 +209,13 @@
     }
     .product-reviews-summary .reviews-actions {
         .font-size(@font-size__base);
+    }
+    .product-options-wrapper {
+        .field {
+            .note {
+                display: block;
+            }
+        }
     }
 }
 
@@ -329,7 +342,6 @@
         }
         .price-box {
             display: block;
-            font-weight: @font-weight__semibold;
             margin: 7px 0;
         }
         .text {
@@ -439,8 +451,8 @@
     }
 
     .product-info-main {
-        .page-title {
-            .title {
+        .page-title-wrapper {
+            .page-title {
                 margin-top: -13px;
             }
         }
@@ -534,38 +546,6 @@
 //--------------------------------------
 
 & when (@media-common = true) {
-
-//
-//    Minimum Advertising Price
-//--------------------------------------
-.map.popup {
-    .popup(
-        @_popup-margin-top: @indent__s,
-        @_popup-margin-left: false,
-        @_popup-content-margin: 10px 0 0,
-        @_popup-position-top: false,
-        @_popup-position-left: false,
-        @_popup-position: absolute
-    );
-    .ui-dialog & {
-        padding: 22px;
-    }
-    .map.add.form {
-        &:extend(.abs-add-clearfix all);
-        margin-bottom: 15px;
-        .price-box {
-            float: left;
-            .label {
-                &:after {
-                    content: ": ";
-                }
-            }
-        }
-    }
-    .form.map.checkout {
-        float: right;
-    }
-}
 
 //
 //    Compare Products Page

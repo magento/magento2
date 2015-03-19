@@ -36,7 +36,6 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                 }
             }
             $this->cart->save();
-            $this->_checkoutSession->setCartWasUpdated(true);
         }
         return $this->_goBack();
     }

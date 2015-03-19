@@ -50,7 +50,7 @@ class ProductTypeList implements ProductTypeListInterface
      */
     public function getProductTypes()
     {
-        if (is_null($this->productTypes)) {
+        if ($this->productTypes === null) {
             $productTypes = [];
             foreach ($this->productTypeConfig->getAll() as $productTypeData) {
                 /** @var \Magento\Catalog\Api\Data\ProductTypeInterface $productType */

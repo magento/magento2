@@ -304,7 +304,7 @@ class Base implements \Magento\Framework\App\RouterInterface
 
         if (null == $actionInstance) {
             $actionInstance = $this->getNotFoundAction($currentModuleName, $request);
-            if (is_null($actionInstance)) {
+            if ($actionInstance === null) {
                 return null;
             }
             $action = 'noroute';

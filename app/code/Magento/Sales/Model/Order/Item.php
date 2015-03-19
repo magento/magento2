@@ -101,20 +101,20 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -126,7 +126,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -288,7 +288,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      */
     public function getOrder()
     {
-        if (is_null($this->_order) && ($orderId = $this->getOrderId())) {
+        if ($this->_order === null && ($orderId = $this->getOrderId())) {
             $order = $this->_orderFactory->create();
             $order->load($orderId);
             $this->setOrder($order);
@@ -380,7 +380,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      */
     public static function getStatusName($statusId)
     {
-        if (is_null(self::$_statuses)) {
+        if (self::$_statuses === null) {
             self::getStatuses();
         }
         if (isset(self::$_statuses[$statusId])) {
@@ -417,7 +417,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      */
     public static function getStatuses()
     {
-        if (is_null(self::$_statuses)) {
+        if (self::$_statuses === null) {
             self::$_statuses = [
                 self::STATUS_PENDING => __('Ordered'),
                 self::STATUS_SHIPPED => __('Shipped'),
@@ -441,7 +441,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function getOriginalPrice()
     {
         $price = $this->getData(OrderItemInterface::ORIGINAL_PRICE);
-        if (is_null($price)) {
+        if ($price === null) {
             return $this->getPrice();
         }
         return $price;
@@ -480,7 +480,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function getProductOptionByCode($code = null)
     {
         $options = $this->getProductOptions();
-        if (is_null($code)) {
+        if ($code === null) {
             return $options;
         }
         if (isset($options[$code])) {
@@ -2326,6 +2326,27 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition)
     {
         return $this->setData(OrderItemInterface::BASE_WEEE_TAX_ROW_DISPOSITION, $baseWeeeTaxRowDisposition);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderItemExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

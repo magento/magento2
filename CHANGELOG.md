@@ -1,3 +1,36 @@
+0.42.0-beta11
+=============
+* Various improvements:
+    * Added LICENSE to Developer module
+    * Refactored Catalog and related module to use mutable data object interface
+    * Refactored Sales and related modules to use mutable data interfaces
+* Setup:
+    * Added styles for new module enabling / disabling section in Installation wizard
+    * Modules Install and upgrade capabilities are refactored to implement interfaces used by Setup application
+* Framework:
+    * Moved/refactored Magento\IO\Sftp adapter into Filesystem library
+    * Removed Magento IO library
+    * Implemented Dynamic Types Binding in SOAP
+    * Implemented Extensible Attributes generation
+    * Improved Web API Related Code Quality
+    * Moved Specific Helper Components From the Magento/Core Module to Magento/Framework
+* Performance:
+    * Inline JS code is eliminated
+    * Created fixture for changing Magento config update via Performance Toolkit Generator
+* Fixed bugs:
+    * Issue with  multiple addresses checkout
+    * Issue with catalog page update after a product status changes
+    * Issue with distance between "Log in" & "or" & "Register" in Frontend header
+    * Issue with tax details and amounts in frontend and backend order
+    * JavaScript error when clicking on toggle arrow to show FPT in shopping cart
+    * PHP Warning when trying to checkout with Multiple Addresses on review order page
+* Functional tests:
+    * Refactored end-to-end test for order placement from backend and for OnePageCheckout
+* GitHub requests:
+    * [#1035] (https://github.com/magento/magento2/issues/1035) -- Bug in Magento\Framework\Simplexml\Element::appendChild
+    * [#1053] (https://github.com/magento/magento2/issues/1053) -- #865: add getParams/setParam to RequestInterface
+    * [#1066] (https://github.com/magento/magento2/issues/1066) -- PHP 5.5.16-1+deb.sury.org~precise+1
+
 0.42.0-beta10
 =============
 * Framework

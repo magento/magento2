@@ -34,7 +34,7 @@ class InvoiceCommentsListTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/invoice/' . $invoice->getId() . '/comments',
+                'resourcePath' => '/V1/invoices/' . $invoice->getId() . '/comments',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [

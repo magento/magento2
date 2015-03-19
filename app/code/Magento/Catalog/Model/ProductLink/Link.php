@@ -167,4 +167,30 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->setData(self::KEY_POSITION, $position);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\ProductLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        if (!$this->_getExtensionAttributes()) {
+            $this->setExtensionAttributes(
+                $this->extensionAttributesFactory->create('Magento\Catalog\Model\ProductLink\Link')
+            );
+        }
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

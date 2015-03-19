@@ -146,7 +146,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'default_shipping' => $defaultShipping
             ]);
         $customerDetails = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($customerDetails, $customerData);
+        $this->dataObjectHelper->populateWithArray(
+            $customerDetails,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->customerRepository->save($customerDetails);
         $customerAfter = $this->customerRepository->getById($existingCustomerId);
         $this->assertEquals($email, $customerAfter->getEmail());
@@ -208,10 +212,18 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $addressId = $addresses[0]->getId();
         $newAddress = array_merge($addresses[0]->__toArray(), ['city' => $city]);
         $newAddressDataObject = $this->addressFactory->create();
-        $this->dataObjectHelper->populateWithArray($newAddressDataObject, $newAddress);
+        $this->dataObjectHelper->populateWithArray(
+            $newAddressDataObject,
+            $newAddress,
+            '\Magento\Customer\Api\Data\AddressInterface'
+        );
         $newAddressDataObject->setRegion($addresses[0]->getRegion());
         $newCustomerEntity = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerEntity, $customerDetails);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerEntity,
+            $customerDetails,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $newCustomerEntity->setId($customerId)
             ->setAddresses([$newAddressDataObject, $addresses[1]]);
         $this->customerRepository->save($newCustomerEntity);
@@ -236,7 +248,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->getById($customerId);
         $customerDetails = $customer->__toArray();
         $newCustomerEntity = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerEntity, $customerDetails);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerEntity,
+            $customerDetails,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $newCustomerEntity->setId($customer->getId())
             ->setAddresses(null);
         $this->customerRepository->save($newCustomerEntity);
@@ -257,7 +273,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->getById($customerId);
         $customerDetails = $customer->__toArray();
         $newCustomerEntity = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerEntity, $customerDetails);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerEntity,
+            $customerDetails,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $newCustomerEntity->setId($customer->getId())
             ->setAddresses([]);
         $this->customerRepository->save($newCustomerEntity);
@@ -279,13 +299,13 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSearchCustomers($filters, $filterGroup, $expectedResult)
     {
-        /** @var \Magento\Framework\Api\SearchCriteriaDataBuilder $searchBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaDataBuilder');
+            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
             $searchBuilder->addFilter([$filter]);
         }
-        if (!is_null($filterGroup)) {
+        if ($filterGroup !== null) {
             $searchBuilder->addFilter($filterGroup);
         }
 
@@ -308,9 +328,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSearchCustomersOrder()
     {
-        /** @var \Magento\Framework\Api\SearchCriteriaDataBuilder $searchBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $objectManager = Bootstrap::getObjectManager();
-        $searchBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaDataBuilder');
+        $searchBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
 
         // Filter for 'firstname' like 'First'
         $filterBuilder = $objectManager->create('Magento\Framework\Api\FilterBuilder');

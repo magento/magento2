@@ -98,7 +98,7 @@ class LinkRepositoryTest extends WebapiAbstract
     protected function getTargetLink(Product $product, $linkId = null)
     {
         $links = $product->getTypeInstance()->getLinks($product);
-        if (!is_null($linkId)) {
+        if ($linkId !== null) {
             return isset($links[$linkId]) ? $links[$linkId] : null;
         }
 
@@ -113,7 +113,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => true,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Title',
                 'sort_order' => 1,
@@ -159,7 +159,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Store View Title',
                 'sort_order' => 1,
@@ -197,7 +197,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link with URL resources',
                 'sort_order' => 1,
@@ -234,7 +234,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link with URL resources',
                 'sort_order' => 1,
@@ -256,7 +256,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
@@ -285,7 +285,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
@@ -312,7 +312,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Title',
                 'sort_order' => 15,
@@ -339,7 +339,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
@@ -368,7 +368,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
@@ -392,7 +392,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
@@ -419,7 +419,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 1,
@@ -457,7 +457,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => $sortOrder,
@@ -493,7 +493,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 0,
@@ -529,7 +529,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links';
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'simple',
+            'sku' => 'simple',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 50,
@@ -554,7 +554,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links';
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'wrong-sku',
+            'sku' => 'wrong-sku',
             'linkContent' => [
                 'title' => 'Link Title',
                 'sort_order' => 15,
@@ -581,7 +581,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Updated Title',
                 'sort_order' => 2,
@@ -612,7 +612,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => true,
             'linkId' => $linkId,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Updated Title',
                 'sort_order' => 2,
@@ -646,7 +646,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => true,
             'linkId' => 1,
-            'productSku' => 'wrong-sku',
+            'sku' => 'wrong-sku',
             'linkContent' => [
                 'title' => 'Updated Title',
                 'sort_order' => 2,
@@ -671,7 +671,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => true,
             'linkId' => 9999,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Title',
                 'sort_order' => 2,
@@ -698,7 +698,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Updated Link Title',
                 'sort_order' => 2,
@@ -725,7 +725,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Updated Link Title',
                 'sort_order' => $sortOrder,
@@ -751,7 +751,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'linkContent' => [
                 'title' => 'Updated Link Title',
                 'sort_order' => 200,
@@ -813,7 +813,7 @@ class LinkRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ['productSku' => $sku];
+        $requestData = ['sku' => $sku];
 
         $expectedMessage = 'Requested product doesn\'t exist';
         try {
@@ -845,7 +845,7 @@ class LinkRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ['productSku' => $sku];
+        $requestData = ['sku' => $sku];
 
         $list = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEmpty($list);
@@ -871,7 +871,7 @@ class LinkRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData = ['productSku' => $sku];
+        $requestData = ['sku' => $sku];
 
         $list = $this->_webApiCall($serviceInfo, $requestData);
 

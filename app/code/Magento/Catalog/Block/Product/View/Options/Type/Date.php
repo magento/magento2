@@ -93,7 +93,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         )->setImage(
             $this->getViewFileUrl('Magento_Theme::calendar.png')
         )->setDateFormat(
-            $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
         )->setValue(
             $value
         )->setYearsRange(
@@ -201,12 +201,12 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $extraParams .= ' data-role="calendar-dropdown" data-calendar-role="' . $name . '"';
         $select->setExtraParams($extraParams);
 
-        if (is_null($value)) {
+        if ($value === null) {
             $value = $this->getProduct()->getPreconfiguredValues()->getData(
                 'options/' . $option->getId() . '/' . $name
             );
         }
-        if (!is_null($value)) {
+        if ($value !== null) {
             $select->setValue($value);
         }
 

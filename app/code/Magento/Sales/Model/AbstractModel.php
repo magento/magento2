@@ -27,7 +27,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -38,7 +38,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -49,7 +49,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -69,23 +69,23 @@ abstract class AbstractModel extends AbstractExtensibleModel
     /**
      * Get object created at date affected current active store timezone
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getCreatedAtDate()
     {
-        return $this->_localeDate->date($this->dateTime->toTimestamp($this->getCreatedAt()), null, null, true);
+        return $this->_localeDate->date(new \DateTime($this->getCreatedAt()));
     }
 
     /**
      * Get object created at date affected with object store timezone
      *
-     * @return \Magento\Framework\Stdlib\DateTime\Date
+     * @return \DateTime
      */
     public function getCreatedAtStoreDate()
     {
         return $this->_localeDate->scopeDate(
             $this->getStore(),
-            $this->dateTime->toTimestamp($this->getCreatedAt()),
+            $this->getCreatedAt(),
             true
         );
     }

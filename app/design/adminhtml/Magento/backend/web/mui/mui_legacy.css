@@ -1,0 +1,1939 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* ==========================================================================
+   base.css (begin)
+   ========================================================================== */
+
+/*
+    Buttons group
+-------------------------------------- */
+
+.buttons-group {
+    position: relative;
+    display: inline-block;
+}
+
+.buttons-group:before,
+.buttons-group:after {
+    display: table;
+    content: "";
+}
+
+.buttons-group:after {
+    clear: both;
+}
+
+.buttons-group > button,
+.buttons-group > .button {
+    position: relative;
+    float: left;
+    margin-left: -1px;
+    border-radius: 0;
+}
+
+.buttons-group > button:first-child,
+.buttons-group > .button:first-child {
+    margin-left: 0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.buttons-group > button:last-child,
+.buttons-group > .button:last-child,
+.buttons-group > [data-toggle="dropdown"] {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.buttons-group-vertical > .button {
+    float: none;
+    display: block;
+    margin-left: 0;
+    margin-top: -1px;
+}
+
+.buttons-group-vertical > input[type=button],
+.buttons-group-vertical > input[type=submit],
+.buttons-group-vertical > input[type=reset],
+.buttons-group-vertical > button {
+    width: 100%;
+}
+
+.buttons-group-vertical > .button:first-child {
+    margin-top: 0;
+    border-radius: 4px 4px 0 0;
+}
+
+.buttons-group-vertical > .button:last-child {
+    border-radius: 0 0 4px 4px;
+}
+
+/*
+    Forms
+-------------------------------------- */
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+legend {
+    padding: 0 10px;
+    margin: 0 -10px;
+}
+
+fieldset legend + br {
+    display: none;
+}
+
+label {
+    display: inline-block;
+}
+
+label > input[type="radio"],
+label > input[type="checkbox"] {
+    margin: -3px 3px 0 0;
+    vertical-align: middle;
+}
+
+select {
+    padding: 4px;
+    margin: 0 0 8px;
+}
+
+select[multiple],
+select[size] {
+    height: auto;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin: 3px 0;
+    line-height: normal;
+}
+
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+    cursor: not-allowed;
+}
+
+/*
+    Blockquotes
+-------------------------------------- */
+blockquote {
+    border-left: 2px solid #ccc;
+    padding-left: 5px;
+}
+
+blockquote small:before {
+    content: '\2014 \00A0';
+}
+/* ==========================================================================
+   base.css (end)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   elements.css (begin)
+   ========================================================================== */
+.tipsy {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    padding: 5px;
+    font-size: 12px;
+    z-index: 998;
+}
+
+.tipsy-inner {
+    padding: 5px 8px 4px;
+    background-color: #000;
+    color: #fff;
+    max-width: 150px;
+    border-radius: 3px;
+}
+
+.tipsy-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #000;
+}
+
+.tipsy-s .tipsy-arrow {
+    top: 0;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.tipsy-se .tipsy-arrow {
+    top: 0;
+    left: 10px;
+}
+
+.tipsy-sw .tipsy-arrow {
+    top: 0;
+    right: 10px;
+}
+
+.tipsy-n .tipsy-arrow,
+.tipsy-ne .tipsy-arrow,
+.tipsy-nw .tipsy-arrow {
+    bottom: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #000;
+    border-bottom: none;
+}
+
+.tipsy-n .tipsy-arrow {
+    left: 50%;
+    margin-left: -4px;
+}
+
+.tipsy-ne .tipsy-arrow {
+    left: 10px;
+}
+
+.tipsy-nw .tipsy-arrow {
+    right: 10px;
+}
+
+.tipsy-w .tipsy-arrow,
+.tipsy-e .tipsy-arrow {
+    top: 50%;
+    margin-top: -4px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.tipsy-w .tipsy-arrow {
+    right: 0;
+    border-right: none;
+    border-left: 5px solid #000;
+}
+
+.tipsy-e .tipsy-arrow {
+    left: 0;
+    border-right: 5px solid #000;
+    border-left: none;
+}
+
+/*
+    Pagination
+-------------------------------------- */
+.pagination {
+    margin: 18px 0;
+    text-align: center;
+    font-size: 11px;
+    line-height: 26px;
+}
+
+.pagination-left {
+    text-align: left;
+}
+
+.pagination-right {
+    text-align: right;
+}
+
+.pagination ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination li {
+    display: inline;
+    line-height: 18px;
+}
+
+.pagination li a,
+.pagination li span {
+    margin: 0 5px;
+}
+
+.pagination .current span {
+    color: #000;
+}
+
+.pagination .current .button {
+    color: #fff;
+}
+
+.pagination .amount {
+    display: inline;
+    margin: 0 15px 0 0;
+}
+
+.pagination .limiter,
+.pagination label {
+    display: inline;
+}
+
+.pagination .limiter {
+    margin: 0 0 0 15px;
+}
+
+.pagination select {
+    width: auto;
+    margin-right: 5px;
+}
+
+.pagination-alt .amount {
+    float: left;
+}
+
+.pagination-alt .limiter {
+    float: right;
+}
+
+.pagination li .pagination-previous,
+.pagination li .pagination-next {
+    display: inline-block;
+    width: 8px;
+    height: 12px;
+    text-indent: -9999px;
+    text-align: left;
+    vertical-align: middle;
+    background: url(images/pagination-arrows-bg.png) no-repeat 0 0;
+}
+
+.pagination li .pagination-previous:hover {
+    background-position: 0 -13px;
+}
+
+.pagination li.disabled .pagination-previous {
+    background-position: 0 -26px;
+}
+
+.pagination li .pagination-next {
+    background-position: -10px 0;
+}
+
+.pagination li .pagination-next:hover {
+    background-position: -10px -13px;
+}
+
+.pagination li.disabled .pagination-next {
+    background-position: -10px -26px;
+}
+
+/*
+    Breadcrumbs
+-------------------------------------- */
+.breadcrumbs {
+    margin: 18px 0;
+}
+
+.breadcrumbs ul {
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumbs li {
+    display: inline-block;
+}
+
+.breadcrumbs li:after {
+    content: "/";
+    margin: 0 4px;
+}
+
+.breadcrumbs .current:after {
+    content: "";
+}
+
+/*
+    Tags
+-------------------------------------- */
+.tags {
+    margin: 18px 0;
+    padding: 0;
+}
+
+.tags li {
+    display: inline-block;
+    margin: 0 10px 5px 0;
+    white-space: nowrap;
+    list-style: none;
+}
+
+/* =============================================================================
+   Tabels
+   ========================================================================== */
+
+/* Striped table */
+
+.table-striped tbody tr td:nth-child(odd),
+.table-striped tbody tr th:nth-child(odd) {
+    background: #f5f5f5;
+}
+
+.table-striped tbody tr td:nth-child(even),
+.table-striped tbody tr th:nth-child(even) {
+    background: #fff;
+}
+
+.table-striped tbody tr:hover td,
+.table-striped tbody tr:hover th {
+    background-color: #fff9e4;
+}
+
+.table-light th,
+.table-light td {
+    border-width: 1px 0 0 0;
+}
+
+.table-light caption + thead tr:first-child th,
+.table-light caption + thead tr:first-child td,
+.table-light colgroup + thead tr:first-child th,
+.table-light colgroup + thead tr:first-child td,
+.table-light thead:first-child tr:first-child th,
+.table-light thead:first-child tr:first-child td {
+    border-top: 0;
+}
+
+.table-light tbody tr:nth-child(odd) td,
+.table-light tbody tr:nth-child(odd) th,
+.table-light tbody tr:nth-child(even) td,
+.table-light tbody tr:nth-child(even) th,
+.table-light tfoot tr:nth-child(odd) td,
+.table-light tfoot tr:nth-child(odd) th,
+.table-light tfoot tr:nth-child(even) td,
+.table-light tfoot tr:nth-child(even) th,
+.table-light thead tr:nth-child(odd) td,
+.table-light thead tr:nth-child(odd) th,
+.table-light thead tr:nth-child(even) td,
+.table-light thead tr:nth-child(even) th,
+.table-light tfoot {
+    background: none;
+}
+
+.table-light tbody tr:hover td,
+.table-light tbody tr:hover th {
+    background-color: #fff9e4;
+}
+
+.table-full-width {
+    width: 100%;
+}
+
+/*
+    Star rating
+-------------------------------------- */
+.rating-box {
+    width: 70px;
+    height: 13px;
+    font-size: 0;
+    line-height: 0;
+    background: url(images/rating-bg.png) 0 0 repeat-x;
+    overflow: hidden;
+}
+
+.rating-box  .rating {
+    height: 13px;
+    background: url(images/rating-bg.png) 0 -13px repeat-x;
+}
+
+/*
+    Navigation
+-------------------------------------- */
+.nav {
+    background: #e6e6e6;
+}
+
+.menu {
+    margin: 0;
+    padding: 0;
+}
+
+/* All Levels */
+.menu li:hover,
+.menu li.hovered {
+    z-index: 990 !important;
+}
+
+.menu li.parent {
+    position: relative;
+    z-index: 1;
+}
+
+.menu li a {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+.menu li a span {
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+/* 1st Level (Top Level) */
+.level-top > li {
+    float: left;
+    margin: 0;
+    display: inline;
+    position: relative;
+    z-index: 1;
+}
+
+.level-top > li > a {
+    float: left;
+    font-size: 14px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 15px;
+    border: 1px solid transparent;
+}
+
+.level-top > .parent > a span:after {
+    content: " ▼";
+}
+
+.level-top > li > a:hover,
+.level-top > li:hover > a,
+.level-top > li.hovered > a {
+    background: #fff;
+    border-color: #a6a6a6;
+}
+
+.level-top > .parent > a:hover,
+.level-top > .parent:hover > a,
+.level-top > .parent.hovered > a {
+    border-color: #a6a6a6;
+    border-bottom-color: transparent;
+    position: relative;
+    z-index: 99999;
+}
+
+/* 2nd Level */
+.menu ul {
+    margin: 0;
+    position: absolute;
+    min-width: 100%;
+    top: 36px;
+    left: -10000px;
+    background: #fff;
+    padding: 0;
+    border: 1px solid #a6a6a6;
+}
+
+.menu ul li {
+    float: none;
+    height: auto;
+    display: block;
+    margin: 0;
+}
+
+.menu ul .parent > a span:after {
+    content: " ►"
+}
+
+.menu ul li a {
+    display: block;
+    padding: 8px 12px;
+    line-height: 1.2;
+}
+
+.menu ul li a:hover {
+    background: #e6e6e6;
+}
+
+/* 3rd+ Level */
+.menu ul ul {
+    top: 0;
+}
+
+/* Show Menu */
+.menu li:hover > ul,
+.menu li.hovered > ul {
+    left: 0;
+    z-index: 991;
+}
+
+.menu li:hover > ul > li:hover > ul,
+.menu li.hovered > ul > li.hovered > ul {
+    left: -2px;
+    margin-left: 100%;
+}
+
+/* Vertical navigation */
+.nav-vertical .menu  li {
+    float: none;
+    display: block;
+}
+
+.nav-vertical .menu li a {
+    float: none;
+    display: block;
+    height: auto;
+    line-height: 1.2;
+    padding: 10px;
+}
+
+.nav-vertical .menu li:hover > ul,
+.nav-vertical .menu li.hovered > ul {
+    left: -1px;
+    top: 0;
+    margin-left: 100%;
+}
+
+.nav-vertical .level-top > .parent > a span:after {
+    content: " ►";
+}
+
+.nav-vertical .level-top > .parent > a:hover,
+.nav-vertical .level-top > .parent:hover > a,
+.nav-vertical .level-top > .parent.hovered > a {
+    border-color: #a6a6a6;
+}
+
+/*  Tree navigation */
+.nav-tree {
+    background: none;
+    box-shadow: none;
+}
+
+.nav-tree ul li {
+    margin: 10px 0;
+}
+
+.nav-tree .level-top > li {
+    display: block;
+    float: none;
+    border: none;
+}
+
+.nav-tree .menu ul {
+    position: static;
+    left: 0;
+    background: none;
+    box-shadow: none;
+    margin: 0 0 0 20px;
+    border: none;
+}
+
+.nav-tree .menu li:hover > ul > li:hover > ul,
+.nav-tree .menu li:hover > ul {
+    left: 0;
+    top: 0;
+    margin-left: 20px;
+}
+
+.nav-tree .menu li a {
+    float: none;
+    border: none;
+    font-weight: normal;
+}
+
+.nav-tree .menu li a:link,
+.nav-tree .menu li a:visited {
+    height: auto;
+    line-height: 1.2;
+    padding: 0;
+    display: inline;
+    text-decoration: underline;
+}
+
+.nav-tree .menu li a:hover,
+.nav-tree .menu li a:active {
+    text-decoration: none;
+    background: none;
+    box-shadow: none;
+}
+
+.nav-tree .menu li a span {
+    text-transform: none;
+}
+
+.nav-tree .menu ul .parent > a span:after,
+.nav-tree .level-top > .parent > a span:after {
+    content: "";
+}
+
+/*  Inline navigation */
+.nav-inline {
+    background: none;
+    box-shadow: none;
+    position: relative;
+}
+
+.nav-inline ul {
+    display: inline;
+}
+
+.nav-inline .menu ul {
+    border: none;
+    top: 16px;
+    padding: 10px 0;
+}
+
+.nav-inline ul li {
+    display: inline;
+    border: none;
+}
+
+.nav-inline .menu li.parent {
+    position: static;
+}
+
+.nav-inline .menu li:hover > ul > li:hover > ul {
+    left: 0;
+    top: 25px;
+    margin-left: 0;
+}
+
+.nav-inline  ul li:after {
+    content: '|';
+    margin: 0 5px;
+}
+
+.nav-inline  ul  li:last-child:after {
+    content: '';
+}
+
+.nav-inline .menu li a {
+    border: none;
+    font-weight: normal;
+}
+
+.nav-inline .menu li a:link,
+.nav-inline .menu li a:visited {
+    padding: 0;
+    line-height: 1.2;
+    height: auto;
+    display: inline;
+    text-decoration: underline;
+}
+
+.nav-inline .menu li a:hover,
+.nav-inline .menu li a:active {
+    text-decoration: none;
+    background: none;
+    box-shadow: none;
+}
+
+.nav-inline .menu li a span {
+    text-transform: none;
+}
+
+.nav-inline .menu ul .parent > a span:after,
+.nav-inline .level-top > .parent > a span:after {
+    content: " ▼";
+}
+
+/*
+    Loaders
+-------------------------------------- */
+.loading {
+    position: relative;
+}
+
+.loading:after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 50%;
+    left: 50%;
+    margin: -12px 0 0 -12px;
+    background: #fff url(images/ajax-loader.gif) no-repeat center;
+}
+
+.loading-message {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    text-align: center;
+    z-index: 2;
+}
+
+.button.loading {
+    padding-right: 25px;
+}
+
+.button.loading:after {
+    left: auto;
+    right: 6px;
+}
+
+table.loading:after {
+    right: -1px;
+}
+
+/* loader with svg */
+.loading-svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-image: url(images/ajax-loader.svg);
+    background-size: contain;
+    width: 36px;
+    height: 36px;
+    margin: -18px 0 0 -18px;
+    opacity: .7;
+    -webkit-animation: rotate 1.5s infinite steps(12);
+    -moz-animation: rotate 1.5s infinite steps(12);
+    animation: rotate 1.5s infinite steps(12);
+}
+
+@-moz-keyframes rotate {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes "rotate" {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+/* loader inner */
+.loading-inner {
+    background: url(images/ajax-loader.gif) no-repeat center;
+}
+
+/* loader sizes */
+.loading-small:after {
+    background-image: url(images/ajax-loader-small.gif);
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+}
+
+.loading-big:after {
+    background-image: url(images/ajax-loader-big.gif);
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+}
+
+/* laoder locker */
+.loading-blocker {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.loading-blocker:after {
+    width: auto;
+    height: auto;
+    margin: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, .65);
+}
+
+/* css3 only loader */
+.loading-arrow {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    text-align: center;
+    font: 32px/1 Arial, Verdana, sans-serif;
+    color: #AE4444;
+    text-shadow: 0 0 5px #A5E0FC;
+    -moz-animation: spin .8s infinite linear;
+    -webkit-animation: spin .8s infinite linear;
+    animation: spin .8s infinite linear;
+}
+
+.loading-arrow:before {
+    content: '↻';
+}
+
+@-moz-document url-prefix() {
+    .loading-arrow:after {
+        font-size:36px;
+        position: absolute;
+        left:-1px;
+        top:-5px;
+    }
+}
+@-moz-keyframes spin {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+/*
+    Tabs
+-------------------------------------- */
+.tabs-nav {
+    margin: 0;
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+    padding: 0;
+}
+
+.tabs-nav > li > a {
+    display: block;
+}
+
+.tabs-nav > li > a:hover {
+    text-decoration: none;
+}
+
+.tabs-nav > li {
+    float: left;
+    margin-bottom: -1px;
+    margin-right: -1px;
+    background: #eaeaea;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VhZWFlYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkZmRmZGYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eaeaea), color-stop(100%, #dfdfdf));
+    background: -webkit-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: -o-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: -ms-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: linear-gradient(to bottom, #eaeaea 0%, #dfdfdf 100%);
+}
+
+.tabs-nav > li:hover {
+    background: #dfdfdf;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RmZGZkZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlYWVhZWEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dfdfdf), color-stop(100%, #eaeaea));
+    background: -webkit-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
+    background: -o-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
+    background: -ms-linear-gradient(top, #dfdfdf 0%, #eaeaea 100%);
+    background: linear-gradient(to bottom, #dfdfdf 0%, #eaeaea 100%);
+}
+
+.tabs-nav > li > a {
+    padding: 8px 12px;
+    line-height: 18px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #666;
+}
+
+.tabs-nav > .active > a,
+.tabs-nav > .active > a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border-bottom-color: #fff;
+}
+
+.tab-content {
+    overflow: auto;
+    border: solid #ccc;
+    border-width: 0 1px 1px;
+}
+
+.tabs-below > .tabs-nav,
+.tabs-right > .tabs-nav,
+.tabs-left > .tabs-nav {
+    border-bottom: 0;
+}
+
+.tab-content > .tab-pane {
+    display: none;
+    padding: 20px 13px;
+}
+
+.tab-content > .active {
+    display: block;
+    background: #fff;
+}
+
+.tabs-below > .tabs-nav {
+    border-top: 1px solid #ccc;
+}
+
+.tabs-below > .tabs-nav > li {
+    margin-top: -1px;
+    margin-bottom: 0;
+}
+
+.tabs-below > .tabs-nav > li.active > a {
+    border: 1px solid #ccc;
+    border-top-color: transparent;
+}
+
+.tabs-below > .tab-content {
+    border-width: 1px 1px 0;
+}
+
+.tabs-left > .tabs-nav > li,
+.tabs-right > .tabs-nav > li {
+    float: none;
+}
+
+.tabs-left > .tabs-nav > li > a,
+.tabs-right > .tabs-nav > li > a {
+    min-width: 74px;
+    margin-right: 0;
+}
+
+.tabs-left > .tabs-nav {
+    float: left;
+    margin-right: -1px;
+    border-right: 1px solid #ccc;
+}
+
+.tabs-left > .tab-content,
+.tabs-right > .tab-content {
+    border-width: 1px;
+}
+
+.tabs-left > .tabs-nav .active > a,
+.tabs-left > .tabs-nav .active > a:hover {
+    border-color: #ccc transparent #ccc #ccc;
+}
+
+.tabs-right > .tabs-nav {
+    float: right;
+    margin-left: -1px;
+}
+
+.tabs-right > .tabs-nav .active > a,
+.tabs-right > .tabs-nav .active > a:hover {
+    border-color: #ccc #ccc #ccc transparent;
+}
+
+.accordion {
+    margin-bottom: 18px;
+}
+
+.accordion-group {
+    margin: 0 0 5px;
+    border: 1px solid #ccc;
+}
+
+.accordion-heading {
+    border-bottom: 0;
+    background: #eaeaea;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VhZWFlYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkZmRmZGYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eaeaea), color-stop(100%, #dfdfdf));
+    background: -webkit-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: -o-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: -ms-linear-gradient(top, #eaeaea 0%, #dfdfdf 100%);
+    background: linear-gradient(to bottom, #eaeaea 0%, #dfdfdf 100%);
+}
+
+.accordion-heading .accordion-toggle {
+    display: block;
+    padding: 8px 15px;
+    cursor: pointer;
+    color: #555;
+    text-decoration: none;
+}
+
+.accordion-inner {
+    padding: 9px 15px;
+    border-top: 1px solid #ccc;
+}
+
+.collapse {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height 0.35s ease;
+    -moz-transition: height 0.35s ease;
+    -ms-transition: height 0.35s ease;
+    -o-transition: height 0.35s ease;
+    transition: height 0.35s ease;
+}
+
+.collapse.in,
+.no-js .collapse {
+    height: auto !important;
+    overflow: visible;
+}
+
+.no-js .tabs-nav > li,
+.no-js .tabs-left > .tabs-nav,
+.no-js .tabs-right > .tabs-nav {
+    float: none;
+}
+
+.no-js .tabs-left > .tabs-nav,
+.no-js .tabs-nav > li {
+    margin-right: 0;
+}
+
+.no-js .tabs-right > .tabs-nav {
+    margin-left: 0;
+}
+
+.no-js .tabs-right > .tabs-nav > .active > a {
+    border-left-color: #ccc;
+}
+
+.no-js .tabs-left .tabs-nav {
+    border-right: 1px solid #ccc;
+}
+
+.no-js .tabs-left .tabs-nav > li > a {
+    border-right: 0;
+}
+
+.no-js .tab-content > .tab-pane {
+    display: block;
+    border-bottom: 1px solid #ccc;
+}
+
+.no-js .tab-content > .tab-pane:last-child {
+    border-bottom: none;
+}
+
+.no-js .tab-content > .active {
+    background: #fff;
+}
+
+.no-js .tabs-below > .tabs-nav > li.active > a {
+    border-top: 1px solid #ccc;
+}
+
+/*
+    Clears
+-------------------------------------- */
+.tabs:before,
+.tabs:after,
+.tabs-nav:before,
+.tabs-nav:after {
+    display: table;
+    content: "";
+}
+
+.tabs-nav:after,
+.tabs:after {
+    clear: both;
+}
+
+/* ==========================================================================
+   elements.css (end)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   form.css (begin)
+   ========================================================================== */
+/*
+    Forms
+-------------------------------------- */
+.form {
+}
+
+/*
+    Fieldset
+-------------------------------------- */
+.fieldset {
+    margin: 20px 0;
+    letter-spacing: -0.31em; /* webkit */
+    word-spacing: -0.43em; /* IE < 8 && gecko */
+}
+
+.fieldset > * {
+    letter-spacing: normal;
+    word-spacing: normal;
+}
+
+/*
+    Legend
+-------------------------------------- */
+.legend {
+}
+
+/*
+    Label
+-------------------------------------- */
+.label {
+    margin: 0;
+    vertical-align: middle;
+}
+
+/*
+    Control
+-------------------------------------- */
+.control input {
+    vertical-align: middle;
+    margin: 0;
+}
+
+.control select,
+.control textarea {
+    margin: 0;
+}
+
+/*
+    Field
+-------------------------------------- */
+.field {
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 0 12px 0;
+}
+
+.field > .label {
+    margin: 0 0 6px;
+}
+
+.field > .control {
+}
+
+/* TODO: remove after all templates refactoring */
+span.required {
+    display: none;
+}
+
+.field.required > .label:after {
+    content: '*';
+    color: red;
+    margin-left: 3px;
+}
+
+.field.alternative {
+}
+
+/*
+    Radios and Checkboxes
+-------------------------------------- */
+/* TODO: rename 'choice' class */
+.choice .control {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.choice > .label span:after {
+    content: '';
+    margin: 0;
+}
+
+.choice > .control {
+    width: auto;
+}
+
+/* TODO: rename or remove 'extra' class */
+.extra {
+    margin: 5px 0 0;
+}
+
+/*
+    Control with added before and after content
+-------------------------------------- */
+.with-addon {
+}
+
+.addon {
+    padding: 0;
+    display: table;
+    width: 100%;
+}
+
+.addon textarea,
+.addon select,
+.addon input {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+.addon select {
+    width: auto;
+}
+
+.addon select + .addafter {
+    border: none;
+}
+
+.ie .addon textarea,
+.ie .addon select {
+    display:inline-block;
+}
+
+.addon textarea:first-child,
+.addon select:first-child,
+.addon input[type=text]:first-child,
+.addon .addbefore:first-child {
+    border-radius: 0;
+}
+
+.addon textarea:last-child,
+.addon select:last-child,
+.addon input[type=text]:last-child,
+.addon .addafter:last-child {
+    border-radius: 0;
+}
+
+.addon .addbefore,
+.addon .addafter {
+    background: #f5f5f5;
+    background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    vertical-align: middle;
+    width: 1px;
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    height: 0;
+    white-space: nowrap;
+    display: inline-block;
+    display: table-cell;
+    padding: 4px;
+    border: solid #ccc;
+    border-width: 1px 0 1px 1px;
+}
+
+/*.addon {direction: rtl; }
+.addon > * {direction: ltr; }*/
+
+.addon *:focus ~ .addafter {
+
+}
+
+.addon .addafter {
+    border-width: 1px 1px 1px 0;
+}
+
+.choice .addafter,
+.choice .addbefore {
+    display: inline;
+}
+
+/* Addon left aligned */
+.field-price .addon {
+    direction: rtl;
+}
+
+.field-price .addon > * {
+    direction: ltr;
+}
+
+.field-price .addon .addafter {
+    border-width: 1px 0 1px 1px;
+    border-radius: 1px 0 0 1px;
+}
+
+
+/*
+    Form tooltip
+-------------------------------------- */
+.with-tooltip.choice {
+    padding-right: 20px;
+}
+
+.with-tooltip.choice,
+.with-tooltip > .control {
+    position: relative;
+    z-index: 1;
+}
+
+.with-tooltip.choice:hover,
+.with-tooltip:hover > .control {
+    z-index: 998;
+}
+
+.with-tooltip:not(.choice) .tooltip {
+    position: absolute;
+    left: 100%;
+    top: 3px;
+    vertical-align: middle;
+    margin: 4px 0 0 3px;
+}
+
+.with-tooltip:not(.choice) .tooltip .help {
+    width: 12px;
+    overflow: hidden;
+}
+
+/*
+    Form actions
+-------------------------------------- */
+.form-actions {
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/*
+    Default view for fields: Labels are above the controls
+-------------------------------------- */
+.form-inline .label,
+.form-inline .control {
+    margin: 0;
+    float: left;
+    width: 55%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.form-inline .label {
+    width: 45%;
+    text-align: right;
+    padding: 5px 15px 0 0;
+}
+
+.form-inline .choice {
+    position: relative;
+    z-index: 1;
+}
+
+.form-inline .choice .control {
+    position: absolute;
+    margin-top: 4px;
+    width: auto;
+    left: 45%;
+}
+
+.form-inline .choice .tooltip {
+    margin-left: 20px;
+    position: relative;
+    z-index: 1;
+    margin-top: 7px;
+}
+
+.form-inline .with-tooltip:not(.choice) {
+    padding-top: 20px;
+}
+
+.control .control-value {
+    display: inline-block;
+    padding: 6px 0 0;
+    vertical-align: top;
+}
+
+.control .control-value.special {
+    font-weight: bold;
+}
+
+/*
+    Field with multiple fields
+-------------------------------------- */
+/* TODO: rename 'fields-group' class. Propose - 'group' */
+
+[class^="fields-group-"] .field {
+    vertical-align: top;
+    margin: 0;
+    display: inline-block;
+}
+
+[class^="fields-group-"] .field .label {
+    width: auto;
+    float: none;
+    text-align: left;
+    padding-right: 0;
+}
+
+[class^="fields-group-"] .choice .label {
+    display: inline;
+}
+
+[class^="fields-group-"] .field .control {
+    float: none;
+    width: auto;
+    margin-left: 0;
+}
+
+@media screen and (max-width: 960px) {
+    [class^="fields-group-"] .field {
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+[class^="fields-group-"] {
+    letter-spacing: -0.31em; /* webkit */
+    word-spacing: -0.43em; /* IE < 8 && gecko */
+}
+
+[class^="fields-group-"] > * {
+    letter-spacing: normal;
+    word-spacing: normal;
+}
+
+/*
+    Form field with nested controls inside
+-------------------------------------- */
+.nested {
+    padding: 6px 0 0;
+}
+
+.nested .choice .label,
+.nested .choice .control {
+    float: none;
+    width: auto;
+    position: static;
+    left: auto;
+    text-align: left;
+    display: inline;
+    padding: 0;
+}
+
+.control *:first-child {
+    /*margin-top: 0;*/
+}
+
+.nested .field {
+    width: auto;
+    padding: 0;
+    margin: 5px 0;
+    display: block;
+}
+
+.nested .field:first-child {
+    margin-top: 0;
+}
+
+.nested .field:last-child {
+    margin-bottom: 0;
+}
+
+/*
+    Cols
+-------------------------------------- */
+.form-cols  .fieldset {
+    padding-right: 0;
+}
+
+.form-cols  .fieldset > .field {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 20px;
+}
+
+.form-cols  .fieldset > .with-tooltip:not(.choice) .tooltip {
+    right: 20px;
+}
+
+@media screen and (max-width: 960px) {
+    .form-cols  .fieldset > .field {
+        width: 100% !important;
+        display: block;
+    }
+}
+
+.buttons[note]:after {
+    content: '* ' attr(note);
+    display: block;
+    clear: both;
+    font-size: 11px;
+    color: red;
+    margin-top: 10px;
+}
+
+.qty .control,
+.qty .label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.qty .input-text {
+    width: 3em;
+    margin: 0;
+}
+
+/*
+    Clearfix
+-------------------------------------- */
+.buttons-set:before,
+.buttons-set:after,
+.form-inline .field:before,
+.form-inline .field:after,
+.form-actions:before,
+.form-actions:after,
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.buttons-set:after,
+.form-inline .field:after,
+.form-actions:after,
+.clearfix:after {
+    clear: both;
+}
+/* ==========================================================================
+   form.css (end)
+   ========================================================================== */
+
+
+/* =============================================================================
+   components.css (begin)
+   ========================================================================== */
+.sorter {
+    line-height: 25px;
+    padding: 5px 0;
+    border:solid #999;
+    border-width: 1px 0;
+}
+.view-mode {
+    margin: 0;
+    float: left;
+    white-space: nowrap;
+}
+.sort-by {
+    float: right;
+    white-space: nowrap;
+    line-height: normal;
+}
+.sort-by select {
+    width: auto;
+    margin: 0;
+}
+.sort-by a {
+    display: inline-block;
+    width: 8px;
+    height: 11px;
+    margin: 0 0 0 3px;
+    text-decoration: none;
+    color: #000;
+    text-indent: -9999px;
+    background: url(images/sorter-bg.png) no-repeat 0 0;
+}
+.sort-by a:hover {
+    background-position: 0 -12px;
+}
+.sort-asc a {
+    background-position: -9px 0;
+}
+.sort-asc a:hover {
+    background-position: -9px -12px;
+}
+.view-icons strong,
+.view-icons a {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    text-indent: -9999px;
+    line-height: normal;
+    background: url(images/view-mode-bg.png) no-repeat 0 0;
+}
+.view-icons strong.view-list {
+    background-position: -16px 0;
+}
+.view-icons a.view-grid {
+    background-position: 0 -16px;
+}
+.view-icons a.view-grid:hover {
+    background-position: 0 -32px;
+}
+.view-icons a.view-list {
+    background-position: -16px -16px;
+}
+
+.view-icons a.view-list:hover {
+    background-position: -16px -32px;
+}
+.sorter:after {
+    content:"";
+    display:table;
+    clear: both;
+}
+
+/* =============================================================================
+   Footer Blocks
+   ========================================================================== */
+.footer-links {
+    margin-bottom: 12px;
+}
+.switcher {}
+.switcher ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.switcher .current {
+    display: none;
+}
+.copyrights {
+    display: block;
+    margin: 12px 0;
+}
+.bug-report {
+    margin: 12px 0;
+}
+
+/* =============================================================================
+   Simple Block
+   ========================================================================== */
+.block {}
+.block-title,
+.block-list > li,
+.block-footer {
+    padding:5px 0;
+}
+.block-subtitle {
+    margin:5px 0;
+    font-weight:bold;
+}
+.block-list {
+    list-style:none;
+    padding:0;
+}
+.block-footer:after {
+    content:'';
+    width:100%;
+    display:table;
+    clear:both;
+}
+
+/* =============================================================================
+   Auth, User Block (Login, Register Pages)
+   ========================================================================== */
+.block-user {
+    margin:0 0 15px 0;
+}
+.block-user .block-title {
+    text-transform:uppercase;
+}
+.block-user .forgot-link {
+    display:inline-block;
+    margin:7px 0 5px;
+}
+.block-user .block-footer .button {
+    float:right;
+}
+.block-user .block-content {
+    padding-top:12px;
+}
+.block-user .block-content p {
+    margin-top:0;
+}
+.block-login .block-content {
+    min-height:150px;
+}
+
+/* =============================================================================
+   Search Form
+   ========================================================================== */
+.form-search {
+    margin:0 0 10px 0;
+}
+.form-search label {
+    vertical-align:top;
+}
+.form-search input[type=search],
+.form-search input.search {
+    margin-bottom:0;
+    min-width:160px;
+}
+.form-search strong {
+    display:none;
+}
+.search-form-submit {
+
+}
+
+/* =============================================================================
+   Quick access links
+   ========================================================================== */
+.quick-access {
+    float:right;
+    margin:12px 0 0 0;
+}
+.quick-access .nav > ul > li {
+    margin:0 22px 0 0;
+}
+.quick-access .nav > ul > li:after {
+    content:'';
+}
+.quick-access .items-qty {
+    font-size:11px;
+}
+.quick-access .nav > .button {
+    margin:-3px 0 0 0;
+}
+
+/* =============================================================================
+   Header
+   ========================================================================== */
+.page-header .arrow {
+    margin:0 0 0 3px;
+    cursor:pointer;
+    color:#919191;
+    font-size:9px;
+    vertical-align:middle;
+}
+.page-header-inner:after {
+    content:'';
+    display:table;
+    width:100%;
+}
+.menu-top {
+    list-style:none;
+    margin:0 0 10px 0;
+}
+.menu-top li {
+    display:inline-block;
+    margin:0 25px 0 0;
+}
+.menu-top li a {
+    text-decoration:underline;
+}
+.menu-top li a span {
+    text-transform:none;
+}
+.menu-top dl {}
+.menu-top dt {
+    display:inline;
+}
+.menu-top dd {
+    display:inline;
+    margin:0 25px 0 0;
+}
+/* =============================================================================
+   components.css (end)
+   ========================================================================== */
+
+
+/* =============================================================================
+   print.css (begin)
+   ========================================================================== */
+
+/* ==|== print styles =======================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+
+    /* Black prints faster: h5bp.com/s */
+    a, a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+        content: "";
+    }
+
+    /* Don't show links for images, or javascript/internal links */
+    pre, blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    /* h5bp.com/t */
+    tr, img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2, h3 {
+        page-break-after: avoid;
+    }
+}
+/* =============================================================================
+   print.css (end)
+   ========================================================================== */
+
+
+/* =============================================================================
+   utils.css (begin)
+   ========================================================================== */
+/*
+    Helpers and Utils
+-------------------------------------- */
+
+/* Hide from both screenreaders and browsers: h5bp.com/u */
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+input.no-display,
+.no-display {
+    display: none;
+}
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible {
+    visibility: hidden;
+}
+
+/* Contain floats: h5bp.com/q */
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+/* =============================================================================
+   utils.css (end)
+   ========================================================================== */

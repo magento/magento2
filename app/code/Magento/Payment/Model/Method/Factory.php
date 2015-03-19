@@ -40,7 +40,7 @@ class Factory
         $method = $this->_objectManager->create($className, $data);
         if (!$method instanceof \Magento\Payment\Model\MethodInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                sprintf("%s class doesn't implement \Magento\Payment\Model\MethodInterface", $className)
+                __('%1 class doesn\'t implement \Magento\Payment\Model\MethodInterface', $className)
             );
         }
         return $method;

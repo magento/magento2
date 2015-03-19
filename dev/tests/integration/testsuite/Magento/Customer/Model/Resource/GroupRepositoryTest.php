@@ -25,7 +25,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Data\GroupInterfaceFactory */
     private $groupFactory;
 
-    /** @var  \Magento\Framework\Api\SearchCriteriaDataBuilder */
+    /** @var  \Magento\Framework\Api\SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
     protected function setUp()
@@ -33,7 +33,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
         $this->groupFactory = $this->objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
-        $this->searchCriteriaBuilder = $this->objectManager->create('Magento\Framework\Api\SearchCriteriaDataBuilder');
+        $this->searchCriteriaBuilder = $this->objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
     }
 
     /**
@@ -194,7 +194,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         foreach ($filters as $filter) {
             $this->searchCriteriaBuilder->addFilter([$filter]);
         }
-        if (!is_null($filterGroup)) {
+        if ($filterGroup !== null) {
             $this->searchCriteriaBuilder->addFilter($filterGroup);
         }
 

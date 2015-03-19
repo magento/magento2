@@ -36,8 +36,8 @@ class PriceModifier
     public function removeGroupPrice(\Magento\Catalog\Model\Product $product, $customerGroupId, $websiteId)
     {
         $prices = $product->getData('group_price');
-        if (is_null($prices)) {
-            throw new NoSuchEntityException("This product doesn't have group price");
+        if ($prices === null) {
+            throw new NoSuchEntityException(__('This product doesn\'t have group price'));
         }
         $groupPriceQty = count($prices);
 
@@ -50,15 +50,17 @@ class PriceModifier
         }
         if ($groupPriceQty == count($prices)) {
             throw new NoSuchEntityException(
-                "Product hasn't group price with such data: customerGroupId = '$customerGroupId',"
-                . "website = $websiteId."
+                __(
+                    'Product hasn\'t group price with such data: customerGroupId = \'%1\', website = %2.',
+                    [$customerGroupId, $websiteId]
+                )
             );
         }
         $product->setData('group_price', $prices);
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException("Invalid data provided for group price");
+            throw new CouldNotSaveException(__('Invalid data provided for group price'));
         }
     }
 
@@ -76,8 +78,8 @@ class PriceModifier
     {
         $prices = $product->getData('tier_price');
         // verify if price exist
-        if (is_null($prices)) {
-            throw new NoSuchEntityException("This product doesn't have tier price");
+        if ($prices === null) {
+            throw new NoSuchEntityException(__('This product doesn\'t have tier price'));
         }
         $tierPricesQty = count($prices);
 
@@ -95,15 +97,18 @@ class PriceModifier
 
         if ($tierPricesQty == count($prices)) {
             throw new NoSuchEntityException(
-                "Product hasn't group price with such data: customerGroupId = '$customerGroupId',"
-                . "website = $websiteId, qty = $qty"
+                __(
+                    'Product hasn\'t group price with such data: customerGroupId = \'%1\''
+                    . ', website = %2, qty = %3',
+                    [$customerGroupId, $websiteId, $qty]
+                )
             );
         }
         $product->setData('tier_price', $prices);
         try {
             $this->productRepository->save($product);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException("Invalid data provided for tier_price");
+            throw new CouldNotSaveException(__('Invalid data provided for tier_price'));
         }
     }
 }

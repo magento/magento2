@@ -83,7 +83,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
@@ -94,7 +94,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
@@ -105,7 +105,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -423,7 +423,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     public function getCalculationPrice()
     {
         $price = $this->_getData('calculation_price');
-        if (is_null($price)) {
+        if ($price === null) {
             if ($this->hasCustomPrice()) {
                 $price = $this->getCustomPrice();
             } else {
@@ -443,7 +443,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     public function getCalculationPriceOriginal()
     {
         $price = $this->_getData('calculation_price');
-        if (is_null($price)) {
+        if ($price === null) {
             if ($this->hasOriginalCustomPrice()) {
                 $price = $this->getOriginalCustomPrice();
             } else {
@@ -507,7 +507,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     public function getOriginalPrice()
     {
         $price = $this->_getData('original_price');
-        if (is_null($price)) {
+        if ($price === null) {
             $price = $this->priceCurrency->convert($this->getBaseOriginalPrice(), $this->getStore());
             $this->setData('original_price', $price);
         }
@@ -578,7 +578,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     public function getConvertedPrice()
     {
         $price = $this->_getData('converted_price');
-        if (is_null($price)) {
+        if ($price === null) {
             $price = $this->priceCurrency->convert($this->getPrice(), $this->getStore());
             $this->setData('converted_price', $price);
         }

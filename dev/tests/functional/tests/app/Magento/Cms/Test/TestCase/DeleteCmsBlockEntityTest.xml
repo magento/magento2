@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\DeleteCmsBlockEntityTest">
+        <variation name="DeleteCmsBlockEntityTestVariation1">
+            <data name="issue" xsi:type="string">Bug: MAGETWO-32125</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockDeleteMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockNotInGrid" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockNotOnCategoryPage" />
+        </variation>
+    </testCase>
+</config>

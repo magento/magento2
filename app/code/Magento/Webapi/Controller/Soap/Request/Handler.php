@@ -6,6 +6,7 @@
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
@@ -108,8 +109,10 @@ class Handler
 
         if (!$isAllowed) {
             throw new AuthorizationException(
-                AuthorizationException::NOT_AUTHORIZED,
-                ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
+                __(
+                    AuthorizationException::NOT_AUTHORIZED,
+                    ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
+                )
             );
         }
         $service = $this->_objectManager->get($serviceClass);
@@ -154,14 +157,14 @@ class Handler
         } elseif (is_array($data)) {
             $dataType = substr($dataType, 0, -2);
             foreach ($data as $key => $value) {
-                if ($value instanceof ExtensibleDataInterface) {
+                if ($value instanceof ExtensibleDataInterface || $value instanceof MetadataObjectInterface) {
                     $result[] = $this->_dataObjectConverter
                         ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($value, $dataType));
                 } else {
                     $result[$key] = $value;
                 }
             }
-        } elseif (is_scalar($data) || is_null($data)) {
+        } elseif (is_scalar($data) || $data === null) {
             $result = $data;
         } else {
             throw new \InvalidArgumentException("Service returned result in invalid format.");

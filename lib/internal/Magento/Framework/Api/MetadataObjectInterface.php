@@ -14,4 +14,12 @@ interface MetadataObjectInterface
      * @return string
      */
     public function getAttributeCode();
+
+    /**
+     * Set code of the attribute.
+     *
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function setAttributeCode($attributeCode);
 }

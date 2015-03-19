@@ -178,7 +178,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function loadByCustomerId($customerId, $create = false)
     {
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             return $this;
         }
         $customerId = (int)$customerId;
@@ -295,7 +295,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             $item = $this->_wishlistItemFactory->create();
             $item->setProductId($product->getId());
             $item->setWishlistId($this->getId());
-            $item->setAddedAt($this->dateTime->now());
+            $item->setAddedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
             $item->setStoreId($storeId);
             $item->setOptions($product->getCustomOptions());
             $item->setProduct($product);
@@ -321,7 +321,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getItemCollection()
     {
-        if (is_null($this->_itemCollection)) {
+        if ($this->_itemCollection === null) {
             $this->_itemCollection = $this->_wishlistCollectionFactory->create()->addWishlistFilter(
                 $this
             )->addStoreFilter(
@@ -494,7 +494,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getSharedStoreIds()
     {
-        if (is_null($this->_storeIds) || !is_array($this->_storeIds)) {
+        if ($this->_storeIds === null || !is_array($this->_storeIds)) {
             if ($this->_useCurrentWebsite) {
                 $this->_storeIds = $this->getStore()->getWebsite()->getStoreIds();
             } else {
@@ -528,7 +528,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->setStore($this->_storeManager->getStore());
         }
         return $this->_store;

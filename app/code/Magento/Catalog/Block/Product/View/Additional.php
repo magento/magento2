@@ -28,7 +28,7 @@ class Additional extends \Magento\Framework\View\Element\Template
      */
     public function getChildHtmlList()
     {
-        if (is_null($this->_list)) {
+        if ($this->_list === null) {
             $this->_list = [];
             $layout = $this->getLayout();
             foreach ($this->getChildNames() as $name) {

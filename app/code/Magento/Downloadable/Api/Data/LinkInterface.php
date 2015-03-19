@@ -173,4 +173,19 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setSampleUrl($sampleUrl);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Downloadable\Api\Data\LinkExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Downloadable\Api\Data\LinkExtensionInterface $extensionAttributes);
 }

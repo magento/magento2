@@ -137,7 +137,7 @@ class Form extends Template
     public function getAvailableCurrencies()
     {
         $currencies = $this->getData('_currencies');
-        if (is_null($currencies)) {
+        if ($currencies === null) {
             $currencies = [];
             $codes = $this->_storeManager->getStore()->getAvailableCurrencyCodes(true);
             if (is_array($codes) && count($codes)) {
@@ -295,7 +295,7 @@ class Form extends Template
     protected function _getSelectBlock()
     {
         $block = $this->getData('_select_block');
-        if (is_null($block)) {
+        if ($block === null) {
             $block = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select');
             $this->setData('_select_block', $block);
         }
@@ -308,7 +308,7 @@ class Form extends Template
     protected function _getDateBlock()
     {
         $block = $this->getData('_date_block');
-        if (is_null($block)) {
+        if ($block === null) {
             $block = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Date');
             $this->setData('_date_block', $block);
         }
@@ -348,7 +348,7 @@ class Form extends Template
         )->setImage(
             $this->getViewFileUrl('Magento_Theme::calendar.png')
         )->setDateFormat(
-            $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
         )->setClass(
             'input-text'
         )->getHtml();

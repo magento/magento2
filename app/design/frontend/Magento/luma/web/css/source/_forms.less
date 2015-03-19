@@ -71,8 +71,7 @@ fieldset.field {
     appearance: none;
     border: 1px solid @border-color__base;
     height: 32px;
-    .url("images/select-bg.svg");
-    background: @select__background url("@{url}") no-repeat 100% 45%;
+    background: @select__background url('../images/select-bg.svg') no-repeat 100% 45%;
     background-size: 30px 60px;
     padding-right: 25px;
     text-indent: .01em;
@@ -117,7 +116,9 @@ select:focus ~ .tooltip .tooltip-content {
         margin: 0;
         > .field:not(.choice) >,
         .fields > .field {
-            margin: 0 0 @form-field__vertical-indent;
+            &:not(:last-child) {
+                margin: 0 0 @form-field__vertical-indent;
+            }
             .label {
                 margin: 0 0 4px;
                 padding: 0 0 @indent__xs;

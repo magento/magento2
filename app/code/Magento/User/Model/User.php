@@ -229,7 +229,7 @@ class User extends AbstractModel implements StorageInterface
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
-            'modified' => $this->dateTime->now(),
+            'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'extra' => serialize($this->getExtra()),
         ];
 
@@ -245,7 +245,7 @@ class User extends AbstractModel implements StorageInterface
             $data['password'] = $this->_getEncodedPassword($this->getPassword());
         }
 
-        if (!is_null($this->getIsActive())) {
+        if ($this->getIsActive() !== null) {
             $data['is_active'] = intval($this->getIsActive());
         }
 
@@ -674,7 +674,7 @@ class User extends AbstractModel implements StorageInterface
             throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
-        $this->setRpTokenCreatedAt($this->dateTime->now());
+        $this->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
         return $this;
     }
@@ -695,8 +695,8 @@ class User extends AbstractModel implements StorageInterface
 
         $expirationPeriod = $this->_userData->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($linkTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime($linkTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }

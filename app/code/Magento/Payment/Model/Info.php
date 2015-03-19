@@ -5,7 +5,6 @@
  */
 namespace Magento\Payment\Model;
 
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
@@ -35,8 +34,8 @@ class Info extends AbstractExtensibleModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -46,8 +45,8 @@ class Info extends AbstractExtensibleModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeValueFactory $customAttributeFactory,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -59,7 +58,7 @@ class Info extends AbstractExtensibleModel
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
+            $extensionFactory,
             $customAttributeFactory,
             $resource,
             $resourceCollection,
@@ -155,7 +154,7 @@ class Info extends AbstractExtensibleModel
             throw new \Magento\Framework\Exception\LocalizedException(__('The payment disallows storing objects.'));
         }
         $this->_initAdditionalInformation();
-        if (is_array($key) && is_null($value)) {
+        if (is_array($key) && $value === null) {
             $this->_additionalInformation = $key;
         } else {
             $this->_additionalInformation[$key] = $value;

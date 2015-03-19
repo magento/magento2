@@ -45,7 +45,7 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      */
     public function getCondition()
     {
-        if (is_null($this->getValue())) {
+        if ($this->getValue() === null) {
             return null;
         }
 

@@ -231,7 +231,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function isGiftMessagesAvailable($item = null)
     {
-        if (is_null($item)) {
+        if ($item === null) {
             return $this->_messageHelper->getIsMessagesAvailable('items', $this->getQuote(), $this->getStore());
         }
         return $this->_messageHelper->getIsMessagesAvailable('item', $item, $this->getStore());
@@ -286,9 +286,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $address = $this->getQuoteAddress();
         if ($this->displayTotalsIncludeTax()) {
-            return $address->getSubtotal() + $address->getTaxAmount() + $this->getDiscountAmount();
+            return $address->getSubtotal()
+                + $address->getTaxAmount()
+                + $address->getDiscountAmount()
+                + $address->getHiddenTaxAmount();
         } else {
-            return $address->getSubtotal() + $this->getDiscountAmount();
+            return $address->getSubtotal() + $address->getDiscountAmount();
         }
     }
 

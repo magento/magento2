@@ -7,31 +7,10 @@
 namespace Magento\Wonderland\Model\Data;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Wonderland\Api\Data\FakeAddressInterface;
 
-class FakeAddress extends AbstractExtensibleObject
+class FakeAddress extends AbstractExtensibleObject implements FakeAddressInterface
 {
-    /**#@+
-     * Constants for keys of data array
-     */
-    const ID = 'id';
-    const CUSTOMER_ID = 'customer_id';
-    const REGION = 'region';
-    const REGIONS = 'regions';
-    const COUNTRY_ID = 'country_id';
-    const STREET = 'street';
-    const COMPANY = 'company';
-    const TELEPHONE = 'telephone';
-    const FAX = 'fax';
-    const POSTCODE = 'postcode';
-    const CITY = 'city';
-    const FIRSTNAME = 'firstname';
-    const LASTNAME = 'lastname';
-    const MIDDLENAME = 'middlename';
-    const PREFIX = 'prefix';
-    const SUFFIX = 'suffix';
-    const VAT_ID = 'vat_id';
-    /**#@-*/
-
     /**
      * Get ID
      *
@@ -200,5 +179,47 @@ class FakeAddress extends AbstractExtensibleObject
     public function getVatId()
     {
         return $this->_get(self::VAT_ID);
+    }
+
+    /**
+     * Get if this address is default shipping address.
+     *
+     * @return bool|null
+     */
+    public function isDefaultShipping()
+    {
+        return $this->_get(self::DEFAULT_SHIPPING);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Get if this address is default billing address
+     *
+     * @return bool|null
+     */
+    public function isDefaultBilling()
+    {
+        return $this->_get(self::DEFAULT_BILLING);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

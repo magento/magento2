@@ -188,7 +188,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             return [];
         }
 
-        if (is_null($this->_allAttributes)) {
+        if ($this->_allAttributes === null) {
             $this->_allAttributes = $this->_attributeFactory->create()->getAttributeCodesByFrontendType('weee');
         }
         return $this->_allAttributes;
@@ -263,7 +263,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     $rateRequest->getCountryId()
                 )->where(
                     'state IN(?)',
-                    [$rateRequest->getRegionId(), '*']
+                    [$rateRequest->getRegionId(), 0]
                 )->where(
                     'entity_id = ?',
                     (int)$product->getId()
