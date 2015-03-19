@@ -131,7 +131,5 @@ class Date extends AbstractFilter
         }
 
         return $value;
-
-        return $value;
     }
 }
