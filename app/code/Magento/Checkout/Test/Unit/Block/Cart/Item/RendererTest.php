@@ -114,8 +114,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Checkout\Block\Cart\Item\Renderer::getProductPriceHtml
-     * covers \Magento\Checkout\Block\Cart\Item\Renderer::getPriceRender
+     * @covers \Magento\Checkout\Block\Cart\Item\Renderer::getProductPriceHtml
+     * @covers \Magento\Checkout\Block\Cart\Item\Renderer::getPriceRender
      */
     public function testGetProductPriceHtml()
     {

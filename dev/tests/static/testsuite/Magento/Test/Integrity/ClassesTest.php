@@ -557,8 +557,8 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             }
         }
         if ($errors) {
-            $this->fail('Nonexistent classes/methods were found in @covers annotations: ' . PHP_EOL
-                . implode(PHP_EOL, $errors)
+            $this->fail(
+                'Nonexistent classes/methods were found in @covers annotations: ' . PHP_EOL . implode(PHP_EOL, $errors)
             );
         }
     }
