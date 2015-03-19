@@ -3,9 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Element\UiComponent\Control;
+namespace Magento\Ui\Component\Control;
 
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Container
@@ -15,7 +16,7 @@ class Container extends AbstractBlock
     /**
      * Default button class
      */
-    const DEFAULT_CONTROL = 'Magento\Framework\View\Element\UiComponent\Control\ControlInterface';
+    const DEFAULT_CONTROL = 'Magento\Ui\Component\Control\Button';
 
     /**
      * Create button renderer
