@@ -7,17 +7,11 @@
 namespace Magento\Framework\Less;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\SourceFileGeneratorInterface;
 
 class FileGenerator implements SourceFileGeneratorInterface
 {
-    /**
-     * Temporary directory prefix
-     */
-    const TMP_LESS_DIR = 'less';
-
     /**
      * Max execution (locking) time for generation process (in seconds)
      */
@@ -27,11 +21,6 @@ class FileGenerator implements SourceFileGeneratorInterface
      * Lock file, if exists shows that process is locked
      */
     const LOCK_FILE = 'less.lock';
-
-    /**
-     * @var string
-     */
-    protected $lessDirectory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
@@ -59,17 +48,29 @@ class FileGenerator implements SourceFileGeneratorInterface
     private $importProcessor;
 
     /**
-     * @var \Magento\Framework\App\View\Asset\Publisher
+     * @var FileGenerator\RelatedGenerator
      */
-    private $publisher;
+    private $relatedGenerator;
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var File\Temporary
+     */
+    private $temporaryFile;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor
-     * @param \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
+     * @param PreProcessor\Instruction\MagentoImport $magentoImportProcessor
+     * @param PreProcessor\Instruction\Import $importProcessor
      * @param \Magento\Framework\View\Asset\Source $assetSource
-     * @param \Magento\Framework\App\View\Asset\Publisher $publisher
+     * @param FileGenerator\RelatedGenerator $relatedGenerator
+     * @param Config $config
+     * @param File\Temporary $temporaryFile
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -77,17 +78,20 @@ class FileGenerator implements SourceFileGeneratorInterface
         \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor,
         \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor,
         \Magento\Framework\View\Asset\Source $assetSource,
-        \Magento\Framework\App\View\Asset\Publisher $publisher
+        \Magento\Framework\Less\FileGenerator\RelatedGenerator $relatedGenerator,
+        Config $config,
+        File\Temporary $temporaryFile
     ) {
         $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
-        $this->lessDirectory = DirectoryList::TMP_MATERIALIZATION_DIR . '/' . self::TMP_LESS_DIR;
         $this->assetRepo = $assetRepo;
         $this->assetSource = $assetSource;
 
         $this->magentoImportProcessor = $magentoImportProcessor;
         $this->importProcessor = $importProcessor;
-        $this->publisher = $publisher;
+        $this->relatedGenerator = $relatedGenerator;
+        $this->config = $config;
+        $this->temporaryFile = $temporaryFile;
     }
 
     /**
@@ -109,16 +113,14 @@ class FileGenerator implements SourceFileGeneratorInterface
         while ($this->isProcessLocked()) {
             sleep(1);
         }
-        $lockFilePath = $this->lessDirectory . '/' . self::LOCK_FILE;
+        $lockFilePath = $this->config->getLessDirectory() . '/' . self::LOCK_FILE;
         $this->tmpDirectory->writeFile($lockFilePath, time());
 
         $this->magentoImportProcessor->process($chain);
         $this->importProcessor->process($chain);
-        $this->generateRelatedFiles();
+        $this->relatedGenerator->generate();
         $lessRelativePath = preg_replace('#\.css$#', '.less', $chain->getAsset()->getPath());
-        $tmpFilePath = $this->createFile($lessRelativePath, $chain->getContent());
-
-        $this->createFileMain($lessRelativePath, $chain->getContent());
+        $tmpFilePath = $this->temporaryFile->createFile($lessRelativePath, $chain->getContent());
 
         $this->tmpDirectory->delete($lockFilePath);
         return $tmpFilePath;
@@ -131,7 +133,7 @@ class FileGenerator implements SourceFileGeneratorInterface
      */
     protected function isProcessLocked()
     {
-        $lockFilePath = $this->lessDirectory . '/' . self::LOCK_FILE;
+        $lockFilePath = $this->config->getLessDirectory() . '/' . self::LOCK_FILE;
         if ($this->tmpDirectory->isExist($lockFilePath)) {
             $lockTime = time() - (int)$this->tmpDirectory->readFile($lockFilePath);
             if ($lockTime >= self::MAX_LOCK_TIME) {
@@ -141,70 +143,5 @@ class FileGenerator implements SourceFileGeneratorInterface
             return true;
         }
         return false;
-    }
-
-    /**
-     * Create all asset files, referenced from already processed ones
-     *
-     * @return void
-     */
-    protected function generateRelatedFiles()
-    {
-        do {
-            $relatedFiles = $this->importProcessor->getRelatedFiles();
-            $this->importProcessor->resetRelatedFiles();
-            foreach ($relatedFiles as $relatedFileInfo) {
-                list($relatedFileId, $asset) = $relatedFileInfo;
-                $this->generateRelatedFile($relatedFileId, $asset);
-            }
-        } while ($relatedFiles);
-    }
-
-    /**
-     * Create file, referenced relatively to an asset
-     *
-     * @param string $relatedFileId
-     * @param LocalInterface $asset
-     * @return void
-     */
-    protected function generateRelatedFile($relatedFileId, LocalInterface $asset)
-    {
-        $relatedAsset = $this->assetRepo->createRelated($relatedFileId, $asset);
-        $relatedAsset->getFilePath();
-
-        $this->createFile($relatedAsset->getPath(), $relatedAsset->getContent());
-        $relatedAsset->getSourceFile();
-        $this->publisher->publish($relatedAsset);
-    }
-
-    /**
-     * Write down contents to a temporary file and return its absolute path
-     *
-     * @param string $relativePath
-     * @param string $contents
-     * @return string
-     */
-    private function createFile($relativePath, $contents)
-    {
-        $filePath = $this->lessDirectory . '/' . $relativePath;
-
-        if (!$this->tmpDirectory->isExist($filePath)) {
-            $this->tmpDirectory->writeFile($filePath, $contents);
-        }
-        return $this->tmpDirectory->getAbsolutePath($filePath);
-    }
-
-    /**
-     * @param string $relativePath
-     * @param string $contents
-     *
-     * @return void
-     */
-    private function createFileMain($relativePath, $contents)
-    {
-        $filePath = '/static/' . $relativePath;
-        $contents .= '@urls-resolved: true;' . PHP_EOL . PHP_EOL;
-        $this->pubDirectory->writeFile($filePath, $contents);
-        return;
     }
 }
