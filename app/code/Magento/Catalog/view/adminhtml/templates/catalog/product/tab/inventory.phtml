@@ -24,7 +24,7 @@
     <div class="control">
         <select id="inventory_manage_stock" name="<?php echo $block->getFieldSuffix() ?>[stock_data][manage_stock]" <?php echo $_readonly;?>>
             <option value="1"><?php echo __('Yes') ?></option>
-            <option value="0"<?php if ($block->getConfigFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+            <option value="0"<?php if ($block->getFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
         </select>
         <input type="hidden" id="inventory_manage_stock_default" value="<?php echo $block->getDefaultConfigValue('manage_stock'); ?>">
         <?php $_checked = ($block->getFieldValue('use_config_manage_stock') || $block->IsNew()) ? 'checked="checked"' : '' ?>
