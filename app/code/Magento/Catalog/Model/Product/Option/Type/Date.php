@@ -165,7 +165,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 $timestamp += 60 * 60 * $value['hour'] + 60 * $value['minute'];
             }
 
-            $date = new \DateTime('@' . $timestamp);
+            $date = (new \DateTime())->setTimestamp($timestamp);
             $result = $date->format('Y-m-d H:i:s');
 
             // Save date in internal format to avoid locale date bugs
@@ -188,19 +188,22 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     {
         if ($this->_formattedOptionValue === null) {
             if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
-                $format = $this->_localeDate->getDateFormat(
-                    \IntlDateFormatter::MEDIUM
+                $result = $this->_localeDate->formatDateTime(
+                    new \DateTime($optionValue),
+                    \IntlDateFormatter::MEDIUM,
+                    \IntlDateFormatter::NONE
                 );
-                $result = \IntlDateFormatter::formatObject(new \DateTime($optionValue), $format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
-                $format = $this->_localeDate->getDateTimeFormat(
+                $result = $this->_localeDate->formatDateTime(
+                    new \DateTime($optionValue),
+                    \IntlDateFormatter::SHORT,
                     \IntlDateFormatter::SHORT
                 );
-                $result = \IntlDateFormatter::formatObject(new \DateTime($optionValue), $format);
             } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
-                $result = \IntlDateFormatter::formatObject(
+                $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
-                    $this->is24hTimeFormat() ? 'H:i' : 'h:i a'
+                    \IntlDateFormatter::NONE,
+                    \IntlDateFormatter::SHORT
                 );
             } else {
                 $result = $optionValue;

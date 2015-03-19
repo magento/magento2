@@ -23,7 +23,7 @@ class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         if (intval($data) == $data) {
             return (string)number_format($data, 2);
         }
-        if (!is_null($data)) {
+        if ($data !== null) {
             return $data * 1;
         }
         return $this->getColumn()->getDefault();

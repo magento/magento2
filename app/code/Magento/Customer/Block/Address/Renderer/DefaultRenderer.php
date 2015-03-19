@@ -97,9 +97,8 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      */
     public function getFormat(AbstractAddress $address = null)
     {
-        $countryFormat = is_null(
-            $address
-        ) ? false : $address->getCountryModel()->getFormat(
+        $countryFormat = $address === null
+        ? false : $address->getCountryModel()->getFormat(
             $this->getType()->getCode()
         );
         $format = $countryFormat ? $countryFormat->getFormat() : $this->getType()->getDefaultFormat();
@@ -189,7 +188,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
                 $data[$key] = $this->escapeHtml($value);
             }
         }
-        $format = !is_null($format) ? $format : $this->getFormatArray($addressAttributes);
+        $format = $format !== null ? $format : $this->getFormatArray($addressAttributes);
         return $this->filterManager->template($format, ['variables' => $data]);
     }
 }

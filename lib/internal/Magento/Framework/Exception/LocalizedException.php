@@ -61,7 +61,7 @@ class LocalizedException extends \Exception
      */
     public function getLogMessage()
     {
-        if (is_null($this->logMessage)) {
+        if ($this->logMessage === null) {
             $renderer = new Placeholder();
             $this->logMessage = $renderer->render([$this->getRawMessage()], $this->getParameters());
         }

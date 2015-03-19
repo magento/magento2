@@ -100,7 +100,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $store = $designConfig->getStore();
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
         }
         return $this;

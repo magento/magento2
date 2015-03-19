@@ -18,7 +18,7 @@ class Jcb extends \Magento\Centinel\Model\AbstractState
      */
     public function isAuthenticateAllowed()
     {
-        return $this->_isLookupStrictSuccessful() && is_null($this->getAuthenticateEciFlag());
+        return $this->_isLookupStrictSuccessful() && $this->getAuthenticateEciFlag() === null;
     }
 
     /**

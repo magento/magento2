@@ -281,7 +281,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     public function getCountryHtmlSelect($type)
     {
         $countryId = $this->getAddress()->getCountryId();
-        if (is_null($countryId)) {
+        if ($countryId === null) {
             $countryId = $this->directoryHelper->getDefaultCountry();
         }
         $select = $this->getLayout()->createBlock(

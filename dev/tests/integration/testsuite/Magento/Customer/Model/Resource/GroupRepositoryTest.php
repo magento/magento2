@@ -194,7 +194,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         foreach ($filters as $filter) {
             $this->searchCriteriaBuilder->addFilter([$filter]);
         }
-        if (!is_null($filterGroup)) {
+        if ($filterGroup !== null) {
             $this->searchCriteriaBuilder->addFilter($filterGroup);
         }
 

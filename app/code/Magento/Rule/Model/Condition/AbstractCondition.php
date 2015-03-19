@@ -411,7 +411,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getValueName()
     {
         $value = $this->getValue();
-        if (is_null($value) || '' === $value) {
+        if ($value === null || '' === $value) {
             return '...';
         }
 
@@ -551,7 +551,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     public function getOperatorElement()
     {
         $options = $this->getOperatorSelectOptions();
-        if (is_null($this->getOperator())) {
+        if ($this->getOperator() === null) {
             foreach ($options as $option) {
                 $this->setOperator($option['value']);
                 break;

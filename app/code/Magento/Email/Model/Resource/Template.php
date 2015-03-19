@@ -72,7 +72,7 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function checkCodeUsage(\Magento\Email\Model\Template $template)
     {
-        if ($template->getTemplateActual() != 0 || is_null($template->getTemplateActual())) {
+        if ($template->getTemplateActual() != 0 || $template->getTemplateActual() === null) {
             $select = $this->_getReadAdapter()->select()->from(
                 $this->getMainTable(),
                 'COUNT(*)'
