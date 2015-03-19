@@ -86,7 +86,7 @@ class FrontController implements FrontControllerInterface
                     // @todo Message should be clarified
                     $message = $this->appState->getMode() == State::MODE_DEVELOPER
                         ? $e->getMessage()
-                        : (string)__('An error occurred while processing your request');
+                        : (string)new \Magento\Framework\Phrase('An error occurred while processing your request');
                     $result = $this->handleException($e, $actionInstance, $message);
                     break;
                 }
