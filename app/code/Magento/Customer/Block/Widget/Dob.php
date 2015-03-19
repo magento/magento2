@@ -206,13 +206,13 @@ class Dob extends AbstractWidget
     public function getMinDateRange()
     {
         $dob = $this->_getAttribute('dob');
-        if (!is_null($dob)) {
+        if ($dob !== null) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
             $minDateValue = ArrayObjectSearch::getArrayElementByName(
                 $rules,
                 self::MIN_DATE_RANGE_KEY
             );
-            if (!is_null($minDateValue)) {
+            if ($minDateValue !== null) {
                 return date("Y/m/d", $minDateValue);
             }
         }
@@ -227,13 +227,13 @@ class Dob extends AbstractWidget
     public function getMaxDateRange()
     {
         $dob = $this->_getAttribute('dob');
-        if (!is_null($dob)) {
+        if ($dob !== null) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
             $maxDateValue = ArrayObjectSearch::getArrayElementByName(
                 $rules,
                 self::MAX_DATE_RANGE_KEY
             );
-            if (!is_null($maxDateValue)) {
+            if ($maxDateValue !== null) {
                 return date("Y/m/d", $maxDateValue);
             }
         }

@@ -473,7 +473,7 @@ class Address extends AbstractCustomer
                 if ('select' == $attributeParams['type']) {
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
-                    $value = new \DateTime('@' . strtotime($rowData[$attributeAlias]));
+                    $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                 } else {
                     $value = $rowData[$attributeAlias];

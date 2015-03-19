@@ -67,7 +67,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      */
     public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
-        $storeCode = !is_null($storeCode) ? (string)$storeCode : $this->defaultStoreCode;
+        $storeCode = $storeCode !== null ? (string)$storeCode : $this->defaultStoreCode;
         $resourcePath = '/' . $storeCode . $this->_getRestResourcePath($serviceInfo);
         $httpMethod = $this->_getRestHttpMethod($serviceInfo);
         //Get a valid token

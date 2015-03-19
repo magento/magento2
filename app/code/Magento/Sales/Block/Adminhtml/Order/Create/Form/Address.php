@@ -258,7 +258,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
                 }
             }
         }
-        if (is_null($this->_form->getElement('country_id')->getValue())) {
+        if ($this->_form->getElement('country_id')->getValue() === null) {
             $this->_form->getElement('country_id')->setValue(
                 $this->directoryHelper->getDefaultCountry($this->getStore())
             );

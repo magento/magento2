@@ -438,7 +438,7 @@ class TypeProcessor
                     );
                 }
             }
-        } elseif ($isArrayType && is_null($value)) {
+        } elseif ($isArrayType && $value === null) {
             return null;
         } elseif (!$isArrayType && !is_array($value)) {
             if ($value !== null && $type !== self::ANY_TYPE && !$this->setType($value, $type)) {

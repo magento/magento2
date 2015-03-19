@@ -157,7 +157,7 @@ class Links
      */
     protected function getBehavior()
     {
-        if (is_null($this->behavior)) {
+        if ($this->behavior === null) {
             $this->behavior = $this->importFactory->create()->getDataSourceModel()->getBehavior();
         }
         return $this->behavior;

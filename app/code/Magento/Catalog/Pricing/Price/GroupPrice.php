@@ -76,7 +76,7 @@ class GroupPrice extends AbstractPrice implements BasePriceProviderInterface
      */
     protected function getCustomerGroupId()
     {
-        if (!is_null($this->product->getCustomerGroupId())) {
+        if ($this->product->getCustomerGroupId() !== null) {
             return (int) $this->product->getCustomerGroupId();
         }
         return (int) $this->customerSession->getCustomerGroupId();

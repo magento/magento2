@@ -71,7 +71,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCurrentStorageCode()
     {
-        if (is_null($this->_currentStorage)) {
+        if ($this->_currentStorage === null) {
             $this->_currentStorage = (int)$this->scopeConfig->getValue(
                 \Magento\MediaStorage\Model\File\Storage::XML_PATH_STORAGE_MEDIA,
                 'default'
@@ -99,7 +99,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isInternalStorage($storage = null)
     {
-        $storage = !is_null($storage) ? (int)$storage : $this->getCurrentStorageCode();
+        $storage = $storage !== null ? (int)$storage : $this->getCurrentStorageCode();
 
         return in_array($storage, $this->_internalStorageList);
     }

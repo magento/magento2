@@ -142,7 +142,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         if (self::MODEL == $output) {
             $output = $this->_model;
         }
-        if (is_null($format)) {
+        if ($format === null) {
             $this->_localeMock->expects(
                 $this->once()
             )->method(

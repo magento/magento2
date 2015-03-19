@@ -134,18 +134,18 @@ class Cache
         }
 
         $hash = spl_object_hash($object);
-        if (!is_null($idx) && strpos($idx, '{')) {
+        if ($idx !== null && strpos($idx, '{')) {
             $idx = str_replace('{hash}', $hash, $idx);
         }
         if (isset($this->_hashes[$hash])) {
             //throw new \Exception('test');
-            if (!is_null($idx)) {
+            if ($idx !== null) {
                 $this->_references[$idx] = $this->_hashes[$hash];
             }
             return $this->_hashes[$hash];
         }
 
-        if (is_null($idx)) {
+        if ($idx === null) {
             $idx = '#' . ++$this->_idx;
         }
 

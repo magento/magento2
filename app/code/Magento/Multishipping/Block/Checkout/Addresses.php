@@ -126,7 +126,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     public function getAddressOptions()
     {
         $options = $this->getData('address_options');
-        if (is_null($options)) {
+        if ($options === null) {
             $options = [];
             $addresses = [];
 

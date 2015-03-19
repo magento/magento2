@@ -122,7 +122,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         //TODO: This may change since same resource of multiple versions may be allowed after namespace changes
         ksort($services);
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeCode = !is_null($storeCode)
+        $storeCode = $storeCode !== null
             ? (string)$storeCode
             : Bootstrap::getObjectManager()
                 ->get('Magento\Store\Model\StoreManagerInterface')

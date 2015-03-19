@@ -81,7 +81,7 @@ class Range implements FilterInterface
      */
     private function getPart($field, $operator, $value)
     {
-        return is_null($value)
+        return $value === null
             ? ''
             : $this->conditionManager->generateCondition($field, $operator, $value);
     }

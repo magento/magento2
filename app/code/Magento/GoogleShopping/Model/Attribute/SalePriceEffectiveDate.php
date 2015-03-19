@@ -40,17 +40,17 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
 
         $dateString = null;
         // if we have from an to dates, and if these dates are correct
-        if (!is_null($from) && !is_null($to) && $from < $to) {
+        if ($from !== null && $to !== null && $from < $to) {
             $dateString = $from->format('Y-m-d H:i:s') . '/' . $to->format('Y-m-d H:i:s');
         }
 
         // if we have only "from" date, send "from" day
-        if (!is_null($from) && is_null($to)) {
+        if ($from !== null && $to === null) {
             $dateString = $from->format('Y-m-d');
         }
 
         // if we have only "to" date, use "now" date for "from"
-        if (is_null($from) && !is_null($to)) {
+        if ($from === null && $to !== null) {
             $from = new \DateTime();
             // if "now" date is earlier than "to" date
             if ($from < $to) {
@@ -58,7 +58,7 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
             }
         }
 
-        if (!is_null($dateString)) {
+        if ($dateString !== null) {
             $this->_setAttribute($entry, 'sale_price_effective_date', self::ATTRIBUTE_TYPE_TEXT, $dateString);
         }
 
