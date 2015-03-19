@@ -144,7 +144,10 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getCustomerData()
     {
-        return \Zend_Json::encode($this->_getCustomer()->__toArray());
+        if ($this->isCustomerLoggedIn()) {
+            return \Zend_Json::encode($this->_getCustomer()->__toArray());
+        }
+        return \Zend_Json::encode([]);
     }
 
     /**

@@ -32,7 +32,7 @@ define(
 define(['Magento_Ui/js/form/component'], function (Component) {
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/billing-address'
+            template: 'Magento_Ui/errors'
         }
     });
 });
