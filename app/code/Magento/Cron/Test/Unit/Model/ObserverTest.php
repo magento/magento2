@@ -60,6 +60,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_cronGroupConfig;
 
     /**
+    * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+    */
+    protected $timezone;
+
+    /**
      * Prepare parameters
      */
     public function setUp()
@@ -93,6 +98,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ['execute']
         )->getMock();
 
+        $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $this->timezone->expects($this->any())->method('scopeTimeStamp')->will($this->returnValue(time()));
         $this->_observer = new \Magento\Cron\Model\Observer(
             $this->_objectManager,
             $this->_scheduleFactory,
@@ -100,7 +107,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->_config,
             $this->_scopeConfig,
             $this->_request,
-            $this->_shell
+            $this->_shell,
+            $this->timezone
         );
     }
 
@@ -112,7 +120,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $lastRun = time() + 10000000;
         $this->_cache->expects($this->any())->method('load')->will($this->returnValue($lastRun));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_job1'));
         $this->_config->expects($this->once())->method('getJobs')->will($this->returnValue([]));
 
         $scheduleMock = $this->getMockBuilder('Magento\Cron\Model\Schedule')->disableOriginalConstructor()->getMock();
@@ -161,16 +169,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $lastRun = time() + 10000000;
         $this->_cache->expects($this->any())->method('load')->will($this->returnValue($lastRun));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $schedule = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->setMethods(
-            ['getJobCode', 'tryLockJob', 'getScheduledAt', '__wakeup']
+            ['getJobCode', 'tryLockJob', 'getScheduledAt', '__wakeup', 'save']
         )->disableOriginalConstructor()->getMock();
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('-1 day'));
         $schedule->expects($this->once())->method('tryLockJob')->will($this->returnValue(false));
-
+        $abstractModel = $this->getMock('Magento\Framework\Model\AbstractModel', [], [], '', false);
+        $schedule->expects($this->any())->method('save')->will($this->returnValue($abstractModel));
         $this->_collection->addItem($schedule);
 
         $this->_config->expects(
@@ -198,7 +207,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $lastRun = time() + 10000000;
         $this->_cache->expects($this->any())->method('load')->will($this->returnValue($lastRun));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $schedule = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->setMethods(
@@ -262,7 +271,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
         $schedule->expects($this->once())->method('save');
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_collection->addItem($schedule);
 
         $jobConfig = ['test_group' => ['test_job1' => ['instance' => 'Some_Class']]];
@@ -293,7 +302,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         ];
 
         $exceptionMessage = 'Invalid callback: Not_Existed_Class::notExistedMethod can\'t be called';
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $schedule = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->setMethods(
@@ -349,6 +358,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $jobConfig = [
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
 
         $scheduleMethods = [
             'getJobCode',
@@ -430,7 +440,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(['test_group' => []])
         );
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_cache->expects(
             $this->at(0)
         )->method(
@@ -501,7 +511,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $this->_config->expects($this->at(1))->method('getJobs')->will($this->returnValue($jobs));
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_cache->expects(
             $this->at(0)
         )->method(
@@ -568,7 +578,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $schedule->expects($this->any())->method('getExecutedAt')->will($this->returnValue('-1 day'));
         $schedule->expects($this->any())->method('getStatus')->will($this->returnValue('success'));
-
+        $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_collection->addItem($schedule);
 
         $this->_config->expects($this->once())->method('getJobs')->will($this->returnValue($jobConfig));
