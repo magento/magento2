@@ -1,6 +1,0 @@
-{
-    "frontend": {
-        "directory": "./pub/static/frontend/Magento/blank/en_US",
-        "port": 8000
-    }
-}

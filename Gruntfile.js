@@ -8,18 +8,20 @@ module.exports = function (grunt) {
     'use strict';
 
     var _ = require('underscore'),
-        path = require('path');
+        path = require('path'),
+        configDir = './dev/tools/grunt/configs',
+        taskDir = './dev/tools/grunt/tasks';
 
     [
-        './dev/tools/grunt/tasks/mage-minify',
-        './dev/tools/grunt/tasks/deploy',
+        taskDir + '/mage-minify',
+        taskDir + '/deploy',
         'time-grunt'
     ].forEach(function (task) {
         require(task)(grunt);
     });
 
     require('load-grunt-config')(grunt, {
-        configPath: path.join(process.cwd(), 'dev/tools/grunt/configs'),
+        configPath: path.join(__dirname, configDir),
         init: true,
         loadGruntTasks: {
             pattern: [
@@ -85,10 +87,27 @@ module.exports = function (grunt) {
             'usebanner:documentationHtml'
         ],
 
-        spec: [
-            'connect:frontend',
-            'jasmine:frontend'
-        ]
+        spec: function (theme) {
+            var tasks = [],
+                themes = require(configDir + '/themes');
+
+            function tasksFor(theme) {
+                return [
+                    'connect:' + theme,
+                    'jasmine:' + theme
+                ];
+            }
+
+            if (!theme) {
+                Object.keys(themes).forEach(function (theme) {
+                    tasks = tasks.concat(tasksFor(theme));
+                });
+            } else {
+                tasks = tasksFor(theme);
+            }
+
+            grunt.task.run(tasks);
+        }
     }, function (task, name) {
         grunt.registerTask(name, task);
     });

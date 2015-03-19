@@ -1,3 +1,10 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,25 +15,15 @@
         <link rel="stylesheet" href="<%= style %>">
         <% }); %>
         <% with (scripts) { %>
-            <% [].concat(polyfills, jasmine, boot, reporters).forEach(function (script) { %>
+            <% [].concat(polyfills, jasmine, boot, vendor, src, reporters).forEach(function (script) { %>
             <script type="text/javascript" src="<%= script %>"></script>
             <% }); %>
         <% } %>
-        <script type="text/javascript" src="/vendor/requirejs/require.js"></script>
         <script type="text/javascript">
-            var startTests = window.onload;
+            var jasmineBoot = window.onload;
             window.onload = null;
 
-            require.config({
-                paths: {
-                    ko: 'ko/ko',
-                    jquery: 'jquery/jquery.min'
-                }
-            });
-
-            require([
-                'dev/tests/js/jasmine/testsuite/adminhtml/Magento/backend/some_module'
-            ], startTests);
+            require(<%= JSON.stringify(scripts.helpers) %>, jasmineBoot);
         </script>
     </head>
     <body></body>
