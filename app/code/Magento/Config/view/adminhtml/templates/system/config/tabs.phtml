@@ -50,9 +50,7 @@
                                 <?php echo $_tab->getChildren()->isLast($_section) ? ' _last' : '' ?>">
                                 <a href="<?php echo $block->getSectionUrl($_section) ?>"
                                    class="admin__page-nav-link item-nav">
-                                    <span>
-                                        <?php echo $_section->getLabel() ?>
-                                    </span>
+                                   <span><?php echo $_section->getLabel() ?></span>
                                 </a>
                             </li>
                             <?php $_iterator++; ?>

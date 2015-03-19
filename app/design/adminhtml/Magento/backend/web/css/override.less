@@ -1847,9 +1847,8 @@ table.table tbody tr:last-child td {
 .page-actions > button.action-back:before,
 .page-actions .page-actions-buttons > button.action-back:before,
 .admin__page-nav-title._collapsible:after,
-.admin__page-nav-link.error:after,
-.admin__page-nav-link._changed:after,
-.admin__page-nav-link.changed:after {
+.admin__page-nav-item-messages .admin__page-nav-item-message._error .admin__page-nav-item-message-icon,
+.admin__page-nav-item-messages .admin__page-nav-item-message._changed .admin__page-nav-item-message-icon {
   -webkit-font-smoothing: antialiased;
   font-family: 'Admin Icons';
   line-height: 1;
@@ -4196,6 +4195,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   cursor: pointer;
   margin: 0;
   padding-right: 35px;
+  transition: background-color 0.1s ease-out, border 0.1s ease-out;
 }
 .admin__page-nav-title._collapsible + .admin__page-nav-items {
   display: none;
@@ -4227,6 +4227,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   border-left: 3px solid transparent;
   margin-left: .7rem;
   padding: 0;
+  position: relative;
 }
 .admin__page-nav-item:hover,
 .admin__page-nav-item._active,
@@ -4251,26 +4252,24 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .admin__page-nav-item.ui-state-active .admin__page-nav-link {
   font-weight: 600;
 }
-.admin__page-nav-item.ui-tabs-loading,
-.admin__page-nav-item._loading {
-  position: relative;
-  z-index: 1;
-}
-.admin__page-nav-item.ui-tabs-loading:before,
-.admin__page-nav-item._loading:before {
-  background: url('../images/loader-2.gif') no-repeat 50% 50%;
-  background-size: 120px;
-  content: '';
-  display: block;
-  height: 2rem;
+.admin__page-nav-item .admin__page-nav-item-message-loader {
+  display: none;
   position: absolute;
-  right: .5rem;
-  top: 2.1rem;
-  width: 2rem;
-  z-index: 2;
+  right: 0;
+  top: 50%;
+  margin-top: -1rem;
 }
-.admin__page-nav-item:first-child {
-  margin-top: 1.3rem;
+.admin__page-nav-item .admin__page-nav-item-message-loader .spinner {
+  font-size: 2rem;
+  margin-right: 1.5rem;
+}
+.admin__page-nav-item._loading:before,
+.admin__page-nav-item.ui-tabs-loading:before {
+  display: none;
+}
+.admin__page-nav-item._loading .admin__page-nav-item-message-loader,
+.admin__page-nav-item.ui-tabs-loading .admin__page-nav-item-message-loader {
+  display: inline-block;
 }
 .admin__page-nav-item:last-child {
   margin-bottom: 1.3rem;
@@ -4283,22 +4282,86 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   font-weight: 500;
   line-height: 1.2;
   margin: 0 0 -1px;
-  padding: 2rem 3rem 2rem 1rem;
+  padding: 2rem 4rem 2rem 1rem;
   word-break: break-all;
+  transition: background-color 0.1s ease-out, border 0.1s ease-out;
 }
-.admin__page-nav-link.error:after,
-.admin__page-nav-link._changed:after,
-.admin__page-nav-link.changed:after {
-  color: #666666;
-  content: '\e631';
+.admin__page-nav-link._changed .admin__page-nav-item-message._changed,
+.admin__page-nav-link.changed .admin__page-nav-item-message._changed {
+  display: inline-block;
+}
+.admin__page-nav-link._error .admin__page-nav-item-message._error,
+.admin__page-nav-link.error .admin__page-nav-item-message._error {
+  display: inline-block;
+}
+.admin__page-nav-item-messages {
+  display: inline-block;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message {
+  position: relative;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message:hover {
+  z-index: 500;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message:hover .admin__page-nav-item-message-tooltip {
+  display: block;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message._error,
+.admin__page-nav-item-messages .admin__page-nav-item-message._changed {
+  display: none;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message._error .admin__page-nav-item-message-icon,
+.admin__page-nav-item-messages .admin__page-nav-item-message._changed .admin__page-nav-item-message-icon {
   display: inline-block;
   font-size: 1.4rem;
   padding-left: 1.5rem;
   vertical-align: top;
 }
-.admin__page-nav-link.error:after {
+.admin__page-nav-item-messages .admin__page-nav-item-message._error .admin__page-nav-item-message-icon:after,
+.admin__page-nav-item-messages .admin__page-nav-item-message._changed .admin__page-nav-item-message-icon:after {
+  color: #666666;
+  content: '\e631';
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message._error .admin__page-nav-item-message-icon:after {
   color: #eb5202;
   content: '\e623';
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message-tooltip {
+  box-shadow: 0px 3px 9px 0 rgba(0, 0, 0, 0.3);
+  background: #f1f1f1;
+  border-radius: 1px;
+  border: 1px solid #f1f1f1;
+  bottom: 3.7rem;
+  display: none;
+  font-weight: 400;
+  word-break: normal;
+  padding: 2rem;
+  line-height: 1.4;
+  position: absolute;
+  left: -1rem;
+  width: 27rem;
+  z-index: 2;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message-tooltip:after,
+.admin__page-nav-item-messages .admin__page-nav-item-message-tooltip:before {
+  border: 15px solid transparent;
+  height: 0;
+  width: 0;
+  border-top-color: #f1f1f1;
+  content: "";
+  display: block;
+  position: absolute;
+  left: 2rem;
+  top: 100%;
+  z-index: 3;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message-tooltip:after {
+  border-top-color: #f1f1f1;
+  margin-top: -1px;
+  z-index: 4;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message-tooltip:before {
+  border-top-color: #bfbfbf;
 }
 .dashboard-data {
   background: #ffffff;

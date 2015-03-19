@@ -30,8 +30,16 @@
 @admin__page-nav-icon-error__content: @icon-warning__content;
 @admin__page-nav-icon-error__color: @color-phoenix;
 
+@admin__page-nav-item-message-loader__font-size: 2rem;
+@admin__page-nav-tooltip__z-index1: @field-tooltip__z-index;
+@admin__page-nav-tooltip__z-index2: 2;
+@admin__page-nav-tooltip__z-index3: 3;
+@admin__page-nav-tooltip__z-index4: 4;
+
+@admin__page-nav-transition: background-color 0.1s ease-out, border 0.1s ease-out;
+
 //
-//  Section Nav (can be simple and collapsed)
+//  Page Nav (can be simple and collapsed)
 //  _____________________________________________
 
 .admin__page-nav {
@@ -78,6 +86,7 @@
         cursor: pointer;
         margin: 0;
         padding-right: 35px;
+        transition: @admin__page-nav-transition;
 
         + .admin__page-nav-items {
             display: none;
@@ -117,6 +126,7 @@
     border-left: 3px solid transparent;
     margin-left: .7rem;
     padding: 0;
+    position: relative;
 
     &:hover,
     &._active,
@@ -141,27 +151,28 @@
         }
     }
 
-    &.ui-tabs-loading,
-    &._loading {
-        position: relative;
-        z-index: 1;
-        &:before {
-            background: url('../images/loader-2.gif') no-repeat 50% 50%;
-            background-size: 120px;
-            content: '';
-            display: block;
-            height: 2rem;
-            position: absolute;
-            right: .5rem;
-            top: 2.1rem;
-            width: 2rem;
-            z-index: 2;
+    .admin__page-nav-item-message-loader {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
+        .spinner {
+            font-size: @admin__page-nav-item-message-loader__font-size;
+            margin-right: 1.5rem;
         }
     }
 
-    &:first-child {
-        margin-top: @admin__page-nav-item__margin-vertical;
+    &._loading,
+    &.ui-tabs-loading {
+        &:before {
+            display: none;
+        }
+        .admin__page-nav-item-message-loader {
+            display: inline-block;
+        }
     }
+
     &:last-child {
         margin-bottom: @admin__page-nav-item__margin-vertical;
     }
@@ -175,27 +186,106 @@
     font-weight: @font-weight__heavier;
     line-height: @line-height__s;
     margin: 0 0 -1px;
-    padding: 2rem 3rem 2rem 1rem;
+    padding: 2rem 4rem 2rem 1rem;
     word-break: break-all;
+    transition: @admin__page-nav-transition;
 
-    &.error,
     &._changed,
     &.changed {
-        &:after {
-            &:extend(.abs-icon all);
-            color: @admin__page-nav-link__changed__color;
-            content: @admin__page-nav-icon-changed__content;
-            display: inline-block;
-            font-size: @admin__page-nav-title__font-size;
-            padding-left: 1.5rem;
-            vertical-align: top;
+        .admin__page-nav-item-message {
+            &._changed {
+                display: inline-block;
+            }
         }
     }
 
+    &._error,
     &.error {
+        .admin__page-nav-item-message {
+            &._error {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+//  Messages in tooltip
+
+.admin__page-nav-item-messages {
+    display: inline-block;
+
+    .admin__page-nav-item-message {
+        position: relative;
+        &:hover {
+            z-index: @admin__page-nav-tooltip__z-index1;
+            .admin__page-nav-item-message-tooltip {
+                display: block;
+            }
+        }
+
+        &._error,
+        &._changed {
+            display: none;
+            .admin__page-nav-item-message-icon {
+                &:extend(.abs-icon all);
+                display: inline-block;
+                font-size: @admin__page-nav-title__font-size;
+                padding-left: 1.5rem;
+                vertical-align: top;
+                &:after {
+                    color: @admin__page-nav-link__changed__color;
+                    content: @admin__page-nav-icon-changed__content;
+                }
+            }
+        }
+
+        &._error {
+            .admin__page-nav-item-message-icon {
+                &:after {
+                    color: @admin__page-nav-icon-error__color;
+                    content: @admin__page-nav-icon-error__content;
+                }
+            }
+        }
+    }
+
+    .admin__page-nav-item-message-tooltip {
+        @_shadow: 0px 3px 9px 0 rgba(0, 0, 0, 0.3);
+        .css(box-shadow, @_shadow);
+        background: @admin__page-nav__background-color;
+        border-radius: 1px;
+        border: 1px solid @admin__page-nav__background-color;
+        bottom: 3.7rem;
+        display: none;
+        font-weight: @font-weight__regular;
+        word-break: normal;
+        padding: 2rem;
+        line-height: @line-height__base;
+        position: absolute;
+        left: -1rem;
+        width: 27rem;
+        z-index: @admin__page-nav-tooltip__z-index2;
+        &:after,
+        &:before {
+            .arrow(
+            @_position: down,
+            @_size: 15px,
+            @_color: @admin__page-nav__background-color
+            );
+            content: "";
+            display: block;
+            position: absolute;
+            left: 2rem;
+            top: 100%;
+            z-index: @admin__page-nav-tooltip__z-index3;
+        }
         &:after {
-            color: @admin__page-nav-icon-error__color;
-            content: @admin__page-nav-icon-error__content;
+            border-top-color: @admin__page-nav__background-color;
+            margin-top: -1px;
+            z-index: @admin__page-nav-tooltip__z-index4;
+        }
+        &:before {
+            border-top-color: @color-gray75;
         }
     }
 }
