@@ -96,7 +96,7 @@ class ServiceCollection extends AbstractServiceCollection
             $customerItem->setBillingTelephone($billingAddress->getTelephone());
             $customerItem->setBillingPostcode($billingAddress->getPostcode());
             $customerItem->setBillingCountryId($billingAddress->getCountryId());
-            $region = is_null($billingAddress->getRegion()) ? '' : $billingAddress->getRegion()->getRegion();
+            $region = $billingAddress->getRegion() === null ? '' : $billingAddress->getRegion()->getRegion();
             $customerItem->setBillingRegion($region);
         }
         return $customerItem;

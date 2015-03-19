@@ -96,7 +96,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      */
     public function getForm()
     {
-        if (is_null($this->_form)) {
+        if ($this->_form === null) {
             $this->_form = $this->_formFactory->create();
             $this->_prepareForm();
         }

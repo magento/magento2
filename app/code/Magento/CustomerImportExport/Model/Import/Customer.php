@@ -292,11 +292,11 @@ class Customer extends AbstractCustomer
         $attributesToSave = [];
 
         // entity table data
-        $now = new \DateTime('@' . time());
+        $now = new \DateTime();
         if (empty($rowData['created_at'])) {
             $createdAt = $now;
         } else {
-            $createdAt = new \DateTime('@' . strtotime($rowData['created_at']));
+            $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
         $entityRow = [
             'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
@@ -333,7 +333,7 @@ class Customer extends AbstractCustomer
                 if ('select' == $attributeParameters['type']) {
                     $value = $attributeParameters['options'][strtolower($value)];
                 } elseif ('datetime' == $attributeParameters['type']) {
-                    $value = new \DateTime('@' . strtotime($value));
+                    $value = (new \DateTime())->setTimestamp(strtotime($value));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                 } elseif ($backendModel) {
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));

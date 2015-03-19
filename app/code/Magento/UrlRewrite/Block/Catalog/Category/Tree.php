@@ -136,7 +136,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getCategoryCollection()
     {
         $collection = $this->_getData('category_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->_categoryFactory->create()->getCollection()->addAttributeToSelect(
                 ['name', 'is_active']
             )->setLoadProductCount(

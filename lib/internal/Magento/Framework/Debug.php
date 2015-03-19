@@ -29,7 +29,7 @@ class Debug
      */
     public static function getRootPath()
     {
-        if (is_null(self::$_filePath)) {
+        if (self::$_filePath === null) {
             if (defined('BP')) {
                 self::$_filePath = BP;
             } else {
@@ -170,7 +170,7 @@ class Debug
             } else {
                 $out .= 'array(' . join(', ', $args) . ')';
             }
-        } elseif (is_null($arg)) {
+        } elseif ($arg === null) {
             $out .= 'NULL';
         } elseif (is_numeric($arg) || is_float($arg)) {
             $out .= $arg;

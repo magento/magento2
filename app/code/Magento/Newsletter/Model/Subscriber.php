@@ -578,7 +578,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->save();
         $sendSubscription = $sendInformationEmail;
-        if (is_null($sendSubscription) xor $sendSubscription) {
+        if ($sendSubscription === null xor $sendSubscription) {
             try {
                 if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
                     $this->sendUnsubscriptionEmail();

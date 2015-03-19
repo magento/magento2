@@ -9,7 +9,7 @@
  * Replace task for backend migration
  */
 module.exports = {
-    example: {
+    escapeCalc: {
         src: ['<%= combo.autopath("backend","pub") %>/css/styles.css'], // source files array (supports minimatch)
         dest: '<%= combo.autopath("backend","pub") %>/css/override.less', // destination directory or file
         replacements: [{

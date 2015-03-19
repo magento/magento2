@@ -503,7 +503,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** Set current customer */
         /** @var \Magento\Backend\Model\Session\Quote $session */
         $session = Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session\Quote');
-        if (!is_null($customerIdFromFixture)) {
+        if ($customerIdFromFixture !== null) {
             $session->setCustomerId($customerIdFromFixture);
 
             /** Unset fake IDs for default billing and shipping customer addresses */

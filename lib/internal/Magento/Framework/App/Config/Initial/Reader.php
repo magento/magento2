@@ -99,7 +99,7 @@ class Reader
         $domDocument = null;
         foreach ($fileList as $file) {
             try {
-                if (is_null($domDocument)) {
+                if ($domDocument === null) {
                     $class = $this->_domDocumentClass;
                     $domDocument = new $class($file, [], null, $this->_schemaFile);
                 } else {

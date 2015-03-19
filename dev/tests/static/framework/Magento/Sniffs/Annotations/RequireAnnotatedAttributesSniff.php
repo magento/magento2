@@ -201,7 +201,7 @@ class RequireAnnotatedAttributesSniff extends PHP_CodeSniffer_Standards_Abstract
         }
 
         $comment = $this->commentParser->getComment();
-        if (is_null($comment) === true) {
+        if (($comment === null) === true) {
             $this->helper->addMessage($commentStart, Helper::EMPTY_DOC, ['Variable']);
             return;
         }

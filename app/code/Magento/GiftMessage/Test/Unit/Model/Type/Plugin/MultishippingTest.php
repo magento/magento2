@@ -41,7 +41,11 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testBeforeSetShippingMethods()
+    /**
+     * @dataProvider beforeSetShippingMethodsDataProvider
+     * @param array|null $methods
+     */
+    public function testBeforeSetShippingMethods($methods)
     {
         $this->requestMock->expects($this->once())
             ->method('getParam')
@@ -52,6 +56,17 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->messageMock->expects($this->once())->method('add')->with('Expected Value', $quoteMock);
 
-        $this->plugin->beforeSetShippingMethods($subjectMock, []);
+        $this->plugin->beforeSetShippingMethods($subjectMock, $methods);
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSetShippingMethodsDataProvider()
+    {
+        return [
+            [null],
+            [[]]
+        ];
     }
 }

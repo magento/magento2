@@ -231,7 +231,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function isGiftMessagesAvailable($item = null)
     {
-        if (is_null($item)) {
+        if ($item === null) {
             return $this->_messageHelper->getIsMessagesAvailable('items', $this->getQuote(), $this->getStore());
         }
         return $this->_messageHelper->getIsMessagesAvailable('item', $item, $this->getStore());
