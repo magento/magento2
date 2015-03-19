@@ -92,7 +92,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
-                $date = new \DateTime('@' . mktime(0, 0, 0, 1, 1, 2001));
+                $date = (new \DateTime())->setTimestamp(mktime(0, 0, 0, 1, 1, 2001));
                 $data['report_from'] = $this->_localeDate->formatDateTime(
                     $date,
                     \IntlDateFormatter::SHORT,
