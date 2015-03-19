@@ -12,7 +12,4 @@
     <event name="catalog_category_save_after">
         <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Model\Category\Observer" method="processUrlRewriteSaving"/>
     </event>
-    <event name="catalog_category_move_after">
-        <observer name="process_url_rewrite_moving" instance="Magento\CatalogUrlRewrite\Model\Category\Observer" method="processUrlRewriteMoving"/>
-    </event>
 </config>
