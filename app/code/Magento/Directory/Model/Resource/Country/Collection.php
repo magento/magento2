@@ -11,6 +11,10 @@
  */
 namespace Magento\Directory\Model\Resource\Country;
 
+/**
+ * Class Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -63,7 +67,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
