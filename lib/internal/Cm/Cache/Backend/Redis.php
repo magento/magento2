@@ -242,7 +242,7 @@ class Cm_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_Ba
             );
 
             $res = $this->_redis->evalSha(self::LUA_SAVE_SH1, $tags, $sArgs);
-            if (is_null($res)) {
+            if ($res === null) {
                 $script =
                     "local oldTags = redis.call('HGET', ARGV[1]..ARGV[9], ARGV[3]) ".
                     "redis.call('HMSET', ARGV[1]..ARGV[9], ARGV[2], ARGV[10], ARGV[3], ARGV[11], ARGV[4], ARGV[12], ARGV[5], ARGV[13]) ".

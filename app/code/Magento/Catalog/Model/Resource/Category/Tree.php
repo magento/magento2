@@ -170,7 +170,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $toLoad = true,
         $onlyActive = false
     ) {
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->getCollection($sorted);
         } else {
             $this->setCollection($collection);
@@ -347,7 +347,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     public function getCollection($sorted = false)
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = $this->_getDefaultCollection($sorted);
         }
         return $this->_collection;
@@ -377,7 +377,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     public function setCollection($collection)
     {
-        if (!is_null($this->_collection)) {
+        if ($this->_collection !== null) {
             $this->_clean($this->_collection);
         }
         $this->_collection = $collection;

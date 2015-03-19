@@ -88,7 +88,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
         $faviconUrl = $this->storeManager->getStore()
                 ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $path;
 
-        if (!is_null($scopeConfig) && $this->checkIsFile($path)) {
+        if ($scopeConfig !== null && $this->checkIsFile($path)) {
             return $faviconUrl;
         }
 

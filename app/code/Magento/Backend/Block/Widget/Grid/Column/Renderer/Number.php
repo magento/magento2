@@ -26,7 +26,7 @@ class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     protected function _getValue(\Magento\Framework\Object $row)
     {
         $data = parent::_getValue($row);
-        if (!is_null($data)) {
+        if ($data !== null) {
             $value = $data * 1;
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $value > 0 ? '+' : '';
             if ($sign) {

@@ -126,7 +126,7 @@ class Snapshot extends Filesystem
      */
     protected function _getDbBackupManager()
     {
-        if (is_null($this->_dbBackupManager)) {
+        if ($this->_dbBackupManager === null) {
             $this->_dbBackupManager = $this->_createDbBackupInstance();
         }
 

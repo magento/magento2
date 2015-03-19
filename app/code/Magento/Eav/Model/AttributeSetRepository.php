@@ -91,7 +91,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         /** The only possible/meaningful search criteria for attribute set is entity type code */
         $entityTypeCode = $this->getEntityTypeCode($searchCriteria);
 
-        if (!is_null($entityTypeCode)) {
+        if ($entityTypeCode !== null) {
             $collection->setEntityTypeFilter($this->eavConfig->getEntityType($entityTypeCode)->getId());
         }
 

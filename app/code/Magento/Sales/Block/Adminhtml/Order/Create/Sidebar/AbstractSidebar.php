@@ -129,7 +129,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     public function getItemCount()
     {
         $count = $this->getData('item_count');
-        if (is_null($count)) {
+        if ($count === null) {
             $count = count($this->getItems());
             $this->setData('item_count', $count);
         }

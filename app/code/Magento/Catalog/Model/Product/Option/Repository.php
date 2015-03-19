@@ -57,7 +57,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         $product = $this->productRepository->get($sku);
         $option = $product->getOptionById($optionId);
-        if (is_null($option)) {
+        if ($option === null) {
             throw NoSuchEntityException::singleField('optionId', $optionId);
         }
         return $option;
@@ -124,7 +124,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $product = $this->productRepository->get($sku, true);
         $options = $product->getOptions();
         $option = $product->getOptionById($optionId);
-        if (is_null($option)) {
+        if ($option === null) {
             throw NoSuchEntityException::singleField('optionId', $optionId);
         }
         unset($options[$optionId]);
