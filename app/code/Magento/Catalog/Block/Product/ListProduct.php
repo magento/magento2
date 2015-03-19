@@ -88,7 +88,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     protected function _getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
+        if ($this->_productCollection === null) {
             $layer = $this->getLayer();
             /* @var $layer \Magento\Catalog\Model\Layer */
             if ($this->getShowRootCategory()) {

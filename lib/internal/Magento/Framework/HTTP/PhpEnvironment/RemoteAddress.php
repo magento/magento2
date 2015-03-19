@@ -47,7 +47,7 @@ class RemoteAddress
      */
     public function getRemoteAddress($ipToLong = false)
     {
-        if (is_null($this->remoteAddress)) {
+        if ($this->remoteAddress === null) {
             foreach ($this->alternativeHeaders as $var) {
                 if ($this->request->getServer($var, false)) {
                     $this->remoteAddress = $this->request->getServer($var);

@@ -146,7 +146,7 @@ class TransactionTest extends WebapiAbstract
 
         $expectedData = ['transaction_id' => (int)$transaction->getId()];
 
-        if (!is_null($transaction->getParentId())) {
+        if ($transaction->getParentId() !== null) {
             $expectedData['parent_id'] = (int)$transaction->getParentId();
         }
 

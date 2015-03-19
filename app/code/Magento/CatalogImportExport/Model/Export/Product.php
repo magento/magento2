@@ -685,7 +685,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function getItemsPerPage()
     {
-        if (is_null($this->_itemsPerPage)) {
+        if ($this->_itemsPerPage === null) {
             $memoryLimit = trim(ini_get('memory_limit'));
             $lastMemoryLimitLetter = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
             switch ($lastMemoryLimitLetter) {
@@ -1001,7 +1001,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $dataRow[$colPrefix . 'position'] = $linkData['position'];
                         $dataRow[$colPrefix . 'sku'] = $linkData['sku'];
 
-                        if (!is_null($linkData['default_qty'])) {
+                        if ($linkData['default_qty'] !== null) {
                             $dataRow[$colPrefix . 'default_qty'] = $linkData['default_qty'];
                         }
                     }

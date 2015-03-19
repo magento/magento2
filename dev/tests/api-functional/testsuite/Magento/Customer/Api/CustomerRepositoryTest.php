@@ -236,7 +236,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
         $requestData = ['customer' => $newCustomerDataObject];
         $response = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertTrue(!is_null($response));
+        $this->assertTrue($response !== null);
 
         //Verify if the customer is updated
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);

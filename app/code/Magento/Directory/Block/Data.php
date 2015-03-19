@@ -76,7 +76,7 @@ class Data extends \Magento\Framework\View\Element\Template
     public function getCountryCollection()
     {
         $collection = $this->getData('country_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->_countryCollectionFactory->create()->loadByStore();
             $this->setData('country_collection', $collection);
         }
@@ -94,7 +94,7 @@ class Data extends \Magento\Framework\View\Element\Template
     public function getCountryHtmlSelect($defValue = null, $name = 'country_id', $id = 'country', $title = 'Country')
     {
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
-        if (is_null($defValue)) {
+        if ($defValue === null) {
             $defValue = $this->getCountryId();
         }
         $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
@@ -131,7 +131,7 @@ class Data extends \Magento\Framework\View\Element\Template
     public function getRegionCollection()
     {
         $collection = $this->getData('region_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->_regionCollectionFactory->create()->addCountryFilter($this->getCountryId())->load();
 
             $this->setData('region_collection', $collection);
@@ -178,7 +178,7 @@ class Data extends \Magento\Framework\View\Element\Template
     public function getCountryId()
     {
         $countryId = $this->getData('country_id');
-        if (is_null($countryId)) {
+        if ($countryId === null) {
             $countryId = $this->directoryHelper->getDefaultCountry();
         }
         return $countryId;

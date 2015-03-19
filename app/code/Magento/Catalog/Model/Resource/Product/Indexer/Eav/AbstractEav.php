@@ -198,7 +198,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
         )->group(
             ['l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
         );
-        if (!is_null($parentIds)) {
+        if ($parentIds !== null) {
             $select->where('l.parent_id IN(?)', $parentIds);
         }
 

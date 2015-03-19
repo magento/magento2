@@ -170,7 +170,7 @@ class Service
     private function _getMaxUploadSize($configuredLimit)
     {
         $maxIniUploadSize = $this->_fileSize->getMaxFileSize();
-        if (is_null($configuredLimit)) {
+        if ($configuredLimit === null) {
             return $maxIniUploadSize;
         }
         $maxUploadSize = $this->_fileSize->convertSizeToInteger($configuredLimit);

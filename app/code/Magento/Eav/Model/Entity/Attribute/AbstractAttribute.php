@@ -1025,7 +1025,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function setOptions(array $options = null)
     {
-        if (!is_null($options)) {
+        if ($options !== null) {
             $optionDataArray = [];
             foreach ($options as $option) {
                 $optionData = $this->dataObjectProcessor->buildOutputDataArray(

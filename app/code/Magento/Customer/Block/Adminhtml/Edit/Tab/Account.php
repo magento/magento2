@@ -241,7 +241,7 @@ class Account extends GenericMetadata
      */
     protected function _getCustomerDataObject()
     {
-        if (is_null($this->_customerDataObject)) {
+        if ($this->_customerDataObject === null) {
             $customerData = $this->_backendSession->getCustomerData();
             $accountData = isset($customerData['account']) ? $customerData['account'] : [];
             $this->_customerDataObject = $this->customerDataFactory->create();
@@ -291,7 +291,7 @@ class Account extends GenericMetadata
      */
     protected function _getCustomerForm()
     {
-        if (is_null($this->_customerForm)) {
+        if ($this->_customerForm === null) {
             $this->_customerForm = $this->_customerFormFactory->create(
                 'customer',
                 'adminhtml_customer',
