@@ -9,7 +9,7 @@
 
 ?>
 <script>
-require(['jquery'], function(){
+require(["jquery", "extjs/ext-tree-checkbox", "prototype"], function(){
 ConfigurableNodeExists = function(currentNode) {
     for (var i in currentNode.childNodes ) {
         if (currentNode.childNodes[i].id) {
