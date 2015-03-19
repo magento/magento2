@@ -36,9 +36,9 @@ interface ActionInterface
     public function getResponse();
 
     /**
-     * Redirect to custom, previous or main page
+     * Get default redirect object
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function getDefaultRedirect();
 }
