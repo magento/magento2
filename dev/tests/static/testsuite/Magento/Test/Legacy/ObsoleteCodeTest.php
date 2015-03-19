@@ -508,7 +508,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $classRegex .= '|' . preg_quote(rtrim($regexClassPartialPath, '\\'));
             }
             // Checks condition when classpath is distributed over namespace and class definition
-            $classRegexNamespaceClass = '/namespace\s+' . preg_quote('\\') . '?(' . $classRegex . ')(\s|;)(\r\n)+'
+            $classRegexNamespaceClass = '/namespace\s+' . preg_quote('\\') . '?(' . $classRegex . ')(\s|;)(\r?\n)+'
                 . 'class\s+' . preg_quote('\\') . '?(' . preg_quote(rtrim($classPartialPath, '\\')) . ')\s*/';
             $matchNamespaceClass = preg_match($classRegexNamespaceClass, $content);
             $constantRegexPartial = '/\b(?P<classWithConst>([a-zA-Z0-9_' . preg_quote('\\') . ']*))('
