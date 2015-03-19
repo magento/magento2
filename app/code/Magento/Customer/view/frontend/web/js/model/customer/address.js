@@ -30,8 +30,22 @@ define([], function() {
             vatId: addressData.vat_id,
             customerAddressId: addressData.id,
             sameAsBilling: null,
-            getFullName: function() {
-                return addressData.region.region + ', ' + addressData.street[0] + ', ' + addressData.city;
+            getFullAddress: function() {
+                var address = '';
+                address += (addressData.firstname && addressData.lastname)
+                    ? addressData.firstname + ' ' + addressData.lastname + ', ' : '';
+                for (item in addressData.street) {
+                    address += addressData.street[item] ? addressData.street[item] + ', ' : '';
+                }
+                address += addressData.city ? addressData.city + ', ' : '';
+                if (addressData.region.region && addressData.postcode) {
+                     address += addressData.region.region + ' ' + addressData.postcode + ', ';
+                } else {
+                    address += addressData.region.region ? addressData.region.region + ', ' : '';
+                    address += addressData.postcode ? addressData.postcode + ', ' : '';
+                }
+                address += addressData.country_id ? addressData.country_id : '';
+                return address;
             }
         }
     }

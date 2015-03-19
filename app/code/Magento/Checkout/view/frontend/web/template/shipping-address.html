@@ -8,7 +8,7 @@
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
                 <div class="control">
-                    <select name="shipping_address_id" id="shipping:address-select" data-bind="options: addresses, optionsText: function(item) { return item.getFullName(); }, optionsValue: 'customerAddressId', value: selectedAddressId"></select>
+                    <select name="shipping_address_id" id="shipping:address-select" data-bind="options: addresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId', value: selectedAddressId"></select>
                 </div>
             </div>
             <div class="choice field">

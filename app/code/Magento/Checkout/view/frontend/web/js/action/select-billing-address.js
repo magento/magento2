@@ -7,10 +7,14 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['../model/quote'],
-    function(quote) {
-        return function(billingAddressId, shipToSame, formKey) {
-            return quote.setBillingAddress(billingAddressId, shipToSame);
+    ['../model/quote', '../model/addresslist'],
+    function(quote, addressList) {
+        return function(billingAddressId, useForShipping, formKey) {
+            if (!billingAddressId) {
+                alert('Currently adding a new address is not supported.');
+                return false;
+            }
+            return quote.setBillingAddress(addressList.getAddressById(billingAddressId), useForShipping);
         }
     }
 );

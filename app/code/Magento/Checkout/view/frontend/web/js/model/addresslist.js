@@ -23,7 +23,18 @@ define(['jquery'], function($) {
             return address;
         },
         getAddresses: function() {
-            return addresses;
+            if (addresses.indexOf(this.newAddress) !== -1) {
+                return addresses;
+            } else {
+                addresses.push(this.newAddress);
+                return addresses;
+            }
+        },
+        newAddress: {
+            getFullAddress: function() {
+                return 'New Address';
+            },
+            customerAddressId: null
         }
     }
 });

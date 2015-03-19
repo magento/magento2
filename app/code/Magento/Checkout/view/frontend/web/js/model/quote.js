@@ -18,13 +18,18 @@ define(['mage/storage'], function(storage) {
         setData: function(cartData) {
             quoteData = cartData;
         },
-        setBillingAddress: function (billingAddressId, shipToSame) {
+        setBillingAddress: function (billingAddress) {
             return storage.post(
-                '/checkout/onepage/saveBilling',
-                {'billing_address_id': billingAddressId, 'billing': {'use_for_shipping': shipToSame}}
+                '/rest/default/V1/carts/' + this.getQuoteId()  + '/billing-address',
+                JSON.stringify(
+                    {
+                        "cartId": this.getQuoteId(),
+                        "address": billingAddress
+                    }
+                )
             ).done(
-                function() {
-                    billingAddress = billingAddressId;
+                function (response) {
+                    console.log('Billing address set. Id: ' + response);
                 }
             );
         },
