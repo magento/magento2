@@ -576,9 +576,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_cache->expects($this->at(0))->method('load')->will($this->returnValue(time() + 10000000));
         $this->_cache->expects($this->at(1))->method('load')->will($this->returnValue(time() - 10000000));
 
-        //XML_PATH_HISTORY_CLEANUP_EVERY
-        $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
-        //XML_PATH_SCHEDULE_LIFETIME
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
 
         $scheduleMock = $this->getMockBuilder('Magento\Cron\Model\Schedule')->disableOriginalConstructor()->getMock();
@@ -633,8 +630,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $schedule2->expects($this->any())->method('getStatus')->will(
             $this->returnValue(Schedule::STATUS_MISSED));
         //we don't expect this job be deleted from the list
-        $schedule2->expects($this->never())->method('delete')->will(
-            $this->returnValue(true));
+        $schedule2->expects($this->never())->method('delete');
 
         $this->_collection->addItem($schedule1);
         $this->_config->expects($this->once())->method('getJobs')->will($this->returnValue($jobConfig));
@@ -683,6 +679,5 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_scheduleFactory->expects($this->at(1))->method('create')->will($this->returnValue($scheduleMock));
 
         $this->_observer->dispatch('');
-
     }
 }

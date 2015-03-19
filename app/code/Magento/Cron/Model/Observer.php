@@ -324,15 +324,17 @@ class Observer
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_CLEANUP_EVERY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+
+        if ($lastCleanup > time() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
+            return $this;
+        }
+
+        // check how long the record should stay unprocessed before marked as MISSED
         $scheduleLifetime = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
-
-        if ($lastCleanup > time() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
-            return $this;
-        }
 
         /**
          * @var \Magento\Cron\Model\Resource\Schedule\Collection $history
