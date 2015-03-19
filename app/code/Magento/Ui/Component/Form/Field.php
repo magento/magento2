@@ -75,7 +75,7 @@ class Field extends AbstractComponent
                 ['context' => $this->getContext()]
             );
             $this->wrappedComponent->prepare();
-            $jsConfig = $this->getJsConfiguration($this->wrappedComponent);
+            $jsConfig = $this->getConfiguration($this->wrappedComponent);
             $this->getContext()->addComponentDefinition($this->wrappedComponent->getComponentName(), $jsConfig);
         }
     }

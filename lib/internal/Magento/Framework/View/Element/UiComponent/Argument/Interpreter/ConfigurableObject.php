@@ -37,9 +37,6 @@ class ConfigurableObject implements InterpreterInterface
 
     /**
      * {@inheritdoc}
-     * @return object
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
      */
     public function evaluate(array $data)
     {

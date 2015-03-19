@@ -5,8 +5,6 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-
 /**
  * Class Filters
  */
@@ -33,7 +31,7 @@ class Filters extends AbstractComponent
     {
         parent::prepare();
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

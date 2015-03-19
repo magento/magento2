@@ -44,7 +44,7 @@ class Columns extends AbstractComponent
             }
         }
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

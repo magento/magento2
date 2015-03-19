@@ -65,7 +65,7 @@ class Date extends AbstractDataType
             $this->setData('config', $config);
         }
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 

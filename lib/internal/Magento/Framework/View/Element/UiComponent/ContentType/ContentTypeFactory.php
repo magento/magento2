@@ -22,7 +22,7 @@ class ContentTypeFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 

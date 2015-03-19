@@ -77,11 +77,11 @@ class Column extends AbstractComponent
                 array_merge(['context' => $this->getContext()], (array) $this->getData())
             );
             $this->wrappedComponent->prepare();
-            $wrappedComponentConfig = $this->getJsConfiguration($this->wrappedComponent);
+            $wrappedComponentConfig = $this->getConfiguration($this->wrappedComponent);
         }
 
         $this->applySorting();
-        $jsConfig = array_replace_recursive($wrappedComponentConfig, $this->getJsConfiguration($this));
+        $jsConfig = array_replace_recursive($wrappedComponentConfig, $this->getConfiguration($this));
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 

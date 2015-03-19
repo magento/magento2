@@ -33,7 +33,7 @@ class Range extends AbstractFilter
     {
         parent::prepare();
         $this->applyFilter();
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 

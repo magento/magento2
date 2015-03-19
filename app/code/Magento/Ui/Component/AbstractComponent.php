@@ -187,7 +187,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     {
         $config = $this->getDefaultConfiguration();
         if ($this->hasData('config')) {
-            $config = array_merge($config, $this->getData('config'));
+            $config = array_replace_recursive($config, $this->getData('config'));
         }
 
         $this->setData('config', $config);
@@ -209,7 +209,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
      * @param UiComponentInterface $component
      * @return array
      */
-    protected function getJsConfiguration(UiComponentInterface $component)
+    protected function getConfiguration(UiComponentInterface $component)
     {
         $jsConfig = (array) $component->getData('js_config');
         if (!isset($jsConfig['extends'])) {

@@ -51,7 +51,7 @@ class DateRange extends AbstractFilter
         $this->wrappedComponent->prepare();
 
         $this->applyFilter();
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 

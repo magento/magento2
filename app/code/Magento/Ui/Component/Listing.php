@@ -35,7 +35,7 @@ class Listing extends AbstractComponent
     {
         $this->getContext()->addButtons($this->getData('buttons'), $this);
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         unset($jsConfig['extends']);
         $this->getContext()->addComponentDefinition($this->getContext()->getNamespace(), $jsConfig);
     }

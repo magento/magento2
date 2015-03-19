@@ -5,10 +5,12 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Form;
 
+use Magento\Ui\Controller\Adminhtml\AbstractAction;
+
 /**
  * Class Save
  */
-class Save extends \Magento\Ui\Controller\Adminhtml\AbstractAction
+class Save extends AbstractAction
 {
     /**
      * Action for AJAX request

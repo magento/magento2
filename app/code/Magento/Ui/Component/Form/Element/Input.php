@@ -31,7 +31,7 @@ class Input extends AbstractFormElement
     {
         parent::prepare();
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

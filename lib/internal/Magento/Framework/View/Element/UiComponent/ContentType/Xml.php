@@ -10,24 +10,23 @@ use Magento\Framework\View\FileSystem;
 use Magento\Framework\View\TemplateEnginePool;
 use Magento\Framework\View\Element\UiComponentInterface;
 
-
 /**
  * Class Xml
  */
 class Xml extends AbstractContentType
 {
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var FileSystem
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\View\TemplateEnginePool
+     * @var TemplateEnginePool
      */
     protected $templateEnginePool;
 
     /**
-     * @var \Magento\Framework\Xml\Generator
+     * @var Generator
      */
     protected $generator;
 

@@ -65,7 +65,7 @@ class DataSource extends AbstractComponent implements DataSourceInterface
             $this->setData('config', $config);
         }
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         unset($jsConfig['extends']);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }

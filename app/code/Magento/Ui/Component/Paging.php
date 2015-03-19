@@ -35,12 +35,6 @@ class Paging extends AbstractComponent
         $config = $this->getData('config');
         if (isset($config['options'])) {
             $config['options'] = array_values($config['options']);
-            usort(
-                $config['options'],
-                function($a, $b) {
-                    return (int)$a['value'] - (int)$b['value'];
-                }
-            );
             $this->setData('config', $config);
         }
 
@@ -53,7 +47,7 @@ class Paging extends AbstractComponent
 
         $this->getContext()->getDataProvider()->setLimit($offset, $size);
 
-        $jsConfig = $this->getJsConfiguration($this);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
@@ -66,23 +60,23 @@ class Paging extends AbstractComponent
     {
         return  [
             'options' => [
-                [
+                '20' => [
                     'value' => 20,
                     'label' => 20
                 ],
-                [
+                '30' => [
                     'value' => 30,
                     'label' => 30
                 ],
-                [
+                '50' => [
                     'value' => 50,
                     'label' => 50
                 ],
-                [
+                '100' => [
                     'value' => 100,
                     'label' => 100
                 ],
-                [
+                '200' => [
                     'value' => 200,
                     'label' => 200
                 ],

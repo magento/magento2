@@ -51,8 +51,8 @@ class Input extends AbstractFilter
 
         $this->applyFilter();
         $jsConfig = array_replace_recursive(
-            $this->getJsConfiguration($this->wrappedComponent),
-            $this->getJsConfiguration($this)
+            $this->getConfiguration($this->wrappedComponent),
+            $this->getConfiguration($this)
         );
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
