@@ -231,11 +231,11 @@ class Topmenu extends Template implements IdentityInterface
             $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $this->escapeHtml(
                 $child->getName()
             ) . '</span></a>' . $this->_addSubMenu(
-                    $child,
-                    $childLevel,
-                    $childrenWrapClass,
-                    $limit
-                ) . '</li>';
+                $child,
+                $childLevel,
+                $childrenWrapClass,
+                $limit
+            ) . '</li>';
             $itemPosition++;
             $counter++;
         }
