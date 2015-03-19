@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
-use Magento\Catalog\Model\Category;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -43,13 +43,14 @@ class Remove
      *
      * @param \Magento\Catalog\Model\CategoryRepository $subject
      * @param callable $proceed
-     * @param Category $category
+     * @param CategoryInterface $category
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
         \Magento\Catalog\Model\CategoryRepository $subject,
         \Closure $proceed,
-        Category $category
+        CategoryInterface $category
     ) {
         $categoryIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
         $categoryIds[] = $category->getId();
