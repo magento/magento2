@@ -7,27 +7,24 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['mage/storage', '../model/customer', 'Magento_Ui/js/model/errorlist'],
-    function(storage, customer, errorlist) {
-        return function(login, password, formKey) {
+    ['jquery', 'mage/storage', '../model/customer', 'Magento_Ui/js/model/errorlist'],
+    function($, storage, customer, errorlist) {
+        return function(login, password) {
             return storage.post(
-                'customer/account/loginpost',
-                {'login': {'username': login, 'password': password}, 'form_key': formKey}
+                'customer/ajax/login',
+                JSON.stringify({'username': login, 'password': password})
             ).done(function (response) {
-                var error;
                 if (response) {
-                    var result = $.parseJSON(response);
-                    if (result.error) {
-                        error = result.error;
-                    }
-                }
-                if (error) {
-                    errorlist.add(result.error);
-                } else {
                     customer.setIsLoggedIn(true);
+                } else {
+                    errorlist.add('Server returned no response');
                 }
-            }).fail(function () {
-                errorlist.add('Server doesn\'t respond');
+            }).fail(function (response) {
+                if (response.status == 401) {
+                    errorlist.add('Invalid login or password');
+                } else {
+                    errorlist.add('Could not authenticate. Please try again later');
+                }
             });
         }
     }

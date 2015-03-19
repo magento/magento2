@@ -9,13 +9,14 @@
 define(
     [
         'jquery',
+        'ko',
         'mage/storage',
         'Magento_Checkout/js/model/addresslist',
         './customer/address'
     ],
-    function($, storage, addressList, address) {
+    function($, ko, storage, addressList, address) {
         var isLoaded = false;
-        var isLoggedIn = false;
+        var isLoggedIn = ko.observable(window.isLoggedIn);
         return {
             customerData: [],
             load: function () {
@@ -28,10 +29,10 @@ define(
                 }
             },
             isLoggedIn: function() {
-                return window.isLoggedIn;
+                return isLoggedIn;
             },
             setIsLoggedIn: function (flag) {
-                isLoggedIn = flag;
+                isLoggedIn(flag);
             },
             getBillingAddressList: function () {
                 return addressList.getAddresses();

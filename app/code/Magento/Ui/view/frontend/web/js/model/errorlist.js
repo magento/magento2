@@ -6,8 +6,8 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(function() {
-    var errors = [];
+define(['ko'], function(ko) {
+    var errors = ko.observableArray([]);
     return {
         add: function (error) {
             errors.push(error);

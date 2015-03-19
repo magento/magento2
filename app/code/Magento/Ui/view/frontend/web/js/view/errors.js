@@ -29,8 +29,9 @@ define(
 );
 */
 
-define(['Magento_Ui/js/form/component'], function (Component) {
+define(['Magento_Ui/js/form/component', '../model/errorlist'], function (Component, errors) {
     return Component.extend({
+        errorList: errors.getAll(),
         defaults: {
             template: 'Magento_Ui/errors'
         }

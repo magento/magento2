@@ -157,7 +157,10 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getCart()
     {
-        $quoteId = $this->getQuote()->getId();
-        return \Zend_Json::encode($this->cartRepositoryInterface->get($quoteId));
+        if ($this->_customerSession->isLoggedIn()) {
+            $quoteId = $this->getQuote()->getId();
+            return \Zend_Json::encode($this->cartRepositoryInterface->get($quoteId));
+        }
+        return '{}';
     }
 }

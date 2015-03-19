@@ -14,6 +14,7 @@ define([
     './bind/class',
     './bind/keyboard',
     './bind/optgroup',
+    './bind/fadeVisible',
     './extender/observable_array'
 ], function(ko, templateEngine) {
     'use strict';
