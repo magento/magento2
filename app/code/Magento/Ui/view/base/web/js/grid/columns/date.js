@@ -11,7 +11,7 @@ define([
         },
 
         initProperties: function () {
-            this.dateFormat = utils.normalizeData(this.dateFormat);
+            this.dateFormat = utils.normalizeDate(this.dateFormat);
 
             return this._super();
         },

@@ -12,22 +12,13 @@ define([
 
     return Provider.extend({
         initialize: function () {
-            _.bindAll(this, '_reload', 'onReload');
+            utils.limit(this, 'reload', 100);
+            _.bindAll(this, 'onReload');
 
             return this._super();
         },
 
         reload: function () {
-            if (this.timeoutID) {
-                window.clearTimeout(this.timeoutID);
-            }
-
-            this.timeoutID = window.setTimeout(this._reload, 100);
-        },
-
-        _reload: function () {
-            delete this.timeoutID;
-
             this.trigger('reload');
 
             $.ajax({
