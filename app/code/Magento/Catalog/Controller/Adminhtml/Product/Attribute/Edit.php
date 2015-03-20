@@ -7,16 +7,10 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
-    /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
     /**
      * Constructor
      *
@@ -24,16 +18,13 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Framework\Registry $coreRegistry
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
         \Magento\Framework\Registry $coreRegistry,
-        PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory
+        PageFactory $resultPageFactory
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
     }
 

@@ -157,6 +157,9 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManagerMock));
+        $this->contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->will($this->returnValue($redirectFactoryMock));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -171,7 +174,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'addressHelper' => $this->addressHelperMock,
                 'urlFactory' => $urlFactoryMock,
-                'resultRedirectFactory' => $redirectFactoryMock,
             ]
         );
     }

@@ -21,7 +21,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      *  Init context object
      */
-    protected function initContext()
+    protected function initContext($resultRedirectFactory = null)
     {
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', [], [], '', false);
         $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
@@ -70,7 +70,8 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper',
                 'getTitle',
-                'getView'
+                'getView',
+                'getResultRedirectFactory'
             ],
             [],
             '',
@@ -88,6 +89,9 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
         $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
         $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
+        $this->context->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->willReturn($resultRedirectFactory);
 
         $this->session = $sessionMock;
         $this->request = $requestInterfaceMock;

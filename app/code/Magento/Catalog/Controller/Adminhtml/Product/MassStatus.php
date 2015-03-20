@@ -17,25 +17,17 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $_productPriceIndexerProcessor;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
     ) {
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         parent::__construct($context, $productBuilder);
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
