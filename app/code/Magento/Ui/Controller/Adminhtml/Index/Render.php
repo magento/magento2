@@ -16,23 +16,13 @@ use Magento\Framework\View\Element\UiComponentInterface;
 class Render extends AbstractAction
 {
     /**
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param Context $context
      * @param UiComponentFactory $factory
-     * @param UiComponentFactory $uiComponentFactory
      */
-    public function __construct(
-        Context $context,
-        UiComponentFactory $factory,
-        UiComponentFactory $uiComponentFactory
-    ) {
-        $this->uiComponentFactory = $uiComponentFactory;
+    public function __construct(Context $context, UiComponentFactory $factory)
+    {
         parent::__construct($context, $factory);
     }
 
@@ -43,7 +33,7 @@ class Render extends AbstractAction
      */
     public function execute()
     {
-        $component = $this->uiComponentFactory->create($this->_request->getParam('namespace'));
+        $component = $this->factory->create($this->_request->getParam('namespace'));
         $this->prepareComponent($component);
         $this->_response->appendBody((string) $component->render());
     }

@@ -88,6 +88,7 @@ class Reader implements UiReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function read($scope = null)
     {

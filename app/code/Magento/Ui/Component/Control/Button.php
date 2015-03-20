@@ -6,11 +6,12 @@
 namespace Magento\Ui\Component\Control;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Button
  */
-class Button extends Template
+class Button extends Template implements ControlInterface
 {
     /**
      * Define block template
