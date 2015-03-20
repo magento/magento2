@@ -6,8 +6,11 @@
 
 namespace Magento\Tools\Console;
 
-use Symfony\Component\Console\Command\Command;
-
+/**
+ * Class CommandList contains predefined list of command classes for Tools
+ *
+ * @package Magento\Tools\Console
+ */
 class CommandList
 {
     /**
@@ -24,6 +27,7 @@ class CommandList
      * Gets list of command instances
      *
      * @return \Symfony\Component\Console\Command\Command[]
+     * @throws \Exception
      */
     public function getCommands()
     {
@@ -31,10 +35,9 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $command = new $class;
-                if ($command instanceof Command) {
-                    $commands[] = $command;
-                }
+                $commands[] = new $class;
+            } else {
+                throw new \Exception('Class ' . $class . ' does not exist');
             }
         }
 

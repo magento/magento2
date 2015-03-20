@@ -35,4 +35,17 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())->method('get')->with('Symfony\Component\Console\Command\Command');
         $this->commandList->getCommands();
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Class Symfony\Component\Console\Command\WrongCommand does not exist
+     */
+    public function testGetCommandsException()
+    {
+        $wrongCommands =[
+            'Symfony\Component\Console\Command\WrongCommand'
+        ];
+        $commandList = new CommandList($this->objectManager, $wrongCommands);
+        $commandList->getCommands();
+    }
 }

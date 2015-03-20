@@ -7,8 +7,12 @@
 namespace Magento\Framework\Console;
 
 use Magento\Framework\ObjectManagerInterface;
-use Symfony\Component\Console\Command\Command;
 
+/**
+ * Class CommandList has a list of commands, which can be extended via DI configuration.
+ *
+ * @package Magento\Framework\Console
+ */
 class CommandList
 {
     /**
@@ -37,16 +41,16 @@ class CommandList
      * Gets list of command instances
      *
      * @return \Symfony\Component\Console\Command\Command[]
+     * @throws \Exception
      */
     public function getCommands()
     {
         $commands = [];
         foreach ($this->commands as $class) {
             if (class_exists($class)) {
-                $command = $this->objectManager->get($class);
-                if ($command instanceof Command) {
-                    $commands[] = $command;
-                }
+                $commands[] = $this->objectManager->get($class);
+            } else {
+                throw new \Exception('Class ' . $class . ' does not exist');
             }
         }
 

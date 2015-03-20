@@ -1,3 +1,16 @@
 # Console
 
-This component has a list of commands, which can be extended via DI configuration.
+This component contains Magento Cli and can be extended via DI configuration.
+
+For example we can introduce new command in module using di.xml:
+
+```
+<type name="Magento\Framework\Console\CommandList">
+    <arguments>
+        <argument name="commands" xsi:type="array">
+            <item name="session_cleaner" xsi:type="string">Magento\MyModule\Console\TestMeCommand</item>
+        </argument>
+    </arguments>
+</type>
+```
+

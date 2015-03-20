@@ -7,8 +7,12 @@
 namespace Magento\Setup\Console;
 
 use Zend\ServiceManager\ServiceManager;
-use Symfony\Component\Console\Command\Command;
 
+/**
+ * Class CommandList contains predefined list of commands for Setup
+ *
+ * @package Magento\Setup\Console
+ */
 class CommandList
 {
     /**
@@ -44,6 +48,7 @@ class CommandList
      * Gets list of command instances
      *
      * @return \Symfony\Component\Console\Command\Command[]
+     * @throws \Exception
      */
     public function getCommands()
     {
@@ -51,10 +56,9 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $command = $this->serviceManager->create($class);
-                if ($command instanceof Command) {
-                    $commands[] = $command;
-                }
+                $commands[] = $this->serviceManager->create($class);
+            } else {
+                throw new \Exception('Class ' . $class . ' does not exist');
             }
         }
 
