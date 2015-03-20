@@ -3,9 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    './abstract',
-    'mageUtils'
-], function (Abstract, utils) {
+    './abstract'
+], function (Abstract) {
     'use strict';
 
     return Abstract.extend({

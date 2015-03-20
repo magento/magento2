@@ -82,10 +82,6 @@ define([
     }
 
     return Abstract.extend({
-        defaults: {
-            template: 'ui/form/element/select'
-        },
-
         /**
          * Extends instance with defaults, extends config with formatted values
          *     and options, and invokes initialize method of AbstractElement class.

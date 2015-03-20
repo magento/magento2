@@ -49,6 +49,10 @@ define([
             }, this);
 
             return this;
+        },
+        
+        remove: function (path) {
+            this.set(path);
         }
     }, EventsBus);
 

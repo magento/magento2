@@ -185,11 +185,10 @@ define([
          * @returns {Component} Chainable.
          */
         setUnique: function () {
-            var params = this.provider.params,
-                property = this.uniqueProp;
+            var property = this.uniqueProp;
 
             if (this[property]()) {
-                params.set(this.uniqueNs, this.name);
+                this.source.set(this.uniqueNs, this.name);
             }
 
             return this;

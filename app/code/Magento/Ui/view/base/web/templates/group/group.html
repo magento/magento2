@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<!-- ko if: element.isMultiple() -->
 <fieldset class="admin__field" data-bind="css: {'_required': element.required}">
     <legend class="admin__field-label">
         <span data-bind="text: element.label"></span>
@@ -20,7 +18,7 @@
                 <!-- /ko -->
 
                 <!-- ko if: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
-                    <!-- ko template: element.getTemplate() --><!-- /ko -->
+                    <!-- ko template: element.elementTmpl --><!-- /ko -->
                 <!-- /ko -->
 
             <!-- /ko -->
@@ -34,14 +32,3 @@
         <!-- /ko -->
     </div>
 </fieldset>
-<!-- /ko -->
-
-<!-- ko if: element.isSingle() -->
-
-    <!-- ko foreach: { data: elems, as: 'element' } -->
-
-        <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
-
-    <!-- /ko -->
-
-<!-- /ko -->
