@@ -122,7 +122,7 @@ define([
             this.hasUnique = this.uniqueProp && uniqueNs;
 
             if (this.hasUnique) {
-                this.source.on('update:params.' + uniqueNs, update, this.name);
+                this.source.on(uniqueNs, update, this.name);
             }
 
             return this;
