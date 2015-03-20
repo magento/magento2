@@ -19,7 +19,7 @@ class Timezone extends \Magento\Framework\App\Config\Value
      */
     public function beforeSave()
     {
-        if (!in_array($this->getValue(), \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC))) {
+        if (!in_array($this->getValue(), \DateTimeZone::listIdentifiers(\DateTimeZone::ALL))) {
             throw new LocalizedException(__('Please correct the timezone.'));
         }
         return $this;

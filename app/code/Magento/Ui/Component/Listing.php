@@ -173,7 +173,7 @@ class Listing extends AbstractView
     {
         if ($this->hasData(static::ROW_DATA_PROVIDER_KEY)) {
             foreach ($this->getData(static::ROW_DATA_PROVIDER_KEY) as $field => $data) {
-                $dataRow[$field] = $this->dataProviderRowPool->get($data['class'])->getData($dataRow);
+                $dataRow[$field] = $this->dataProviderRowPool->get($data['class'])->getData($dataRow, $data);
             }
         }
 
