@@ -27,10 +27,7 @@
                 <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
 
                 <li class="admin__page-nav-item" <?php if ($block->getTabIsHidden($_tab)): ?> style="display:none"<?php endif; ?><?php echo $block->getUiId('tab', 'item', $_tab->getId()) ?>>
-                    <a href="<?php echo $_tabHref ?>"
-                       id="<?php echo $block->getTabId($_tab) ?>"
-                       name="<?php echo $block->getTabId($_tab, false) ?>"
-                       title="<?php echo $block->getTabTitle($_tab) ?>"
+                    <a href="<?php echo $_tabHref ?>" id="<?php echo $block->getTabId($_tab) ?>" name="<?php echo $block->getTabId($_tab, false) ?>" title="<?php echo $block->getTabTitle($_tab) ?>"
                        class="admin__page-nav-link <?php echo $_tabClass;?>"
                        data-tab-type="<?php echo $_tabType;?>"
                        <?php echo $block->getUiId('tab', 'link', $_tab->getId()) ?>>
