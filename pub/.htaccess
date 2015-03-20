@@ -156,12 +156,6 @@
 
 </IfModule>
 
-############################################
-## By default allow all access
-
-    Order allow,deny
-    Allow from all
-
 ###########################################
 ## Deny access to release notes to prevent disclosure of the installed Magento version
 

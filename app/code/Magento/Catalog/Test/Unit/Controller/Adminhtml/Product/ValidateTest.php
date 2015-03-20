@@ -28,9 +28,9 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
     protected $initializationHelper;
     /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $productFactory;
-    /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJson;
-    /** @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJsonFactory;
 
     protected function setUp()
@@ -104,8 +104,8 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->getMock();
         $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
 
-        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\JSON', [], [], '', false);
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -125,14 +125,20 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testAttributeSetIsObtainedFromPost()
+    public function testAttributeSetIsObtainedFromPostByDefault()
     {
+        $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
         $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, 9]]);
-
         $this->product->expects($this->once())->method('setAttributeSetId')->with(9);
+
+        $this->action->execute();
+    }
+
+    public function testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
+    {
+        $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, null]]);
+        $this->product->expects($this->once())->method('setAttributeSetId')->with(4);
 
         $this->action->execute();
     }

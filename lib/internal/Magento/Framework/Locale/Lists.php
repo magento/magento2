@@ -103,7 +103,7 @@ class Lists implements ListsInterface
     {
         $options = [];
         $locale = $this->localeResolver->getLocale();
-        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
+        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
         foreach ($zones as $code) {
             $options[] = [
                 'label' => \IntlTimeZone::createTimeZone($code)->getDisplayName(
