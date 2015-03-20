@@ -8,15 +8,22 @@
             <div class="field addresses">
                 <label class="label" for="billing:address-select"><span>Select a billing address from your address book or enter a new address.</span></label>
                 <div class="control">
-                    <select name="billing_address_id" id="billing:address-select" data-bind="options: billingAddresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId'"></select>
+                    <select name="billing_address_id" id="billing:address-select" data-bind="
+                        options: billingAddresses,
+                        optionsText: function(item) {
+                            return item.getFullAddress();
+                        },
+                        optionsValue: 'customerAddressId',
+                        value: selectedBillingAddressId
+                    "></select>
                 </div>
             </div>
             <div class="field choice">
-                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" />
+                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" data-bind="checked: useForShipping" />
                 <label class="label" for="billing:use_for_shipping_yes"><span>Ship to this address</span></label>
             </div>
             <div class="field choice">
-                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" class="radio" />
+                <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" class="radio" data-bind="checked: useForShipping" />
                 <label class="label" for="billing:use_for_shipping_no"><span>Ship to different address</span></label>
             </div>
             <input type="hidden" name="billing[use_for_shipping]" value="1" />

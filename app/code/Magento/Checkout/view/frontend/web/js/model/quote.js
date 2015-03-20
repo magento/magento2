@@ -29,21 +29,8 @@ define(
                 return quoteData.entity_id;
             },
             setBillingAddress: function (address) {
-                return storage.post(
-                    '/rest/default/V1/carts/' + this.getQuoteId()  + '/billing-address',
-                    JSON.stringify(
-                        {
-                            "cartId": this.getQuoteId(),
-                            "address": address
-                        }
-                    )
-                ).done(
-                    function (response) {
-                        console.log('Billing address set. Id: ' + response);
-                        billingAddress = address;
-                        quoteHasBillingAddress((billingAddress != null));
-                    }
-                );
+                billingAddress = address;
+                quoteHasBillingAddress(billingAddress !== null);
             },
             getBillingAddress: function() {
                 return billingAddress;

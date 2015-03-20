@@ -35,20 +35,28 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     protected $quoteRepository;
 
     /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    protected $addressRepository;
+
+    /**
      * Constructs a quote billing address service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
      * @param QuoteAddressValidator $addressValidator Address validator.
      * @param Logger $logger Logger.
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      */
     public function __construct(
         QuoteRepository $quoteRepository,
         QuoteAddressValidator $addressValidator,
-        Logger $logger
+        Logger $logger,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
     ) {
         $this->addressValidator = $addressValidator;
         $this->logger = $logger;
         $this->quoteRepository = $quoteRepository;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -58,6 +66,12 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $this->addressValidator->validate($address);
+        // TODO: Draft implementation. Should be improved when checkout ui rendering will be able to process addresses.
+        $customerAddressId = $address->getCustomerAddressId();
+        if ($customerAddressId) {
+            $address = $this->addressRepository->getById($customerAddressId);
+            $address = $quote->getBillingAddress()->importCustomerAddressData($address);
+        }
         $quote->setBillingAddress($address);
         $quote->setDataChanges(true);
         try {
