@@ -10,6 +10,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\SourceFileGeneratorInterface;
 
+/**
+ * Class FileGenerator
+ * @package Magento\Framework\Less
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileGenerator implements SourceFileGeneratorInterface
 {
     /**
@@ -71,8 +76,6 @@ class FileGenerator implements SourceFileGeneratorInterface
      * @param FileGenerator\RelatedGenerator $relatedGenerator
      * @param Config $config
      * @param File\Temporary $temporaryFile
-     *
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
