@@ -14,23 +14,15 @@ use Magento\Framework\Registry;
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Context $context
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context, $registry, $resultForwardFactory);
     }
 

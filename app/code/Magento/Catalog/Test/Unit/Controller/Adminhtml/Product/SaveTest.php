@@ -93,11 +93,10 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Save',
             [
-                'context' => $this->initContext(),
+                'context' => $this->initContext($this->resultRedirectFactory),
                 'productBuilder' => $this->productBuilder,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'initializationHelper' => $this->initializationHelper,
             ]
         );

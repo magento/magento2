@@ -21,7 +21,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
@@ -31,7 +30,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         parent::__construct(
@@ -40,8 +38,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
+            $cart
         );
         $this->quoteRepository = $quoteRepository;
     }

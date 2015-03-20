@@ -133,7 +133,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'request' => $this->requestMock,
                 'objectManager' => $this->objectManagerMock,
                 'actionFlag' => $this->actionFlagMock,
-                'messageManager' => $this->messageManagerMock
+                'messageManager' => $this->messageManagerMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
         $this->viewAction = $objectManager->getObject(
