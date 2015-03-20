@@ -19,7 +19,13 @@ class Request implements \Magento\Framework\App\RequestInterface
      */
     public function __construct(array $parameters = [])
     {
-        $this->setParams(getopt(null, $parameters));
+        $data = getopt(null, $parameters);
+        // It can happen that request comes from http, but it runs the console (e.g. pub/cron.php)
+        if ($data) {
+            $this->setParams($data);
+        } else {
+            $this->setParams([]);
+        }
     }
 
     /**
@@ -37,6 +43,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      *
      * @param string $name
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setModuleName($name)
     {
@@ -57,6 +64,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      *
      * @param string $name
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setActionName($name)
     {
@@ -105,6 +113,7 @@ class Request implements \Magento\Framework\App\RequestInterface
      * @param null|string $name
      * @param null|string $default
      * @return null|string|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCookie($name, $default)
     {
