@@ -122,8 +122,8 @@ class Minifier implements MinifierInterface
                     '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
                     '><',
                     preg_replace(
-                        '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script|style)\b))*+)'
-                        . '(?:<(?>textarea|pre|script|style)\b|\z))#',
+                        '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
+                        . '(?:<(?>textarea|pre|script)\b|\z))#',
                         ' ',
                         preg_replace(
                             '#(?<!:|\\\\)//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
