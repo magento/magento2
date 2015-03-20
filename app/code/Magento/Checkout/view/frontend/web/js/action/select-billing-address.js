@@ -7,8 +7,8 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['../model/quote', '../model/addresslist', 'mage/storage', 'select-shipping-address'],
-    function(quote, addressList, storage, shippingAddressAction) {
+    ['../model/quote', '../model/addresslist', 'mage/storage'],
+    function(quote, addressList, storage) {
         return function(billingAddressId, useForShipping, formKey) {
             var billingAddress = addressList.getAddressById(billingAddressId);
             if (!billingAddressId) {

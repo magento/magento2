@@ -4,7 +4,7 @@
         <h2>Billing Information</h2>
     </div>
     <div id="checkout-step-billing" class="step-content" data-role="content" data-bind="fadeVisible: isLoggedIn() && !quoteHasBillingAddress()">
-        <form class="form billing" id="co-billing-form" data-hasrequired="* Required Fields" data-bind="submit: submitBillingAddress">
+        <form class="form billing" id="co-billing-form" data-hasrequired="* Required Fields">
             <div class="field addresses">
                 <label class="label" for="billing:address-select"><span>Select a billing address from your address book or enter a new address.</span></label>
                 <div class="control">
@@ -29,7 +29,7 @@
             <input type="hidden" name="billing[use_for_shipping]" value="1" />
             <div class="actions" id="billing-buttons-container">
                 <div class="primary">
-                    <button data-role="opc-continue" type="submit" class="button action continue primary"><span>Continue</span></button>
+                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: submitBillingAddress"><span>Continue</span></button>
                 </div>
             </div>
         </form>
