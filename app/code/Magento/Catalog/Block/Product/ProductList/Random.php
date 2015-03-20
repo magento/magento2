@@ -60,7 +60,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      */
     protected function _getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
+        if ($this->_productCollection === null) {
             /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
             $collection = $this->_productCollectionFactory->create();
             $this->_catalogLayer->prepareProductCollection($collection);

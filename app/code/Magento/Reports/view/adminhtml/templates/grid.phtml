@@ -112,7 +112,7 @@ require([
         period_date_from.adviceContainer = $('<?php echo $block->getSuffixId('period_date_from_advice')?>');
         period_date_to.adviceContainer = $('<?php echo $block->getSuffixId('period_date_to_advice')?>');
 
-        validateFilterDate = function() {
+        var validateFilterDate = function() {
             if (period_date_from && period_date_to) {
                 var valid = true;
                 jQuery(period_date_from).add(period_date_to).each(function() {

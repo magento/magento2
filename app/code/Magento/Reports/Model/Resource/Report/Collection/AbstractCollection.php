@@ -199,7 +199,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
      */
     public function isTotals($flag = null)
     {
-        if (is_null($flag)) {
+        if ($flag === null) {
             return $this->_isTotals;
         }
         $this->_isTotals = $flag;

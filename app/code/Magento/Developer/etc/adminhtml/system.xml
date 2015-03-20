@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <section id="dev" translate="label">
+            <group id="front_end_development_workflow" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Front-end development workflow</label>
+                <field id="type" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Workflow type</label>
+                    <comment>Not available in production mode</comment>
+                    <source_model>Magento\Developer\Model\Config\Source\WorkflowType</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

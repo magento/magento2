@@ -47,6 +47,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $helperDataMock = $this->getMock(
+            'Magento\Directory\Helper\Data',
+            [],
+            [],
+            '',
+            false
+        );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'logger' => $logger,
@@ -57,6 +64,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'scopeConfig' => $scopeConfigMock,
             'countryFactory' => $countryFactory,
             'resource' => $resource,
+            'helperData' => $helperDataMock
         ];
         $this->_model = $objectManager->getObject('Magento\Directory\Model\Resource\Country\Collection', $arguments);
     }

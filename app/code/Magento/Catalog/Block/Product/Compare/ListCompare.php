@@ -149,7 +149,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      */
     public function getItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_compareProduct->setAllowUsedFlat(false);
 
             $this->_items = $this->_itemCollectionFactory->create();
@@ -180,7 +180,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
+        if ($this->_attributes === null) {
             $this->_attributes = $this->getItems()->getComparableAttributes();
         }
 

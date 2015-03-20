@@ -308,7 +308,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         foreach ($filters as $filter) {
             $searchBuilder->addFilter([$filter]);
         }
-        if (!is_null($filterGroup)) {
+        if ($filterGroup !== null) {
             $searchBuilder->addFilter($filterGroup);
         }
 

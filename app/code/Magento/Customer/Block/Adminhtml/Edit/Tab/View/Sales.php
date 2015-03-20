@@ -112,7 +112,7 @@ class Sales extends \Magento\Backend\Block\Template
         $this->_groupedCollection = [];
 
         foreach ($this->_collection as $sale) {
-            if (!is_null($sale->getStoreId())) {
+            if ($sale->getStoreId() !== null) {
                 $store = $this->_storeManager->getStore($sale->getStoreId());
                 $websiteId = $store->getWebsiteId();
                 $groupId = $store->getGroupId();

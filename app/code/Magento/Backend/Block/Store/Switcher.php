@@ -139,7 +139,7 @@ class Switcher extends \Magento\Backend\Block\Template
         $collection = $this->_websiteFactory->create()->getResourceCollection();
 
         $websiteIds = $this->getWebsiteIds();
-        if (!is_null($websiteIds)) {
+        if ($websiteIds !== null) {
             $collection->addIdFilter($this->getWebsiteIds());
         }
 

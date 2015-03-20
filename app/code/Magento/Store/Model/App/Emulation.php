@@ -150,7 +150,7 @@ class Emulation extends \Magento\Framework\Object
      */
     public function stopEnvironmentEmulation()
     {
-        if (is_null($this->initialEnvironmentInfo)) {
+        if ($this->initialEnvironmentInfo === null) {
             return $this;
         }
 

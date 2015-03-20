@@ -82,7 +82,7 @@ class Decimal
      */
     public function getMaxValue(FilterInterface $filter)
     {
-        if (is_null($this->max)) {
+        if ($this->max === null) {
             $this->loadValues($filter);
         }
 
@@ -97,7 +97,7 @@ class Decimal
      */
     public function getMinValue(FilterInterface $filter)
     {
-        if (is_null($this->min)) {
+        if ($this->min === null) {
             $this->loadValues($filter);
         }
 
@@ -114,7 +114,7 @@ class Decimal
     public function getRangeItemCounts($range, FilterInterface $filter)
     {
         $count = array_key_exists($range, $this->rangeItemsCount) ? $this->rangeItemsCount[$range] : null;
-        if (is_null($count)) {
+        if ($count === null) {
             $count = $this->getResource()
                 ->getCount($filter, $range);
             $this->rangeItemsCount[$range] = $count;

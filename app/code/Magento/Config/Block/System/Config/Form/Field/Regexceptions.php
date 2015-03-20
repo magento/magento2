@@ -69,7 +69,7 @@ class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\Field
             )->setName(
                 $this->_getCellInputElementName($columnName)
             )->setHtmlId(
-                $this->_getCellInputElementId('#{_id}', $columnName)
+                $this->_getCellInputElementId('<%- _id %>', $columnName)
             )->setValues(
                 $options
             );

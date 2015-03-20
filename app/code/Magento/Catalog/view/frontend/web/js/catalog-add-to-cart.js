@@ -39,7 +39,7 @@ define([
 
         submitForm: function(form) {
             var self = this;
-            if (form.has('input[type="file"]').length) {
+            if (form.has('input[type="file"]').length  && form.find('input[type="file"]').val() !== '') {
                 self.element.off('submit');
                 form.submit();
             } else {
