@@ -100,7 +100,7 @@ class CustomerRegistry
      */
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
@@ -188,7 +188,7 @@ class CustomerRegistry
      */
     public function removeByEmail($customerEmail, $websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);

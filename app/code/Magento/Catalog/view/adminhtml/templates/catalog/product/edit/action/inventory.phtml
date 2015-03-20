@@ -50,7 +50,7 @@
                                 class="select" disabled="disabled">
                             <option value="1"><?php echo __('Yes') ?></option>
                             <option
-                                value="0"<?php if ($block->getConfigFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+                                value="0"<?php if ($block->getFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
                         </select>
                     </div>
                     <div class="field choice">

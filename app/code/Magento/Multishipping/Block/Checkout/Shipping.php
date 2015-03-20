@@ -89,7 +89,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     public function getAddressCount()
     {
         $count = $this->getData('address_count');
-        if (is_null($count)) {
+        if ($count === null) {
             $count = count($this->getAddresses());
             $this->setData('address_count', $count);
         }

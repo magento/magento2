@@ -232,7 +232,7 @@ class Collection extends \Magento\Framework\Data\Collection
         $interval = [];
         $interval['period'] = $dateStart->format('Y');
         $interval['start'] = $firstInterval
-            ? $dateStart->format('Y-m-dd 00:00:00')
+            ? $dateStart->format('Y-m-d 00:00:00')
             : $dateStart->format('Y-01-01 00:00:00');
 
         $interval['end'] = $dateStart->diff($dateEnd)->y == 0

@@ -163,7 +163,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      */
     public function isNew()
     {
-        return is_null($this->getQueueStatus());
+        return $this->getQueueStatus() === null;
     }
 
     /**
@@ -174,7 +174,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      */
     public function setQueueStartAtByString($startAt)
     {
-        if (is_null($startAt) || $startAt == '') {
+        if ($startAt === null || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
             $time = (new \DateTime($startAt))->getTimestamp();
@@ -354,7 +354,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      */
     public function getTemplate()
     {
-        if (is_null($this->_template)) {
+        if ($this->_template === null) {
             $this->_template = $this->_templateFactory->create()->load($this->getTemplateId());
         }
         return $this->_template;

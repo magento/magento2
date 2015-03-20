@@ -8,10 +8,9 @@
     <button title="Actions" class="action-default scalable add" data-bind="click: onToggle('actionsVisible')">
         <span data-bind="text: $t('Actions')"></span>
     </button>
-    <button title="" class="action-toggle scalable  add" data-toggle="dropdown" data-bind="click: onToggle('actionsVisible'), css: {active: actionsVisible}">
-        <span>|</span>
+    <button title="" class="action-toggle scalable add" data-toggle="dropdown" data-bind="click: onToggle('actionsVisible'), css: {active: actionsVisible}">
+        <span data-bind="text: $t('Select')"></span>
     </button>
-
     <ul class="dropdown-menu" data-bind="css: {'active': actionsVisible}, foreach: {data: actions, as: 'action'}">
         <li data-bind="click: $parent.setAction(action)"><span class="item" data-bind="text: label"></span></li>
     </ul>

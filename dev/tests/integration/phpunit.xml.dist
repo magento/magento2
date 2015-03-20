@@ -13,9 +13,9 @@
     <!-- Test suites definition -->
     <testsuites>
         <!-- Memory tests run first to prevent influence of other tests on accuracy of memory measurements -->
-        <!--<testsuite name="Memory Usage Tests">-->
-            <!--<file>testsuite/Magento/MemoryUsageTest.php</file>-->
-        <!--</testsuite>-->
+        <testsuite name="Memory Usage Tests">
+            <file>testsuite/Magento/MemoryUsageTest.php</file>
+        </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
             <exclude>testsuite/Magento/Test/Integrity</exclude>

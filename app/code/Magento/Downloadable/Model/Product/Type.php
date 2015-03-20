@@ -126,7 +126,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function getLinks($product)
     {
-        if (is_null($product->getDownloadableLinks())) {
+        if ($product->getDownloadableLinks() === null) {
             $_linkCollection = $this->_linksFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(
@@ -202,7 +202,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function getSamples($product)
     {
-        if (is_null($product->getDownloadableSamples())) {
+        if ($product->getDownloadableSamples() === null) {
             $_sampleCollection = $this->_samplesFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(

@@ -8,8 +8,8 @@
 
 namespace Magento\Tools\Di\Test\Unit\App\Task;
 
-use \Magento\Tools\Di\App\Task\OperationFactory;
-use \Magento\Tools\Di\App\Task\OperationException;
+use Magento\Tools\Di\App\Task\OperationFactory;
+use Magento\Tools\Di\App\Task\OperationException;
 
 class OperationFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,7 +68,7 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
     public function aliasesDataProvider()
     {
         return  [
-            [OperationFactory::AREA, [], 'Magento\Tools\Di\App\Task\Operation\Area'],
+            [OperationFactory::AREA_CONFIG_GENERATOR, [], 'Magento\Tools\Di\App\Task\Operation\Area'],
             [OperationFactory::INTERCEPTION, null, 'Magento\Tools\Di\App\Task\Operation\Interception'],
             [OperationFactory::INTERCEPTION_CACHE, 1, 'Magento\Tools\Di\App\Task\Operation\InterceptionCache'],
         ];

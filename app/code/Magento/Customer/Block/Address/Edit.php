@@ -106,24 +106,22 @@ class Edit extends \Magento\Directory\Block\Data
         if ($addressId = $this->getRequest()->getParam('id')) {
             try {
                 $this->_address = $this->_addressRepository->getById($addressId);
+                if ($this->_address->getCustomerId() != $this->_customerSession->getCustomerId()) {
+                    $this->_address = null;
+                }
             } catch (NoSuchEntityException $e) {
                 $this->_address = null;
             }
         }
 
-        if (is_null($this->_address) || !$this->_address->getId()) {
+        if ($this->_address === null || !$this->_address->getId()) {
             $this->_address = $this->addressDataFactory->create();
-            $this->_address->setPrefix(
-                $this->getCustomer()->getPrefix()
-            )->setFirstname(
-                $this->getCustomer()->getFirstname()
-            )->setMiddlename(
-                $this->getCustomer()->getMiddlename()
-            )->setLastname(
-                $this->getCustomer()->getLastname()
-            )->setSuffix(
-                $this->getCustomer()->getSuffix()
-            );
+            $customer = $this->getCustomer();
+            $this->_address->setPrefix($customer->getPrefix());
+            $this->_address->setFirstname($customer->getFirstname());
+            $this->_address->setMiddlename($customer->getMiddlename());
+            $this->_address->setLastname($customer->getLastname());
+            $this->_address->setSuffix($customer->getSuffix());
         }
 
         $this->pageConfig->getTitle()->set($this->getTitle());
@@ -251,7 +249,7 @@ class Edit extends \Magento\Directory\Block\Data
     public function getRegion()
     {
         $region = $this->getAddress()->getRegion();
-        return is_null($region) ? '' : $region->getRegion();
+        return $region === null ? '' : $region->getRegion();
     }
 
     /**
@@ -262,7 +260,7 @@ class Edit extends \Magento\Directory\Block\Data
     public function getRegionId()
     {
         $region = $this->getAddress()->getRegion();
-        return is_null($region) ? 0 : $region->getRegionId();
+        return $region === null ? 0 : $region->getRegionId();
     }
 
     /**

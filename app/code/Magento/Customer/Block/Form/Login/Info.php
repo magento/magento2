@@ -77,7 +77,7 @@ class Info extends \Magento\Framework\View\Element\Template
     public function getCreateAccountUrl()
     {
         $url = $this->getData('create_account_url');
-        if (is_null($url)) {
+        if ($url === null) {
             $url = $this->_customerUrl->getRegisterUrl();
         }
         if ($this->checkoutData->isContextCheckout()) {

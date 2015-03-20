@@ -100,7 +100,14 @@ window.giftMessagesController = {
 
         new Ajax.Request($(this.getFieldId(container, 'form')).action, {
             parameters: Form.serialize($(this.getFieldId(container, 'form')), true),
-            loaderArea: container
+            loaderArea: container,
+            onSuccess: function(response) {
+                var message = '<div class="messages"><div class="message message-success success">'
+                    + response.responseText
+                    + '<div data-ui-id="messages-message-success"></div></div></div>';
+                jQuery('#messages').html(message);
+                jQuery(document).scrollTop(0);
+            }
         });
     },
     getFieldId: function(container, name) {

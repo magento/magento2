@@ -68,7 +68,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function getWishlistCustomer()
     {
-        if (is_null($this->_customer)) {
+        if ($this->_customer === null) {
             $this->_customer = $this->customerRepository->getById($this->_getWishlist()->getCustomerId());
         }
 

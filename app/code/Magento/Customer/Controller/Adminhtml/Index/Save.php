@@ -70,7 +70,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $scope = null,
         \Magento\Customer\Model\Metadata\Form $metadataForm = null
     ) {
-        if (is_null($metadataForm)) {
+        if ($metadataForm === null) {
             $metadataForm = $this->_objectManager->get('Magento\Customer\Model\Metadata\FormFactory')->create(
                 $entityType,
                 $formCode,

@@ -177,12 +177,12 @@
         > .submenu {
             background-color: @submenu__background-color;
             box-shadow: 0 0 3px @color-black;
-            left: -100rem;
+            left: -90rem;
             min-height: ~'calc(@{menu-logo__outer-size} + 2rem + 100%)';
             padding: @submenu__padding-vertical 0 0;
             position: absolute;
             top: -@menu-logo__outer-size;
-            transition: all .7s linear;
+            transition: all .5s ease;
             visibility: hidden;
             z-index: @submenu__z-index;
             &._show {
@@ -234,13 +234,14 @@
         .parent {
             margin-bottom: 4.5rem;
             //  Section title
-            //  ToDo UI: Should be not a link, strong instead and have a classname
-            > a {
+            > a, // ToDo UI: Should be deleted after template changes a -> strong.submenu-group-title
+            .submenu-group-title {
                 color: @submenu-section-label__color;
                 display: block;
                 font-size: 1.6rem;
                 font-weight: @font-weight__semibold;
                 margin-bottom: .7rem;
+                padding: 1.25rem @submenu__padding-horizontal;
                 pointer-events: none;
             }
         }
@@ -272,6 +273,9 @@
         position: absolute;
         right: 0;
         top: 0;
+        &:active {
+            .scale();
+        }
         &:before {
             &:extend(.abs-icon all);
             color: @submenu-section-label__color;
@@ -280,6 +284,8 @@
             .transition(color);
         }
         &:hover {
+            cursor: pointer;
+            text-decoration: none;
             &:before {
                 color: @color-white;
             }

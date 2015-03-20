@@ -123,7 +123,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function getShippingAddressCount()
     {
         $count = $this->getData('shipping_address_count');
-        if (is_null($count)) {
+        if ($count === null) {
             $count = count($this->getShippingAddresses());
             $this->setData('shipping_address_count', $count);
         }
