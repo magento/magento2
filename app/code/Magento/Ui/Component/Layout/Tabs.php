@@ -42,12 +42,19 @@ class Tabs extends Generic implements LayoutInterface
      */
     protected $sortIncrement = 10;
 
+    /**
+     * Constructor
+     *
+     * @param null|string $navContainerName
+     */
     public function __construct($navContainerName = null)
     {
         $this->navContainerName = $navContainerName;
     }
 
     /**
+     * Build
+     *
      * @param UiComponentInterface $component
      * @return array
      */
@@ -60,12 +67,21 @@ class Tabs extends Generic implements LayoutInterface
         return parent::build($component);
     }
 
+    /**
+     * Add navigation block
+     *
+     * @return void
+     */
     protected function addNavigationBlock()
     {
         $pageLayout = $this->component->getContext()->getPageLayout();
         /** @var \Magento\Ui\Component\Layout\Tabs\Nav $navBlock */
         if ($this->navContainerName) {
-            $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', $this->navContainerName);
+            $navBlock = $pageLayout->addBlock(
+                'Magento\Ui\Component\Layout\Tabs\Nav',
+                'tabs_nav',
+                $this->navContainerName
+            );
         } else {
             $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', 'content');
         }
@@ -79,6 +95,7 @@ class Tabs extends Generic implements LayoutInterface
      * @param array $topNode
      * @param UiComponentInterface $component
      * @param string $componentType
+     * @return void
      */
     protected function addChildren(
         array &$topNode,
@@ -157,6 +174,7 @@ class Tabs extends Generic implements LayoutInterface
      * Process data source
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processDataSource()
     {
@@ -213,7 +231,12 @@ class Tabs extends Generic implements LayoutInterface
                         continue;
                     }
 
-                    $this->addToCollection($itemTemplate, $elementName, "{$this->namespace}.{$elementName}", $component->getData());
+                    $this->addToCollection(
+                        $itemTemplate,
+                        $elementName,
+                        "{$this->namespace}.{$elementName}",
+                        $component->getData()
+                    );
 
                     $referenceName = "{$name}.elements.{$elementName}";
                     $this->addToGroup($templateGroupName, $elementName, $referenceName, $component->getData());
@@ -231,7 +254,12 @@ class Tabs extends Generic implements LayoutInterface
                         continue;
                     }
 
-                    $this->addToCollection($collection, $elementName, "{$this->namespace}.{$elementName}", $component->getData());
+                    $this->addToCollection(
+                        $collection,
+                        $elementName,
+                        "{$this->namespace}.{$elementName}",
+                        $component->getData()
+                    );
 
                     $referenceName = "{$name}.elements.{$elementName}";
                     $this->addToGroup($groupName, $elementName, $referenceName, $component->getData());
@@ -378,6 +406,7 @@ class Tabs extends Generic implements LayoutInterface
      * @param string $dataScope
      * @param array $element
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addToCollection(array & $collection, $elementName, $dataScope, array $element)
     {

@@ -99,7 +99,7 @@ class ListProducts extends \Magento\Framework\View\Element\Template
             'downloadable.customer.products.pager'
         )->setCollection(
             $this->getItems()
-        );
+        )->setPath('downloadable/customer/products');
         $this->setChild('pager', $pager);
         $this->getItems()->load();
         foreach ($this->getItems() as $item) {

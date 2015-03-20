@@ -106,7 +106,7 @@ class Online extends \Magento\Framework\Model\AbstractModel
      */
     public function setPrepareAt($time = null)
     {
-        if (is_null($time)) {
+        if ($time === null) {
             $time = time();
         }
         $this->_cacheManager->save($time, 'log_visitor_online_prepare_at');

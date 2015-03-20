@@ -437,7 +437,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     $config = $this->_reader->readFile($configFile);
                     $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
                     $themeWidgetConfig = null;
-                    if (!is_null($widgetName)) {
+                    if ($widgetName !== null) {
                         foreach ($config as $widget) {
                             if (isset($widget['name']) && $widgetName === $widget['name']) {
                                 $themeWidgetConfig = $widget;

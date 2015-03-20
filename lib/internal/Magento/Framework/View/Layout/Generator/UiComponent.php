@@ -12,6 +12,7 @@ use Magento\Framework\View\Layout\GeneratorInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
 use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 use Magento\Framework\View\Layout\Generator\Context as GeneratorContext;
 use Magento\Framework\View\Element\UiComponent\ContextFactory as UiComponentContextFactory;
@@ -28,9 +29,9 @@ class UiComponent implements GeneratorInterface
     const TYPE = 'uiComponent';
 
     /**
-     * Block adapter
+     * Block container for components
      */
-    const ADAPTER = 'Magento\Framework\View\Element\UiComponent\TemplateAdapter';
+    const CONTAINER = 'Magento\Framework\View\Element\UiComponent\ContainerInterface';
 
     /**
      * @var UiComponentFactory
@@ -105,7 +106,7 @@ class UiComponent implements GeneratorInterface
      * @param string $elementName
      * @param string $data
      * @param LayoutInterface $layout
-     * @return UiComponentInterface
+     * @return ContainerInterface
      */
     protected function generateComponent(Structure $structure, $elementName, $data, LayoutInterface $layout)
     {
@@ -124,10 +125,10 @@ class UiComponent implements GeneratorInterface
         ]);
         $this->prepareComponent($component);
 
-        /** @var \Magento\Framework\View\Element\UiComponent\TemplateAdapter $adapterBlock */
-        $adapterBlock = $this->blockFactory->createBlock(static::ADAPTER, ['component' => $component]);
+        /** @var ContainerInterface $blockContainer */
+        $blockContainer = $this->blockFactory->createBlock(static::CONTAINER, ['component' => $component]);
 
-        return $adapterBlock;
+        return $blockContainer;
     }
 
     /**

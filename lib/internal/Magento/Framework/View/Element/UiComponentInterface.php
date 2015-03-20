@@ -34,8 +34,11 @@ interface UiComponentInterface extends BlockInterface
     public function render();
 
     /**
+     * Add component
+     *
      * @param string $name
      * @param UiComponentInterface $component
+     * @return void
      */
     public function addComponent($name, UiComponentInterface $component);
 

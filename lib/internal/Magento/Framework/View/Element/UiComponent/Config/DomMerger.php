@@ -275,6 +275,7 @@ class DomMerger implements DomMergerInterface
      *
      * @param \DOMNode $node
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function hasIdAttribute(\DOMNode $node)
     {

@@ -24,11 +24,11 @@ class Title extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     {
         $mapValue = $this->getProductAttributeValue($product);
         $name = $this->getGroupAttributeName();
-        if (!is_null($name)) {
+        if ($name !== null) {
             $mapValue = $name->getProductAttributeValue($product);
         }
 
-        if (!is_null($mapValue)) {
+        if ($mapValue !== null) {
             $titleText = $mapValue;
         } elseif ($product->getName()) {
             $titleText = $product->getName();

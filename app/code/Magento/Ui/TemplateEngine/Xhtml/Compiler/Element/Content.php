@@ -35,7 +35,8 @@ class Content implements ElementInterface
         if (!empty($content)) {
             $compiler->setPostprocessingData($name, $content);
             $newNode = $node->ownerDocument->createTextNode(
-                Compiler::PATTERN_TAG . $name . Compiler::PATTERN_TAG);
+                Compiler::PATTERN_TAG . $name . Compiler::PATTERN_TAG
+            );
             $node->parentNode->replaceChild($newNode, $node);
         } else {
             $node->parentNode->removeChild($node);

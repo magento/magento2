@@ -32,6 +32,13 @@
     <filterRange class="Magento\Ui\Component\Filters\Type\Range"/>
     <filterInput class="Magento\Ui\Component\Filters\Type\Input"/>
     <filterDate class="Magento\Ui\Component\Filters\Type\Date"/>
+    <wrapper class="Magento\Ui\Component\Wrapper">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">uiComponent</item>
+            </item>
+        </argument>
+    </wrapper>
     <massaction class="Magento\Ui\Component\MassAction">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">templates/listingcontainer/massaction/default</item>

@@ -116,7 +116,7 @@ class Compiler
     /**
      * Run postprocessing contents template
      *
-     * @param $content
+     * @param string $content
      * @return string
      */
     public function postprocessing($content)
@@ -135,6 +135,7 @@ class Compiler
      *
      * @param string $key
      * @param string $content
+     * @return void
      */
     public function setPostprocessingData($key, $content)
     {

@@ -220,7 +220,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected function _setResourceModel($resourceName, $collectionName = null)
     {
         $this->_resourceName = $resourceName;
-        if (is_null($collectionName)) {
+        if ($collectionName === null) {
             $collectionName = $resourceName . '\\' . 'Collection';
         }
         $this->_collectionName = $collectionName;

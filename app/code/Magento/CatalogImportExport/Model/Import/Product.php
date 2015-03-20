@@ -1086,7 +1086,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $storeIds = [0];
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = new \DateTime('@' . strtotime($attrValue));
+                        $attrValue = (new \DateTime())->setTimestamp(strtotime($attrValue));
                         $attrValue = $attrValue->format(DateTime::DATETIME_PHP_FORMAT);
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);

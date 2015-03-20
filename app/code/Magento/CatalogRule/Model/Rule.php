@@ -283,7 +283,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function getMatchingProductIds()
     {
-        if (is_null($this->_productIds)) {
+        if ($this->_productIds === null) {
             $this->_productIds = [];
             $this->setCollectedAttributes([]);
 

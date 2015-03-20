@@ -101,7 +101,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function saveLog($data, $id = null)
     {
         $adapter = $this->_getWriteAdapter();
-        if (is_null($id)) {
+        if ($id === null) {
             $adapter->insert($this->getTable('log_summary'), $data);
         } else {
             $condition = $adapter->quoteInto('summary_id = ?', $id);

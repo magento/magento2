@@ -419,7 +419,7 @@ class AbstractAddress extends AbstractExtensibleModel
      */
     public function getRegionModel($regionId = null)
     {
-        if (is_null($regionId)) {
+        if ($regionId === null) {
             $regionId = $this->getRegionId();
         }
 
@@ -492,7 +492,7 @@ class AbstractAddress extends AbstractExtensibleModel
         $addressData = [];
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
-            if (!is_null($this->getData($code))) {
+            if ($this->getData($code) !== null) {
                 if ($code === AddressInterface::STREET) {
                     $addressData[$code] = $this->getDataUsingMethod($code);
                 } else {

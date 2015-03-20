@@ -59,16 +59,42 @@ class Range extends AbstractFilter
     {
         $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         if (!empty($value['from']) || !empty($value['to'])) {
-            if (isset($value['from']) && empty($value['from']) && $value['from'] !== '0') {
-                $value['orig_from'] = $value['from'];
-                $value['from'] = null;
-            }
-            if (isset($value['to']) && empty($value['to']) && $value['to'] !== '0') {
-                $value['orig_to'] = $value['to'];
-                $value['to'] = null;
-            }
+            $value = $this->prepareFrom($value);
+            $value = $this->prepareTo($value);
         } else {
             $value = null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Prepare "from" value
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function prepareFrom(array $value)
+    {
+        if (isset($value['from']) && empty($value['from']) && $value['from'] !== '0') {
+            $value['orig_from'] = $value['from'];
+            $value['from'] = null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Prepare "from" value
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function prepareTo(array $value)
+    {
+        if (isset($value['to']) && empty($value['to']) && $value['to'] !== '0') {
+            $value['orig_to'] = $value['to'];
+            $value['to'] = null;
         }
 
         return $value;
