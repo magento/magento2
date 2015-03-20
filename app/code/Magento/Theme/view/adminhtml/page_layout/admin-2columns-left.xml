@@ -34,11 +34,12 @@
                             <container name="page.messages" as="page.messages"/>
                         </container>
                     </container>
-                    <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="col-2-left-layout">
-                        <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col">
+                    <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="page-columns row admin__scope-old">
+                        <!-- ToDo UI: remove main-col & side-col class after new sidebar implemented -->
+                        <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col col-m-9 col-m-push-3">
                             <container name="content" as="content"/>
                         </container>
-                        <container name="side.col" as="side-col" after="main.col" htmlId="page:left" htmlTag="div" htmlClass="side-col">
+                        <container name="side.col" as="side-col" after="main.col" htmlId="page:left" htmlTag="div" htmlClass="col-m-3 col-m-pull-9 side-col">
                             <container name="left" as="left"/>
                         </container>
                     </container>

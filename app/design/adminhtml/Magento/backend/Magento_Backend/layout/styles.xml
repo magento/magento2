@@ -14,5 +14,7 @@
 
         <css src="css/styles.css"/>
     </head>
-    <body/>
+    <body>
+        <referenceContainer name="page.main.container" htmlClass="page-columns" />
+    </body>
 </page>

@@ -34,8 +34,10 @@
                             <container name="page.messages" as="page.messages"/>
                         </container>
                     </container>
-                    <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="col-1-layout">
-                       <container name="content" as="content"/>
+                    <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="page-columns admin__scope-old">
+                        <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col">
+                            <container name="content" as="content"/>
+                        </container>
                     </container>
                 </container>
                 <container name="js" as="js" label="JavaScript"/>

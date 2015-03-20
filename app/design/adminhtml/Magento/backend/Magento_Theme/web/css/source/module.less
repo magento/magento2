@@ -7,63 +7,63 @@
 
 
 // Base
-
-html {
-    font-size: 62.5%;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    font-size-adjust: 100%;
-}
-
-body,
-html {
-    height: 100%;
-    min-height: 100%;
-}
-
-body {
-    color: @baseColor;
-    font-family: @baseFont;
-    line-height: @baseLineHeight;
-    font-weight: @baseFontWeight;
-    .font-size(@baseFontSize);
-    background: #f5f5f5;
-    .vendor-prefix-display(flex);
-    .vendor-prefix-flex-direction(column);
-    & > * {
-        .vendor-prefix-flex-grow(0);
-        .vendor-prefix-flex-shrink(0);
-        .vendor-prefix-flex-basis(auto);
-    }
-}
-
-.page-wrapper {
-    max-width: 100%;
-    min-width: @layout__min-width + 2 * @layout-indent__width;
-    margin-left: 8.8rem; // migration styles -> @menu__width
-    background-color: #fff;
-    box-sizing: border-box;
-}
-
-.page-actions {
-    &.fixed &-inner {
-        &:extend(._layout-width all);
-    }
-    &.fixed &-buttons {
-        padding-right: 15px;
-    }
-}
-
-.page-content {
-    &:extend(._layout-width all);
-    .clearer();
-    min-height: 20rem; // ToDo UI: delete if sticky footer
-}
-
-.page-wrapper > .page-content {
-    margin-bottom: 20px;
-}
-
+//
+//html {
+//    font-size: 62.5%;
+//    -webkit-text-size-adjust: 100%;
+//    -ms-text-size-adjust: 100%;
+//    font-size-adjust: 100%;
+//}
+//
+//body,
+//html {
+//    height: 100%;
+//    min-height: 100%;
+//}
+//
+//body {
+//    color: @baseColor;
+//    font-family: @baseFont;
+//    line-height: @baseLineHeight;
+//    font-weight: @baseFontWeight;
+//    .font-size(@baseFontSize);
+//    background: #f5f5f5;
+//    .vendor-prefix-display(flex);
+//    .vendor-prefix-flex-direction(column);
+//    & > * {
+//        .vendor-prefix-flex-grow(0);
+//        .vendor-prefix-flex-shrink(0);
+//        .vendor-prefix-flex-basis(auto);
+//    }
+//}
+//
+//.page-wrapper {
+//    max-width: 100%;
+//    min-width: @layout__min-width + 2 * @layout-indent__width;
+//    margin-left: 8.8rem; // migration styles -> @menu__width
+//    background-color: #fff;
+//    box-sizing: border-box;
+//}
+//
+//.page-actions {
+//    &.fixed &-inner {
+//        &:extend(._layout-width all);
+//    }
+//    &.fixed &-buttons {
+//        padding-right: 15px;
+//    }
+//}
+//
+//.page-content {
+//    &:extend(._layout-width all);
+//    .clearer();
+//    min-height: 20rem; // ToDo UI: delete if sticky footer
+//}
+//
+//.page-wrapper > .page-content {
+//    margin-bottom: 20px;
+//}
+//
 button {
     border-radius: 2px;
     .button();

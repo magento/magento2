@@ -855,20 +855,6 @@ option:empty {
   margin-top: -1px;
   z-index: 4;
 }
-.col-2-left-layout {
-  margin-left: -30px;
-  margin-top: 50px;
-  width: auto;
-}
-.col-2-left-layout .main-col {
-  width: ~" calc( (100%) * 0.75 - 30px )";
-  float: right;
-}
-.col-2-left-layout .side-col {
-  width: ~" calc( (100%) * 0.75 - 30px )";
-  float: left;
-  margin-left: 30px;
-}
 .admin__fieldset-wrapper-title {
   margin-bottom: 30px;
   padding: 14px 0 16px;
@@ -1162,6 +1148,7 @@ fieldset[disabled] .address-list .action-delete {
 }
 .actions-split .dropdown-menu > li:hover {
   background-color: #e3e3e3;
+  cursor: pointer;
 }
 .actions-split .dropdown-menu > li:active {
   background-color: #cacaca;
@@ -1335,16 +1322,22 @@ button.primary,
 }
 .abs-action-primary:hover,
 .abs-action-primary:active,
+.abs-action-primary:focus,
 button.primary:hover,
 button.primary:active,
+button.primary:focus,
 .page-actions > button.action-primary:hover,
 .page-actions > button.action-primary:active,
+.page-actions > button.action-primary:focus,
 .page-actions .page-actions-buttons > button.action-primary:hover,
 .page-actions .page-actions-buttons > button.action-primary:active,
+.page-actions .page-actions-buttons > button.action-primary:focus,
 .page-actions > button.primary:hover,
 .page-actions > button.primary:active,
+.page-actions > button.primary:focus,
 .page-actions .page-actions-buttons > button.primary:hover,
-.page-actions .page-actions-buttons > button.primary:active {
+.page-actions .page-actions-buttons > button.primary:active,
+.page-actions .page-actions-buttons > button.primary:focus {
   background-color: #ba4000;
   border-color: #b84002;
   box-shadow: 0 0 0 1px #007bdb;
@@ -1381,18 +1374,25 @@ button.secondary,
 }
 .abs-action-secondary:hover,
 .abs-action-secondary:active,
+.abs-action-secondary:focus,
 button.secondary:hover,
 button.secondary:active,
+button.secondary:focus,
 .ui-dialog .ui-button:hover,
 .ui-dialog .ui-button:active,
+.ui-dialog .ui-button:focus,
 .ui-dialog .action-primary:hover,
 .ui-dialog .action-primary:active,
+.ui-dialog .action-primary:focus,
 .attribute-popup-actions .page-actions-buttons > button.action-default.primary:hover,
 .attribute-popup-actions .page-actions-buttons > button.action-default.primary:active,
+.attribute-popup-actions .page-actions-buttons > button.action-default.primary:focus,
 .popup-window .magento_buttons .ok_button:hover,
 .popup-window .magento_buttons .ok_button:active,
+.popup-window .magento_buttons .ok_button:focus,
 .fade .actions .primary:hover,
-.fade .actions .primary:active {
+.fade .actions .primary:active,
+.fade .actions .primary:focus {
   background-color: #35302c;
   box-shadow: 0 0 0 1px #007bdb;
   color: #ffffff;
@@ -1420,32 +1420,44 @@ button.tertiary,
 }
 .abs-action-tertiary:active,
 .abs-action-tertiary:hover,
+.abs-action-tertiary:focus,
 button.tertiary:active,
 button.tertiary:hover,
+button.tertiary:focus,
 .ui-dialog .action-close:active,
 .ui-dialog .action-close:hover,
+.ui-dialog .action-close:focus,
 .attribute-popup-actions .action-default.reset:active,
 .attribute-popup-actions .action-default.reset:hover,
+.attribute-popup-actions .action-default.reset:focus,
 .popup-window .magento_buttons .cancel_button:active,
 .popup-window .magento_buttons .cancel_button:hover,
+.popup-window .magento_buttons .cancel_button:focus,
 .fade .actions .cancel:active,
-.fade .actions .cancel:hover {
+.fade .actions .cancel:hover,
+.fade .actions .cancel:focus {
   background-color: transparent;
   border-color: transparent;
   box-shadow: none;
 }
 .abs-action-tertiary:active,
 .abs-action-tertiary:hover,
+.abs-action-tertiary:focus,
 button.tertiary:active,
 button.tertiary:hover,
+button.tertiary:focus,
 .ui-dialog .action-close:active,
 .ui-dialog .action-close:hover,
+.ui-dialog .action-close:focus,
 .attribute-popup-actions .action-default.reset:active,
 .attribute-popup-actions .action-default.reset:hover,
+.attribute-popup-actions .action-default.reset:focus,
 .popup-window .magento_buttons .cancel_button:active,
 .popup-window .magento_buttons .cancel_button:hover,
+.popup-window .magento_buttons .cancel_button:focus,
 .fade .actions .cancel:active,
-.fade .actions .cancel:hover {
+.fade .actions .cancel:hover,
+.fade .actions .cancel:focus {
   color: #007bdb;
   text-decoration: underline;
 }
@@ -1459,20 +1471,26 @@ button.tertiary:hover,
 }
 .abs-action-quaternary:active,
 .abs-action-quaternary:hover,
+.abs-action-quaternary:focus,
 .page-actions > button:active,
 .page-actions > button:hover,
+.page-actions > button:focus,
 .page-actions .page-actions-buttons > button:active,
-.page-actions .page-actions-buttons > button:hover {
+.page-actions .page-actions-buttons > button:hover,
+.page-actions .page-actions-buttons > button:focus {
   background-color: transparent;
   border-color: transparent;
   box-shadow: none;
 }
 .abs-action-quaternary:active,
 .abs-action-quaternary:hover,
+.abs-action-quaternary:focus,
 .page-actions > button:active,
 .page-actions > button:hover,
+.page-actions > button:focus,
 .page-actions .page-actions-buttons > button:active,
-.page-actions .page-actions-buttons > button:hover {
+.page-actions .page-actions-buttons > button:hover,
+.page-actions .page-actions-buttons > button:focus {
   color: #231d1a;
 }
 .action-default,
@@ -1494,7 +1512,8 @@ button:hover {
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
 }
 .action-primary:hover,
-.action-primary:active {
+.action-primary:active,
+.action-primary:focus {
   background-color: #ba4000;
   border-color: #b84002;
   box-shadow: 0 0 0 1px #007bdb;
@@ -1514,7 +1533,8 @@ button:hover {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 .action-secondary:hover,
-.action-secondary:active {
+.action-secondary:active,
+.action-secondary:focus {
   background-color: #35302c;
   box-shadow: 0 0 0 1px #007bdb;
   color: #ffffff;
@@ -1532,7 +1552,9 @@ button:hover {
 .action-tertiary:active,
 .action-quaternary:active,
 .action-tertiary:hover,
-.action-quaternary:hover {
+.action-quaternary:hover,
+.action-tertiary:focus,
+.action-quaternary:focus {
   background-color: transparent;
   border-color: transparent;
   box-shadow: none;
@@ -1541,7 +1563,8 @@ button:hover {
   color: #007bdb;
 }
 .action-tertiary:active,
-.action-tertiary:hover {
+.action-tertiary:hover,
+.action-tertiary:focus {
   color: #007bdb;
   text-decoration: underline;
 }
@@ -1549,7 +1572,8 @@ button:hover {
   color: #41362f;
 }
 .action-quaternary:active,
-.action-quaternary:hover {
+.action-quaternary:hover,
+.action-quaternary:focus {
   color: #231d1a;
 }
 table.table {
@@ -1878,6 +1902,8 @@ table.table th.required:after {
 .actions-split:after,
 .tabs-horiz:before,
 .tabs-horiz:after,
+.page-content:before,
+.page-content:after,
 .ui-dialog .ui-dialog-buttonset:before,
 .ui-dialog .ui-dialog-buttonset:after,
 .ui-dialog .main-col .insert-title-inner:before,
@@ -1912,6 +1938,7 @@ table.table th.required:after {
 .abs-clearfix:after,
 .actions-split:after,
 .tabs-horiz:after,
+.page-content:after,
 .ui-dialog .ui-dialog-buttonset:after,
 .ui-dialog .main-col .insert-title-inner:after,
 .ui-dialog .magento_message .insert-title-inner:after,
@@ -1929,8 +1956,7 @@ table.table th.required:after {
   clear: both;
 }
 .abs-clearer:after,
-.admin__fieldset > .admin__field:after,
-.col-2-left-layout:after {
+.admin__fieldset > .admin__field:after {
   content: "";
   display: table;
   clear: both;
@@ -1972,6 +1998,10 @@ table.table th.required:after {
   color: #41362f;
   display: block;
   padding: 1.5rem 1.8rem 1.3rem;
+  text-decoration: none;
+}
+.tabs-horiz .ui-tabs-anchor:hover {
+  color: #41362f;
   text-decoration: none;
 }
 .ui-tabs-panel {
@@ -2459,8 +2489,12 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .ui-dialog .side-col:after {
   display: none;
 }
+.ui-dialog .side-col {
+  width: 20%;
+}
 .ui-dialog .main-col {
   padding-right: 0;
+  width: 80%;
 }
 .ui-dialog .grid,
 .ui-dialog .pager {
@@ -2641,8 +2675,10 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .ui-popup-message .ui-dialog-content {
   background: #fffbbb;
+  margin-bottom: 0;
   padding: 0 2rem 2rem;
 }
+.ui-popup-message .ui-dialog-content .messages:last-child,
 .ui-popup-message .ui-dialog-content .message:last-child {
   margin-bottom: 0;
 }
@@ -3028,6 +3064,70 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .ie9 .spinner > span {
   display: none;
+}
+.popup-loading {
+  position: fixed;
+  z-index: 1003;
+  width: 200px;
+  background: rgba(255, 255, 255, 0.8);
+  left: 50%;
+  top: 40%;
+  margin-left: -100px;
+  color: #d85909;
+  border-color: #d85909;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  padding: 100px 0 10px;
+}
+.popup-loading:after {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  background-image: url('../mui/images/ajax-loader-big.gif');
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  content: '';
+  z-index: 2;
+}
+.loading-old,
+.loading-mask {
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 999;
+}
+.loading-old,
+.loading-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.loading-old .loader,
+.loading-mask .loader {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 160px;
+  height: 160px;
+  color: #5e5b56;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  background: #e5e2dd url(../mui/images/ajax-loader-big.gif) no-repeat 50% 30%;
+  border-radius: 5px;
+  opacity: .95;
+}
+.loading-mask img {
+  display: none;
+}
+.loading-old p,
+.loading-mask p {
+  margin-top: 118px;
 }
 .message-system-inner {
   background: #fffbbb;

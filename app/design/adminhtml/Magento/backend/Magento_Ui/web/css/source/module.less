@@ -34,12 +34,6 @@
 }
 
 .customer-index-edit {
-    .page-wrapper {
-        background: #fff;
-    }
-    .col-2-left-layout {
-        background: #fff;
-    }
     .main-col {
         padding-left: 40px;
     }
@@ -118,15 +112,16 @@
                 color: #eb5202;
                 text-decoration: none;
             }
-            .ui-state-active & {
-                color: @admin__color4;
-                font-weight: 600;
-            }
             &.changed {
                 font-style: italic;
             }
         }
     }
+}
+
+.ui-state-active .tab-nav-item-link {
+    color: @admin__color4;
+    font-weight: 600;
 }
 
 .listing-tiles {
@@ -276,17 +271,6 @@
             }
             > span {
                 .visually-hidden();
-            }
-        }
-        .dropdown-menu {
-            > li {
-                padding: 4px 15px;
-                &:hover {
-                    background-color: #e8e8e8;
-                }
-                span {
-                    display: block;
-                }
             }
         }
     }
