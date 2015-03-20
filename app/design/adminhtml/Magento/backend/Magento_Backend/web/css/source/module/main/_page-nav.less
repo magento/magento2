@@ -14,13 +14,14 @@
 @admin__page-nav-title__border-color: @border__color;
 @admin__page-nav-title__collapsible__background-color: @page-wrapper__background-color;
 @admin__page-nav-title__collapsible__active__background-color: @color-white-fog2;
-@admin__page-nav-title__font-size: 1.4rem;
+@admin__page-nav-title__font-size: @font-size__base;
 
 @admin__page-nav-item__border-color: @border__color;
 @admin__page-nav-item__margin-vertical: 1.3rem;
 @admin__page-nav-item__active__color: @color-phoenix;
 
 @admin__page-nav-link__color: @color-very-dark-gray-black;
+@admin__page-nav-link__padding: 2rem 4rem 2rem 1rem;
 @admin__page-nav-link__hover__color: @color-very-dark-gray-black;
 @admin__page-nav-link__changed__color: @color-very-dark-gray;
 
@@ -31,12 +32,12 @@
 @admin__page-nav-icon-error__color: @color-phoenix;
 
 @admin__page-nav-item-message-loader__font-size: 2rem;
+@admin__page-nav-tooltip__background: @admin__page-nav__background-color;
+@admin__page-nav-tooltip__box-shadow: 0 3px 9px 0 rgba(0, 0, 0, .3);
 @admin__page-nav-tooltip__z-index1: @field-tooltip__z-index;
-@admin__page-nav-tooltip__z-index2: 2;
-@admin__page-nav-tooltip__z-index3: 3;
-@admin__page-nav-tooltip__z-index4: 4;
+@admin__page-nav-tooltip__border-color: @color-gray75;
 
-@admin__page-nav-transition: background-color 0.1s ease-out, border 0.1s ease-out;
+@admin__page-nav-transition: background-color .1s ease-out;
 
 //
 //  Page Nav (can be simple and collapsed)
@@ -59,6 +60,14 @@
                 }
                 + .admin__page-nav-items {
                     display: block;
+                }
+            }
+        }
+        &._hide {
+            .admin__page-nav-title-messages {
+                display: inline-block;
+                ._active {
+                    display: inline-block;
                 }
             }
         }
@@ -85,7 +94,7 @@
         background: @admin__page-nav-title__collapsible__background-color;
         cursor: pointer;
         margin: 0;
-        padding-right: 35px;
+        padding-right: 3.5rem;
         transition: @admin__page-nav-transition;
 
         + .admin__page-nav-items {
@@ -113,6 +122,9 @@
     }
     strong {
         font-weight: @font-weight__bold;
+    }
+    .admin__page-nav-title-messages {
+        display: none;
     }
 }
 
@@ -151,18 +163,6 @@
         }
     }
 
-    .admin__page-nav-item-message-loader {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
-        .spinner {
-            font-size: @admin__page-nav-item-message-loader__font-size;
-            margin-right: 1.5rem;
-        }
-    }
-
     &._loading,
     &.ui-tabs-loading {
         &:before {
@@ -178,6 +178,7 @@
     }
 }
 
+
 .admin__page-nav-link {
     border: 1px solid transparent;
     border-width: 1px 0;
@@ -186,12 +187,11 @@
     font-weight: @font-weight__heavier;
     line-height: @line-height__s;
     margin: 0 0 -1px;
-    padding: 2rem 4rem 2rem 1rem;
-    word-break: break-all;
+    padding: @admin__page-nav-link__padding;
     transition: @admin__page-nav-transition;
+    word-break: break-all;
 
-    &._changed,
-    &.changed {
+    &._changed {
         .admin__page-nav-item-message {
             &._changed {
                 display: inline-block;
@@ -199,8 +199,7 @@
         }
     }
 
-    &._error,
-    &.error {
+    &._error {
         .admin__page-nav-item-message {
             &._error {
                 display: inline-block;
@@ -217,7 +216,7 @@
     .admin__page-nav-item-message {
         position: relative;
         &:hover {
-            z-index: @admin__page-nav-tooltip__z-index1;
+            z-index: @admin__page-nav-tooltip__z-index;
             .admin__page-nav-item-message-tooltip {
                 display: block;
             }
@@ -230,7 +229,7 @@
                 &:extend(.abs-icon all);
                 display: inline-block;
                 font-size: @admin__page-nav-title__font-size;
-                padding-left: 1.5rem;
+                padding-left: .8em;
                 vertical-align: top;
                 &:after {
                     color: @admin__page-nav-link__changed__color;
@@ -249,43 +248,55 @@
         }
     }
 
+    .admin__page-nav-item-message-loader {
+        display: none;
+        margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
+        position: absolute;
+        right: 0;
+        top: 50%;
+        .spinner {
+            font-size: @admin__page-nav-item-message-loader__font-size;
+            margin-right: 1.5rem;
+        }
+    }
+
     .admin__page-nav-item-message-tooltip {
-        @_shadow: 0px 3px 9px 0 rgba(0, 0, 0, 0.3);
-        .css(box-shadow, @_shadow);
-        background: @admin__page-nav__background-color;
+        background: @admin__page-nav-tooltip__background;
+        border: 1px solid @admin__page-nav-tooltip__background;
         border-radius: 1px;
-        border: 1px solid @admin__page-nav__background-color;
         bottom: 3.7rem;
+        box-shadow: @admin__page-nav-tooltip__box-shadow;
         display: none;
         font-weight: @font-weight__regular;
-        word-break: normal;
-        padding: 2rem;
-        line-height: @line-height__base;
-        position: absolute;
         left: -1rem;
+        line-height: @line-height__base;
+        padding: 2rem;
+        position: absolute;
+        text-transform: none;
         width: 27rem;
-        z-index: @admin__page-nav-tooltip__z-index2;
+        word-break: normal;
+        z-index: 2;
         &:after,
         &:before {
             .arrow(
             @_position: down,
             @_size: 15px,
-            @_color: @admin__page-nav__background-color
+            @_color: @admin__page-nav-tooltip__background
             );
-            content: "";
+            content: '';
             display: block;
-            position: absolute;
             left: 2rem;
+            position: absolute;
             top: 100%;
-            z-index: @admin__page-nav-tooltip__z-index3;
+            z-index: 3;
         }
         &:after {
-            border-top-color: @admin__page-nav__background-color;
+            border-top-color: @admin__page-nav-tooltip__background;
             margin-top: -1px;
-            z-index: @admin__page-nav-tooltip__z-index4;
+            z-index: 4;
         }
         &:before {
-            border-top-color: @color-gray75;
+            border-top-color: @admin__page-nav-tooltip__border-color;
         }
     }
 }

@@ -4175,6 +4175,12 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .admin__page-nav._collapsed._show ._collapsible + .admin__page-nav-items {
   display: block;
 }
+.admin__page-nav._collapsed._hide .admin__page-nav-title-messages {
+  display: inline-block;
+}
+.admin__page-nav._collapsed._hide .admin__page-nav-title-messages ._active {
+  display: inline-block;
+}
 .admin__page-nav + ._collapsed {
   border-bottom: none;
   border-top: none;
@@ -4194,8 +4200,8 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   background: #ffffff;
   cursor: pointer;
   margin: 0;
-  padding-right: 35px;
-  transition: background-color 0.1s ease-out, border 0.1s ease-out;
+  padding-right: 3.5rem;
+  transition: background-color 0.1s ease-out;
 }
 .admin__page-nav-title._collapsible + .admin__page-nav-items {
   display: none;
@@ -4217,6 +4223,9 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .admin__page-nav-title strong {
   font-weight: 700;
+}
+.admin__page-nav-title .admin__page-nav-title-messages {
+  display: none;
 }
 .admin__page-nav-items {
   list-style-type: none;
@@ -4252,17 +4261,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .admin__page-nav-item.ui-state-active .admin__page-nav-link {
   font-weight: 600;
 }
-.admin__page-nav-item .admin__page-nav-item-message-loader {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  margin-top: -1rem;
-}
-.admin__page-nav-item .admin__page-nav-item-message-loader .spinner {
-  font-size: 2rem;
-  margin-right: 1.5rem;
-}
 .admin__page-nav-item._loading:before,
 .admin__page-nav-item.ui-tabs-loading:before {
   display: none;
@@ -4283,15 +4281,13 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   line-height: 1.2;
   margin: 0 0 -1px;
   padding: 2rem 4rem 2rem 1rem;
+  transition: background-color 0.1s ease-out;
   word-break: break-all;
-  transition: background-color 0.1s ease-out, border 0.1s ease-out;
 }
-.admin__page-nav-link._changed .admin__page-nav-item-message._changed,
-.admin__page-nav-link.changed .admin__page-nav-item-message._changed {
+.admin__page-nav-link._changed .admin__page-nav-item-message._changed {
   display: inline-block;
 }
-.admin__page-nav-link._error .admin__page-nav-item-message._error,
-.admin__page-nav-link.error .admin__page-nav-item-message._error {
+.admin__page-nav-link._error .admin__page-nav-item-message._error {
   display: inline-block;
 }
 .admin__page-nav-item-messages {
@@ -4314,7 +4310,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .admin__page-nav-item-messages .admin__page-nav-item-message._changed .admin__page-nav-item-message-icon {
   display: inline-block;
   font-size: 1.4rem;
-  padding-left: 1.5rem;
+  padding-left: .8em;
   vertical-align: top;
 }
 .admin__page-nav-item-messages .admin__page-nav-item-message._error .admin__page-nav-item-message-icon:after,
@@ -4326,20 +4322,32 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   color: #eb5202;
   content: '\e623';
 }
+.admin__page-nav-item-messages .admin__page-nav-item-message-loader {
+  display: none;
+  margin-top: -1rem;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+.admin__page-nav-item-messages .admin__page-nav-item-message-loader .spinner {
+  font-size: 2rem;
+  margin-right: 1.5rem;
+}
 .admin__page-nav-item-messages .admin__page-nav-item-message-tooltip {
-  box-shadow: 0px 3px 9px 0 rgba(0, 0, 0, 0.3);
   background: #f1f1f1;
-  border-radius: 1px;
   border: 1px solid #f1f1f1;
+  border-radius: 1px;
   bottom: 3.7rem;
+  box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.3);
   display: none;
   font-weight: 400;
-  word-break: normal;
-  padding: 2rem;
-  line-height: 1.4;
-  position: absolute;
   left: -1rem;
+  line-height: 1.4;
+  padding: 2rem;
+  position: absolute;
+  text-transform: none;
   width: 27rem;
+  word-break: normal;
   z-index: 2;
 }
 .admin__page-nav-item-messages .admin__page-nav-item-message-tooltip:after,
@@ -4348,10 +4356,10 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   height: 0;
   width: 0;
   border-top-color: #f1f1f1;
-  content: "";
+  content: '';
   display: block;
-  position: absolute;
   left: 2rem;
+  position: absolute;
   top: 100%;
   z-index: 3;
 }

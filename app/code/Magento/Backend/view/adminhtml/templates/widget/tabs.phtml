@@ -15,6 +15,7 @@
         <?php if ($block->getTitle()): ?>
             <div class="admin__page-nav-title" <?php echo $block->getUiId('title') ?>>
                 <strong><?php echo $block->getTitle() ?></strong>
+                <span class="admin__page-nav-title-messages"></span>
             </div>
         <?php endif ?>
         <ul <?php echo $block->getUiId('tab', $block->getId()) ?> class="<?php echo $block->getIsHoriz() ? 'tabs-horiz' : 'tabs admin__page-nav-items' ?>">

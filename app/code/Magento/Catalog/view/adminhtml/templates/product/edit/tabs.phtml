@@ -47,6 +47,7 @@
                     <?php echo $block->getUiId('title') ?>
                     data-role="title">
                     <strong><?php echo $isBasic ? __('Basic Settings') : __('Advanced Settings') ?></strong>
+                    <span class="admin__page-nav-title-messages"></span>
                 </div>
 
                 <ul <?php echo $block->getUiId('tab', $tabGroupId) ?> class="tabs admin__page-nav-items" data-role="content">
@@ -61,6 +62,7 @@
 
                             <a href="<?php echo $_tabHref ?>" id="<?php echo $block->getTabId($_tab) ?>"
                                name="<?php echo $block->getTabId($_tab, false) ?>"
+                               title="<?php echo $block->getTabTitle($_tab) ?>"
                                class="admin__page-nav-link <?php echo $_tabClass;?>"
                                data-tab-type="<?php echo $_tabType;?>" <?php echo $block->getUiId('tab', 'link', $_tab->getId()) ?>>
 
