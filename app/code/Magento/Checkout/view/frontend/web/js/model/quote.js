@@ -53,16 +53,6 @@ define(
             getShippingAddress: function() {
                 return shippingAddress;
             },
-            setShippingMethod: function(billingAddressId, shipToSame) {
-                return storage.post(
-                    '/checkout/onepage/saveBilling',
-                    {'billing_address_id': billingAddressId, 'billing': {'use_for_shipping': shipToSame}}
-                ).done(
-                    function() {
-                        billingAddress = billingAddressId;
-                    }
-                );
-            },
             setPaymentMethod: function(paymentMethodCode, additionalData) {
                 // TODO add support of additional payment data for more complex payments
                 var paymentMethodData = {
@@ -87,6 +77,23 @@ define(
             },
             getPaymentMethod: function() {
                 return paymentMethod;
+            },
+            setShippingMethod: function(shippingMethodCode) {
+                var shippingMethodData ={
+                    "cartId": this.getQuoteId(),
+                    "code" : shippingMethodCode
+                };
+                return storage.put(
+                    'rest/V1/carts/' + this.getQuoteId() + '/selected-shipping-method',
+                    JSON.stringify(shippingMethodData)
+                ).done(
+                    function() {
+                        shippingMethod = shippingMethodCode;
+                    }
+                );
+            },
+            getShippingMethod: function() {
+                return shippingMethod;
             }
         };
     }

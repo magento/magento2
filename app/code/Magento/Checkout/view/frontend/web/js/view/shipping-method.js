@@ -6,66 +6,55 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-/*
 define(
     [
-        'underscore',
-        'text!./templates/shipping-method.html',
+        'jquery',
+        'Magento_Ui/js/form/component',
         '../model/quote',
         '../model/shipping-service',
-        '../action/set-shipping-method'
+        '../action/select-shipping-method'
     ],
-    function(_, template, quote, shippingService, setShippingMethod) {
-        var root;
-        template = _.template(template);
-        quote.setBillingAddress = _.wrap(_.bind(quote.setBillingAddress, quote), function(func, addressId, shipToSame) {
-            return func(addressId, shipToSame).done(function() {
-                view.render();
-            });
-        });
-        var view = {
-            render: function (newRoot) {
-                root = newRoot || root;
-                if (quote.getBillingAddress()) {
-                    shippingService.getAvailableShippingMethods(quote).then(function(methods) {
-                        root.html(template({'shippingRateGroups': methods}));
-                    });
-                    root.find('#shipping-method-form').on('submit', function (e) {
-                        e.preventDefault();
-                        setShippingMethod(root.find('#shipping_method').val());
-                    });
-                } else {
-                    root.html('<h2>Shipping Method</h2>');
+    function ($, Component, quote, shippingService, selectShippingMethod) {
+        var loadedRates = shippingService.getAvailableShippingMethods(quote);
+
+        return Component.extend({
+
+            defaults: {
+                template: 'Magento_Checkout/shipping-method',
+                rates: function () {
+                    return shippingService.sortRates(loadedRates)
+                },
+
+                isShippingRateGroupsAvailable: function () {
+                    return loadedRates.length < 0
+                },
+
+                getRatesQty: function (data) {
+                    return data.length && loadedRates.length == 1;
+                },
+
+                selectedMethodCode: shippingService.getSelectedShippingMethod(quote),
+
+                verifySelectedMethodCode: function (data) {
+                    return this.selectedMethodCode == data;
+                },
+                shippingCodePrice: function () {
+
+                    return shippingService.getShippingCodePrice(loadedRates);
+                },
+                isErrorMessagePresent: function (data) {
+                    return !data.available;
+                },
+                setShippingMethod: function (form) {
+                    form = $(form);
+                    var shippingMethodCode = form.find("input[name='shipping_method'][checked]").val();
+                    if (!shippingMethodCode) {
+                        return;
+                    }
+                    selectShippingMethod(shippingMethodCode);
                 }
             }
-        };
-        return view;
-    }
-);
-*/
 
-
-define(
-    [
-        'Magento_Ui/js/form/component',
-        '../model/shipping-service',
-        '../model/quote'
-    ],
-    function (Component, shippingService, quote) {
-        return Component.extend({
-            defaults: {
-                template: 'Magento_Checkout/shipping-method'
-            },
-
-            initObservable: function() {
-                var methods = shippingService.getAvailableShippingMethods(quote) || [];
-                this._super()
-                    .observe({
-                        rates: methods
-                    });
-
-                return this;
-            }
         });
     }
 );

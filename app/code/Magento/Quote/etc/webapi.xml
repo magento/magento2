@@ -40,7 +40,7 @@
     <route url="/V1/carts/:cartId/selected-shipping-method" method="GET">
         <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Sales::sales" />
+            <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/shipping-methods" method="GET">

@@ -1,22 +1,73 @@
-<h2>Shipping Method</h2>
-{{#if shippingRateGroups}}
-    <form name="shipping-method-form" id="shipping-method-form">
-        <fieldset class="fieldset">
-            <legend class="legend"><span>{{@key}}</span></legend>
-            <dl class="items methods-shipping">
-                {{#each shippingRateGroups }}
-                <dt class="item-title {{@key}}">{{@key}}</dt>
-                <dd class="item-content {{@key}}">
-                    <div class="field choice">
-                        <input name="shipping_method" type="radio" value="{{@key}}" id="s_method_{{@key}}" checked="checked" />
-                        <label class="label" for="s_method_{{code}}">{{@key}}</label>
-                    </div>
-                </dd>
-                {{/each}}
-            </dl>
-            <input type="submit" value="Continue" />
-        </fieldset>
-    </form>
-{{else}}
-    <p>Sorry, no quotes are available for this order at this time.</p>
-{{/if}}
+<li id="opc-shipping_method" class="section allow active" role="presentation" data-collapsible="true">
+    <div class="step-title" data-role="title" aria-controls="checkout-step-shipping_method" role="tab" aria-selected="true" aria-expanded="true" tabindex="0">
+        <span class="number">3</span>
+        <h2>Shipping Method</h2>
+    </div>
+    <div id="checkout-step-shipping_method" class="step-content" data-role="content" role="tabpanel" aria-hidden="false" style="display: block;">
+        <!-- ko if: isShippingRateGroupsAvailable() -->
+        Sorry, no quotes are available for this order at this time
+        <!-- /ko -->
+        <!-- ko ifnot: isShippingRateGroupsAvailable() -->
+        <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">
+            <div id="checkout-shipping-method-load">
+                <dl class="items methods-shipping">
+                    <!--ko foreach: { data: rates(), as: 'method'}-->
+                    <dt data-bind="text: method.carrier_title, attr: {'class': 'item-title ' + method.carrier_code}"></dt>
+                    <dd data-bind="attr: {'class': 'item-content ' + method.carrier_code}">
+                        <fieldset class="fieldset">
+                            <!--<legend class="legend"><span data-bind="text: $data.carrier_title"></span></legend>-->
+                            <br>
+
+                            <div class="field choice" data-bind="foreach: { data: items, as: 'item'}">
+                                <!-- ko if: $parents[1].isErrorMessagePresent(item) -->
+                                <!--todo add error message to api-->
+                                <div class="message error">
+                                    <div>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</div>
+                                </div>
+                                <span class="no-display">
+                                    <input name="shipping_method" type="radio" data-bind="attr: {'value' : item.method_code, 'id': 's_method_' + item.method_code}"/>
+                                </span>
+                                <!-- /ko -->
+                                <!-- ko ifnot: $parents[1].isErrorMessagePresent(item) -->
+                                <!-- ko if: $parents[1].getRatesQty($parent.items) -->
+                                    <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
+                                           name="shipping_method" class="radio no-display" type="radio"/>
+                                <!-- /ko -->
+                                 <!--ko ifnot: $parents[1].getRatesQty($parent.items)-->
+                                <div class="control">
+                                    <input name="shipping_method" type="radio"
+                                           data-bind="attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
+                                           class="radio" checked="checked"/>
+                                </div>
+                                 <!--/ko-->
+                                <label class="label" data-bind="attr: {'for': 's_method_' + item.carrier_code + '_' + item.method_code"><span
+                                        data-bind="text:item.method_title + ' ' + item.amount"></span>
+                                </label>
+                                <!-- /ko -->
+                            </div>
+                        </fieldset>
+                    </dd>
+
+                    <!-- /ko -->
+                </dl>
+                <div class="no-display" data-bind="attr: {'data-shipping-code-price': shippingCodePrice()}"></div>
+                <!--todo add gift message block-->
+                <fieldset class="fieldset gift-message"></fieldset>
+            </div>
+            <div id="onepage-checkout-shipping-method-additional-load"></div>
+            <div class="actions-toolbar" id="shipping-method-buttons-container">
+                <div class="primary">
+                    <button data-role="opc-continue" type="submit" class="button action continue primary">
+                        <span>Continue</span>
+                    </button>
+                </div>
+                <div class="secondary">
+                    <a class="action back" href="#">
+                        <span>Back</span>
+                    </a>
+                </div>
+            </div>
+        </form>
+        <!-- /ko -->
+        </div>
+</li>

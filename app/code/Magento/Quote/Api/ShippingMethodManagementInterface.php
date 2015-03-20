@@ -11,8 +11,7 @@ interface ShippingMethodManagementInterface
      * Sets the carrier and shipping methods codes for a specified cart.
      *
      * @param int $cartId The shopping cart ID.
-     * @param string $carrierCode The carrier code.
-     * @param string $methodCode The shipping method code.
+     * @param string $code The carrier code.
      * @return bool
      * @throws \Magento\Framework\Exception\InputException The shipping method is not valid for an empty cart.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The shipping method could not be saved.
@@ -20,7 +19,7 @@ interface ShippingMethodManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart contains only virtual products
      * so the shipping method does not apply.
      */
-    public function set($cartId, $carrierCode, $methodCode);
+    public function set($cartId, $code);
 
     /**
      * Returns selected shipping method for a specified quote.

@@ -139,15 +139,14 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * {@inheritDoc}
      *
      * @param int $cartId The shopping cart ID.
-     * @param string $carrierCode The carrier code.
-     * @param string $methodCode The shipping method code.
+     * @param string $code The carrier code.
      * @return bool
      * @throws \Magento\Framework\Exception\InputException The shipping method is not valid for an empty cart.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The shipping method could not be saved.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart contains only virtual products and the shipping method is not applicable.
      * @throws \Magento\Framework\Exception\StateException The billing or shipping address is not set.
      */
-    public function set($cartId, $carrierCode, $methodCode)
+    public function set($cartId, $code)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
@@ -169,9 +168,9 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
             throw new StateException('Billing address is not set');
         }
 
-        $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
+        $shippingAddress->setShippingMethod($code);
         if (!$shippingAddress->requestShippingRates()) {
-            throw new NoSuchEntityException('Carrier with such method not found: ' . $carrierCode . ', ' . $methodCode);
+            throw new NoSuchEntityException('Carrier with such method not found: ' . $code);
         }
         try {
             $this->quoteRepository->save($quote->collectTotals());
