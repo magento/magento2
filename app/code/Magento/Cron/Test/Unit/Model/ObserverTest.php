@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model;
+
 use Magento\Cron\Model\Schedule;
+
 /**
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -623,11 +625,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $schedule1->expects($this->any())->method('getExecutedAt')->will($this->returnValue(null));
         $schedule1->expects($this->any())->method('getScheduledAt')->will($this->returnValue('-2 day -1 hour'));
-        $schedule1->expects($this->any())->method('getStatus')->will(
-            $this->returnValue(Schedule::STATUS_MISSED));
+        $schedule1->expects($this->any())->method('getStatus')->will($this->returnValue(Schedule::STATUS_MISSED));
         //we expect this job be deleted from the list
-        $schedule1->expects($this->once())->method('delete')->will(
-            $this->returnValue(true));
+        $schedule1->expects($this->once())->method('delete')->will($this->returnValue(true));
 
         // This item was scheduled 1 day ago
         $schedule2 = $this->getMockBuilder(
@@ -637,8 +637,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $schedule2->expects($this->any())->method('getExecutedAt')->will($this->returnValue(null));
         $schedule2->expects($this->any())->method('getScheduledAt')->will($this->returnValue('-1 day'));
-        $schedule2->expects($this->any())->method('getStatus')->will(
-            $this->returnValue(Schedule::STATUS_MISSED));
+        $schedule2->expects($this->any())->method('getStatus')->will($this->returnValue(Schedule::STATUS_MISSED));
         //we don't expect this job be deleted from the list
         $schedule2->expects($this->never())->method('delete');
 
