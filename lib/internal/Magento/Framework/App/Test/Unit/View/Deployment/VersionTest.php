@@ -3,12 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Test\Unit\View\Deployment;
 
 use \Magento\Framework\App\View\Deployment\Version;
 
-
+/**
+ * Class VersionTest
+ */
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
