@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 use Magento\Sales\Model\EntityInterface;
+use Magento\SalesSequence\Model\Sequence\SequenceReader;
 
 /**
  * Flat sales resource abstract
@@ -46,9 +47,9 @@ abstract class Entity extends AbstractDb
     protected $attribute;
 
     /**
-     * @var \Magento\Sales\Model\Increment
+     * @var SequenceReader
      */
-    protected $salesIncrement;
+    protected $sequenceReader;
 
     /**
      * @var \Magento\Sales\Model\Resource\GridInterface
@@ -58,19 +59,19 @@ abstract class Entity extends AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param \Magento\Sales\Model\Increment $salesIncrement
+     * @param SequenceReader $sequenceReader
      * @param string|null $resourcePrefix
      * @param GridInterface|null $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\Sales\Model\Increment $salesIncrement,
+        SequenceReader $sequenceReader,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->attribute = $attribute;
-        $this->salesIncrement = $salesIncrement;
+        $this->sequenceReader = $sequenceReader;
         $this->gridAggregator = $gridAggregator;
         parent::__construct($context, $resourcePrefix);
     }
@@ -98,7 +99,7 @@ abstract class Entity extends AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
-            $object->setIncrementId($this->salesIncrement->getNextValue($object->getStoreId()));
+            $object->setIncrementId($this->sequenceReader->getSequence($object)->getNextValue());
         }
         parent::_beforeSave($object);
         return $this;

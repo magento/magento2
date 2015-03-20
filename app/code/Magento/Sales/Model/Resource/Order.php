@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
-use Magento\Sales\Model\Increment as SalesIncrement;
+use Magento\SalesSequence\Model\Sequence\SequenceReader;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
 use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
@@ -58,7 +58,7 @@ class Order extends SalesResource implements OrderResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SalesIncrement $salesIncrement
+     * @param SequenceReader $sequenceReader
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
      * @param OrderGrid $gridAggregator
@@ -67,7 +67,7 @@ class Order extends SalesResource implements OrderResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SalesIncrement $salesIncrement,
+        SequenceReader $sequenceReader,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
         OrderGrid $gridAggregator,
@@ -75,7 +75,7 @@ class Order extends SalesResource implements OrderResourceInterface
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceReader, $resourcePrefix, $gridAggregator);
     }
 
     /**

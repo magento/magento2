@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\App\Resource as AppResource;
-use Magento\Sales\Model\Increment as SalesIncrement;
+use Magento\SalesSequence\Model\Sequence\SequenceReader;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
 use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
@@ -41,18 +41,18 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SalesIncrement $salesIncrement
+     * @param SequenceReader $sequenceReader
      * @param CreditmemoGrid $gridAggregator
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SalesIncrement $salesIncrement,
+        SequenceReader $sequenceReader,
         CreditmemoGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceReader, $resourcePrefix, $gridAggregator);
     }
 
     /**
