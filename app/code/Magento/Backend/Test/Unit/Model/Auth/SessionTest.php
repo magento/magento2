@@ -39,6 +39,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected $storage;
 
     /**
+     * @var \Magento\Framework\Acl\Builder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $aclBuilder;
+
+    /**
      * @var Session
      */
     protected $session;
@@ -69,6 +74,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->aclBuilder = $this->getMockBuilder('Magento\Framework\Acl\Builder')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->session = $objectManager->getObject(
             'Magento\Backend\Model\Auth\Session',
@@ -77,7 +85,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'sessionConfig' => $this->sessionConfig,
                 'cookieManager' => $this->cookieManager,
                 'cookieMetadataFactory' => $this->cookieMetadataFactory,
-                'storage' => $this->storage
+                'storage' => $this->storage,
+                'aclBuilder' => $this->aclBuilder
             ]
         );
     }
@@ -87,6 +96,38 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->config = null;
         $this->sessionConfig = null;
         $this->session = null;
+    }
+
+    /**
+     * @dataProvider refreshAclDataProvider
+     * @param $isUserPassedViaParams
+     */
+    public function testRefreshAcl($isUserPassedViaParams)
+    {
+        $aclMock = $this->getMockBuilder('Magento\Framework\Acl')->disableOriginalConstructor()->getMock();
+        $this->aclBuilder->expects($this->any())->method('getAcl')->willReturn($aclMock);
+        $userMock = $this->getMockBuilder('Magento\User\Model\User')
+            ->setMethods(['getReloadAclFlag', 'setReloadAclFlag', 'unsetData', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
+        $userMock->expects($this->once())->method('setReloadAclFlag')->with('0')->willReturnSelf();
+        $userMock->expects($this->once())->method('save');
+        if ($isUserPassedViaParams) {
+            $this->session->refreshAcl($userMock);
+        } else {
+            $this->storage->expects($this->once())->method('getUser')->willReturn($userMock);
+            $this->session->refreshAcl();
+        }
+        $this->assertSame($aclMock, $this->session->getAcl());
+    }
+
+    public function refreshAclDataProvider()
+    {
+        return [
+            'User set via params' => [true],
+            'User set to session object' => [false]
+        ];
     }
 
     public function testIsLoggedInPositive()

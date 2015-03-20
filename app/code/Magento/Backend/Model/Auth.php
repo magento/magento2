@@ -93,6 +93,7 @@ class Auth
      * If auth storage was not defined outside - returns default object of auth storage
      *
      * @return \Magento\Backend\Model\Auth\StorageInterface
+     * @codeCoverageIgnore
      */
     public function getAuthStorage()
     {
@@ -126,6 +127,7 @@ class Auth
      * Return credential storage object
      *
      * @return null|\Magento\Backend\Model\Auth\Credential\StorageInterface
+     * @codeCoverageIgnore
      */
     public function getCredentialStorage()
     {
