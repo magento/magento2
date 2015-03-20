@@ -8,7 +8,7 @@ For example we can introduce new command in module using di.xml:
 <type name="Magento\Framework\Console\CommandList">
     <arguments>
         <argument name="commands" xsi:type="array">
-            <item name="session_cleaner" xsi:type="string">Magento\MyModule\Console\TestMeCommand</item>
+            <item name="test_me" xsi:type="string">Magento\MyModule\Console\TestMeCommand</item>
         </argument>
     </arguments>
 </type>
