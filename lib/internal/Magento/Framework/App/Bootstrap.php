@@ -331,7 +331,7 @@ class Bootstrap
      *
      * @return bool
      */
-    public function isInstalled()
+    private function isInstalled()
     {
         $this->initObjectManager();
         /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
