@@ -7,12 +7,36 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['../model/quote', '../model/addresslist'],
-    function(quote, addressList) {
+    [
+        '../model/quote',
+        '../model/addresslist',
+        'mage/storage',
+        'Magento_Ui/js/model/errorlist'
+    ],
+    function(quote, addressList, storage, errorList) {
         return function(shippingAddressId, sameAsBilling, formKey) {
+            if (!shippingAddressId) {
+                alert('Currently adding a new address is not supported.');
+                return false;
+            }
             var address = addressList.getAddressById(shippingAddressId);
             address.sameAsBilling = sameAsBilling;
-            return quote.setShippingAddress(address);
+
+            storage.post(
+                'rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-address',
+                JSON.stringify({address: address})
+            ).done(
+                function(quoteAddressId) {
+                    address.id = quoteAddressId;
+                    quote.setShippingAddress(address);
+                }
+            ).error(
+                function(response) {
+                    var error = $.parseJSON(response.responseText);
+                    errorList.add(error.message);
+                    quote.setShippingAddress(null);
+                }
+            );
         }
     }
 );

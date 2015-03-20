@@ -16,19 +16,18 @@ define(
     ],
     function($, ko, storage, addressList, address) {
         var isLoggedIn = ko.observable(window.isLoggedIn);
+        var customerData = {};
+
+        if (isLoggedIn()) {
+            customerData = window.customerData;
+            if (Object.keys(customerData).length) {
+                $.each(customerData.addresses, function (key, item) {
+                    addressList.add(new address(item));
+                });
+            }
+        }
         return {
-            customerData: [],
-            initialize: function () {
-                this._super();
-                if (this.isLoggedIn()) {
-                    this.customerData = window.customerData;
-                    if (this.customerData.length) {
-                        $.each(this.customerData.addresses, function (key, item) {
-                            addressList.add(new address(item));
-                        });
-                    }
-                }
-            },
+            customerData: customerData,
             isLoggedIn: function() {
                 return isLoggedIn;
             },

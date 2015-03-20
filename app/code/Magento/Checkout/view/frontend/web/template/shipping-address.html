@@ -3,12 +3,16 @@
         <span class="number">3</span>
         <h2>Shipping Information</h2>
     </div>
-    <div id="checkout-step-shipping" class="step-content" data-role="content">
+    <div id="checkout-step-shipping" class="step-content" data-role="content" data-bind="fadeVisible: !quoteHasShippingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
                 <div class="control">
-                    <select name="shipping_address_id" id="shipping:address-select" data-bind="options: addresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId', value: selectedAddressId"></select>
+                    <select name="shipping_address_id"
+                            id="shipping:address-select"
+                            data-bind="options: addresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId', value: selectedAddressId"
+                            >
+                    </select>
                 </div>
             </div>
             <div class="choice field">
