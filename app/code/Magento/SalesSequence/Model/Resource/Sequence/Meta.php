@@ -98,8 +98,11 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
+     * Validate metadata and sequence before save
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws Exception
      * @throws NoSuchEntityException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
@@ -121,10 +124,9 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->getData('active_profile')
-            ->setMetaId($object->getId())
-            ->setIsActive(1)
-            ->save();
+        $profile = $object->getData('active_profile')
+            ->setMetaId($object->getId());
+        $this->resourceProfile->save($profile);
         return $this;
     }
 }

@@ -22,6 +22,10 @@ class SequenceReader
      */
     protected $sequenceFactory;
 
+    /**
+     * @param ResourceSequenceMeta $resourceSequenceMeta
+     * @param SequenceFactory $sequenceFactory
+     */
     public function __construct(
         ResourceSequenceMeta $resourceSequenceMeta,
         SequenceFactory $sequenceFactory
@@ -31,14 +35,20 @@ class SequenceReader
     }
 
     /**
+     * Returns sequence for given entityType and store
+     *
      * @param \Magento\Sales\Model\AbstractModel $entity
-     * @return \Magento\SalesSequence\Model\Sequence
+     * @return \Magento\Framework\DB\Sequence\SequenceInterface
      */
     public function getSequence(\Magento\Sales\Model\AbstractModel $entity)
     {
-        return $this->sequenceFactory->create(['meta' => $this->resourceSequenceMeta->loadBy(
-            $entity->getEntityType(),
-            $entity->getStore()->getId()
-        )]);
+        return $this->sequenceFactory->create(
+            [
+                'meta' => $this->resourceSequenceMeta->loadBy(
+                    $entity->getEntityType(),
+                    $entity->getStore()->getId()
+                )
+            ]
+        );
     }
 }

@@ -18,12 +18,4 @@ class Profile extends AbstractModel
     {
         $this->_init('Magento\SalesSequence\Model\Resource\Sequence\Profile');
     }
-
-    /**
-     * @return bool
-     */
-    public function isActive()
-    {
-        return (bool)$this->getData('is_active');
-    }
 }
