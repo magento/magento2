@@ -189,6 +189,7 @@ class Helper
                     $this->logger->critical($e);
                 }
             } else {
+                $scheduledStructure->setElementToBrokenParentList($key);
                 $this->logger->critical(
                     "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
                     'because the latter doesn\'t exist'
