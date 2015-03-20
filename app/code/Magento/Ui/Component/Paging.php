@@ -36,7 +36,7 @@ class Paging extends AbstractComponent
 
         $paging = $this->getContext()->getRequestParam('paging');
 
-        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging),  $this->getSize($paging));
+        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging), $this->getSize($paging));
 
         $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
