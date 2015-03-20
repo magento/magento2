@@ -6,7 +6,6 @@
 namespace Magento\Framework\Setup\Test\Unit\Option;
 
 use Magento\Framework\Setup\Option\MultiSelectConfigOption;
-use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
 class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
@@ -47,7 +46,7 @@ class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateException()
     {
-        $option = new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, ['a', 'b']);
-        $option->validate('c');
+        $option = new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, ['a', 'b']);
+        $option->validate(['c', 'd']);
     }
 }
