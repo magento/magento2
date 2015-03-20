@@ -73,7 +73,7 @@ class Button extends Template implements ControlInterface
         } else {
             $url = $this->hasData('url') ? $this->getData('url') : $this->getUrl();
             if (!empty($url)) {
-                return sprintf("setLocation('%s');", $url);
+                return sprintf("location.href = '%s';", $url);
             }
 
             return null;
