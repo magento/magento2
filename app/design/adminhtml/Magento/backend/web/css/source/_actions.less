@@ -8,6 +8,8 @@
 //  _____________________________________________
 
 @import 'actions/_actions-split.less';
+@import 'actions/_actions-select.less';
+@import 'actions/_actions-multiselect.less';
 
 //
 //  Variables
@@ -16,13 +18,16 @@
 //  Base button
 @button__background-color: @color-gray89;
 @button__border-color: @color-gray68;
+@button__border-size: 1px;
+@button__border-style: solid;
 @button__color: @color-brownie;
 @button__font-family: @font-family__base;
 @button__font-size: @font-size__base;
-@button__padding-top: .5em;
-@button__padding-bottom: .57em;
+@button__padding-top: .429em; // 6px
+@button__padding-bottom: .5em; // 7px
 @button__padding-horizontal: 1em;
 @button__padding-vertical__l: .6875em;
+@button__height: 3.3rem;
 
 @button__active__background-color: darken(@button__background-color, 5%);
 @button__hover__background-color: darken(@button__background-color, 3%);
@@ -46,11 +51,24 @@
 @button-secondary__active__background-color: @color-very-dark-gray-black2;
 @button-secondary__hover__background-color: @color-very-dark-gray-black2;
 
+//  Triangle marker
+@button-marker-triangle__height: .5rem;
+@button-marker-triangle__width: .8rem;
+
+@button-marker-triangle__height__xl: .9rem;
+@button-marker-triangle__width__xl: 1.2rem;
+
+//  Actions
+@action__active__border-color: @color-blue-pure; // Not the same as @button__hover__border-color
+
+//  Actions menu
+@action-menu__hover__background-color: @color-gray89;
+
 //
 //  Utilities
 //  _____________________________________________
 
-.action-reset () {
+.action-reset() {
     background-color: transparent;
     border: none;
     border-radius: 0;
@@ -73,7 +91,7 @@
 }
 
 .abs-action-pattern {
-    border: 1px solid;
+    border: @button__border-size @button__border-style;
     border-radius: 0; // ToDo UI: Delete with admin scope
     display: inline-block;
     font-family: @button__font-family;
@@ -115,6 +133,10 @@
 
 .abs-action-quaternary {
     .action-quaternary();
+}
+
+.abs-action-menu {
+    .action-menu();
 }
 
 //
@@ -214,6 +236,50 @@ button {
     &:active,
     &:hover {
         color: darken(@text__color, 10%);
+    }
+}
+
+//
+//  Action menu
+//  ---------------------------------------------
+
+.action-menu {
+    .appearing__off();
+    background-color: @page-wrapper__background-color;
+    border: 1px solid @action__active__border-color;
+    border-radius: 1px;
+    box-shadow: @component__box-shadow__base;
+    color: @text__color;
+    display: block; // ToDo UI: Should be deleted with old styles
+    font-weight: @font-weight__regular;
+    left: 0;
+    list-style: none;
+    margin: 2px 0 0; // Action box-shadow + 1px indent
+    min-width: 0; // ToDo UI: Should be deleted with old styles
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transition: opacity @appearing__transition-duration @apperaing__transition-timing-function;
+    &._active {
+        .appearing__on();
+    }
+    > li {
+        display: block;
+        border: none; // ToDo UI: Should be deleted with old styles
+        padding: 0;
+        &:hover {
+            background-color: @action-menu__hover__background-color;
+        }
+        &:active {
+            background-color: darken(@action-menu__hover__background-color, 10%);
+        }
+    }
+    .item,
+    .action-menu-item {
+        display: block;
+        padding: .6875em 1em;
+        cursor: pointer;
     }
 }
 

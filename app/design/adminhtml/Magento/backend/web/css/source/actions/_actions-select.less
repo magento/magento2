@@ -1,0 +1,46 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Actions -> Action select
+//  _____________________________________________
+
+.action-select-wrap {
+    @_action-select__border-color: @button__border-color;
+    @_action-select__active__border-color: @action__active__border-color;
+    @_action-select-toggle__size: @button__height;
+
+    display: inline-block;
+    position: relative;
+    .action-select {
+        .dropdown-triangle(
+            @_dropdown__padding-right: @_action-select-toggle__size;
+            @_triangle__height: @button-marker-triangle__height;
+            @_triangle__width: @button-marker-triangle__width;
+        );
+        .text-overflow-ellipsis();
+        background-color: transparent;
+        font-weight: @font-weight__regular;
+        text-align: left;
+        //  Toggle action
+        &:before {
+            background-color: @button__background-color;
+            border: @button__border-size @button__border-style @_action-select__border-color;
+            bottom: 0;
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: @_action-select-toggle__size;
+        }
+        &._active {
+            border-color: @_action-select__active__border-color;
+            &:before {
+                border-color: @_action-select__active__border-color;
+                border-left-color: @_action-select__border-color;
+            }
+        }
+    }
+}

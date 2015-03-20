@@ -4,16 +4,32 @@
  * See COPYING.txt for license details.
  */
 -->
-<div title="Select Items" class="actions-split grid-actions" data-bind="css: {'active': actionsVisible}, click: toggleActions, stopPropagation: true, outerClick: hideActions">
-    <button title="Actions" class="action-default scalable add">
-        <span data-bind="text: $t('Actions')"></span>
-    </button>
-    <button title="" class="action-toggle scalable add" data-bind="css: {active: actionsVisible}">
-        <span>|</span>
-    </button>
-    <ul class="dropdown-menu" data-bind="css: {active: actionsVisible}, foreach: {data: actions, as: 'action'}">
-        <li data-bind="click: $parent.applyAction.bind($parent, action)">
-            <span class="item" data-bind="text: label"></span>
-        </li>
-    </ul>
+
+<div class="admin__scope">
+    <div class="admin__data-grid-header-row row row-gutter">
+        <div class="col-m-2">
+            <div
+                class="action-select-wrap"
+                data-bind="css: {'_active': actionsVisible},
+                   click: toggleActions,
+                   stopPropagation: true,
+                   outerClick: hideActions">
+                <button
+                    class="action-select"
+                    data-bind="title: $t('Select Items')">
+                    <span data-bind="text: $t('Actions')"></span>
+                </button>
+                <ul
+                    class="action-menu"
+                    data-bind="css: {'_active': actionsVisible},
+                       foreach: {data: actions, as: 'action'}">
+                    <li data-bind="click: $parent.applyAction.bind($parent, action)">
+                    <span
+                        class="item"
+                        data-bind="text: label"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
