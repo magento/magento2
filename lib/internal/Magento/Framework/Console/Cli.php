@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework;
+namespace Magento\Framework\Console;
 
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Magento\Framework\App\Bootstrap;

@@ -8,7 +8,7 @@
 try {
     require __DIR__ . '/../app/bootstrap.php';
     if (PHP_SAPI == 'cli') {
-        $application = new Magento\Framework\Cli('Magento CLI');
+        $application = new Magento\Framework\Console\Cli('Magento CLI');
         $application->run();
     }
 
