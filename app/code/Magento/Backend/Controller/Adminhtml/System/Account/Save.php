@@ -10,20 +10,11 @@ use Magento\Framework\Exception\AuthenticationException;
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context)
+    {
         parent::__construct($context);
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

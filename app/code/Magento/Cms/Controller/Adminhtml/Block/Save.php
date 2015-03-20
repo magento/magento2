@@ -9,21 +9,13 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Save extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\Registry $coreRegistry
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context, $coreRegistry);
     }
 

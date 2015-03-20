@@ -11,19 +11,11 @@ use Magento\Backend\App\Action;
 class Delete extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
-        Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        Action\Context $context
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

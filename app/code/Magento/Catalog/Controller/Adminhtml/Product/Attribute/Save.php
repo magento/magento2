@@ -47,11 +47,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     protected $groupCollectionFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Framework\Registry $coreRegistry
@@ -62,7 +57,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -75,8 +69,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Catalog\Helper\Product $productHelper
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -85,7 +78,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $this->attributeFactory = $attributeFactory;
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

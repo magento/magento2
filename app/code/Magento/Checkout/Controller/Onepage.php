@@ -86,7 +86,6 @@ class Onepage extends Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
@@ -105,7 +104,6 @@ class Onepage extends Action
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
@@ -131,8 +129,7 @@ class Onepage extends Action
             $context,
             $customerSession,
             $customerRepository,
-            $accountManagement,
-            $resultRedirectFactory
+            $accountManagement
         );
     }
 
