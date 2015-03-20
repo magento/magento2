@@ -95,7 +95,7 @@ class FileAssembler implements AppInterface
      * @param \Magento\Framework\View\Asset\SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param \Magento\Tools\View\Deployer\Log $logger
      * @param ChainFactoryInterface $chainFactory
-     * @param Filesystem $filesystem,
+     * @param Filesystem $filesystem
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
