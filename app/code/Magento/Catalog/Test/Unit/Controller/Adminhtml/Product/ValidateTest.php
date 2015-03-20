@@ -114,11 +114,10 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Validate',
             [
-                'context' => $this->initContext(),
+                'context' => $this->initContext($this->resultRedirectFactory),
                 'productBuilder' => $this->productBuilder,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'initializationHelper' => $this->initializationHelper,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'productFactory' => $this->productFactory,

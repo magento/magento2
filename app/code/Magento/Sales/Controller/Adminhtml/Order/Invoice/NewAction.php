@@ -9,7 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -24,25 +23,17 @@ class NewAction extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
-        PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory
+        PageFactory $resultPageFactory
     ) {
         $this->registry = $registry;
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

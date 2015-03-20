@@ -33,18 +33,12 @@ class Save extends AbstractConfig
     protected $string;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -52,14 +46,12 @@ class Save extends AbstractConfig
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\String $string,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\Stdlib\String $string
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

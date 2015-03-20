@@ -10,7 +10,6 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -48,7 +47,6 @@ class Confirm extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
@@ -62,7 +60,6 @@ class Confirm extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -77,7 +74,7 @@ class Confirm extends \Magento\Customer\Controller\Account
         $this->customerRepository = $customerRepository;
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct($context, $customerSession, $resultPageFactory);
     }
 
     /**
