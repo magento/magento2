@@ -17,6 +17,9 @@ define(["jquery", 'mage/storage', '../model/quote', 'mage/url'], function($, sto
                 async: false,
                 success: function(data) {
                     availableShipmentMethods = data;
+                },
+                error: function(data) {
+                    availableShipmentMethods = [];
                 }
             });
             //sort by carrier_code

@@ -20,7 +20,7 @@
                     <dt data-bind="text: method.carrier_title, attr: {'class': 'item-title ' + method.carrier_code}"></dt>
                     <dd data-bind="attr: {'class': 'item-content ' + method.carrier_code}">
                         <fieldset class="fieldset">
-                            <!--<legend class="legend"><span data-bind="text: $data.carrier_title"></span></legend>-->
+                            <!--<legend class="legend"><span data-bind="text: method.carrier_title"></span></legend>-->
                             <br>
 
                             <div class="field choice" data-bind="foreach: { data: items, as: 'item'}">
@@ -35,14 +35,16 @@
                                 <!-- /ko -->
                                 <!-- ko ifnot: $parents[1].isErrorMessagePresent(item) -->
                                 <!-- ko if: $parents[1].getRatesQty($parent.items) -->
+                                <span class="no-display">
                                     <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
-                                           name="shipping_method" class="radio no-display" type="radio"/>
+                                           name="shipping_method" class="radio no-display" type="radio" checked="checked"/>
+                                    </span>
                                 <!-- /ko -->
                                  <!--ko ifnot: $parents[1].getRatesQty($parent.items)-->
                                 <div class="control">
                                     <input name="shipping_method" type="radio"
                                            data-bind="attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
-                                           class="radio" checked="checked"/>
+                                           class="radio"/>
                                 </div>
                                  <!--/ko-->
                                 <label class="label" data-bind="attr: {'for': 's_method_' + item.carrier_code + '_' + item.method_code"><span

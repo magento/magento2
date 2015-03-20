@@ -30,7 +30,7 @@ define(
                 },
 
                 isShippingRateGroupsAvailable: function () {
-                    return loadedRates.length < 0
+                    return loadedRates.length == 0
                 },
 
                 getRatesQty: function (data) {
@@ -51,7 +51,7 @@ define(
                 },
                 setShippingMethod: function (form) {
                     form = $(form);
-                    var shippingMethodCode = form.find("input[name='shipping_method'][checked]").val();
+                    var shippingMethodCode = form.find("input[name='shipping_method']:checked").val();
                     if (!shippingMethodCode) {
                         return;
                     }
