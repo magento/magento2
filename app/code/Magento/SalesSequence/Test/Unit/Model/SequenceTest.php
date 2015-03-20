@@ -39,7 +39,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     {
         $this->meta = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\Meta',
-            ['getSequenceTable'],
+            ['getSequenceTable', 'getActiveProfile'],
             [],
             '',
             false
@@ -71,7 +71,6 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequence = $helper->getObject('Magento\SalesSequence\Model\Sequence', [
             'meta' => $this->meta,
-            'profile' => $this->profile,
             'resource' => $this->resource,
         ]);
     }
@@ -88,19 +87,24 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
         $lastInsertId = 3; //at this step it will represents 777
         $this->profile->expects($this->atLeastOnce())->method('getStartValue')->willReturn($startValue);
         $this->meta->expects($this->atLeastOnce())
+            ->method('getActiveProfile')
+            ->willReturn(
+                $this->profile
+            );
+        $this->meta->expects($this->atLeastOnce())
             ->method('getSequenceTable')
             ->willReturn(
-                $this->sequenceParameters()['testTable']
+                $this->sequenceParameters()->testTable
             );
         $this->adapter->expects($this->exactly(3))->method('insert')->with(
-            $this->sequenceParameters()['testTable'],
+            $this->sequenceParameters()->testTable,
             []
         );
         $this->profile->expects($this->exactly(3))->method('getSuffix')->willReturn(
-            $this->sequenceParameters()['suffix']
+            $this->sequenceParameters()->suffix
         );
         $this->profile->expects($this->exactly(3))->method('getPrefix')->willReturn(
-            $this->sequenceParameters()['prefix']
+            $this->sequenceParameters()->prefix
         );
         $this->profile->expects($this->exactly(3))->method('getStep')->willReturn($step);
         $lastInsertId = $this->nextIncrementStep($lastInsertId, 780);
@@ -117,16 +121,16 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     {
         $lastInsertId++;
         $this->adapter->expects($this->at(1))->method('lastInsertId')->with(
-            $this->sequenceParameters()['testTable']
+            $this->sequenceParameters()->testTable
         )->willReturn(
             $lastInsertId
         );
         $this->assertEquals(
             sprintf(
                 Sequence::DEFAULT_PATTERN,
-                $this->sequenceParameters()['prefix'],
+                $this->sequenceParameters()->prefix,
                 $sequenceNumber,
-                $this->sequenceParameters()['suffix']
+                $this->sequenceParameters()->suffix
             ),
             $this->sequence->getNextValue()
         );
@@ -134,14 +138,14 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array
+     * @return \stdClass
      */
     private function sequenceParameters()
     {
-        return [
-            'prefix' => 'AA-',
-            'suffix' => '-0',
-            'testTable' => 'testSequence'
-        ];
+        $data = new \stdClass();
+        $data->prefix = 'AA-';
+        $data->suffix = '-0';
+        $data->testTable = 'testSequence';
+        return $data;
     }
 }
