@@ -52,5 +52,4 @@ class CommandList
 
         return $commands;
     }
-
 }

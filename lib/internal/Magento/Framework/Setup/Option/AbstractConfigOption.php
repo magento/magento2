@@ -53,7 +53,7 @@ abstract class AbstractConfigOption extends InputOption
 
     /**
      * No base validation
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param mixed $data
      * @return void
      */
