@@ -31,7 +31,7 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $command = new $class;;
+                $command = new $class;
                 if ($command instanceof Command) {
                     $commands[] = $command;
                 }
