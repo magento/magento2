@@ -1,4 +1,9 @@
 ############################################
+## uncomment the line below to enable developer mode
+
+#   SetEnv MAGE_MODE developer
+
+############################################
 ## uncomment these lines for CGI mode
 ## make sure to specify the correct cgi php binary file name
 ## it might be /cgi-bin/php-cgi
