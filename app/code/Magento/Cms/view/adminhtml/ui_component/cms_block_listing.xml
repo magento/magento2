@@ -183,7 +183,7 @@
             <item name="config" xsi:type="array">
                 <item name="actions" xsi:type="array">
                     <item name="delete" xsi:type="array">
-                        <item name="confirm" xsi:type="string" translate="true">cscscscscscs!!!!!!!!</item>
+                        <item name="confirm" xsi:type="string" translate="true">Are you sure you want to perform this action?</item>
                         <item name="type" xsi:type="string">delete</item>
                         <item name="label" xsi:type="string" translate="true">Delete</item>
                         <item name="url" xsi:type="string">cms/block/massDelete</item>

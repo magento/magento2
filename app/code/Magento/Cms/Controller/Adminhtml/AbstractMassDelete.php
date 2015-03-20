@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,7 +20,7 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
     /**
      * Redirect url
      */
-    const REDIRECT_URL = '*/*/index';
+    const REDIRECT_URL = '*/*/';
 
     /**
      * Resource collection
@@ -61,19 +60,21 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $data = $this->getRequest()->getParam('massaction', '[]');
-        $data = json_decode($data, true);
         $resultRedirect = $this->resultRedirectFactory->create();
 
+        $selected = $this->getRequest()->getParam('selected');
+        $allSelected = $this->getRequest()->getParam('all_selected');
+        $excluded = $this->getRequest()->getParam('excluded');
+
         try {
-            if (isset($data['all_selected']) && $data['all_selected'] === true) {
-                if (!empty($data['excluded'])) {
-                    $this->excludedDelete($data['excluded']);
+            if (isset($allSelected) && $allSelected === 'true') {
+                if (!empty($excluded)) {
+                    $this->excludedDelete($excluded);
                 } else {
                     $this->deleteAll();
                 }
-            } elseif (!empty($data['selected'])) {
-                $this->selectedDelete($data['selected']);
+            } elseif (!empty($selected)) {
+                $this->selectedDelete($selected);
             } else {
                 $this->messageManager->addError(__('Please select item(s).'));
             }
