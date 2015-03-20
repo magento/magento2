@@ -60,7 +60,7 @@ class FileAssembler implements AppInterface
     /**
      * @var \Magento\Framework\Less\FileGenerator
      */
-    private $sourceFileGeneratorPoll;
+    private $sourceFileGeneratorPool;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
@@ -109,7 +109,7 @@ class FileAssembler implements AppInterface
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
         $this->assetRepo = $assetRepo;
-        $this->sourceFileGeneratorPoll = $sourceFileGeneratorPoll;
+        $this->sourceFileGeneratorPool = $sourceFileGeneratorPoll;
         $this->assetSource = $assetSource;
         $this->logger = $logger;
         $this->chainFactory = $chainFactory;
@@ -125,7 +125,7 @@ class FileAssembler implements AppInterface
         $this->state->setAreaCode($this->params->getArea());
         $this->objectManager->configure($this->configLoader->load($this->params->getArea()));
 
-        $sourceFileGenerator = $this->sourceFileGeneratorPoll->create($this->params->getExt());
+        $sourceFileGenerator = $this->sourceFileGeneratorPool->create($this->params->getExt());
 
         foreach ($this->params->getFiles() as $file) {
             $file .= '.' . $this->params->getExt();
