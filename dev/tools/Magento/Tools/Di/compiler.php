@@ -164,7 +164,7 @@ try {
     $classesScanner = new \Magento\Tools\Di\Code\Reader\ClassesScanner();
     $classesScanner->addExcludePatterns($fileExcludePatterns);
 
-    $directoryInstancesNamesList = new \Magento\Tools\Di\Code\Reader\InstancesNamesList\Directory(
+    $directoryInstancesNamesList = new \Magento\Tools\Di\Code\Reader\Decorator\Directory(
         $log,
         new \Magento\Framework\Code\Reader\ClassReader(),
         $classesScanner,

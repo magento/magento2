@@ -39,7 +39,7 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     {
         foreach ($this->_classesToDestruct as $className) {
             if (isset($this->_sharedInstances[$className])) {
-                $this->_sharedInstances[$className]->__destruct();
+                $this->_sharedInstances[$className] = null;
             }
         }
 

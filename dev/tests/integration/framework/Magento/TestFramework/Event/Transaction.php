@@ -92,7 +92,15 @@ class Transaction
         if (!$this->_isTransactionActive) {
             $this->_getAdapter()->beginTransparentTransaction();
             $this->_isTransactionActive = true;
-            $this->_eventManager->fireEvent('startTransaction', [$test]);
+            try {
+                $this->_eventManager->fireEvent('startTransaction', [$test]);
+            } catch (\Exception $e) {
+                $test->getTestResultObject()->addFailure(
+                    $test,
+                    new \PHPUnit_Framework_AssertionFailedError($e->getMessage()),
+                    0
+                );
+            }
         }
     }
 

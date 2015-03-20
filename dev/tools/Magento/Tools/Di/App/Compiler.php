@@ -33,18 +33,49 @@ class Compiler implements \Magento\Framework\AppInterface
     private $response;
 
     /**
+     * @var array
+     */
+    private $compiledPathsList = [];
+
+    /**
+     * @var array
+     */
+    private $excludedPathsList = [];
+
+    /**
      * @param Task\Manager $taskManager
      * @param ObjectManagerInterface $objectManager
      * @param Response $response
+     * @param array $compiledPathsList
+     * @param array $excludedPathsList
      */
     public function __construct(
         Task\Manager $taskManager,
         ObjectManagerInterface $objectManager,
-        Response $response
+        Response $response,
+        $compiledPathsList = [],
+        $excludedPathsList = []
     ) {
         $this->taskManager = $taskManager;
         $this->objectManager = $objectManager;
         $this->response = $response;
+
+        if (empty($compiledPathsList)) {
+            $compiledPathsList = [
+                'application' => BP . '/'  . 'app/code',
+                'library' => BP . '/'  . 'lib/internal/Magento/Framework',
+                'generated_helpers' => BP . '/'  . 'var/generation'
+            ];
+        }
+        $this->compiledPathsList = $compiledPathsList;
+
+        if (empty($excludedPathsList)) {
+            $excludedPathsList = [
+                'application' => '#^' . BP . '/app/code/[\\w]+/[\\w]+/Test#',
+                'framework' => '#^' . BP . '/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#'
+            ];
+        }
+        $this->excludedPathsList = $excludedPathsList;
     }
 
     /**
@@ -85,25 +116,43 @@ class Compiler implements \Magento\Framework\AppInterface
                             'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
                         ]
                     ]
+                ],
+                'Magento\Tools\Di\Code\Reader\ClassesScanner' => [
+                    'arguments' => [
+                        'excludePatterns' => $this->excludedPathsList
+                    ]
                 ]
             ]
         );
 
         $operations = [
             Task\OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => BP . '/' . 'app/code',
+                'path' => $this->compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
             Task\OperationFactory::APPLICATION_CODE_GENERATOR => [
-                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+                $this->compiledPathsList['application'],
+                $this->compiledPathsList['library'],
+                $this->compiledPathsList['generated_helpers'],
             ],
             Task\OperationFactory::INTERCEPTION =>
-                BP . '/var/generation',
+                [
+                    'intercepted_paths' => [
+                        $this->compiledPathsList['application'],
+                        $this->compiledPathsList['library'],
+                        $this->compiledPathsList['generated_helpers'],
+                    ],
+                    'path_to_store' => $this->compiledPathsList['generated_helpers'],
+                ],
             Task\OperationFactory::AREA_CONFIG_GENERATOR => [
-                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
+                $this->compiledPathsList['application'],
+                $this->compiledPathsList['library'],
+                $this->compiledPathsList['generated_helpers'],
             ],
             Task\OperationFactory::INTERCEPTION_CACHE => [
-                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
+                $this->compiledPathsList['application'],
+                $this->compiledPathsList['library'],
+                $this->compiledPathsList['generated_helpers'],
             ]
         ];
 
