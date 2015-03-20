@@ -393,7 +393,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     {
         $element = 'element9';
         $expectedToRemove = ['element2', 'element3'];
-        $expectedToRemoveWithBroken = ['element2', 'element3', $element];
+        $expectedToRemoveWithBroken = ['element2', 'element3'];
         $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
 
         $this->_model->setElementToBrokenParentList($element);

@@ -9,7 +9,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\CreateConfigurableProductEntityTest">
         <variation name="CreateConfigurableProductEntityTestVariation1">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34195</data>
             <data name="description" xsi:type="string">Create product with category and two new options</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
@@ -55,7 +54,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation3">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34195</data>
             <data name="description" xsi:type="string">Create product with special price</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
@@ -116,13 +114,13 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation6" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34195</data>
             <data name="description" xsi:type="string">MAGETWO-13361: Create Configurable Product with Creating New Category and New Attribute (Required Fields Only)</data>
             <data name="product/data/configurable_attributes_data/preset" xsi:type="string">two_searchable_options</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
             <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
