@@ -328,7 +328,7 @@ nav ol {
 .admin__control-file:active + .admin__control-file-label:before,
 .admin__control-file:focus + .admin__control-file-label:before,
 .admin__control-textarea:focus,
-.admin__control-addon [class*='admin__control-']:focus + label:before {
+.admin__control-addon [class*='admin__control-']:focus + [class*='admin__addon-']:before {
   border-color: #007bdb;
   box-shadow: none;
   outline: 0;
@@ -345,6 +345,7 @@ nav ol {
   opacity: .5;
   cursor: not-allowed;
 }
+.admin__fieldset > .admin__field.admin__field-wide[class] > .admin__field-control,
 .address-item-edit-content .admin__field[class] > .admin__field-control,
 .page-layout-admin-login .admin__field[class] > .admin__field-control {
   float: none;
@@ -352,6 +353,7 @@ nav ol {
   text-align: left;
   width: auto;
 }
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option) > .admin__field-label,
 .address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label,
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label {
   text-align: left;
@@ -361,19 +363,57 @@ nav ol {
   margin-bottom: 0.86rem;
   margin-top: -0.14rem;
 }
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option) > .admin__field-label:before,
 .address-item-edit-content .admin__field[class]:not(.admin__field-option) > .admin__field-label:before,
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option) > .admin__field-label:before {
   display: none;
 }
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option)._required > .admin__field-label span,
 .address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span,
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span {
   padding-left: 1.5rem;
 }
+.admin__fieldset > .admin__field.admin__field-wide[class]:not(.admin__field-option)._required > .admin__field-label span:after,
 .address-item-edit-content .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after,
 .page-layout-admin-login .admin__field[class]:not(.admin__field-option)._required > .admin__field-label span:after {
   left: 0;
   margin-left: 30px;
   top: .2rem;
+}
+.admin__control-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.admin__control-table {
+  width: 100%;
+}
+.admin__control-table thead {
+  background: none;
+}
+.admin__control-table td,
+.admin__control-table th {
+  background: #efefef;
+  border: 0;
+  border-bottom: 1px solid #ffffff;
+  padding: 1.3rem 2.5rem 1.3rem 0;
+  text-align: left;
+}
+.admin__control-table td:first-child,
+.admin__control-table th:first-child {
+  padding-left: 1.5rem;
+}
+.admin__control-table th {
+  border: 0;
+  vertical-align: bottom;
+  color: #303030;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding-bottom: 0;
+}
+.admin__control-table th._required span:after {
+  color: #eb5202;
+  content: '*';
 }
 .admin__control-text {
   line-height: 3.3rem;
@@ -684,9 +724,11 @@ option:empty {
   color: #808080;
   content: attr(data-config-scope);
   display: inline-block;
-  position: absolute;
+  font-size: 1.2rem;
   left: ~" calc( (100%) * 0.7777777777777778 - 30px )";
+  line-height: 3.2rem;
   margin-left: 60px;
+  position: absolute;
   width: ~" calc( (100%) * 0.2222222222222222 - 30px )";
 }
 .admin__field-control .admin__field[data-config-scope]:nth-child(n+2):before {
@@ -4498,6 +4540,108 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 .dashboard-sales-value {
   font-size: 2.4rem;
   font-weight: 600;
+}
+.downloadable-form .col-price,
+.downloadable-form .col-limit,
+.downloadable-form .col-share,
+.downloadable-form .col-sort {
+  width: 1%;
+}
+.downloadable-form .col-action {
+  width: 1px;
+}
+.downloadable-form td.col-limit {
+  white-space: nowrap;
+}
+.downloadable-form .admin__control-table .admin__control-text {
+  margin-bottom: .5rem;
+  min-width: 6rem;
+}
+.downloadable-form .files .row,
+.downloadable-form .files-wide .row {
+  margin: .7rem 0;
+}
+.downloadable-form .files .row > .admin__control-text,
+.downloadable-form .files-wide .row > .admin__control-text {
+  margin-top: .7rem;
+}
+.downloadable-form .files .uploader,
+.downloadable-form .files-wide .uploader {
+  margin: .5rem 0;
+}
+.downloadable-form .files .fileinput-button,
+.downloadable-form .files-wide .fileinput-button {
+  color: #007bdb;
+  cursor: pointer;
+  display: inline-block;
+  float: none;
+  margin: .5rem 0;
+  text-decoration: none;
+}
+.downloadable-form .files .fileinput-button:hover,
+.downloadable-form .files-wide .fileinput-button:hover {
+  color: #007bdb;
+  text-decoration: underline;
+}
+.downloadable-form .action-remove {
+  background-image: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: content-box;
+  box-shadow: none;
+  text-shadow: none;
+  line-height: inherit;
+  font-weight: 400;
+  display: inline-block;
+  text-decoration: none;
+  margin-top: .5rem;
+}
+.downloadable-form .action-remove:focus,
+.downloadable-form .action-remove:active {
+  background: none;
+  border: none;
+}
+.downloadable-form .action-remove:hover {
+  background: none;
+  border: none;
+}
+.downloadable-form .action-remove.disabled,
+.downloadable-form .action-remove[disabled],
+fieldset[disabled] .downloadable-form .action-remove {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.downloadable-form .action-remove > span {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.downloadable-form .action-remove:after {
+  font-family: 'Admin Icons';
+  content: '\e630';
+  font-size: 1.8rem;
+  line-height: 16px;
+  color: #41362f;
+  overflow: hidden;
+  speak: none;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+@-moz-document url-prefix() {
+  .downloadable-form {
+    display: table-column;
+  }
 }
 @media all and (max-width: 1023px) {
   .admin__menu .submenu li {
