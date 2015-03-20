@@ -4,7 +4,7 @@
         <h2>Order Review</h2>
     </div>
     <div class="order-review" id="checkout-review-load">
-        <!-- ko foreach: { data: items_before, as: 'element' } -->
+        <!-- ko foreach: { data: itemsBefore, as: 'element' } -->
         <!-- ko template: element.getTemplate() --><!-- /ko -->
         <!-- /ko -->
         <div id="checkout-review-table-wrapper" class="order-review-wrapper table-wrapper">
@@ -24,15 +24,13 @@
                 <!-- /ko -->
                 </tbody>
                 <tfoot>
-                <!-- ko template: review/totals.html --><!-- /ko -->
                 </tfoot>
             </table>
         </div>
-        <!-- ko foreach: { data: items_after, as: 'element' } -->
+        <!-- ko foreach: { data: itemsAfter, as: 'element' } -->
         <!-- ko template: element.getTemplate() --><!-- /ko -->
         <!-- /ko -->
         <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
-            <!-- ko template: getAgreementsTemplate() --><!-- /ko -->
             <div class="actions-toolbar" id="review-buttons-container">
                 <div class="primary">
                     <button data-role="review-save" type="submit" title="Place Order"
