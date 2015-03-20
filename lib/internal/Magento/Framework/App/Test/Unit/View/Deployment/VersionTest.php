@@ -81,7 +81,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->throwException($storageException));
         $this->versionStorage->expects($this->once())->method('save')->with(time());
-        $this->assertEquals(time(), $this->object->getValue());
+        $this->assertTrue(abs($this->object->getValue() - time()) <= 1);
         $this->object->getValue(); // Ensure caching in memory
     }
 }
