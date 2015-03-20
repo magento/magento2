@@ -83,6 +83,13 @@ class Result
     {
         try {
             $templateRootElement = $this->getDocumentElement();
+            foreach ($templateRootElement->attributes as $name => $attribute) {
+                if ('noNamespaceSchemaLocation' === $name) {
+                    $this->getDocumentElement()->removeAttributeNode($attribute);
+                    break;
+                }
+            }
+            $templateRootElement->removeAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi');
             $this->compiler->compile($templateRootElement, $this->component, $this->component);
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
