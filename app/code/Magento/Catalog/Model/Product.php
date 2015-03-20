@@ -242,6 +242,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $metadataService;
 
+    /*
+     * @param \Magento\Catalog\Model\ProductLink\ProductLinkManagementInterface
+     */
+    protected $linkManagement;
+
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
@@ -275,6 +280,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
+     * @param \Magento\Catalog\Model\ProductLink\Management $linkManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      *
@@ -308,6 +314,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
+        \Magento\Catalog\Model\ProductLink\Management $linkManagement,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
@@ -331,6 +338,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
+        $this->linkManagement = $linkManagement;
         $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
@@ -1247,6 +1255,64 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $collection->addProductIdFilter();
         $collection->joinAttributes();
         return $collection;
+    }
+
+    /**
+     * Get product links info
+     *
+     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     */
+    public function getProductLinks()
+    {
+        $relatedProducts = $this->linkManagement->getLinkedItemsByType($this->getSku(), "related");
+        $upSellProducts = $this->linkManagement->getLinkedItemsByType($this->getSku(), "upsell");
+        $crossSellProducts = $this->linkManagement->getLinkedItemsByType($this->getSku(), "crosssell");
+
+        $productLinks = array_merge($relatedProducts, $upSellProducts);
+        $productLinks = array_merge($productLinks, $crossSellProducts);
+        return $productLinks;
+    }
+
+    /**
+     * Set product links info
+     *
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
+     * @return this
+     */
+    public function setProductLinks(array $links = null)
+    {
+        // Gather each linktype
+        $relatedLinks = array();
+        $upSellLinks = array();
+        $crossSellLinks = array();
+        foreach ($links as $link) {
+            switch ($link->getLinkType()) {
+                case "related":
+                    $relatedLinks[] =  $link;
+                    break;
+                case "upsell":
+                    $upSellLinks[] = $link;
+                    break;
+                case "crosssell":
+                    $crossSellLinks[] = $link;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (!empty($relatedLinks)) {
+            $this->linkManagement->setProductLinks($this->getSku(), "related", $relatedLinks);
+        }
+
+        if (!empty($upSellLinks)) {
+            $this->linkManagement->setProductLinks($this->getSku(), "upsell", $upSellLinks);
+        }
+
+        if (!empty($crossSellLinks)) {
+            $this->linkManagement->setProductLinks($this->getSku(), "crosssell", $crossSellLinks);
+        }
+        return $this;
     }
 
     /*******************************************************************************
