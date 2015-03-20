@@ -82,6 +82,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      * Functions returns array with price formatting info
      *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getPriceFormat()
     {
