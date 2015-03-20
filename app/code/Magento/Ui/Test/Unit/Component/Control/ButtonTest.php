@@ -77,10 +77,10 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOnClick($onClick, $url, $getUrl, $result)
     {
-        if (!is_null($onClick)) {
+        if ($onClick !== null) {
             $this->button->setData('on_click', $onClick);
         }
-        if (!is_null($url)) {
+        if ($url !== null) {
             $this->button->setData('url', $url);
         }
         $this->urlBuilderMock->expects($this->any())

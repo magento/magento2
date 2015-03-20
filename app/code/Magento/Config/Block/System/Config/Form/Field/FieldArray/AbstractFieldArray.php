@@ -181,7 +181,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      */
     protected function _getCellInputElementName($columnName)
     {
-        return $this->getElement()->getName() . '[#{_id}][' . $columnName . ']';
+        return $this->getElement()->getName() . '[<%- _id %>][' . $columnName . ']';
     }
 
     /**
@@ -203,7 +203,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             return $column['renderer']->setInputName(
                 $inputName
             )->setInputId(
-                $this->_getCellInputElementId('#{_id}', $columnName)
+                $this->_getCellInputElementId('<%- _id %>', $columnName)
             )->setColumnName(
                 $columnName
             )->setColumn(
@@ -212,15 +212,15 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
         }
 
         return '<input type="text" id="' . $this->_getCellInputElementId(
-            '#{_id}',
+            '<%- _id %>',
             $columnName
         ) .
             '"' .
             ' name="' .
             $inputName .
-            '" value="#{' .
+            '" value="<%- ' .
             $columnName .
-            '}" ' .
+            ' %>" ' .
             ($column['size'] ? 'size="' .
             $column['size'] .
             '"' : '') .

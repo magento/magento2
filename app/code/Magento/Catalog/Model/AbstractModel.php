@@ -205,7 +205,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      */
     public function unsetData($key = null)
     {
-        if (!is_null($key) && $this->isLockedAttribute($key) || $this->isReadonly()) {
+        if ($key !== null && $this->isLockedAttribute($key) || $this->isReadonly()) {
             return $this;
         }
 

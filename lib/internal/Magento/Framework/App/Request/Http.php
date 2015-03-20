@@ -267,7 +267,7 @@ class Http extends Request implements RequestInterface
      */
     public function getBeforeForwardInfo($name = null)
     {
-        if (is_null($name)) {
+        if ($name === null) {
             return $this->beforeForwardInfo;
         } elseif (isset($this->beforeForwardInfo[$name])) {
             return $this->beforeForwardInfo[$name];

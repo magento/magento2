@@ -51,7 +51,7 @@ class Plugin
      */
     protected function _init($localeCode)
     {
-        if (!is_null($localeCode)) {
+        if ($localeCode !== null) {
             $this->_translate->setLocale($localeCode)
                 ->loadData();
         }

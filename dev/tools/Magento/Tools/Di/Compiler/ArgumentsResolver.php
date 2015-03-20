@@ -229,7 +229,7 @@ class ArgumentsResolver
      */
     private function getNonObjectArgument($value)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return $this->nullValuePattern;
         }
 

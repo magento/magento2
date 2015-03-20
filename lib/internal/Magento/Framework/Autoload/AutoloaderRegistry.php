@@ -36,7 +36,7 @@ class AutoloaderRegistry
      */
     public static function getAutoloader()
     {
-        if (!is_null(self::$autoloader)) {
+        if (self::$autoloader !== null) {
             return self::$autoloader;
         } else {
             throw new \Exception('Autoloader is not registered, cannot be retrieved.');

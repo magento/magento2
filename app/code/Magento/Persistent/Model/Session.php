@@ -328,7 +328,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     public function deleteExpired($websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->_storeManager->getStore()->getWebsiteId();
         }
 

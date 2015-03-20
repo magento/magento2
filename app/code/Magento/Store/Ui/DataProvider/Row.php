@@ -44,9 +44,10 @@ class Row implements RowInterface
      * Get data
      *
      * @param array $dataRow
+     * @param array $data
      * @return mixed
      */
-    public function getData(array $dataRow)
+    public function getData(array $dataRow, array $data = [])
     {
         $content = '';
         $origStores = $dataRow['store_id'];

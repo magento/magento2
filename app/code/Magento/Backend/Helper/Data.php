@@ -93,7 +93,7 @@ class Data extends AbstractHelper
      */
     public function setPageHelpUrl($url = null)
     {
-        if (is_null($url)) {
+        if ($url === null) {
             $request = $this->_request;
             $frontModule = $request->getControllerModule();
             if (!$frontModule) {

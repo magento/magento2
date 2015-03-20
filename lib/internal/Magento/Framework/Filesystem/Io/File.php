@@ -213,7 +213,7 @@ class File extends AbstractIo
             return false;
         }
         $stat = @fstat($this->_streamHandler);
-        if (!is_null($part)) {
+        if ($part !== null) {
             return isset($stat[$part]) ? $stat[$part] : $default;
         }
         return $stat;
@@ -413,7 +413,7 @@ class File extends AbstractIo
     public function read($filename, $dest = null)
     {
         $this->_cwd();
-        if (!is_null($dest)) {
+        if ($dest !== null) {
             $result = @copy($filename, $dest);
         } else {
             $result = @file_get_contents($filename);
@@ -460,7 +460,7 @@ class File extends AbstractIo
         } else {
             $result = @file_put_contents($filename, $src);
         }
-        if (!is_null($mode) && $result) {
+        if ($mode !== null && $result) {
             @chmod($filename, $mode);
         }
         $this->_iwd();

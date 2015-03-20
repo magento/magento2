@@ -73,7 +73,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      */
     public function getWishlist()
     {
-        if (is_null($this->_wishlist)) {
+        if ($this->_wishlist === null) {
             $this->_wishlist = $this->_wishlistFactory->create();
 
             $wishlistId = $this->_getRequest()->getParam('wishlist_id');
@@ -95,7 +95,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      */
     public function getCustomer()
     {
-        if (is_null($this->_customer)) {
+        if ($this->_customer === null) {
             $params = $this->urlDecoder->decode($this->_getRequest()->getParam('data'));
             $data   = explode(',', $params);
             $customerId    = abs(intval($data[0]));
