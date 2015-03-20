@@ -31,10 +31,10 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      * covers \Magento\Framework\Message\AbstractMessage::setText
      * @dataProvider setTextGetTextProvider
      */
-    public function testSetTextGetText($text)
+    public function testSetTextGetText($text, $resultText)
     {
         $this->model->setText($text);
-        $this->assertEquals($text, $this->model->getText());
+        $this->assertEquals($resultText, $this->model->getText());
     }
 
     /**
@@ -42,7 +42,7 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function setTextGetTextProvider()
     {
-        return [[''], ['some text']];
+        return [['', ''], ['some text', 'some text'], [new \Magento\Framework\Phrase('some text'), 'some text']];
     }
 
     /**
