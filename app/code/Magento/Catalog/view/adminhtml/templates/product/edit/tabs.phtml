@@ -43,11 +43,14 @@
                     }}'
                 <?php endif;?>>
 
-                <div class="admin__page-nav-title <?php if (!$isBasic): ?> <?php echo '_collapsible';?><?php endif;?>"
-                    <?php echo $block->getUiId('title') ?>
-                    data-role="title">
-                    <strong><?php echo $isBasic ? __('Basic Settings') : __('Advanced Settings') ?></strong>
-                    <span class="admin__page-nav-title-messages"></span>
+                <div class="admin__page-nav-title-wrap" <?php echo $block->getUiId('title') ?> data-role="title">
+                    <div class="admin__page-nav-title <?php if (!$isBasic): ?> <?php echo '_collapsible';?><?php endif;?>"
+                        data-role="trigger">
+                        <strong>
+                            <?php echo $isBasic ? __('Basic Settings') : __('Advanced Settings') ?>
+                        </strong>
+                        <span class="admin__page-nav-title-messages"></span>
+                    </div>
                 </div>
 
                 <ul <?php echo $block->getUiId('tab', $tabGroupId) ?> class="tabs admin__page-nav-items" data-role="content">
