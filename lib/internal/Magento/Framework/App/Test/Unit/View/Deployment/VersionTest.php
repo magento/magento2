@@ -72,6 +72,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueDefaultModeSaving()
     {
+        $time = time();
         $this->appState
             ->expects($this->once())
             ->method('getMode')
@@ -81,8 +82,8 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('load')
             ->will($this->throwException($storageException));
-        $this->versionStorage->expects($this->once())->method('save')->with(time());
-        $this->assertTrue(abs($this->object->getValue() - time()) <= 1);
+        $this->versionStorage->expects($this->once())->method('save')->with($time);
+        $this->assertEquals($time, $this->object->getValue());
         $this->object->getValue(); // Ensure caching in memory
     }
 }
