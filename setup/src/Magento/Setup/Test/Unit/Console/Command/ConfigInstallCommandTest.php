@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\ModuleList;
-use Magento\Setup\Console\Command\ConfigInstallCommand;
+use Magento\Setup\Console\Command\ConfigCreateCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,6 +30,11 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
     private $moduleList;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|InputInterface
      */
     private $input;
@@ -44,6 +49,7 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
         $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface', [], [], '', false);
         $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
     }
@@ -69,8 +75,9 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->output->expects($this->once())
             ->method('writeln')
             ->with('<info>No module configuration is available, so all modules are enabled.</info>');
+        $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(false);
 
-        $command = new ConfigInstallCommand($this->configModel, $this->moduleList);
+        $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $command->initialize($this->input, $this->output);
     }
 
@@ -99,8 +106,31 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getAvailableOptions')
             ->will($this->returnValue($optionsSet));
+        $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(false);
 
-        $command = new ConfigInstallCommand($this->configModel, $this->moduleList);
+        $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $command->initialize($this->input, $this->output);
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Deployment configuration already exists
+     */
+    public function testDeploymentConfigExists()
+    {
+        $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(true);
+        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $optionsSet = [
+            $option
+        ];
+
+        $this->configModel
+            ->expects($this->once())
+            ->method('getAvailableOptions')
+            ->will($this->returnValue($optionsSet));
+
+        $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
+        $command->initialize($this->input, $this->output);
+    }
+
 }

@@ -6,13 +6,14 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\ConfigModel;
-use Magento\Framework\Module\ModuleList;
 
-class ConfigInstallCommand extends Command
+class ConfigCreateCommand extends Command
 {
     /**
      * @var ConfigModel
@@ -32,15 +33,25 @@ class ConfigInstallCommand extends Command
     private $moduleList;
 
     /**
+     * Existing deployment config
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor
      *
      * @param \Magento\Setup\Model\ConfigModel $configModel
      * @param ModuleList $moduleList
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ConfigModel $configModel, ModuleList $moduleList)
+    public function __construct(
+        ConfigModel $configModel,
+        ModuleList $moduleList,
+        DeploymentConfig $deploymentConfig)
     {
         $this->configModel = $configModel;
         $this->moduleList = $moduleList;
+        $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
 
@@ -53,8 +64,8 @@ class ConfigInstallCommand extends Command
     {
         $options = $this->configModel->getAvailableOptions();
 
-        $this->setName('config:install')
-            ->setDescription('Install deployment configuration')
+        $this->setName('config:create')
+            ->setDescription('Create deployment configuration')
             ->setDefinition($options);
 
         $this->ignoreValidationErrors();
@@ -74,6 +85,10 @@ class ConfigInstallCommand extends Command
      */
     public function initialize(InputInterface $input, OutputInterface $output)
     {
+        if ($this->deploymentConfig->isAvailable()) {
+            throw new \Exception('Deployment configuration already exists, cannot create a new one');
+        }
+
         if (!$this->moduleList->isModuleInfoAvailable()) {
             $output->writeln(
                 '<info>No module configuration is available, so all modules are enabled.</info>'

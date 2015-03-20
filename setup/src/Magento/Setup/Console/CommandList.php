@@ -40,7 +40,7 @@ class CommandList
     protected function getCommandsClasses()
     {
         return [
-            'Magento\Setup\Console\Command\ConfigInstallCommand'
+            'Magento\Setup\Console\Command\ConfigCreateCommand'
         ];
     }
 
