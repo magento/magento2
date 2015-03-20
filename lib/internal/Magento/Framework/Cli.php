@@ -63,7 +63,7 @@ class Cli extends SymfonyApplication
             $commandList = $objectManager->create(
                 'Magento\Framework\Console\CommandList',
                 ['objectManager'=>$objectManager]
-                );
+            );
 
             $modulesCommands = $commandList->getCommands();
 
