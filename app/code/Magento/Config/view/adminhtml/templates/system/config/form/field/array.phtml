@@ -42,7 +42,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             'prototype'
         ], function (mageTemplate) {
         // create row creator
-        var arrayRow<?php echo $_htmlId ?> = {
+        window.arrayRow<?php echo $_htmlId ?> = {
 
             // define row prototypeJS template
             template: mageTemplate(

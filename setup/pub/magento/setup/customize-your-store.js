@@ -4,7 +4,7 @@
  */
 
 'use strict';
-angular.module('customize-your-store', ['ngStorage'])
+angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
     .controller('customizeYourStoreController', ['$scope', '$localStorage' , '$state', '$http', '$sce', function ($scope, $localStorage, $state, $http, $sce) {
         $scope.store = {
             timezone: 'America/Los_Angeles',
@@ -12,6 +12,7 @@ angular.module('customize-your-store', ['ngStorage'])
             language: 'en_US',
             useSampleData: false,
             loadedAllModules: false,
+            showModulesControl: false,
             selectAll: true,
             allModules: [],
             errorFlag : false,
@@ -51,6 +52,7 @@ angular.module('customize-your-store', ['ngStorage'])
         if (!$scope.store.loadedAllModules) {
             $http.get('index.php/modules').success(function (data) {
                 $state.loadedModules = data;
+                $scope.store.showModulesControl = true;
                 if (data.error) {
                     $scope.updateOnExpand($scope.store.advanced);
                     $scope.store.errorMessage = $sce.trustAsHtml(data.error);

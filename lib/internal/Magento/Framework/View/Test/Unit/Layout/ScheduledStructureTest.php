@@ -36,6 +36,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'element3' => ['data', 'of', 'element', '3'],
                 'element4' => ['data', 'of', 'element', '4'],
                 'element5' => ['data', 'of', 'element', '5'],
+                'element9' => ['data', 'of', 'element', '9'],
             ],
             'scheduledMoves' => [
                 'element1' => ['data', 'of', 'element', 'to', 'move', '1'],
@@ -382,5 +383,23 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_model->getPaths());
         $this->assertEmpty($this->_model->getElements());
         $this->assertEmpty($this->_model->getStructure());
+    }
+
+    /**
+     * covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToBrokenParentList
+     * covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElementFromBrokenParentList
+     */
+    public function testSetElementToBrokenParentList()
+    {
+        $element = 'element9';
+        $expectedToRemove = ['element2', 'element3'];
+        $expectedToRemoveWithBroken = ['element2', 'element3', $element];
+        $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
+
+        $this->_model->setElementToBrokenParentList($element);
+        $this->assertEquals($expectedToRemoveWithBroken, $this->_model->getListToRemove());
+
+        $this->_model->unsetElementFromBrokenParentList($element);
+        $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
     }
 }
