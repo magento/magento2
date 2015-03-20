@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Setup;
+namespace Magento\Backend\Test\Unit\Setup;
 
+use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\File\ConfigFilePool;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase

@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Console\Command;
+namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Console\Command\ConfigInstallCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

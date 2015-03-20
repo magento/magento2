@@ -3,9 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
+namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Setup\Model\ConfigGenerator;
+use Magento\Setup\Model\ConfigOptionsList;
 
 class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 {

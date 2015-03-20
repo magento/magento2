@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Config\File;
+namespace Magento\Framework\Config\Test\Unit\File;
+
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class ConfigFilePoolTest extends \PHPUnit_Framework_TestCase
 {

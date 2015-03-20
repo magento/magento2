@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Setup\Model\ConfigModel;
 
 class ConfigModelTest extends \PHPUnit_Framework_TestCase
 {
