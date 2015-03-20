@@ -1,9 +1,14 @@
 <li id="opc-shipping_method" class="section allow active" role="presentation" data-collapsible="true">
     <div class="step-title" data-role="title" aria-controls="checkout-step-shipping_method" role="tab" aria-selected="true" aria-expanded="true" tabindex="0">
-        <span class="number">3</span>
+        <span class="number">4</span>
         <h2>Shipping Method</h2>
     </div>
-    <div id="checkout-step-shipping_method" class="step-content" data-role="content" role="tabpanel" aria-hidden="false" style="display: block;">
+    <div id="checkout-step-shipping_method"
+         class="step-content"
+         data-role="content"
+         role="tabpanel"
+         aria-hidden="false"
+         data-bind="fadeVisible: isLoggedIn() && !quoteHasShippingMethod() && quoteHasShippingAddress()">
         <!-- ko if: isShippingRateGroupsAvailable() -->
         Sorry, no quotes are available for this order at this time
         <!-- /ko -->

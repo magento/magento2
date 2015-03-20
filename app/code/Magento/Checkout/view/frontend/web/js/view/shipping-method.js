@@ -12,15 +12,19 @@ define(
         'Magento_Ui/js/form/component',
         '../model/quote',
         '../model/shipping-service',
-        '../action/select-shipping-method'
+        '../action/select-shipping-method',
+        'Magento_Customer/js/model/customer'
     ],
-    function ($, Component, quote, shippingService, selectShippingMethod) {
+    function ($, Component, quote, shippingService, selectShippingMethod, customer) {
         var loadedRates = shippingService.getAvailableShippingMethods(quote);
 
         return Component.extend({
-
             defaults: {
                 template: 'Magento_Checkout/shipping-method',
+                isLoggedIn: customer.isLoggedIn(),
+                quoteHasShippingAddress: quote.hasShippingAddress(),
+                quoteHasShippingMethod: quote.hasShippingMethod(),
+
                 rates: function () {
                     return shippingService.sortRates(loadedRates)
                 },

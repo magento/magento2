@@ -20,7 +20,9 @@ define(
                 addresses: customer.getShippingAddressList(),
                 selectedAddressId: null,
                 sameAsBilling: null,
+                isLoggedIn: customer.isLoggedIn(),
                 quoteHasShippingAddress: quote.hasShippingAddress(),
+                quoteHasBillingAddress: quote.hasBillingAddress(),
                 selectShippingAddress: function() {
                     selectShippingAddress(this.selectedAddressId, this.sameAsBilling);
                 }

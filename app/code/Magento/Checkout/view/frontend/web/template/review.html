@@ -1,48 +1,55 @@
 <li id="opc-review" class="section allow active">
     <div class="step-title" data-role="title">
-        <span class="number">5</span>
+        <span class="number">6</span>
         <h2>Order Review</h2>
     </div>
-    <div class="order-review" id="checkout-review-load">
-        <!-- ko foreach: { data: itemsBefore, as: 'element' } -->
-        <!-- ko template: element.getTemplate() --><!-- /ko -->
-        <!-- /ko -->
-        <div id="checkout-review-table-wrapper" class="order-review-wrapper table-wrapper">
-            <table class="data table table-order-review items" id="checkout-review-table">
-                <caption class="table-caption">Order Review</caption>
-                <thead>
-                <tr>
-                    <th class="col item" scope="col">Product Name</th>
-                    <th class="col price" scope="col">Price</th>
-                    <th class="col qty" scope="col">Qty</th>
-                    <th class="col subtotal" scope="col">Subtotal</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- ko foreach: getItems() -->
-                <!-- ko template: review/item.html --><!-- /ko -->
-                <!-- /ko -->
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
-        </div>
-        <!-- ko foreach: { data: itemsAfter, as: 'element' } -->
-        <!-- ko template: element.getTemplate() --><!-- /ko -->
-        <!-- /ko -->
-        <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
-            <div class="actions-toolbar" id="review-buttons-container">
-                <div class="primary">
-                    <button data-role="review-save" type="submit" title="Place Order"
-                                class="button action primary checkout"><span>Place Order</span></button>
-                </div>
-                <div class="secondary">
-            <span id="checkout-review-edit-label">Forgot an Item?</span>
-                    <a data-bind="attr: {href: $data.cartUrl}"
-                       aria-describedby="checkout-review-edit-label"
-                       class="action edit">
-                        <span>Edit Your Cart</span>
-                    </a>
+    <div id="checkout-step-review"
+         class="step-content"
+         data-role="content"
+         role="tabpanel"
+         aria-hidden="false"
+         data-bind="fadeVisible: isLoggedIn() && quoteHasPaymentMethod()">
+        <div class="order-review" id="checkout-review-load">
+            <!-- ko foreach: { data: itemsBefore, as: 'element' } -->
+            <!-- ko template: element.getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+            <div id="checkout-review-table-wrapper" class="order-review-wrapper table-wrapper">
+                <table class="data table table-order-review items" id="checkout-review-table">
+                    <caption class="table-caption">Order Review</caption>
+                    <thead>
+                    <tr>
+                        <th class="col item" scope="col">Product Name</th>
+                        <th class="col price" scope="col">Price</th>
+                        <th class="col qty" scope="col">Qty</th>
+                        <th class="col subtotal" scope="col">Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- ko foreach: getItems() -->
+                    <!-- ko template: review/item.html --><!-- /ko -->
+                    <!-- /ko -->
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- ko foreach: { data: itemsAfter, as: 'element' } -->
+            <!-- ko template: element.getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+            <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
+                <div class="actions-toolbar" id="review-buttons-container">
+                    <div class="primary">
+                        <button data-role="review-save" type="submit" title="Place Order"
+                                    class="button action primary checkout"><span>Place Order</span></button>
+                    </div>
+                    <div class="secondary">
+                <span id="checkout-review-edit-label">Forgot an Item?</span>
+                        <a data-bind="attr: {href: $data.cartUrl}"
+                           aria-describedby="checkout-review-edit-label"
+                           class="action edit">
+                            <span>Edit Your Cart</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

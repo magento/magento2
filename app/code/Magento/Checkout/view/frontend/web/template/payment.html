@@ -1,9 +1,14 @@
 <li id="opc-payment" class="section allow active" role="presentation" data-collapsible="true">
     <div class="step-title" data-role="title" aria-controls="checkout-step-payment" role="tab" aria-selected="true" aria-expanded="true" tabindex="0">
-        <span class="number">4</span>
+        <span class="number">5</span>
         <h2>Payment Information</h2>
     </div>
-    <div id="checkout-step-payment" class="step-content" data-role="content" role="tabpanel" aria-hidden="false" style="display: block;">
+    <div id="checkout-step-payment"
+         class="step-content"
+         data-role="content"
+         role="tabpanel"
+         aria-hidden="false"
+         data-bind="fadeVisible: isLoggedIn() && !quoteHasPaymentMethod() && quoteHasShippingMethod()">
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <fieldset class="fieldset">
                 <legend class="legend payments-title">

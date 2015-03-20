@@ -16,32 +16,40 @@ define(
         var billingAddress,
             shippingAddress,
             shippingMethod,
-            paymentMethod,
-            quoteData;
+            paymentMethod;
+
+        var quoteHasBillingAddress = ko.observable(false);
         var quoteHasShippingAddress = ko.observable(false);
-        quoteData = window.cartData;
+        var quoteHasShippingMethod = ko.observable(false);
+        var quoteHasPaymentMethod = ko.observable(false);
+        var quoteData = window.cartData;
 
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
             },
-            setBillingAddress: function (billingAddress) {
+            setBillingAddress: function (address) {
                 return storage.post(
                     '/rest/default/V1/carts/' + this.getQuoteId()  + '/billing-address',
                     JSON.stringify(
                         {
                             "cartId": this.getQuoteId(),
-                            "address": billingAddress
+                            "address": address
                         }
                     )
                 ).done(
                     function (response) {
                         console.log('Billing address set. Id: ' + response);
+                        billingAddress = address;
+                        quoteHasBillingAddress((billingAddress != null));
                     }
                 );
             },
             getBillingAddress: function() {
                 return billingAddress;
+            },
+            hasBillingAddress: function() {
+                return quoteHasBillingAddress;
             },
             setShippingAddress: function (address) {
                 shippingAddress = address;
@@ -71,12 +79,18 @@ define(
                 return storage.put(
                     '/rest/default/V1/carts/' + this.getQuoteId() + '/selected-payment-methods',
                     JSON.stringify(paymentMethodData)
-                ).done(function() {
-                    paymentMethod = paymentMethodCode;
-                });
+                ).done(
+                    function() {
+                        paymentMethod = paymentMethodCode;
+                        quoteHasPaymentMethod((paymentMethod != null));
+                    }
+                );
             },
             getPaymentMethod: function() {
                 return paymentMethod;
+            },
+            hasPaymentMethod: function() {
+                return quoteHasPaymentMethod;
             },
             setShippingMethod: function(shippingMethodCode) {
                 var shippingMethodData ={
@@ -89,11 +103,15 @@ define(
                 ).done(
                     function() {
                         shippingMethod = shippingMethodCode;
+                        quoteHasShippingMethod((shippingMethod != null));
                     }
                 );
             },
             getShippingMethod: function() {
                 return shippingMethod;
+            },
+            hasShippingMethod: function() {
+                return quoteHasShippingMethod;
             }
         };
     }

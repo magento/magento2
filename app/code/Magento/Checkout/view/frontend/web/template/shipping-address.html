@@ -3,7 +3,10 @@
         <span class="number">3</span>
         <h2>Shipping Information</h2>
     </div>
-    <div id="checkout-step-shipping" class="step-content" data-role="content" data-bind="fadeVisible: !quoteHasShippingAddress()">
+    <div id="checkout-step-shipping"
+         class="step-content"
+         data-role="content"
+         data-bind="fadeVisible: isLoggedIn() && !quoteHasShippingAddress() && quoteHasBillingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
