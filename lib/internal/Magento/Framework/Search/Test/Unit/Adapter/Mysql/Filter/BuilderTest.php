@@ -86,7 +86,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                          * @var \Magento\Framework\DB\Adapter\AdapterInterface $adapter
                          */
                         $fromCondition = '';
-                        if (!is_null($filter->getFrom())) {
+                        if ($filter->getFrom() !== null) {
                             $fromCondition = $this->conditionManager->generateCondition(
                                 $filter->getField(),
                                 ($isNegation ? '<' : '>='),
@@ -94,7 +94,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                             );
                         }
                         $toCondition = '';
-                        if (!is_null($filter->getTo())) {
+                        if ($filter->getTo() !== null) {
                             $toCondition = $this->conditionManager->generateCondition(
                                 $filter->getField(),
                                 ($isNegation ? '>=' : '<'),

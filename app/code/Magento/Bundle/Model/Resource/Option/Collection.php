@@ -175,7 +175,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getAllIds()
     {
-        if (is_null($this->_itemIds)) {
+        if ($this->_itemIds === null) {
             $this->_itemIds = parent::getAllIds();
         }
         return $this->_itemIds;

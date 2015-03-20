@@ -11,6 +11,10 @@
  */
 namespace Magento\Directory\Model\Resource\Country;
 
+/**
+ * Class Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -45,6 +49,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_localeResolver;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $helperData;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -54,6 +63,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Directory\Model\Resource\CountryFactory $countryFactory
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\App\Helper\AbstractHelper $helperData
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -68,6 +78,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Directory\Model\Resource\CountryFactory $countryFactory,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\App\Helper\AbstractHelper $helperData,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -77,6 +88,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_localeResolver = $localeResolver;
         $this->_countryFactory = $countryFactory;
         $this->_arrayUtils = $arrayUtils;
+        $this->helperData = $helperData;
     }
 
     /**
@@ -208,7 +220,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         }
         $options = [];
         foreach ($sort as $label => $value) {
-            $options[] = ['value' => $value, 'label' => $label];
+            $option = ['value' => $value, 'label' => $label];
+            if ($this->helperData->isRegionRequired($value)) {
+                $option['is_region_required'] = true;
+            }
+            $options[] = $option;
         }
 
         if (count($options) > 0 && $emptyLabel !== false) {

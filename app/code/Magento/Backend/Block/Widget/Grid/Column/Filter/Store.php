@@ -115,7 +115,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     public function getCondition()
     {
         $value = $this->getValue();
-        if (is_null($value) || $value == self::ALL_STORE_VIEWS) {
+        if ($value === null || $value == self::ALL_STORE_VIEWS) {
             return null;
         }
         if ($value == '_deleted_') {

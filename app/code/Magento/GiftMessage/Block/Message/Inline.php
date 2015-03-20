@@ -211,7 +211,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getMessage($entity = null)
     {
-        if (is_null($this->_giftMessage)) {
+        if ($this->_giftMessage === null) {
             $this->_initMessage();
         }
 

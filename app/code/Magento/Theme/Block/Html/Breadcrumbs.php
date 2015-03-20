@@ -69,7 +69,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
      */
     public function getCacheKeyInfo()
     {
-        if (is_null($this->_cacheKeyInfo)) {
+        if ($this->_cacheKeyInfo === null) {
             $this->_cacheKeyInfo = parent::getCacheKeyInfo() + [
                 'crumbs' => base64_encode(serialize($this->_crumbs)),
                 'name' => $this->getNameInLayout(),

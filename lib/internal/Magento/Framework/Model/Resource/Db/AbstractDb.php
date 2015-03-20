@@ -138,7 +138,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
-        if (!is_null($resourcePrefix)) {
+        if ($resourcePrefix !== null) {
             $this->_resourcePrefix = $resourcePrefix;
         }
         parent::__construct();
@@ -197,7 +197,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $this->_resourcePrefix = $connections;
         }
 
-        if (is_null($tables) && is_string($connections)) {
+        if ($tables === null && is_string($connections)) {
             $this->_resourceModel = $this->_resourcePrefix;
         } elseif (is_array($tables)) {
             foreach ($tables as $key => $value) {
@@ -273,7 +273,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             $entitySuffix = null;
         }
 
-        if (!is_null($entitySuffix)) {
+        if ($entitySuffix !== null) {
             $tableName .= '_' . $entitySuffix;
         }
 
@@ -349,12 +349,12 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        if (is_null($field)) {
+        if ($field === null) {
             $field = $this->getIdFieldName();
         }
 
         $read = $this->_getReadAdapter();
-        if ($read && !is_null($value)) {
+        if ($read && $value !== null) {
             $select = $this->_getLoadSelect($field, $value, $object);
             $data = $read->fetchRow($select);
 
@@ -411,7 +411,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                 $this->_beforeSave($object);
                 $this->_checkUnique($object);
                 $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                if (!is_null($object->getId()) && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
+                if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
                     $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
                     /**
                      * Not auto increment primary key support
@@ -509,7 +509,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     public function addUniqueField($field)
     {
-        if (is_null($this->_uniqueFields)) {
+        if ($this->_uniqueFields === null) {
             $this->_initUniqueFields();
         }
         if (is_array($this->_uniqueFields)) {
@@ -562,7 +562,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     public function getUniqueFields()
     {
-        if (is_null($this->_uniqueFields)) {
+        if ($this->_uniqueFields === null) {
             $this->_initUniqueFields();
         }
         return $this->_uniqueFields;

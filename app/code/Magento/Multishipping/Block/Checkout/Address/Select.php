@@ -94,7 +94,7 @@ class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
     public function getAddress()
     {
         $addresses = $this->getData('address_collection');
-        if (is_null($addresses)) {
+        if ($addresses === null) {
             try {
                 $filter =  $this->filterBuilder->setField('parent_id')
                     ->setValue($this->_multishipping->getCustomer()->getId())

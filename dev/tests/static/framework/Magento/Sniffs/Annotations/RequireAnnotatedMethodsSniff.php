@@ -163,7 +163,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
         }
 
         $comment = $this->commentParser->getComment();
-        if (is_null($comment) === true) {
+        if (($comment === null) === true) {
             $this->helper->addMessage($commentStart, Helper::EMPTY_DOC, ['Function']);
             return;
         }

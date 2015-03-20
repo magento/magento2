@@ -284,7 +284,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     public function getSize()
     {
         $this->load();
-        if (is_null($this->_totalRecords)) {
+        if ($this->_totalRecords === null) {
             $this->_totalRecords = count($this->getItems());
         }
         return intval($this->_totalRecords);
@@ -401,7 +401,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $itemId = $this->_getItemId($item);
 
-        if (!is_null($itemId)) {
+        if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'

@@ -226,7 +226,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         /** @var $productMediaGallery \Magento\Catalog\Model\Product\Attribute\Backend\Media */
         $productMediaGallery = $this->getGalleryAttributeBackend($product);
         $filePath = $this->entryResolver->getEntryFilePathById($product, $entry->getId());
-        if (is_null($filePath)) {
+        if ($filePath === null) {
             throw new NoSuchEntityException(__('There is no image with provided ID.'));
         }
 
@@ -260,7 +260,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         /** @var $productMediaGallery \Magento\Catalog\Model\Product\Attribute\Backend\Media */
         $productMediaGallery = $this->getGalleryAttributeBackend($product);
         $filePath = $this->entryResolver->getEntryFilePathById($product, $entryId);
-        if (is_null($filePath)) {
+        if ($filePath === null) {
             throw new NoSuchEntityException(__('There is no image with provided ID.'));
         }
 
@@ -295,7 +295,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             }
         }
 
-        if (is_null($output)) {
+        if ($output === null) {
             throw new NoSuchEntityException(__('Such image doesn\'t exist'));
         }
         return $output;

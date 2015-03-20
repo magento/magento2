@@ -50,7 +50,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      */
     public function getNumber($value)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 
