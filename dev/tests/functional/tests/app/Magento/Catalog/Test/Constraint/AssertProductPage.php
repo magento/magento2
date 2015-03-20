@@ -150,7 +150,7 @@ class AssertProductPage extends AbstractAssertForm
         $fixtureProductSku = $this->product->getSku();
         $formProductSku = $this->productView->getProductSku();
 
-        if ($fixtureProductSku == $formProductSku) {
+        if ($fixtureProductSku === null || $fixtureProductSku == $formProductSku) {
             return null;
         }
         return "Displayed product sku on product page(front-end) not equals passed from fixture. "
