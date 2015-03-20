@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false" />
     <type name="Magento\Directory\Model\Currency\Import\Config">
         <arguments>
             <argument name="servicesConfig" xsi:type="array">
@@ -15,6 +14,17 @@
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\Webservicex</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="DirectoryHelperDataProxy" type="Magento\Directory\Helper\Data\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Directory\Helper\Data</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false">
+        <arguments>
+            <argument name="helperData" xsi:type="object">DirectoryHelperDataProxy</argument>
         </arguments>
     </type>
 </config>
