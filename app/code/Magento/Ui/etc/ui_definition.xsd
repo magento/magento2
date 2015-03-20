@@ -34,6 +34,7 @@
             <xs:element type="filterRange" name="filterRange"/>
             <xs:element type="filterInput" name="filterInput"/>
             <xs:element type="filterDate" name="filterDate"/>
+            <xs:element type="wrapper" name="wrapper"/>
             <xs:element type="input" name="input"/>
             <xs:element type="checkbox" name="checkbox"/>
             <xs:element type="select" name="select"/>

@@ -44,6 +44,7 @@ class Generic implements LayoutInterface
      * @param array $topNode
      * @param UiComponentInterface $component
      * @param string $componentType
+     * @return void
      */
     protected function addChildren(
         array &$topNode,

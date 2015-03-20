@@ -5,9 +5,11 @@
  */
 namespace Magento\Ui\Component\Control;
 
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
 
 /**
  * Class ActionPool
@@ -41,7 +43,7 @@ class ActionPool implements ActionPoolInterface
     protected $itemFactory;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock
+     * @var AbstractBlock
      */
     protected $toolbarBlock;
 
@@ -75,6 +77,7 @@ class ActionPool implements ActionPoolInterface
      * @param string $key
      * @param array $data
      * @param UiComponentInterface $component
+     * @return void
      */
     public function add($key, array $data, UiComponentInterface $component)
     {

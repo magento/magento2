@@ -7,12 +7,12 @@ namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Ui\Component\Control\ActionPoolFactory;
-use Magento\Ui\Component\Control\ActionPoolInterface;
-use Magento\Ui\Component\Control\ButtonProviderFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
@@ -52,13 +52,6 @@ class Context implements ContextInterface
      * @var string
      */
     protected $acceptType;
-
-    /**
-     * Config provider
-     *
-     * @var ConfigProviderInterface
-     */
-    protected $configProvider;
 
     /**
      * @var PageLayoutInterface

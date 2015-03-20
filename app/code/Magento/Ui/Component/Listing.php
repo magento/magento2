@@ -42,6 +42,7 @@ class Listing extends AbstractComponent
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDataSourceData()
     {

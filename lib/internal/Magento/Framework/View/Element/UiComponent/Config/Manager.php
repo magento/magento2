@@ -94,6 +94,7 @@ class Manager implements ManagerInterface
      * @param ReaderFactory $readerFactory
      * @param ArrayObjectFactory $arrayObjectFactory
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
+     * @param CacheInterface $cache
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -189,7 +190,7 @@ class Manager implements ManagerInterface
     /**
      * Get UIReader and collect base files configuration
      *
-     * @param $name
+     * @param string $name
      * @return UiReaderInterface
      */
     public function getReader($name)
@@ -269,7 +270,7 @@ class Manager implements ManagerInterface
      * Add a component into pool
      *
      * @param string $instanceName
-     * @param $configuration
+     * @param array $configuration
      * @return void
      */
     protected function addComponentIntoPool($instanceName, array $configuration)

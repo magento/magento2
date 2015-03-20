@@ -9,17 +9,6 @@ define([
 ], function(loader, $, _) {
     'use strict';
 
-    /**
-     * Wraps nodes into container
-     * @param  {Array} nodes - array of nodes
-     * @param  {HTMLElement} container - target container
-     */
-    function wrap(nodes, container) {
-        nodes.forEach(function (node) {
-            container.appendChild(node);
-        });
-    }
-
     return {
         /**
          * Renders template and it's extenders using this._parse function.
@@ -31,12 +20,11 @@ define([
          */
         render: function (template) {
             var isRendered = $.Deferred(),
-                parent = template,
                 resolve       = isRendered.resolve.bind(isRendered),
                 loadTemplate  = this._load.bind(this),
                 parseTemplate = this._parse.bind(this);
 
-            loadTemplate(parent)
+            loadTemplate(template)
                 .then(parseTemplate)
                 .done(resolve);
 
@@ -62,13 +50,7 @@ define([
          * @return {Deferred} - Promise of template to be parsed. Is being resolved with array of HTML elements.
          */
         _parse: function (rawHtml) {
-            var templateContainer;
-
-            templateContainer = document.createElement('div');
-
-            wrap(_.toArray($.parseHTML(rawHtml)), templateContainer);
-
-            return _.toArray(templateContainer.childNodes);
+            return _.toArray($.parseHTML(rawHtml));
         }
     };
 });
