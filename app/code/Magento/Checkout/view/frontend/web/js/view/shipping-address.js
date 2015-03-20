@@ -13,7 +13,6 @@ define(
         'Magento_Customer/js/model/customer'
     ],
     function(Component, selectShippingAddress, customer) {
-        customer.load();
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',

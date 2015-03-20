@@ -1,26 +1,92 @@
-<div data-bind="fadeVisible: !isLoggedIn()">
-    <h2>Checkout Method</h2>
-    <h3>Login</h3>
-    <p>Already registered? Please log in below:</p>
-    <form data-bind="submit:login">
-        <fieldset>
-            <label for="login">Login</label>
-            <input type="text" name="login" id="login" data-bind="value:username"/>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" data-bind="value:password"/>
-            <input type="submit" />
-            <a href="">Forgot your password?</a>
-        </fieldset>
-    </form>
-    <h2>Checkout as a Guest or Register</h2>
-    <p>Register with us for future convenience:</p>
-    <form method="get">
-        <fieldset>
-            <label for="guest">Checkout as Guest</label>
-            <input type="radio" name="notuser[guest]" id="guest"/>
-            <label for="register">Register</label>
-            <input type="radio" name="notuser[register]" id="register"/>
-            <input type="submit" value="Continue"/>
-        </fieldset>
-    </form>
-</div>
+<li id="opc-billing" class="section allow active">
+    <div class="step-title" data-role="title">
+        <span class="number">1</span>
+        <h2 data-bind="text: $t('Authentication')"></h2>
+    </div>
+    <div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="fadeVisible: !isLoggedIn()">
+        <div class="login-wrapper">
+            <div class="block block-guest" data-bind="visible: (isAllowedGuestCheckout || isRegistrationAllowed)">
+                <div class="block-title">
+                    <strong id="block-guest-heading" role="heading" aria-level="2" data-bind="text: $t('Checkout as a Guest or Register')"></strong>
+                </div>
+                <div class="block-content" aria-labelledby="block-guest-heading">
+                    <div data-bind="visible: (!isAllowedGuestCheckout && isRegistrationAllowed)">
+                        <p><strong data-bind="text $t('Register and save time!')"></strong><br />
+                            <!-- ko text: $t('Register with us for future convenience:')--><!-- /ko -->
+                        </p>
+                        <ul>
+                            <li data-bind="text: $t('Fast and easy check out')"></li>
+                            <li data-bind="text: $t('Easy access to your order history and status')"></li>
+                        </ul>
+                    </div>
+                    <p class="note" data-bind="visible: (isAllowedGuestCheckout && isRegistrationAllowed), text: $t('Register with us for future convenience:')"></p>
+
+                    <fieldset class="fieldset guest" data-bind="visible: isAllowedGuestCheckout">
+                        <div class="field choice">
+                            <input type="radio" name="checkout_method" data-role="checkout-method-guest" id="login:guest" value="guest" checked="checked" class="radio" />
+                            <label class="label" for="login:guest"><span data-bind="text: $t('Checkout as Guest')"></span></label>
+                        </div>
+                        <div class="field choice" data-bind="visible: isRegistrationAllowed">
+                            <input type="radio" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" data-bind="checked: isMethodRegister || !isAllowedGuestCheckout" class="radio" />
+                            <label class="label" for="login:register"><span data-bind="text: $t('Register')"></span></label>
+                        </div>
+                    </fieldset>
+                    <div class="actions-toolbar">
+                        <div class="primary">
+                            <button data-bind="visible: isAllowedGuestCheckout" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action continue primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Continue')"></span></button>
+                            <!-- ko ifnot: isAllowedGuestCheckout -->
+                                <!-- ko if: isCustomerMustBeLogged -->
+                                    <input type="checkbox" name="checkout_method" id="login:register" value="register" checked="checked" style="display: none"/>
+                                    <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"registerUrl"}'><span data-bind="text: $t('Register')"></span></button>
+                                <!-- /ko -->
+                                <!-- ko if: isCustomerMustBeLogged -->
+                                    <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>
+                                    <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Register')"></span></button>
+                                <!-- /ko -->
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block block-customer-login">
+                <div class="block-title">
+                    <strong id="block-customer-login-heading" role="heading" aria-level="2" data-bind="text: $t('Login')"></strong>
+                </div>
+                <div class="block-content" aria-labelledby="block-customer-login-heading">
+                    <form class="form login" data-role="login"
+                          id="login-form"
+                          data-bind="submit:login"
+                          method="post"
+                          data-mage-init='{"validation":{}}'>
+                        <fieldset class="fieldset login">
+                            <div class="field note" data-bind="text: $t('Already registered? Please log in below:')"></div>
+                            <div class="field email required">
+                                <label class="label" for="login-email"><span data-bind="text: $t('Email')"></span></label>
+                                <div class="control">
+                                    <input type="email" class="input-text" id="login-email" name="login[username]" data-validate="{required:true, 'validate-email':true}" data-bind="value: username" />
+                                </div>
+                            </div>
+                            <div class="field password required">
+                                <label for="login-password" class="label"><span data-bind="text: $t('Password')"></span></label>
+                                <div class="control">
+                                    <input type="password" class="input-text" id="login-password" name="login[password]" data-bind="value:password" data-validate="{required:true, 'validate-password':true}"/>
+                                </div>
+                            </div>
+                            <div class="actions-toolbar">
+                                <input name="context" type="hidden" value="checkout" />
+                                <div class="primary">
+                                    <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
+                                </div>
+                                <div class="secondary">
+                                    <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">
+                                        <span data-bind="text: $t('Forgot Your Password?')"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

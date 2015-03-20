@@ -16,6 +16,12 @@ define(
     function(ko, Component, login, customer) {
         return Component.extend({
             isLoggedIn: customer.isLoggedIn(),
+            isAllowedGuestCheckout: true,
+            isRegistrationAllowed: true,
+            isMethodRegister: false,
+            isCustomerMustBeLoged: false,
+            registerUrl: '',
+            forgotPasswordUrl: '',
             username: '',
             password: '',
             defaults: {

@@ -14,7 +14,6 @@ define(
         '../action/select-billing-address'
     ],
     function ($, Component, customer, selectBillingAddress) {
-        customer.load();
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address',

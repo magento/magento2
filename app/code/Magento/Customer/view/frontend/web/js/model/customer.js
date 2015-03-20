@@ -15,17 +15,18 @@ define(
         './customer/address'
     ],
     function($, ko, storage, addressList, address) {
-        var isLoaded = false;
         var isLoggedIn = ko.observable(window.isLoggedIn);
         return {
             customerData: [],
-            load: function () {
-                if (!isLoaded && this.isLoggedIn()) {
+            initialize: function () {
+                this._super();
+                if (this.isLoggedIn()) {
                     this.customerData = window.customerData;
-                    $.each(this.customerData.addresses, function(key, item) {
-                        addressList.add(new address(item));
-                    });
-                    isLoaded = true;
+                    if (this.customerData.length) {
+                        $.each(this.customerData.addresses, function (key, item) {
+                            addressList.add(new address(item));
+                        });
+                    }
                 }
             },
             isLoggedIn: function() {
