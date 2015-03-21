@@ -23,16 +23,29 @@ themes = require('./themes');
 tasks = {};
 
 _.each(themes, function (config, theme) {
-    var requireJsConfig = root + '/testsuite/' + config.area + '/' + config.name + '/require.config.js',
-        specs;
+    var requireJsConfigs,
+        specs,
+        area = config.area,
+        vendorThemePath = config.name;
+
+    requireJsConfigs = [
+        'pub/static/_requirejs/' + area + '/' + vendorThemePath + '/' + config.locale + '/requirejs-config.js',
+        root + '/require.conf.js',
+        root + '/tests/lib/**/*.conf.js',
+        root + '/tests/app/code/**/base/**/*.conf.js',
+        root + '/tests/app/code/**/' + area + '/**/*.conf.js',
+        root + '/tests/app/design/' + area + '/' + vendorThemePath + '/**/*.conf.js'
+    ];
 
     specs = [
-        root + '/testsuite/' + config.area + '/' + config.name + '/**/*.test.js',
-        '!' + requireJsConfig
+        root + '/tests/lib/**/*.test.js',
+        root + '/tests/app/code/**/base/**/*.test.js',
+        root + '/tests/app/code/**/' + area + '/**/*.test.js',
+        root + '/tests/app/design/' + area + '/' + vendorThemePath + '/' + theme + '/**/*.test.js'
     ];
 
     tasks[theme] = {
-        src: requireJsConfig,
+        src: requireJsConfigs,
         options: {
             host: host + ':' + port++,
             template: root + '/spec_runner.html',

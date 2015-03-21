@@ -16,7 +16,8 @@ var serveStatic = require('serve-static'),
 ignoredPaths = [
     /^\/_SpecRunner.html/,
     /^\/dev\/tests/,
-    /^\/.grunt/
+    /^\/.grunt/,
+    /^\/pub\/static/
 ];
 
 function serveAsIs(path) {
@@ -47,6 +48,9 @@ tasks = {};
 _.each(themes, function (config, theme) {
     tasks[theme] = {
         options: {
+            /**
+             * To debug in browser, add "keepalive" option and launch "http://localhost:%PORT%/_SpecRunner.html"
+             */
             base: 'pub/static/' + config.area + '/' + config.name + '/' + config.locale,
             port: port++,
             middleware: middleware
