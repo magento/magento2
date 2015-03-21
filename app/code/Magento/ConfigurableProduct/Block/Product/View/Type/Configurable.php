@@ -183,8 +183,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                     'amount' => $this->_registerJsPrice($this->_convertPrice($regularPrice->getAmount()->getValue())),
                 ],
                 'basePrice' => [
-                    'amount' =>
-                        $this->_registerJsPrice($this->_convertPrice($finalPrice->getAmount()->getBaseAmount())),
+                    'amount' => $this->_registerJsPrice(
+                        $this->_convertPrice($finalPrice->getAmount()->getBaseAmount())
+                    ),
                 ],
                 'finalPrice' => [
                     'amount' => $this->_registerJsPrice($this->_convertPrice($finalPrice->getAmount()->getValue())),
@@ -193,7 +194,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
             'images' => isset($options['images']) ? $options['images'] : [],
-            'baseImage' => $options['baseImage'],
         ];
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributes['defaultValues'])) {

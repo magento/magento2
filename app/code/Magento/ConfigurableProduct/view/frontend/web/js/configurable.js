@@ -10,7 +10,8 @@ define([
     "priceUtils",
     "priceBox",
     "jquery/ui",
-    "jquery/jquery.parsequery"
+    "jquery/jquery.parsequery",
+    "mage/gallery"
 ], function($, _, mageTemplate, utils){
 
     function getPrices(elems){
@@ -83,6 +84,8 @@ define([
 
             this.options.values = this.options.spConfig.defaultValues || {};
             this.options.parentImage = $('[data-role=base-image-container] img').attr('src');
+
+            this.initialGalleryImages = $(this.options.mediaGallerySelector).gallery('option', 'images');
         },
 
         /**
@@ -238,12 +241,7 @@ define([
         _changeProductImage: function () {
             var images = this.options.spConfig.images,
                 imagesArray = null,
-                galleryElement = $(this.options.mediaGallerySelector),
-                baseImage = {
-                    small: this.options.spConfig.baseImage,
-                    medium: this.options.spConfig.baseImage,
-                    large: this.options.spConfig.baseImage
-                };
+                galleryElement = $(this.options.mediaGallerySelector);
             $.each(this.options.settings, function (k, v) {
                 var selectValue = parseInt(v.value, 10),
                     attributeId = v.id.replace(/[a-z]*/, '');
@@ -263,18 +261,16 @@ define([
             });
 
             var result = [];
-            $.each(imagesArray || baseImage, function (k, v) {
+            $.each(imagesArray || {}, function (k, v) {
                 result.push({
                     small: v,
                     medium: v,
                     large: v
                 });
             });
-            if (result.length !== 1) {
-                result = [baseImage];
-            }
+
             if (galleryElement.length && galleryElement.data('mageGallery')) {
-                galleryElement.gallery('option', 'images', result);
+                galleryElement.gallery('option', 'images', result.length > 0 ? result : this.initialGalleryImages);
             }
         },
 
