@@ -61,6 +61,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultLayoutFactoryMock;
 
     /**
+     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultLayoutMock;
+
+    /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
@@ -109,7 +114,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
         $this->resultLayoutFactoryMock = $this->getMock(
             'Magento\Framework\View\Result\LayoutFactory',
-            [],
+            ['create'],
             [],
             '',
             false
@@ -202,15 +207,19 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $shipment = [];
         $tracking = [];
 
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
-        $blockMock = $this->getMock('Magento\Shipping\Block\Adminhtml\View\Comments', ['toHtml'], [], '', false);
+        $this->resultLayoutMock = $this->getMock(
+            'Magento\Framework\View\Result\Layout',
+            ['getBlock', 'getDefaultLayoutHandle', 'addDefaultHandle', 'getLayout'],
+            [],
+            '',
+            false
+        );
 
         $this->requestMock->expects($this->once())->method('setParam')->with('shipment_id', $shipmentId);
         $this->requestMock->expects($this->once())
             ->method('getPost')
             ->with('comment')
             ->will($this->returnValue($data));
-        $this->titleMock->expects($this->once())->method('prepend');
         $this->requestMock->expects($this->any())
             ->method('getParam')
             ->will(
@@ -234,10 +243,13 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->shipmentMock->expects($this->once())->method('addComment');
         $this->shipmentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save');
-        $this->viewInterfaceMock->expects($this->once())->method('loadLayout')->with(false);
-        $this->viewInterfaceMock->expects($this->once())->method('getLayout')->will($this->returnValue($layoutMock));
-        $layoutMock->expects($this->once())->method('getBlock')->will($this->returnValue($blockMock));
-        $blockMock->expects($this->once())->method('toHtml')->will($this->returnValue($result));
+        $layoutMock = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
+        $blockMock = $this->getMock('Magento\Shipping\Block\Adminhtml\View\Comments', ['toHtml'], [], '', false);
+        $blockMock->expects($this->once())->method('toHtml')->willReturn($result);
+        $layoutMock->expects($this->once())->method('getBlock')->with('shipment_comments')->willReturn($blockMock);
+        $this->resultLayoutMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
+        $this->resultLayoutMock->expects($this->once())->method('addDefaultHandle');
+        $this->resultLayoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->resultLayoutMock));
         $this->responseMock->expects($this->once())->method('setBody')->with($result);
 
         $this->assertNull($this->controller->execute());
