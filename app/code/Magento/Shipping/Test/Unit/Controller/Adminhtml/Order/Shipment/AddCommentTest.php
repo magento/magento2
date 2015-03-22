@@ -215,10 +215,12 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $layoutMock = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
         $blockMock = $this->getMock('Magento\Shipping\Block\Adminhtml\View\Comments', ['toHtml'], [], '', false);
         $blockMock->expects($this->once())->method('toHtml')->willReturn($result);
-        $layoutMock->expects($this->once())->method('getBlock')->with('shipment_comments')->willReturn($blockMock);
+        $layoutMock->expects($this->once())->method('getBlock')
+            ->with('shipment_comments')->willReturn($blockMock);
         $resultLayoutMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $resultLayoutMock->expects($this->once())->method('addDefaultHandle');
-        $this->resultLayoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultLayoutMock));
+        $this->resultLayoutFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($resultLayoutMock));
         $this->responseMock->expects($this->once())->method('setBody')->with($result);
 
         $this->assertNull($this->controller->execute());
