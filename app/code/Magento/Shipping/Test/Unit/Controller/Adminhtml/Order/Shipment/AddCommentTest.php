@@ -56,6 +56,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $viewInterfaceMock;
 
     /**
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultLayoutFactoryMock;
+
+    /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
