@@ -102,6 +102,13 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->resultLayoutFactoryMock = $this->getMock(
+            'Magento\Framework\View\Result\LayoutFactory',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
@@ -153,7 +160,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\AddComment(
             $contextMock,
             $this->shipmentLoaderMock,
-            $this->shipmentSenderMock
+            $this->shipmentSenderMock,
+            $this->resultLayoutFactoryMock
         );
     }
 
