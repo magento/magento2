@@ -31,19 +31,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $titleMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $pageConfigMock;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
@@ -59,11 +49,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultLayoutFactoryMock;
-
-    /**
-     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resultLayoutMock;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -105,13 +90,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->titleMock = $this->getMock(
-            'Magento\Framework\View\Page\Title',
-            ['prepend', '__wakeup'],
-            [],
-            '',
-            false
-        );
         $this->resultLayoutFactoryMock = $this->getMock(
             'Magento\Framework\View\Result\LayoutFactory',
             ['create'],
@@ -121,9 +99,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -153,15 +128,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
             $this->returnValue($this->resultPageMock)
         );
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
-        );
-
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
         $contextMock->expects($this->any())
             ->method('getObjectManager')
@@ -207,7 +176,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $shipment = [];
         $tracking = [];
 
-        $this->resultLayoutMock = $this->getMock(
+        $resultLayoutMock = $this->getMock(
             'Magento\Framework\View\Result\Layout',
             ['getBlock', 'getDefaultLayoutHandle', 'addDefaultHandle', 'getLayout'],
             [],
@@ -247,9 +216,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $blockMock = $this->getMock('Magento\Shipping\Block\Adminhtml\View\Comments', ['toHtml'], [], '', false);
         $blockMock->expects($this->once())->method('toHtml')->willReturn($result);
         $layoutMock->expects($this->once())->method('getBlock')->with('shipment_comments')->willReturn($blockMock);
-        $this->resultLayoutMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
-        $this->resultLayoutMock->expects($this->once())->method('addDefaultHandle');
-        $this->resultLayoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->resultLayoutMock));
+        $resultLayoutMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
+        $resultLayoutMock->expects($this->once())->method('addDefaultHandle');
+        $this->resultLayoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultLayoutMock));
         $this->responseMock->expects($this->once())->method('setBody')->with($result);
 
         $this->assertNull($this->controller->execute());
