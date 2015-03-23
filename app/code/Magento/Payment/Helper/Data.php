@@ -182,7 +182,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve payment information block
      *
-     * @param Info $info
+     * @param InfoInterface $info
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return Template
      */
@@ -198,12 +198,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Render payment information block
      *
-     * @param Info $info
+     * @param InfoInterface $info
      * @param int $storeId
      * @return string
      * @throws \Exception
      */
-    public function getInfoBlockHtml(Info $info, $storeId)
+    public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
         $this->_appEmulation->startEnvironmentEmulation($storeId);
 
