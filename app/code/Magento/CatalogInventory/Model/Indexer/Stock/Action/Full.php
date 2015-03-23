@@ -22,6 +22,8 @@ class Full extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($ids = null)
     {

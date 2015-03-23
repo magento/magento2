@@ -124,8 +124,8 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('doReplace')
             ->will($this->throwException(
-                new \Magento\Framework\Exception\AlreadyExistsException(__('Custom storage message')))
-            );
+                new \Magento\Framework\Exception\AlreadyExistsException(__('Custom storage message'))
+            ));
 
         $this->storage->replace([['UrlRewrite1']]);
     }
