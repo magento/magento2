@@ -7,7 +7,6 @@ namespace Magento\Sales\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\Webapi\Exception;
 
 /**
  * Sales abstract model

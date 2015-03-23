@@ -15,6 +15,8 @@ use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * TODO: Refactor to avoid code duplication with \Magento\Customer\Model\Address\AbstractAddress
+ *
  * Address abstract model
  *
  * @method string getPrefix()
