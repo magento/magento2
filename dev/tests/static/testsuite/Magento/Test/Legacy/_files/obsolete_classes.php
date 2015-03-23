@@ -2296,7 +2296,7 @@ return [
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
     [
         'Magento\Store\Model\Exception',
-        'Magento\Framework\Exception\LocalizedException, Magento\Framework\App\InitException'
+        'Magento\Framework\Exception\LocalizedException, Magento\Framework\Exception\State\InitException'
     ],
     ['Magento\Core\Model\Store\Group', 'Magento\Store\Model\Group'],
     ['Magento\Core\Model\Store\Group\Factory', 'Magento\Store\Model\GroupFactory'],
@@ -2518,8 +2518,8 @@ return [
     ['Magento\OsInfo', 'Magento\Framework\OsInfo'],
     ['Magento\Registry', 'Magento\Framework\Registry'],
     ['Magento\Util', 'Magento\Framework\Util'],
-    ['Magento\BootstrapException', 'Magento\Framework\App\InitException'],
-    ['Magento\Framework\BootstrapException', 'Magento\Framework\App\InitException'],
+    ['Magento\BootstrapException', 'Magento\Framework\Exception\State\InitException'],
+    ['Magento\Framework\BootstrapException', 'Magento\Framework\Exception\State\InitException'],
     ['Magento\Checkout\Helper\Url'],
     [
         'Magento\Customer\Service\V1\CustomerCurrentService',

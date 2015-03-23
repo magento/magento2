@@ -55,7 +55,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\App\InitException
+     * @expectedException \Magento\Framework\Exception\State\InitException
      */
     public function testGetScopeWithInvalidScope()
     {

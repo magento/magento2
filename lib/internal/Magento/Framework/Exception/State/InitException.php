@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App;
+namespace Magento\Framework\Exception\State;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * An exception that indicates application initialization error
  */
-class InitException extends \Exception
+class InitException extends LocalizedException
 {
 }

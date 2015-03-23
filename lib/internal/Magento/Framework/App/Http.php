@@ -240,7 +240,7 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleInitException(\Exception $exception)
     {
-        if ($exception instanceof \Magento\Framework\App\InitException) {
+        if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
             return true;
         }
