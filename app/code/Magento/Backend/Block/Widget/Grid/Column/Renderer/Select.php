@@ -54,7 +54,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         $html = '<select name="' . $this->escapeHtml($name) . '" ' . $this->getColumn()->getValidateClass() . '>';
         $value = $row->getData($this->getColumn()->getIndex());
         foreach ($this->_getOptions() as $val => $label) {
-            $selected = $val == $value && !is_null($value) ? ' selected="selected"' : '';
+            $selected = $val == $value && $value !== null ? ' selected="selected"' : '';
             $html .= '<option value="' . $this->escapeHtml($val) . '"' . $selected . '>';
             $html .= $this->escapeHtml($label) . '</option>';
         }

@@ -21,7 +21,7 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     public function beforeSave($object)
     {
         $shippingAddressId = $object->getShippingAddressId();
-        if (is_null($shippingAddressId)) {
+        if ($shippingAddressId === null) {
             $object->unsetShippingAddressId();
         }
     }

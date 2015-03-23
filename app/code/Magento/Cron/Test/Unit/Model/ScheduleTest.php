@@ -158,29 +158,14 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     public function testTrySchedule($scheduledAt, $cronExprArr, $expected)
     {
         // 1. Create mocks
-        $timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['date'])
-            ->getMockForAbstractClass();
-
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
-            'Magento\Cron\Model\Schedule',
-            [
-                'timezone' => $timezoneMock
-            ]
+            'Magento\Cron\Model\Schedule'
         );
 
         // 2. Set fixtures
         $model->setScheduledAt($scheduledAt);
         $model->setCronExprArr($cronExprArr);
-        if ($scheduledAt && $cronExprArr) {
-            $date = is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt);
-            $timezoneMock->expects($this->once())
-                ->method('date')
-                ->with($date)
-                ->willReturn((new \DateTime())->setTimestamp($date));
-        }
 
         // 3. Run tested method
         $result = $model->trySchedule();

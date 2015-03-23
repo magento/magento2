@@ -114,7 +114,7 @@ class Statistics extends \Magento\Backend\App\Action
      */
     protected function _getSession()
     {
-        if (is_null($this->_adminSession)) {
+        if ($this->_adminSession === null) {
             $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
         }
         return $this->_adminSession;

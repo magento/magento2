@@ -90,7 +90,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getTypeId()
     {
-        if (is_null($this->_typeId)) {
+        if ($this->_typeId === null) {
             throw new \Magento\Catalog\Exception(__('A product type is not defined for the indexer.'));
         }
         return $this->_typeId;
@@ -299,7 +299,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             ]
         );
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 
@@ -318,28 +318,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
 
         $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
         $write->query($query);
-
-        /**
-         * Add possibility modify prices from external events
-         */
-        $select = $write->select()->join(
-            ['wd' => $this->_getWebsiteDateTable()],
-            'i.website_id = wd.website_id',
-            []
-        );
-        $this->_eventManager->dispatch(
-            'prepare_catalog_product_price_index_table',
-            [
-                'index_table' => ['i' => $this->_getDefaultFinalPriceTable()],
-                'select' => $select,
-                'entity_id' => 'i.entity_id',
-                'customer_group_id' => 'i.customer_group_id',
-                'website_id' => 'i.website_id',
-                'website_date' => 'wd.website_date',
-                'update_fields' => ['price', 'min_price', 'max_price']
-            ]
-        );
-
         return $this;
     }
 

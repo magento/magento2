@@ -254,7 +254,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     public function hasVerification()
     {
         $configData = $this->getConfigData('useccv');
-        if (is_null($configData)) {
+        if ($configData === null) {
             return true;
         }
         return (bool)$configData;

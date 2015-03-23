@@ -90,7 +90,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($storeId) {
                 $product->setStoreId($storeId);
             }
-            $setId = $this->getRequest()->getPost('set');
+            $setId = $this->getRequest()->getPost('set') ?: $this->getRequest()->getParam('set');
             if ($setId) {
                 $product->setAttributeSetId($setId);
             }

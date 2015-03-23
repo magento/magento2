@@ -37,7 +37,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     public function getTree($rootCategoryId = null, $depth = null)
     {
         $category = null;
-        if (!is_null($rootCategoryId)) {
+        if ($rootCategoryId !== null) {
             /** @var \Magento\Catalog\Model\Category $category */
             $category = $this->categoryRepository->get($rootCategoryId);
         }
@@ -57,7 +57,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
             $parentChildren = $parentCategory->getChildren();
             $categoryIds = explode(',', $parentChildren);
             $lastId = array_pop($categoryIds);
-            $afterId = (is_null($afterId) || $afterId > $lastId) ? $lastId : $afterId;
+            $afterId = ($afterId === null || $afterId > $lastId) ? $lastId : $afterId;
         }
 
         if (strpos($parentCategory->getPath(), $model->getPath()) === 0) {

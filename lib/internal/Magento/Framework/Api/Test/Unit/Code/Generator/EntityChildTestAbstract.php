@@ -85,40 +85,33 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
         $this->mockDefinedClassesCall();
 
         $this->ioObjectMock->expects($this->once())
-            ->method('makeGenerationDirectory')
-            ->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->once())
             ->method('makeResultFileDirectory')
             ->with($this->getResultClassName())
-            ->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->once())
-            ->method('fileExists')
-            ->with($resultFileName)
-            ->will($this->returnValue(false));
+            ->willReturn(true);
 
         //Mocking _generateCode call
         $this->classGenerator->expects($this->once())
             ->method('setName')
             ->with($this->getResultClassName())
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('addProperties')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('addMethods')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('setClassDocBlock')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('generate')
-            ->will($this->returnValue($generatedCode));
+            ->willReturn($generatedCode);
 
         //Mocking generation
         $this->ioObjectMock->expects($this->any())
             ->method('getResultFileName')
             ->with($this->getResultClassName())
-            ->will($this->returnValue($resultFileName));
+            ->willReturn($resultFileName);
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with($resultFileName, $generatedCode);

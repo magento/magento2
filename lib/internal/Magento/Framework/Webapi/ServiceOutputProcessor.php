@@ -61,7 +61,7 @@ class ServiceOutputProcessor
             return $this->processDataObject(
                 $this->dataObjectProcessor->buildOutputDataArray($data, $dataType)
             );
-        } elseif (is_null($data)) {
+        } elseif ($data === null) {
             return [];
         } else {
             /** No processing is required for scalar types */

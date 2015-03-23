@@ -583,7 +583,7 @@ class IndexBuilder
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
         );
 
-        if (!is_null($productId)) {
+        if ($productId !== null) {
             $select->where('rp.product_id=?', $productId);
         }
 
