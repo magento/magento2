@@ -66,7 +66,13 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storage = $this->getMock('Magento\Framework\Session\Storage', ['getUser'], [], '', false);
+        $this->storage = $this->getMock(
+            'Magento\Framework\Session\Storage',
+            ['getUser', 'getAcl', 'setAcl'],
+            [],
+            '',
+            false
+        );
         $this->sessionConfig = $this->getMock(
             'Magento\Framework\Session\Config',
             ['getCookiePath', 'getCookieDomain', 'getCookieSecure', 'getCookieHttpOnly'],
@@ -113,6 +119,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
         $userMock->expects($this->once())->method('setReloadAclFlag')->with('0')->willReturnSelf();
         $userMock->expects($this->once())->method('save');
+        $this->storage->expects($this->once())->method('setAcl')->with($aclMock);
+        $this->storage->expects($this->any())->method('getAcl')->willReturn($aclMock);
         if ($isUserPassedViaParams) {
             $this->session->refreshAcl($userMock);
         } else {
@@ -216,5 +224,59 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->session->prolong();
 
         $this->assertLessThanOrEqual(time(), $this->session->getUpdatedAt());
+    }
+
+    /**
+     * @dataProvider isAllowedDataProvider
+     * @param bool $isUserDefined
+     * @param bool $isAclDefined
+     * @param bool $isAllowed
+     * @param true $expectedResult
+     */
+    public function testIsAllowed($isUserDefined, $isAclDefined, $isAllowed, $expectedResult)
+    {
+        $userAclRole = 'userAclRole';
+        if ($isAclDefined) {
+            $aclMock = $this->getMockBuilder('Magento\Framework\Acl')->disableOriginalConstructor()->getMock();
+            $this->storage->expects($this->any())->method('getAcl')->willReturn($aclMock);
+        }
+        if ($isUserDefined) {
+            $userMock = $this->getMockBuilder('Magento\User\Model\User')->disableOriginalConstructor()->getMock();
+            $this->storage->expects($this->once())->method('getUser')->willReturn($userMock);
+        }
+        if ($isAclDefined && $isUserDefined) {
+            $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+            $aclMock->expects($this->once())->method('isAllowed')->with($userAclRole)->willReturn($isAllowed);
+        }
+
+        $this->assertEquals($expectedResult, $this->session->isAllowed('resource'));
+    }
+
+    public function isAllowedDataProvider()
+    {
+        return [
+            "Negative: User not defined" => [false, true, true, false],
+            "Negative: Acl not defined" => [true, false, true, false],
+            "Negative: Permission denied" => [true, true, false, false],
+            "Positive: Permission granted" => [true, true, false, false],
+        ];
+    }
+
+    /**
+     * @dataProvider firstPageAfterLoginDataProvider
+     * @param bool $isFirstPageAfterLogin
+     */
+    public function testFirstPageAfterLogin($isFirstPageAfterLogin)
+    {
+        $this->session->setIsFirstPageAfterLogin($isFirstPageAfterLogin);
+        $this->assertEquals($isFirstPageAfterLogin, $this->session->isFirstPageAfterLogin());
+    }
+
+    public function firstPageAfterLoginDataProvider()
+    {
+        return [
+            'First page after login' => [true],
+            'Not first page after login' => [false],
+        ];
     }
 }
