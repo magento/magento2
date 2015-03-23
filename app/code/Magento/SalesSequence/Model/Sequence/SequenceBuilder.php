@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
@@ -76,8 +77,7 @@ class SequenceBuilder
         SequenceFactory $sequenceFactory,
         MetaFactory $metaFactory,
         ProfileFactory $profileFactory
-    )
-    {
+    ) {
         $this->resourceMetadata = $resourceMetadata;
         $this->sequenceFactory = $sequenceFactory;
         $this->metaFactory = $metaFactory;
@@ -213,7 +213,8 @@ class SequenceBuilder
         $metadata = $this->metaFactory->create(
             [
                 'data' => array_intersect_key(
-                    $this->data, array_flip(['entity_type', 'store_id', 'sequence_table', 'active_profile'])
+                    $this->data,
+                    array_flip(['entity_type', 'store_id', 'sequence_table', 'active_profile'])
                 )
             ]
         );

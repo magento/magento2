@@ -6,12 +6,12 @@ namespace Magento\SalesSequence\Model\Resource\Sequence;
 
 use Magento\Framework\Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Sales\Model\AbstractModel as SalesAbstractModel;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\Resource\Sequence\Profile as ResourceProfile;
 use Magento\SalesSequence\Model\Sequence\MetaFactory;
 use Magento\SalesSequence\Model\Sequence\Profile;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+
 /**
  * Class Meta
  */
@@ -25,7 +25,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_eventPrefix = 'sales_sequence_meta';
 
     /**
-     * @var Profile
+     * @var ResourceProfile
      */
     protected $resourceProfile;
 
@@ -39,8 +39,8 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
-     * @param Profile $resourceProfile
-     * @param null $resourcePrefix
+     * @param ResourceProfile $resourceProfile
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         DatabaseContext $context,
