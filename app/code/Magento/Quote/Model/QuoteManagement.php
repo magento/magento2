@@ -96,6 +96,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -110,6 +115,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -126,7 +132,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         QuoteRepository $quoteRepository,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Checkout\Model\Session $checkoutSession
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -142,6 +149,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->customerRepository = $customerRepository;
         $this->customerModelFactory = $customerModelFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -244,7 +252,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
         }
 
-        return $this->submit($quote)->getId();
+        $order = $this->submit($quote);
+        $this->checkoutSession->setLastSuccessQuoteId($quote->getId());
+        return $order->getId();
     }
 
     /**
