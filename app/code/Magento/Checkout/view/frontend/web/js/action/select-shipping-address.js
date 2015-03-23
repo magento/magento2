@@ -14,7 +14,7 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function(quote, addressList, storage, errorList) {
-        return function(shippingAddressId, sameAsBilling, formKey) {
+        return function(shippingAddressId, sameAsBilling) {
             if (!shippingAddressId) {
                 alert('Currently adding a new address is not supported.');
                 return false;
@@ -29,9 +29,6 @@ define(
                 function(quoteAddressId) {
                     address.id = quoteAddressId;
                     quote.setShippingAddress(address);
-                    if (sameAsBilling) {
-                        quote.setBillingAddress(address);
-                    }
                 }
             ).error(
                 function(response) {

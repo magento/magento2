@@ -9,23 +9,37 @@
 define(
     [
         'Magento_Ui/js/form/component',
+        'ko',
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Customer/js/model/customer',
         '../model/quote',
         'Magento_Checkout/js/model/step-navigator'
     ],
-    function(Component, selectShippingAddress, customer, quote, navigator) {
+    function(Component, ko, selectShippingAddress, customer, quote, navigator) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',
                 addresses: customer.getShippingAddressList(),
-                selectedAddressId: null,
-                sameAsBilling: null,
+                selectedAddressId: ko.observable(null),
+                sameAsBilling: ko.observable(null),
                 isLoggedIn: customer.isLoggedIn(),
                 isVisible: navigator.isShippingAddressVisible(),
                 quoteHasBillingAddress: quote.hasBillingAddress(),
                 selectShippingAddress: function() {
-                    selectShippingAddress(this.selectedAddressId, this.sameAsBilling);
+                    selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());
+                },
+                sameAsBillingClick: function() {
+                    if (this.sameAsBilling()) {
+                        var billingAddress = quote.getBillingAddress();
+                        this.selectedAddressId(billingAddress.customerAddressId);
+                    }
+                    return true;
+                },
+                onAddressChange: function() {
+                    var billingAddress = quote.getBillingAddress();
+                    if (this.selectedAddressId() != billingAddress.customerAddressId) {
+                        this.sameAsBilling(false);
+                    }
                 },
                 // Checkout step navigation
                 backToBilling: function() {

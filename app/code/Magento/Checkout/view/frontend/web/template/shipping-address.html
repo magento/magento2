@@ -13,14 +13,22 @@
                 <div class="control">
                     <select name="shipping_address_id"
                             id="shipping:address-select"
-                            data-bind="options: addresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId', value: selectedAddressId"
+                            data-bind="options: addresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId', value: selectedAddressId, event: {change: onAddressChange}"
                             >
                     </select>
                 </div>
             </div>
             <div class="choice field">
-                <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1" checked="checked" class="checkbox" data-bind="checked: sameAsBilling"/>
-                <label class="label" for="shipping:same_as_billing"><span>Use Billing Address</span></label>
+                <input type="checkbox"
+                       name="shipping[same_as_billing]"
+                       id="shipping:same_as_billing"
+                       value="1"
+                       checked="checked"
+                       class="checkbox"
+                       data-bind="checked: sameAsBilling, click: sameAsBillingClick"/>
+                <label class="label" for="shipping:same_as_billing">
+                    <span>Use Billing Address</span>
+                </label>
             </div>
             <div class="actions-toolbar" id="shipping-buttons-container">
                 <div class="primary">
