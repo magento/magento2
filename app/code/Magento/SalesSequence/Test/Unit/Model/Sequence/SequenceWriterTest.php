@@ -25,7 +25,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
      */
     private $meta;
 
-
     /**
      * @var \Magento\SalesSequence\Model\Sequence\Profile | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -62,7 +61,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             true,
             ['query']
         );
-
         $this->resourceSequenceMeta = $this->getMock(
             'Magento\SalesSequence\Model\Resource\Sequence\Meta',
             ['loadBy', 'getReadConnection'],
@@ -70,7 +68,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->meta = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\Meta',
             ['getId', 'setData', 'save'],
@@ -78,7 +75,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->sequence = $this->getMock(
             '\Magento\Framework\DB\Ddl\Sequence',
             [],
@@ -86,7 +82,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->profile = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\Profile',
             ['getId', 'setData', 'getStartValue'],
@@ -94,7 +89,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->metaFactory = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\MetaFactory',
             ['create'],
@@ -103,7 +97,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->metaFactory->expects($this->any())->method('create')->willReturn($this->meta);
-
         $this->profileFactory = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\ProfileFactory',
             ['create'],
@@ -112,7 +105,6 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
-
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequenceWriter = $helper->getObject(
             'Magento\SalesSequence\Model\Sequence\SequenceWriter',
