@@ -235,7 +235,7 @@ class DirectoryList
     {
         if (!isset($this->directories[$code])) {
             throw new \Magento\Framework\Exception\FilesystemException(
-                new \Magento\Framework\Phrase('Unknown directory type: %1', [$code])
+                new \Magento\Framework\Phrase('Unknown directory type: \'%1\'', [$code])
             );
         }
     }
