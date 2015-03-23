@@ -13,6 +13,7 @@
 @import (reference) "../mui/styles/abstract.less"; // Import some abstract
 
 .admin__scope-old {
+    box-sizing: content-box;
 
 //    .normalize();
     @import "../mui/styles/base.less";
@@ -4855,11 +4856,14 @@
 //  Configuration -> Payment Methods
 .adminhtml-system-config-edit {
     .admin__scope-old {
-        .payflow-settings-notice .important-label {
-            .style32();
-        }
-        .payflow-settings-notice ul.options-list strong {
-            .style28();
+        .payflow-settings-notice {
+            padding: 10px;
+            .important-label {
+                .style32();
+            }
+            ul.options-list strong {
+                .style28();
+            }
         }
     }
 }
