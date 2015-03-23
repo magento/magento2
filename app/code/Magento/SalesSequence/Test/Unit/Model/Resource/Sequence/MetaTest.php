@@ -92,7 +92,6 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->resourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
             ['getConnection', 'getTableName'],

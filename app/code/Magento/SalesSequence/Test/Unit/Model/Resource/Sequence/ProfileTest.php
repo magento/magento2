@@ -49,6 +49,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
      */
     private $select;
+
     /**
      * Initialization
      */
