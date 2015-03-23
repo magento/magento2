@@ -69,7 +69,6 @@ class Context extends \Magento\Framework\App\Action\Context
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param bool $canUseBaseUrl
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -91,7 +90,6 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         $canUseBaseUrl = false
     ) {
         parent::__construct(
