@@ -11,6 +11,21 @@ namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 interface DataProviderInterface
 {
     /**
+     * Get config data
+     *
+     * @return mixed
+     */
+    public function getConfigData();
+
+    /**
+     * Set config data
+     *
+     * @param mixed $config
+     * @return void
+     */
+    public function setConfigData($config);
+
+    /**
      * @return array
      */
     public function getMeta();
@@ -21,6 +36,12 @@ interface DataProviderInterface
      * @return array
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName);
+
+    /**
+     * @param string $fieldSetName
+     * @return array
+     */
+    public function getFieldsMetaInfo($fieldSetName);
 
     /**
      * Get data

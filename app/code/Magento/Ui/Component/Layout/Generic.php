@@ -28,7 +28,7 @@ class Generic implements LayoutInterface
         $this->addChildren($children, $component, $component->getName());
         $dataSources = $component->getDataSourceData();
         $configuration = [
-            'types' => array_reverse($context->getComponentsDefinitions()),
+            'types' => $context->getComponentsDefinitions(),
             'components' => [
                 $context->getNamespace() => [
                     'children' => array_merge($children, $dataSources)
@@ -59,7 +59,7 @@ class Generic implements LayoutInterface
                 if ($child instanceof DataSourceInterface) {
                     continue;
                 }
-                $this->addChildren($childrenNode, $child, $child->getComponentName());
+                self::addChildren($childrenNode, $child, $child->getComponentName());
             }
         }
         /** @var JsConfigInterface $component */
@@ -70,8 +70,10 @@ class Generic implements LayoutInterface
             $nodeData = [
                 'type' => $componentType,
                 'name' => $component->getName(),
-                'children' => $childrenNode
             ];
+            if (!empty($childrenNode)) {
+                $nodeData['children'] = $childrenNode;
+            }
             if (isset($config['dataScope'])) {
                 $nodeData['dataScope'] = $config['dataScope'];
                 unset($config['dataScope']);
