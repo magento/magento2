@@ -1,3 +1,9 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <li id="opc-billing" class="section allow active">
     <div class="step-title" data-role="title">
         <span class="number">2</span>
@@ -10,9 +16,7 @@
                 <div class="control">
                     <select name="billing_address_id" id="billing:address-select" data-bind="
                         options: billingAddresses,
-                        optionsText: function(item) {
-                            return item.getFullAddress();
-                        },
+                        optionsText: billingAddressesOptionsText,
                         optionsValue: 'customerAddressId',
                         value: selectedBillingAddressId
                     "></select>

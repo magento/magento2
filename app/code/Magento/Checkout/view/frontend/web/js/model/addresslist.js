@@ -1,12 +1,11 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*jshint browser:true*/
+/*global define*/
 define(['jquery'], function($) {
+    "use strict";
     var addresses = [];
     return {
         add: function (address) {
@@ -15,7 +14,7 @@ define(['jquery'], function($) {
         getAddressById: function(id) {
             var address = null;
             $.each(addresses, function(key, item) {
-                if (id == item.customerAddressId) {
+                if (id === item.customerAddressId) {
                     address = item;
                     return false;
                 }
@@ -36,5 +35,5 @@ define(['jquery'], function($) {
             },
             customerAddressId: null
         }
-    }
+    };
 });

@@ -29,6 +29,9 @@ define(
                 function(quoteAddressId) {
                     address.id = quoteAddressId;
                     quote.setShippingAddress(address);
+                    if (sameAsBilling) {
+                        quote.setBillingAddress(address);
+                    }
                 }
             ).error(
                 function(response) {

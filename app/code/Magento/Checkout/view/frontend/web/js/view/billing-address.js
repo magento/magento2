@@ -1,11 +1,9 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*jshint browser:true*/
+/*global define*/
 define(
     [
         'Magento_Ui/js/form/component',
@@ -14,6 +12,7 @@ define(
         '../model/quote'
     ],
     function (Component, customer, selectBillingAddress, quote) {
+        "use strict";
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address',
@@ -22,7 +21,10 @@ define(
                 isLoggedIn: customer.isLoggedIn(),
                 quoteHasBillingAddress: quote.hasBillingAddress(),
                 useForShipping: "1",
-                submitBillingAddress: function() {
+                billingAddressesOptionsText: function (item) {
+                    return item.getFullAddress();
+                },
+                submitBillingAddress: function () {
                     selectBillingAddress(this.selectedBillingAddressId, this.useForShipping);
                 }
             }
