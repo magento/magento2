@@ -32,7 +32,7 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\SequenceReader $sequenceReader
+     * @param \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager
      * @param \Magento\Sales\Model\Order\Shipment\Track\Validator $validator
      * @param string|null $resourcePrefix
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
@@ -40,13 +40,13 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\SequenceReader $sequenceReader,
+        \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
         \Magento\Sales\Model\Order\Shipment\Track\Validator $validator,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceReader, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
     }
 
     /**

@@ -8,9 +8,9 @@ use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceSequenceMeta;
 use Magento\SalesSequence\Model\SequenceFactory;
 
 /**
- * Class SequenceReader
+ * Class SequenceManager
  */
-class SequenceReader
+class SequenceManager
 {
     /**
      * @var ResourceSequenceMeta
@@ -44,7 +44,7 @@ class SequenceReader
     {
         return $this->sequenceFactory->create(
             [
-                'meta' => $this->resourceSequenceMeta->loadBy(
+                'meta' => $this->resourceSequenceMeta->loadByEntityTypeAndStore(
                     $entity->getEntityType(),
                     $entity->getStore()->getId()
                 )

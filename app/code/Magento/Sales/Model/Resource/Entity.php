@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 use Magento\Sales\Model\EntityInterface;
-use Magento\SalesSequence\Model\Sequence\SequenceReader;
+use Magento\SalesSequence\Model\Sequence\SequenceManager;
 
 /**
  * Flat sales resource abstract
@@ -47,9 +47,9 @@ abstract class Entity extends AbstractDb
     protected $attribute;
 
     /**
-     * @var SequenceReader
+     * @var SequenceManager
      */
-    protected $sequenceReader;
+    protected $sequenceManager;
 
     /**
      * @var \Magento\Sales\Model\Resource\GridInterface
@@ -59,19 +59,19 @@ abstract class Entity extends AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SequenceReader $sequenceReader
+     * @param SequenceManager $sequenceManager
      * @param string|null $resourcePrefix
      * @param GridInterface|null $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        SequenceReader $sequenceReader,
+        SequenceManager $sequenceManager,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->attribute = $attribute;
-        $this->sequenceReader = $sequenceReader;
+        $this->sequenceManager = $sequenceManager;
         $this->gridAggregator = $gridAggregator;
         parent::__construct($context, $resourcePrefix);
     }
@@ -99,7 +99,7 @@ abstract class Entity extends AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
-            $object->setIncrementId($this->sequenceReader->getSequence($object)->getNextValue());
+            $object->setIncrementId($this->sequenceManager->getSequence($object)->getNextValue());
         }
         parent::_beforeSave($object);
         return $this;

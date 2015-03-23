@@ -16,6 +16,7 @@ class Meta extends AbstractModel
      */
     protected function _construct()
     {
+
         $this->_init('Magento\SalesSequence\Model\Resource\Sequence\Meta');
     }
 }

@@ -33,7 +33,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\SequenceReader $sequenceReader
+     * @param \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
      * @param string|null $resourcePrefix
@@ -42,7 +42,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\SequenceReader $sequenceReader,
+        \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
         $resourcePrefix = null,
@@ -50,7 +50,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($context, $attribute, $sequenceReader, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
     }
 
     /**

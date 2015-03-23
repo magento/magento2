@@ -17,7 +17,7 @@ class Sequence
      * @param int $startNumber
      * @return string
      */
-    public function createSequence($name, $startNumber = 1)
+    public function getCreateSequenceDdl($name, $startNumber = 1)
     {
         $format = "CREATE TABLE %s (
                      sequence_value %s UNSIGNED NOT NULL AUTO_INCREMENT,

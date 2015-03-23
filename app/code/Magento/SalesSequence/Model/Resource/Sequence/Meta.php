@@ -11,7 +11,7 @@ use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\Resource\Sequence\Profile as ResourceProfile;
 use Magento\SalesSequence\Model\Sequence\MetaFactory;
 use Magento\SalesSequence\Model\Sequence\Profile;
-
+use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 /**
  * Class Meta
  */
@@ -34,6 +34,8 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected $metaFactory;
 
+    protected $ddlSequence;
+
     /**
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
@@ -44,9 +46,10 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
         DatabaseContext $context,
         MetaFactory $metaFactory,
         ResourceProfile $resourceProfile,
+        DdlSequence $ddlSequence,
         $resourcePrefix = null
-    )
-    {
+    ) {
+        $this->ddlSequence = $ddlSequence;
         $this->metaFactory = $metaFactory;
         $this->resourceProfile = $resourceProfile;
         parent::__construct($context, $resourcePrefix);
@@ -68,7 +71,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @return \Magento\SalesSequence\Model\Sequence\Meta
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function loadBy($entityType, $storeId)
+    public function loadByEntityTypeAndStore($entityType, $storeId)
     {
         $meta = $this->metaFactory->create();
         $adapter = $this->_getReadAdapter();
@@ -93,7 +96,10 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->setData('active_profile', $this->resourceProfile->loadActiveProfile($object));
+        $object->setData(
+            'active_profile',
+            $this->resourceProfile->loadActiveProfile($object->getId())
+        );
         return $this;
     }
 
@@ -128,5 +134,18 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->setMetaId($object->getId());
         $this->resourceProfile->save($profile);
         return $this;
+    }
+
+    /**
+     * Shortcut for sequence creation
+     *
+     * @param $sequenceName
+     * @param $startNumber
+     */
+    public function createSequence($sequenceName, $startNumber)
+    {
+        $this->_getWriteAdapter()->query(
+            $this->ddlSequence->getCreateSequenceDdl($sequenceName, $startNumber)
+        );
     }
 }

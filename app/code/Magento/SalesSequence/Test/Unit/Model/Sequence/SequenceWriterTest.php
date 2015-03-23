@@ -187,7 +187,7 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
         $this->meta->expects($this->once())->method('getData')->with('active_profile')->willReturn($this->profile);
         $this->profile->expects($this->once())->method('getStartValue')->willReturn($startValue);
         $this->sequence->expects($this->once())
-            ->method('createSequence')
+            ->method('getCreateSequenceDdl')
             ->with($tableName, $startValue)
             ->willReturn($sql);
         $this->resourceSequenceMeta->expects($this->once())->method('getReadConnection')->willReturn($this->adapter);

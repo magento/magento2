@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\App\Resource as AppResource;
-use Magento\SalesSequence\Model\Sequence\SequenceReader;
+use Magento\SalesSequence\Model\Sequence\SequenceManager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
 use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
@@ -46,18 +46,18 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SequenceReader $sequenceReader
+     * @param SequenceManager $sequenceManager
      * @param ShipmentGrid $gridAggregator
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SequenceReader $sequenceReader,
+        SequenceManager $sequenceManager,
         ShipmentGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $sequenceReader, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
     }
 
     /**

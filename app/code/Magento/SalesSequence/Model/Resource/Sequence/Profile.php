@@ -52,15 +52,15 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load active profile
      *
-     * @param ModelMeta $meta
+     * @param $metadataId
      * @return \Magento\SalesSequence\Model\Sequence\Profile
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function loadActiveProfile(ModelMeta $meta)
+    public function loadActiveProfile($metadataId)
     {
         $profile = $this->profileFactory->create();
         $adapter = $this->_getReadAdapter();
-        $bind = ['meta_id' => $meta->getId()];
+        $bind = ['meta_id' => $metadataId];
         $select = $adapter->select()
             ->from($this->getMainTable(), ['profile_id'])
             ->where('meta_id = :meta_id')

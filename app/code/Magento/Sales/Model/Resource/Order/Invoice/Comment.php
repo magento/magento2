@@ -32,7 +32,7 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\SequenceReader $sequenceReader
+     * @param \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      * @param string|null $resourcePrefix
@@ -40,13 +40,13 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\SequenceReader $sequenceReader,
+        \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceReader, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
     }
 
     /**
