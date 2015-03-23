@@ -73,7 +73,9 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->redirect));
         $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
-            ->setMethods(['getRequest', 'getResponse', 'getObjectManager', 'getMessageManager', 'getResultRedirectFactory'])
+            ->setMethods(
+                ['getRequest', 'getResponse', 'getObjectManager', 'getMessageManager', 'getResultRedirectFactory']
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())
