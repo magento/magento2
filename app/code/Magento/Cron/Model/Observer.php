@@ -370,7 +370,8 @@ class Observer
         $now = $this->timezone->scopeTimeStamp();
         /** @var Schedule $record */
         foreach ($history as $record) {
-            if (strtotime($record->getExecutedAt()) < $now - $historyLifetimes[$record->getStatus()]) {
+            $checkTime = strtotime($record->getExecutedAt() ? $record->getExecutedAt() : $record->getScheduledAt());
+            if ($checkTime < $now - $historyLifetimes[$record->getStatus()]) {
                 $record->delete();
             }
         }
