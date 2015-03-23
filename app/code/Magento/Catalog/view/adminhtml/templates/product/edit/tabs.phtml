@@ -32,6 +32,7 @@
             ?>
 
             <div class="admin__page-nav <?php if (!$isBasic): ?> <?php echo '_collapsed';?> <?php endif;?>"
+                data-role="container"
                 id="<?php echo $tabGroupId ?>"
                 <?php if (!$isBasic): ?>
                     data-mage-init='{"collapsible":{
@@ -49,7 +50,7 @@
                         <strong>
                             <?php echo $isBasic ? __('Basic Settings') : __('Advanced Settings') ?>
                         </strong>
-                        <span class="admin__page-nav-title-messages"></span>
+                        <span data-role="title-messages" class="admin__page-nav-title-messages"></span>
                     </div>
                 </div>
 
@@ -71,7 +72,7 @@
 
                                 <span><?php echo $block->escapeHtml($block->getTabLabel($_tab)); ?></span>
 
-                                <span class="admin__page-nav-item-messages">
+                                <span class="admin__page-nav-item-messages" data-role="item-messages">
                                    <span class="admin__page-nav-item-message _changed">
                                        <span class="admin__page-nav-item-message-icon"></span>
                                        <span class="admin__page-nav-item-message-tooltip">

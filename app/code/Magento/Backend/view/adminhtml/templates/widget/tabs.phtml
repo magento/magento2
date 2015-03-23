@@ -11,11 +11,11 @@
 <?php if (!empty($tabs)): ?>
 
 <div class="admin__scope">
-    <div class="admin__page-nav" id="<?php echo $block->getId() ?>">
+    <div class="admin__page-nav" data-role="container" id="<?php echo $block->getId() ?>">
         <?php if ($block->getTitle()): ?>
-            <div class="admin__page-nav-title" <?php echo $block->getUiId('title') ?>>
+            <div class="admin__page-nav-title" data-role="title" <?php echo $block->getUiId('title') ?>>
                 <strong><?php echo $block->getTitle() ?></strong>
-                <span class="admin__page-nav-title-messages"></span>
+                <span data-role="title-messages" class="admin__page-nav-title-messages"></span>
             </div>
         <?php endif ?>
         <ul <?php echo $block->getUiId('tab', $block->getId()) ?> class="<?php echo $block->getIsHoriz() ? 'tabs-horiz' : 'tabs admin__page-nav-items' ?>">
@@ -34,7 +34,7 @@
 
                        <span><?php echo $block->getTabLabel($_tab); ?></span>
 
-                       <span class="admin__page-nav-item-messages">
+                       <span class="admin__page-nav-item-messages" data-role="item-messages">
                            <span class="admin__page-nav-item-message _changed">
                                <span class="admin__page-nav-item-message-icon"></span>
                                <span class="admin__page-nav-item-message-tooltip">
