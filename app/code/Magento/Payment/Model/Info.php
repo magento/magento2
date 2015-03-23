@@ -10,7 +10,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Payment information model
  */
-class Info extends AbstractExtensibleModel
+class Info extends AbstractExtensibleModel implements InfoInterface
 {
     /**
      * Additional information container

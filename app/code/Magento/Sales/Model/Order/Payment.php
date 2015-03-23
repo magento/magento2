@@ -9,7 +9,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Payment\Model\Info;
+use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**

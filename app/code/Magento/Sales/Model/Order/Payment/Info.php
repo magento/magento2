@@ -13,7 +13,7 @@ use Magento\Sales\Model\AbstractModel;
  *
  * Payment information model
  */
-class Info extends AbstractModel
+class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
 {
     /**
      * Additional information container

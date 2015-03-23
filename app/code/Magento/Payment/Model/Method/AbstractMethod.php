@@ -497,7 +497,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function getInfoInstance()
     {
         $instance = $this->getData('info_instance');
-        if (!$instance instanceof \Magento\Payment\Model\Info) {
+        if (!$instance instanceof \Magento\Payment\Model\InfoInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment information object instance.'));
         }
         return $instance;

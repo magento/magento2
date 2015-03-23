@@ -13,7 +13,7 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Sales\Model\AbstractModel;
-
+use Magento\Customer\Model\Address\AddressModelInterface;
 /**
  * TODO: Refactor to avoid code duplication with \Magento\Customer\Model\Address\AbstractAddress
  *
@@ -31,7 +31,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractAddress extends AbstractModel
+class AbstractAddress extends AbstractModel implements AddressModelInterface
 {
     /**
      * Possible customer address types

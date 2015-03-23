@@ -84,7 +84,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
             $this->setId($value);
             return;
         }
-        if (isset($this->_data[$key]) && $this->_data[$key] != $value) {
+        if (isset($this->_data[$key]) && $this->getData($key) != $value) {
             $this->rawData[$key] = $value;
             return;
         } else if (!isset($this->_data[$key])) {

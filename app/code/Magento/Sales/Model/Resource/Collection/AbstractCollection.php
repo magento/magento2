@@ -252,4 +252,33 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
         }
         return false;
     }
+
+    /**
+     * Load data with filter in place
+     *
+     * @param   bool $printQuery
+     * @param   bool $logQuery
+     * @return  $this
+     */
+    public function loadWithFilter($printQuery = false, $logQuery = false)
+    {
+        $this->_beforeLoad();
+        $this->_renderFilters()->_renderOrders()->_renderLimit();
+        $this->printLogQuery($printQuery, $logQuery);
+        $data = $this->getData();
+        $this->resetData();
+        if (is_array($data)) {
+            foreach ($data as $row) {
+                $item = $this->getNewEmptyItem();
+                if ($this->getIdFieldName()) {
+                    $item->setIdFieldName($this->getIdFieldName());
+                }
+                $item->setData($row)->flushDataIntoModel();
+                $this->addItem($item);
+            }
+        }
+        $this->_setIsLoaded();
+        $this->_afterLoad();
+        return $this;
+    }
 }

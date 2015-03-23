@@ -9,7 +9,7 @@ use Magento\Payment\Model\Method\Substitution;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
-use Magento\Payment\Model\Info;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\LayoutFactory;
@@ -186,7 +186,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return Template
      */
-    public function getInfoBlock(Info $info, LayoutInterface $layout = null)
+    public function getInfoBlock(InfoInterface $info, LayoutInterface $layout = null)
     {
         $layout = $layout ?: $this->_layout;
         $blockType = $info->getMethodInstance()->getInfoBlockType();
