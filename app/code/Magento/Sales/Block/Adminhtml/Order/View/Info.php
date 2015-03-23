@@ -254,4 +254,9 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     {
         return $this->_localeDate->scopeDate($store, $createdAt, true);
     }
+
+    public function getOrderAdminDate($createdAt)
+    {
+        return $this->_localeDate->date(new \DateTime($createdAt));
+    }
 }

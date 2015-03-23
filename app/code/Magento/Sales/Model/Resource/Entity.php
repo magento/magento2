@@ -154,7 +154,7 @@ abstract class Entity extends AbstractDb
                 $object->setUpdatedAt($row['updated_at']);
             }
         }
-
+        $object->flushDataIntoModel();
         parent::_afterSave($object);
         return $this;
     }
@@ -173,4 +173,39 @@ abstract class Entity extends AbstractDb
         parent::_afterDelete($object);
         return $this;
     }
+
+    /**
+     * Perform actions after object load
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $object->flushDataIntoModel();
+        return $this;
+    }
+//
+//    protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
+//    {
+//        $data = [];
+//        $fields = $this->_getWriteAdapter()->describeTable($table);
+//        foreach (array_keys($fields) as $field) {
+//            if ($object->hasData($field)) {
+//                $fieldValue = $object->getData($field);
+//                if ($fieldValue instanceof \Zend_Db_Expr) {
+//                    $data[$field] = $fieldValue;
+//                } else {
+//                    if (null !== $fieldValue) {
+//                        $fieldValue = $this->_prepareTableValueForSave($fieldValue, $fields[$field]['DATA_TYPE']);
+//                        $data[$field] = $this->_getWriteAdapter()->prepareColumnValue($fields[$field], $fieldValue);
+//                    } elseif (!empty($fields[$field]['NULLABLE'])) {
+//                        $data[$field] = null;
+//                    }
+//                }
+//            }
+//        }
+//        return $data;
+//    }
 }

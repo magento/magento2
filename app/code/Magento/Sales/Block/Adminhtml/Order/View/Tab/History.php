@@ -132,7 +132,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             );
         }
 
-        usort($history, [__CLASS__, 'sortHistoryByTimestamp']);
+//        usort($history, [__CLASS__, 'sortHistoryByTimestamp']);
         return $history;
     }
 

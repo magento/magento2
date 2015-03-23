@@ -11,7 +11,7 @@
 <?php $_order = $block->getOrder() ?>
 <?php
 $orderAdminDate = $block->formatDate(
-    $this->_localeDate->date(new \DateTime($_order->getCreatedAt())),
+    $block->getOrderAdminDate($_order->getCreatedAt()),
     \IntlDateFormatter::MEDIUM, true
 );
 $orderStoreDate = $block->formatDate(

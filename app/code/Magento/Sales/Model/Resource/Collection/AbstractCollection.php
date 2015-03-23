@@ -225,4 +225,31 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     {
         return $this;
     }
+
+    /**
+     * Returns a collection item that corresponds to the fetched row
+     * and moves the internal data pointer ahead
+     *
+     * @return  \Magento\Framework\Object|bool
+     */
+    public function fetchItem()
+    {
+        if (null === $this->_fetchStmt) {
+            $this->_renderOrders()->_renderLimit();
+
+            $this->_fetchStmt = $this->getConnection()->query($this->getSelect());
+        }
+        $data = $this->_fetchStmt->fetch();
+        if (!empty($data) && is_array($data)) {
+            /**@var \Magento\Sales\Model\AbstractModel $item */
+            $item = $this->getNewEmptyItem();
+            if ($this->getIdFieldName()) {
+                $item->setIdFieldName($this->getIdFieldName());
+            }
+            $item->setData($data)->flushDataIntoModel();
+
+            return $item;
+        }
+        return false;
+    }
 }
