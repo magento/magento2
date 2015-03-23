@@ -15,6 +15,6 @@
         <css src="css/styles.css"/>
     </head>
     <body>
-        <referenceContainer name="page.main.container" htmlClass="page-columns" />
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="" /> <!-- ToDo UI: remove this wrapper remove with old styles removal -->
     </body>
 </page>
