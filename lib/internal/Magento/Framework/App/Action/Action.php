@@ -65,7 +65,7 @@ class Action extends AbstractAction
      */
     public function __construct(Context $context)
     {
-        parent::__construct($context->getRequest(), $context->getResponse(), $context);
+        parent::__construct($context);
         $this->_objectManager = $context->getObjectManager();
         $this->_eventManager = $context->getEventManager();
         $this->_url = $context->getUrl();

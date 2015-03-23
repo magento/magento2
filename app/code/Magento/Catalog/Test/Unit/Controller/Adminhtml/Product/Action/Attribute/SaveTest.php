@@ -216,7 +216,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getFormKeyValidator')->willReturn($this->formKeyValidator);
         $this->context->expects($this->any())->method('getTitle')->willReturn($this->title);
         $this->context->expects($this->any())->method('getLocaleResolver')->willReturn($this->localeResolver);
-        $this->context->expects($this->any())->method('getResultRedirectFactory')->willReturn($this->resultRedirectFactory);
+        $this->context->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
 
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',
