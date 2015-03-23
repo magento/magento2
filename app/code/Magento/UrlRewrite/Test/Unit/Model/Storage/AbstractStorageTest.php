@@ -115,7 +115,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      * @expectedExceptionMessage URL key for specified store already exists.
      */
     public function testReplaceIfThrewDuplicateEntryExceptionWithCustomMessage()

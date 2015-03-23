@@ -28,7 +28,7 @@ class Full extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
         try {
             $this->reindexAll();
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }
