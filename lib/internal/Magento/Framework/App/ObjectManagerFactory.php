@@ -249,7 +249,9 @@ class ObjectManagerFactory
             );
             $configData = $reader->read('primary');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\State\InitException(__($e->getMessage()), $e);
+            throw new \Magento\Framework\Exception\State\InitException(
+                new \Magento\Framework\Phrase($e->getMessage()), $e
+            );
         }
         return $configData;
     }

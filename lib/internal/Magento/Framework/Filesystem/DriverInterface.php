@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Filesystem;
 
+use Magento\Framework\Exception\FilesystemException;
+
 /**
  * Class Driver
  */
@@ -25,7 +27,7 @@ interface DriverInterface
      *
      * @param string $path
      * @return array
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws FilesystemException
      */
     public function stat($path);
 
@@ -34,7 +36,7 @@ interface DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws FilesystemException
      */
     public function isReadable($path);
 
@@ -43,7 +45,7 @@ interface DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws FilesystemException
      */
     public function isFile($path);
 
@@ -52,7 +54,7 @@ interface DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws FilesystemException
      */
     public function isDirectory($path);
 
@@ -72,7 +74,7 @@ interface DriverInterface
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws FilesystemException
      */
     public function isWritable($path);
 
@@ -108,7 +110,7 @@ interface DriverInterface
      *
      * @param string|null $path
      * @return array
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws FilesystemException
      */
     public function readDirectoryRecursively($path = null);
 
