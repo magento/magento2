@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Order;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
