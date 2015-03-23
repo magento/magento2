@@ -46,7 +46,7 @@ define([
                 if (!params)
                     params = {};
                 self._removeExcessiveData(params, dataOrigin, dataToAdd);
-                params.data = $.extend({}, params.data, dataToAdd, {'qty': $(self.options.qtyInfo).val()});
+                params.data = $.extend({}, params.data, dataToAdd, dataOrigin, {'qty': $(self.options.qtyInfo).val()});
                 $(element).data('post', params);
             });
             event.stopPropagation();
