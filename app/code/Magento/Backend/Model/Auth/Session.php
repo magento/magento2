@@ -253,6 +253,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param string $path
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function isValidForPath($path)
     {
