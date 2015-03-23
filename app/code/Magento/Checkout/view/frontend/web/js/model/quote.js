@@ -23,10 +23,13 @@ define(
         var quoteHasShippingMethod = ko.observable(false);
         var quoteHasPaymentMethod = ko.observable(false);
         var quoteData = window.cartData;
-
+        var currencySymbol = window.currencySymbol;
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
+            },
+            getCurrencySymbol: function() {
+              return currencySymbol.data;
             },
             setBillingAddress: function (address) {
                 billingAddress = address;

@@ -13,9 +13,10 @@ define(
         '../model/quote',
         '../model/shipping-service',
         '../action/select-shipping-method',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Catalog/js/price-utils'
     ],
-    function ($, Component, quote, shippingService, selectShippingMethod, customer) {
+    function ($, Component, quote, shippingService, selectShippingMethod, customer, priceUtils) {
         var loadedRates = shippingService.getAvailableShippingMethods(quote);
 
         return Component.extend({
@@ -56,6 +57,11 @@ define(
                         return;
                     }
                     selectShippingMethod(shippingMethodCode);
+                },
+
+                getFormatedPrice: function(price) {
+                    //todo add format data
+                    return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
                 }
             }
 

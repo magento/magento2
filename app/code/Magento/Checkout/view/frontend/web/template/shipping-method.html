@@ -20,11 +20,13 @@
                     <dt data-bind="text: method.carrier_title, attr: {'class': 'item-title ' + method.carrier_code}"></dt>
                     <dd data-bind="attr: {'class': 'item-content ' + method.carrier_code}">
                         <fieldset class="fieldset">
-                            <!--<legend class="legend"><span data-bind="text: method.carrier_title"></span></legend>-->
+                            <legend class="legend"><span data-bind="text: method.carrier_title"></span></legend>
                             <br>
+                            <!--ko foreach: { data: items, as: 'item'}-->
+                            <div class="field choice">
 
-                            <div class="field choice" data-bind="foreach: { data: items, as: 'item'}">
                                 <!-- ko if: $parents[1].isErrorMessagePresent(item) -->
+
                                 <!--todo add error message to api-->
                                 <div class="message error">
                                     <div>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</div>
@@ -37,7 +39,7 @@
                                 <!-- ko if: $parents[1].getRatesQty($parent.items) -->
                                 <span class="no-display">
                                     <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
-                                           name="shipping_method" class="radio no-display" type="radio" checked="checked"/>
+                                           name="shipping_method" class="radio" type="radio" checked="checked"/>
                                     </span>
                                 <!-- /ko -->
                                  <!--ko ifnot: $parents[1].getRatesQty($parent.items)-->
@@ -47,11 +49,15 @@
                                            class="radio"/>
                                 </div>
                                  <!--/ko-->
-                                <label class="label" data-bind="attr: {'for': 's_method_' + item.carrier_code + '_' + item.method_code"><span
-                                        data-bind="text:item.method_title + ' ' + item.amount"></span>
+                                <label class="label" data-bind="attr: {'for': 's_method_' + item.carrier_code + '_' + item.method_code}">
+                                    <span  data-bind="text:item.method_title"></span>
+                                    <span class="price">
+                                        <span class="price" data-bind="text: $parents[1].getFormatedPrice(item.amount)"></span>
+                                    </span>
                                 </label>
                                 <!-- /ko -->
                             </div>
+                            <!-- /ko -->
                         </fieldset>
                     </dd>
 

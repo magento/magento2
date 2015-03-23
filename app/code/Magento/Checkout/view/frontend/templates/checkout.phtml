@@ -21,6 +21,7 @@
             window.customerData = <?php echo $this->getCustomerData(); ?>;
             window.cartData = <?php echo $this->getCart(); ?>;
             window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
+            window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
         </script>
         <script>
             require(['mage/url'], function(url) {

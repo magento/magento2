@@ -31,9 +31,19 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $jsLayout;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var \Magento\Quote\Api\Data\CartInterface
      */
     protected $cartRepositoryInterface;
+
+    /**
+     * @var \Magento\Quote\Api\Data\CartInterface
+     */
+    protected $cartData;
+
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $localeCurrency;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -49,6 +59,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
@@ -65,6 +76,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = []
     ) {
         parent::__construct(
@@ -85,6 +97,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->_isScopePrivate = true;
         $this->jsLayout = is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->cartRepositoryInterface = $cartRepositoryInterface;
+        $this->localeCurrency = $localeCurrency;
     }
 
 
@@ -151,6 +164,19 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     }
 
     /**
+     * Retrieve current active quote object.
+     *
+     * @return \Magento\Quote\Api\Data\CartInterface
+     */
+    protected function getCartData()
+    {
+        if (!$this->cartData) {
+            $quoteId = $this->getQuote()->getId();
+            $this->cartData = $this->cartRepositoryInterface->get($quoteId);
+        }
+        return $this->cartData;
+    }
+    /**
      * Retrieve current active quote.
      *
      * @return string
@@ -158,8 +184,23 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     public function getCart()
     {
         if ($this->_customerSession->isLoggedIn()) {
-            $quoteId = $this->getQuote()->getId();
-            return \Zend_Json::encode($this->cartRepositoryInterface->get($quoteId));
+            return \Zend_Json::encode($this->getCartData());
+        }
+        return '{}';
+    }
+
+    /**
+     * Retrieve active quote currency code.
+     *
+     * @return string
+     */
+    public function getCurrencySymbol()
+    {
+        if ($this->_customerSession->isLoggedIn()) {
+            $currencyCode = $this->getCartData()->getQuoteCurrencyCode();
+            $currency = $this->localeCurrency->getCurrency($currencyCode);
+            $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
+            return \Zend_Json::encode(['data' => $symbol]);
         }
         return '{}';
     }
