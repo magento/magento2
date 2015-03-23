@@ -4243,7 +4243,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   cursor: pointer;
   margin: 0;
   padding-right: 3.5rem;
-  transition: background-color 0.1s ease-out;
+  transition: border-color 0.1s ease-out, background-color 0.1s ease-out;
 }
 .admin__page-nav-title._collapsible + .admin__page-nav-items {
   display: none;
@@ -4255,7 +4255,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   font-weight: 700;
   position: absolute;
   right: 1.8rem;
-  top: 1.8rem;
+  top: 2rem;
 }
 .admin__page-nav-title._collapsible:hover {
   background: #f1f1f1;
@@ -4276,16 +4276,23 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .admin__page-nav-item {
   border-left: 3px solid transparent;
-  margin-left: .7rem;
+  margin-left: 0.7rem;
   padding: 0;
   position: relative;
+  transition: border-color 0.1s ease-out, background-color 0.1s ease-out;
 }
-.admin__page-nav-item:hover,
+.admin__page-nav-item:hover {
+  border-color: #e4e4e4;
+}
+.admin__page-nav-item:hover .admin__page-nav-link {
+  background: #e4e4e4;
+  color: #303030;
+  text-decoration: none;
+}
 .admin__page-nav-item._active,
 .admin__page-nav-item.ui-state-active {
   border-color: #eb5202;
 }
-.admin__page-nav-item:hover .admin__page-nav-link,
 .admin__page-nav-item._active .admin__page-nav-link,
 .admin__page-nav-item.ui-state-active .admin__page-nav-link {
   background: #ffffff;
@@ -4293,11 +4300,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   border-right: 1px solid #ffffff;
   color: #303030;
   margin-right: -1px;
-}
-.admin__page-nav-item:hover .admin__page-nav-link:hover,
-.admin__page-nav-item._active .admin__page-nav-link:hover,
-.admin__page-nav-item.ui-state-active .admin__page-nav-link:hover {
-  text-decoration: none;
 }
 .admin__page-nav-item._active .admin__page-nav-link,
 .admin__page-nav-item.ui-state-active .admin__page-nav-link {
@@ -4323,7 +4325,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   line-height: 1.2;
   margin: 0 0 -1px;
   padding: 2rem 4rem 2rem 1rem;
-  transition: background-color 0.1s ease-out;
+  transition: border-color 0.1s ease-out, background-color 0.1s ease-out;
   word-break: break-all;
 }
 .admin__page-nav-link._changed .admin__page-nav-item-message._changed {

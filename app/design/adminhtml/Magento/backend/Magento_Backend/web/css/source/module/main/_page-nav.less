@@ -18,7 +18,9 @@
 
 @admin__page-nav-item__border-color: @border__color;
 @admin__page-nav-item__margin-vertical: 1.3rem;
+@admin__page-nav-item__margin-horizontal: .7rem;
 @admin__page-nav-item__active__color: @color-phoenix;
+@admin__page-nav-item__hover__background-color: darken(@admin__page-nav__background-color, 5%);
 
 @admin__page-nav-link__color: @color-very-dark-gray-black;
 @admin__page-nav-link__padding: 2rem 4rem 2rem 1rem;
@@ -37,7 +39,7 @@
 @admin__page-nav-tooltip__z-index1: @field-tooltip__z-index;
 @admin__page-nav-tooltip__border-color: @color-gray75;
 
-@admin__page-nav-transition: background-color .1s ease-out;
+@admin__page-nav-transition: border-color .1s ease-out, background-color .1s ease-out;
 
 //
 //  Page Nav (can be simple and collapsed)
@@ -109,7 +111,7 @@
             font-weight: @font-weight__bold;
             position: absolute;
             right: 1.8rem;
-            top: 1.8rem;
+            top: 2rem;
         }
 
         &:hover {
@@ -136,11 +138,20 @@
 
 .admin__page-nav-item {
     border-left: 3px solid transparent;
-    margin-left: .7rem;
+    margin-left: @admin__page-nav-item__margin-horizontal;
     padding: 0;
     position: relative;
+    transition: @admin__page-nav-transition;
 
-    &:hover,
+    &:hover {
+        border-color: @admin__page-nav-item__hover__background-color;
+        .admin__page-nav-link {
+            background: @admin__page-nav-item__hover__background-color;
+            color: @admin__page-nav-link__hover__color;
+            text-decoration: none;
+        }
+    }
+
     &._active,
     &.ui-state-active {
         border-color: @admin__page-nav-item__active__color;
@@ -150,9 +161,6 @@
             border-right: 1px solid @admin__page-nav-title__collapsible__background-color;
             color: @admin__page-nav-link__hover__color;
             margin-right: -1px;
-            &:hover {
-                text-decoration: none;
-            }
         }
     }
 
