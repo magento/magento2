@@ -10,15 +10,16 @@ define(
     [
         '../model/quote',
         'mage/storage',
+        'mage/url',
         'Magento_Ui/js/model/errorlist'
     ],
-    function(quote, storage, errorList) {
+    function(quote, storage, url, errorList) {
         return function() {
             storage.put(
                 'rest/default/V1/carts/' + quote.getQuoteId() + '/order'
             ).done(
                 function() {
-                    window.location.replace('/checkout/onepage/success/');
+                    window.location.replace(url.build('checkout/onepage/success/'));
                 }
             ).error(
                 function(response) {
