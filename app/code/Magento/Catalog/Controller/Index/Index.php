@@ -1,12 +1,12 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
+
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
