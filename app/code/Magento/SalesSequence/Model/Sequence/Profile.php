@@ -4,7 +4,7 @@
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * Class Profile

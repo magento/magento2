@@ -208,7 +208,6 @@ class SequenceBuilder
                 )
             ]
         );
-        $profile->setHasDataChanges(true);
         $this->data['active_profile'] = $profile;
         $metadata = $this->metaFactory->create(
             [
@@ -218,7 +217,6 @@ class SequenceBuilder
                 )
             ]
         );
-        $metadata->setHasDataChanges(true);
         $this->resourceMetadata->save($metadata);
         $this->resourceMetadata->createSequence(
             $this->data['sequence_table'],
