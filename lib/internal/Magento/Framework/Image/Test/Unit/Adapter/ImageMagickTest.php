@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ImageMagickTest extends \PHPUnit_Framework_TestCase
@@ -85,7 +85,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithException()
     {
-        $exception = new FilesystemException();
+        $exception = new FilesystemException(new \Magento\Framework\Phrase(''));
         $this->writeMock->method('create')->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->imageMagic->save('product/cache', 'sample.jpg');

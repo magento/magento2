@@ -298,7 +298,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
                 $this->_getFilePath(),
                 $mode
             );
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FilesystemException $e) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
                 __('Sorry, but we cannot read from or write to backup file "%1".', $this->getFileName())
             );
@@ -353,7 +353,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     {
         try {
             $this->_getStream()->write($string);
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FilesystemException $e) {
             throw new \Magento\Backup\Exception(
                 __('Something went wrong writing to the backup file "%1".', $this->getFileName())
             );

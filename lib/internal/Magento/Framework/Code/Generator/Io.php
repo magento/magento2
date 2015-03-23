@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 
 class Io
 {

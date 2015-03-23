@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 
 class Write extends Read implements WriteInterface
 {
@@ -43,13 +43,13 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @return void
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      */
     protected function assertWritable($path)
     {
         if ($this->isWritable($path) === false) {
             $path = $this->getAbsolutePath($this->path, $path);
-            throw new FilesystemException(sprintf('The path "%s" is not writable', $path));
+            throw new FilesystemException(new \Magento\Framework\Phrase('The path "%1" is not writable', [$path]));
         }
     }
 
@@ -58,14 +58,16 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @return void
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      */
     protected function assertIsFile($path)
     {
         clearstatcache();
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         if (!$this->driver->isFile($absolutePath)) {
-            throw new FilesystemException(sprintf('The "%s" file doesn\'t exist or not a file', $absolutePath));
+            throw new FilesystemException(
+                new \Magento\Framework\Phrase('The "%1" file doesn\'t exist or not a file', [$absolutePath])
+            );
         }
     }
 
@@ -136,7 +138,7 @@ class Write extends Read implements WriteInterface
      * @param string $destination
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
@@ -209,7 +211,7 @@ class Write extends Read implements WriteInterface
      *
      * @param null $path
      * @return bool
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      */
     public function isWritable($path = null)
     {

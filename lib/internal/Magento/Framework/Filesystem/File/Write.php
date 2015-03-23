@@ -6,7 +6,7 @@
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 
 class Write extends Read implements WriteInterface
 {
@@ -27,15 +27,15 @@ class Write extends Read implements WriteInterface
      * Assert file existence for proper mode
      *
      * @return void
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      */
     protected function assertValid()
     {
         $fileExists = $this->driver->isExists($this->path);
         if (!$fileExists && preg_match('/r/', $this->mode)) {
-            throw new FilesystemException(sprintf('The file "%s" doesn\'t exist', $this->path));
+            throw new FilesystemException(new \Magento\Framework\Phrase('The file "%1" doesn\'t exist', [$this->path]));
         } elseif ($fileExists && preg_match('/x/', $this->mode)) {
-            throw new FilesystemException(sprintf('The file "%s" already exists', $this->path));
+            throw new FilesystemException(new \Magento\Framework\Phrase('The file "%1" already exists', [$this->path]));
         }
     }
 
@@ -51,7 +51,9 @@ class Write extends Read implements WriteInterface
         try {
             return $this->driver->fileWrite($this->resource, $data);
         } catch (FilesystemException $e) {
-            throw new FilesystemException(sprintf('Cannot write to the "%s" file. %s', $this->path, $e->getMessage()));
+            throw new FilesystemException(
+                new \Magento\Framework\Phrase('Cannot write to the "%1" file. %2', [$this->path, $e->getMessage()])
+            );
         }
     }
 
@@ -69,7 +71,9 @@ class Write extends Read implements WriteInterface
         try {
             return $this->driver->filePutCsv($this->resource, $data, $delimiter, $enclosure);
         } catch (FilesystemException $e) {
-            throw new FilesystemException(sprintf('Cannot write to the "%s" file. %s', $this->path, $e->getMessage()));
+            throw new FilesystemException(
+                new \Magento\Framework\Phrase('Cannot write to the "%1" file. %2', [$this->path, $e->getMessage()])
+            );
         }
     }
 
@@ -84,7 +88,9 @@ class Write extends Read implements WriteInterface
         try {
             return $this->driver->fileFlush($this->resource);
         } catch (FilesystemException $e) {
-            throw new FilesystemException(sprintf('Cannot flush the "%s" file. %s', $this->path, $e->getMessage()));
+            throw new FilesystemException(
+                new \Magento\Framework\Phrase('Cannot flush the "%1" file. %2', [$this->path, $e->getMessage()])
+            );
         }
     }
 

@@ -8,7 +8,7 @@ namespace Magento\MediaStorage\Model\File\Storage;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 
 class Config
 {

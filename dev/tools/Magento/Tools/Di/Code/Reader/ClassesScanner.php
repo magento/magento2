@@ -5,7 +5,7 @@
  */
 namespace Magento\Tools\Di\Code\Reader;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 use Zend\Code\Scanner\FileScanner;
 
 class ClassesScanner implements ClassesScannerInterface
@@ -45,7 +45,7 @@ class ClassesScanner implements ClassesScannerInterface
     {
         $realPath = realpath($path);
         if (!(bool)$realPath) {
-            throw new FilesystemException();
+            throw new FilesystemException(new \Magento\Framework\Phrase(''));
         }
 
         $recursiveIterator = new \RecursiveIteratorIterator(

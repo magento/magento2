@@ -120,7 +120,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FilesystemException
      */
     public function testFilePutContentsFail()
     {
@@ -129,7 +129,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FilesystemException
      * @expectedExceptionMessage Please correct the download URL.
      */
     public function testFileOpenInvalidUrl()

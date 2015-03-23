@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 
 /**
  * Class Http
@@ -90,7 +90,9 @@ class Http extends File
         $result = @file_get_contents($this->getScheme() . $path, $flags, $context);
         if (false === $result) {
             throw new FilesystemException(
-                sprintf('Cannot read contents from file "%s" %s', $path, $this->getWarningMessage())
+                new \Magento\Framework\Phrase(
+                    'Cannot read contents from file "%1" %2', [$path, $this->getWarningMessage()]
+                )
             );
         }
         return $result;
@@ -111,7 +113,9 @@ class Http extends File
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode, $context);
         if (!$result) {
             throw new FilesystemException(
-                sprintf('The specified "%s" file could not be written %s', $path, $this->getWarningMessage())
+                new \Magento\Framework\Phrase(
+                    'The specified "%1" file could not be written %2', [$path, $this->getWarningMessage()]
+                )
             );
         }
         return $result;
@@ -131,7 +135,7 @@ class Http extends File
         $urlProp = $this->parseUrl($this->getScheme() . $path);
 
         if (false === $urlProp) {
-            throw new FilesystemException((string)new \Magento\Framework\Phrase('Please correct the download URL.'));
+            throw new FilesystemException(new \Magento\Framework\Phrase('Please correct the download URL.'));
         }
 
         $hostname = $urlProp['host'];
@@ -228,7 +232,7 @@ class Http extends File
      *
      * @param string $hostname
      * @param int $port
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      * @return array
      */
     protected function open($hostname, $port)
@@ -236,7 +240,7 @@ class Http extends File
         $result = @fsockopen($hostname, $port, $errorNumber, $errorMessage);
         if ($result === false) {
             throw new FilesystemException(
-                (string)new \Magento\Framework\Phrase(
+                new \Magento\Framework\Phrase(
                     'Something went wrong connecting to the host. Error#%1 - %2.',
                     [$errorNumber, $errorMessage]
                 )

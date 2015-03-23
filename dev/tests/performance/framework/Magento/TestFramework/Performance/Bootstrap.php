@@ -57,7 +57,7 @@ class Bootstrap
             if ($filesystemAdapter->isExists($reportDir)) {
                 $filesystemAdapter->deleteDirectory($reportDir);
             }
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FilesystemException $e) {
             if (file_exists($reportDir)) {
                 throw new \Magento\Framework\Exception("Cannot cleanup reports directory '{$reportDir}'.");
             }

@@ -234,7 +234,7 @@ class DirectoryList
     private function assertCode($code)
     {
         if (!isset($this->directories[$code])) {
-            throw new FilesystemException("Unknown directory type: '$code'");
+            throw new FilesystemException(new \Magento\Framework\Phrase('Unknown directory type: %1', [$code]));
         }
     }
 }

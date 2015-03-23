@@ -17,7 +17,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FilesystemException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\DeploymentConfig;
 use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;

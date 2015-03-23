@@ -26,7 +26,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider providerNotValidFiles
      * @param string $path
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FilesystemException
      */
     public function testAssertValid($path)
     {
