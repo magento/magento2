@@ -228,13 +228,15 @@ class DirectoryList
      * Asserts that specified directory code is in the registry
      *
      * @param string $code
-     * @throws FilesystemException
+     * @throws \Magento\Framework\Exception\FilesystemException
      * @return void
      */
     private function assertCode($code)
     {
         if (!isset($this->directories[$code])) {
-            throw new FilesystemException(new \Magento\Framework\Phrase('Unknown directory type: %1', [$code]));
+            throw new \Magento\Framework\Exception\FilesystemException(
+                new \Magento\Framework\Phrase('Unknown directory type: %1', [$code])
+            );
         }
     }
 }
