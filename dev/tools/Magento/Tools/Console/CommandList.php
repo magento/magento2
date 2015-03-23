@@ -14,7 +14,7 @@ namespace Magento\Tools\Console;
 class CommandList
 {
     /**
-     * Gets list of setup command classes
+     * Gets list of tools command classes
      *
      * @return string[]
      */
