@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    'tests/tools',
+    'tests/assets/tools',
     'tests/assets/script/index',
     'mage/apply/scripts'
 ], function (tools, config, processScripts) {

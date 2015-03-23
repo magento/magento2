@@ -88,25 +88,11 @@ module.exports = function (grunt) {
         ],
 
         spec: function (theme) {
-            var tasks = [],
-                themes = require(configDir + '/themes');
+            var runner = require('./dev/tests/js/jasmine/spec_runner');
 
-            function tasksFor(theme) {
-                return [
-                    'connect:' + theme,
-                    'jasmine:' + theme
-                ];
-            }
+            runner.init(grunt, { theme: theme });
 
-            if (!theme) {
-                Object.keys(themes).forEach(function (theme) {
-                    tasks = tasks.concat(tasksFor(theme));
-                });
-            } else {
-                tasks = tasksFor(theme);
-            }
-
-            grunt.task.run(tasks);
+            grunt.task.run(runner.getTasks());
         }
     }, function (task, name) {
         grunt.registerTask(name, task);

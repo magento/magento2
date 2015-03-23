@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+'use strict';
+
 require.config({
     baseUrl: './',
     bundles: {

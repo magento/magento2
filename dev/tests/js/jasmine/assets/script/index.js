@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    'tests/tools',
+    'tests/assets/tools',
     'text!./config.json',
     'text!./templates/selector.html',
     'text!./templates/virtual.html'

@@ -28,6 +28,7 @@
     "morgan": "^1.5.0",
     "node-minify": "^1.0.1",
     "serve-static": "^1.7.1",
+    "strip-json-comments": "^1.0.2",
     "time-grunt": "^1.0.0",
     "underscore": "^1.7.0"
   },
