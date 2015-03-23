@@ -131,13 +131,9 @@ class Observer
             if (!$category->getIsActive()) {
                 continue;
             }
-
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
-
             $tree = $parentCategoryNode->getTree();
-
             $categoryData = $this->getMenuCategoryData($category);
-
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
@@ -151,7 +147,6 @@ class Observer
         }
     }
 
-
     /**
      * Get category data to be added to the Menu
      *
@@ -160,7 +155,6 @@ class Observer
      */
     public function getMenuCategoryData($category)
     {
-
         $nodeId = 'category-node-' . $category->getId();
 
         $categoryData = [
