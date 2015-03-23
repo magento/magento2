@@ -7,7 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
-
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 /**
  * Order history block
  * Class Info
@@ -243,5 +243,15 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function isSingleStoreMode()
     {
         return $this->_storeManager->isSingleStoreMode();
+    }
+
+    /**
+     * Get object created at date affected with object store timezone
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAtStoreDate($store, $createdAt)
+    {
+        return $this->_localeDate->scopeDate($store, $createdAt, true);
     }
 }

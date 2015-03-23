@@ -10,8 +10,15 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Info */ ?>
 <?php $_order = $block->getOrder() ?>
 <?php
-$orderAdminDate = $block->formatDate($_order->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true);
-$orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDateFormatter::MEDIUM, true);
+$orderAdminDate = $block->formatDate(
+    $this->_localeDate->date(new \DateTime($_order->getCreatedAt())),
+    \IntlDateFormatter::MEDIUM, true
+);
+$orderStoreDate = $block->formatDate(
+    $block->getCreatedAtStoreDate($_order->getStore(), $_order->getCreatedAt()),
+    \IntlDateFormatter::MEDIUM,
+    true
+);
 ?>
 
 <?php /* the opening and closing divs of these two clearfixes are in app\code\core\Mage\Adminhtml\view\adminhtml\sales\order\invoice\create\form.phtml */?>
@@ -43,7 +50,13 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                 </tr>
                 <?php if ($orderAdminDate != $orderStoreDate):?>
                 <tr>
-                    <th><?php echo __('Order Date (%1)', $_order->getCreatedAtStoreDate()->getTimezone()->getName()) ?></th>
+                    <th><?php echo __(
+                            'Order Date (%1)',
+                            $block->getCreatedAtStoreDate(
+                                $_order->getStore(),
+                                $_order->getCreatedAt()
+                            )->getTimezone()->getName()
+                        ) ?></th>
                     <td><?php echo $orderStoreDate ?></td>
                 </tr>
                 <?php endif;?>

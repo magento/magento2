@@ -287,7 +287,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             'Order # %1 %2 | %3',
             $this->getOrder()->getRealOrderId(),
             $_extOrderId,
-            $this->formatDate($this->getOrder()->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true)
+            $this->formatDate(
+                $this->_localeDate->date(new \DateTime($this->getOrder()->getCreatedAt())),
+                \IntlDateFormatter::MEDIUM,
+                true
+            )
         );
     }
 
