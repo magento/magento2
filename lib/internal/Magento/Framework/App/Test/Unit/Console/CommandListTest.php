@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Test\Unit\Console;
 
 use Magento\Framework\Console\CommandList;
+use Symfony\Component\Console\Command\Command;
 
 class CommandListTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,36 +17,24 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
     private $commandList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var Symfony\Component\Console\Command\Command
      */
-    private $objectManager;
+    private $testCommand;
 
     public function setUp()
     {
-        $commands =[
-            'Symfony\Component\Console\Command\Command'
+        $this->testCommand = new Command('Test');
+        $commands = [
+            $this->testCommand
         ];
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $this->commandList = new CommandList($this->objectManager, $commands);
+        $this->commandList = new CommandList($commands);
     }
 
     public function testGetCommands()
     {
-        $this->objectManager->expects($this->once())->method('get')->with('Symfony\Component\Console\Command\Command');
-        $this->commandList->getCommands();
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Class Symfony\Component\Console\Command\WrongCommand does not exist
-     */
-    public function testGetCommandsException()
-    {
-        $wrongCommands =[
-            'Symfony\Component\Console\Command\WrongCommand'
-        ];
-        $commandList = new CommandList($this->objectManager, $wrongCommands);
-        $commandList->getCommands();
+        $commands = $this->commandList->getCommands();
+        $this->assertEquals(1, count($commands));
+        $this->assertEquals($this->testCommand, $commands[0]);
     }
 }
