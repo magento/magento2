@@ -14,9 +14,10 @@ define(
         '../model/shipping-service',
         '../action/select-shipping-method',
         'Magento_Customer/js/model/customer',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function ($, Component, quote, shippingService, selectShippingMethod, customer, priceUtils) {
+    function ($, Component, quote, shippingService, selectShippingMethod, customer, priceUtils, navigator) {
         var loadedRates = shippingService.getAvailableShippingMethods(quote);
 
         return Component.extend({
@@ -24,7 +25,6 @@ define(
                 template: 'Magento_Checkout/shipping-method',
                 isLoggedIn: customer.isLoggedIn(),
                 quoteHasShippingAddress: quote.hasShippingAddress(),
-                quoteHasShippingMethod: quote.hasShippingMethod(),
 
                 rates: function () {
                     return shippingService.sortRates(loadedRates)
@@ -62,9 +62,13 @@ define(
                 getFormatedPrice: function(price) {
                     //todo add format data
                     return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
+                },
+                isVisible: navigator.isShippingMethodVisible(),
+                // Checkout step navigation
+                backToShippingAddress: function() {
+                    navigator.toStep('shippingAddress');
                 }
             }
-
         });
     }
 );

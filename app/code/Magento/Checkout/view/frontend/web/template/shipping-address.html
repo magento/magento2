@@ -6,7 +6,7 @@
     <div id="checkout-step-shipping"
          class="step-content"
          data-role="content"
-         data-bind="fadeVisible: isLoggedIn() && !quoteHasShippingAddress() && quoteHasBillingAddress()">
+         data-bind="fadeVisible: isVisible() && isLoggedIn() && quoteHasBillingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
@@ -26,7 +26,7 @@
                 <div class="primary">
                     <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: selectShippingAddress"><span>Continue</span></button>
                 </div>
-                <div class="secondary"><a href="#" class="action back"><span>Back</span></a></div>
+                <div class="secondary"><a href="#" data-bind="click: backToBilling"><span>Back</span></a></div>
             </div>
         </form>
     </div>

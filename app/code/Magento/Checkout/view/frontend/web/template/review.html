@@ -8,7 +8,7 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false"
-         data-bind="fadeVisible: isLoggedIn() && quoteHasPaymentMethod()">
+         data-bind="fadeVisible: isVisible() && isLoggedIn() && quoteHasPaymentMethod()">
         <div class="order-review" id="checkout-review-load">
             <!-- ko foreach: { data: itemsBefore, as: 'element' } -->
             <!-- ko template: element.getTemplate() --><!-- /ko -->
@@ -43,7 +43,7 @@
                                     class="button action primary checkout"><span>Place Order</span></button>
                     </div>
                     <div class="secondary">
-                <span id="checkout-review-edit-label">Forgot an Item?</span>
+                        <span id="checkout-review-edit-label">Forgot an Item?</span>
                         <a data-bind="attr: {href: $data.cartUrl}"
                            aria-describedby="checkout-review-edit-label"
                            class="action edit">

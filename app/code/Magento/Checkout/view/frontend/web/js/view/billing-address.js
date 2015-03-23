@@ -9,17 +9,16 @@ define(
         'Magento_Ui/js/form/component',
         'Magento_Customer/js/model/customer',
         '../action/select-billing-address',
-        '../model/quote'
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function (Component, customer, selectBillingAddress, quote) {
-        "use strict";
+    function (Component, customer, selectBillingAddress, navigator) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address',
                 billingAddresses: customer.getBillingAddressList(),
                 selectedBillingAddressId: "1",
                 isLoggedIn: customer.isLoggedIn(),
-                quoteHasBillingAddress: quote.hasBillingAddress(),
+                isVisible: navigator.isBillingAddressVisible(),
                 useForShipping: "1",
                 billingAddressesOptionsText: function (item) {
                     return item.getFullAddress();

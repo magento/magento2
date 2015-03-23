@@ -10,9 +10,10 @@ define(
     [
         'Magento_Ui/js/form/component',
         '../model/quote',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function (Component, quote, customer) {
+    function (Component, quote, customer, navigator) {
         var itemsBefore = [];
         var itemsAfter = [];
 
@@ -24,7 +25,8 @@ define(
                 itemsBefore: itemsBefore,
                 itemsAfter: itemsAfter,
                 getItems: function() {},
-                getAgreementsTemplate: function() {}
+                getAgreementsTemplate: function() {},
+                isVisible: navigator.isReviewVisible()
             }
         });
     }

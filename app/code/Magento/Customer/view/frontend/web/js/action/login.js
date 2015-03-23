@@ -7,8 +7,14 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['jquery', 'mage/storage', '../model/customer', 'Magento_Ui/js/model/errorlist'],
-    function($, storage, customer, errorlist) {
+    [
+        'jquery',
+        'mage/storage',
+        '../model/customer',
+        'Magento_Ui/js/model/errorlist',
+        'Magento_Checkout/js/model/step-navigator'
+    ],
+    function($, storage, customer, errorlist, navigator) {
         return function(login, password) {
             return storage.post(
                 'customer/ajax/login',
@@ -16,6 +22,8 @@ define(
             ).done(function (response) {
                 if (response) {
                     customer.setIsLoggedIn(true);
+                    navigator.setStepVisible('authentication', false);
+                    navigator.setStepVisible('billingAddress', true);
                 } else {
                     errorlist.add('Server returned no response');
                 }

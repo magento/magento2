@@ -8,7 +8,7 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false"
-         data-bind="fadeVisible: isLoggedIn() && !quoteHasPaymentMethod() && quoteHasShippingMethod()">
+         data-bind="fadeVisible: isVisible() && isLoggedIn() && quoteHasShippingMethod()">
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <fieldset class="fieldset">
                 <legend class="legend payments-title">
@@ -48,7 +48,7 @@
                     </button>
                 </div>
                 <div class="secondary">
-                    <a class="action back" href="#"><span>Back</span></a>
+                    <a class="action back" href="#" data-bind="click: backToShippingMethod"><span>Back</span></a>
                 </div>
             </div>
         </form>

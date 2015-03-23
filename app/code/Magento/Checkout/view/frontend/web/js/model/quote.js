@@ -10,9 +10,10 @@ define(
     [
         'jquery',
         'ko',
-        'mage/storage'
+        'mage/storage',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function($, ko, storage) {
+    function($, ko, storage, navigator) {
         var billingAddress,
             shippingAddress,
             shippingMethod,
@@ -34,6 +35,8 @@ define(
             setBillingAddress: function (address) {
                 billingAddress = address;
                 quoteHasBillingAddress(billingAddress !== null);
+                navigator.setStepVisible('billingAddress', false);
+                navigator.setStepVisible('shippingAddress', true);
             },
             getBillingAddress: function() {
                 return billingAddress;
@@ -44,6 +47,8 @@ define(
             setShippingAddress: function (address) {
                 shippingAddress = address;
                 quoteHasShippingAddress((shippingAddress != null));
+                navigator.setStepVisible('shippingAddress', false);
+                navigator.setStepVisible('shippingMethod', true);
             },
             hasShippingAddress: function() {
                 return quoteHasShippingAddress;
@@ -73,6 +78,9 @@ define(
                     function() {
                         paymentMethod = paymentMethodCode;
                         quoteHasPaymentMethod((paymentMethod != null));
+                        navigator.setStepVisible('paymentMethod', false);
+                        navigator.setStepVisible('review', true);
+
                     }
                 );
             },
@@ -94,6 +102,8 @@ define(
                     function() {
                         shippingMethod = shippingMethodCode;
                         quoteHasShippingMethod((shippingMethod != null));
+                        navigator.setStepVisible('shippingMethod', false);
+                        navigator.setStepVisible('paymentMethod', true);
                     }
                 );
             },

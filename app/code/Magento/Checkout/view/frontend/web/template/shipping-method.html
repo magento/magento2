@@ -8,7 +8,7 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false"
-         data-bind="fadeVisible: isLoggedIn() && !quoteHasShippingMethod() && quoteHasShippingAddress()">
+         data-bind="fadeVisible: isVisible() && isLoggedIn() && quoteHasShippingAddress()">
         <!-- ko if: isShippingRateGroupsAvailable() -->
         Sorry, no quotes are available for this order at this time
         <!-- /ko -->
@@ -75,7 +75,7 @@
                     </button>
                 </div>
                 <div class="secondary">
-                    <a class="action back" href="#">
+                    <a class="action back" href="#" data-bind="click: backToShippingAddress">
                         <span>Back</span>
                     </a>
                 </div>
