@@ -20,6 +20,7 @@
     * Fixed JS error when going back to "Customize Your Store" step from "Create Admin Account" step in installation wizard
 * Framework
     * New module Magento_MediaStorage is created and holds components from Magento_Core module
+    * New module Magento_MediaStorage is created and holds components from Magento_Core module
     * Implemented JS resources bundling (server side pre-processing)
     * Zend_Locale replaced with Native PHP Implementation
     * Zend_Date replaced with native PHP DateTime object/functions
@@ -133,6 +134,10 @@
     * MAP link is displayed for a product on category page after delete Catalog Price Rule
     * Deploy script modifies LESS files with "@urls-resolved: true"
     * Zip code field is missing in customers addresses on backend
+    * Impossible to add bundle product with required option to shopping cart without selecting all available options
+    * Empty email is sent when a registered user changes password in the front end
+    * Tabs widget does not initialize sometimes on Product Creation page
+    * Fatal error when trying to send notify customer by email about shipment
 * Tests
     * Fixed an issue with WebDriverException for iframes in functional tests
     * Added functional test for backend menu navigation
@@ -146,6 +151,7 @@
     * [#533] (https://github.com/magento/magento2/issues/533) -- Remove Allow all access in .htaccess
     * [#850] (https://github.com/magento/magento2/issues/850) -- HTML Profiler and pub/static Resources
     * [#919] (https://github.com/magento/magento2/issues/919) -- System information error when error is fixed but page wasn't refreshed
+    * [#987] (https://github.com/magento/magento2/pull/987) -- Fix mod_expires for dynamic content
     * [#1004] (https://github.com/magento/magento2/issues/1004) -- Problem with template luma
     * [#1014] (https://github.com/magento/magento2/issues/1014) -- php index.php update - Class Magento\Store\Model\StoreManagerInterface does not exist
     * [#1015] (https://github.com/magento/magento2/issues/1015) -- After success setup/index.php update - "Missing required argument $engines of Magento\Framework\View\TemplateEngineFactory"
@@ -156,9 +162,11 @@
     * [#1042] (https://github.com/magento/magento2/issues/1042) -- Lost catalog rewrite url after page/list-mode/limit changed
     * [#1045] (https://github.com/magento/magento2/issues/1045) -- Bad rendering frontend category menu
     * [#1048] (https://github.com/magento/magento2/pull/1048) -- Make possible to upload SVG logo by admin
+    * [#1052] (https://github.com/magento/magento2/pull/1052) -- Fix history cleanup for missed cron jobs
     * [#1062] (https://github.com/magento/magento2/pull/1062) -- Add check to see if PHP > 5.6 and always_populate_raw_post_data = -1
     * [#1082] (https://github.com/magento/magento2/pull/1082) -- Fix incorrect variable name ($schema -> $scheme)
     * [#1086] (https://github.com/magento/magento2/issues/1086) -- Email message containing non English character is displayed incorrectly on the receiver
+    * [#1088] (https://github.com/magento/magento2/pull/1088) -- Add developer mode example to .htaccess
     * [#1107] (https://github.com/magento/magento2/issues/1107) -- Serious security issue in Customer Address edit section
 
 0.42.0-beta11
