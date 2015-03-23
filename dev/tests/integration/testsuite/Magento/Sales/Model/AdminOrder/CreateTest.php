@@ -83,7 +83,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = $objectManager->create('Magento\Sales\Model\Order');
-        $order->loadByIncrementId('100000001');
+        $order->loadByIncrementId('100000002');
 
         $this->assertNull($order->getShippingAddress()->getSameAsBilling());
 
