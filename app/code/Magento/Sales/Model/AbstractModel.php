@@ -16,6 +16,11 @@ use Magento\Framework\Webapi\Exception;
  */
 abstract class AbstractModel extends AbstractExtensibleModel
 {
+    /**
+     * Raw object data
+     *
+     * @var array
+     */
     protected $rawData = [];
 
     /**
@@ -68,6 +73,12 @@ abstract class AbstractModel extends AbstractExtensibleModel
         return $this->_eventObject;
     }
 
+    /**
+     * Set data by key
+     *
+     * @param $key
+     * @param $value
+     */
     protected function _setDataByKey($key, $value)
     {
         if ($this->_idFieldName === $key) {
@@ -83,6 +94,13 @@ abstract class AbstractModel extends AbstractExtensibleModel
         }
     }
 
+    /**
+     * Set data by key
+     *
+     * @param array|string $key
+     * @param null $value
+     * @return $this
+     */
     public function setData($key, $value = null)
     {
         if (is_array($key)) {
@@ -95,6 +113,12 @@ abstract class AbstractModel extends AbstractExtensibleModel
         return $this;
     }
 
+    /**
+     * Unset data by key
+     *
+     * @param null $key
+     * @return $this
+     */
     public function unsetData($key = null)
     {
         if (!isset($this->_data[$key]) || $this->_data[$key] !== null) {
@@ -104,6 +128,8 @@ abstract class AbstractModel extends AbstractExtensibleModel
     }
 
     /**
+     * Returns data by key
+     *
      * @param string $key
      * @param null $index
      * @return array|null
@@ -116,11 +142,13 @@ abstract class AbstractModel extends AbstractExtensibleModel
             return isset($this->rawData[$key]) ? $this->rawData[$key] :
                 (isset($this->_data[$key]) ? $this->_data[$key] : null);
         }
-//
-//        if (strpos($key, '/') || $index !== null) {
-//            throw new Exception('ololo');
-//        }
     }
+
+    /**
+     * Returns entity Id
+     *
+     * @return int|null
+     */
     public function getId()
     {
         return isset($this->_data[$this->_idFieldName]) ? $this->_data[$this->_idFieldName] : null;
