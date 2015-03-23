@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
         $this->historyItemMock = $this->getMock(
             'Magento\Sales\Model\Order\Status\History',
-            ['__wakeup', 'addData'],
+            ['__wakeup', 'setData'],
             [],
             '',
             false
@@ -86,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $data = [['data']];
         $this->historyItemMock->expects($this->once())
-            ->method('addData')
+            ->method('setData')
             ->with($this->equalTo($data[0]))
             ->will($this->returnValue($this->historyItemMock));
 
