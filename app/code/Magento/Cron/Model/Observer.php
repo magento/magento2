@@ -345,6 +345,13 @@ class Observer
             return $this;
         }
 
+        // check how long the record should stay unprocessed before marked as MISSED
+        $scheduleLifetime = (int)$this->_scopeConfig->getValue(
+            'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
+
         /**
          * @var \Magento\Cron\Model\Resource\Schedule\Collection $history
          */
@@ -370,7 +377,8 @@ class Observer
         $now = $this->timezone->scopeTimeStamp();
         /** @var Schedule $record */
         foreach ($history as $record) {
-            $checkTime = strtotime($record->getExecutedAt() ? $record->getExecutedAt() : $record->getScheduledAt());
+            $checkTime = $record->getExecutedAt() ? strtotime($record->getExecutedAt()) :
+                strtotime($record->getScheduledAt()) + $scheduleLifetime;
             if ($checkTime < $now - $historyLifetimes[$record->getStatus()]) {
                 $record->delete();
             }
