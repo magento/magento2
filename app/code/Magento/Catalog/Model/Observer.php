@@ -132,17 +132,12 @@ class Observer
                 continue;
             }
 
-            $nodeId = 'category-node-' . $category->getId();
-
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
 
             $tree = $parentCategoryNode->getTree();
-            $categoryData = [
-                'name' => $category->getName(),
-                'id' => $nodeId,
-                'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'is_active' => $this->_isActiveMenuCategory($category),
-            ];
+
+            $categoryData = $this->getMenuCategoryData($category);
+
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
@@ -154,6 +149,28 @@ class Observer
 
             $this->_addCategoriesToMenu($subcategories, $categoryNode, $block);
         }
+    }
+
+
+    /**
+     * Get category data to be added to the Menu
+     *
+     * @param \Magento\Framework\Data\Tree\Node $category
+     * @return array
+     */
+    public function getMenuCategoryData($category)
+    {
+
+        $nodeId = 'category-node-' . $category->getId();
+
+        $categoryData = [
+            'name' => $category->getName(),
+            'id' => $nodeId,
+            'url' => $this->_catalogCategory->getCategoryUrl($category),
+            'is_active' => $this->_isActiveMenuCategory($category),
+        ];
+
+        return $categoryData;
     }
 
     /**
