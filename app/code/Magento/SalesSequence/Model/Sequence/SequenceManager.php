@@ -1,9 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
+use Magento\Sales\Model\AbstractModel;
 use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceSequenceMeta;
 use Magento\SalesSequence\Model\SequenceFactory;
 
@@ -37,16 +39,17 @@ class SequenceManager
     /**
      * Returns sequence for given entityType and store
      *
-     * @param \Magento\Sales\Model\AbstractModel $entity
+     * @param AbstractModel $entity
+     * @param int $storeId
      * @return \Magento\Framework\DB\Sequence\SequenceInterface
      */
-    public function getSequence(\Magento\Sales\Model\AbstractModel $entity)
+    public function getSequence(AbstractModel $entity, $storeId)
     {
         return $this->sequenceFactory->create(
             [
                 'meta' => $this->resourceSequenceMeta->loadByEntityTypeAndStore(
                     $entity->getEntityType(),
-                    $entity->getStore()->getId()
+                    $storeId
                 )
             ]
         );

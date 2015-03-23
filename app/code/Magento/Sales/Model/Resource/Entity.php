@@ -98,8 +98,16 @@ abstract class Entity extends AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
+        /**
+         * @var \Magento\Sales\Model\AbstractModel $object
+         */
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
-            $object->setIncrementId($this->sequenceManager->getSequence($object)->getNextValue());
+            $object->setIncrementId(
+                $this->sequenceManager->getSequence(
+                    $object,
+                    $object->getStore()->getId()
+                )->getNextValue()
+            );
         }
         parent::_beforeSave($object);
         return $this;
