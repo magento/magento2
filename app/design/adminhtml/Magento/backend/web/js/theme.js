@@ -31,14 +31,7 @@ define('globalNavigation', [
         },
 
         _initOverlay: function () {
-            var wrapper = $('<div />').addClass('admin__scope');
-
             this.overlay = $(this.options.overlayTmpl).appendTo('body').hide(0);
-
-            /**
-             * @todo fix LESS and remove next line and wrapper definition
-             */
-            this.overlay.wrap(wrapper);
 
             return this;
         },
