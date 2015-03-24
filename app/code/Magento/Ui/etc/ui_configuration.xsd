@@ -25,6 +25,17 @@
                     <xs:element type="massaction" name="massaction"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
                     <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element name="field" type="field" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="fieldsetConfiguration">
+        <xs:complexContent>
+            <xs:extension base="container">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element name="field" type="field" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -47,10 +58,9 @@
         <xs:complexContent>
             <xs:extension base="form">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element name="fieldset" type="fieldset" />
+                    <xs:element name="fieldset" type="fieldsetConfiguration" />
                     <xs:element name="field" type="field" />
                     <xs:element type="dataSource" name="dataSource"/>
-                    <xs:element type="containerConfiguration" name="container"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

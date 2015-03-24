@@ -183,6 +183,7 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
+        $this->collection->load();
         return $this->collection->toArray();
     }
 

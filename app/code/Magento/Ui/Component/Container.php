@@ -19,7 +19,7 @@ class Container extends AbstractComponent
      */
     public function getComponentName()
     {
-        return static::NAME;
+        return static::NAME . '.' . $this->getData('type');
     }
 
     /**

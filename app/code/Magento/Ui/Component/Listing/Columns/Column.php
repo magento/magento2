@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class Column
  */
-class Column extends AbstractComponent
+class Column extends AbstractComponent implements ColumnInterface
 {
     const NAME = 'column';
 
@@ -103,6 +103,8 @@ class Column extends AbstractComponent
     }
 
     /**
+     * To prepare items of a column
+     *
      * @param array $items
      * @return array
      */

@@ -8,12 +8,13 @@ namespace Magento\Ui\Component\MassAction\Columns;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Column
  */
-class Column extends AbstractComponent
+class Column extends AbstractComponent implements ColumnInterface
 {
     const NAME = 'column.massaction';
 

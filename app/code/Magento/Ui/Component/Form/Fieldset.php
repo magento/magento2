@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Framework\Exception;
+use Magento\Ui\Component\Container;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -21,6 +23,11 @@ class Fieldset extends AbstractComponent
      * @var bool
      */
     protected $collapsible = false;
+
+    /**
+     * @var UiComponentInterface[]
+     */
+    protected $fieldsInContainers = [];
 
     /**
      * Constructor
@@ -59,35 +66,69 @@ class Fieldset extends AbstractComponent
     public function prepare()
     {
         parent::prepare();
+        foreach ($this->getChildComponents() as $name => $child) {
+            if ($child instanceof Container) {
+                $this->fieldsInContainers += $child->getChildComponents();
+            }
+        }
 
         $fieldsMeta = $this->getContext()->getDataProvider()->getFieldsMetaInfo($this->getName());
         foreach ($fieldsMeta as $name => $fieldData) {
             if (empty($fieldData)) {
                 continue;
             }
-            $fieldComponent = isset($this->components[$name]) ? $this->components[$name] : null;
-            if ($fieldComponent === null) {
-                $fieldData = $this->updateDataScope($fieldData, $name);
-                $argument = [
-                    'context' => $this->getContext(),
-                    'data' => [
-                        'name' => $name,
-                        'config' => $fieldData
-                    ]
-                ];
-                $fieldComponent = $this->uiComponentFactory->create($name, 'field', $argument);
-                $fieldComponent->prepare();
-                $this->components[$name] = $fieldComponent;
-            } else {
-                $config = $fieldComponent->getData('config');
-                $config = array_replace_recursive($config, $fieldData);
-                $config = $this->updateDataScope($config, $fieldComponent->getName());
-                $fieldComponent->setData('config', $config);
-            }
+            $fieldComponent = $this->getComponent($name);
+            $this->prepareField($fieldData, $name, $fieldComponent);
         }
 
         $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+    }
+
+    /**
+     * Prepare field component
+     *
+     * @param array $fieldData
+     * @param string $name
+     * @param UiComponentInterface|null $fieldComponent
+     * @return void
+     * @throws Exception
+     */
+    protected function prepareField(array $fieldData, $name, UiComponentInterface $fieldComponent = null)
+    {
+        if ($fieldComponent === null) {
+            if (isset($this->fieldsInContainers[$name])) {
+                $this->updateField($fieldData, $this->fieldsInContainers[$name]);
+                return;
+            }
+            $fieldData = $this->updateDataScope($fieldData, $name);
+            $argument = [
+                'context' => $this->getContext(),
+                'data' => [
+                    'name' => $name,
+                    'config' => $fieldData
+                ]
+            ];
+            $fieldComponent = $this->uiComponentFactory->create($name, 'field', $argument);
+            $fieldComponent->prepare();
+            $this->addComponent($name, $fieldComponent);
+        } else {
+            $this->updateField($fieldData, $fieldComponent);
+        }
+    }
+
+    /**
+     * Update field data
+     *
+     * @param array $fieldData
+     * @param UiComponentInterface $component
+     */
+    protected function updateField(array $fieldData, UiComponentInterface $component)
+    {
+        $config = $component->getData('config');
+        $config = array_replace_recursive($config, $fieldData);
+        $config = $this->updateDataScope($config, $component->getName());
+        $component->setData('config', $config);
     }
 
     /**
