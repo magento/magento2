@@ -14,6 +14,7 @@ define([
             bodyTmpl: 'ui/grid/cells/multiselect',
             menuVisible: false,
             allSelected: false,
+            showAllSelected: false,
             selected: [],
             excluded: [],
             actions: [{
@@ -42,7 +43,7 @@ define([
 
         initObservable: function () {
             this._super()
-                .observe('menuVisible selected excluded allSelected totalSelected');
+                .observe('menuVisible selected excluded allSelected totalSelected showAllSelected');
 
             return this;
         },
@@ -52,6 +53,7 @@ define([
          */
         selectAll: function () {
             this.allSelected(true);
+            this.showAllSelected(true);
 
             this.clearExcluded()
                 .selectPage();
@@ -62,6 +64,7 @@ define([
          */
         deselectAll: function () {
             this.allSelected(false);
+            this.showAllSelected(false);
             this.deselectPage();
         },
 
@@ -132,6 +135,8 @@ define([
             if (this.allSelected()) {
                 count = total - excluded;
             }
+
+            this.showAllSelected(!excluded);
 
             this.totalSelected(count);
 
