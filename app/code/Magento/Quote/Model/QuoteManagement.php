@@ -254,6 +254,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         $order = $this->submit($quote);
         $this->checkoutSession->setLastSuccessQuoteId($quote->getId());
+        $this->checkoutSession->setLastOrderId($order->getIncrementId());
         return $order->getId();
     }
 
