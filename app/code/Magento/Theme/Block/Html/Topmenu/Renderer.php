@@ -46,7 +46,7 @@ class Renderer extends Topmenu
      * @param int $limit
      * @return string HTML code
      */
-    public function _addSubMenu($child, $childLevel, $childrenWrapClass, $limit)
+    public function addSubMenu($child, $childLevel, $childrenWrapClass, $limit)
     {
         $html = '';
         if (!$child->hasChildren()) {

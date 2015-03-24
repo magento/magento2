@@ -39,10 +39,10 @@ foreach ($children as $child) {
         $html .= '</ul></li><li class="column"><ul>';
     }
 
-    $html .= '<li ' . $block->_getRenderedMenuItemAttributes($child) . '>';
+    $html .= '<li ' . $block->getRenderedMenuItemAttributes($child) . '>';
     $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $block->escapeHtml(
             $child->getName()
-        ) . '</span></a>' . $block->_addSubMenu(
+        ) . '</span></a>' . $block->addSubMenu(
             $child,
             $childLevel,
             $childrenWrapClass,

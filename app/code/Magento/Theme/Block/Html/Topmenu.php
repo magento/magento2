@@ -142,7 +142,7 @@ class Topmenu extends Template implements IdentityInterface
      * @param \Magento\Framework\Data\Tree\Node $item
      * @return string
      */
-    public function _getRenderedMenuItemAttributes(\Magento\Framework\Data\Tree\Node $item)
+    public function getRenderedMenuItemAttributes(\Magento\Framework\Data\Tree\Node $item)
     {
         $html = '';
         $attributes = $this->_getMenuItemAttributes($item);
