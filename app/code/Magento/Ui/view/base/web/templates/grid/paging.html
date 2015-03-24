@@ -4,36 +4,49 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="pager">
-    <span data-part="left">
-        <span class="pages-total-found">
-            <strong data-bind="text: totalRecords"></strong> records found
-             <!-- ko if: totalSelected -->
-            (<strong data-bind="text: totalSelected"></strong> selected)
-            <!-- /ko -->
-        </span>
-        <label class="view-pages">
-            View
-            <select data-bind="
-                options: options,
-                value: pageSize,
-                optionsValue: 'value',
-                optionsText: 'label'"
-            ></select>
-            per page.
-        </label>
-    </span>
-    <span data-part="right">
-        <span data-bind="css: { disabled: isFirst() }, click: prev" class="action-previous">
+
+
+<div class="col-xs-3">
+    <div class="admin__control-text">
+        <span data-bind="text: totalRecords"></span> records found
+        <!-- ko if: totalSelected -->
+        (<span data-bind="text: totalSelected"></span> selected)
+        <!-- /ko -->
+    </div>
+</div>
+
+<div class="col-xs-7 admin__data-grid-pager-wrap">
+    <select
+        id="perPage"
+        class="admin__control-select"
+        data-bind="options: options,
+                   value: pageSize,
+                   optionsValue: 'value',
+                   optionsText: 'label'"></select>
+    <label class="admin__control-text" for="perPage">per page</label>
+
+    <div class="admin__data-grid-pager">
+        <button
+            class="action-previous"
+            type="button"
+            data-bind="css: { disabled: isFirst() },
+                   click: prev">
             <span>Previous page</span>
-        </span>
-        <input data-bind="value: _current" type="text" class="input-text page" />
-        <span class="pages-total">
-            of
-            <span data-bind="text: pages" style="vertical-align: top;"></span>
-        </span>
-        <span data-bind="css: { disabled: isLast() }, click: next" class="action-next">
+        </button>
+        <input
+            id="pageCurrent"
+            class="admin__control-input"
+            data-bind="value: _current"
+            type="number" />
+        <label class="admin__control-text" for="pageCurrent">
+            of <span data-bind="text: pages"></span>
+        </label>
+        <button
+            class="action-next"
+            data-bind="css: { disabled: isLast() },
+                       click: next">
             <span>Next page</span>
-        </span>
-    </span>
+        </button>
+    </div>
+
 </div>

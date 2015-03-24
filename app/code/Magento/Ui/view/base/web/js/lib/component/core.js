@@ -40,6 +40,10 @@ define([
     }
 
     return {
+        defaults: {
+            regions: []
+        },
+
         initialize: function (options, additional) {
             _.bindAll(this, '_insert');
 
@@ -76,7 +80,6 @@ define([
                 'source': registry.get(this.provider),
                 'renderer': registry.get('globalStorage').renderer,
                 'containers': [],
-                'regions': [],
                 '_elems': []
             });
 

@@ -1,0 +1,65 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid -> Header
+//  _____________________________________________
+
+//
+//  Components
+//  ---------------------------------------------
+
+@import 'data-grid-header/_data-grid-filters';
+@import 'data-grid-header/_data-grid-pager';
+@import 'data-grid-header/_data-grid-action-columns';
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid-header-row__margin-bottom: @indent__base;
+@data-grid-action-default-view__z-index: @data-grid-action-columns__z-index - 10;
+
+//
+
+.admin__data-grid-header {
+    font-size: @font-size__base; // ToDo UI: should be deleted, added to prevent fz override with .grid
+    position: relative;
+    z-index: @data-grid-header__z-index; // Should be moved to data grid header
+}
+
+.admin__data-grid-header-row {
+    margin-bottom: @data-grid-header-row__margin-bottom;
+    .action-select-wrap {
+        display: block;
+    }
+    .action-select {
+        width: 100%;
+    }
+}
+
+//  Data grid Header Actions
+.admin__data-grid-actions-wrap {
+    text-align: right;
+    .admin__action-dropdown-wrap {
+        text-align: left;
+        border-left: 1px solid @color-gray80;
+        &._active,
+        &:first-child {
+            border-left: none;
+        }
+    }
+}
+
+//  Default view
+.admin__data-grid-action-default-view {
+    z-index: @data-grid-action-default-view__z-index;
+    .admin__action-dropdown {
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-views__content;
+        }
+    }
+}

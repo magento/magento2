@@ -26,7 +26,7 @@
 //  Form Fields
 //  _____________________________________________
 
-// Fieldset
+//  Fieldset
 .admin__fieldset {
     border: 0;
     margin: 0;
@@ -49,6 +49,12 @@
     }
 }
 
+.admin__field-control {
+    .admin__control-input {
+        width: 100%;
+    }
+}
+
 // Label
 .admin__field-label {
     color: @field-label__color;
@@ -59,7 +65,7 @@
         display: none;
     }
 
-    [class]:not(.admin__field-option) > & {
+    .admin__field:not(.admin__field-option) > & {
         font-family: @font-family__base;
         font-size: @field-label__font-size;
         font-weight: @font-weight__semibold;
