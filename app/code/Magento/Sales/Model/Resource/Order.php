@@ -9,7 +9,6 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\Sales\Model\Increment as SalesIncrement;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
@@ -46,6 +45,13 @@ class Order extends SalesResource implements OrderResourceInterface
     protected $addressHandler;
 
     /**
+     * Events manager.
+     *
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * Model Initialization
      *
      * @return void
@@ -61,7 +67,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param SalesIncrement $salesIncrement
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
-     * @param OrderGrid $gridAggregator
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string|null $resourcePrefix
      */
     public function __construct(
@@ -70,12 +76,13 @@ class Order extends SalesResource implements OrderResourceInterface
         SalesIncrement $salesIncrement,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
-        OrderGrid $gridAggregator,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        $this->eventManager = $eventManager;
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
     /**
@@ -199,6 +206,26 @@ class Order extends SalesResource implements OrderResourceInterface
             $relatedObject->save();
             $relatedObject->setOrder($object);
         }
+
+        $this->eventManager->dispatch(
+            $this->_eventPrefix . '_save_after', ['entity' => $object]
+        );
+
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Dispatches corresponding event after the deletion of the order.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->eventManager->dispatch(
+            $this->_eventPrefix . '_delete_after', ['entity' => $object]
+        );
+
+        return parent::_afterDelete($object);
     }
 }

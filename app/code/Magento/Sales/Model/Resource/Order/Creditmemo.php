@@ -9,7 +9,6 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Sales\Model\Increment as SalesIncrement;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
 use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 
 /**
@@ -27,6 +26,13 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
     protected $_eventPrefix = 'sales_order_creditmemo_resource';
 
     /**
+     * Events manager.
+     *
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * Model initialization
      *
      * @return void
@@ -42,17 +48,18 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
-     * @param CreditmemoGrid $gridAggregator
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        CreditmemoGrid $gridAggregator,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        $this->eventManager = $eventManager;
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
     /**
@@ -93,6 +100,26 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
                 $comment->save();
             }
         }
+
+        $this->eventManager->dispatch(
+            $this->_eventPrefix . '_save_after', ['entity' => $object]
+        );
+
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Dispatches corresponding event after the deletion of the order creditmemo.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->eventManager->dispatch(
+            $this->_eventPrefix . '_delete_after', ['entity' => $object]
+        );
+
+        return parent::_afterDelete($object);
     }
 }

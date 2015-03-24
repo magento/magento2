@@ -12,11 +12,11 @@ namespace Magento\Sales\Model\Resource;
 interface GridInterface
 {
     /**
-     * @param int|string $value
+     * @param null|int|string $value
      * @param null|string $field
      * @return \Zend_Db_Statement_Interface
      */
-    public function refresh($value, $field = null);
+    public function refresh($value = null, $field = null);
 
     /**
      * @param int|string $value

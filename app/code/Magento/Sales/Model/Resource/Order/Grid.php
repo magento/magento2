@@ -19,16 +19,34 @@ class Grid extends AbstractGrid
     protected $gridTableName = 'sales_order_grid';
 
     /**
-     * Refresh grid row
+     * Refreshes (adds new) grid rows.
      *
-     * @param int|string $value
+     * By default if $value parameter is omitted, orders created/updated
+     * since the last method call will be refreshed.
+     *
+     * Otherwise single order will be refreshed according to $value, $field
+     * parameters.
+     *
+     * @param null|int|string $value
      * @param null|string $field
      * @return \Zend_Db_Statement_Interface
      */
-    public function refresh($value, $field = null)
+    public function refresh($value = null, $field = null)
     {
-        $select = $this->getGridOriginSelect()
-            ->where(($field ?: 'sfo.entity_id') . ' = ?', $value);
+        $select = $this->getGridOriginSelect();
+
+        if (!$value) {
+            $select->where(
+                ($field ?: 'sfo.updated_at') . ' >= ?',
+                $this->getLastUpdatedAtValue()
+            );
+        } else {
+            $select->where(
+                ($field ?: 'sfo.entity_id') . ' = ?',
+                $value
+            );
+        }
+
         return $this->getConnection()->query(
             $this->getConnection()
                 ->insertFromSelect(

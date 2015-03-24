@@ -24,16 +24,34 @@ class Grid extends AbstractGrid
     protected $creditmemoTableName = 'sales_creditmemo';
 
     /**
-     * Refresh grid row
+     * Refreshes (adds new) grid rows.
      *
-     * @param int|string $value
+     * By default if $value parameter is omitted, order creditmemos created/updated
+     * since the last method call will be refreshed.
+     *
+     * Otherwise single order creditmemo will be refreshed according to $value, $field
+     * parameters.
+     *
+     * @param null|int|string $value
      * @param null|string $field
      * @return \Zend_Db_Statement_Interface
      */
-    public function refresh($value, $field = null)
+    public function refresh($value = null, $field = null)
     {
-        $select = $this->getGridOriginSelect()
-            ->where(($field ?: 'sfc.entity_id') . ' = ?', $value);
+        $select = $this->getGridOriginSelect();
+
+        if (!$value) {
+            $select->where(
+                ($field ?: 'sfc.created_at') . ' >= ?',
+                $this->getLastUpdatedAtValue()
+            );
+        } else {
+            $select->where(
+                ($field ?: 'sfc.entity_id') . ' = ?',
+                $value
+            );
+        }
+
         return $this->getConnection()->query(
             $this->getConnection()
                 ->insertFromSelect(
@@ -81,6 +99,7 @@ class Grid extends AbstractGrid
                     'increment_id' => 'sfc.increment_id',
                     'order_increment_id' => 'sfo.increment_id',
                     'created_at' => 'sfc.created_at',
+                    'updated_at' => 'sfc.updated_at',
                     'order_created_at' => 'sfo.created_at',
                     'billing_name' => "trim(concat(ifnull(sba.firstname, ''), ' ', ifnull(sba.lastname, '')))",
                 ]
