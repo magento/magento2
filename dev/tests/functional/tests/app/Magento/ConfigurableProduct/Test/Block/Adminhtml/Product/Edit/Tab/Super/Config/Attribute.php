@@ -6,10 +6,11 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Form;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute\AttributeSelector;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Attribute block in Variation section.
@@ -158,13 +159,17 @@ class Attribute extends Form
      */
     protected function createNewVariationSet(array $attribute)
     {
-        $this->_rootElement->find($this->createNewVariationSet)->click();
+        $attributeFixture = ObjectManager::getInstance()->create(
+            'Magento\Catalog\Test\Fixture\CatalogProductAttribute',
+            ['data' => $attribute]
+        );
 
+        $this->_rootElement->find($this->createNewVariationSet)->click();
         $newAttribute = $this->getEditAttributeForm();
-        $newAttribute->getTabElement('properties')->fillFormTab($attribute);
+        $newAttribute->fill($attributeFixture);
         $newAttribute->_rootElement->find($this->saveAttribute)->click();
 
-        $this->browser->selectWindow();
+        $this->browser->switchToFrame();
     }
 
     /**

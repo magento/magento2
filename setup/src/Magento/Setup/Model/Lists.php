@@ -36,7 +36,7 @@ class Lists
      */
     public function getTimezoneList()
     {
-        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
+        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
         $list = [];
         foreach ($zones as $code) {
             $list[$code] = \IntlTimeZone::createTimeZone($code)->getDisplayName(

@@ -1,32 +1,22 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\Result;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var Result\Redirect
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * Constructor
      *
      * @param Context $context
-     * @param Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
-        Context $context,
-        Result\RedirectFactory $resultRedirectFactory
+        Context $context
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

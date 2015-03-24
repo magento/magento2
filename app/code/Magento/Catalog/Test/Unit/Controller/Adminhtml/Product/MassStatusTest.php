@@ -43,10 +43,9 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->willReturn($this->resultRedirect);
 
         $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\MassStatus(
-            $this->initContext(),
+            $this->initContext($resultRedirectFactory),
             $productBuilder,
-            $this->priceProcessor,
-            $resultRedirectFactory
+            $this->priceProcessor
         );
     }
 

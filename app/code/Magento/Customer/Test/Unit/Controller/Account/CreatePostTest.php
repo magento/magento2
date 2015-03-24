@@ -197,6 +197,13 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
 
         $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Controller\Result\RedirectFactory'
+        )->setMethods(['create'])
+            ->getMock();
+        $this->resultRedirectFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->redirectMock);
 
         $contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $contextMock->expects($this->any())
@@ -214,14 +221,9 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManagerMock));
-
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Controller\Result\RedirectFactory'
-        )->setMethods(['create'])
-            ->getMock();
-        $this->resultRedirectFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->redirectMock);
+        $contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->will($this->returnValue($this->resultRedirectFactoryMock));
 
         $this->model = $objectManager->getObject(
             'Magento\Customer\Controller\Account\CreatePost',
@@ -243,7 +245,6 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
                 'escape' => $escaperMock,
                 'customerExtractor' => $this->customerExtractorMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
             ]
         );
     }
