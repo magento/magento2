@@ -131,7 +131,6 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn($profileTableName);
         $this->adapter->expects($this->any())->method('select')->willReturn($this->select);
-        $this->meta->expects($this->once())->method('getId')->willReturn($metaId);
         $this->select->expects($this->at(0))
             ->method('from')
             ->with($profileTableName, [$profileIdFieldName])
@@ -156,6 +155,6 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ->method('quoteIdentifier');
         $this->adapter->expects($this->once())->method('fetchRow')->willReturn($profileData);
         $this->profile->expects($this->at(0))->method('setData')->with($profileData);
-        $this->assertEquals($this->profile, $this->resource->loadActiveProfile($this->meta));
+        $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }
 }

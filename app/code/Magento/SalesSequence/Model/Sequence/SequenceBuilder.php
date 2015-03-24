@@ -29,11 +29,6 @@ class SequenceBuilder
     protected $resourceMetadata;
 
     /**
-     * @var SequenceFactory
-     */
-    protected $sequenceFactory;
-
-    /**
      * @var ProfileFactory
      */
     protected $profileFactory;
@@ -78,18 +73,15 @@ class SequenceBuilder
 
     /**
      * @param ResourceMetadata $resourceMetadata
-     * @param SequenceFactory $sequenceFactory
      * @param MetaFactory $metaFactory
      * @param ProfileFactory $profileFactory
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
-        SequenceFactory $sequenceFactory,
         MetaFactory $metaFactory,
         ProfileFactory $profileFactory
     ) {
         $this->resourceMetadata = $resourceMetadata;
-        $this->sequenceFactory = $sequenceFactory;
         $this->metaFactory = $metaFactory;
         $this->profileFactory = $profileFactory;
         $this->data = array_flip($this->pattern);

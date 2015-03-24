@@ -176,6 +176,19 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 
+    public function testCreateSequence()
+    {
+        $sequenceName = "sequence_order_777";
+        $startNumber = 1;
+        $sql = "some sql";
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->adapter);
+        $this->ddlSequence->expects($this->once())->method('getCreateSequenceDdl')->with($sequenceName, $startNumber)->willReturn($sql);
+        $this->adapter->expects($this->once())->method('query')->with($sql);
+        $this->resource->createSequence($sequenceName, $startNumber);
+    }
+
     /**
      * @param $metaData
      */
