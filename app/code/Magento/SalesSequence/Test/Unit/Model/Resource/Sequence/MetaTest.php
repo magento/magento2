@@ -58,6 +58,11 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     private $select;
 
     /**
+     * @var \Magento\Framework\DB\Ddl\Sequence | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $ddlSequence;
+
+    /**
      * Initialization
      */
     protected function setUp()
@@ -114,6 +119,13 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->ddlSequence = $this->getMock(
+            'Magento\Framework\DB\Ddl\Sequence',
+            [],
+            [],
+            '',
+            false
+        );
         $this->profile = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\Profile',
             [],
@@ -124,7 +136,8 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         $this->resource = new Meta(
             $this->dbContext,
             $this->metaFactory,
-            $this->resourceProfile
+            $this->resourceProfile,
+            $this->ddlSequence
         );
     }
 
@@ -160,7 +173,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->willReturn($metaId);
         $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
         $this->stepCheckSaveWithActiveProfile($metaData);
-        $this->assertEquals($this->meta, $this->resource->loadBy($entityType, $storeId));
+        $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 
     /**
@@ -177,6 +190,6 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         $this->adapter->expects($this->once())->method('fetchRow')->willReturn($metaData);
         $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
         $this->meta->expects($this->at(0))->method('setData')->with($metaData);
-        $this->meta->expects($this->at(1))->method('setData')->with('active_profile', $this->profile);
+        $this->meta->expects($this->at(2))->method('setData')->with('active_profile', $this->profile);
     }
 }

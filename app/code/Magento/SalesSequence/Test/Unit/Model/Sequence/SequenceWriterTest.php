@@ -6,14 +6,14 @@
 namespace Magento\SalesSequence\Model\Resource\Sequence;
 
 /**
- * Class SequenceWriterTest
+ * Class SequenceBuilderTest
  */
-class SequenceWriterTest extends \PHPUnit_Framework_TestCase
+class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\SequenceWriter
+     * @var \Magento\SalesSequence\Model\Sequence\SequenceBuilder
      */
-    private $sequenceWriter;
+    private $sequenceBuilder;
 
     /**
      * @var \Magento\SalesSequence\Model\Resource\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
@@ -106,8 +106,8 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->sequenceWriter = $helper->getObject(
-            'Magento\SalesSequence\Model\Sequence\SequenceWriter',
+        $this->sequenceBuilder = $helper->getObject(
+            'Magento\SalesSequence\Model\Sequence\SequenceBuilder',
             [
                 'resourceSequenceMeta' => $this->resourceSequenceMeta,
                 'metaFactory' => $this->metaFactory,
@@ -129,7 +129,7 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(1);
         $this->setExpectedException('Magento\Framework\Exception\AlreadyExistsException');
-        $this->sequenceWriter->addSequence($entityType, $storeId, 'PREF', 'SUFF', 1, 1, 9999999, 912992192);
+        $this->sequenceBuilder->addSequence($entityType, $storeId, 'PREF', 'SUFF', 1, 1, 9999999, 912992192);
     }
 
     public function testAddSequence()
@@ -184,7 +184,7 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($sql);
         $this->resourceSequenceMeta->expects($this->once())->method('getReadConnection')->willReturn($this->adapter);
         $this->adapter->expects($this->once())->method('query')->with($sql);
-        $this->sequenceWriter->addSequence(
+        $this->sequenceBuilder->addSequence(
             $entityType,
             $storeId,
             $prefix,
