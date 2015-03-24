@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Multiline
  */
-class Multiline extends AbstractFormElement
+class Multiline extends AbstractElement
 {
     const NAME = 'multiline';
 

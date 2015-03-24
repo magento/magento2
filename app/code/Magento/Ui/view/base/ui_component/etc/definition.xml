@@ -60,13 +60,13 @@
             </item>
         </argument>
     </filterDate>
-    <wrapper class="Magento\Ui\Component\Wrapper">
+    <container class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">uiComponent</item>
             </item>
         </argument>
-    </wrapper>
+    </container>
     <massaction class="Magento\Ui\Component\MassAction">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">templates/listingcontainer/massaction/default</item>
@@ -207,7 +207,6 @@
         </argument>
     </fieldset>
     <field class="Magento\Ui\Component\Form\Field"/>
-    <!-- container -->
     <tab class="Magento\Ui\Component\Layout\Tabs\Tab">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">templates/layout/tabs/tab/default</item>

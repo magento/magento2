@@ -25,7 +25,7 @@ class Form extends AbstractComponent
     }
 
     /**
-     * Prepare component configuration
+     * Register component
      *
      * @return void
      */
@@ -36,6 +36,8 @@ class Form extends AbstractComponent
         $jsConfig = $this->getConfiguration($this);
         unset($jsConfig['extends']);
         $this->getContext()->addComponentDefinition($this->getContext()->getNamespace(), $jsConfig);
+
+        $this->getContext()->addButtons($this->getData('buttons'), $this);
     }
 
     /**

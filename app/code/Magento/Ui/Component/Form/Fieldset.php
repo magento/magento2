@@ -97,53 +97,11 @@ class Fieldset extends AbstractComponent
      * @param string $name
      * @return array
      */
-    public function updateDataScope(array $data, $name)
+    protected function updateDataScope(array $data, $name)
     {
         if (!isset($data['dataScope'])) {
             $data['dataScope'] = $name;
         }
-
         return $data;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLegendText()
-    {
-        return $this->getData('config/label');
-    }
-
-    /**
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getIsCollapsible()
-    {
-        return $this->getData('config/collapsible', $this->collapsible);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAjaxUrl()
-    {
-        return $this->getData('config/source');
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->getData('config/content');
-    }
-
-    /**
-     * @return array
-     */
-    public function getChildren()
-    {
-        return $this->getData('children');
     }
 }

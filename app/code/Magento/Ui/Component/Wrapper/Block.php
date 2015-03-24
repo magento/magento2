@@ -3,18 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Container;
+namespace Magento\Ui\Component\Wrapper;
 
-use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class Block
  */
 class Block extends AbstractComponent
 {
-    const NAME = 'blockContainer';
+    const NAME = 'blockWrapper';
 
     /**
      * @var BlockInterface

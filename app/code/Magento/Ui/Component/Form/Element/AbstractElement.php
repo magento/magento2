@@ -8,9 +8,9 @@ namespace Magento\Ui\Component\Form\Element;
 use Magento\Ui\Component\AbstractComponent;
 
 /**
- * Class AbstractFormElement
+ * Class AbstractElement
  */
-abstract class AbstractFormElement extends AbstractComponent implements ElementInterface
+abstract class AbstractElement extends AbstractComponent implements ElementInterface
 {
     /**
      * @return string
@@ -38,9 +38,8 @@ abstract class AbstractFormElement extends AbstractComponent implements ElementI
 
     /**
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsReadonly()
+    public function isReadonly()
     {
         return (bool) $this->getData('readonly');
     }
