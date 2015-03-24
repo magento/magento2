@@ -8,30 +8,33 @@
 
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
-<?php if ($block->getInList()): ?>
-    <li data-block="minicart" class="minicart-wrapper">
-<?php else:  ?>
-    <div data-block="minicart" class="minicart-wrapper">
-<?php endif; ?>
+
 <?php $_cartQty = (float) $block->getSummaryCount() ?>
-<?php if (!$block->getIsLinkMode() || !$block->getIsNeedToDisplaySideBar()): ?>
-    <a class="action showcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
+<div data-block="minicart" class="minicart-wrapper">
+    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>">
         <span class="text"><?php echo __('My Cart'); ?></span>
         <span class="counter qty<?php echo($_cartQty > 0) ? '' : ' empty'; ?>">
             <span class="counter-number">
                 <?php echo $_cartQty;?>
             </span>
             <span class="counter-label">
-                <?php if ($_cartQty == 1):?>
-                    <?php echo __('item');?>
-                <?php else:?>
-                    <?php echo __('items');?>
-                <?php endif;?>
+                <?php echo $block->getSummaryText($_cartQty); ?>
             </span>
         </span>
     </a>
     <?php if ($block->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($block->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>
+        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>"
+             data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=minicart]",
+                "triggerTarget":".showcart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "height": 200,
+                "maxHeight": 600,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":[]}}'>
             <div class="title">
                 <strong>
                     <span class="text"><?php echo __('My Cart'); ?></span>
@@ -42,8 +45,11 @@
             </div>
             <div class="content">
                 <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+
+                    <a href="#" id="btn-minicart-close" style="position:absolute;right:5px;">[X]</a>
+
                     <div class="items-total">
-                        <?php echo($_cartQty == 1) ? __('1 item ') : __('%1 items ', $_cartQty) ?>
+                        <?php echo $_cartQty . $block->getSummaryText($_cartQty); ?>
                     </div>
                     <?php $isPossibleOnepageCheckout = $_cartQty && $block->isPossibleOnepageCheckout() ?>
                     <?php if ($isPossibleOnepageCheckout): ?>
@@ -62,11 +68,6 @@
                                 </button>
                                 <?php echo $block->getChildHtml('extra_actions') ?>
                             <?php endif; ?>
-                        </div>
-                        <div class="secondary">
-                            <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
-                                <span><?php echo __('Go to Shopping Cart') ?></span>
-                            </a>
                         </div>
                     </div>
                 <?php endif ?>
@@ -88,24 +89,33 @@
                         <p class="minicart empty text"><?php echo $block->getCartEmptyMessage(); ?></p>
                     <?php endif; ?>
                 <?php endif ?>
+
+                <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+                    <div class="actions">
+                        <div class="secondary">
+                            <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
+                                <span><?php echo __('View and edit cart') ?></span>
+                            </a>
+                        </div>
+                    </div>
+                <?php endif ?>
+
             </div>
         </div>
     <?php endif ?>
-<?php endif; ?>
-<script type="text/x-magento-init">
+    <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
             "sidebar": {
                 "checkoutUrl": "<?php echo $block->getCheckoutUrl();?>",
                 "checkoutButton": "#top-cart-btn-checkout",
                 "removeButton": "#mini-cart a.action.delete",
-                "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>"
+                "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>",
+                "closeButton": "#btn-minicart-close",
+                "targetElement": "div.block.block-minicart",
+                "updateItemQtyUrl": "<?php echo $block->getUpdateItemQtyUrl(); ?>"
             }
         }
     }
-</script>
-<?php if ($block->getInList()): ?>
-    </li>
-<?php else:  ?>
-    </div>
-<?php endif; ?>
+    </script>
+</div>

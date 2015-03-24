@@ -75,9 +75,24 @@ $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                     <?php echo $block->getSidebarItemPriceHtml($_item); ?>
                 <?php endif; //Can apply MSRP ?>
 
-                <div class="details-qty">
+                <div class="details-qty qty">
                     <span class="label"><?php echo __('Qty'); ?></span>
-                    <span class="value qty"><?php echo $block->getQty() ?></span>
+                    <input id="cart-item-<?php echo $_item->getId() ?>-qty"
+                           value="<?php echo $block->getQty() ?>"
+                           type="number"
+                           size="4"
+                           title="<?php echo __('Qty'); ?>"
+                           class="input-text qty cart-item-qty"
+                           style="width:50px"
+                           data-cart-item="<?php echo $_item->getId() ?>"
+                           maxlength="12"/>
+                    <button id="update-cart-item-<?php echo $_item->getId() ?>"
+                           class="update-cart-item"
+                           data-cart-item="<?php echo $_item->getId() ?>"
+                           title="<?php echo __('Update'); ?>"
+                           style="display: none">
+                        <span>Update</span>
+                    </button>
                 </div>
             </div>
 
