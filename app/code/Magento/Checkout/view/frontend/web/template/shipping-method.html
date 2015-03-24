@@ -24,9 +24,7 @@
                             <br>
                             <!--ko foreach: { data: items, as: 'item'}-->
                             <div class="field choice">
-
                                 <!-- ko if: $parents[1].isErrorMessagePresent(item) -->
-
                                 <!--todo add error message to api-->
                                 <div class="message error">
                                     <div>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</div>
@@ -36,16 +34,16 @@
                                 </span>
                                 <!-- /ko -->
                                 <!-- ko ifnot: $parents[1].isErrorMessagePresent(item) -->
-                                <!-- ko if: $parents[1].getRatesQty($parent.items) -->
+                                <!-- ko if: $parent.items.length && $parents[1].rates().length == 1 -->
                                 <span class="no-display">
                                     <input data-bind="attr: {'value' : item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.method_code}"
                                            name="shipping_method" class="radio" type="radio" checked="checked"/>
                                     </span>
                                 <!-- /ko -->
-                                 <!--ko ifnot: $parents[1].getRatesQty($parent.items)-->
+                                 <!--ko ifnot: ($parent.items.length && $parents[1].rates().length == 1)-->
                                 <div class="control">
                                     <input name="shipping_method" type="radio"
-                                           data-bind="attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
+                                           data-bind="checked:$parents[1].verifySelectedMethodCode(item.method_code, item.carrier_code + '_' + item.method_code), attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
                                            class="radio"/>
                                 </div>
                                  <!--/ko-->
@@ -63,7 +61,6 @@
 
                     <!-- /ko -->
                 </dl>
-                <div class="no-display" data-bind="attr: {'data-shipping-code-price': shippingCodePrice}"></div>
                 <!--todo add gift message block-->
                 <fieldset class="fieldset gift-message"></fieldset>
             </div>

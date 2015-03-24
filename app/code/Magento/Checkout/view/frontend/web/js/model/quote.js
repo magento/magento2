@@ -15,6 +15,7 @@ define(
         var paymentMethod = ko.observable(null);
         var quoteData = window.cartData;
         var currencySymbol = window.currencySymbol;
+        var selectedShippingMethod = window.selectedShippingMethod;
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -48,6 +49,9 @@ define(
             },
             getShippingMethod: function() {
                 return shippingMethod;
+            },
+            getSelectedShippingMethod: function() {
+                return selectedShippingMethod;
             }
         };
     }

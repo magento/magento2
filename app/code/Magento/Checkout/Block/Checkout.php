@@ -9,6 +9,7 @@ namespace Magento\Checkout\Block;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
+use Magento\Framework\Webapi\Exception;
 
 /**
  * Onepage checkout block
@@ -46,6 +47,11 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $localeCurrency;
 
     /**
+     * @var \Magento\Quote\Api\ShippingMethodManagementInterface
+     */
+    protected $shippingMethodManagement;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
@@ -77,6 +83,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
         array $data = []
     ) {
         parent::__construct(
@@ -98,6 +105,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->jsLayout = is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->cartRepositoryInterface = $cartRepositoryInterface;
         $this->localeCurrency = $localeCurrency;
+        $this->shippingMethodManagement = $shippingMethodManagement;
     }
 
 
@@ -203,5 +211,21 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             return \Zend_Json::encode(['data' => $symbol]);
         }
         return '{}';
+    }
+
+    /**
+     * Retrieve selected shipping method.
+     *
+     * @return string|bool
+     */
+    public function getSelectedShippingMethod()
+    {   $selectedShippingMethod = false;
+        $quoteId = $this->getQuote()->getId();
+        try {
+            $selectedShippingMethod = $this->shippingMethodManagement->get($quoteId)->getMethodCode();
+        } catch( \Exception $e) {
+
+        }
+        return \Zend_Json::encode($selectedShippingMethod);
     }
 }

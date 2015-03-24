@@ -24,25 +24,20 @@ define(
                 rates: shippingService.getRates(),
                 quoteHasShippingAddress: quote.getShippingAddress(),
 
-                getRatesQty: function (data) {
-                    return data.length && this.rates().length == 1;
+                verifySelectedMethodCode: function (data, value) {
+                    if (quote.getSelectedShippingMethod() == data) {
+                        return value;
+                    }
+                    return false;
                 },
 
-                selectedMethodCode: shippingService.getSelectedShippingMethod(quote),
-
-                verifySelectedMethodCode: function (data) {
-                    return this.selectedMethodCode == data;
-                },
-                shippingCodePrice: shippingService.getShippingPrices(),
                 isErrorMessagePresent: function (data) {
                     return !data.available;
                 },
                 setShippingMethod: function (form) {
                     form = $(form);
-                    var shippingMethodCode = form.find("input[name='shipping_method']:checked").val();
-                    if (!shippingMethodCode) {
-                        return;
-                    }
+                    var code = form.find("input[name='shipping_method']:checked").val();
+                    var shippingMethodCode = code ? code.split("_") : null;
                     selectShippingMethod(shippingMethodCode);
                 },
 

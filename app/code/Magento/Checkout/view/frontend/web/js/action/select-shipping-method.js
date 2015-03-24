@@ -15,15 +15,20 @@ define(
     ],
     function (quote, storage, errorList, navigator) {
         return function (shippingMethodCode) {
+            if (!shippingMethodCode) {
+                alert('Please specify a shipping method');
+            }
             var shippingMethodData ={
                 "cartId": quote.getQuoteId(),
-                "code" : shippingMethodCode
+                "carrierCode" : shippingMethodCode[0],
+                "methodCode" : shippingMethodCode[1]
+
             };
             return storage.put(
                 'rest/V1/carts/' + quote.getQuoteId() + '/selected-shipping-method',
                 JSON.stringify(shippingMethodData)
             ).done(
-                function() {
+                function(shippingMethodCode) {
                     quote.setShippingMethod(shippingMethodCode);
                     navigator.setCurrent('shippingMethod').goNext();
                 }

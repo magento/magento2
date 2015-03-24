@@ -22,6 +22,7 @@
             window.cartData = <?php echo $this->getCart(); ?>;
             window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
             window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
+            window.selectedShippingMethod = <?php echo $this->getSelectedShippingMethod()?>;
         </script>
         <script>
             require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {
