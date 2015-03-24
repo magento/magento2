@@ -74,9 +74,7 @@ class Renderer extends Topmenu
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
         }
 
-        $html .= '<ul class="level' . $childLevel . ' submenu">';
         $html .= $this->render($child, $childrenWrapClass, $limit, $colStops);
-        $html .= '</ul>';
 
         return $html;
     }

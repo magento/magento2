@@ -42,12 +42,22 @@ foreach ($children as $child) {
     $html .= '<li ' . $block->getRenderedMenuItemAttributes($child) . '>';
     $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $block->escapeHtml(
             $child->getName()
-        ) . '</span></a>' . $block->addSubMenu(
+        ) . '</span></a>';
+
+    if ($child->hasChildren()) {
+
+        $html .= '<ul class="level' . $childLevel . ' submenu">';
+        $html .= $block->addSubMenu(
             $child,
             $childLevel,
             $childrenWrapClass,
             $limit
-        ) . '</li>';
+        );
+        $html .= '</ul>';
+
+    }
+
+    $html .= '</li>';
     $itemPosition++;
     $counter++;
 }
