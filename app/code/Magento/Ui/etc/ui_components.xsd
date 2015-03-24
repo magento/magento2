@@ -7,7 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <!-- Include section -->
-    <xs:include schemaLocation="../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"/>
+    <xs:include schemaLocation="../../../../../lib/internal/Magento/Framework/Data/etc/argument/types.xsd"/>
     <!-- Defined the types of components -->
     <xs:complexType name="layout" xml:base="ui_element">
         <xs:complexContent>
@@ -107,6 +107,15 @@
     <xs:complexType name="filterDate">
         <xs:complexContent>
             <xs:extension base="input"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="container">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="massaction">

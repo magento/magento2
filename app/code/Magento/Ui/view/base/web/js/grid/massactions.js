@@ -4,14 +4,16 @@
  */
 define([
     'underscore',
+    'mageUtils',
     'uiComponent'
-], function (_, Component) {
+], function (_, utils, Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'ui/grid/actions',
-            actionsVisible: false
+            actionsVisible: false,
+            noItems:  'You haven\'t selected any items!'
         },
 
         initObservable: function () {
@@ -22,10 +24,24 @@ define([
         },
 
         applyAction: function (action) {
-            var confirmed = true;
+            var proceed = true,
+                data = this.source.get('config.multiselect');
 
-            if (action.confirm) {
-                confirmed = window.confirm(action.confirm);
+            if (!data || !data.totalSelected) {
+                proceed = false;
+
+                alert(this.noItems);
+            }
+
+            if (proceed && action.confirm) {
+                proceed = window.confirm(action.confirm);
+            }
+
+            if (proceed) {
+                utils.submit({
+                    url: action.url,
+                    data: data
+                });
             }
         },
 

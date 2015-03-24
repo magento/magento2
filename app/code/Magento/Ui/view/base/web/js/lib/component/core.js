@@ -6,21 +6,9 @@ define([
     'ko',
     'mageUtils',
     'underscore',
-    'Magento_Ui/js/lib/registry/registry'
+    'uiRegistry'
 ], function (ko, utils, _, registry) {
     'use strict';
-
-    function getOffsetFor(elems, offset) {
-        if (typeof offset === 'undefined') {
-            offset = -1;
-        }
-
-        if (offset < 0) {
-            offset += elems.length + 1;
-        }
-
-        return offset;
-    }
 
     /**
      * Wrapper for ko.observable and ko.observableArray.
@@ -40,6 +28,15 @@ define([
     }
 
     return {
+        defaults: {
+            parentName: '<%= $data.getPart(name, -2) %>',
+            parentScope: '<%= $data.getPart(dataScope, -2) %>',
+            template: 'ui/collection',
+            containers: [],
+            regions: [],
+            _elems: []
+        },
+
         initialize: function (options, additional) {
             _.bindAll(this, '_insert');
 
@@ -71,13 +68,8 @@ define([
          */
         initProperties: function () {
             _.extend(this, {
-                'parentName': this.getPart(this.name, -2),
-                'parentScope': this.getPart(this.dataScope, -2),
                 'source': registry.get(this.provider),
-                'renderer': registry.get('globalStorage').renderer,
-                'containers': [],
-                'regions': [],
-                '_elems': []
+                'renderer': registry.get('globalStorage').renderer
             });
 
             return this;
@@ -122,7 +114,7 @@ define([
             this.hasUnique = this.uniqueProp && uniqueNs;
 
             if (this.hasUnique) {
-                this.source.on('update:params.' + uniqueNs, update, this.name);
+                this.source.on(uniqueNs, update, this.name);
             }
 
             return this;
@@ -163,7 +155,7 @@ define([
         getPart: function (parts, offset, delimiter) {
             delimiter = delimiter || '.';
             parts = parts.split(delimiter);
-            offset = getOffsetFor(parts, offset);
+            offset = utils.formatOffset(parts, offset);
 
             parts.splice(offset, 1);
 
@@ -175,7 +167,7 @@ define([
          * @returns {String}
          */
         getTemplate: function () {
-            return this.template || 'ui/collection';
+            return this.template;
         },
 
         /**
@@ -185,11 +177,10 @@ define([
          * @returns {Component} Chainable.
          */
         setUnique: function () {
-            var params = this.provider.params,
-                property = this.uniqueProp;
+            var property = this.uniqueProp;
 
             if (this[property]()) {
-                params.set(this.uniqueNs, this.name);
+                this.source.set(this.uniqueNs, this.name);
             }
 
             return this;

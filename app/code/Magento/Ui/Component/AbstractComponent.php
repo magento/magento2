@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Abstract class AbstractComponent
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractComponent extends Object implements UiComponentInterface, JsConfigInterface
 {
@@ -102,8 +103,11 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     }
 
     /**
+     * Add component
+     *
      * @param string $name
      * @param UiComponentInterface $component
+     * @return void
      */
     public function addComponent($name, UiComponentInterface $component)
     {
@@ -207,12 +211,17 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
      * Get JS configuration
      *
      * @param UiComponentInterface $component
+     * @param null|string $extends
      * @return array
      */
-    protected function getConfiguration(UiComponentInterface $component)
+    protected function getConfiguration(UiComponentInterface $component, $extends = null)
     {
         $jsConfig = (array) $component->getData('js_config');
-        if (!isset($jsConfig['extends'])) {
+        if (isset($jsConfig['extends'])) {
+            return $jsConfig;
+        } else if (null !== $extends) {
+            $jsConfig['extends'] = $extends;
+        } else {
             $jsConfig['extends'] = $component->getContext()->getNamespace();
         }
 

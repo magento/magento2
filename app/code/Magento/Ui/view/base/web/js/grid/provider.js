@@ -12,7 +12,7 @@ define([
 
     return Provider.extend({
         initialize: function () {
-            utils.limit(this, 'reload', 100);
+            utils.limit(this, 'reload', 50);
             _.bindAll(this, 'onReload');
 
             return this._super();

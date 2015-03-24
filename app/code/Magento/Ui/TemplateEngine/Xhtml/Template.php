@@ -43,7 +43,10 @@ class Template
     }
 
     /**
+     * Append
+     *
      * @param string $content
+     * @return void
      */
     public function append($content)
     {

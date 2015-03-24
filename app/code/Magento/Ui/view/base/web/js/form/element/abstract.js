@@ -51,6 +51,9 @@ define([
 
             this._super();
 
+            this.initialValue = this.getInititalValue();
+            this.value(this.initialValue);
+
             return this;
         },
 
@@ -64,11 +67,8 @@ define([
 
             this._super();
 
-            this.initialValue = this.getInititalValue();
-
             this.observe('error disabled focused preview hidden')
                 .observe({
-                    'value': this.initialValue,
                     'required': !!rules['required-entry']
                 });
 
@@ -87,12 +87,8 @@ define([
 
             _.extend(this, {
                 'uid': uid,
-                'noticeId': 'notice-' + this.uid,
+                'noticeId': 'notice-' + uid,
                 'inputName': utils.serializeName(this.dataScope)
-            });
-
-            _.defaults(this, {
-                'template': this.tmpPath + this.input_type
             });
 
             return this;
@@ -117,7 +113,7 @@ define([
          * @returns {*} Elements' value.
          */
         getInititalValue: function () {
-            var values = [this.source.get('data.' + this.dataScope), this.default],
+            var values = [this.value(), this.default],
                 value;
 
             values.some(function (v) {
@@ -195,7 +191,7 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() != this.initialValue;
+            var notEqual = this.value() !== this.initialValue;
 
             return this.hidden() ? false : notEqual;
         },

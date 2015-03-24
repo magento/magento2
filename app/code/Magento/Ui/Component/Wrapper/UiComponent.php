@@ -3,17 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Element\UiComponent;
+namespace Magento\Ui\Component\Wrapper;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Ui\Component\Container\BlockFactory;
 
 /**
- * Class TemplateAdapter
+ * Class UiComponent
+ *
+ * Encapsulate UI Component to represent it as standard Layout Block
  */
-class TemplateAdapter extends Template
+class UiComponent extends Template implements ContainerInterface
 {
     /**
      * Ui component
@@ -25,24 +27,25 @@ class TemplateAdapter extends Template
     /**
      * @var BlockFactory
      */
-    protected $containerFactory;
+    protected $blockWrapperFactory;
 
     /**
      * Constructor
      *
      * @param TemplateContext $context
      * @param UiComponentInterface $component
-     * @param BlockFactory $containerFactory
+     * @param BlockFactory $blockWrapperFactory
      * @param array $data
      */
     public function __construct(
         TemplateContext $context,
         UiComponentInterface $component,
-        BlockFactory $containerFactory,
+        BlockFactory $blockWrapperFactory,
         array $data = []
     ) {
         $this->component = $component;
-        $this->containerFactory = $containerFactory;
+        $this->blockWrapperFactory = $blockWrapperFactory;
+        $this->setNameInLayout($this->component->getName());
         parent::__construct($context, $data);
     }
 
@@ -56,10 +59,13 @@ class TemplateAdapter extends Template
         foreach ($this->getChildNames() as $childName) {
             $childBlock = $this->getLayout()->getBlock($childName);
             if ($childBlock) {
-                $container = $this->containerFactory->create([
-                    'block' => $childBlock
+                $wrapper = $this->blockWrapperFactory->create([
+                    'block' => $childBlock,
+                    'data' => [
+                        'name' => 'block_' . $childName
+                    ]
                 ]);
-                $this->component->addComponent('block_' . $childName, $container);
+                $this->component->addComponent('block_' . $childName, $wrapper);
             }
         }
 

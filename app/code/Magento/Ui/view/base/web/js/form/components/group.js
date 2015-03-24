@@ -8,30 +8,13 @@ define([
 ], function (_, Component) {
     'use strict';
 
-    function extractData(container, field, orig) {
-        var data,
-            value;
-
-        container.some(function (item) {
-            value = item[field];
-
-            if (_.isFunction(value)) {
-                value = value();
-            }
-
-            return !item.hidden() && (data = value);
-        });
-
-        return data || orig;
-    }
-
     return Component.extend({
         defaults: {
             hidden: false,
             label: '',
             required: false,
             template: 'ui/group/group',
-            fieldTemplate: 'ui/group/field',
+            fieldTemplate: 'ui/form/field',
             breakLine: true
         },
 
@@ -70,21 +53,6 @@ define([
             elem.on({
                 'toggle': this.toggle
             });
-
-            this.extractData();
-
-            return this;
-        },
-
-        /**
-         * Extracts label and required properties from child elements
-         *
-         * @return {Object} - reference to instance
-         */
-        extractData: function () {
-            var elems = this.elems();
-
-            this.required(extractData(elems, 'required', this.required()));
 
             return this;
         },

@@ -11,9 +11,9 @@ define([
 
     return Class.extend({
         initialize: function (types) {
-            this.types = {};
+            this.types = types || {};
 
-            this.set(types);
+            this.set(this.types);
 
             return this;
         },

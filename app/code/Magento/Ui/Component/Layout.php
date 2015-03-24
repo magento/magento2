@@ -69,7 +69,7 @@ class Layout extends AbstractComponent
     }
 
     /**
-     * Create Layout Navigation block and add to mane page layout
+     * Register component and build layout structure
      *
      * @inheritdoc
      */

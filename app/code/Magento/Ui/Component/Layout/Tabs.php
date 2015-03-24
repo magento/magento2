@@ -13,7 +13,10 @@ use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
- * Class Layout
+ * Class Tabs
+ * @deprecated
+ * @see TabsEx
+ * @TODO REMOVE THIS CLASS
  */
 class Tabs extends Generic implements LayoutInterface
 {
@@ -42,12 +45,19 @@ class Tabs extends Generic implements LayoutInterface
      */
     protected $sortIncrement = 10;
 
+    /**
+     * Constructor
+     *
+     * @param null|string $navContainerName
+     */
     public function __construct($navContainerName = null)
     {
         $this->navContainerName = $navContainerName;
     }
 
     /**
+     * Build
+     *
      * @param UiComponentInterface $component
      * @return array
      */
@@ -60,12 +70,21 @@ class Tabs extends Generic implements LayoutInterface
         return parent::build($component);
     }
 
+    /**
+     * Add navigation block
+     *
+     * @return void
+     */
     protected function addNavigationBlock()
     {
         $pageLayout = $this->component->getContext()->getPageLayout();
         /** @var \Magento\Ui\Component\Layout\Tabs\Nav $navBlock */
         if ($this->navContainerName) {
-            $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', $this->navContainerName);
+            $navBlock = $pageLayout->addBlock(
+                'Magento\Ui\Component\Layout\Tabs\Nav',
+                'tabs_nav',
+                $this->navContainerName
+            );
         } else {
             $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', 'content');
         }
@@ -79,20 +98,19 @@ class Tabs extends Generic implements LayoutInterface
      * @param array $topNode
      * @param UiComponentInterface $component
      * @param string $componentType
+     * @return void
      */
-    protected function addChildren(
-        array &$topNode,
-        UiComponentInterface $component,
-        $componentType
-    ) {
+    protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
+    {
+        // Initialization of structure components
         $this->initSections();
         $this->initAreas();
         $this->initGroups();
         $this->initElements();
 
+        // Create of structure components
         $this->processDataSource();
-
-        $this->processChildBlocks();
+        $this->processChildComponents();
 
         $topNode = $this->structure;
     }
@@ -157,6 +175,7 @@ class Tabs extends Generic implements LayoutInterface
      * Process data source
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processDataSource()
     {
@@ -168,7 +187,7 @@ class Tabs extends Generic implements LayoutInterface
                 'config' => isset($meta['config']) ? $meta['config'] : []
             ];
             $areaConfig['insertTo'] = [
-                "{$this->namespace}.sections" => ['position' => $this->getNextSortIncrement()]
+                $this->namespace . '.sections' => ['position' => $this->getNextSortIncrement()]
             ];
             $this->addArea($areName, $areaConfig);
 
@@ -186,8 +205,8 @@ class Tabs extends Generic implements LayoutInterface
 
             if (isset($meta['is_collection'])) {
                 $templateGroupName = $groupName . '_template';
-                $groupConfig['type'] = 'collection';
-                $groupConfig['dataScope'] = "{$this->namespace}.{$name}";
+                $groupConfig['type'] = $this->component->getComponent($name)->getComponentName();
+                $groupConfig['dataScope'] = $this->namespace . '.'. $name;
                 $groupConfig['config']['active'] = 1;
                 $groupConfig['config']['removeLabel'] = __('Remove ' . $groupConfig['config']['label']);
                 $groupConfig['config']['removeMessage'] = __('Are you sure you want to delete this item?');
@@ -213,7 +232,12 @@ class Tabs extends Generic implements LayoutInterface
                         continue;
                     }
 
-                    $this->addToCollection($itemTemplate, $elementName, "{$this->namespace}.{$elementName}", $component->getData());
+                    $this->addToCollection(
+                        $itemTemplate,
+                        $elementName,
+                        "{$this->namespace}.{$elementName}",
+                        $component->getData()
+                    );
 
                     $referenceName = "{$name}.elements.{$elementName}";
                     $this->addToGroup($templateGroupName, $elementName, $referenceName, $component->getData());
@@ -231,7 +255,12 @@ class Tabs extends Generic implements LayoutInterface
                         continue;
                     }
 
-                    $this->addToCollection($collection, $elementName, "{$this->namespace}.{$elementName}", $component->getData());
+                    $this->addToCollection(
+                        $collection,
+                        $elementName,
+                        "{$this->namespace}.{$elementName}",
+                        $component->getData()
+                    );
 
                     $referenceName = "{$name}.elements.{$elementName}";
                     $this->addToGroup($groupName, $elementName, $referenceName, $component->getData());
@@ -241,12 +270,12 @@ class Tabs extends Generic implements LayoutInterface
     }
 
     /**
-     * Process child blocks
+     * Process child components
      *
      * @throws \Exception
      * @return void
      */
-    protected function processChildBlocks()
+    protected function processChildComponents()
     {
         // Add child blocks content
         foreach ($this->component->getChildComponents() as $blockName => $childBlock) {
@@ -378,10 +407,14 @@ class Tabs extends Generic implements LayoutInterface
      * @param string $dataScope
      * @param array $element
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addToCollection(array & $collection, $elementName, $dataScope, array $element)
     {
         $collection['children'][$elementName] = ['type' => 'group'];
+        $formElement = isset($element['config']['formElement'])
+            ? 'form.' . $element['config']['formElement']
+            : '';
 
         if (isset($element['fieldGroup'])) {
             $elementName = $element['fieldGroup'];
@@ -413,7 +446,7 @@ class Tabs extends Generic implements LayoutInterface
             $size = (int) @$element['size'];
             for ($i = 0; $i < $size; ++$i) {
                 $collection['children'][$elementName]['children'][] = [
-                    'type' => @$element['formElement'],
+                    'type' => $formElement,
                     'dataScope' => strval($i),
                     'config' => $element,
                 ];
@@ -423,7 +456,7 @@ class Tabs extends Generic implements LayoutInterface
             }
         } else {
             $collection['children'][$elementName]['children'][] = [
-                'type' => @$element['formElement'],
+                'type' => $formElement,
                 'dataScope' => $dataScope,
                 'config' => $element,
             ];

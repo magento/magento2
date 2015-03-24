@@ -11,10 +11,10 @@ define([
     'use strict';
 
     var childTemplate = {
-        template:   "{name}.{itemTemplate}",
-        parent:     "{name}",
-        name:       "{childIndex}",
-        dataScope:  "{childIndex}"
+        template: '<%= $data.name %>.<%= $data.itemTemplate %>',
+        parent: '<%= $data.name %>',
+        name: '<%= $data.childIndex %>',
+        dataScope: '<%= name %>'
     };
 
     return Component.extend({
@@ -39,7 +39,7 @@ define([
          *
          * @param {Object} elem - Incoming child.
          */
-        initElement: function(elem) {
+        initElement: function (elem) {
             this._super();
 
             elem.activate();
@@ -55,12 +55,11 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        initChildren: function() {
-            var data     = this.provider.data,
-                children = data.get(this.dataScope),
-                initial  = this.initialItems = [];
+        initChildren: function () {
+            var children = this.source.get(this.dataScope),
+                initial = this.initialItems = [];
 
-            _.each(children, function(item, index) {
+            _.each(children, function (item, index) {
                 initial.push(index);
                 this.addChild(index);
             }, this);
@@ -74,13 +73,13 @@ define([
          * @param {String|Object} [index] - Index of a child.
          * @returns {Collection} Chainable.
          */
-        addChild: function(index) {
+        addChild: function (index) {
             this.childIndex = !_.isString(index) ?
-                ('new_' + this.lastIndex++) :
+                'new_' + this.lastIndex++ :
                 index;
 
             this.renderer.render({
-                layout: [
+                components: [
                     utils.template(childTemplate, this)
                 ]
             });
@@ -94,12 +93,12 @@ define([
          *
          * @returns {Boolean}
          */
-        hasChanged: function(){
+        hasChanged: function () {
             var initial = this.initialItems,
                 current = this.elems.pluck('index'),
                 changed = !utils.identical(initial, current);
 
-            return changed || this.elems.some(function(elem){
+            return changed || this.elems.some(function (elem) {
                 return _.some(elem.delegate('hasChanged'));
             });
         },
@@ -109,12 +108,12 @@ define([
          *
          * @returns {Array} An array of validation results.
          */
-        validate: function(){
+        validate: function () {
             var elems;
 
             this.allValid = true;
 
-            elems = this.elems.sortBy(function(elem){
+            elems = this.elems.sortBy(function (elem) {
                 return !elem.active();
             });
 
@@ -130,23 +129,23 @@ define([
          * @param {Object} elem - Element to run validation on.
          * @returns {Array} An array of validation results.
          */
-        _validate: function(elem){
+        _validate: function (elem) {
             var result = elem.delegate('validate'),
                 invalid;
 
-            invalid = _.some(result, function(item){
+            invalid = _.some(result, function (item) {
                 return !item.valid;
             });
 
-            if(this.allValid && invalid){
+            if (this.allValid && invalid) {
                 this.allValid = false;
 
                 elem.activate();
             }
 
-            return result;  
+            return result;
         },
-        
+
         /**
          * Creates function that removes element
          * from collection using '_removeChild' method.
@@ -155,8 +154,8 @@ define([
          *      Since this method is used by 'click' binding,
          *      it requires function to invoke.
          */
-        removeChild: function(elem) {
-            return function() {
+        removeChild: function (elem) {
+            return function () {
                 var confirmed = confirm(this.removeMessage);
 
                 if (confirmed) {
@@ -173,7 +172,7 @@ define([
          *
          * @param {Object} elem - Element to remove.
          */
-        _removeChild: function(elem) {
+        _removeChild: function (elem) {
             var isActive = elem.active(),
                 first;
 
@@ -189,4 +188,3 @@ define([
         }
     });
 });
-

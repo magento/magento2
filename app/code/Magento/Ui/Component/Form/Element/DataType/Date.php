@@ -35,6 +35,8 @@ class Date extends AbstractDataType
      * Constructor
      *
      * @param ContextInterface $context
+     * @param TimezoneInterface $localeDate
+     * @param ResolverInterface $localeResolver
      * @param array $components
      * @param array $data
      */

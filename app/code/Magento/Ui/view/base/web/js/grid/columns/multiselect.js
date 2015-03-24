@@ -30,10 +30,6 @@ define([
                 label: 'Deselect all on this page'
             }],
 
-            exports: {
-                totalSelected: '<%= provider %>:data.totalSelected'
-            },
-
             imports: {
                 totalRecords: '<%= provider %>:data.totalRecords',
                 rows: '<%= provider %>:data.items'
@@ -46,7 +42,7 @@ define([
 
         initObservable: function () {
             this._super()
-                .observe('menuVisible selected excluded allSelected');
+                .observe('menuVisible selected excluded allSelected totalSelected');
 
             return this;
         },
@@ -138,6 +134,8 @@ define([
             }
 
             this.totalSelected(count);
+
+            return this;
         },
 
         toggleMenu: function () {
@@ -146,6 +144,25 @@ define([
 
         hideMenu: function () {
             this.menuVisible(false);
+        },
+
+        exportSelections: function () {
+            var data;
+
+            if (this.allSelected()) {
+                data = {
+                    all_selected: true,
+                    excluded: this.excluded()
+                };
+            } else {
+                data = {
+                    selected: this.selected()
+                };
+            }
+
+            data.totalSelected = this.totalSelected();
+
+            this.source.set('config.multiselect', data);
         },
 
         isSelectVisible: function (action) {
@@ -169,7 +186,8 @@ define([
 
         onSelectedChange: function (selected) {
             this.updateExcluded(selected)
-                .countSelected();
+                .countSelected()
+                .exportSelections();
         }
     });
 });

@@ -34,39 +34,19 @@ class UiComponent implements Layout\ReaderInterface
     protected $layoutHelper;
 
     /**
-     * UI component manager
-     *
-     * @var ManagerInterface
-     */
-    protected $componentManager;
-
-    /**
      * @var string|null
      */
     protected $scopeType;
 
     /**
-     * @var \Magento\Framework\View\Layout\Argument\Parser
-     */
-    protected $argumentParser;
-
-    /**
      * Constructor
      *
      * @param Layout\ScheduledStructure\Helper $helper
-     * @param Layout\Argument\Parser $argumentParser
-     * @param ManagerInterface $componentManager
      * @param string|null $scopeType
      */
-    public function __construct(
-        Layout\ScheduledStructure\Helper $helper,
-        Layout\Argument\Parser $argumentParser,
-        ManagerInterface $componentManager,
-        $scopeType = null
-    ) {
+    public function __construct(Layout\ScheduledStructure\Helper $helper, $scopeType = null)
+    {
         $this->layoutHelper = $helper;
-        $this->componentManager = $componentManager;
-        $this->argumentParser = $argumentParser;
         $this->scopeType = $scopeType;
     }
 

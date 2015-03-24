@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Textarea
  */
-class Textarea extends AbstractFormElement
+class Textarea extends AbstractElement
 {
     const NAME = 'textarea';
 
@@ -20,5 +20,18 @@ class Textarea extends AbstractFormElement
     public function getComponentName()
     {
         return static::NAME;
+    }
+
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+
+        $jsConfig = $this->getConfiguration($this, Input::NAME);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }
