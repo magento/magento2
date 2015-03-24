@@ -191,8 +191,8 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $controllerInstance->expects($this->any())
             ->method('dispatch')
             ->with($this->request)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase($message))
+            ->willThrowException(
+                new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase($message))
             );
         $controllerInstance->expects($this->once())->method('getDefaultRedirect')->willReturn($this->resultRedirect);
 
