@@ -1,12 +1,16 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Controller\Adminhtml\Form;
 
-class Validate extends \Magento\Ui\Controller\Adminhtml\AbstractAction
+use Magento\Ui\Controller\Adminhtml\AbstractAction;
+
+/**
+ * Class Validate
+ */
+class Validate extends AbstractAction
 {
     /**
      * Action for AJAX request

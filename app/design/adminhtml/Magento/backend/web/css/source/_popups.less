@@ -31,18 +31,16 @@
 //  _____________________________________________
 
 .ui-dialog {
+    .appearing__off();
     background: @popup__background-color;
     min-width: 40%;
-    opacity: 0;
     transform: scale(0.7);
     transition: all 0.3s;
-    visibility: hidden;
     width: 75%;
 
     &.ui-dialog-active {
+        .appearing__on();
         transform: scale(1);
-        opacity: 1;
-        visibility: visible;
     }
 
     &.ui-draggable {

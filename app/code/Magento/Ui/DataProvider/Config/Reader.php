@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Ui\DataProvider\Config;
 
+use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Class Reader
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+class Reader extends Filesystem
 {
     /**
      * List of id attributes for merge
@@ -35,7 +35,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         Converter $converter,
         SchemaLocator $schemaLocator,
         ValidationStateInterface $validationState,
-        $fileName = '*.xml',
+        $fileName = 'data_source.xml',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = ''

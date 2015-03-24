@@ -10,6 +10,18 @@ namespace Magento\Ui\Component\Form\Element;
  */
 class Range extends AbstractFormElement
 {
+    const NAME = 'range';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
     /**
      * @return mixed
      */

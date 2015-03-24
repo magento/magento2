@@ -1,21 +1,19 @@
 <?php
 /**
- * Hierarchy config file resolver
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Config\FileIteratorFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\FileResolverInterface;
 
 /**
  * Class FileResolver
  */
-class FileResolver implements \Magento\Framework\Config\FileResolverInterface
+class FileResolver implements FileResolverInterface
 {
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
@@ -46,7 +44,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     {
         $iterator = $this->iteratorFactory->create(
             $this->directoryRead,
-            $this->directoryRead->search('/*/*/etc/data_source/' . $filename)
+            $this->directoryRead->search('/*/*/etc/' . $filename)
         );
         return $iterator;
     }

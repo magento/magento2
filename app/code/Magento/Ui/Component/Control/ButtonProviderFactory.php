@@ -9,7 +9,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ButtonProviderFactory
- * @package Magento\Ui\DataProvider
  */
 class ButtonProviderFactory
 {
@@ -43,6 +42,7 @@ class ButtonProviderFactory
                 sprintf('"%s" must implement the interface ButtonProviderInterface.', $providerClass)
             );
         }
+
         return $object;
     }
 }

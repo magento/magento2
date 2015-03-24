@@ -7,15 +7,40 @@
 //  Actions -> Actions split
 //  _____________________________________________
 
+//
+//  Extends
+//  ---------------------------------------------
+
+.abs-actions-split-xl {
+    @_dropdown__padding-right: 4rem;
+    @_action-toggle__width: @_dropdown__padding-right;
+
+    @_triangle__height: @button-marker-triangle__height__xl;
+    @_triangle__right: (@_dropdown__padding-right / 2) - (@_triangle__width / 2);
+    @_triangle__width: @button-marker-triangle__width__xl;
+
+    .action-default {
+        margin-right: @_action-toggle__width;
+    }
+    .action-toggle {
+        padding-right: @_dropdown__padding-right;
+        &:after {
+            border-width: @_triangle__height @_triangle__width / 2 0 @_triangle__width / 2;
+            margin-top: -((@_triangle__width / 2) / 2);
+            right: @_triangle__right;
+        }
+    }
+}
+
+//  Double button action
 .actions-split {
     @_action-split__min-width: @_action-toggle__width + @_action-default__min-width;
-    @_action-split-dropdown__hover__background-color: @color-gray89;
     @_action-default__min-width: 9.3rem;
-    @_action-toggle__width: 4rem;
+    @_action-toggle__width: @button__height;
 
     .extend__clearfix();
     position: relative;
-    z-index: @split-button__z-index;
+    z-index: @actions-split__z-index;
     &.active,
     &._active,
     &:hover {
@@ -31,8 +56,7 @@
             }
         }
         .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
+            .appearing__on();
         }
     }
     .action-toggle,
@@ -52,8 +76,8 @@
     .action-toggle {
         .dropdown-triangle(
             @_dropdown__padding-right: @_action-toggle__width;
-            @_triangle__height: .9rem;
-            @_triangle__width: 1.2rem;
+            @_triangle__height: @button-marker-triangle__height;
+            @_triangle__width: @button-marker-triangle__width;
         );
         border-left-color: rgba(0, 0, 0, .2);
         bottom: 0;
@@ -61,13 +85,13 @@
         position: absolute;
         right: 0;
         top: 0;
-        //  Disable triangle rotation
-        &._active,
-        &.active {
-            &:after {
-                transform: none;
-            }
-        }
+        //   Disable triangle rotation
+        //  &._active,
+        //  &.active {
+        //     &:after {
+        //          transform: none;
+        //      }
+        //   }
         &.action-secondary,
         &.secondary,
         &.action-primary,
@@ -81,31 +105,6 @@
         }
     }
     .dropdown-menu {
-        background-color: @page-wrapper__background-color;
-        border: 1px solid @button__hover__border-color;
-        border-radius: 1px;
-        box-shadow: @component__box-shadow__base;
-        display: block; // ToDo UI: Should be deleted with old styles
-        left: 0;
-        list-style: none;
-        margin: 2px 0 0; // Action box-shadow + 1px indent
-        min-width: 0; // ToDo UI: Should be deleted with old styles
-        opacity: 0;
-        padding: 0;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        transition: opacity @appering__transition-duration @apperaing__transition-timing-function;
-        visibility: hidden;
-        > li {
-            border: none; // ToDo UI: Should be deleted with old styles
-            padding: .6875em;
-            &:hover {
-                background-color: @_action-split-dropdown__hover__background-color;
-            }
-            &:active {
-                background-color: darken(@_action-split-dropdown__hover__background-color, 10%);
-            }
-        }
+        &:extend(.abs-action-menu all);
     }
 }

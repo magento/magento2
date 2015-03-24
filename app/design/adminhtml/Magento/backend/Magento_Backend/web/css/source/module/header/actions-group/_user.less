@@ -80,11 +80,9 @@
 }
 
 .admin-user-account-text {
+    .text-overflow-ellipsis();
     display: inline-block;
     max-width: @user-account-menu__min-width - @user-account__padding-left - @user-account__padding-right - 2rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .admin-user-menu {
@@ -118,11 +116,9 @@
         }
     }
     .admin-user-name {
+        .text-overflow-ellipsis();
         display: inline-block;
         max-width: @user-account-menu__min-width;
         overflow: hidden;
-        text-overflow: ellipsis;
-        vertical-align: text-top;
-        white-space: nowrap;
     }
 }

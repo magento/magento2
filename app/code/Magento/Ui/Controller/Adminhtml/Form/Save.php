@@ -1,17 +1,16 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Controller\Adminhtml\Form;
 
+use Magento\Ui\Controller\Adminhtml\AbstractAction;
+
 /**
  * Class Save
- *
- * @package Magento\Ui\Controller\Adminhtml\Form
  */
-class Save extends \Magento\Ui\Controller\Adminhtml\AbstractAction
+class Save extends AbstractAction
 {
     /**
      * Action for AJAX request

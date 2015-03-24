@@ -6,19 +6,19 @@ define([
     './components/types',
     './components/layout',
     'Magento_Ui/js/lib/class'
-], function(Types, Layout, Class){
+], function (Types, Layout, Class) {
     'use strict';
 
     return Class.extend({
-        initialize: function(data){
+        initialize: function (data) {
             this.types = new Types(data.types);
-            this.layout = new Layout(data.layout, this.types);
+            this.layout = new Layout(data.components, this.types);
 
             return this;
         },
 
-        render: function(data){
-            this.layout.run(data.layout);
+        render: function (data) {
+            this.layout.run(data.components);
             this.types.set(data.types);
         }
     });
