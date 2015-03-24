@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Deployment configuration reader

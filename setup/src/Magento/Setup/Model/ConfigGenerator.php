@@ -144,7 +144,6 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
-        var_dump($data);
         $connection = [];
 
         $optional = [
