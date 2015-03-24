@@ -3,9 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model\Resource\Sequence;
 
 use Magento\Framework\App\Resource;
+use Magento\SalesSequence\Model\Resource\Sequence\Meta;
 
 /**
  * Class MetaTest
