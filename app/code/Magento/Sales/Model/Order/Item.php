@@ -288,7 +288,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getOrder()
     {
-        if (is_null($this->_order) && ($orderId = $this->getOrderId())) {
+        if ($this->_order === null && ($orderId = $this->getOrderId())) {
             $order = $this->_orderFactory->create();
             $order->load($orderId);
             $this->setOrder($order);
@@ -380,7 +380,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public static function getStatusName($statusId)
     {
-        if (is_null(self::$_statuses)) {
+        if (self::$_statuses === null) {
             self::getStatuses();
         }
         if (isset(self::$_statuses[$statusId])) {
@@ -417,7 +417,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public static function getStatuses()
     {
-        if (is_null(self::$_statuses)) {
+        if (self::$_statuses === null) {
             self::$_statuses = [
                 self::STATUS_PENDING => __('Ordered'),
                 self::STATUS_SHIPPED => __('Shipped'),
@@ -441,7 +441,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getOriginalPrice()
     {
         $price = $this->getData(OrderItemInterface::ORIGINAL_PRICE);
-        if (is_null($price)) {
+        if ($price === null) {
             return $this->getPrice();
         }
         return $price;
@@ -480,7 +480,7 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptionByCode($code = null)
     {
         $options = $this->getProductOptions();
-        if (is_null($code)) {
+        if ($code === null) {
             return $options;
         }
         if (isset($options[$code])) {

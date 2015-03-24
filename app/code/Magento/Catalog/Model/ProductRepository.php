@@ -132,7 +132,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
             $productId = $this->resourceModel->getIdBySku($sku);
             if (!$productId) {
-                throw new NoSuchEntityException('Requested product doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
             if ($editMode) {
                 $product->setData('_edit_mode', true);
@@ -161,7 +161,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             $product->load($productId);
             if (!$product->getId()) {
-                throw new NoSuchEntityException('Requested product doesn\'t exist');
+                throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
             $this->instancesById[$productId][$cacheKey] = $product;
             $this->instances[$product->getSku()][$cacheKey] = $product;
@@ -231,7 +231,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $validationResult = $this->resourceModel->validate($product);
         if (true !== $validationResult) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
-                sprintf('Invalid product data: %s', implode(',', $validationResult))
+                __('Invalid product data: %1', implode(',', $validationResult))
             );
         }
         try {
@@ -249,7 +249,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $exception
             );
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException('Unable to save product');
+            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
@@ -266,7 +266,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         try {
             $this->resourceModel->delete($product);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\StateException('Unable to remove product ' . $sku);
+            throw new \Magento\Framework\Exception\StateException(
+                __('Unable to remove product %1', $sku)
+            );
         }
         unset($this->instances[$sku]);
         unset($this->instancesById[$productId]);

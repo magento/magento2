@@ -92,7 +92,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     {
         if ($this->getOrder()) {
             $storeId = $this->getOrder()->getStoreId();
-            if (is_null($storeId)) {
+            if ($storeId === null) {
                 $deleted = __(' [deleted]');
                 return nl2br($this->getOrder()->getStoreName()) . $deleted;
             }
@@ -114,7 +114,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         if ($this->getOrder()) {
             $customerGroupId = $this->getOrder()->getCustomerGroupId();
             try {
-                if (!is_null($customerGroupId)) {
+                if ($customerGroupId !== null) {
                     return $this->groupRepository->getById($customerGroupId)->getCode();
                 }
             } catch (NoSuchEntityException $e) {

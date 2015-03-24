@@ -77,7 +77,7 @@ class Comment extends Entity implements CreditmemoCommentResourceInterface
         $errors = $this->validator->validate($object);
         if (!empty($errors)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot save comment") . ":\n" . implode("\n", $errors)
+                __("Cannot save comment:\n%1", implode("\n", $errors))
             );
         }
         return $this;

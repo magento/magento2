@@ -294,7 +294,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function canVoid()
     {
         if ($this->getState() == self::STATE_PAID) {
-            if (is_null($this->getCanVoidFlag())) {
+            if ($this->getCanVoidFlag() === null) {
                 return (bool)$this->getOrder()->getPayment()->canVoid($this);
             }
         }
@@ -555,7 +555,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getStateName($stateId = null)
     {
-        if (is_null($stateId)) {
+        if ($stateId === null) {
             $stateId = $this->getState();
         }
 

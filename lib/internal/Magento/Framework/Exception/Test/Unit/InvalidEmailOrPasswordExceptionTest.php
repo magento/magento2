@@ -7,6 +7,7 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Phrase;
 
 /**
  * Class InvalidEmailOrPasswordExceptionTest
@@ -15,11 +16,16 @@ use \Magento\Framework\Exception\InvalidEmailOrPasswordException;
  */
 class InvalidEmailOrPasswordExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $exception = new InvalidEmailOrPasswordException(
-            InvalidEmailOrPasswordException::INVALID_EMAIL_OR_PASSWORD,
-            ['consumer_id' => 1, 'resources' => 'record2']
+            new Phrase(
+                InvalidEmailOrPasswordException::INVALID_EMAIL_OR_PASSWORD,
+                ['consumer_id' => 1, 'resources' => 'record2']
+            )
         );
         $this->assertSame('Invalid email or password', $exception->getMessage());
     }

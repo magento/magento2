@@ -52,7 +52,18 @@ class Minifier implements MinifierInterface
         'label',
         'select',
         'textarea',
+        '\?',
     ];
+
+    /**
+     * @var Filesystem\Directory\ReadInterface
+     */
+    protected $rootDirectory;
+
+    /**
+     * @var Filesystem\Directory\WriteInterface
+     */
+    protected $htmlDirectory;
 
     /**
      * @param Filesystem $filesystem
@@ -60,7 +71,7 @@ class Minifier implements MinifierInterface
     public function __construct(
         Filesystem $filesystem
     ) {
-        $this->appDirectory = $filesystem->getDirectoryRead(DirectoryList::APP);
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
     }
 
@@ -72,7 +83,8 @@ class Minifier implements MinifierInterface
      */
     public function getMinified($file)
     {
-        if (!$this->htmlDirectory->isExist($this->appDirectory->getRelativePath($file))) {
+        $file = $this->htmlDirectory->getDriver()->getRealPathSafety($file);
+        if (!$this->htmlDirectory->isExist($this->rootDirectory->getRelativePath($file))) {
             $this->minify($file);
         }
         return $this->getPathToMinified($file);
@@ -87,7 +99,7 @@ class Minifier implements MinifierInterface
     public function getPathToMinified($file)
     {
         return $this->htmlDirectory->getAbsolutePath(
-            $this->appDirectory->getRelativePath($file)
+            $this->rootDirectory->getRelativePath($file)
         );
     }
 
@@ -95,24 +107,33 @@ class Minifier implements MinifierInterface
      * Minify template file
      *
      * @param string $file
+     * @return void
      */
     public function minify($file)
     {
-        $file = $this->appDirectory->getRelativePath($file);
+        $file = $this->rootDirectory->getRelativePath($file);
         $content = preg_replace(
-            '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
-            '><',
+            '#(?<!]]>)\s+</#',
+            '</',
             preg_replace(
-                '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script)\b))*+)'
-                . '(?:<(?>textarea|pre|script)\b|\z))#',
-                ' ',
+                '#((?:<\?php\s+(?!echo|print|if|elseif|else)[^\?]*)\?>)\s+#',
+                '$1',
                 preg_replace(
-                    '#(?<!:)//(?!\<\!\[)(?!]]\>)[^\n\r]*#',
-                    '',
+                    '#(?<!' . implode('|', $this->inlineHtmlTags) . ')\> \<#',
+                    '><',
                     preg_replace(
-                        '#(?<!:)//[^\n\r]*(\s\?\>)#',
-                        '$1',
-                        $this->appDirectory->readFile($file)
+                        '#(?ix)(?>[^\S ]\s*|\s{2,})(?=(?:(?:[^<]++|<(?!/?(?:textarea|pre|script|style)\b))*+)'
+                        . '(?:<(?>textarea|pre|script|style)\b|\z))#',
+                        ' ',
+                        preg_replace(
+                            '#(?<!:|\\\\)//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
+                            '',
+                            preg_replace(
+                                '#(?<!:)//[^\n\r]*(\s\?\>)#',
+                                '$1',
+                                $this->rootDirectory->readFile($file)
+                            )
+                        )
                     )
                 )
             )
@@ -121,6 +142,6 @@ class Minifier implements MinifierInterface
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
-        $this->htmlDirectory->writeFile($file, $content);
+        $this->htmlDirectory->writeFile($file, rtrim($content));
     }
 }

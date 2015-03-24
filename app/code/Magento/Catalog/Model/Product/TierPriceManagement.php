@@ -88,7 +88,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     public function add($sku, $customerGroupId, $price, $qty)
     {
         if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($qty, 'Float') || $qty <= 0) {
-            throw new InputException('Please provide valid data');
+            throw new InputException(__('Please provide valid data'));
         }
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
@@ -131,13 +131,13 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         if (is_array($errors) && count($errors)) {
             $errorAttributeCodes = implode(', ', array_keys($errors));
             throw new InputException(
-                sprintf('Values of following attributes are invalid: %s', $errorAttributeCodes)
+                __('Values of following attributes are invalid: %1', $errorAttributeCodes)
             );
         }
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save group price');
+            throw new CouldNotSaveException(__('Could not save group price'));
         }
         return true;
     }

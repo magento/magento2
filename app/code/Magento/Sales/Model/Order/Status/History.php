@@ -15,6 +15,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\Resource\Order\Status\History _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Status\History getResource()
  * @method \Magento\Sales\Model\Order\Status\History setCreatedAt(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class History extends AbstractModel implements OrderStatusHistoryInterface
 {
@@ -106,7 +107,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
      */
     public function setIsCustomerNotified($flag = null)
     {
-        if (is_null($flag)) {
+        if ($flag === null) {
             $flag = self::CUSTOMER_NOTIFICATION_NOT_APPLICABLE;
         }
 

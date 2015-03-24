@@ -33,7 +33,7 @@ class ClassReaderDecorator implements \Magento\Framework\Code\Reader\ClassReader
     public function getConstructor($className)
     {
         $unmappedArguments = $this->classReader->getConstructor($className);
-        if (is_null($unmappedArguments)) {
+        if ($unmappedArguments === null) {
             return $unmappedArguments;
         }
 

@@ -251,7 +251,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getImageLabel($product = null, $mediaAttributeCode = 'image')
     {
-        if (is_null($product)) {
+        if ($product === null) {
             $product = $this->getProduct();
         }
 

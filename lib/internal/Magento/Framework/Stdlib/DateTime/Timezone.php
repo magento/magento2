@@ -197,7 +197,11 @@ class Timezone implements TimezoneInterface
     public function scopeTimeStamp($scope = null)
     {
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
-        return (new \DateTime('now', new \DateTimeZone($timezone ?: 'UTC')))->getTimestamp();
+        $currentTimezone = @date_default_timezone_get();
+        @date_default_timezone_set($timezone);
+        $date = date('Y-m-d H:i:s');
+        @date_default_timezone_set($currentTimezone);
+        return strtotime($date);
     }
 
     /**
@@ -233,7 +237,7 @@ class Timezone implements TimezoneInterface
      * @param null $locale
      * @param null $timezone
      * @param string|null $pattern
-     * @return mixed
+     * @return string
      */
     public function formatDateTime(
         \DateTimeInterface $date,

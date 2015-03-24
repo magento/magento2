@@ -446,7 +446,15 @@ class Pager extends \Magento\Framework\View\Element\Template
         $urlParams['_fragment'] = $this->getFragment();
         $urlParams['_query'] = $params;
 
-        return $this->getUrl('*/*/*', $urlParams);
+        return $this->getUrl($this->getPath(), $urlParams);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPath()
+    {
+        return $this->_getData('path') ?: '*/*/*';
     }
 
     /**

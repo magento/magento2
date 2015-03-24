@@ -19,7 +19,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
         /** @var $typeModel \Magento\GoogleShopping\Model\Type */
         $typeModel = $this->_objectManager->create('Magento\GoogleShopping\Model\Type');
         $id = $this->getRequest()->getParam('type_id');
-        if (!is_null($id)) {
+        if ($id !== null) {
             $typeModel->load($id);
         }
 

@@ -490,9 +490,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $basedOn = 'default';
         } else {
 
-            if ((is_null($billingAddress) || !$billingAddress->getCountryId())
+            if (($billingAddress === null || !$billingAddress->getCountryId())
                 && $basedOn == 'billing'
-                || (is_null($shippingAddress) || !$shippingAddress->getCountryId())
+                || ($shippingAddress === null || !$shippingAddress->getCountryId())
                 && $basedOn == 'shipping'
             ) {
                 if ($customerId) {
@@ -554,7 +554,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 break;
         }
 
-        if (is_null($customerTaxClass) || $customerTaxClass === false) {
+        if ($customerTaxClass === null || $customerTaxClass === false) {
             if ($customerId) {
                 $customerData = $this->customerRepository->getById($customerId);
                 $customerTaxClass = $this->customerGroupRepository

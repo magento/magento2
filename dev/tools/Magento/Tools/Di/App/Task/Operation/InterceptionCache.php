@@ -20,26 +20,23 @@ class InterceptionCache implements OperationInterface
     private $configInterface;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Interceptions
      */
     private $interceptionsInstancesNamesList;
 
     /**
-     * @param \Magento\Framework\Interception\Config\Config                  $configInterface
-     * @param \Magento\Tools\Di\Code\Reader\ClassesScanner                   $classesScanner
-     * @param \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions $interceptionsInstancesNamesList
-     * @param array                                                           $data
+     * @param \Magento\Framework\Interception\Config\Config $configInterface
+     * @param \Magento\Tools\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList
+     * @param array $data
      */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
-        \Magento\Tools\Di\Code\Reader\ClassesScanner $classesScanner,
-        \Magento\Tools\Di\Code\Reader\InstancesNamesList\Interceptions $interceptionsInstancesNamesList,
+        \Magento\Tools\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList,
         array $data = []
     ) {
-        $this->data = $data;
         $this->configInterface = $configInterface;
-        $this->classesScanner = $classesScanner;
         $this->interceptionsInstancesNamesList = $interceptionsInstancesNamesList;
+        $this->data = $data;
     }
 
     /**
@@ -55,9 +52,7 @@ class InterceptionCache implements OperationInterface
 
         $definitions = [];
         foreach ($this->data as $path) {
-            if (is_readable($path)) {
-                array_merge($definitions, $this->interceptionsInstancesNamesList->getList($path));
-            }
+            $definitions = array_merge($definitions, $this->interceptionsInstancesNamesList->getList($path));
         }
 
         $this->configInterface->initialize($definitions);
