@@ -24,14 +24,12 @@ define([
          * @param  {*} value
          * @return {Object} - reference to instance
          */
-        store: function () {
-            this._super();
-
+        onUpdate: function () {
             if (this.hasUnique) {
                 this.setUnique();
             }
 
-            return this;
+            return this._super();
         }
     });
 });
