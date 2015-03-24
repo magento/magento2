@@ -13,11 +13,10 @@ define(
         '../model/quote',
         '../model/shipping-service',
         '../action/select-shipping-method',
-        'Magento_Customer/js/model/customer',
         'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/step-navigator'
     ],
-    function ($, Component, quote, shippingService, selectShippingMethod, customer, priceUtils, navigator) {
+    function ($, Component, quote, shippingService, selectShippingMethod, priceUtils, navigator) {
 
         return Component.extend({
             defaults: {
@@ -54,7 +53,7 @@ define(
                 isVisible: navigator.isShippingMethodVisible(),
                 // Checkout step navigation
                 backToShippingAddress: function () {
-                    navigator.toStep('shippingAddress');
+                    navigator.setCurrent('shippingMethod').goBack();
                 }
             }
         });
