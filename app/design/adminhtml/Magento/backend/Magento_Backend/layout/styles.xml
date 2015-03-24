@@ -9,7 +9,6 @@
     <head>
         <remove src="mui/mui_legacy.css"/>
         <remove src="css/styles-old.css"/>
-        <remove src="css/styles-migration.css"/>
         <remove src="jquery/farbtastic/css/farbtastic.css"/>
 
         <css src="css/styles.css"/>

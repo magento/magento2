@@ -13,6 +13,7 @@
     </head>
     <update handle="editor"/>
     <body>
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="" /> <!-- @todo ui: Removes .admin__scope-old class for edit product -->
         <referenceContainer name="content">
             <block class="Magento\Catalog\Block\Adminhtml\Product\Edit" name="product_edit">
                 <container name="product-type-tabs" label="Tabs">

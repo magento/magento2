@@ -30,15 +30,6 @@ var watchOptions = {
         "options": {
             livereload: true
         }
-    },
-    "backendMigration": {
-        "files": [
-            "<%= combo.autopath(\"backend\",\"pub\") %>/css/styles.css"
-        ],
-        "tasks": [
-            "replace:escapeCalc",
-            "less:override"
-        ]
     }
 };
 

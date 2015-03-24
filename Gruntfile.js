@@ -61,14 +61,6 @@ module.exports = function (grunt) {
             'less:backend'
         ],
         /**
-         * Styles for backend theme
-         */
-        backend: [
-            'less:backend',
-            'replace:escapeCalc',
-            'less:override'
-        ],
-        /**
          * Documentation
          */
         documentation: [

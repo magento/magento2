@@ -2369,130 +2369,6 @@
         float: left;
     }
 
-    .address-list li {
-        border: 1px solid #d9d2ca;
-        background: #f7f2ec;
-        padding: 10px 10px 15px;
-        cursor: pointer;
-        margin-bottom: -1px;
-    }
-
-    .address-list li.ui-state-active {
-        background: #fff;
-        position: relative;
-        box-shadow: 0 1px 1px 0 rgba(217, 210, 202, 1);
-        margin-left: -2px;
-        padding-left: 12px;
-    }
-
-    .address-list li.ui-state-active:before,
-    .address-list li.ui-state-active:after {
-        position: absolute;
-        font-family: 'MUI-Icons';
-        font-style: normal;
-        font-weight: normal;
-        font-size: 18px;
-        color: #fff;
-        content: "\e02a";
-        speak: none;
-        line-height: 11px;
-        width: 10px;
-        right: -9px;
-        text-indent: -6px;
-        top: 50%;
-        margin-top: -5px;
-        z-index: 2;
-    }
-
-    .address-list li.ui-state-active:before {
-        color: #d9d2ca;
-        right: -11px;
-        z-index: 1;
-    }
-
-    .address-list li.address-list-actions:before,
-    .address-list li.address-list-actions:after {
-        display: none;
-    }
-
-    .address-list li.address-list-actions {
-        padding: 20px 0 0;
-        border: 0;
-        background: none;
-        box-shadow: none;
-        cursor: default;
-    }
-
-    .address-list li.address-list-actions:first-child {
-        padding: 0;
-    }
-
-    .address-list .label {
-        float: none;
-        width: auto;
-        padding: 0 0 0 10px;
-    }
-
-    .address-list input[type="checkbox"] {
-        float: left;
-    }
-
-    .address-list address:first-line {
-        /*  its not work  if First Name and Last Name in two lines */
-        font-weight: bold;
-    }
-
-    .address-list address {
-        margin: 0 20px 15px 0;
-        line-height: 1.5;
-    }
-
-    .address-list-item-actions {
-        float: right;
-    }
-
-    .address-list .action-edit {
-        display: none;
-    }
-
-    .address-list .field {
-        margin-bottom: 15px;
-    }
-
-    .ui-tabs-nav .address-list-item a {
-        text-decoration: none;
-        color: #676056;
-    }
-
-    .address-item-edit {
-        margin-left: 277px;
-    }
-
-    .address-item-edit-content {
-        border: 1px solid #dad1c8;
-        background: #fff;
-        box-shadow: 0 2px 1px 0 rgba(217, 210, 202, .5);
-        padding-left: 10px;
-    }
-
-    .address-item-edit-content .fieldset:last-child {
-        margin-bottom: 29px;
-    }
-
-    .address-item-edit .legend {
-        border-bottom: 0;
-        margin: 0 0 18px;
-        padding-left: 20%;
-    }
-
-    .address-item-edit .legend span {
-        padding-left: 0;
-    }
-
-    .address-item-edit-actions {
-        padding: 0 0 18px 20%;
-    }
-
     /*
         Configuration -> Design
     -------------------------------------- */
@@ -2742,13 +2618,6 @@
         System - Tax
     --------------------------------------*/
 
-    .tax-rate-popup .form-inline .field {
-        position: static;
-        &.required .label {
-            position: relative;
-            z-index: 1;
-        }
-    }
 
     .mselect-hidden + .mage-error {
         position: absolute;
@@ -5864,6 +5733,87 @@
         .grid .col-info {
             &:extend(.col-110-max all);
             &:extend(.ellipsis all);
+        }
+    }
+}
+
+
+//
+//  Login page captcha reload @todo ui - remove after loader consistency
+//  _____________________________________________
+
+// Tax popup
+.tax-rate-popup .form-inline .field {
+    position: static;
+    &.required .label {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+// Product tabs
+.ui-tabs-panel {
+    .main-col & {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .accordion {
+        margin: 0 0 8px;
+        padding: 0;
+        > dt {
+            background: #fff;
+            padding: 5px 18px 2px;
+            position: relative;
+            + dd {
+                display: none;
+                &.open {
+                    padding: 25px 18px 18px;
+                    display: block;
+                    margin-left: 0;
+                    border-top: 0;
+                    border-radius: 0 0 5px 5px;
+                }
+            }
+            &.open {
+                margin: 0;
+                border-bottom: 0;
+                border-radius: 5px 5px 0 0;
+                a {
+                    &:before {
+                        content: '\e02c'; /* arrow down icon */
+                    }
+                }
+            }
+            a {
+                .style10();
+                display: block;
+                padding: 7px 0 10px 22px;
+                text-decoration: none;
+                position: relative;
+                cursor: pointer;
+                border-bottom: 1px solid #cac3b4;
+                i {
+                    .style31();
+                }
+                &:before {
+                    position: absolute;
+                    left: 0;
+                    top: 11px;
+                    font-family: 'MUI-Icons';
+                    font-style: normal;
+                    speak: none;
+                    font-size: 16px;
+                    font-weight: normal;
+                    -webkit-font-smoothing: antialiased;
+                    content: '\e02a'; /* arrow right icon */
+                    color: #b2b0ad;
+                }
+                &:hover {
+                    &:before {
+                        color: #7e7e7e;
+                    }
+                }
+            }
         }
     }
 }

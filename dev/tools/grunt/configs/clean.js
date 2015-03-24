@@ -19,9 +19,9 @@ _.each(themes, function(theme, name) {
                 "dot": true,
                 "src": [
                     "<%= path.tmp %>/cache/**/*",
-                    "<%= combo.autopath(\""+name+"\", \"pub\") %>**/*",
-                    "<%= combo.autopath(\""+name+"\", \"tmpLess\") %>**/*",
-                    "<%= combo.autopath(\""+name+"\", \"tmpSource\") %>**/*"
+                    "<%= combo.autopath(\""+name+"\", path.pub ) %>**/*",
+                    "<%= combo.autopath(\""+name+"\", path.tmpLess) %>**/*",
+                    "<%= combo.autopath(\""+name+"\", path.tmpSource) %>**/*"
                 ]
             }
         ]

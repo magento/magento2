@@ -9,7 +9,7 @@
     <head>
         <css src="mui/mui_legacy.css"/>
         <css src="css/styles-old.css"/>
-        <css src="css/styles-migration.css"/> <!-- New styles scope -->
+        <css src="css/styles.css"/>
     </head>
 
     <body>

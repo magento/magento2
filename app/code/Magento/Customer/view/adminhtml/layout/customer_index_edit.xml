@@ -7,6 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="" /> <!-- Removes .admin__scope-old class for customer columns -->
         <referenceContainer name="content">
             <ui_component name="customer_form" component="form" />
         </referenceContainer>
