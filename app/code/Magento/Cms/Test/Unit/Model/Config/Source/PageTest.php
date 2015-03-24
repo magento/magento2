@@ -72,9 +72,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $pageCriteriaMock = $this->getMock(
-            'Magento\Cms\Model\Resource\PageCriteria',
-            [],
+        $pageCriteriaMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Api\SearchCriteriaInterface',
             [],
             '',
             false

@@ -10,7 +10,6 @@
                 type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Cms\Api\Data\BlockSearchResultsInterface"
                 type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Cms\Model\PageCriteriaInterface" type="Magento\Cms\Model\Resource\PageCriteria" />
     <preference for="Magento\Cms\Model\BlockCriteriaInterface" type="Magento\Cms\Model\Resource\BlockCriteria" />
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <arguments>
