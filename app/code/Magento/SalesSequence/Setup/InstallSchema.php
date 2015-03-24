@@ -53,25 +53,25 @@ class InstallSchema implements InstallSchemaInterface
             'start_value',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'primary' => false, 'default' => 1],
+            ['nullable' => false, 'unsigned' => true, 'primary' => false, 'default' => 1],
             'Start value for sequence'
         )->addColumn(
             'step',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'primary' => false, 'default' => 1],
+            ['nullable' => false, 'unsigned' => true, 'primary' => false, 'default' => 1],
             'Step for sequence'
         )->addColumn(
             'max_value',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'primary' => false],
+            ['nullable' => false, 'unsigned' => true, 'primary' => false],
             'MaxValue for sequence'
         )->addColumn(
             'warning_value',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => false, 'primary' => false],
+            ['nullable' => false, 'unsigned' => true, 'primary' => false],
             'WarningValue for sequence'
         )->addColumn(
             'is_active',
