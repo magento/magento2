@@ -1116,7 +1116,6 @@ fieldset[disabled] .address-list .action-delete {
   display: inline-block;
   font-size: 1.3rem;
   font-weight: 400;
-  height: 3.3rem;
   letter-spacing: -0.025em;
   padding: 0.7rem 3.3rem 0.8rem 1.5rem;
   position: relative;
@@ -4396,7 +4395,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   padding: 1.5rem;
 }
 .page-main-actions {
-  margin: 0 0 2rem;
+  margin: 0 0 3rem;
 }
 .page-actions {
   float: right;
@@ -4799,21 +4798,24 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   vertical-align: top;
 }
 .admin__data-grid-action-columns-menu {
-  padding: 2rem 1.5rem 1rem;
+  color: #303030;
+  font-size: 1.3rem;
   overflow: hidden;
+  padding: 2.2rem 3.5rem 1rem;
+  z-index: 1;
 }
 .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-content {
-  max-height: 19rem;
-  margin-right: -3.3rem;
+  max-height: 22rem;
+  margin-right: -5.3rem;
   overflow-y: auto;
-  width: 55.8rem;
+  width: 52.7rem;
 }
 .admin__data-grid-action-columns-menu .admin__field-option {
   height: 2rem;
-  float: left;
-  width: 17.5rem;
-  margin-bottom: 1rem;
-  padding: 0 1rem;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem 0 0;
+  width: 15.8rem;
 }
 .admin__data-grid-action-columns-menu .admin__field-label {
   overflow: hidden;
@@ -4821,11 +4823,14 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   white-space: nowrap;
   display: block;
 }
+.admin__data-grid-action-columns-menu .admin__action-dropdown-menu-header {
+  border-bottom: 1px solid #d1d1d1;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+}
 .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-footer {
-  position: relative;
-  box-shadow: 0 -10px 10px -5px #ffffff;
-  z-index: 1;
-  padding: 2rem 1rem 1rem;
+  border-top: 1px solid #d1d1d1;
+  padding: 2.5rem 0 2rem;
 }
 .admin__data-grid-action-columns-menu .admin__action-dropdown-footer-main-actions {
   margin-left: 25%;
@@ -4838,10 +4843,13 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 .admin__data-grid-header {
   font-size: 1.4rem;
   position: relative;
-  z-index: 300;
+  z-index: 299;
 }
 .admin__data-grid-header-row {
   margin-bottom: 2rem;
+}
+.admin__data-grid-header-row:first-child {
+  margin-bottom: 1.1rem;
 }
 .admin__data-grid-header-row .action-select-wrap {
   display: block;
@@ -4853,18 +4861,40 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   text-align: right;
 }
 .admin__data-grid-actions-wrap .admin__action-dropdown-wrap {
+  position: relative;
   text-align: left;
-  border-left: 1px solid #cccccc;
 }
-.admin__data-grid-actions-wrap .admin__action-dropdown-wrap._active,
-.admin__data-grid-actions-wrap .admin__action-dropdown-wrap:first-child {
-  border-left: none;
+.admin__data-grid-actions-wrap .admin__action-dropdown-wrap._active:after,
+.admin__data-grid-actions-wrap .admin__action-dropdown-wrap:first-child:after {
+  display: none;
+}
+.admin__data-grid-actions-wrap .admin__action-dropdown-wrap._active .admin__action-dropdown,
+.admin__data-grid-actions-wrap .admin__action-dropdown-wrap._active .admin__action-dropdown-menu {
+  border-color: #adadad;
+}
+.admin__data-grid-actions-wrap .admin__action-dropdown-wrap:after {
+  border-left: 1px solid #cccccc;
+  content: '';
+  height: 3.3rem;
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+}
+.admin__data-grid-actions-wrap .admin__action-dropdown {
+  padding-bottom: 1.7rem;
+}
+.admin__data-grid-actions-wrap .admin__action-dropdown:after {
+  margin-top: -0.6rem;
 }
 .admin__data-grid-action-default-view {
   z-index: 280;
 }
 .admin__data-grid-action-default-view .admin__action-dropdown:before {
   content: '\e60f';
+}
+.admin__data-grid-loading-mask {
+  z-index: 300;
 }
 @media all and (max-width: 1023px) {
   .admin__menu .submenu li {

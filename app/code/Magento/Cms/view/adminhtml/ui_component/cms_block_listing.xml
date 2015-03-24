@@ -28,13 +28,18 @@
         </item>
     </argument>
     <wrapper name="block_listing_top">
-        <paging name="listing_paging"/>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/header</item>
+            </item>
+        </argument>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/filters</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">top</item>
                     <item name="dataScope" xsi:type="string">params.filters</item>
                 </item>
             </argument>
@@ -177,22 +182,24 @@
                 </filterDate>
             </filterRange>
         </filters>
-    </wrapper>
-    <massaction name="listing_massaction">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="actions" xsi:type="array">
-                    <item name="delete" xsi:type="array">
-                        <item name="confirm" xsi:type="string" translate="true">cscscscscscs!!!!!!!!</item>
-                        <item name="type" xsi:type="string">delete</item>
-                        <item name="label" xsi:type="string" translate="true">Delete</item>
-                        <item name="url" xsi:type="string">cms/block/massDelete</item>
+        <massaction name="listing_massaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="delete" xsi:type="array">
+                            <item name="confirm" xsi:type="string" translate="true">cscscscscscs!!!!!!!!</item>
+                            <item name="type" xsi:type="string">delete</item>
+                            <item name="label" xsi:type="string" translate="true">Delete</item>
+                            <item name="url" xsi:type="string">cms/block/massDelete</item>
+                        </item>
                     </item>
+                    <item name="indexField" xsi:type="string">block_id</item>
                 </item>
-                <item name="indexField" xsi:type="string">block_id</item>
-            </item>
-        </argument>
-    </massaction>
+            </argument>
+        </massaction>
+        <paging name="listing_paging" />
+    </wrapper>
     <dataSource name="cms_block_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Cms\Model\Block\DataProvider</argument>

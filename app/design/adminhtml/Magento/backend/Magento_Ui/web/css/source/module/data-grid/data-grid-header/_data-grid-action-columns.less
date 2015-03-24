@@ -11,12 +11,11 @@
 //  Variables
 //  ---------------------------------------------
 
-@data-grid-action-columns-menu__padding-horizontal: 1.5rem;
+@data-grid-action-columns-menu__padding-horizontal: 3.5rem;
 
 @data-grid-action-columns-menu-item__column: 3;
-@data-grid-action-columns-menu-item__margin-bottom: 1rem;
-@data-grid-action-columns-menu-item__padding-horizontal: 1rem;
-@data-grid-action-columns-menu-item__width: 17.5rem;
+@data-grid-action-columns-menu-item__margin-bottom: 1.5rem;
+@data-grid-action-columns-menu-item__width: 15.8rem;
 @data-grid-action-columns-menu-item__height: round((@font-size__base * @line-height__base), 1);
 @data-grid-action-columns__z-index: @data-grid-header__z-index - 10;
 
@@ -40,8 +39,11 @@
 }
 
 .admin__data-grid-action-columns-menu {
-    padding: 2rem @data-grid-action-columns-menu__padding-horizontal 1rem;
+    color: @color-very-dark-gray-black;
+    font-size: 1.3rem;
     overflow: hidden;
+    padding: 2.2rem @data-grid-action-columns-menu__padding-horizontal 1rem;
+    z-index: 1;
     .admin__action-dropdown-menu-content {
         .extend__clearfix();
         max-height: (@data-grid-action-columns-menu-items-to-scroll / @data-grid-action-columns-menu-item__column) * (@data-grid-action-columns-menu-item__height + @data-grid-action-columns-menu-item__margin-bottom) + (@data-grid-action-columns-menu-item__height / 2);
@@ -51,20 +53,24 @@
     }
     .admin__field-option {
         height: @data-grid-action-columns-menu-item__height;
-        float: left;
-        width: @data-grid-action-columns-menu-item__width;
+        //float: left;
+        display: inline-block;
         margin-bottom: @data-grid-action-columns-menu-item__margin-bottom;
-        padding: 0 @data-grid-action-columns-menu-item__padding-horizontal;
+        padding: 0 1rem 0 0;
+        width: @data-grid-action-columns-menu-item__width;
     }
     .admin__field-label {
         .text-overflow-ellipsis();
         display: block;
     }
+    .admin__action-dropdown-menu-header {
+        border-bottom: 1px solid @border-color__base;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
     .admin__action-dropdown-menu-footer {
-        position: relative;
-        box-shadow: 0 -10px 10px -5px @color-white;
-        z-index: 1;
-        padding: 2rem @data-grid-action-columns-menu-item__padding-horizontal 1rem;
+        border-top: 1px solid @border-color__base;
+        padding: 2.5rem 0 2rem;
     }
     .admin__action-dropdown-footer-main-actions {
         margin-left: 25%;
@@ -72,6 +78,6 @@
     }
     .admin__action-dropdown-footer-secondary-actions {
         float: left;
-        margin-left: -1em;
+        margin-left: -@button__padding-horizontal;
     }
 }

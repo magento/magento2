@@ -16,6 +16,7 @@
 @action-dropdown__border-color: @color-light-gray;
 @action-dropdown__font-size: round(@font-size__base - .1rem, 1);
 @action-dropdown__height: @action__height;
+@action-dropdown__padding-bottom: .8rem;
 @action-dropdown__padding-horizontal: 1.5rem;
 @action-dropdown__padding-right: @action-dropdown__padding-horizontal + @action-dropdown-menu__padding-horizontal + @button-marker-triangle__width;
 @action-dropdown__active__border-color: @color-blue-pure;
@@ -79,9 +80,8 @@
     display: inline-block;
     font-size: @action-dropdown__font-size;
     font-weight: @font-weight__regular;
-    height: @action-dropdown__height;
     letter-spacing: -.025em;
-    padding: .7rem @action-dropdown__padding-right .8rem @action-dropdown__padding-horizontal;
+    padding: .7rem @action-dropdown__padding-right @action-dropdown__padding-bottom @action-dropdown__padding-horizontal;
     position: relative;
     transition: border-color @appearing__transition-duration @apperaing__transition-timing-function;
     vertical-align: baseline;

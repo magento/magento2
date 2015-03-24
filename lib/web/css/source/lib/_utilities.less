@@ -467,9 +467,18 @@
     appearance: @value;
 }
 
-//
+.vendor-prefix-column-count (
+    @_value
+) {
+    -webkit-column-count: @_value;
+       -moz-column-count: @_value;
+            column-count: @_value;
+}
+
+    //
 //  Pointer for popups or dropdowns
 //  ---------------------------------------------
+
 .pointer(
     @_size: 6px,
     @_background-color: @color-white,

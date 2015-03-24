@@ -11,14 +11,15 @@
 //  Components
 //  ---------------------------------------------
 
-@import 'data-grid-header/_data-grid-filters';
-@import 'data-grid-header/_data-grid-pager';
-@import 'data-grid-header/_data-grid-action-columns';
+@import 'data-grid-header/_data-grid-filters.less';
+@import 'data-grid-header/_data-grid-pager.less';
+@import 'data-grid-header/_data-grid-action-columns.less';
 
 //
 //  Variables
 //  ---------------------------------------------
 
+@data-grid-header-add-indent__size: .9rem;
 @data-grid-header-row__margin-bottom: @indent__base;
 @data-grid-action-default-view__z-index: @data-grid-action-columns__z-index - 10;
 
@@ -27,11 +28,14 @@
 .admin__data-grid-header {
     font-size: @font-size__base; // ToDo UI: should be deleted, added to prevent fz override with .grid
     position: relative;
-    z-index: @data-grid-header__z-index; // Should be moved to data grid header
+    z-index: @data-grid-header__z-index - 1;
 }
 
 .admin__data-grid-header-row {
     margin-bottom: @data-grid-header-row__margin-bottom;
+    &:first-child {
+        margin-bottom: @data-grid-header-row__margin-bottom - @data-grid-header-add-indent__size;
+    }
     .action-select-wrap {
         display: block;
     }
@@ -44,11 +48,34 @@
 .admin__data-grid-actions-wrap {
     text-align: right;
     .admin__action-dropdown-wrap {
+        position: relative;
         text-align: left;
-        border-left: 1px solid @color-gray80;
         &._active,
         &:first-child {
-            border-left: none;
+            &:after {
+                display: none;
+            }
+        }
+        &._active {
+            .admin__action-dropdown,
+            .admin__action-dropdown-menu {
+                border-color: @action__border-color;
+            }
+        }
+        &:after {
+            border-left: 1px solid @color-gray80;
+            content: '';
+            height: @action__height;
+            left: 0;
+            position: absolute;
+            top: 0;
+            z-index: 3;
+        }
+    }
+    .admin__action-dropdown {
+        padding-bottom: @action-dropdown__padding-bottom + @data-grid-header-add-indent__size;
+        &:after {
+            margin-top: -.6rem;
         }
     }
 }
