@@ -201,33 +201,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Sales\Controller\Adminhtml\Order\View::execute
      */
-    public function testExecuteException()
-    {
-        $id = 111;
-        $message = 'epic fail';
-        $exception = new \Magento\Framework\App\Action\Exception($message);
-        $this->initOrder();
-        $this->initOrderSuccess($id);
-        $this->prepareRedirect();
-
-        $this->resultPageFactoryMock->expects($this->once())
-            ->method('create')
-            ->willThrowException($exception);
-        $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with($message)
-            ->willReturnSelf();
-        $this->setPath('sales/order/index');
-
-        $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
-            $this->viewAction->execute()
-        );
-    }
-
-    /**
-     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::execute
-     */
     public function testGlobalException()
     {
         $id = 111;
