@@ -144,6 +144,7 @@ class UpdateCustomerFrontendEntityTest extends Injectable
 
         \PHPUnit_Framework_Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
 
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
@@ -157,7 +158,7 @@ class UpdateCustomerFrontendEntityTest extends Injectable
     public function tearDown()
     {
         if ($this->cmsIndex->getLinksBlock()->isVisible()) {
-            $this->cmsIndex->getLinksBlock()->openLink('Log Out');
+            $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
         }
     }
 }

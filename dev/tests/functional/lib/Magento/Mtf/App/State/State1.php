@@ -8,17 +8,16 @@ namespace Magento\Mtf\App\State;
 
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Core\Test\Fixture\ConfigData;
+use Magento\Config\Test\Fixture\ConfigData;
 
 /**
- * Class State1
- * Example Application State class
+ * Example Application State class.
  */
 class State1 extends AbstractState
 {
     // TODO: Move data set to ConfigData fixture after implement merging fixture xml
     /**
-     * Data set for configuration state
+     * Data set for configuration state.
      *
      * @var array
      */
@@ -34,7 +33,7 @@ class State1 extends AbstractState
     ];
 
     /**
-     * Configuration fixture
+     * Configuration fixture.
      *
      * @var ConfigData
      */
@@ -50,7 +49,9 @@ class State1 extends AbstractState
     }
 
     /**
-     * @inheritdoc
+     * Apply set up configuration profile.
+     *
+     * @return void
      */
     public function apply()
     {
@@ -61,7 +62,9 @@ class State1 extends AbstractState
     }
 
     /**
-     * @inheritdoc
+     * Get name of the Application State Profile.
+     *
+     * @return string
      */
     public function getName()
     {

@@ -11,7 +11,6 @@ use Magento\Mtf\Page\Page;
 
 /**
  * Login page for backend.
- *
  */
 class AdminAuthLogin extends Page
 {
@@ -39,7 +38,7 @@ class AdminAuthLogin extends Page
      *
      * @var string
      */
-    protected $messagesBlock = '#messages .messages';
+    protected $messagesBlock = '.messages .message';
 
     /**
      * Constructor.
@@ -76,11 +75,11 @@ class AdminAuthLogin extends Page
     /**
      * Get global messages block.
      *
-     * @return \Magento\Core\Test\Block\Messages
+     * @return \Magento\Backend\Test\Block\Messages
      */
     public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages($this->_browser->find($this->messagesBlock));
+        return Factory::getBlockFactory()->getMagentoBackendMessages($this->_browser->find($this->messagesBlock));
     }
 
     /**

@@ -64,7 +64,7 @@
             <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">-</item>
-                <item name="preset" xsi:type="string">starting-560</item>
+                <item name="preset" xsi:type="string">starting-100</item>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="presets" xsi:type="string">default</item>

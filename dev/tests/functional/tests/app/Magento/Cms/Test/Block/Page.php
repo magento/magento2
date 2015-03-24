@@ -19,7 +19,7 @@ class Page extends Block
      *
      * @var string
      */
-    protected $uninitialized = '//body[(@data-mage-init) or (@aria-busy="true")]';
+    protected $uninitialized = '//*[(@data-mage-init)]';
 
     /**
      * Cms page content class.
@@ -130,5 +130,6 @@ class Page extends Block
                 return $browser->find($uninitialized, Locator::SELECTOR_XPATH)->isVisible() == false ? true : null;
             }
         );
+        sleep(3); // TODO: remove after resolving an issue with ajax on Frontend.
     }
 }

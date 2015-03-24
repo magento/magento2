@@ -370,9 +370,9 @@ class View extends AbstractConfigureBlock
      */
     public function clickAddToCompare()
     {
-        /** @var \Magento\Core\Test\Block\Messages $messageBlock */
+        /** @var \Magento\Backend\Test\Block\Messages $messageBlock */
         $messageBlock = $this->blockFactory->create(
-            'Magento\Core\Test\Block\Messages',
+            'Magento\Backend\Test\Block\Messages',
             ['element' => $this->browser->find($this->messageBlock)]
         );
         $this->_rootElement->find($this->clickAddToCompare, Locator::SELECTOR_CSS)->click();

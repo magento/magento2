@@ -65,6 +65,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends Abs
         $catalogProductView->getViewBlock()->fillOptions($product);
         $actualPrices = $this->getProductPagePrices($actualPrices);
         $catalogProductView->getViewBlock()->clickAddToCart();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
         $actualPrices = $this->getCartPrices($product, $actualPrices);
         $actualPrices = $this->getTotals($actualPrices);
         //Prices verification

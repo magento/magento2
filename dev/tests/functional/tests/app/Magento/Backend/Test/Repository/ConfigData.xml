@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Core\Test\Repository\ConfigData">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="store_information">
             <field path="general/store_information/name" scope="general" scope_id="1" label="" xsi:type="string">Store 1</field>
             <field path="general/store_information/phone" scope="general" scope_id="1" label="" xsi:type="string">1234-123-123</field>

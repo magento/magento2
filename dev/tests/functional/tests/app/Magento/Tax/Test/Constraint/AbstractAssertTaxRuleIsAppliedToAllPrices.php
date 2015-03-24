@@ -120,6 +120,8 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $catalogProductView->getViewBlock()->fillOptions($product);
         $actualPrices = $this->getProductPagePrices($actualPrices);
         $catalogProductView->getViewBlock()->setQtyAndClickAddToCart($qty);
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $this->checkoutCart->open();
         $this->fillEstimateBlock($address, $shipping);
         $actualPrices = $this->getCartPrices($product, $actualPrices);
         $actualPrices = $this->getTotals($actualPrices);
@@ -150,6 +152,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
      */
     public function getCartPrices(InjectableFixture $product, $actualPrices)
     {
+        $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
         $actualPrices['cart_item_price_incl_tax'] =

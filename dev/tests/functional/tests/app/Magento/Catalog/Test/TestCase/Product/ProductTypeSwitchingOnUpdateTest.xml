@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnUpdateTest">
         <variation name="ProductTypeSwitchingOnUpdateTestVariation1">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
             <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="actionName" xsi:type="string">-</data>

@@ -64,15 +64,16 @@ class DeleteProductsFromWishlistOnFrontendTest extends AbstractWishlistTest
      */
     protected function removeProducts(array $products, $removedProductsIndex)
     {
+        $productBlock = $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock();
         $removeProducts = [];
         if ($removedProductsIndex) {
             $removedProductsIndex = explode(',', $removedProductsIndex);
             foreach ($removedProductsIndex as $index) {
-                $this->wishlistIndex->getItemsBlock()->getItemProduct($products[--$index])->remove();
+                $productBlock->getItemProduct($products[--$index])->remove();
                 $removeProducts[] = $products[$index];
             }
         } else {
-            $this->wishlistIndex->getItemsBlock()->removeAllProducts();
+            $productBlock->removeAllProducts();
             $removeProducts = $products;
         }
 
