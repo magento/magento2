@@ -14,6 +14,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      * Mass action for cache disabling
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -39,7 +40,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
     }
 
     /**
-     * Redirect user to the previous or main page
+     * {@inheritdoc}
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */

@@ -26,7 +26,7 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
     }
 
     /**
-     * Redirect user to the previous or main page
+     * {@inheritdoc}
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */

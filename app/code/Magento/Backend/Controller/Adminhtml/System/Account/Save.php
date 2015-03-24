@@ -68,7 +68,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     }
 
     /**
-     * Redirect user to the previous or main page
+     * {@inheritdoc}
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */

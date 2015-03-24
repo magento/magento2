@@ -53,6 +53,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * Update product(s) status action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -70,7 +71,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     }
 
     /**
-     * Redirect user to the previous or main page
+     * {@inheritdoc}
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */

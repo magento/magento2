@@ -26,6 +26,7 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -39,7 +40,7 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
     }
 
     /**
-     * Redirect user to the previous or main page
+     * {@inheritdoc}
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
