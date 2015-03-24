@@ -34,7 +34,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateInstallConfig()
     {
-        $returnValue = $this->configGeneratorObject->createInstallConfig();
+        $returnValue = $this->configGeneratorObject->createInstallConfig([]);
         $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
         $this->assertEquals('install', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
@@ -43,7 +43,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCreateCryptConfigWithInput()
     {
         $testData = [ConfigOptionsList::INPUT_KEY_CRYPT_KEY => 'some-test_key'];
-        $returnValue = $this->configGeneratorObject->createCryptConfig($testData);
+        $returnValue = $this->configGeneratorObject->createCryptConfig($testData, []);
         $this->assertEquals('crypt', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['key' => 'some-test_key'], $returnValue->getData());
@@ -51,7 +51,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCryptConfigWithoutInput()
     {
-        $returnValue = $this->configGeneratorObject->createCryptConfig([]);
+        $returnValue = $this->configGeneratorObject->createCryptConfig([], []);
         $this->assertEquals('crypt', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['key' => md5('key')], $returnValue->getData());
@@ -85,7 +85,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $returnValue = $this->configGeneratorObject->createSessionConfig([]);
         $this->assertEquals('session', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['save' => ConfigOptionsList::SESSION_SAVE_FILES], $returnValue->getData());
+        $this->assertEquals([], $returnValue->getData());
     }
 
     public function testCreateDefinitionsConfig()
@@ -119,12 +119,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('testDbName', $dbData['connection']['default']['dbname']);
         $this->assertArrayHasKey('username', $dbData['connection']['default']);
         $this->assertSame('testDbUser', $dbData['connection']['default']['username']);
-        $this->assertArrayHasKey('password', $dbData['connection']['default']);
-        $this->assertSame('', $dbData['connection']['default']['password']);
-        $this->assertArrayHasKey('model', $dbData['connection']['default']);
-        $this->assertSame('mysql4', $dbData['connection']['default']['model']);
-        $this->assertArrayHasKey('initStatements', $dbData['connection']['default']);
-        $this->assertSame('SET NAMES utf8;', $dbData['connection']['default']['initStatements']);
         $this->assertArrayHasKey('active', $dbData['connection']['default']);
         $this->assertSame('1', $dbData['connection']['default']['active']);
     }

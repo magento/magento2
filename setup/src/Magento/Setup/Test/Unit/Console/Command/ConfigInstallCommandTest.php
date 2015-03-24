@@ -111,26 +111,4 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
         $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $command->initialize($this->input, $this->output);
     }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Deployment configuration already exists
-     */
-    public function testDeploymentConfigExists()
-    {
-        $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(true);
-        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $optionsSet = [
-            $option
-        ];
-
-        $this->configModel
-            ->expects($this->once())
-            ->method('getAvailableOptions')
-            ->will($this->returnValue($optionsSet));
-
-        $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
-        $command->initialize($this->input, $this->output);
-    }
-
 }

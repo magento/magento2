@@ -16,12 +16,12 @@ class TextConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructInvalidFrontendType()
     {
-        new TextConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT);
+        new TextConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, 'path/to/value');
     }
 
     public function testGetFrontendType()
     {
-        $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT);
+        $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, 'path/to/value');
         $this->assertEquals(TextConfigOption::FRONTEND_WIZARD_TEXT, $option->getFrontendType());
     }
 
@@ -31,7 +31,7 @@ class TextConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateException()
     {
-        $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT);
+        $option = new TextConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, 'path/to/value');
         $option->validate(1);
     }
 }

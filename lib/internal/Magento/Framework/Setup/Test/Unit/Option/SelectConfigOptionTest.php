@@ -16,7 +16,7 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructInvalidFrontendType()
     {
-        new SelectConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, ['a', 'b']);
+        new SelectConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, ['a', 'b'], 'path/to/value');
     }
 
     /**
@@ -25,18 +25,28 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructNoOptions()
     {
-        new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, []);
+        new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, [], 'path/to/value');
     }
 
     public function testGetFrontendType()
     {
-        $option = new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, ['a', 'b']);
+        $option = new SelectConfigOption(
+            'test',
+            SelectConfigOption::FRONTEND_WIZARD_SELECT,
+            ['a', 'b'],
+            'path/to/value'
+        );
         $this->assertEquals(SelectConfigOption::FRONTEND_WIZARD_SELECT, $option->getFrontendType());
     }
 
     public function testGetSelectOptions()
     {
-        $option = new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, ['a', 'b']);
+        $option = new SelectConfigOption(
+            'test',
+            SelectConfigOption::FRONTEND_WIZARD_SELECT,
+            ['a', 'b'],
+            'path/to/value'
+        );
         $this->assertEquals(['a', 'b'], $option->getSelectOptions());
     }
 
@@ -46,7 +56,12 @@ class SelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateException()
     {
-        $option = new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, ['a', 'b']);
+        $option = new SelectConfigOption(
+            'test',
+            SelectConfigOption::FRONTEND_WIZARD_SELECT,
+            ['a', 'b'],
+            'path/to/value'
+        );
         $option->validate('c');
     }
 }
