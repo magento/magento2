@@ -320,28 +320,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
 
         $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
         $write->query($query);
-
-        /**
-         * Add possibility modify prices from external events
-         */
-        $select = $write->select()->join(
-            ['wd' => $this->_getWebsiteDateTable()],
-            'i.website_id = wd.website_id',
-            []
-        );
-        $this->_eventManager->dispatch(
-            'prepare_catalog_product_price_index_table',
-            [
-                'index_table' => ['i' => $this->_getDefaultFinalPriceTable()],
-                'select' => $select,
-                'entity_id' => 'i.entity_id',
-                'customer_group_id' => 'i.customer_group_id',
-                'website_id' => 'i.website_id',
-                'website_date' => 'wd.website_date',
-                'update_fields' => ['price', 'min_price', 'max_price']
-            ]
-        );
-
         return $this;
     }
 
