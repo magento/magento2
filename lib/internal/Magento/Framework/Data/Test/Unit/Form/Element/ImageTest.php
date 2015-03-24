@@ -53,7 +53,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Data\Form\Element\Image::__construct
+     * @covers \Magento\Framework\Data\Form\Element\Image::__construct
      */
     public function testConstruct()
     {
@@ -61,7 +61,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Data\Form\Element\Image::getName
+     * @covers \Magento\Framework\Data\Form\Element\Image::getName
      */
     public function testGetName()
     {
@@ -70,7 +70,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
+     * @covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
      */
     public function testGetElementHtmlWithoutValue()
     {
@@ -83,7 +83,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
+     * @covers \Magento\Framework\Data\Form\Element\Image::getElementHtml
      */
     public function testGetElementHtmlWithValue()
     {
@@ -97,7 +97,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<input', $html);
         $this->assertContains('type="file"', $html);
         $this->assertContains('value="test_value"', $html);
-        $this->assertContains('<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"', $html);
+        $this->assertContains(
+            '<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"',
+            $html
+        );
         $this->assertContains('<input type="checkbox"', $html);
     }
 }

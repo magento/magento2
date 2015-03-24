@@ -215,7 +215,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for the magic method __wakeup
      *
-     * covers \Magento\Framework\App\Response\Http::__wakeup
+     * @covers \Magento\Framework\App\Response\Http::__wakeup
      */
     public function testWakeUpWith()
     {
