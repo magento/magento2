@@ -36,7 +36,7 @@ define(
                 getAvailablePaymentMethodCount: function() {
                     return paymentMethodCount;
                 },
-                isVisible: navigator.isPaymentMethodVisible(),
+                isVisible: navigator.isStepVisible('paymentMethod'),
                 backToShippingMethod: function() {
                     navigator.setCurrent('paymentMethod').goBack();
                 }

@@ -22,7 +22,7 @@ define(
                 addresses: customer.getShippingAddressList(),
                 selectedAddressId: ko.observable(null),
                 sameAsBilling: ko.observable(null),
-                isVisible: navigator.isShippingAddressVisible(),
+                isVisible: navigator.isStepVisible('shippingAddress'),
                 quoteHasBillingAddress: quote.getBillingAddress(),
                 selectShippingAddress: function() {
                     selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());

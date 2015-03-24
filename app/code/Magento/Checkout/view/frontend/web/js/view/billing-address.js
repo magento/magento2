@@ -17,7 +17,7 @@ define(
                 template: 'Magento_Checkout/billing-address',
                 billingAddresses: customer.getBillingAddressList(),
                 selectedBillingAddressId: "1",
-                isVisible: navigator.isBillingAddressVisible(),
+                isVisible: navigator.isStepVisible('billingAddress'),
                 useForShipping: "1",
                 billingAddressesOptionsText: function (item) {
                     return item.getFullAddress();

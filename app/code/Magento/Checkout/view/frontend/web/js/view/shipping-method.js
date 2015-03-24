@@ -50,7 +50,7 @@ define(
                     //todo add format data
                     return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
                 },
-                isVisible: navigator.isShippingMethodVisible(),
+                isVisible: navigator.isStepVisible('shippingMethod'),
                 // Checkout step navigation
                 backToShippingAddress: function () {
                     navigator.setCurrent('shippingMethod').goBack();

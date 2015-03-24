@@ -10,9 +10,8 @@ define(['jquery', 'ko', 'Magento_Customer/js/model/customer'], function($, ko, c
     var customerIsLoggedIn = customer.isLoggedIn()();
     return {
         currentStep: null,
-
         steps: [
-            {name: 'authentication', isVisible: ko.observable(customerIsLoggedIn), order: 1},
+            {name: 'authentication', isVisible: ko.observable(!customerIsLoggedIn), order: 1},
             {name: 'billingAddress', isVisible: ko.observable(customerIsLoggedIn), order: 2},
             {name: 'shippingAddress', isVisible: ko.observable(false), order: 3},
             {name: 'shippingMethod', isVisible: ko.observable(false), order: 4},
@@ -23,26 +22,41 @@ define(['jquery', 'ko', 'Magento_Customer/js/model/customer'], function($, ko, c
             this.currentStep = step;
             return this;
         },
-        goNext: function() {
+        getCurrentStep: function() {
+            if (!this.currentStep) {
+                alert('Current step not set.');
+                return;
+            }
             var self = this;
             var currentStep = null;
-            var nextStep = null;
             $.each(this.steps, function(key, step) {
                 if (self.currentStep == step.name) {
                     currentStep = step;
                 }
             });
+            return currentStep;
+        },
+        goNext: function() {
+            var currentStep = this.getCurrentStep();
+            var nextStep = null;
             $.each(this.steps, function(key, step) {
                 var nextStepOrder = currentStep.order + 1;
                 if (nextStepOrder == step.order) {
                     nextStep = step;
                 }
             });
-
             this.toStep(nextStep.name);
         },
         goBack: function() {
-            alert('Sorry, in progress...');
+            var currentStep = this.getCurrentStep();
+            var previousStep = null;
+            $.each(this.steps, function(key, step) {
+                var prevStepOrder = currentStep.order - 1;
+                if (prevStepOrder == step.order) {
+                    previousStep = step;
+                }
+            });
+            this.toStep(previousStep.name);
         },
         toStep: function(step) {
             if (step) {
@@ -62,20 +76,8 @@ define(['jquery', 'ko', 'Magento_Customer/js/model/customer'], function($, ko, c
             });
             return step;
         },
-        isShippingAddressVisible: function() {
-            return this.findStepByName('shippingAddress').isVisible;
-        },
-        isBillingAddressVisible: function() {
-            return this.findStepByName('billingAddress').isVisible;
-        },
-        isShippingMethodVisible: function() {
-            return this.findStepByName('shippingMethod').isVisible;
-        },
-        isPaymentMethodVisible: function() {
-            return this.findStepByName('paymentMethod').isVisible;
-        },
-        isReviewVisible: function() {
-            return this.findStepByName('review').isVisible;
+        isStepVisible: function(step) {
+            return this.findStepByName(step).isVisible;
         },
         setStepVisible: function(step, flag) {
             this.findStepByName(step).isVisible(flag);

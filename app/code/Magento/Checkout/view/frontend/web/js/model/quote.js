@@ -19,6 +19,9 @@ define(
             getQuoteId: function() {
                 return quoteData.entity_id;
             },
+            isVirtual: function() {
+                return quoteData.is_virtual;
+            },
             getCurrencySymbol: function() {
               return currencySymbol.data;
             },

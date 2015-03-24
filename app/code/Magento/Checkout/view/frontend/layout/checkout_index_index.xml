@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Checkout\Block\Checkout" name="checkout.root" template="checkout.phtml"  cacheable="false">
+            <block class="Magento\Checkout\Block\Checkout" name="checkout.root" template="checkout.phtml" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="renderer" xsi:type="array">

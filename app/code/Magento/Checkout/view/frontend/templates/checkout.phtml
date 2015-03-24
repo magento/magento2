@@ -24,7 +24,8 @@
             window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
         </script>
         <script>
-            require(['mage/url'], function(url) {
+            require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {
+                loader.registerLoader();
                 return url.setBaseUrl('<?php echo $this->getBaseUrl();?>');
             })
         </script>

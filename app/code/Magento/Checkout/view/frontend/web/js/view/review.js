@@ -25,7 +25,7 @@ define(
                 itemsAfter: itemsAfter,
                 getItems: function() {},
                 getAgreementsTemplate: function() {},
-                isVisible: navigator.isReviewVisible(),
+                isVisible: navigator.isStepVisible('review'),
                 cartUrl: url.build('checkout/cart/'),
                 placeOrder: function() {
                     orderAction();
