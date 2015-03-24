@@ -20,11 +20,19 @@ abstract class AbstractConfigOption extends InputOption
     private $frontendType;
 
     /**
+     * Config path
+     *
+     * @var string
+     */
+    private $configPath;
+
+    /**
      * Constructor
      *
      * @param string $name
      * @param string $frontendType
      * @param int $mode
+     * @param string $configPath
      * @param string $description
      * @param string|array|null $defaultValue
      * @param string|array|null $shortcut
@@ -33,11 +41,13 @@ abstract class AbstractConfigOption extends InputOption
         $name,
         $frontendType,
         $mode,
+        $configPath,
         $description = '',
         $defaultValue = null,
         $shortcut = null
     ) {
         $this->frontendType = $frontendType;
+        $this->configPath = $configPath;
         parent::__construct($name, $shortcut, $mode, $description, $defaultValue);
     }
 
@@ -49,6 +59,16 @@ abstract class AbstractConfigOption extends InputOption
     public function getFrontendType()
     {
         return $this->frontendType;
+    }
+
+    /**
+     * Get config path
+     *
+     * @return string
+     */
+    public function getConfigPath()
+    {
+        return $this->configPath;
     }
 
     /**

@@ -72,12 +72,17 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_CRYPT_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'crypt/key',
                 'Encryption key'
+                // TODO: find right place for it
+                //md5($this->random->getRandomString(10))
+
             ),
             new SelectConfigOption(
                 self::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 [self::SESSION_SAVE_FILES, self::SESSION_SAVE_DB],
+                'session/save',
                 'Session save location',
                 self::SESSION_SAVE_FILES
             ),
@@ -85,42 +90,56 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 self::INPUT_KEY_DEFINITION_FORMAT,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 DefinitionFactory::getSupportedFormats(),
+                'definition/format',
                 'Type of definitions used by Object Manager'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'Database server host'
+                'db/connection/default/host',
+                'Database server host',
+                'localhost'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_NAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'Database name'
+                'db/connection/default/dbname',
+                'Database name',
+                'magento2'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'Database server username'
+                'db/connection/default/username',
+                'Database server username',
+                'root'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_PASS,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                'Database server password'
+                'db/connection/default/password',
+                'Database server password',
+                ''
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'db/table_prefix',
                 'Database table prefix'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_MODEL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'Database type'
+                'db/connection/default/model',
+                'Database type',
+                'mysql4'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_INIT_STATEMENTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'Database  initial set of commands'
+                'db/connection/default/initStatements',
+                'Database  initial set of commands',
+                'SET NAMES utf8;'
             ),
         ];
     }
@@ -128,7 +147,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      */
-    public function createConfig(array $data)
+    public function createConfig(array $data, array $currentConfig = [])
     {
         $configData = [];
         $configData[] = $this->configGenerator->createInstallConfig();
@@ -153,18 +172,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function validate(array $options)
     {
         $errors = [];
-
-        $required = [
-            ConfigOptionsList::INPUT_KEY_DB_HOST,
-            ConfigOptionsList::INPUT_KEY_DB_NAME,
-            ConfigOptionsList::INPUT_KEY_DB_USER
-        ];
-
-        foreach ($required as $key) {
-            if (!isset($options[$key]) || empty($options[$key])) {
-                $errors[] = "Missing value for db configuration: {$key}";
-            }
-        }
 
         if (isset($options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])
             && !$options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) {

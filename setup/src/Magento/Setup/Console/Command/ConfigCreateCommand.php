@@ -64,7 +64,7 @@ class ConfigCreateCommand extends Command
     {
         $options = $this->configModel->getAvailableOptions();
 
-        $this->setName('config:create')
+        $this->setName('config:set')
             ->setDescription('Create deployment configuration')
             ->setDefinition($options);
 
@@ -76,7 +76,14 @@ class ConfigCreateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->configModel->process($input->getOptions());
+        $inputOptions = $input->getOptions();
+
+        $inputOptions = array_filter($inputOptions,
+            function ($value) {
+                return $value !== null;
+            }
+        );
+        $this->configModel->process($inputOptions);
         $output->writeln('<info>You saved the deployment config.</info>');
     }
 
@@ -85,10 +92,6 @@ class ConfigCreateCommand extends Command
      */
     public function initialize(InputInterface $input, OutputInterface $output)
     {
-        if ($this->deploymentConfig->isAvailable()) {
-            throw new \Exception('Deployment configuration already exists, cannot create a new one');
-        }
-
         if (!$this->moduleList->isModuleInfoAvailable()) {
             $output->writeln(
                 '<info>No module configuration is available, so all modules are enabled.</info>'

@@ -30,6 +30,7 @@ class SelectConfigOption extends AbstractConfigOption
      * @param string $name
      * @param string $frontendType
      * @param array $selectOptions
+     * @param string $configPath
      * @param string $description
      * @param string|null $defaultValue
      * @param string|array|null $shortCut
@@ -39,6 +40,7 @@ class SelectConfigOption extends AbstractConfigOption
         $name,
         $frontendType,
         array $selectOptions,
+        $configPath,
         $description = '',
         $defaultValue = null,
         $shortCut = null
@@ -54,6 +56,7 @@ class SelectConfigOption extends AbstractConfigOption
             $name,
             $frontendType,
             self::VALUE_REQUIRED,
+            $configPath,
             $description,
             $defaultValue,
             $shortCut

@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Deployment configuration reader
@@ -78,5 +79,11 @@ class Reader
 
         $result = @include $file;
         return $result ?: [];
+    }
+
+    public function loadConfig()
+    {
+        // TODO: add multi config functionality here
+        return $this->load();
     }
 }

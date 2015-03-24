@@ -144,26 +144,22 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
+        var_dump($data);
         $connection = [];
 
-        $required = [
+        $optional = [
             ConfigOptionsList::INPUT_KEY_DB_HOST,
             ConfigOptionsList::INPUT_KEY_DB_NAME,
-            ConfigOptionsList::INPUT_KEY_DB_USER
+            ConfigOptionsList::INPUT_KEY_DB_USER,
+            ConfigOptionsList::INPUT_KEY_DB_PASS,
+            ConfigOptionsList::INPUT_KEY_DB_MODEL,
+            ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS,
         ];
 
-        foreach ($required as $key) {
-            $connection[ConfigGenerator::$paramMap[$key]] = $data[$key];
-        }
-
-        $optional = [
-            ConfigOptionsList::INPUT_KEY_DB_PASS => '',
-            ConfigOptionsList::INPUT_KEY_DB_MODEL => 'mysql4',
-            ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;'
-        ];
-
-        foreach ($optional as $key => $value) {
-            $connection[self::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : $value;
+        foreach ($optional as $key) {
+            if (isset($data[$key])) {
+                $connection[self::$paramMap[$key]] = $data[$key];
+            }
         }
 
         $connection[self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE]] = '1';
