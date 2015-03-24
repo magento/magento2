@@ -366,7 +366,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             if (\Magento\Framework\App\Utility\Files::init()->isModuleExists($module)) {
                 $this->pluginValidator->validate($plugin, $type);
             }
-        } catch (\Magento\Framework\Interception\Code\ValidatorException $exception) {
+        } catch (\Magento\Framework\Exception\ValidatorException $exception) {
             $this->fail($exception->getMessage());
         }
     }
