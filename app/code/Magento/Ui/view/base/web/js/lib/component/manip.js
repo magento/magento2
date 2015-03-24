@@ -9,18 +9,6 @@ define([
 ], function (_, utils, registry) {
     'use strict';
 
-    function getOffsetFor(elems, offset) {
-        if (typeof offset === 'undefined') {
-            offset = -1;
-        }
-
-        if (offset < 0) {
-            offset += elems.length + 1;
-        }
-
-        return offset;
-    }
-
     function getIndex(container, target) {
         var result;
 
@@ -34,9 +22,7 @@ define([
     }
 
     function compact(container) {
-        return container.filter(function (value) {
-            return typeof value === 'object';
-        });
+        return container.filter(utils.isObject);
     }
 
     function reserve(container, elem, position) {
@@ -52,13 +38,11 @@ define([
             }
         }
 
-        offset = getOffsetFor(container, offset);
+        offset = utils.formatOffset(container, offset);
 
-        if (container[offset]) {
-            container.splice(offset, 0, elem);
-        } else {
+        container[offset] ?
+            container.splice(offset, 0, elem) :
             container[offset] = elem;
-        }
 
         return offset;
     }

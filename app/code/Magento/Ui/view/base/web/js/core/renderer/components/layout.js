@@ -18,38 +18,22 @@ define([
             name = node.name || name;
         }
 
-        if (parentName) {
-            name = parentName + '.' + name;
-        }
-
-        return name;
+        return utils.fullPath(parentName, name);
     }
 
     function getNodeType(parent, node) {
-        return node.type || (parent && parent.childType);
-    }
-
-    function notEmpty(value) {
-        return !_.isUndefined(value) && value !== '';
+        return node.type || parent && parent.childType;
     }
 
     function getDataScope(parent, node) {
         var dataScope = node.dataScope,
             parentScope = parent && parent.dataScope;
 
-        return notEmpty(parentScope) ?
-            (notEmpty(dataScope) ?
-                (parentScope + '.' + dataScope) :
-                parentScope) :
-            (dataScope || '');
-    }
-
-    function mergeNode(node, config) {
-        return utils.extend({}, config, node);
-    }
-
-    function additional(node) {
-        return _.pick(node, 'name', 'index', 'dataScope');
+        return !utils.isEmpty(parentScope) ?
+            !utils.isEmpty(dataScope) ?
+                parentScope + '.' + dataScope :
+                parentScope :
+            dataScope || '';
     }
 
     function loadDeps(node) {
@@ -74,10 +58,7 @@ define([
     }
 
     function initComponent(node, Constr) {
-        var component = new Constr(
-            node.config,
-            additional(node)
-        );
+        var component = new Constr(_.omit(node, 'children'));
 
         registry.set(node.name, component);
     }
@@ -126,27 +107,34 @@ define([
         },
 
         build: function (parent, node, name) {
-            var defaults = parent && parent.childDefaults,
+            var defaults = parent && parent.childDefaults || {},
                 type;
 
-            if (utils.isObject(defaults)) {
-                node = mergeNode(node, defaults);
-            }
-
             type = getNodeType.apply(null, arguments);
-            node = mergeNode(node, this.types.get(type));
 
-            node.index = node.name || name;
-            node.name = getNodeName(parent, node, name);
-            node.dataScope = getDataScope(parent, node);
+            node = utils.extend({
+            }, this.types.get(type), defaults, node);
+
+            _.extend(node, node.config || {});
+
+            _.extend(node, {
+                index: node.name || name,
+                name: getNodeName(parent, node, name),
+                dataScope: getDataScope(parent, node)
+            });
 
             delete node.type;
+            delete node.config;
 
-            this.registry.set(node.name, node);
+            if (node.isTemplate) {
+                node.isTemplate = false;
 
-            return node.isTemplate ?
-                (node.isTemplate = false) :
-                node;
+                this.registry.set(node.name, node);
+
+                return false;
+            }
+
+            return node;
         },
 
         initComponent: function (node) {
@@ -163,7 +151,7 @@ define([
     });
 
     _.extend(Layout.prototype, {
-        waitTemplate: function (parent, node, name) {
+        waitTemplate: function (parent, node) {
             var args = _.toArray(arguments);
 
             this.registry.get(node.template, function () {
@@ -176,7 +164,7 @@ define([
         waitParent: function (node, name) {
             var process = this.process.bind(this);
 
-            this.registry.get(node.parent, function (parent) {
+            registry.get(node.parent, function (parent) {
                 process(parent, node, name);
             });
 
@@ -186,7 +174,7 @@ define([
         applyTemplate: function (parent, node, name) {
             var template = this.registry.get(node.template);
 
-            node = mergeNode(node, template);
+            node = utils.extend({}, template, node);
 
             delete node.template;
 
@@ -230,14 +218,12 @@ define([
         },
 
         addChild: function (parent, child) {
-            var name,
-                position;
+            var name;
 
             if (parent && parent.component) {
                 name = child.name || child;
-                position = child.sortOrder;
 
-                this.insert(name, parent.name, position);
+                this.insert(name, parent.name, child.sortOrder);
             }
 
             return this;

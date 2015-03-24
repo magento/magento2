@@ -37,7 +37,8 @@ define([
             template: 'ui/form/components/collection/item',
             label: '',
             uniqueNs: 'activeCollectionItem',
-            previewTpl: 'ui/form/components/collection/preview'
+            previewTpl: 'ui/form/components/collection/preview',
+            regions: ['body', 'head']
         },
 
         /**
@@ -59,8 +60,6 @@ define([
             this._super();
 
             this.displayed = [];
-
-            utils.add(this.regions, 'body', 'head');
 
             return this;
         },
@@ -161,6 +160,7 @@ define([
                 var elem = elems[index];
 
                 preview = elem ? elem.delegate('getPreview') : '';
+
                 preview = Array.isArray(preview) ?
                     _.compact(preview).join(', ') :
                     preview;
