@@ -11,9 +11,10 @@ define(
         '../model/quote',
         '../model/addresslist',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist'
+        'Magento_Ui/js/model/errorlist',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function(quote, addressList, storage, errorList) {
+    function(quote, addressList, storage, errorList, navigator) {
         return function(shippingAddressId, sameAsBilling) {
             if (!shippingAddressId) {
                 alert('Currently adding a new address is not supported.');
@@ -29,10 +30,11 @@ define(
                 function(quoteAddressId) {
                     address.id = quoteAddressId;
                     quote.setShippingAddress(address);
+                    navigator.setCurrent('shippingAddress').goNext();
                 }
             ).error(
                 function(response) {
-                    var error = $.parseJSON(response.responseText);
+                    var error = JSON.parse(response.responseText);
                     errorList.add(error.message);
                     quote.setShippingAddress(null);
                 }

@@ -13,17 +13,15 @@ define(
         '../model/quote',
         '../model/payment-service',
         '../action/select-payment-method',
-        'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/step-navigator'
     ],
-    function ($, Component, quote, paymentService, selectPaymentMethod, customer, navigator) {
+    function ($, Component, quote, paymentService, selectPaymentMethod, navigator) {
         var paymentMethods = paymentService.getAvailablePaymentMethods(quote);
         var paymentMethodCount = paymentMethods.length;
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',
-                isLoggedIn: customer.isLoggedIn(),
-                quoteHasShippingMethod: quote.hasShippingMethod(),
+                quoteHasShippingMethod: quote.getShippingMethod(),
 
                 setPaymentMethod: function(form) {
                     var paymentMethodCode = $("input[name='payment[method]']:checked", form).val();
@@ -40,7 +38,7 @@ define(
                 },
                 isVisible: navigator.isPaymentMethodVisible(),
                 backToShippingMethod: function() {
-                    navigator.toStep('shippingMethod');
+                    navigator.setCurrent('paymentMethod').goBack();
                 }
             }
         });

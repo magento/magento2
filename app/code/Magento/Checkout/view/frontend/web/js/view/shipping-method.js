@@ -22,9 +22,8 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-method',
-                isLoggedIn: customer.isLoggedIn(),
-                quoteHasShippingAddress: quote.hasShippingAddress(),
                 rates: shippingService.getRates(),
+                quoteHasShippingAddress: quote.getShippingAddress(),
 
                 getRatesQty: function (data) {
                     return data.length && this.rates().length == 1;

@@ -22,28 +22,27 @@ define(
                 addresses: customer.getShippingAddressList(),
                 selectedAddressId: ko.observable(null),
                 sameAsBilling: ko.observable(null),
-                isLoggedIn: customer.isLoggedIn(),
                 isVisible: navigator.isShippingAddressVisible(),
-                quoteHasBillingAddress: quote.hasBillingAddress(),
+                quoteHasBillingAddress: quote.getBillingAddress(),
                 selectShippingAddress: function() {
                     selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());
                 },
                 sameAsBillingClick: function() {
                     if (this.sameAsBilling()) {
                         var billingAddress = quote.getBillingAddress();
-                        this.selectedAddressId(billingAddress.customerAddressId);
+                        this.selectedAddressId(billingAddress().customerAddressId);
                     }
                     return true;
                 },
                 onAddressChange: function() {
                     var billingAddress = quote.getBillingAddress();
-                    if (this.selectedAddressId() != billingAddress.customerAddressId) {
+                    if (this.selectedAddressId() != billingAddress().customerAddressId) {
                         this.sameAsBilling(false);
                     }
                 },
                 // Checkout step navigation
                 backToBilling: function() {
-                    navigator.toStep('billingAddress');
+                    navigator.setCurrent('shippingAddress').goBack();
                 }
             }
         });

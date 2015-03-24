@@ -22,8 +22,7 @@ define(
             ).done(function (response) {
                 if (response) {
                     customer.setIsLoggedIn(true);
-                    navigator.setStepVisible('authentication', false);
-                    navigator.setStepVisible('billingAddress', true);
+                    navigator.toStep('billingAddress');
                 } else {
                     errorlist.add('Server returned no response');
                 }

@@ -10,9 +10,10 @@ define(
         '../model/addresslist',
         'mage/storage',
         'Magento_Ui/js/model/errorlist',
-        './select-shipping-address'
+        './select-shipping-address',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function(quote, addressList, storage, errorList, selectShippingAddress) {
+    function(quote, addressList, storage, errorList, selectShippingAddress, navigator) {
         "use strict";
         return function(billingAddressId, useForShipping) {
             var billingAddress = addressList.getAddressById(billingAddressId);
@@ -29,10 +30,12 @@ define(
             ).success(
                 function (response) {
                     billingAddress.id = response;
+                    quote.setBillingAddress(billingAddress, useForShipping);
                     if (useForShipping === '1') {
-                        selectShippingAddress(billingAddressId, '1');
+                        //TODO: need to use use_for_shipping key in saveBilling request instead additional request
+                        selectShippingAddress(billingAddressId, true);
                     } else {
-                        quote.setBillingAddress(billingAddress);
+                        navigator.setCurrent('billingAddress').goNext();
                     }
                 }
             ).error(

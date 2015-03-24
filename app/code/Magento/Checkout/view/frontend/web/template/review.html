@@ -8,7 +8,7 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false"
-         data-bind="fadeVisible: isVisible() && isLoggedIn() && quoteHasPaymentMethod()">
+         data-bind="fadeVisible: isVisible() && quoteHasPaymentMethod()">
         <div class="order-review" id="checkout-review-load">
             <!-- ko foreach: { data: itemsBefore, as: 'element' } -->
             <!-- ko template: element.getTemplate() --><!-- /ko -->
