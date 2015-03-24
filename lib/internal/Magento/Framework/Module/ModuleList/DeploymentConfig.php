@@ -6,14 +6,23 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
-use Magento\Framework\App\DeploymentConfig\AbstractSegment;
-use Magento\Setup\Model\ConfigOptionsList;
-
 /**
- * Deployment configuration segment for modules
+ * Deployment configuration for modules
  */
-class DeploymentConfig extends AbstractSegment
+class DeploymentConfig
 {
+    /**
+     * Segment key
+     */
+    const KEY_MODULES = 'modules';
+
+    /**
+     * Data
+     *
+     * @var array
+     */
+    protected $data = [];
+
     /**
      * Constructor
      *
@@ -31,10 +40,22 @@ class DeploymentConfig extends AbstractSegment
     }
 
     /**
-     * {@inheritdoc}
+     * Returns config data
+     *
+     * @return array|mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Returns key
+     *
+     * @return string
      */
     public function getKey()
     {
-
+        return self::KEY_MODULES;
     }
 }

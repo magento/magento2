@@ -395,7 +395,7 @@ class Installer
         }
         // retrieve old encryption keys
         if ($this->deploymentConfig->isAvailable()) {
-            $encryptInfo = $this->deploymentConfig->getSegment(ModuleLoader::ENCRYPT_CONFIG_KEY);
+            $encryptInfo = $this->deploymentConfig->getConfigData(ModuleLoader::ENCRYPT_CONFIG_KEY);
             $oldKeys = $encryptInfo[ModuleLoader::KEY_ENCRYPTION_KEY];
             $key = empty($key) ? $oldKeys : $oldKeys . "\n" . $key;
         } else if (empty($key)) {
@@ -1037,8 +1037,7 @@ class Installer
                 $result[$module] = 1;
             }
         }
-        $segment = $this->deploymentConfigFactory->create($result);
-        $this->deploymentConfigWriter->update($segment);
+        $this->deploymentConfigWriter->saveConfig($result);
     }
 
     /**
@@ -1167,7 +1166,7 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = new DbConfig($this->deploymentConfig->getSegment(ModuleLoader::CONFIG_KEY));
+            $dbConfig = new DbConfig($this->deploymentConfig->getConfigData(ModuleLoader::CONFIG_KEY));
             $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
             if ($config) {
                 try {
@@ -1258,7 +1257,7 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $segment = $this->deploymentConfig->getSegment(ModuleLoader::CONFIG_KEY);
+        $segment = $this->deploymentConfig->getConfigData(ModuleLoader::CONFIG_KEY);
         $dbConfig = new DbConfig($segment);
         $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
         $this->checkDatabaseConnection(

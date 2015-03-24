@@ -62,41 +62,6 @@ class Writer
     }
 
     /**
-     * Creates the deployment configuration file
-     *
-     * Will overwrite a file, if it exists.
-     *
-     * @param SegmentInterface[] $segments
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    public function create($segments)
-    {
-        $data = [];
-        foreach ($segments as $segment) {
-            if (!($segment instanceof SegmentInterface)) {
-                throw new \InvalidArgumentException('An instance of SegmentInterface is expected.');
-            }
-            $data[$segment->getKey()] = $segment->getData();
-        }
-        $this->write($data);
-    }
-
-    /**
-     * Update data in the configuration file using specified segment object
-     *
-     * @param SegmentInterface $segment
-     * @return void
-     */
-    public function update(SegmentInterface $segment)
-    {
-        $key = $segment->getKey();
-        $data = $this->reader->load();
-        $data[$key] = $segment->getData();
-        $this->write($data);
-    }
-
-    /**
      * Check if configuration file is writable
      *
      * @return bool

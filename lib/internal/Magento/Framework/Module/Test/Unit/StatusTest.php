@@ -41,11 +41,6 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     private $dependencyChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigFactory;
-
-    /**
      * @var Status
      */
     private $object;
@@ -58,21 +53,13 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->cleanup = $this->getMock('Magento\Framework\App\State\Cleanup', [], [], '', false);
         $this->conflictChecker = $this->getMock('Magento\Framework\Module\ConflictChecker', [], [], '', false);
         $this->dependencyChecker = $this->getMock('Magento\Framework\Module\DependencyChecker', [], [], '', false);
-        $this->deploymentConfigFactory = $this->getMock(
-            'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
-            [],
-            [],
-            '',
-            false
-        );
         $this->object = new Status(
             $this->loader,
             $this->moduleList,
             $this->writer,
             $this->cleanup,
             $this->conflictChecker,
-            $this->dependencyChecker,
-            $this->deploymentConfigFactory
+            $this->dependencyChecker
         );
     }
 
@@ -180,11 +167,8 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(false);
         $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(false);
         $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(false);
-        $deploymentConfig = $this->getMock('Magento\Framework\Module\ModuleList\DeploymentConfig', [], [], '', false);
         $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1, 'Module_Baz' => 0];
-        $this->deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
-            ->willReturn($deploymentConfig);
-        $this->writer->expects($this->once())->method('update')->with($deploymentConfig);
+        $this->writer->expects($this->once())->method('saveConfig')->with($expectedModules);
         $this->cleanup->expects($this->once())->method('clearCaches');
         $this->cleanup->expects($this->once())->method('clearCodeGeneratedFiles');
         $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);

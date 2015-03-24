@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use \Magento\Framework\App\DeploymentConfig\Writer;
-use \Magento\Framework\App\DeploymentConfig\SegmentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 
@@ -53,38 +52,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->with(DirectoryList::CONFIG)
             ->willReturn($this->dirWrite);
-    }
-
-    public function testCreate()
-    {
-        $segments = [
-            $this->createSegment('foo', 'bar'),
-            $this->createSegment('baz', ['value1', 'value2']),
-        ];
-        $expected = ['foo' => 'bar', 'baz' => ['value1', 'value2']];
-        $this->formatter->expects($this->once())->method('format')->with($expected)->willReturn('formatted');
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test.php', 'formatted');
-        $this->object->create($segments);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage An instance of SegmentInterface is expected
-     */
-    public function testCreateException()
-    {
-        $this->object->create(['some_bogus_data']);
-    }
-
-    public function testUpdate()
-    {
-        $segment = $this->createSegment('key', ['nested_key' => 'value']);
-        $preExisting = ['foo' => 'bar', 'key' => 'value', 'baz' => 1];
-        $this->reader->expects($this->once())->method('load')->willReturn($preExisting);
-        $expected = ['foo' => 'bar', 'key' => ['nested_key' => 'value'], 'baz' => 1];
-        $this->formatter->expects($this->once())->method('format')->with($expected)->willReturn('formatted');
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test.php', 'formatted');
-        $this->object->update($segment);
     }
 
     public function testSaveConfig()
@@ -135,18 +102,4 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->object->saveConfig($testSetUpdate);
     }
 
-    /**
-     * Creates a segment mock
-     *
-     * @param string $key
-     * @param mixed $data
-     * @return SegmentInterface
-     */
-    private function createSegment($key, $data)
-    {
-        $result = $this->getMockForAbstractClass('Magento\Framework\App\DeploymentConfig\SegmentInterface');
-        $result->expects($this->atLeastOnce())->method('getKey')->willReturn($key);
-        $result->expects($this->atLeastOnce())->method('getData')->willReturn($data);
-        return $result;
-    }
 }

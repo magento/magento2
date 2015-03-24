@@ -97,10 +97,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Segment key
      */
     const KEY_CACHE = 'cache';
-    /**
-     * Segment key
-     */
-    const KEY_MODULES = 'modules';
+
     /**#@-*/
 
     /**

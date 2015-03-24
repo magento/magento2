@@ -94,7 +94,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
 
     public function testIsModuleInfoAvailableNoConfig()
     {
-        $this->config->expects($this->once())->method('getSegment')->willReturn(null);
+        $this->config->expects($this->once())->method('getConfigData')->willReturn(null);
         $this->assertFalse($this->model->isModuleInfoAvailable());
     }
 
@@ -107,9 +107,9 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
     private function setLoadConfigExpectation($isExpected = true)
     {
         if ($isExpected) {
-            $this->config->expects($this->once())->method('getSegment')->willReturn(self::$enabledFixture);
+            $this->config->expects($this->once())->method('getConfigData')->willReturn(self::$enabledFixture);
         } else {
-            $this->config->expects($this->never())->method('getSegment');
+            $this->config->expects($this->never())->method('getConfigData');
         }
     }
 

@@ -8,9 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\Installer;
 use \Magento\Setup\Model\DeploymentConfigMapper;
-
-use Magento\Framework\App\DeploymentConfig\DbConfig;
-use Magento\Framework\App\DeploymentConfig\EncryptConfig;
+use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
@@ -224,8 +222,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-            [DbConfig::CONFIG_KEY, self::$dbConfig],
-            [EncryptConfig::CONFIG_KEY, [EncryptConfig::KEY_ENCRYPTION_KEY => 'encryption_key']]
+            [ConfigOptionsList::CONFIG_KEY, self::$dbConfig],
+            [ConfigOptionsList::ENCRYPT_CONFIG_KEY, [ConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']]
         ]));
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);

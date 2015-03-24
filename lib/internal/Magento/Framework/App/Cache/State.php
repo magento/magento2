@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\Cache;
 
-use Magento\Framework\App\Cache\Type\ConfigSegment;
+use Magento\Framework\App\Cache\Type\CacheConfig;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 
@@ -93,8 +93,7 @@ class State implements StateInterface
     public function persist()
     {
         $this->load();
-        $segment = new ConfigSegment($this->statuses);
-        $this->writer->update($segment);
+        $this->writer->saveConfig($this->statuses);
     }
 
     /**
@@ -109,7 +108,7 @@ class State implements StateInterface
             if ($this->banAll) {
                 return;
             }
-            $this->statuses = $this->config->getSegment(ConfigSegment::SEGMENT_KEY) ?: [];
+            $this->statuses = $this->config->getConfigData(CacheConfig::CACHE_KEY) ?: [];
         }
     }
 }

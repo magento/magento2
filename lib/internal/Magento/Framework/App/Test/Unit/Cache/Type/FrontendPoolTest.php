@@ -44,13 +44,13 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string|null $fixtureSegment
+     * @param string|null $fixtureconfigData
      * @param string $inputCacheType
      * @param string $expectedFrontendId
      *
      * @dataProvider getDataProvider
      */
-    public function testGet($fixtureSegment, $inputCacheType, $expectedFrontendId)
+    public function testGet($fixtureconfigData, $inputCacheType, $expectedFrontendId)
     {
         $this->reader->expects(
             $this->once()
@@ -59,7 +59,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
         )->with(
                 ConfigOptionsList::KEY_CACHE
         )->will(
-            $this->returnValue($fixtureSegment)
+            $this->returnValue($fixtureconfigData)
         );
 
         $cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
@@ -92,17 +92,17 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 
     public function getDataProvider()
     {
-        $segment1 = [
+        $configData1 = [
             'frontend' => [],
             'type' => ['fixture_cache_type' => ['frontend' => 'configured_frontend_id']],
         ];
-        $segment2 = ['frontend' => [], 'type' => ['fixture_cache_type' => ['frontend' => null]]];
-        $segment3 = ['frontend' => [], 'type' => ['unknown_cache_type' => ['frontend' => null]]];
+        $configData2 = ['frontend' => [], 'type' => ['fixture_cache_type' => ['frontend' => null]]];
+        $configData3 = ['frontend' => [], 'type' => ['unknown_cache_type' => ['frontend' => null]]];
         return [
-            'retrieval from config' => [$segment1, 'fixture_cache_type', 'configured_frontend_id'],
-            'retrieval from map' => [$segment2, 'fixture_cache_type', 'fixture_frontend_id'],
+            'retrieval from config' => [$configData1, 'fixture_cache_type', 'configured_frontend_id'],
+            'retrieval from map' => [$configData2, 'fixture_cache_type', 'fixture_frontend_id'],
             'fallback to default id' => [
-                $segment3,
+                $configData3,
                 'unknown_cache_type',
                 \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID,
             ]
