@@ -7,30 +7,31 @@
  */
 namespace Magento\Framework;
 
+use Zend\Stdlib\JsonSerializable;
 use Magento\Framework\Phrase\RendererInterface;
 
-class Phrase
+class Phrase implements JsonSerializable
 {
     /**
      * Default phrase renderer. Allows stacking renderers that "don't know about each other"
      *
      * @var RendererInterface
      */
-    private static $_renderer;
+    private static $renderer;
 
     /**
      * String for rendering
      *
      * @var string
      */
-    private $_text;
+    private $text;
 
     /**
      * Arguments for placeholder values
      *
      * @var array
      */
-    private $_arguments;
+    private $arguments;
 
     /**
      * Set default Phrase renderer
@@ -40,7 +41,7 @@ class Phrase
      */
     public static function setRenderer(RendererInterface $renderer)
     {
-        self::$_renderer = $renderer;
+        self::$renderer = $renderer;
     }
 
     /**
@@ -50,7 +51,7 @@ class Phrase
      */
     public static function getRenderer()
     {
-        return self::$_renderer;
+        return self::$renderer;
     }
 
     /**
@@ -61,8 +62,28 @@ class Phrase
      */
     public function __construct($text, array $arguments = [])
     {
-        $this->_text = (string)$text;
-        $this->_arguments = $arguments;
+        $this->text = (string)$text;
+        $this->arguments = $arguments;
+    }
+
+    /**
+     * Get phrase base text
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Get phrase message arguments
+     *
+     * @return array
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
     }
 
     /**
@@ -72,7 +93,7 @@ class Phrase
      */
     public function render()
     {
-        return self::$_renderer ? self::$_renderer->render([$this->_text], $this->_arguments) : $this->_text;
+        return self::$renderer ? self::$renderer->render([$this->text], $this->arguments) : $this->text;
     }
 
     /**
@@ -81,6 +102,16 @@ class Phrase
      * @return string
      */
     public function __toString()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @return string
+     */
+    public function jsonSerialize()
     {
         return $this->render();
     }

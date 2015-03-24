@@ -41,7 +41,7 @@ class Region extends \Magento\Framework\Model\AbstractModel
     public function getName()
     {
         $name = $this->getData('name');
-        if (is_null($name)) {
+        if ($name === null) {
             $name = $this->getData('default_name');
         }
         return $name;

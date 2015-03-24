@@ -18,7 +18,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
     protected $faviconFile;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -28,7 +28,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $fileStorageDatabase;
 
@@ -38,15 +38,15 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
     protected $mediaDirectory;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->storeManager = $storeManager;
@@ -79,16 +79,16 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
      */
     protected function prepareFaviconFile()
     {
-        $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
+        $folderName = \Magento\Config\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $scopeConfig = $this->scopeConfig->getValue(
             'design/head/shortcut_icon',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $path = $folderName . '/' . $scopeConfig;
         $faviconUrl = $this->storeManager->getStore()
                 ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $path;
 
-        if (!is_null($scopeConfig) && $this->checkIsFile($path)) {
+        if ($scopeConfig !== null && $this->checkIsFile($path)) {
             return $faviconUrl;
         }
 

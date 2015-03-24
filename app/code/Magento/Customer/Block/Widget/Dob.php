@@ -118,7 +118,7 @@ class Dob extends AbstractWidget
     /**
      * Return label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getLabel()
     {
@@ -138,7 +138,7 @@ class Dob extends AbstractWidget
             'class' => $this->getHtmlClass(),
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
-            'image' => $this->getViewFileUrl('Magento_Core::calendar.png'),
+            'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
         ]);
         return $this->dateElement->getHtml();
     }
@@ -160,7 +160,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT);
+        return $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
     }
 
     /**
@@ -206,13 +206,13 @@ class Dob extends AbstractWidget
     public function getMinDateRange()
     {
         $dob = $this->_getAttribute('dob');
-        if (!is_null($dob)) {
+        if ($dob !== null) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
             $minDateValue = ArrayObjectSearch::getArrayElementByName(
                 $rules,
                 self::MIN_DATE_RANGE_KEY
             );
-            if (!is_null($minDateValue)) {
+            if ($minDateValue !== null) {
                 return date("Y/m/d", $minDateValue);
             }
         }
@@ -227,13 +227,13 @@ class Dob extends AbstractWidget
     public function getMaxDateRange()
     {
         $dob = $this->_getAttribute('dob');
-        if (!is_null($dob)) {
+        if ($dob !== null) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
             $maxDateValue = ArrayObjectSearch::getArrayElementByName(
                 $rules,
                 self::MAX_DATE_RANGE_KEY
             );
-            if (!is_null($maxDateValue)) {
+            if ($maxDateValue !== null) {
                 return date("Y/m/d", $maxDateValue);
             }
         }

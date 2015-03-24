@@ -10,7 +10,7 @@ namespace Magento\Customer\Controller\Ajax;
 /**
  * Logout controller
  *
- * @method \Zend_Controller_Request_Http getRequest()
+ * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
 class Logout extends \Magento\Framework\App\Action\Action
@@ -21,7 +21,7 @@ class Logout extends \Magento\Framework\App\Action\Action
     protected $session;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -30,12 +30,12 @@ class Logout extends \Magento\Framework\App\Action\Action
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;
@@ -45,7 +45,7 @@ class Logout extends \Magento\Framework\App\Action\Action
     /**
      * Customer logout action
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -54,7 +54,7 @@ class Logout extends \Magento\Framework\App\Action\Action
             ->setBeforeAuthUrl($this->_redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['message' => 'Logout Successful']);
     }

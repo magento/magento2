@@ -20,15 +20,23 @@ class InterceptionCache implements OperationInterface
     private $configInterface;
 
     /**
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Interceptions
+     */
+    private $interceptionsInstancesNamesList;
+
+    /**
      * @param \Magento\Framework\Interception\Config\Config $configInterface
+     * @param \Magento\Tools\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
-        $data = []
+        \Magento\Tools\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList,
+        array $data = []
     ) {
-        $this->data = $data;
         $this->configInterface = $configInterface;
+        $this->interceptionsInstancesNamesList = $interceptionsInstancesNamesList;
+        $this->data = $data;
     }
 
     /**
@@ -42,24 +50,11 @@ class InterceptionCache implements OperationInterface
             return;
         }
 
-        $logWriter = new \Magento\Tools\Di\Compiler\Log\Writer\Quiet();
-        $errorWriter = new \Magento\Tools\Di\Compiler\Log\Writer\Console();
-
-        $log = new \Magento\Tools\Di\Compiler\Log\Log($logWriter, $errorWriter);
-
-        $validator = new \Magento\Framework\Code\Validator();
-        $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
-        $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
-
-        $directoryCompiler = new \Magento\Tools\Di\Compiler\Directory($log, $validator);
+        $definitions = [];
         foreach ($this->data as $path) {
-            if (is_readable($path)) {
-                $directoryCompiler->compile($path);
-            }
+            $definitions = array_merge($definitions, $this->interceptionsInstancesNamesList->getList($path));
         }
 
-        list($definitions, ) = $directoryCompiler->getResult();
-
-        $this->configInterface->initialize(array_keys($definitions));
+        $this->configInterface->initialize($definitions);
     }
 }

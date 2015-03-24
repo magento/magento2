@@ -100,26 +100,18 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_dashboardData = null;
 
     /**
-     * @var \Magento\Framework\Locale\ListsInterface
-     */
-    protected $_localeLists = null;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
-        \Magento\Framework\Locale\ListsInterface $localeLists,
         array $data = []
     ) {
         $this->_dashboardData = $dashboardData;
-        $this->_localeLists = $localeLists;
         parent::__construct($context, $collectionFactory, $data);
     }
 
@@ -210,9 +202,11 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $timezoneLocal = $this->_scopeConfig->getValue(
             $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
+        /** @var \DateTime $dateStart */
+        /** @var \DateTime $dateEnd */
         list($dateStart, $dateEnd) = $this->_collectionFactory->create()->getDateRange(
             $this->getDataHelper()->getParam('period'),
             '',
@@ -220,27 +214,27 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             true
         );
 
-        $dateStart->setTimezone($timezoneLocal);
-        $dateEnd->setTimezone($timezoneLocal);
+        $dateStart->setTimezone(new \DateTimeZone($timezoneLocal));
+        $dateEnd->setTimezone(new \DateTimeZone($timezoneLocal));
 
         $dates = [];
         $datas = [];
 
-        while ($dateStart->compare($dateEnd) < 0) {
+        while ($dateStart < $dateEnd) {
             switch ($this->getDataHelper()->getParam('period')) {
                 case '7d':
                 case '1m':
-                    $d = $dateStart->toString('yyyy-MM-dd');
-                    $dateStart->addDay(1);
+                    $d = $dateStart->format('Y-m-d');
+                    $dateStart->modify('+1 day');
                     break;
                 case '1y':
                 case '2y':
-                    $d = $dateStart->toString('yyyy-MM');
-                    $dateStart->addMonth(1);
+                    $d = $dateStart->format('Y-m');
+                    $dateStart->modify('+1 month');
                     break;
                 default:
-                    $d = $dateStart->toString('yyyy-MM-dd HH:00');
-                    $dateStart->addHour(1);
+                    $d = $dateStart->format('Y-m-d H:00');
+                    $dateStart->modify('+1 hour');
             }
             foreach ($this->getAllSeries() as $index => $serie) {
                 if (in_array($d, $this->_axisLabels['x'])) {
@@ -393,26 +387,22 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                      */
                     foreach ($this->_axisLabels[$idx] as $_index => $_label) {
                         if ($_label != '') {
+                            $period = new \DateTime($_label);
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h':
-                                    $this->_axisLabels[$idx][$_index] = $this->formatTime(
-                                        new \Magento\Framework\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd HH:00'),
-                                        'short',
-                                        false
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                                        $period->setTime($period->format('H'), 0, 0),
+                                        \IntlDateFormatter::NONE,
+                                        \IntlDateFormatter::SHORT
                                     );
                                     break;
                                 case '7d':
                                 case '1m':
-                                    $this->_axisLabels[$idx][$_index] = $this->formatDate(
-                                        new \Magento\Framework\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd')
-                                    );
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime($period);
                                     break;
                                 case '1y':
                                 case '2y':
-                                    $formats = $this->_localeLists->getTranslationList('datetime');
-                                    $format = isset($formats['yyMM']) ? $formats['yyMM'] : 'MM/yyyy';
-                                    $format = str_replace(["yyyy", "yy", "MM"], ["Y", "y", "m"], $format);
-                                    $this->_axisLabels[$idx][$_index] = date($format, strtotime($_label));
+                                    $this->_axisLabels[$idx][$_index] = date('m/Y', strtotime($_label));
                                     break;
                             }
                         } else {
@@ -555,7 +545,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     protected function _prepareData()
     {
-        if (!is_null($this->_dataHelper)) {
+        if ($this->_dataHelper !== null) {
             $availablePeriods = array_keys($this->_dashboardData->getDatePeriods());
             $period = $this->getRequest()->getParam('period');
             $this->getDataHelper()->setParam(

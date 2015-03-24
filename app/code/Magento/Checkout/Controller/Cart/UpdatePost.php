@@ -20,8 +20,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
     {
         try {
             $this->cart->truncate()->save();
-            $this->_checkoutSession->setCartWasUpdated(true);
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->messageManager->addError($exception->getMessage());
         } catch (\Exception $exception) {
             $this->messageManager->addException($exception, __('We cannot update the shopping cart.'));
@@ -39,7 +38,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
             $cartData = $this->getRequest()->getParam('cart');
             if (is_array($cartData)) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode()]
+                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
                 );
                 foreach ($cartData as $index => $data) {
                     if (isset($data['qty'])) {
@@ -53,8 +52,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
                 $cartData = $this->cart->suggestItemsQty($cartData);
                 $this->cart->updateItems($cartData)->save();
             }
-            $this->_checkoutSession->setCartWasUpdated(true);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError(
                 $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
             );
@@ -67,13 +65,12 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
     /**
      * Update shopping cart data action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
         $updateAction = (string)$this->getRequest()->getParam('update_cart_action');
@@ -89,6 +86,6 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
                 $this->_updateShoppingCart();
         }
 
-        $this->_goBack();
+        return $this->_goBack();
     }
 }

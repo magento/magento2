@@ -62,23 +62,23 @@ class Date extends AbstractData
             'date_range_max'
         );
 
-        if (!is_null($minDateValue) && strtotime($value) < $minDateValue
-            || !is_null($maxDateValue) && strtotime($value) > $maxDateValue
+        if ($minDateValue !== null && strtotime($value) < $minDateValue
+            || $maxDateValue !== null && strtotime($value) > $maxDateValue
         ) {
-            if (!is_null($minDateValue) && !is_null($maxDateValue)) {
+            if ($minDateValue !== null && $maxDateValue !== null) {
                 $errors[] = __(
                     'Please enter a valid date between %1 and %2 at %3.',
                     date('d/m/Y', $minDateValue),
                     date('d/m/Y', $maxDateValue),
                     $label
                 );
-            } elseif (!is_null($minDateValue)) {
+            } elseif ($minDateValue !== null) {
                 $errors[] = __(
                     'Please enter a valid date equal to or greater than %1 at %2.',
                     date('d/m/Y', $minDateValue),
                     $label
                 );
-            } elseif (!is_null($maxDateValue)) {
+            } elseif ($maxDateValue !== null) {
                 $errors[] = __(
                     'Please enter a valid date less than or equal to %1 at %2.',
                     date('d/m/Y', $maxDateValue),
@@ -127,13 +127,13 @@ class Date extends AbstractData
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT:
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_HTML:
                 case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_PDF:
-                    $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+                    $this->_dateFilterFormat(\IntlDateFormatter::MEDIUM);
                     break;
             }
             $value = $this->_applyOutputFilter($value);
         }
 
-        $this->_dateFilterFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $this->_dateFilterFormat(\IntlDateFormatter::SHORT);
 
         return $value;
     }

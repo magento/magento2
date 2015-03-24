@@ -1,21 +1,13 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="admin/order_shipment/new" module="Magento_Shipping">
-    <blocks>
-        <shipItemsBlock>
-            <class>Magento\Shipping\Test\Block\Adminhtml\Create\Items</class>
-            <locator>#ship_items_container</locator>
-            <strategy>css selector</strategy>
-        </shipItemsBlock>
-        <formBlock>
-            <class>Magento\Shipping\Test\Block\Adminhtml\Form</class>
-            <locator>#edit_form</locator>
-            <strategy>css selector</strategy>
-        </formBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="OrderShipmentNew" area="Adminhtml" mca="admin/order_shipment/new" module="Magento_Shipping">
+    <block name="shipItemsBlock" class="Magento\Shipping\Test\Block\Adminhtml\Create\Items" locator="#ship_items_container" strategy="css selector"/>
+    <block name="formBlock" class="Magento\Shipping\Test\Block\Adminhtml\Form" locator="#edit_form" strategy="css selector"/>
+  </page>
+</config>

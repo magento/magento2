@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeIsConfigurable extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert check whether the attribute is used to create a configurable products.
      *
@@ -35,7 +31,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         CatalogProductNew $newProductPage,
         CatalogProductAttribute $productAttribute = null
     ) {
-        $attributeSearch = is_null($productAttribute) ? $attribute : $productAttribute;
+        $attributeSearch = $productAttribute === null ? $attribute : $productAttribute;
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('configurable');
         $productBlockForm = $newProductPage->getProductForm();

@@ -98,7 +98,7 @@ class Sales extends \Magento\Backend\Block\Template
         $this->_currency = $this->_currencyFactory->create()->load(
             $this->_scopeConfig->getValue(
                 Currency::XML_PATH_CURRENCY_BASE,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
 
@@ -112,7 +112,7 @@ class Sales extends \Magento\Backend\Block\Template
         $this->_groupedCollection = [];
 
         foreach ($this->_collection as $sale) {
-            if (!is_null($sale->getStoreId())) {
+            if ($sale->getStoreId() !== null) {
                 $store = $this->_storeManager->getStore($sale->getStoreId());
                 $websiteId = $store->getWebsiteId();
                 $groupId = $store->getGroupId();

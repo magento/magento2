@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Core\Test\Repository\ConfigData">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="disable_shipping_all">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
@@ -14,9 +14,9 @@
         <dataset name="dhl_eu">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://xmlpitest-ea.dhl.com/XMLShippingServlet</field>
-            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_id_eu%</field>
-            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_password_eu%</field>
-            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">%carriers_dhl_account_eu%</field>
+            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_ID</field>
+            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_PASSWORD</field>
+            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_DHL_ACCOUNT</field>
             <field path="carriers/dhl/showmethod" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
@@ -38,5 +38,5 @@
         <dataset name="dhl_us_rollback">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

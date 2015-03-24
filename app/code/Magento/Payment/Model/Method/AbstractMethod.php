@@ -222,8 +222,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -233,8 +233,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -244,8 +244,8 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -458,12 +458,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * Retrieve payment method code
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCode()
     {
         if (empty($this->_code)) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot retrieve the payment method code.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment method code.'));
         }
         return $this->_code;
     }
@@ -492,13 +492,13 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * Retrieve payment information model object
      *
      * @return \Magento\Payment\Model\Info
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getInfoInstance()
     {
         $instance = $this->getData('info_instance');
         if (!$instance instanceof \Magento\Payment\Model\Info) {
-            throw new \Magento\Framework\Model\Exception(__('We cannot retrieve the payment information object instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment information object instance.'));
         }
         return $instance;
     }
@@ -507,7 +507,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * Validate payment method information object
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validate()
     {
@@ -521,7 +521,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             $billingCountry = $paymentInfo->getQuote()->getBillingAddress()->getCountryId();
         }
         if (!$this->canUseForCountry($billingCountry)) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('You can\'t use the payment type you selected to make payments to the billing country.')
             );
         }
@@ -535,13 +535,13 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param float $amount
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function order(\Magento\Framework\Object $payment, $amount)
     {
         if (!$this->canOrder()) {
-            throw new \Magento\Framework\Model\Exception(__('The order action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The order action is not available.'));
         }
         return $this;
     }
@@ -553,13 +553,13 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param float $amount
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function authorize(\Magento\Framework\Object $payment, $amount)
     {
         if (!$this->canAuthorize()) {
-            throw new \Magento\Framework\Model\Exception(__('The authorize action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The authorize action is not available.'));
         }
         return $this;
     }
@@ -571,13 +571,13 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param float $amount
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function capture(\Magento\Framework\Object $payment, $amount)
     {
         if (!$this->canCapture()) {
-            throw new \Magento\Framework\Model\Exception(__('The capture action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The capture action is not available.'));
         }
 
         return $this;
@@ -619,13 +619,13 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Framework\Object $payment
      * @param float $amount
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function refund(\Magento\Framework\Object $payment, $amount)
     {
         if (!$this->canRefund()) {
-            throw new \Magento\Framework\Model\Exception(__('The refund action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The refund action is not available.'));
         }
         return $this;
     }
@@ -660,12 +660,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param \Magento\Framework\Object $payment
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function void(\Magento\Framework\Object $payment)
     {
         if (!$this->canVoid($payment)) {
-            throw new \Magento\Framework\Model\Exception(__('Void action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Void action is not available.'));
         }
         return $this;
     }
@@ -687,12 +687,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return false
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function acceptPayment(\Magento\Payment\Model\Info $payment)
     {
         if (!$this->canReviewPayment($payment)) {
-            throw new \Magento\Framework\Model\Exception(__('The payment review action is unavailable.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The payment review action is unavailable.'));
         }
         return false;
     }
@@ -702,12 +702,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return false
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function denyPayment(\Magento\Payment\Model\Info $payment)
     {
         if (!$this->canReviewPayment($payment)) {
-            throw new \Magento\Framework\Model\Exception(__('The payment review action is unavailable.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The payment review action is unavailable.'));
         }
         return false;
     }
@@ -736,7 +736,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             $storeId = $this->getStore();
         }
         $path = 'payment/' . $this->getCode() . '/' . $field;
-        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**
@@ -847,5 +847,26 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function debugData($debugData)
     {
         $this->_debug($debugData);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\PaymentMethodExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\PaymentMethodExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\PaymentMethodExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

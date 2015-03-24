@@ -44,7 +44,7 @@ class Main extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getHeader()
     {

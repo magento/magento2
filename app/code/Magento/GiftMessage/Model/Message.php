@@ -5,17 +5,13 @@
  */
 namespace Magento\GiftMessage\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Gift Message model
  *
  * @method \Magento\GiftMessage\Model\Resource\Message _getResource()
  * @method \Magento\GiftMessage\Model\Resource\Message getResource()
- * @method \Magento\GiftMessage\Model\Message setCustomerId(int $value)
- * @method \Magento\GiftMessage\Model\Message setSender(string $value)
- * @method \Magento\GiftMessage\Model\Message setRecipient(string $value)
- * @method \Magento\GiftMessage\Model\Message setMessage(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -30,8 +26,8 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param Resource\Message $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param TypeFactory $typeFactory
@@ -40,8 +36,8 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\GiftMessage\Model\Resource\Message $resource,
         \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
@@ -51,8 +47,8 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -79,7 +75,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * Checks thats gift message is empty
+     * Checks if the gift message is empty
      *
      * @return bool
      */
@@ -88,13 +84,21 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         return trim($this->getMessage()) == '';
     }
 
+    //@codeCoverageIgnoreStart
     /**
-     * @codeCoverageIgnoreStart
      * {@inheritdoc}
      */
     public function getGiftMessageId()
     {
-        return $this->getData('gift_message_id');
+        return $this->getData(self::GIFT_MESSAGE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGiftMessageId($id)
+    {
+        return $this->setData(self::GIFT_MESSAGE_ID, $id);
     }
 
     /**
@@ -102,7 +106,15 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getCustomerId()
     {
-        return $this->getData('customer_id');
+        return $this->getData(self::CUSTOMER_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerId($id)
+    {
+        return $this->setData(self::CUSTOMER_ID, $id);
     }
 
     /**
@@ -110,7 +122,15 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getSender()
     {
-        return $this->getData('sender');
+        return $this->getData(self::SENDER);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSender($sender)
+    {
+        return $this->setData(self::SENDER, $sender);
     }
 
     /**
@@ -118,7 +138,15 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getRecipient()
     {
-        return $this->getData('recipient');
+        return $this->getData(self::RECIPIENT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRecipient($recipient)
+    {
+        return $this->setData(self::RECIPIENT, $recipient);
     }
 
     /**
@@ -126,7 +154,36 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function getMessage()
     {
-        return $this->getData('message');
+        return $this->getData(self::MESSAGE);
     }
-    ////@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMessage($message)
+    {
+        return $this->setData(self::MESSAGE, $message);
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\GiftMessage\Api\Data\MessageExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

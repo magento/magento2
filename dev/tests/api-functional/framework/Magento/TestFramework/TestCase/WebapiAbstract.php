@@ -159,15 +159,21 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @param array $arguments
      * @param string|null $webApiAdapterCode
      * @param string|null $storeCode
+     * @param \Magento\Integration\Model\Integration|null $integration
      * @return array|int|string|float|bool Web API call results
      */
-    protected function _webApiCall($serviceInfo, $arguments = [], $webApiAdapterCode = null, $storeCode = null)
-    {
-        if (is_null($webApiAdapterCode)) {
+    protected function _webApiCall(
+        $serviceInfo,
+        $arguments = [],
+        $webApiAdapterCode = null,
+        $storeCode = null,
+        $integration = null
+    ) {
+        if ($webApiAdapterCode === null) {
             /** Default adapter code is defined in PHPUnit configuration */
             $webApiAdapterCode = strtolower(TESTS_WEB_API_ADAPTER);
         }
-        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode);
+        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode, $integration);
     }
 
     /**
@@ -295,7 +301,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      */
     protected static function _setFixtureNamespace()
     {
-        if (!is_null(self::$_fixturesNamespace)) {
+        if (self::$_fixturesNamespace !== null) {
             throw new \RuntimeException('Fixture namespace is already set.');
         }
         self::$_fixturesNamespace = uniqid();
@@ -320,7 +326,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
     protected static function _getFixtureNamespace()
     {
         $fixtureNamespace = self::$_fixturesNamespace;
-        if (is_null($fixtureNamespace)) {
+        if ($fixtureNamespace === null) {
             throw new \RuntimeException('Fixture namespace must be set.');
         }
         return $fixtureNamespace;
@@ -472,8 +478,8 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         }
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $config \Magento\Backend\Model\Config */
-        $config = $objectManager->create('Magento\Backend\Model\Config');
+        /** @var $config \Magento\Config\Model\Config */
+        $config = $objectManager->create('Magento\Config\Model\Config');
         $data[$group]['fields'][$node]['value'] = $value;
         $config->setSection($section)->setGroups($data)->save();
 
@@ -490,7 +496,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         if ($cleanAppCache) {
             if ($updateLocalConfig) {
                 $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-                $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->reinitStores();
+                $objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
             }
 
             if (!$this->_cleanAppConfigCache()) {

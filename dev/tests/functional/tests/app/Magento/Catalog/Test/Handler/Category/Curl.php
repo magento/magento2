@@ -8,19 +8,18 @@ namespace Magento\Catalog\Test\Handler\Category;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Create new category via curl
+ * Create new category via curl.
  */
 class Curl extends AbstractCurl implements CategoryInterface
 {
     /**
-     * Data use config for category
+     * Data use config for category.
      *
      * @var array
      */
@@ -56,26 +55,17 @@ class Curl extends AbstractCurl implements CategoryInterface
     ];
 
     /**
-     * Post request for creating Subcategory
+     * Post request for creating Subcategory.
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return array
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $data['general'] = $this->replaceMappingData($fixture->getData());
-        if ($fixture->hasData('landing_page')) {
-            $data['general']['landing_page'] = $this->getBlockId($fixture->getLandingPage());
-        }
+        $data = $this->prepareData($fixture);
 
-        $diff = array_diff($this->dataUseConfig, array_keys($data['general']));
-        if (!empty($diff)) {
-            $data['use_config'] = $diff;
-        }
-        $parentCategoryId = $data['general']['parent_id'];
-
-        $url = $_ENV['app_backend_url'] . 'catalog/category/save/store/0/parent/' . $parentCategoryId . '/';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $url = $_ENV['app_backend_url'] . 'catalog/category/save/store/0/parent/' . $data['general']['parent_id'] . '/';
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
@@ -87,15 +77,37 @@ class Curl extends AbstractCurl implements CategoryInterface
     }
 
     /**
-     * Getting block id by name
+     * Prepare category data for curl.
+     *
+     * @param FixtureInterface $fixture
+     * @return array
+     */
+    protected function prepareData(FixtureInterface $fixture)
+    {
+        $data['general'] = $this->replaceMappingData($fixture->getData());
+        $data['is_anchor'] = isset($data['is_anchor']) ? $data['is_anchor'] : 0;
+        if ($fixture->hasData('landing_page')) {
+            $data['general']['landing_page'] = $this->getBlockId($fixture->getLandingPage());
+        }
+
+        $diff = array_diff($this->dataUseConfig, array_keys($data['general']));
+        if (!empty($diff)) {
+            $data['use_config'] = $diff;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Getting block id by name.
      *
      * @param string $landingName
      * @return int|null
      */
-    public function getBlockId($landingName)
+    protected function getBlockId($landingName)
     {
         $url = $_ENV['app_backend_url'] . 'catalog/category';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], []);
         $response = $curl->read();
         $curl->close();

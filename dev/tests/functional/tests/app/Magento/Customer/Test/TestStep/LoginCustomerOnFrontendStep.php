@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\TestStep;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -19,7 +19,7 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
     /**
      * Customer fixture.
      *
-     * @var CustomerInjectable
+     * @var Customer
      */
     protected $customer;
 
@@ -41,12 +41,12 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
      * @constructor
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountLogin $customerAccountLogin
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      */
     public function __construct(
         CmsIndex $cmsIndex,
         CustomerAccountLogin $customerAccountLogin,
-        CustomerInjectable $customer
+        Customer $customer
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->customerAccountLogin = $customerAccountLogin;
@@ -61,7 +61,7 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
     public function run()
     {
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->waitWelcomeMessage();
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
             $this->cmsIndex->getLinksBlock()->openLink("Log Out");
             $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');

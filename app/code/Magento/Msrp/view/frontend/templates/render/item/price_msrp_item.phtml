@@ -16,8 +16,8 @@
  */
 ?>
 <?php
-    /** @var $_coreHelper \Magento\Core\Helper\Data */
-    $_coreHelper = $this->helper('Magento\Core\Helper\Data');
+    /** @var $pricingHelper \Magento\Framework\Pricing\Helper\Data */
+    $pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
     /** @var $_catalogHelper \Magento\Catalog\Helper\Data */
     $_catalogHelper = $this->helper('Magento\Catalog\Helper\Data');
 
@@ -28,8 +28,8 @@
 ?>
 <div class="price-box msrp">
     <?php if ($_product->getMsrp()): ?>
-        <?php $_msrpPrice = $_coreHelper->currency($_product->getMsrp(), true, false) ?>
-        <span class="old-price" ><?php echo $_msrpPrice ?></span>
+        <?php $_msrpPrice = $pricingHelper->currency($_product->getMsrp(), true, false) ?>
+        <span class="old-price"><?php echo $_msrpPrice ?></span>
     <?php endif; ?>
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
         <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
@@ -46,7 +46,7 @@
                                          "cartForm": "#wishlist-view-form"}}'><?php echo __('Click for price') ?>
         </a>
     <?php else: ?>
-        <span class="msrp message">
+        <span class="msrp-message">
             <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
         </span>
     <?php endif; ?>

@@ -6,7 +6,6 @@
  */
 namespace Magento\ConfigurableProduct\Api;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
@@ -23,7 +22,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

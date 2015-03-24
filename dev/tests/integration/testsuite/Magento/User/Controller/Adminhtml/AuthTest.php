@@ -19,7 +19,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
     public function testFormForgotpasswordAction()
     {
         $this->dispatch('backend/admin/auth/forgotpassword');
-        $expected = 'Forgot your user name or password?';
+        $expected = 'Password Help';
         $this->assertContains($expected, $this->getResponse()->getBody());
     }
 
@@ -30,7 +30,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
      */
     public function testForgotpasswordAction()
     {
-        $this->getRequest()->setPost('email', 'test@test.com');
+        $this->getRequest()->setPostValue('email', 'test@test.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertRedirect(
             $this->equalTo(
@@ -63,7 +63,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $user->changeResetPasswordLinkToken($resetPasswordToken);
         $user->save();
 
-        $this->getRequest()->setQuery('token', $resetPasswordToken)->setQuery('id', $user->getId());
+        $this->getRequest()->setQueryValue('token', $resetPasswordToken)->setQueryValue('id', $user->getId());
         $this->dispatch('backend/admin/auth/resetpassword');
 
         $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
@@ -78,7 +78,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
      */
     public function testResetPasswordActionWithDummyToken()
     {
-        $this->getRequest()->setQuery('token', 'dummy')->setQuery('id', 1);
+        $this->getRequest()->setQueryValue('token', 'dummy')->setQueryValue('id', 1);
         $this->dispatch('backend/admin/auth/resetpassword');
         $this->assertSessionMessages(
             $this->equalTo(['Your password reset link has expired.']),
@@ -110,16 +110,16 @@ class AuthTest extends \Magento\Backend\Utility\Controller
         $user->save();
         $oldPassword = $user->getPassword();
 
-        $this->getRequest()->setQuery(
+        $this->getRequest()->setQueryValue(
             'token',
             $resetPasswordToken
-        )->setQuery(
+        )->setQueryValue(
             'id',
             $user->getId()
-        )->setPost(
+        )->setPostValue(
             'password',
             $password
-        )->setPost(
+        )->setPostValue(
             'confirmation',
             $passwordConfirmation
         );
@@ -168,7 +168,7 @@ class AuthTest extends \Magento\Backend\Utility\Controller
      */
     public function testResetPasswordPostActionWithDummyToken()
     {
-        $this->getRequest()->setQuery('token', 'dummy')->setQuery('id', 1);
+        $this->getRequest()->setQueryValue('token', 'dummy')->setQueryValue('id', 1);
         $this->dispatch('backend/admin/auth/resetpasswordpost');
         $this->assertSessionMessages(
             $this->equalTo(['Your password reset link has expired.']),
@@ -206,16 +206,16 @@ class AuthTest extends \Magento\Backend\Utility\Controller
 
         $newDummyPassword = 'new_dummy_password2';
 
-        $this->getRequest()->setQuery(
+        $this->getRequest()->setQueryValue(
             'token',
             $resetPasswordToken
-        )->setQuery(
+        )->setQueryValue(
             'id',
             $user->getId()
-        )->setPost(
+        )->setPostValue(
             'password',
             $newDummyPassword
-        )->setPost(
+        )->setPostValue(
             'confirmation',
             'invalid'
         );

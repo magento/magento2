@@ -6,7 +6,6 @@
 namespace Magento\Eav\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class AttributeSetRepositoryTest extends WebapiAbstract
 {
@@ -22,7 +21,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets/' . $attributeSetId,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',
@@ -51,7 +50,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets/' . $attributeSetId,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',
@@ -74,8 +73,8 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $attributeSet = $this->getAttributeSetByName($attributeSetName);
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/eav/attribute-sets',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'resourcePath' => '/V1/eav/attribute-sets/' . $attributeSet->getId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',
@@ -118,7 +117,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets/' . $attributeSetId,
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',
@@ -151,7 +150,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets/' . $defaultAttributeSetId,
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',
@@ -176,7 +175,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets/' . $attributeSetId,
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',
@@ -217,7 +216,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/eav/attribute-sets/list' . '?' . http_build_query($searchCriteria),
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',

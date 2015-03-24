@@ -15,26 +15,16 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     const VALUE_NO = 0;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * @var \Magento\Eav\Model\Resource\Entity\AttributeFactory
      */
     protected $_eavAttrEntity;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Resource\Entity\AttributeFactory $eavAttrEntity
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\AttributeFactory $eavAttrEntity
     ) {
-        $this->_coreData = $coreData;
         $this->_eavAttrEntity = $eavAttrEntity;
     }
 
@@ -45,7 +35,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = [
                 ['label' => __('Yes'), 'value' => self::VALUE_YES],
                 ['label' => __('No'), 'value' => self::VALUE_NO],

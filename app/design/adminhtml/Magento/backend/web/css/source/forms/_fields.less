@@ -1,0 +1,267 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@field-divider__background-color: @color-lighter-grayish;
+@field-label__color: @color-very-dark-gray-black;
+@field-label__disabled__color: @color-gray65-almost;
+@field-label__font-size: @font-size__base;
+@field-label__line-height: @line-height__s;
+@field-label__required__color: @color-phoenix;
+@field-note__color: @color-very-dark-gray-black;
+@field-note__font-size: @font-size__s;
+@field-scope__color: @color-dark-gray;
+
+@field-error-control__border-color: @color-tomato-brick;
+@field-error-message__background-color: @color-lazy-sun;
+@field-error-message__border-color: @color-apricot;
+@field-error-message__color: @color-very-dark-gray2;
+
+//
+//  Form Fields
+//  _____________________________________________
+
+// Fieldset
+.admin__fieldset {
+    border: 0;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+
+    > .admin__field {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        #mix-grid .row();
+
+        > .admin__field-control {
+            #mix-grid .column(4,9);
+        }
+
+        > .admin__field-label {
+            #mix-grid .column(3,9);
+        }
+    }
+}
+
+// Label
+.admin__field-label {
+    color: @field-label__color;
+    margin: 0;
+    text-align: right;
+
+    + br {
+        display: none;
+    }
+
+    [class]:not(.admin__field-option) > & {
+        font-family: @font-family__base;
+        font-size: @field-label__font-size;
+        font-weight: @font-weight__semibold;
+        line-height: 3.2rem;
+        padding: 0;
+        white-space: nowrap;
+
+        &:before {
+            content: '.';
+            margin-left: -7px;
+            overflow: hidden;
+            visibility: hidden;
+            width: 0;
+        }
+
+        span {
+            display: inline-block;
+            line-height: @field-label__line-height;
+            vertical-align: middle;
+            white-space: normal;
+        }
+    }
+
+    ._required > & {
+        span:after {
+            color: @field-label__required__color;
+            content: '*';
+            display: inline-block;
+            font-size: @font-size__l;
+            font-weight: @font-weight__heavier;
+            line-height: 1;
+            margin-left: 10px;
+            position: absolute;
+            top: 1.2rem;
+            z-index: 1;
+        }
+    }
+
+    ._disabled > & {
+        color: @field-label__disabled__color;
+    }
+}
+
+// Field
+.admin__field {
+    margin-bottom: 0;
+
+    & + & {
+        margin-top: 1.5rem;
+    }
+
+    &:not(.admin__field-option) ~ .admin__field-option {
+        margin-top: .5rem;
+    }
+
+    &.admin__field-option ~ .admin__field-option {
+        margin-top: .9rem;
+    }
+
+    & ~ .admin__field-option:last-child {
+        margin-bottom: .8rem;
+    }
+
+    .admin__fieldset > & {
+        margin-bottom: 3rem;
+        position: relative;
+        z-index: 1;
+        &:hover {
+            z-index: 2;
+        }
+    }
+
+    &[data-config-scope] {
+        &:before {
+            #mix-grid .return_length(7,9);
+            color: @field-scope__color;
+            content: attr(data-config-scope);
+            display: inline-block;
+            position: absolute;
+            left: @_length;
+            margin-left: 2 * @temp_gutter;
+
+            & {
+                #mix-grid .return_length(2,9);
+                width: @_length;
+            }
+        }
+        .admin__field-control &:nth-child(n+2):before {
+            content: '';
+        }
+    }
+
+    &._error {
+        .admin__field-control [class*='admin__addon-']:before,
+        .admin__field-control > [class*='admin__control-'] {
+            border-color: @field-error-control__border-color;
+        }
+    }
+}
+
+// Field error message
+.admin__field-error {
+    background: @field-error-message__background-color;
+    border: 1px solid @field-error-message__border-color;
+    box-sizing: border-box;
+    color: @field-error-message__color;
+    display: block;
+    font-size: @font-size__s;
+    font-weight: @font-weight__regular;
+    line-height: @line-height__s;
+    margin: .2rem 0 0;
+    padding: .8rem 1rem .9rem;
+}
+
+// Field notice message
+.admin__field-note {
+    color: @field-note__color;
+    font-size: @field-note__font-size;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+// Field containing checkbox or radio
+.admin__field-option {
+    padding-top: 8px;
+
+    .admin__field-label {
+        text-align: left;
+    }
+
+    .admin__field-control > & {
+        &:nth-child(1):nth-last-child(2),
+        &:nth-child(2):nth-last-child(1) {
+            display: inline-block;
+            + .admin__field-option {
+                display: inline-block;
+                margin-left: 41px;
+                margin-top: 0;
+            }
+            + .admin__field-option:before {
+                background: @field-divider__background-color;
+                content: '';
+                display: inline-block;
+                height: 20px;
+                margin-left: -20px;
+                position: absolute;
+                width: 1px;
+            }
+        }
+    }
+}
+
+//
+//  Field containing multiple fields
+//  _____________________________________________
+
+[class*='admin__control-grouped'],
+.admin__control-fields {
+    & > .admin__field:first-child {
+        position: static;
+        & > .admin__field-label {
+            #mix-grid .column(3, 9);
+            cursor: pointer;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+        }
+    }
+}
+
+// In rows
+.admin__control-fields {
+    .admin__field-label ~ .admin__field-control {
+        width: 100%;
+    }
+    .admin__field:nth-child(n+2):not(.admin__field-option) {
+        > .admin__field-label {
+            .extend__visually-hidden();
+        }
+    }
+}
+
+// In line
+[class*='admin__control-grouped'] {
+    box-sizing: border-box;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    & > .admin__field {
+        display: table-cell;
+        vertical-align: top;
+        width: 50%;
+        > .admin__field-control {
+            float: none;
+            width: 100%;
+        }
+        &:nth-child(n+2) {
+            padding-left: 20px;
+            &:not(.admin__field-option) .admin__field-label {
+                .visually-hidden();
+            }
+        }
+    }
+}

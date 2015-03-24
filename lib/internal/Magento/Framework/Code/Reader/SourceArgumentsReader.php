@@ -64,7 +64,8 @@ class SourceArgumentsReader
         }
         $arguments = explode(',', $arguments);
         foreach ($arguments as $key => &$argument) {
-            $argument = $this->removeDefaultValue($argument);
+            $argument = $this->removeToken($argument, '=');
+            $argument = $this->removeToken($argument, '&');
             $argument = $this->resolveNamespaces($argument, $availableNamespaces);
         }
         unset($argument);
@@ -102,11 +103,12 @@ class SourceArgumentsReader
      * Remove default value from argument.
      *
      * @param string $argument
+     * @param string $token
      * @return string
      */
-    protected function removeDefaultValue($argument)
+    protected function removeToken($argument, $token)
     {
-        $position = strpos($argument, '=');
+        $position = strpos($argument, $token);
         if (is_numeric($position)) {
             return substr($argument, 0, $position);
         }

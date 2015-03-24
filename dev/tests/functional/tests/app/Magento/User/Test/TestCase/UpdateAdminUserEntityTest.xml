@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\User\Test\TestCase\UpdateAdminUserEntityTest">
+      <variation name="UpdateAdminUserEntityTestVariation1">
+          <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+          <data name="user/data/username" xsi:type="string">NewAdminUser%isolation%</data>
+          <data name="user/data/firstname" xsi:type="string">NewFirstName%isolation%</data>
+          <data name="user/data/lastname" xsi:type="string">NewLastName%isolation%</data>
+          <data name="user/data/email" xsi:type="string">NewEmail%isolation%@example.com</data>
+          <data name="user/data/password" xsi:type="string">123123qa</data>
+          <data name="user/data/password_confirmation" xsi:type="string">123123qa</data>
+          <data name="user/data/current_password" xsi:type="string">123123q</data>
+          <data name="loginAsDefaultAdmin" xsi:type="string">0</data>
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+      </variation>
+      <variation name="UpdateAdminUserEntityTestVariation2">
+          <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+          <data name="user/data/role_id/dataSet" xsi:type="string">role::role_sales</data>
+          <data name="user/data/current_password" xsi:type="string">123123q</data>
+          <data name="loginAsDefaultAdmin" xsi:type="string">0</data>
+          <data name="restrictedAccess" xsi:type="array">
+              <item name="0" xsi:type="string">sales</item>
+          </data>
+          <data name="denyUrl" xsi:type="string">admin/user</data>
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+      </variation>
+      <variation name="UpdateAdminUserEntityTestVariation3">
+          <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+          <data name="user/data/is_active" xsi:type="string">Inactive</data>
+          <data name="user/data/current_password" xsi:type="string">123123q</data>
+          <data name="loginAsDefaultAdmin" xsi:type="string">1</data>
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserWrongCredentialsMessage" />
+      </variation>
+      <variation name="UpdateAdminUserEntityTestVariation4">
+          <data name="description" xsi:type="string">MAGETWO-12375: Use ACL Role with Full GWS Scope (without Using Secret Key to URLs)</data>
+          <data name="loginAsDefaultAdmin" xsi:type="string">1</data>
+          <data name="initialUser/dataSet" xsi:type="string">custom_admin_with_default_role</data>
+          <data name="user/data/role_id/dataSet" xsi:type="string">role::role_sales</data>
+          <data name="user/data/current_password" xsi:type="string">123123q</data>
+          <data name="restrictedAccess" xsi:type="array">
+              <item name="0" xsi:type="string">sales</item>
+          </data>
+          <data name="denyUrl" xsi:type="string">catalog/product</data>
+          <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+          <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
+          <constraint name="Magento\User\Test\Constraint\AssertUserRoleRestrictedAccess" />
+      </variation>
+  </testCase>
+</config>

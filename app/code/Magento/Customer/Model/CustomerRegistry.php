@@ -9,7 +9,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
@@ -44,7 +44,7 @@ class CustomerRegistry
     private $customerSecureRegistryById = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -53,12 +53,12 @@ class CustomerRegistry
      *
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         CustomerFactory $customerFactory,
         CustomerSecureFactory $customerSecureFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -100,7 +100,7 @@ class CustomerRegistry
      */
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
@@ -119,13 +119,15 @@ class CustomerRegistry
         if (!$customer->getEmail()) {
             // customer does not exist
             throw new NoSuchEntityException(
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                [
+                __(
+                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    [
                     'fieldName' => 'email',
-                    'fieldValue' => $customerEmail,
-                    'field2Name' => 'websiteId',
-                    'field2Value' => $websiteId,
-                ]
+                        'fieldValue' => $customerEmail,
+                        'field2Name' => 'websiteId',
+                        'field2Value' => $websiteId,
+                    ]
+                )
             );
         } else {
             $this->customerRegistryById[$customer->getId()] = $customer;
@@ -186,7 +188,7 @@ class CustomerRegistry
      */
     public function removeByEmail($customerEmail, $websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);

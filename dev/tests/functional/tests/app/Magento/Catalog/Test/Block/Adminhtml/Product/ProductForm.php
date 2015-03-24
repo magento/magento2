@@ -13,12 +13,12 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
-use Magento\Catalog\Test\Fixture\Product;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\DataFixture;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Product form on backend product page.
@@ -59,41 +59,6 @@ class ProductForm extends FormTabs
      * @var string
      */
     protected $customTab = './/*/a[contains(@id,"product_info_tabs_%s")]';
-
-    /**
-     * Button "New Category".
-     *
-     * @var string
-     */
-    protected $buttonNewCategory = '#add_category_button';
-
-    /**
-     * Dialog box "Create Category".
-     *
-     * @var string
-     */
-    protected $createCategoryDialog = './/ancestor::body//*[contains(@class,"mage-new-category-dialog")]';
-
-    /**
-     * "Parent Category" block on dialog box.
-     *
-     * @var string
-     */
-    protected $parentCategoryBlock = '//*[contains(@class,"field-new_category_parent")]';
-
-    /**
-     * Field "Category Name" on dialog box.
-     *
-     * @var string
-     */
-    protected $fieldNewCategoryName = '//input[@id="new_category_name"]';
-
-    /**
-     * Button "Create Category" on dialog box.
-     *
-     * @var string
-     */
-    protected $createCategoryButton = '//button[contains(@class,"action-create")]';
 
     /**
      * Tabs title css selector.
@@ -148,18 +113,13 @@ class ProductForm extends FormTabs
         } else {
             $tabs = $this->getFieldsByTabs($product);
 
-            if (null === $category && $product instanceof DataFixture) {
-                $categories = $product->getCategories();
-                $category = reset($categories);
-            }
             if ($category) {
                 $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
-
             $this->showAdvancedSettings();
             $this->fillTabs($tabs, $element);
 
-            if ($product instanceof InjectableFixture && $product->hasData('custom_attribute')) {
+            if ($product->hasData('custom_attribute')) {
                 $this->createCustomAttribute($product);
             }
         }
@@ -182,7 +142,7 @@ class ProductForm extends FormTabs
             /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails $tab */
             $tab = $this->openTab($tabName);
             $tab->addNewAttribute($tabName);
-            $this->fillAttributeForm($attribute);
+            $this->getAttributeForm()->fill($attribute);
         }
     }
 
@@ -227,43 +187,6 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Save new category.
-     *
-     * @param Product $fixture
-     * @return void
-     */
-    public function addNewCategory(Product $fixture)
-    {
-        $this->openTab('product-details');
-        $this->openNewCategoryDialog();
-        $this->_rootElement->find(
-            $this->createCategoryDialog . $this->fieldNewCategoryName,
-            Locator::SELECTOR_XPATH
-        )->setValue($fixture->getNewCategoryName());
-
-        $this->clearCategorySelect();
-        $this->selectParentCategory();
-
-        $buttonCreateCategory = $this->createCategoryDialog . $this->createCategoryButton;
-        $this->_rootElement->find($buttonCreateCategory, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementNotVisible($buttonCreateCategory, Locator::SELECTOR_XPATH);
-    }
-
-    /**
-     * Select parent category for new one.
-     *
-     * @return void
-     */
-    protected function selectParentCategory()
-    {
-        $this->_rootElement->find(
-            $this->createCategoryDialog . $this->parentCategoryBlock,
-            Locator::SELECTOR_XPATH,
-            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails\ParentCategoryIds'
-        )->setValue('Default Category');
-    }
-
-    /**
      * Clear category field.
      *
      * @return void
@@ -274,17 +197,6 @@ class ProductForm extends FormTabs
         if ($this->_rootElement->find($selectedCategory)->isVisible()) {
             $this->_rootElement->find($selectedCategory)->click();
         }
-    }
-
-    /**
-     * Open new category dialog.
-     *
-     * @return void
-     */
-    protected function openNewCategoryDialog()
-    {
-        $this->_rootElement->find($this->buttonNewCategory)->click();
-        $this->waitForElementVisible($this->createCategoryDialog, Locator::SELECTOR_XPATH);
     }
 
     /**
@@ -367,18 +279,6 @@ class ProductForm extends FormTabs
         }
 
         return $data;
-    }
-
-    /**
-     * Fill product attribute form.
-     *
-     * @param CatalogProductAttribute $productAttribute
-     * @return void
-     */
-    public function fillAttributeForm(CatalogProductAttribute $productAttribute)
-    {
-        $attributeForm = $this->getAttributeForm();
-        $attributeForm->fill($productAttribute);
     }
 
     /**

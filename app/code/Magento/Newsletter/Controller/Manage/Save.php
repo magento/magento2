@@ -7,17 +7,16 @@
 namespace Magento\Newsletter\Controller\Manage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
 
 class Save extends \Magento\Newsletter\Controller\Manage
 {
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $formKeyValidator;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -25,11 +24,6 @@ class Save extends \Magento\Newsletter\Controller\Manage
      * @var CustomerRepository
      */
     protected $customerRepository;
-
-    /**
-     * @var CustomerDataBuilder
-     */
-    protected $customerBuilder;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
@@ -41,25 +35,22 @@ class Save extends \Magento\Newsletter\Controller\Manage
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CustomerRepository $customerRepository
-     * @param CustomerDataBuilder $customerBuilder
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         CustomerRepository $customerRepository,
-        CustomerDataBuilder $customerBuilder,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
     ) {
         $this->storeManager = $storeManager;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerRepository = $customerRepository;
-        $this->customerBuilder = $customerBuilder;
         $this->subscriberFactory = $subscriberFactory;
         parent::__construct($context, $customerSession);
     }
@@ -76,14 +67,14 @@ class Save extends \Magento\Newsletter\Controller\Manage
         }
 
         $customerId = $this->_customerSession->getCustomerId();
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
         } else {
             try {
                 $customer = $this->customerRepository->getById($customerId);
                 $storeId = $this->storeManager->getStore()->getId();
-                $updatedCustomer = $this->customerBuilder->populate($customer)->setStoreId($storeId)->create();
-                $this->customerRepository->save($updatedCustomer);
+                $customer->setStoreId($storeId);
+                $this->customerRepository->save($customer);
                 if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
                     $this->subscriberFactory->create()->subscribeCustomerById($customerId);
                     $this->messageManager->addSuccess(__('We saved the subscription.'));

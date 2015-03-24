@@ -10,13 +10,16 @@
 
 <?php $_divId = 'tree-div_' . time() ?>
 <div id="<?php echo $_divId ?>" class="tree"></div>
-
+<!--[if IE]>
+<script id="ie-deferred-loader" defer="defer" src=""></script>
+<![endif]-->
 <script>
     require([
+        'jquery',
         "prototype",
         "extjs/ext-tree-checkbox",
         "mage/adminhtml/form"
-    ], function(){
+    ], function(jQuery){
 
 //<![CDATA[
 
@@ -69,7 +72,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
     }
 });
 
-Ext.onReady(function()
+jQuery(function()
 {
     var categoryLoader = new Ext.tree.TreeLoader({
        dataUrl: '<?php echo $block->getLoadTreeUrl() ?>'

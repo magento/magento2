@@ -22,15 +22,10 @@
         </a>
     <?php endif; ?>
 </div>
-<script>
-    require([
-        "jquery",
-        "mage/mage"
-    ], function(jQuery){
-
-        jQuery('body').mage('addToWishlist',
-            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(['productType' => $_product->getTypeId()])?>
-        );
-
-    });
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "addToWishlist": <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(['productType' => $_product->getTypeId()])?>
+        }
+    }
 </script>

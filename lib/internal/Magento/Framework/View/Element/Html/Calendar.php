@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element\Html;
 
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Locale\Bundle\DataBundle;
 
 /**
  * Calendar block for page header
@@ -62,42 +62,46 @@ class Calendar extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        $localeCode = $this->_localeResolver->getLocaleCode();
+        $localeData = (new DataBundle())->get($this->_localeResolver->getLocale());
 
         // get days names
-        $days = \Zend_Locale_Data::getList($localeCode, 'days');
+        $daysData = $localeData['calendar']['gregorian']['dayNames'];
         $this->assign(
             'days',
             [
-                'wide' => $this->encoder->encode(array_values($days['format']['wide'])),
-                'abbreviated' => $this->encoder->encode(array_values($days['format']['abbreviated']))
+                'wide' => $this->encoder->encode(array_values(iterator_to_array($daysData['format']['wide']))),
+                'abbreviated' => $this->encoder->encode(
+                    array_values(iterator_to_array($daysData['format']['abbreviated']))
+                ),
             ]
         );
 
         // get months names
-        $months = \Zend_Locale_Data::getList($localeCode, 'months');
+        $monthsData = $localeData['calendar']['gregorian']['monthNames'];
         $this->assign(
             'months',
             [
-                'wide' => $this->encoder->encode(array_values($months['format']['wide'])),
-                'abbreviated' => $this->encoder->encode(array_values($months['format']['abbreviated']))
+                'wide' => $this->encoder->encode(array_values(iterator_to_array($monthsData['format']['wide']))),
+                'abbreviated' => $this->encoder->encode(
+                    array_values(iterator_to_array($monthsData['format']['abbreviated']))
+                ),
             ]
         );
 
         // get "today" and "week" words
-        $this->assign('today', $this->encoder->encode(\Zend_Locale_Data::getContent($localeCode, 'relative', 0)));
-        $this->assign('week', $this->encoder->encode(\Zend_Locale_Data::getContent($localeCode, 'field', 'week')));
+        $this->assign('today', $this->encoder->encode($localeData['fields']['day']['relative']['0']));
+        $this->assign('week', $this->encoder->encode($localeData['fields']['week']['dn']));
 
         // get "am" & "pm" words
-        $this->assign('am', $this->encoder->encode(\Zend_Locale_Data::getContent($localeCode, 'am')));
-        $this->assign('pm', $this->encoder->encode(\Zend_Locale_Data::getContent($localeCode, 'pm')));
+        $this->assign('am', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['0']));
+        $this->assign('pm', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['1']));
 
         // get first day of week and weekend days
         $this->assign(
             'firstDay',
             (int)$this->_scopeConfig->getValue(
                 'general/locale/firstday',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->assign(
@@ -105,7 +109,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
             $this->encoder->encode(
                 (string)$this->_scopeConfig->getValue(
                     'general/locale/weekend',
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
             )
         );
@@ -114,23 +118,22 @@ class Calendar extends \Magento\Framework\View\Element\Template
         $this->assign(
             'defaultFormat',
             $this->encoder->encode(
-                $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_MEDIUM)
+                $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM)
             )
         );
         $this->assign(
             'toolTipFormat',
             $this->encoder->encode(
-                $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_LONG)
+                $this->_localeDate->getDateFormat(\IntlDateFormatter::LONG)
             )
         );
 
         // get days and months for en_US locale - calendar will parse exactly in this locale
-        $days = \Zend_Locale_Data::getList('en_US', 'days');
-        $months = \Zend_Locale_Data::getList('en_US', 'months');
+        $englishMonths = (new DataBundle())->get('en_US')['calendar']['gregorian']['monthNames'];
         $enUS = new \stdClass();
         $enUS->m = new \stdClass();
-        $enUS->m->wide = array_values($months['format']['wide']);
-        $enUS->m->abbr = array_values($months['format']['abbreviated']);
+        $enUS->m->wide = array_values(iterator_to_array($englishMonths['format']['wide']));
+        $enUS->m->abbr = array_values(iterator_to_array($englishMonths['format']['abbreviated']));
         $this->assign('enUS', $this->encoder->encode($enUS));
 
         return parent::_toHtml();
@@ -164,7 +167,7 @@ class Calendar extends \Magento\Framework\View\Element\Template
      */
     public function getYearRange()
     {
-        return (int)$this->_localeDate->date('Y')->__toString() - 100
-            . ':' . $this->_localeDate->date('Y')->__toString();
+        return (new \DateTime())->modify('- 100 years')->format('Y')
+            . ':' . (new \DateTime())->format('Y');
     }
 }

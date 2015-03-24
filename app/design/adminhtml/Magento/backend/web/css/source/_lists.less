@@ -7,6 +7,7 @@ ul,
 ol,
 dl {
     margin-top: 0;
+    padding-left: 0;
 }
 
 ul,
@@ -15,49 +16,5 @@ ol {
         list-style: none none;
         margin: 0;
         padding: 0;
-    }
-}
-
-.list {
-    margin-bottom: 1rem;
-    padding-left: 0;
-    > li {
-        margin-bottom: .5rem;
-        ul {
-            padding-left: 1rem;
-            padding-top: .5rem;
-        }
-    }
-    &-reset {
-        list-style: none;
-    }
-}
-
-//  Definition list
-.list-definition {
-    margin: 0 0 3rem;
-    padding: 0;
-    > dt {
-        clear: left;
-        float: left;
-    }
-    > dd {
-        margin-bottom: 1em;
-        margin-left: 20rem;
-    }
-}
-
-//
-//  Mobile
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
-    .list-definition {
-        > dt {
-            float: none;
-        }
-        > dd {
-            margin-left: 0;
-        }
     }
 }

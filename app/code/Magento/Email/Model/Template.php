@@ -8,7 +8,7 @@ namespace Magento\Email\Model;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Template model
@@ -19,7 +19,7 @@ use Magento\Framework\Store\StoreManagerInterface;
  * \Magento\Email\Model\TemplateFactory $templateFactory
  * $templateFactory->create()->load($this->_scopeConfig->getValue(
  *  'path_to_email_template_id_config',
- *  \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+ *  \Magento\Store\Model\ScopeInterface::SCOPE_STORE
  *  ));
  * $variables = array(
  *    'someObject' => $this->_coreResourceEmailTemplate
@@ -158,7 +158,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -213,11 +213,11 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $fileName = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($fileName) {
-            $uploadDir = \Magento\Backend\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
+            $uploadDir = \Magento\Config\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
             $mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->_storeManager->getStore()->getBaseUrl(
@@ -252,7 +252,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $alt = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($alt) {
@@ -319,6 +319,16 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $modulesDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
         $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
 
+        /**
+         * trim copyright message for text templates
+         */
+        if ('html' != $templateType
+            && preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
+            && strpos($matches[0], 'Copyright') > 0
+        ) {
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
+
         if (preg_match('/<!--@subject\s*(.*?)\s*@-->/u', $templateText, $matches)) {
             $this->setTemplateSubject($matches[1]);
             $templateText = str_replace($matches[0], '', $templateText);
@@ -335,9 +345,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         }
 
         /**
-         * Remove comment lines
+         * Remove comment lines and extra spaces
          */
-        $templateText = preg_replace('#\{\*.*\*\}#suU', '', $templateText);
+        $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
 
         $this->setTemplateText($templateText);
         $this->setId($templateId);
@@ -387,7 +397,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     public function getType()
     {
         $templateType = $this->getTemplateType();
-        if (is_null($templateType) && $this->getId()) {
+        if (null === $templateType && $this->getId()) {
             $templateType = $this->_emailConfig->getTemplateType($this->getId());
             $templateType = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         }

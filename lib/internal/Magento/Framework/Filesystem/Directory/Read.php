@@ -65,12 +65,12 @@ class Read implements ReadInterface
      * E.g.: /var/www/application/file.txt
      *
      * @param string $path
-     * @param string $schema
+     * @param string $scheme
      * @return string
      */
-    public function getAbsolutePath($path = null, $schema = null)
+    public function getAbsolutePath($path = null, $scheme = null)
     {
-        return $this->driver->getAbsolutePath($this->path, $path, $schema);
+        return $this->driver->getAbsolutePath($this->path, $path, $scheme);
     }
 
     /**

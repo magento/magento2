@@ -26,7 +26,7 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
     /**
      * Store manager interface.
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -53,14 +53,14 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
 
     /**
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GiftMessageManager $giftMessageManager
      * @param \Magento\GiftMessage\Helper\Message $helper
      * @param MessageFactory $messageFactory
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager,
         \Magento\GiftMessage\Helper\Message $helper,
         \Magento\GiftMessage\Model\MessageFactory $messageFactory
@@ -101,14 +101,14 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
         $quote = $this->quoteRepository->getActive($cartId);
 
         if (0 == $quote->getItemsCount()) {
-            throw new InputException('Gift Messages is not applicable for empty cart');
+            throw new InputException(__('Gift Messages is not applicable for empty cart'));
         }
 
         if ($quote->isVirtual()) {
-            throw new InvalidTransitionException('Gift Messages is not applicable for virtual products');
+            throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
         if (!$this->helper->getIsMessagesAvailable('quote', $quote, $this->storeManager->getStore())) {
-            throw new CouldNotSaveException('Gift Message is not available');
+            throw new CouldNotSaveException(__('Gift Message is not available'));
         }
         $this->giftMessageManager->setMessage($quote, 'quote', $giftMessage);
         return true;

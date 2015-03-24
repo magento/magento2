@@ -69,7 +69,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +92,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @param \Magento\Catalog\Model\Resource\Category $catalogCategory
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
@@ -101,7 +101,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     public function __construct(
         \Magento\Catalog\Model\Resource\Category $catalogCategory,
         \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
@@ -170,7 +170,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $toLoad = true,
         $onlyActive = false
     ) {
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->getCollection($sorted);
         } else {
             $this->setCollection($collection);
@@ -347,7 +347,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     public function getCollection($sorted = false)
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = $this->_getDefaultCollection($sorted);
         }
         return $this->_collection;
@@ -377,7 +377,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     public function setCollection($collection)
     {
-        if (!is_null($this->_collection)) {
+        if ($this->_collection !== null) {
             $this->_clean($this->_collection);
         }
         $this->_collection = $collection;

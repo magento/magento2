@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="ReorderOrderEntityTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Core" next="createOrder" />
+        <step name="createOrder" module="Magento_Sales" next="openOrder" />
+        <step name="openOrder" module="Magento_Sales" next="reorder" />
+        <step name="reorder" module="Magento_Sales" next="fillBillingAddress" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
+        <step name="submitOrder" module="Magento_Sales" />
+    </scenario>
+    <scenario name="CreateOrderBackendTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Core" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders" />
+        <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder" />
+        <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder" />
+        <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />
+        <step name="selectStore" module="Magento_Sales" next="addProducts" />
+        <step name="addProducts" module="Magento_Sales" next="fillAccountInformation" />
+        <step name="fillAccountInformation" module="Magento_Sales" next="updateProductsData" />
+        <step name="updateProductsData" module="Magento_Sales" next="fillBillingAddress" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
+        <step name="submitOrder" module="Magento_Sales" />
+    </scenario>
+    <scenario name="MoveRecentlyViewedProductsOnOrderPageTest" firstStep="createProducts">
+        <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend">
+            <item name="customer">
+                <item name="dataSet" value="default" />
+            </item>
+        </step>
+        <step name="loginCustomerOnFrontend" module="Magento_Customer" next="openProductsOnFrontend" />
+        <step name="openProductsOnFrontend" module="Magento_Catalog" next="openCustomerOnBackend" />
+        <step name="openCustomerOnBackend" module="Magento_Customer" next="createOrderFromCustomerAccount" />
+        <step name="createOrderFromCustomerAccount" module="Magento_Customer" next="selectStore" />
+        <step name="selectStore" module="Magento_Sales" next="addRecentlyViewedProductsToCart" />
+        <step name="addRecentlyViewedProductsToCart" module="Magento_Sales" next="configureProducts" />
+        <step name="configureProducts" module="Magento_Sales" />
+    </scenario>
+    <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
+        <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders">
+            <item name="customer">
+                <item name="dataSet" value="johndoe_with_addresses" />
+            </item>
+        </step>
+        <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder" />
+        <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder" />
+        <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />
+        <step name="selectStore" module="Magento_Sales" next="addProducts" />
+        <step name="addProducts" module="Magento_Sales" next="fillBillingAddress" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder">
+            <item name="billingAddress">
+                <item name="dataSet" value="customer_US" />
+            </item>
+        </step>
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder">
+            <item name="payment">
+                <item name="method" value="checkmo" />
+            </item>
+        </step>
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
+        <step name="submitOrder" module="Magento_Sales" next="openSalesOrderOnFrontendForGuest" />
+        <step name="openSalesOrderOnFrontendForGuest" module="Magento_Sales" next="printOrderOnFrontend" />
+        <step name="printOrderOnFrontend" module="Magento_Sales" />
+    </scenario>
+</config>

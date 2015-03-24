@@ -21,7 +21,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     /** @var \Magento\Framework\UrlInterface */
     protected $url;
 
-    /** @var \Magento\Framework\Store\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
     /** @var \Magento\Framework\App\ResponseInterface */
@@ -33,14 +33,14 @@ class Router implements \Magento\Framework\App\RouterInterface
     /**
      * @param \Magento\Framework\App\ActionFactory $actionFactory
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param UrlFinderInterface $urlFinder
      */
     public function __construct(
         \Magento\Framework\App\ActionFactory $actionFactory,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResponseInterface $response,
         UrlFinderInterface $urlFinder
     ) {
@@ -85,6 +85,7 @@ class Router implements \Magento\Framework\App\RouterInterface
             return $this->processRedirect($request, $rewrite);
         }
 
+        $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $rewrite->getRequestPath());
         $request->setPathInfo('/' . $rewrite->getTargetPath());
         return $this->actionFactory->create('Magento\Framework\App\Action\Forward', ['request' => $request]);
     }

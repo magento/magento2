@@ -25,7 +25,7 @@ class AbstractCollection extends \Magento\Reports\Model\Resource\Report\Collecti
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param null $connection
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -58,7 +58,7 @@ class AbstractCollection extends \Magento\Reports\Model\Resource\Report\Collecti
      */
     protected function _applyOrderStatusFilter()
     {
-        if (is_null($this->_orderStatus)) {
+        if ($this->_orderStatus === null) {
             return $this;
         }
         $orderStatus = $this->_orderStatus;

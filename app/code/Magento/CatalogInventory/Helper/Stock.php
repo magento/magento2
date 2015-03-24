@@ -6,7 +6,7 @@
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -46,7 +46,7 @@ class Stock
 
     /**
      * @param StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param ObjectManagerInterface $objectManager
      */
@@ -71,7 +71,7 @@ class Stock
      */
     public function assignStatusToProduct(\Magento\Catalog\Model\Product $product, $stockStatus = null)
     {
-        if (is_null($stockStatus)) {
+        if ($stockStatus === null) {
             $websiteId = $product->getStore()->getWebsiteId();
             $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();
@@ -109,7 +109,7 @@ class Stock
     {
         $manageStock = $this->scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $cond = [
             '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=1 AND {{table}}.is_in_stock=1',

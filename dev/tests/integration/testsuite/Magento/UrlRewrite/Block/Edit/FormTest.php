@@ -105,7 +105,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         // Check that store value set correctly
         $defaultStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore(
             true
         )->getId();
@@ -116,7 +116,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * Test store selection is available and correctly configured
      *
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testStoreElementMultiStores()
     {

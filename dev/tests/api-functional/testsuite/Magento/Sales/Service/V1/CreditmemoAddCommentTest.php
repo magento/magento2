@@ -7,7 +7,6 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\CreditmemoCommentInterface as Comment;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 /**
  * Class CreditmemoAddCommentTest
@@ -67,8 +66,8 @@ class CreditmemoAddCommentTest extends WebapiAbstract
         $requestData = ['entity' => $commentData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/creditmemo/comment',
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/comments',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

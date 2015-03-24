@@ -6,60 +6,68 @@
 
 namespace Magento\CatalogRule\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Class AssertCatalogPriceRuleAppliedShoppingCart
+ * Assert that Catalog Price Rule is applied in Shopping Cart.
  */
 class AssertCatalogPriceRuleAppliedShoppingCart extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert that Catalog Price Rule is applied for product(s) in Shopping Cart
-     * according to Priority(Priority/Stop Further Rules Processing)
+     * according to Priority(Priority/Stop Further Rules Processing).
      *
-     * @param CatalogProductSimple $product
-     * @param CatalogProductView $pageCatalogProductView
-     * @param CmsIndex $cmsIndex
-     * @param CatalogCategoryView $catalogCategoryView
-     * @param CheckoutCart $pageCheckoutCart
-     * @param array $price
+     * @param CheckoutCart $checkoutCartPage
+     * @param array $products
+     * @param array $cartPrice
+     * @param array $productPrice
+     * @param Customer $customer
      * @return void
      */
     public function processAssert(
-        CatalogProductSimple $product,
-        CatalogProductView $pageCatalogProductView,
-        CmsIndex $cmsIndex,
-        CatalogCategoryView $catalogCategoryView,
-        CheckoutCart $pageCheckoutCart,
-        array $price
+        CheckoutCart $checkoutCartPage,
+        array $products,
+        array $cartPrice,
+        array $productPrice,
+        Customer $customer = null
     ) {
-        $cmsIndex->open();
-        $categoryName = $product->getCategoryIds()[0];
-        $productName = $product->getName();
-        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $catalogCategoryView->getListProductBlock()->openProductViewPage($productName);
-        $pageCatalogProductView->getViewBlock()->clickAddToCartButton();
-        $actualGrandTotal = $pageCheckoutCart->getCartBlock()->getCartItem($product)->getPrice();
+        if ($customer !== null) {
+            $this->objectManager->create(
+                '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                ['customer' => $customer]
+            )->run();
+        }
+        $this->objectManager->create(
+            '\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            ['products' => $products]
+        )->run();
+        $checkoutCartPage->open();
+        foreach ($products as $key => $product) {
+            $actualPrice = $checkoutCartPage->getCartBlock()->getCartItem($product)->getSubtotalPrice();
+            \PHPUnit_Framework_Assert::assertEquals(
+                $productPrice[$key]['sub_total'],
+                $actualPrice,
+                'Wrong product price is displayed.'
+                . "\nExpected: " . $productPrice[$key]['sub_total']
+                . "\nActual: " . $actualPrice . "\n"
+            );
+        }
+        $actualPrices['sub_total'] = $checkoutCartPage->getTotalsBlock()->getSubtotal();
+        $actualPrices['grand_total'] = $checkoutCartPage->getTotalsBlock()->getGrandTotal();
+        $expectedPrices['sub_total'] = $cartPrice['sub_total'];
+        $expectedPrices['grand_total'] = $cartPrice['grand_total'];
         \PHPUnit_Framework_Assert::assertEquals(
-            $price['grand_total'],
-            $actualGrandTotal,
-            'Wrong grand total price is displayed.'
-            . "\nExpected: " . $price['grand_total']
-            . "\nActual: " . $actualGrandTotal
+            $expectedPrices,
+            $actualPrices,
+            'Wrong total cart prices are displayed.'
         );
     }
 
     /**
-     * Text of catalog price rule visibility in Shopping Cart (frontend)
+     * Text of catalog price rule visibility in Shopping Cart (frontend).
      *
      * @return string
      */

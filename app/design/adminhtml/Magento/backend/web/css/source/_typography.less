@@ -4,32 +4,37 @@
 //  */
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/light/opensans-300',
-    @font-weight: @font-weight-light,
+    @font-weight: @font-weight__light,
     @font-style: normal
 );
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/regular/opensans-400',
-    @font-weight: @font-weight-regular,
+    @font-weight: @font-weight__regular,
     @font-style: normal
 );
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/semibold/opensans-600',
-    @font-weight: @font-weight-semibold,
+    @font-weight: @font-weight__semibold,
     @font-style: normal
 );
 
 .font-face(
-    @family-name: 'Open Sans',
+    @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/bold/opensans-700',
-    @font-weight: @font-weight-bold,
+    @font-weight: @font-weight__bold,
     @font-style: normal
 );
+
+html,
+body {
+    height: 100%;
+}
 
 html {
     font-size: 62.5%;
@@ -37,12 +42,12 @@ html {
 
 body {
     .typography(
-        @_font-size: @font-size-base,
-        @_color: @color-base,
-        @_font-family: @font-family-base,
-        @_font-weight: @font-weight-base,
-        @_line-height: @line-height-base,
-        @_font-style: @font-style-base
+        @_font-size: @font-size__base,
+        @_color: @text__color,
+        @_font-family: @font-family__base,
+        @_font-weight: @font-weight__regular,
+        @_line-height: @line-height__base,
+        @_font-style: @font-style__base
     );
 }
 
@@ -51,59 +56,59 @@ body {
 //  ---------------------------------------------
 
 h1 {
+    margin: 0 0 2rem;
     .typography(
         @_font-size: 2.8rem,
-        @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-regular,
-        @_line-height: 3.4rem,
+        @_color: @color-brown-darkie,
+        @_font-weight: @font-weight__regular,
+        @_line-height: @line-height__s,
         @_font-family: false,
         @_font-style: false
     );
-    margin: 0 0 2rem;
 }
 
 h2 {
+    margin: 0 0 2rem;
     .typography(
         @_font-size: 2rem,
-        @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-regular,
-        @_line-height: 2.5rem,
+        @_color: @color-brown-darkie,
+        @_font-weight: @font-weight__regular,
+        @_line-height: @line-height__s,
         @_font-family: false,
         @_font-style: false
     );
-    margin: 0 0 2rem;
 }
 
 h3 {
+    margin: 0 0 2rem;
     .typography(
         @_font-size: 1.7rem,
-        @_color: @color-dark-brownie,
-        @_font-weight: @font-weight-semibold,
-        @_line-height: 2.2rem,
+        @_color: @color-brown-darkie,
+        @_font-weight: @font-weight__semibold,
+        @_line-height: @line-height__s,
         @_font-family: false,
         @_font-style: false
     );
-    margin: 0 0 2rem;
 }
 
 h4,
 h5,
 h6 {
-    font-weight: @font-weight-semibold;
+    font-weight: @font-weight__semibold;
     margin-top: 0;
 }
 
 //  Text
 p {
-    margin: 0 0 1.5rem;
+    margin: 0 0 .5em;
 }
 
 //  Links
 a {
-    color: @color-link;
+    color: @link__color;
     text-decoration: none;
     &:hover {
-        color: @color-link-hover;
+        color: @link__hover__color;
         text-decoration: underline;
     }
 }

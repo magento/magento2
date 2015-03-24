@@ -12,21 +12,21 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestModule3\Service\V1\Entity\Parameter;
-use Magento\TestModule3\Service\V1\Entity\ParameterBuilder;
+use Magento\TestModule3\Service\V1\Entity\ParameterFactory;
 
 class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
 {
     /**
-     * @var ParameterBuilder
+     * @var ParameterFactory
      */
-    protected $parameterBuilder;
+    protected $parameterFactory;
 
     /**
-     * @param ParameterBuilder $parameterBuilder
+     * @param ParameterFactory $parameterFactory
      */
-    public function __construct(ParameterBuilder $parameterBuilder)
+    public function __construct(ParameterFactory $parameterFactory)
     {
-        $this->parameterBuilder = $parameterBuilder;
+        $this->parameterFactory = $parameterFactory;
     }
 
     /**
@@ -34,7 +34,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function success()
     {
-        return $this->parameterBuilder->setName('id')->setValue('a good id')->create();
+        return $this->parameterFactory->create()->setName('id')->setValue('a good id');
     }
 
     /**
@@ -42,7 +42,12 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function resourceNotFoundException()
     {
-        throw new NoSuchEntityException('Resource with ID "%resource_id" not found.', ['resource_id' => 'resourceY']);
+        throw new NoSuchEntityException(
+            __(
+                'Resource with ID "%1" not found.',
+                'resourceY'
+            )
+        );
     }
 
     /**
@@ -50,19 +55,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function serviceException()
     {
-        throw new LocalizedException('Generic service exception %param', ['param' => 3456]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parameterizedServiceException($parameters)
-    {
-        $details = [];
-        foreach ($parameters as $parameter) {
-            $details[$parameter->getName()] = $parameter->getValue();
-        }
-        throw new LocalizedException('Parameterized service exception', $details);
+        throw new LocalizedException(__('Generic service exception %1', 3456));
     }
 
     /**
@@ -70,9 +63,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function authorizationException()
     {
-        throw new AuthorizationException('Consumer is not authorized to access %resources', [
-            'resources'   => 'resourceN'
-        ]);
+        throw new AuthorizationException(__('Consumer is not authorized to access %1', 'resourceN'));
     }
 
     /**
@@ -80,7 +71,11 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function webapiException()
     {
-        throw new \Magento\Webapi\Exception('Service not found', 5555, \Magento\Webapi\Exception::HTTP_NOT_FOUND);
+        throw new \Magento\Framework\Webapi\Exception(
+            'Service not found',
+            5555,
+            \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND
+        );
     }
 
     /**
@@ -108,8 +103,10 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
         if ($wrappedErrorParameters) {
             foreach ($wrappedErrorParameters as $error) {
                 $exception->addError(
-                    InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => $error->getFieldName(), 'value' => $error->getValue()]
+                    __(
+                        InputException::INVALID_FIELD_VALUE,
+                        ['fieldName' => $error->getFieldName(), 'value' => $error->getValue()]
+                    )
                 );
             }
         }

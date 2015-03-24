@@ -13,9 +13,10 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_MODE develop;
+#    set $MAGE_MODE developer;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
+
 
 root $MAGE_ROOT;
 
@@ -46,17 +47,56 @@ location / {
         rewrite / /index.php ;
     }
 
-
     location /static/ {
+
         if ($MAGE_MODE = "production") {
             expires max;
         }
+
+        location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+               add_header Cache-Control "public";
+               expires +1y;
+
+            if (!-f $request_filename) {
+                rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            }
+        }
+
+        location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
+            add_header Cache-Control "no-store";
+                expires    off;
+
+            if (!-f $request_filename) {
+                   rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            }
+
+        }
+
         if (!-f $request_filename) {
             rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
         }
     }
 
     location /media/ {
+
+        location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
+            add_header Cache-Control "public";
+            expires +1y;
+
+            if (!-f $request_filename) {
+                rewrite / /get.php;
+            }
+        }
+
+        location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
+            add_header Cache-Control "no-store";
+            expires    off;
+
+            if (!-f $request_filename) {
+                rewrite / /get.php;
+            }
+        }
+
         if (!-f $request_filename) {
             rewrite / /get.php;
         }
@@ -87,6 +127,7 @@ location / {
     }
 
     location ~ (index|get|static|report|404|503)\.php$ {
+        expires -1;
         fastcgi_pass   fastcgi_backend;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";

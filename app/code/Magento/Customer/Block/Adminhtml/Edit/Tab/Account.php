@@ -52,9 +52,9 @@ class Account extends GenericMetadata
     protected $_customerMetadata;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $_customerBuilder;
+    protected $customerDataFactory;
 
     /**
      * @var \Magento\Customer\Model\Metadata\Form
@@ -72,6 +72,11 @@ class Account extends GenericMetadata
     protected $_extensibleDataObjectConverter;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -82,8 +87,9 @@ class Account extends GenericMetadata
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -99,8 +105,9 @@ class Account extends GenericMetadata
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->options = $options;
@@ -109,8 +116,9 @@ class Account extends GenericMetadata
         $this->_customerFormFactory = $customerFormFactory;
         $this->_accountManagement = $accountManagement;
         $this->_customerMetadata = $customerMetadata;
-        $this->_customerBuilder = $customerBuilder;
+        $this->customerDataFactory = $customerDataFactory;
         $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context, $registry, $formFactory, $dataObjectProcessor, $data);
     }
 
@@ -233,10 +241,15 @@ class Account extends GenericMetadata
      */
     protected function _getCustomerDataObject()
     {
-        if (is_null($this->_customerDataObject)) {
+        if ($this->_customerDataObject === null) {
             $customerData = $this->_backendSession->getCustomerData();
             $accountData = isset($customerData['account']) ? $customerData['account'] : [];
-            $this->_customerDataObject = $this->_customerBuilder->populateWithArray($accountData)->create();
+            $this->_customerDataObject = $this->customerDataFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $this->_customerDataObject,
+                $accountData,
+                '\Magento\Customer\Api\Data\CustomerInterface'
+            );
         }
         return $this->_customerDataObject;
     }
@@ -278,7 +291,7 @@ class Account extends GenericMetadata
      */
     protected function _getCustomerForm()
     {
-        if (is_null($this->_customerForm)) {
+        if ($this->_customerForm === null) {
             $this->_customerForm = $this->_customerFormFactory->create(
                 'customer',
                 'adminhtml_customer',

@@ -6,14 +6,13 @@
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 /**
  * Class InvoiceCreateTest
  */
 class InvoiceCreateTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/invoice';
+    const RESOURCE_PATH = '/V1/invoices';
 
     const SERVICE_READ_NAME = 'salesInvoiceRepositoryV1';
 
@@ -39,7 +38,7 @@ class InvoiceCreateTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

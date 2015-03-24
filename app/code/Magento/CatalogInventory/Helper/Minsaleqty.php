@@ -125,7 +125,7 @@ class Minsaleqty
     }
 
     /**
-     * Encode value to be used in \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+     * Encode value to be used in \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
      *
      * @param array $value
      * @return array
@@ -141,7 +141,7 @@ class Minsaleqty
     }
 
     /**
-     * Decode value from used in \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+     * Decode value from used in \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
      *
      * @param array $value
      * @return array
@@ -175,7 +175,7 @@ class Minsaleqty
     {
         $value = $this->scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
         $value = $this->unserializeValue($value);
@@ -195,7 +195,7 @@ class Minsaleqty
     }
 
     /**
-     * Make value readable by \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+     * Make value readable by \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
      *
      * @param string|array $value
      * @return array

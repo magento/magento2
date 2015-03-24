@@ -359,7 +359,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     public function getData()
     {
-        if (is_null($this->_data)) {
+        if ($this->_data === null) {
             return [];
         }
         return $this->_data;
@@ -373,7 +373,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     public function getLocale()
     {
         if (null === $this->_localeCode) {
-            $this->_localeCode = $this->_locale->getLocaleCode();
+            $this->_localeCode = $this->_locale->getLocale();
         }
         return $this->_localeCode;
     }

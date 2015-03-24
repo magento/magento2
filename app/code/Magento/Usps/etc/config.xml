@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
     <default>
         <carriers>
             <usps>
@@ -24,8 +24,8 @@
                 <model>Magento\Usps\Model\Carrier</model>
                 <size>REGULAR</size>
                 <title>United States Postal Service</title>
-                <userid backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
-                <password backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <userid backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <isproduction>0</isproduction>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <max_package_weight>70</max_package_weight>

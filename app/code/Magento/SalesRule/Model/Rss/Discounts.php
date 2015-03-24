@@ -42,7 +42,11 @@ class Discounts
     {
         /** @var $collection \Magento\SalesRule\Model\Resource\Rule\Collection */
         $collection = $this->collectionFactory->create();
-        $collection->addWebsiteGroupDateFilter($websiteId, $customerGroupId, $this->dateTime->now(true))
+        $collection->addWebsiteGroupDateFilter(
+            $websiteId,
+            $customerGroupId,
+            (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+        )
             ->addFieldToFilter('is_rss', 1)
             ->setOrder('from_date', 'desc');
         $collection->load();

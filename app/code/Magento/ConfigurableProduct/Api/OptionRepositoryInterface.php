@@ -11,28 +11,28 @@ interface OptionRepositoryInterface
     /**
      * Get option for configurable product
      *
-     * @param string $productSku
-     * @param int $optionId
+     * @param string $sku
+     * @param int $id
      * @return \Magento\ConfigurableProduct\Api\Data\OptionInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
-    public function get($productSku, $optionId);
+    public function get($sku, $id);
 
     /**
      * Get all options for configurable product
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\ConfigurableProduct\Api\Data\OptionInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
-    public function getList($productSku);
+    public function getList($sku);
 
     /**
      * Remove option from configurable product
      *
-     * @param Data\OptionInterface $option
+     * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
      * @return bool
      */
     public function delete(\Magento\ConfigurableProduct\Api\Data\OptionInterface $option);
@@ -40,23 +40,23 @@ interface OptionRepositoryInterface
     /**
      * Remove option from configurable product
      *
-     * @param string $productSku
-     * @param int $optionId
+     * @param string $sku
+     * @param int $id
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
-    public function deleteById($productSku, $optionId);
+    public function deleteById($sku, $id);
 
     /**
      * Save option
      *
-     * @param string $productSku
+     * @param string $sku
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \InvalidArgumentException
      */
-    public function save($productSku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option);
+    public function save($sku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option);
 }

@@ -40,11 +40,15 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         /** @var $moduleReader \Magento\Framework\Module\Dir\Reader */
         $moduleReader = $objectManager->get('Magento\Framework\Module\Dir\Reader');
-        $moduleReader->setModuleDir('Magento_Core', 'i18n', dirname(__DIR__) . '/Core/Model/_files/Magento/Core/i18n');
+        $moduleReader->setModuleDir(
+            'Magento_Store',
+            'i18n',
+            dirname(__DIR__) . '/Translation/Model/_files/Magento/Store/i18n'
+        );
         $moduleReader->setModuleDir(
             'Magento_Catalog',
             'i18n',
-            dirname(__DIR__) . '/Core/Model/_files/Magento/Catalog/i18n'
+            dirname(__DIR__) . '/Translation/Model/_files/Magento/Catalog/i18n'
         );
 
         /** @var \Magento\Theme\Model\View\Design $designModel */
@@ -52,7 +56,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             'Magento\Theme\Model\View\Design',
             ['getDesignTheme'],
             [
-                $objectManager->get('Magento\Framework\Store\StoreManagerInterface'),
+                $objectManager->get('Magento\Store\Model\StoreManagerInterface'),
                 $objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory'),
                 $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Theme\Model\ThemeFactory'),
@@ -79,7 +83,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
-        $actualTranslation = __($inputText);
+        $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
 

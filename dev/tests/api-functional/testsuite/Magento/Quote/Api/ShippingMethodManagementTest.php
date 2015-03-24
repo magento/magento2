@@ -8,7 +8,6 @@ namespace Magento\Quote\Api;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ShippingMethodManagementTest extends WebapiAbstract
 {
@@ -37,7 +36,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         return [
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $this->quote->getId() . '/selected-shipping-method',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -69,22 +68,30 @@ class ShippingMethodManagementTest extends WebapiAbstract
      */
     public function testSetMethodWrongMethod()
     {
+        $expectedMessage = 'Carrier with such method not found: %1, %2';
         $this->quote->load('test_order_1', 'reserved_order_id');
         $serviceInfo = $this->getServiceInfo();
+        $carrierCode = 'flatrate';
+        $methodCode = 'wrongMethod';
 
         $requestData = [
             'cartId' => $this->quote->getId(),
-            'carrierCode' => 'flatrate',
-            'methodCode' => 'wrongMethod',
+            'carrierCode' => $carrierCode,
+            'methodCode' => $methodCode,
         ];
         try {
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
-            $message = $e->getMessage();
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
         } catch (\Exception $e) {
-            $message = json_decode($e->getMessage())->message;
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$carrierCode, $methodCode], $errorObj['parameters']);
         }
-        $this->assertEquals('Carrier with such method not found: flatrate, wrongMethod', $message);
     }
 
     /**
@@ -125,13 +132,13 @@ class ShippingMethodManagementTest extends WebapiAbstract
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $data = [
-            ShippingMethodInterface::CARRIER_CODE => $carrierCode,
-            ShippingMethodInterface::METHOD_CODE => $methodCode,
-            ShippingMethodInterface::CARRIER_TITLE => $carrierTitle,
-            ShippingMethodInterface::METHOD_TITLE => $methodTitle,
-            ShippingMethodInterface::SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
-            ShippingMethodInterface::BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
-            ShippingMethodInterface::AVAILABLE => true,
+            ShippingMethodInterface::KEY_CARRIER_CODE => $carrierCode,
+            ShippingMethodInterface::KEY_METHOD_CODE => $methodCode,
+            ShippingMethodInterface::KEY_CARRIER_TITLE => $carrierTitle,
+            ShippingMethodInterface::KEY_METHOD_TITLE => $methodTitle,
+            ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
+            ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
+            ShippingMethodInterface::KEY_AVAILABLE => true,
         ];
 
         $requestData = ["cartId" => $cartId];
@@ -207,7 +214,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         return $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-shipping-method',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -228,7 +235,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
         return [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/shipping-methods',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

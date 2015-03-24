@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Model\Cache\Type as WebapiCache;
+use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
 use Magento\Webapi\Model\Config\Reader;
 
 /**

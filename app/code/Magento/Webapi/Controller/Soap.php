@@ -8,7 +8,8 @@
 namespace Magento\Webapi\Controller;
 
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Webapi\Model\PathProcessor;
+use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Response;
 
 /**
  *
@@ -82,7 +83,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      */
     public function __construct(
         \Magento\Webapi\Controller\Soap\Request $request,
-        Response $response,
+        \Magento\Framework\Webapi\Response $response,
         \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator,
         \Magento\Webapi\Model\Soap\Server $soapServer,
         ErrorProcessor $errorProcessor,
@@ -154,9 +155,9 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
             if (isset($token[1]) && is_string($token[1])) {
                 return $token[1];
             }
-            throw new AuthorizationException('Authentication header format is invalid.');
+            throw new AuthorizationException(__('Authentication header format is invalid.'));
         }
-        throw new AuthorizationException('Authentication header is absent.');
+        throw new AuthorizationException(__('Authentication header is absent.'));
     }
 
     /**

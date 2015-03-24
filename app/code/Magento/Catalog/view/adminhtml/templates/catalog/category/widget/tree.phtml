@@ -10,9 +10,11 @@
 
 <?php $_divId = 'tree' . $block->getId() ?>
 <div id="<?php echo $_divId ?>" class="tree"></div>
-
+<!--[if IE]>
+<script id="ie-deferred-loader" defer="defer" src=""></script>
+<![endif]-->
 <script>
-require(["prototype", "extjs/ext-tree-checkbox"], function(){
+require(['jquery', "prototype", "extjs/ext-tree-checkbox"], function(jQuery){
 
 var tree<?php echo $block->getId() ?>;
 
@@ -54,7 +56,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
     }
 });
 
-Ext.onReady(function()
+jQuery(function()
 {
     var emptyNodeAdded = <?php echo($block->getWithEmptyNode() ? 'false' : 'true') ?>;
 

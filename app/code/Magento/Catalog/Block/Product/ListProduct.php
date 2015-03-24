@@ -41,9 +41,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $_catalogLayer;
 
     /**
-     * @var \Magento\Core\Helper\PostData
+     * @var \Magento\Framework\Data\Helper\PostHelper
      */
     protected $_postDataHelper;
+
+    /**
+     * @var \Magento\Framework\Url\Helper\Data
+     */
+    protected $urlHelper;
 
     /**
      * @var CategoryRepositoryInterface
@@ -52,21 +57,24 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
     /**
      * @param Context $context
-     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Core\Helper\PostData $postDataHelper,
+        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
+        $this->urlHelper = $urlHelper;
         parent::__construct(
             $context,
             $data
@@ -80,7 +88,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     protected function _getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
+        if ($this->_productCollection === null) {
             $layer = $this->getLayer();
             /* @var $layer \Magento\Catalog\Model\Layer */
             if ($this->getShowRootCategory()) {
@@ -329,11 +337,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
     {
         $url = $this->getAddToCartUrl($product);
-        $data = [
-            'product' => $product->getEntityId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->_postDataHelper->getEncodedUrl($url),
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED =>
+                    $this->urlHelper->getEncodedUrl($url),
+            ]
         ];
-        return $this->_postDataHelper->getPostData($url, $data);
     }
 
     /**

@@ -6,44 +6,25 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertUserSuccessLogin
+ * Verify whether customer has logged in to the Backend.
  */
 class AssertUserSuccessLogin extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
-     * Verify whether customer has logged in to the Backend
+     * Verify whether customer has logged in to the Backend.
      *
      * @param User $user
-     * @param AdminAuthLogin $adminAuth
      * @param Dashboard $dashboard
-     * @param User $customAdmin
-     * @internal param null|string $userToLoginInAssert
      * @return void
      */
-    public function processAssert(
-        User $user,
-        AdminAuthLogin $adminAuth,
-        Dashboard $dashboard,
-        User $customAdmin = null
-    ) {
-        $adminAuth->open();
-        $adminUser = $customAdmin === null ? $user : $customAdmin;
-        if ($dashboard->getAdminPanelHeader()->isVisible()) {
-            $dashboard->getAdminPanelHeader()->logOut();
-        }
-        $adminAuth->getLoginBlock()->fill($adminUser);
-        $adminAuth->getLoginBlock()->submit();
-
+    public function processAssert(User $user, Dashboard $dashboard)
+    {
+        $this->objectManager->create('Magento\User\Test\TestStep\LoginUserOnBackendStep', ['user' => $user])->run();
         \PHPUnit_Framework_Assert::assertTrue(
             $dashboard->getAdminPanelHeader()->isLoggedIn(),
             'Admin user was not logged in.'
@@ -51,7 +32,7 @@ class AssertUserSuccessLogin extends AbstractConstraint
     }
 
     /**
-     * Returns success message if equals to expected message
+     * Returns success message if equals to expected message.
      *
      * @return string
      */

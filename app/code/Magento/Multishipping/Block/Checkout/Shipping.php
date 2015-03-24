@@ -89,7 +89,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     public function getAddressCount()
     {
         $count = $this->getData('address_count');
-        if (is_null($count)) {
+        if ($count === null) {
             $count = count($this->getAddresses());
             $this->setData('address_count', $count);
         }
@@ -142,7 +142,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     {
         if ($name = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/title',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $name;

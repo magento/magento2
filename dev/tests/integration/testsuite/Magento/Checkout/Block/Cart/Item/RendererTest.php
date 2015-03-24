@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Block\Cart\Item;
 
 /**
+ * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_and_image.php
  */
 class RendererTest extends \PHPUnit_Framework_TestCase
@@ -36,6 +37,17 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
         $item->setProduct($product);
         $this->_block->setItem($item);
+    }
+
+    protected function tearDown()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $objectManager->removeSharedInstance('Magento\Checkout\Model\Session');
+        $objectManager->removeSharedInstance('Magento\Checkout\Model\Session\Storage');
+
+        unset($_SESSION);
     }
 
     public function testThumbnail()

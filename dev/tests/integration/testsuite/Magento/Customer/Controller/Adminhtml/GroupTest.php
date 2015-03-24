@@ -43,7 +43,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
     {
         $this->dispatch('backend/customer/group/new');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="title">\s*New Customer Group\s*<\/h1>/', $responseBody);
+        $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
         $expected = '<input id="customer_group_code" name="code"  '
             . 'data-ui-id="group-form-fieldset-element-text-code"  value=""';
         $this->assertContains($expected, $responseBody);
@@ -51,14 +51,13 @@ class GroupTest extends \Magento\Backend\Utility\Controller
 
     public function testNewActionWithCustomerGroupDataInSession()
     {
-        /** @var \Magento\Customer\Api\Data\GroupDataBuilder $customerGroupBuilder */
-        $customerGroupBuilder = $this->_objectManager
-            ->get('Magento\Customer\Api\Data\GroupDataBuilder');
+        /** @var \Magento\Customer\Api\Data\GroupInterfaceFactory $customerGroupFactory */
+        $customerGroupFactory = $this->_objectManager
+            ->get('Magento\Customer\Api\Data\GroupInterfaceFactory');
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
-        $customerGroup = $customerGroupBuilder
+        $customerGroup = $customerGroupFactory->create()
             ->setCode(self::CUSTOMER_GROUP_CODE)
-            ->setTaxClassId(self::TAX_CLASS_ID)
-            ->create();
+            ->setTaxClassId(self::TAX_CLASS_ID);
         /** @var \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor */
         $dataObjectProcessor = $this->_objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
         $customerGroupData = $dataObjectProcessor
@@ -70,7 +69,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
         $this->session->setCustomerGroupData($customerGroupData);
         $this->dispatch('backend/customer/group/new');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="title">\s*New Customer Group\s*<\/h1>/', $responseBody);
+        $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
         $expected = '<input id="customer_group_code" name="code"  '
             . 'data-ui-id="group-form-fieldset-element-text-code"  value="' . self::CUSTOMER_GROUP_CODE . '"';
         $this->assertContains($expected, $responseBody);
@@ -188,7 +187,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
     {
         $this->dispatch('backend/customer/group/save');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="title">\s*New Customer Group\s*<\/h1>/', $responseBody);
+        $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
     }
 
     /**
@@ -201,7 +200,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/customer/group/save');
 
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="title">\s*' . self::CUSTOMER_GROUP_CODE . '\s*<\/h1>/', $responseBody);
+        $this->assertRegExp('/<h1 class\="page-title">\s*' . self::CUSTOMER_GROUP_CODE . '\s*<\/h1>/', $responseBody);
     }
 
     public function testSaveActionNonExistingGroupId()

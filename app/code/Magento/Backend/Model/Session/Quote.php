@@ -65,7 +65,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -86,7 +86,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -102,7 +102,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         GroupManagementInterface $groupManagement
     ) {
         $this->customerRepository = $customerRepository;
@@ -166,7 +166,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore($this->getStoreId());
             $currencyId = $this->getCurrencyId();
             if ($currencyId) {
@@ -183,7 +183,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getOrder()
     {
-        if (is_null($this->_order)) {
+        if ($this->_order === null) {
             $this->_order = $this->_orderFactory->create();
             if ($this->getOrderId()) {
                 $this->_order->load($this->getOrderId());

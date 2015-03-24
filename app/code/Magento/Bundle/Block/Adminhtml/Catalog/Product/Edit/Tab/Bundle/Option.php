@@ -41,20 +41,20 @@ class Option extends \Magento\Backend\Block\Widget
     protected $_optionTypes;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_yesno;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
+     * @param \Magento\Config\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Type $optionTypes
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Config\Source\Yesno $yesno,
+        \Magento\Config\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Type $optionTypes,
         \Magento\Framework\Registry $registry,
         array $data = []
@@ -152,7 +152,7 @@ class Option extends \Magento\Backend\Block\Widget
             'add_selection_button',
             'Magento\Backend\Block\Widget\Button',
             [
-                'id' => $this->getFieldId() . '_{{index}}_add_button',
+                'id' => $this->getFieldId() . '_<%- data.index %>_add_button',
                 'label' => __('Add Products to Option'),
                 'class' => 'add add-selection'
             ]
@@ -162,7 +162,7 @@ class Option extends \Magento\Backend\Block\Widget
             'close_search_button',
             'Magento\Backend\Block\Widget\Button',
             [
-                'id' => $this->getFieldId() . '_{{index}}_close_button',
+                'id' => $this->getFieldId() . '_<%- data.index %>_close_button',
                 'label' => __('Close'),
                 'on_click' => 'bSelection.closeSearch(event)',
                 'class' => 'back no-display'
@@ -272,12 +272,12 @@ class Option extends \Magento\Backend\Block\Widget
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
             [
-                'id' => $this->getFieldId() . '_{{index}}_type',
+                'id' => $this->getFieldId() . '_<%- data.index %>_type',
                 'class' => 'select select-product-option-type required-option-select',
                 'extra_params' => 'onchange="bOption.changeType(event)"',
             ]
         )->setName(
-            $this->getFieldName() . '[{{index}}][type]'
+            $this->getFieldName() . '[<%- data.index %>][type]'
         )->setOptions(
             $this->_optionTypes->toOptionArray()
         );
@@ -293,9 +293,9 @@ class Option extends \Magento\Backend\Block\Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            ['id' => $this->getFieldId() . '_{{index}}_required', 'class' => 'select']
+            ['id' => $this->getFieldId() . '_<%- data.index %>_required', 'class' => 'select']
         )->setName(
-            $this->getFieldName() . '[{{index}}][required]'
+            $this->getFieldName() . '[<%- data.index %>][required]'
         )->setOptions(
             $this->_yesno->toOptionArray()
         );

@@ -7,6 +7,7 @@ namespace Magento\Theme\Model\View;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
@@ -125,14 +126,19 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store design/theme/theme_id one
-     * @magentoConfigFixture fixturestore_store design/theme/theme_id two
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetConfigurationDesignThemeStore()
     {
-        $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
-        )->getStore()->getId();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig */
+        $mutableConfig = $objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+        $mutableConfig->setValue('design/theme/theme_id', 'two', ScopeInterface::SCOPE_STORE, 'fixturestore');
+
+        $storeId = $objectManager->get('Magento\Store\Model\StoreManagerInterface')
+            ->getStore()
+            ->getId();
         $this->assertEquals('one', $this->_model->getConfigurationDesignTheme());
         $this->assertEquals('one', $this->_model->getConfigurationDesignTheme(null, ['store' => $storeId]));
         $this->assertEquals('one', $this->_model->getConfigurationDesignTheme('frontend', ['store' => $storeId]));

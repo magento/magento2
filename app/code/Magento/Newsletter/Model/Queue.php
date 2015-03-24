@@ -88,11 +88,6 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
     protected $_date;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $_localeDate;
-
-    /**
      * Problem factory
      *
      * @var \Magento\Newsletter\Model\ProblemFactory
@@ -116,7 +111,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
@@ -132,9 +127,8 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
@@ -145,7 +139,6 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
         $this->_templateFilter = $templateFilter;
         $this->_date = $date;
-        $this->_localeDate = $localeDate;
         $this->_templateFactory = $templateFactory;
         $this->_problemFactory = $problemFactory;
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
@@ -170,7 +163,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      */
     public function isNew()
     {
-        return is_null($this->getQueueStatus());
+        return $this->getQueueStatus() === null;
     }
 
     /**
@@ -181,13 +174,10 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      */
     public function setQueueStartAtByString($startAt)
     {
-        if (is_null($startAt) || $startAt == '') {
+        if ($startAt === null || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
-            $format = $this->_localeDate->getDateTimeFormat(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
-            );
-            $time = $this->_localeDate->date($startAt, $format)->getTimestamp();
+            $time = (new \DateTime($startAt))->getTimestamp();
             $this->setQueueStartAt($this->_date->gmtDate(null, $time));
         }
         return $this;
@@ -364,7 +354,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      */
     public function getTemplate()
     {
-        if (is_null($this->_template)) {
+        if ($this->_template === null) {
             $this->_template = $this->_templateFactory->create()->load($this->getTemplateId());
         }
         return $this->_template;

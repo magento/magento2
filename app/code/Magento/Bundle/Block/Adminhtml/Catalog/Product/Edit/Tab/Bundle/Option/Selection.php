@@ -37,13 +37,13 @@ class Selection extends \Magento\Backend\Block\Widget
     protected $_priceType;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_yesno;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesno
+     * @param \Magento\Config\Model\Config\Source\Yesno $yesno
      * @param \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Registry $registry
@@ -51,7 +51,7 @@ class Selection extends \Magento\Backend\Block\Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Config\Source\Yesno $yesno,
+        \Magento\Config\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Registry $registry,
@@ -131,11 +131,11 @@ class Selection extends \Magento\Backend\Block\Widget
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
             [
-                'id' => $this->getFieldId() . '_{{index}}_price_type',
+                'id' => $this->getFieldId() . '_<%- data.index %>_price_type',
                 'class' => 'select select-product-option-type required-option-select',
             ]
         )->setName(
-            $this->getFieldName() . '[{{parentIndex}}][{{index}}][selection_price_type]'
+            $this->getFieldName() . '[<%- data.parentIndex %>][<%- data.index %>][selection_price_type]'
         )->setOptions(
             $this->_priceType->toOptionArray()
         );
@@ -155,9 +155,9 @@ class Selection extends \Magento\Backend\Block\Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            ['id' => $this->getFieldId() . '_{{index}}_can_change_qty', 'class' => 'select']
+            ['id' => $this->getFieldId() . '_<%- data.index %>_can_change_qty', 'class' => 'select']
         )->setName(
-            $this->getFieldName() . '[{{parentIndex}}][{{index}}][selection_can_change_qty]'
+            $this->getFieldName() . '[<%- data.parentIndex %>][<%- data.index %>][selection_can_change_qty]'
         )->setOptions(
             $this->_yesno->toOptionArray()
         );
@@ -195,8 +195,8 @@ class Selection extends \Magento\Backend\Block\Widget
     {
         $checkboxHtml = '';
         if ($this->isUsedWebsitePrice()) {
-            $fieldsId = $this->getFieldId() . '_{{index}}_price_scope';
-            $name = $this->getFieldName() . '[{{parentIndex}}][{{index}}][default_price_scope]';
+            $fieldsId = $this->getFieldId() . '_<%- data.index %>_price_scope';
+            $name = $this->getFieldName() . '[<%- data.parentIndex %>][<%- data.index %>][default_price_scope]';
             $class = 'bundle-option-price-scope-checkbox';
             $label = __('Use Default Value');
             $disabled = $this->getCanEditPrice() === false ? ' disabled="disabled"' : '';

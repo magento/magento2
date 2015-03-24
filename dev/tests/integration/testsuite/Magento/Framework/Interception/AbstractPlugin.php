@@ -11,7 +11,6 @@ namespace Magento\Framework\Interception;
  */
 abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -21,6 +20,26 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $applicationObjectManager;
+
+    public function setUp()
+    {
+        if (!$this->_objectManager) {
+            return;
+        }
+
+        $this->applicationObjectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        \Magento\Framework\App\ObjectManager::setInstance($this->_objectManager);
+    }
+
+    public function tearDown()
+    {
+        \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
+    }
 
     public function setUpInterceptionConfig($pluginConfig)
     {
@@ -52,21 +71,23 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             $definitions
         );
         $interceptionDefinitions = new Definition\Runtime();
+        $sharedInstances = [
+            'Magento\Framework\Config\CacheInterface'                      => $cache,
+            'Magento\Framework\Config\ScopeInterface'                      => $configScope,
+            'Magento\Framework\Config\ReaderInterface'                     => $this->_configReader,
+            'Magento\Framework\ObjectManager\RelationsInterface'           => $relations,
+            'Magento\Framework\ObjectManager\ConfigInterface'              => $config,
+            'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $config,
+            'Magento\Framework\ObjectManager\DefinitionInterface'          => $definitions,
+            'Magento\Framework\Interception\DefinitionInterface'           => $interceptionDefinitions
+        ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,
             $config,
-            [
-                'Magento\Framework\Config\CacheInterface'                      => $cache,
-                'Magento\Framework\Config\ScopeInterface'                      => $configScope,
-                'Magento\Framework\Config\ReaderInterface'                     => $this->_configReader,
-                'Magento\Framework\ObjectManager\RelationsInterface'           => $relations,
-                'Magento\Framework\ObjectManager\ConfigInterface'              => $config,
-                'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $config,
-                'Magento\Framework\ObjectManager\DefinitionInterface'          => $definitions,
-                'Magento\Framework\Interception\DefinitionInterface'           => $interceptionDefinitions
-            ]
+            $sharedInstances
         );
         $factory->setObjectManager($this->_objectManager);
+
         $config->setInterceptionConfig($interceptionConfig);
         $config->extend(
             [

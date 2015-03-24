@@ -21,22 +21,22 @@ class Tax extends \Magento\Backend\App\Action
     protected $taxClassRepository;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxClassDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxClassInterfaceFactory
      */
-    protected $taxClassDataBuilder;
+    protected $taxClassDataObjectFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService
-     * @param \Magento\Tax\Api\Data\TaxClassDataBuilder taxClassDataBuilder
+     * @param \Magento\Tax\Api\Data\TaxClassInterfaceFactory $taxClassDataObjectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService,
-        \Magento\Tax\Api\Data\TaxClassDataBuilder $taxClassBuilder
+        \Magento\Tax\Api\Data\TaxClassInterfaceFactory $taxClassDataObjectFactory
     ) {
         $this->taxClassRepository = $taxClassService;
-        $this->taxClassDataBuilder = $taxClassBuilder;
+        $this->taxClassDataObjectFactory = $taxClassDataObjectFactory;
         parent::__construct($context);
     }
 
@@ -51,7 +51,7 @@ class Tax extends \Magento\Backend\App\Action
     {
         $className = trim($this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($className));
         if ($className == '') {
-            throw new InputException('Invalid name of tax class specified.');
+            throw new InputException(__('Invalid name of tax class specified.'));
         }
         return $className;
     }

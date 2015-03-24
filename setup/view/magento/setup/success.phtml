@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="content-success">
+
+    <h1 class="jumbo-title">
+        <span class="jumbo-icon icon-success-round"></span>
+        Success
+    </h1>
+
+    <p>Please keep this information for your records:</p>
+
+    <p><strong>Magento Admin Info:</strong></p>
+
+    <dl class="list-definition" id="admin-info">
+        <dt>Username:</dt>
+        <dd>{{admin.username}}</dd>
+
+        <dt>E-Mail:</dt>
+        <dd>{{admin.email}}</dd>
+
+        <dt>Password:</dt>
+        <dd>******</dd>
+
+        <dt>Your Store Address:</dt>
+        <dd>
+            <a href="{{config.address.actual_base_url}}" target="_blank">{{config.address.actual_base_url}}</a>
+        </dd>
+
+        <dt>Magento Admin Address:</dt>
+        <dd>
+            <a href="{{config.address.actual_base_url}}{{config.address.admin}}/" target="_blank">{{config.address.actual_base_url}}{{config.address.admin}}/</a>
+        </dd>
+
+        <dt>Encryption Key:</dt>
+        <dd>{{config.encrypt.key}}</dd>
+    </dl>
+
+    <p>
+        <strong>Database Info:</strong>
+    </p>
+
+    <dl id="db-info" class="list-definition">
+        <dt>Database Name:</dt>
+        <dd>{{db.name}}</dd>
+
+        <dt>Username:</dt>
+        <dd>{{db.user}}</dd>
+
+        <dt>Password:</dt>
+        <dd>******</dd>
+    </dl>
+
+    <p class="bold" ng-repeat="message in messages">{{message}}</p>
+
+    <div ng-show="config.address.actual_base_url">
+        <a
+            class="btn btn-large btn-prime"
+            href="{{config.address.actual_base_url}}{{config.address.admin}}/"
+            target="_blank"
+            >
+            Launch Magento Admin
+        </a>
+    </div>
+
+</div>

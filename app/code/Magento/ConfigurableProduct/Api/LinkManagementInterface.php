@@ -11,26 +11,26 @@ interface LinkManagementInterface
     /**
      * Get all children for Bundle product
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
      */
-    public function getChildren($productSku);
+    public function getChildren($sku);
 
     /**
-     * @param  string $productSku
+     * @param  string $sku
      * @param  string $childSku
      * @return bool
      */
-    public function addChild($productSku, $childSku);
+    public function addChild($sku, $childSku);
 
     /**
      * Remove configurable product option
      *
-     * @param string $productSku
+     * @param string $sku
      * @param string $childSku
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Exception\InputException
      * @return bool
      */
-    public function removeChild($productSku, $childSku);
+    public function removeChild($sku, $childSku);
 }

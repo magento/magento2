@@ -6,7 +6,7 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\User\Test\Fixture\AdminUserRole;
+use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -15,20 +15,16 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertRoleNotInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Asserts that role is not present in Role Grid.
      *
      * @param UserRoleIndex $rolePage
-     * @param AdminUserRole $role
+     * @param Role $role
      * @return void
      */
     public function processAssert(
         UserRoleIndex $rolePage,
-        AdminUserRole $role
+        Role $role
     ) {
         $filter = ['rolename' => $role->getRoleName()];
         $rolePage->open();

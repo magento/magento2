@@ -34,7 +34,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory',
+                            'description' => $this->getSourceClassName() . 'Factory',
                         ],
                     ],
                 ],
@@ -117,8 +117,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceFactoryPropertyName()
     {
-        $parts = explode('\\', $this->_getSourceClassName());
-        return lcfirst(end($parts)) . 'Factory';
+        return lcfirst($this->getSourceClassNameWithoutNamespace()) . 'Factory';
     }
 
     /**
@@ -127,8 +126,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceResourcePropertyName() // InvoiceResource
     {
-        $parts = explode('\\', $this->_getSourceClassName());
-        return lcfirst(end($parts)) . "Resource";
+        return lcfirst($this->getSourceClassNameWithoutNamespace()) . "Resource";
     }
 
     /**
@@ -138,8 +136,8 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getSourceResourceClassName() // Invoice\Resource
     {
-        $temporary = str_replace('\\Api\\Data\\', '\\Model\\Spi\\', $this->_getSourceClassName());
-        $parts = explode('\\', $temporary);
+        $temporary = str_replace('\\Api\\Data\\', '\\Model\\Spi\\', $this->getSourceClassName());
+        $parts = explode('\\', ltrim($temporary, '\\'));
         $className = array_pop($parts);
         $className = str_replace('Interface', '', $className);
         return '\\' . implode('\\', $parts) . '\\' . $className . 'ResourceInterface';
@@ -180,7 +178,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     'name' => $this->_getSourceFactoryPropertyName(),
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory'
+                    'type' => $this->getSourceClassName() . 'Factory'
                 ],
                 [
                     'name' => 'resource',
@@ -205,7 +203,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory'
+                        'description' => $this->getSourceClassName() . 'Factory'
                             . " \$" . $this->_getSourceFactoryPropertyName()
                     ],
                     [
@@ -270,7 +268,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'return',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getResultClassName()) . " \$entity"
+                        'description' => $this->_getResultClassName() . " \$entity"
                     ],
                 ],
             ]
@@ -295,7 +293,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'entity',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    'type' => $this->getSourceClassName(),
                 ],
             ],
             'body' => $body,
@@ -304,7 +302,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -388,7 +386,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'entity',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    'type' => $this->getSourceClassName(),
                 ],
             ],
             'body' => $body,
@@ -397,7 +395,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -431,7 +429,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -457,7 +455,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'entity',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    'type' => $this->getSourceClassName(),
                 ],
             ],
             'body' => $body,
@@ -467,7 +465,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
 
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                        'description' => $this->getSourceClassName() . " \$entity",
                     ],
                 ],
             ]
@@ -482,7 +480,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
         $result = parent::_validateData();
 
         if ($result) {
-            $sourceClassName = $this->_getSourceClassName();
+            $sourceClassName = $this->getSourceClassName();
             $resultClassName = $this->_getResultClassName();
 
             if ($resultClassName !== $sourceClassName . 'Persistor') {

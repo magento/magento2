@@ -28,14 +28,14 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     protected $downloadableType;
 
     /**
-     * @var \Magento\Downloadable\Api\Data\LinkDataBuilder
+     * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory
      */
-    protected $linkBuilder;
+    protected $linkDataObjectFactory;
 
     /**
-     * @var \Magento\Downloadable\Api\Data\SampleDataBuilder
+     * @var \Magento\Downloadable\Api\Data\SampleInterfaceFactory
      */
-    protected $sampleBuilder;
+    protected $sampleDataObjectFactory;
 
     /**
      * @var \Magento\Downloadable\Model\LinkFactory
@@ -60,8 +60,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Model\Product\Type $downloadableType
-     * @param \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder
-     * @param \Magento\Downloadable\Api\Data\SampleDataBuilder $sampleBuilder
+     * @param \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkDataObjectFactory
+     * @param \Magento\Downloadable\Api\Data\SampleInterfaceFactory $sampleDataObjectFactory
      * @param LinkFactory $linkFactory
      * @param Link\ContentValidator $contentValidator
      * @param EncoderInterface $jsonEncoder
@@ -70,8 +70,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Model\Product\Type $downloadableType,
-        \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder,
-        \Magento\Downloadable\Api\Data\SampleDataBuilder $sampleBuilder,
+        \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkDataObjectFactory,
+        \Magento\Downloadable\Api\Data\SampleInterfaceFactory $sampleDataObjectFactory,
         LinkFactory $linkFactory,
         Link\ContentValidator $contentValidator,
         EncoderInterface $jsonEncoder,
@@ -79,8 +79,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     ) {
         $this->productRepository = $productRepository;
         $this->downloadableType = $downloadableType;
-        $this->linkBuilder = $linkBuilder;
-        $this->sampleBuilder = $sampleBuilder;
+        $this->linkDataObjectFactory = $linkDataObjectFactory;
+        $this->sampleDataObjectFactory = $sampleDataObjectFactory;
         $this->linkFactory = $linkFactory;
         $this->contentValidator = $contentValidator;
         $this->jsonEncoder = $jsonEncoder;
@@ -90,11 +90,11 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function getLinks($productSku)
+    public function getLinks($sku)
     {
         $linkList = [];
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $links = $this->downloadableType->getLinks($product);
         /** @var \Magento\Downloadable\Model\Link $link */
         foreach ($links as $link) {
@@ -111,49 +111,50 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      */
     protected function buildLink($resourceData)
     {
-        $this->setBasicFields($resourceData, $this->linkBuilder);
-        $this->linkBuilder->setPrice($resourceData->getPrice());
-        $this->linkBuilder->setNumberOfDownloads($resourceData->getNumberOfDownloads());
-        $this->linkBuilder->setIsShareable($resourceData->getIsShareable());
-        $this->linkBuilder->setLinkType($resourceData->getLinkType());
-        $this->linkBuilder->setLinkFile($resourceData->getLinkFile());
-        $this->linkBuilder->setLinkUrl($resourceData->getLinkUrl());
+        /** @var \Magento\Downloadable\Model\Link $link */
+        $link = $this->linkDataObjectFactory->create();
+        $this->setBasicFields($resourceData, $link);
+        $link->setPrice($resourceData->getPrice());
+        $link->setNumberOfDownloads($resourceData->getNumberOfDownloads());
+        $link->setIsShareable($resourceData->getIsShareable());
+        $link->setLinkType($resourceData->getLinkType());
+        $link->setLinkFile($resourceData->getLinkFile());
+        $link->setLinkUrl($resourceData->getLinkUrl());
 
-        return $this->linkBuilder->create();
+        return $link;
     }
 
     /**
      * Subroutine for buildLink and buildSample
      *
      * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @param \Magento\Downloadable\Api\Data\LinkDataBuilder|\Magento\Downloadable\Api\Data\SampleDataBuilder $builder
+     * @param \Magento\Downloadable\Api\Data\LinkInterface|\Magento\Downloadable\Api\Data\SampleInterface $dataObject
      * @return null
      */
-    protected function setBasicFields($resourceData, $builder)
+    protected function setBasicFields($resourceData, $dataObject)
     {
-        $builder->populateWithArray([]);
-        $builder->setId($resourceData->getId());
+        $dataObject->setId($resourceData->getId());
         $storeTitle = $resourceData->getStoreTitle();
         $title = $resourceData->getTitle();
         if (!empty($storeTitle)) {
-            $builder->setTitle($storeTitle);
+            $dataObject->setTitle($storeTitle);
         } else {
-            $builder->setTitle($title);
+            $dataObject->setTitle($title);
         }
-        $builder->setSortOrder($resourceData->getSortOrder());
-        $builder->setSampleType($resourceData->getSampleType());
-        $builder->setSampleFile($resourceData->getSampleFile());
-        $builder->setSampleUrl($resourceData->getSampleUrl());
+        $dataObject->setSortOrder($resourceData->getSortOrder());
+        $dataObject->setSampleType($resourceData->getSampleType());
+        $dataObject->setSampleFile($resourceData->getSampleFile());
+        $dataObject->setSampleUrl($resourceData->getSampleUrl());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSamples($productSku)
+    public function getSamples($sku)
     {
         $sampleList = [];
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $samples = $this->downloadableType->getSamples($product);
         /** @var \Magento\Downloadable\Model\Sample $sample */
         foreach ($samples as $sample) {
@@ -170,8 +171,9 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      */
     protected function buildSample($resourceData)
     {
-        $this->setBasicFields($resourceData, $this->sampleBuilder);
-        return $this->sampleBuilder->create();
+        $sample = $this->sampleDataObjectFactory->create();
+        $this->setBasicFields($resourceData, $sample);
+        return $sample;
     }
 
     /**
@@ -179,21 +181,21 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function save($productSku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false)
+    public function save($sku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         if ($linkId) {
 
             /** @var $link \Magento\Downloadable\Model\Link */
             $link = $this->linkFactory->create()->load($linkId);
             if (!$link->getId()) {
-                throw new NoSuchEntityException('There is no downloadable link with provided ID.');
+                throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
             }
             if ($link->getProductId() != $product->getId()) {
-                throw new InputException('Provided downloadable link is not related to given product.');
+                throw new InputException(__('Provided downloadable link is not related to given product.'));
             }
             if (!$this->contentValidator->isValid($linkContent)) {
-                throw new InputException('Provided link information is invalid.');
+                throw new InputException(__('Provided link information is invalid.'));
             }
             if ($isGlobalScopeContent) {
                 $product->setStoreId(0);
@@ -201,7 +203,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             $title = $linkContent->getTitle();
             if (empty($title)) {
                 if ($isGlobalScopeContent) {
-                    throw new InputException('Link title cannot be empty.');
+                    throw new InputException(__('Link title cannot be empty.'));
                 }
                 // use title from GLOBAL scope
                 $link->setTitle(null);
@@ -220,20 +222,20 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
                 ->save();
             return $link->getId();
         } else {
-            $product = $this->productRepository->get($productSku, true);
+            $product = $this->productRepository->get($sku, true);
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
-                throw new InputException('Product type of the product must be \'downloadable\'.');
+                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
             }
             if (!$this->contentValidator->isValid($linkContent)) {
-                throw new InputException('Provided link information is invalid.');
+                throw new InputException(__('Provided link information is invalid.'));
             }
 
             if (!in_array($linkContent->getLinkType(), ['url', 'file'])) {
-                throw new InputException('Invalid link type.');
+                throw new InputException(__('Invalid link type.'));
             }
             $title = $linkContent->getTitle();
             if (empty($title)) {
-                throw new InputException('Link title cannot be empty.');
+                throw new InputException(__('Link title cannot be empty.'));
             }
 
             $linkData = [
@@ -287,7 +289,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         /** @var $link \Magento\Downloadable\Model\Link */
         $link = $this->linkFactory->create()->load($linkId);
         if (!$link->getId()) {
-            throw new NoSuchEntityException('There is no downloadable link with provided ID.');
+            throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }
         $link->delete();
         return true;

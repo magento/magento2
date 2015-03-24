@@ -125,6 +125,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the increment ID for the shipment.
      *
      * @return string Increment ID.
@@ -144,6 +152,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return \Magento\Sales\Api\Data\ShipmentPackageInterface[]|null Array of packages, if any. Otherwise, null.
      */
     public function getPackages();
+
+    /**
+     * Sets any packages for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
+     * @return $this
+     */
+    public function setPackages(array $packages = null);
 
     /**
      * Gets the shipment status.
@@ -202,6 +218,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getItems();
 
     /**
+     * Sets the items for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets the tracks for the shipment.
      *
      * @return \Magento\Sales\Api\Data\ShipmentTrackInterface[] Array of tracks.
@@ -209,9 +233,136 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getTracks();
 
     /**
+     * Sets the tracks for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackInterface[] $tracks
+     * @return $this
+     */
+    public function setTracks($tracks);
+
+    /**
      * Gets the comments for the shipment.
      *
      * @return \Magento\Sales\Api\Data\ShipmentCommentInterface[] Array of comments.
      */
     public function getComments();
+
+    /**
+     * Sets the comments for the shipment.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentCommentInterface[] $comments
+     * @return $this
+     */
+    public function setComments($comments = null);
+
+    /**
+     * Sets the store ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setStoreId($id);
+
+    /**
+     * Sets the total weight for the shipment.
+     *
+     * @param float $totalWeight
+     * @return $this
+     */
+    public function setTotalWeight($totalWeight);
+
+    /**
+     * Sets the total quantity for the shipment.
+     *
+     * @param float $qty
+     * @return $this
+     */
+    public function setTotalQty($qty);
+
+    /**
+     * Sets the email-sent flag value for the shipment.
+     *
+     * @param int $emailSent
+     * @return $this
+     */
+    public function setEmailSent($emailSent);
+
+    /**
+     * Sets the order ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOrderId($id);
+
+    /**
+     * Sets the customer ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setCustomerId($id);
+
+    /**
+     * Sets the shipping address ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setShippingAddressId($id);
+
+    /**
+     * Sets the billing address ID for the shipment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setBillingAddressId($id);
+
+    /**
+     * Sets the shipment status.
+     *
+     * @param int $shipmentStatus
+     * @return $this
+     */
+    public function setShipmentStatus($shipmentStatus);
+
+    /**
+     * Sets the increment ID for the shipment.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setIncrementId($id);
+
+    /**
+     * Sets the shipping label for the shipment.
+     *
+     * @param string $shippingLabel
+     * @return $this
+     */
+    public function setShippingLabel($shippingLabel);
+
+    /**
+     * Sets the updated-at timestamp for the shipment.
+     *
+     * @param string $timestamp
+     * @return $this
+     */
+    public function setUpdatedAt($timestamp);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentExtensionInterface $extensionAttributes);
 }

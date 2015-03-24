@@ -1,0 +1,26 @@
+{
+    "name": "magento/module-media-storage",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0",
+        "magento/module-store": "0.74.0-beta1",
+        "magento/module-backend": "0.74.0-beta1",
+        "magento/module-config": "0.74.0-beta1",
+        "magento/framework": "0.74.0-beta1",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+    "version": "0.74.0-beta1",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/MediaStorage"
+            ]
+        ]
+    }
+}

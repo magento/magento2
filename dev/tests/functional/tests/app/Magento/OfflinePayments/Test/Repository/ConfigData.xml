@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <storage class="Magento\Core\Test\Repository\ConfigData">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="cashondelivery">
             <field path="payment/cashondelivery/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
@@ -18,7 +18,9 @@
         <dataset name="cashondelivery_specificcountry_gb">
             <field path="payment/cashondelivery/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/cashondelivery/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
-            <field path="payment/cashondelivery/specificcountry/active" scope="payment" scope_id="1" label="United Kingdom" xsi:type="string">GB</field>
+            <field path="payment/cashondelivery/specificcountry" scope="payment" scope_id="1" xsi:type="array">
+                <item label="United Kingdom" xsi:type="string">GB</item>
+            </field>
         </dataset>
 
         <dataset name="cashondelivery_specificcountry_gb_rollback">
@@ -37,7 +39,9 @@
         <dataset name="checkmo_specificcountry_gb">
             <field path="payment/checkmo/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/checkmo/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
-            <field path="payment/checkmo/specificcountry/active" scope="payment" scope_id="1" label="United Kingdom" xsi:type="string">GB</field>
+            <field path="payment/checkmo/specificcountry" scope="payment" scope_id="1" xsi:type="array">
+                <item label="United Kingdom" xsi:type="string">GB</item>
+            </field>
         </dataset>
 
         <dataset name="checkmo_specificcountry_gb_rollback">
@@ -56,7 +60,9 @@
         <dataset name="banktransfer_specificcountry_gb">
             <field path="payment/banktransfer/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/banktransfer/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
-            <field path="payment/banktransfer/specificcountry/active" scope="payment" scope_id="1" label="United Kingdom" xsi:type="string">GB</field>
+            <field path="payment/banktransfer/specificcountry" scope="payment" scope_id="1" xsi:type="array">
+                <item label="United Kingdom" xsi:type="string">GB</item>
+            </field>
         </dataset>
 
         <dataset name="banktransfer_specificcountry_gb_rollback">
@@ -75,12 +81,14 @@
         <dataset name="purchaseorder_specificcountry_gb">
             <field path="payment/purchaseorder/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/purchaseorder/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
-            <field path="payment/purchaseorder/specificcountry/active" scope="payment" scope_id="1" label="United Kingdom" xsi:type="string">GB</field>
+            <field path="payment/purchaseorder/specificcountry" scope="payment" scope_id="1" xsi:type="array">
+                <item label="United Kingdom" xsi:type="string">GB</item>
+            </field>
         </dataset>
 
         <dataset name="purchaseorder_specificcountry_gb_rollback">
             <field path="payment/purchaseorder/active" scope="payment" scope_id="1" label="No" xsi:type="string">0</field>
             <field path="payment/purchaseorder/allowspecific" scope="payment" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
         </dataset>
-    </storage>
-</repository>
+    </repository>
+</config>

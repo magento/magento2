@@ -5,8 +5,9 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Api\Data\OptionDataBuilder;
-use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
+use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
+use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 
 /**
  * Converter for AttributeMetadata
@@ -14,35 +15,42 @@ use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
 class AttributeMetadataConverter
 {
     /**
-     * @var OptionDataBuilder
+     * @var OptionInterfaceFactory
      */
-    private $_optionBuilder;
+    private $optionFactory;
 
     /**
-     * @var ValidationRuleDataBuilder
+     * @var ValidationRuleInterfaceFactory
      */
-    private $_validationRuleBuilder;
+    private $validationRuleFactory;
 
     /**
-     * @var AttributeMetadataDataBuilder
+     * @var AttributeMetadataInterfaceFactory
      */
-    private $_attributeMetadataBuilder;
+    private $attributeMetadataFactory;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
     /**
      * Initialize the Converter
      *
-     * @param OptionDataBuilder $optionBuilder
-     * @param ValidationRuleDataBuilder $validationRuleBuilder
-     * @param AttributeMetadataDataBuilder $attributeMetadataBuilder
+     * @param OptionInterfaceFactory $optionFactory
+     * @param ValidationRuleInterfaceFactory $validationRuleFactory
+     * @param AttributeMetadataInterfaceFactory $attributeMetadataFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OptionDataBuilder $optionBuilder,
-        ValidationRuleDataBuilder $validationRuleBuilder,
-        AttributeMetadataDataBuilder $attributeMetadataBuilder
+        OptionInterfaceFactory $optionFactory,
+        ValidationRuleInterfaceFactory $validationRuleFactory,
+        AttributeMetadataInterfaceFactory $attributeMetadataFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->_optionBuilder = $optionBuilder;
-        $this->_validationRuleBuilder = $validationRuleBuilder;
-        $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
+        $this->optionFactory = $optionFactory;
+        $this->validationRuleFactory = $validationRuleFactory;
+        $this->attributeMetadataFactory = $attributeMetadataFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -56,44 +64,51 @@ class AttributeMetadataConverter
         $options = [];
         if ($attribute->usesSource()) {
             foreach ($attribute->getSource()->getAllOptions() as $option) {
+                $optionDataObject = $this->optionFactory->create();
                 if (!is_array($option['value'])) {
-                    $this->_optionBuilder->setValue($option['value']);
+                    $optionDataObject->setValue($option['value']);
                 } else {
                     $optionArray = [];
                     foreach ($option['value'] as $optionArrayValues) {
-                        $optionArray[] = $this->_optionBuilder->populateWithArray($optionArrayValues)->create();
+                        $optionObject = $this->optionFactory->create();
+                        $this->dataObjectHelper->populateWithArray(
+                            $optionObject,
+                            $optionArrayValues,
+                            '\Magento\Customer\Api\Data\OptionInterface'
+                        );
+                        $optionArray[] = $optionObject;
                     }
-                    $this->_optionBuilder->setOptions($optionArray);
+                    $optionDataObject->setOptions($optionArray);
                 }
-                $this->_optionBuilder->setLabel($option['label']);
-                $options[] = $this->_optionBuilder->create();
+                $optionDataObject->setLabel($option['label']);
+                $options[] = $optionDataObject;
             }
         }
         $validationRules = [];
         foreach ($attribute->getValidateRules() as $name => $value) {
-            $validationRules[] = $this->_validationRuleBuilder->setName($name)
-                ->setValue($value)
-                ->create();
+            $validationRule = $this->validationRuleFactory->create()
+                ->setName($name)
+                ->setValue($value);
+            $validationRules[] = $validationRule;
         }
 
-        $this->_attributeMetadataBuilder->setAttributeCode($attribute->getAttributeCode())
+
+        return $this->attributeMetadataFactory->create()->setAttributeCode($attribute->getAttributeCode())
             ->setFrontendInput($attribute->getFrontendInput())
             ->setInputFilter((string)$attribute->getInputFilter())
             ->setStoreLabel($attribute->getStoreLabel())
             ->setValidationRules($validationRules)
-            ->setVisible((boolean)$attribute->getIsVisible())
-            ->setRequired((boolean)$attribute->getIsRequired())
+            ->setIsVisible((boolean)$attribute->getIsVisible())
+            ->setIsRequired((boolean)$attribute->getIsRequired())
             ->setMultilineCount((int)$attribute->getMultilineCount())
             ->setDataModel((string)$attribute->getDataModel())
             ->setOptions($options)
             ->setFrontendClass($attribute->getFrontend()->getClass())
             ->setFrontendLabel($attribute->getFrontendLabel())
             ->setNote((string)$attribute->getNote())
-            ->setSystem((boolean)$attribute->getIsSystem())
-            ->setUserDefined((boolean)$attribute->getIsUserDefined())
+            ->setIsSystem((boolean)$attribute->getIsSystem())
+            ->setIsUserDefined((boolean)$attribute->getIsUserDefined())
             ->setBackendType($attribute->getBackendType())
             ->setSortOrder((int)$attribute->getSortOrder());
-
-        return $this->_attributeMetadataBuilder->create();
     }
 }

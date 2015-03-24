@@ -106,7 +106,7 @@ class Links
 
     /**
      * @param array $productIds
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function deleteOldLinks($productIds)
@@ -157,7 +157,7 @@ class Links
      */
     protected function getBehavior()
     {
-        if (is_null($this->behavior)) {
+        if ($this->behavior === null) {
             $this->behavior = $this->importFactory->create()->getDataSourceModel()->getBehavior();
         }
         return $this->behavior;

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter\Price;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Range
 {
@@ -25,9 +25,9 @@ class Range
     private $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Layer
+     * @var Resolver
      */
-    private $layer;
+    private $layerResolver;
 
     /**
      * @param Registry $registry
@@ -39,7 +39,7 @@ class Range
     {
         $this->registry = $registry;
         $this->scopeConfig = $scopeConfig;
-        $this->layer = $layerResolver->get();
+        $this->layerResolver = $layerResolver;
     }
 
     /**
@@ -47,7 +47,8 @@ class Range
      */
     public function getPriceRange()
     {
-        $currentCategory = $this->registry->registry('current_category_filter') ?: $this->layer->getCurrentCategory();
+        $currentCategory = $this->registry->registry('current_category_filter')
+            ?: $this->layerResolver->get()->getCurrentCategory();
 
         return $currentCategory->getFilterPriceRange();
     }

@@ -10,7 +10,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
@@ -38,7 +38,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -59,7 +59,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
@@ -145,7 +145,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     {
         try {
             if (!$configureResult->getOk()) {
-                throw new \Magento\Framework\Model\Exception($configureResult->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(__($configureResult->getMessage()));
             }
 
             $currentStoreId = (int)$configureResult->getCurrentStoreId();
@@ -153,11 +153,8 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
                 $currentStoreId = $this->_storeManager->getStore()->getId();
             }
 
-            try {
-                $product = $this->productRepository->getById($configureResult->getProductId(), false, $currentStoreId);
-            } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Model\Exception(__('The product is not loaded.'), 0, $e);
-            }
+            $product = $this->productRepository->getById($configureResult->getProductId(), false, $currentStoreId);
+
             $this->_coreRegistry->register('current_product', $product);
             $this->_coreRegistry->register('product', $product);
 

@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-version",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0",
+        "magento/framework": "0.74.0-beta1",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+    "version": "0.74.0-beta1",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/Version"
+            ]
+        ]
+    }
+}

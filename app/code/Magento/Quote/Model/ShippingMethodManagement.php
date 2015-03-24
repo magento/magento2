@@ -13,7 +13,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
-use Magento\Quote\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterfaceFactory;
 
 /**
  * Shipping method read service.
@@ -28,11 +28,11 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $quoteRepository;
 
     /**
-     * Shipping method builder.
+     * Shipping data factory.
      *
-     * @var \Magento\Quote\Api\Data\ShippingMethodDataBuilder
+     * @var \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory
      */
-    protected $methodBuilder;
+    protected $methodDataFactory;
 
     /**
      * Shipping method converter
@@ -45,16 +45,16 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Quote\Api\Data\ShippingMethodDataBuilder $methodBuilder Shipping method builder.
-     * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method builder converter.
+     * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory Shipping method factory.
+     * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method converter.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
-        \Magento\Quote\Api\Data\ShippingMethodDataBuilder $methodBuilder,
+        \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory,
         Cart\ShippingMethodConverter $converter
     ) {
         $this->quoteRepository = $quoteRepository;
-        $this->methodBuilder = $methodBuilder;
+        $this->methodDataFactory = $methodDataFactory;
         $this->converter = $converter;
     }
 
@@ -69,7 +69,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException('Shipping address not set.');
+            throw new StateException(__('Shipping address not set.'));
         }
 
         $shippingMethod = $shippingAddress->getShippingMethod();
@@ -80,17 +80,14 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         list($carrierCode, $methodCode) = $this->divideNames('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = $this->divideNames(' - ', $shippingAddress->getShippingDescription());
 
-        $output = [
-            ShippingMethodInterface::CARRIER_CODE => $carrierCode,
-            ShippingMethodInterface::METHOD_CODE => $methodCode,
-            ShippingMethodInterface::CARRIER_TITLE => $carrierTitle,
-            ShippingMethodInterface::METHOD_TITLE => $methodTitle,
-            ShippingMethodInterface::SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
-            ShippingMethodInterface::BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
-            ShippingMethodInterface::AVAILABLE => true,
-        ];
-
-        return $this->methodBuilder->populateWithArray($output)->create();
+        return $this->methodDataFactory->create()
+            ->setCarrierCode($carrierCode)
+            ->setMethodCode($methodCode)
+            ->setCarrierTitle($carrierTitle)
+            ->setMethodTitle($methodTitle)
+            ->setAmount($shippingAddress->getShippingAmount())
+            ->setBaseAmount($shippingAddress->getBaseShippingAmount())
+            ->setAvailable(true);
     }
 
     /**
@@ -104,7 +101,9 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected function divideNames($delimiter, $line)
     {
         if (strpos($line, $delimiter) === false) {
-            throw new InputException('Line "' .  $line . '" doesn\'t contain delimiter ' . $delimiter);
+            throw new InputException(
+                __('Line "%1" doesn\'t contain delimiter %2', $line, $delimiter)
+            );
         }
         return explode($delimiter, $line);
     }
@@ -126,7 +125,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
 
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException('Shipping address not set.');
+            throw new StateException(__('Shipping address not set.'));
         }
         $shippingAddress->collectShippingRates();
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
@@ -155,31 +154,33 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (0 == $quote->getItemsCount()) {
-            throw new InputException('Shipping method is not applicable for empty cart');
+            throw new InputException(__('Shipping method is not applicable for empty cart'));
         }
 
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                'Cart contains virtual product(s) only. Shipping method is not applicable.'
+                __('Cart contains virtual product(s) only. Shipping method is not applicable.')
             );
         }
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException('Shipping address is not set');
+            throw new StateException(__('Shipping address is not set'));
         }
         $billingAddress = $quote->getBillingAddress();
         if (!$billingAddress->getCountryId()) {
-            throw new StateException('Billing address is not set');
+            throw new StateException(__('Billing address is not set'));
         }
 
         $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
         if (!$shippingAddress->requestShippingRates()) {
-            throw new NoSuchEntityException('Carrier with such method not found: ' . $carrierCode . ', ' . $methodCode);
+            throw new NoSuchEntityException(
+                __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
+            );
         }
         try {
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Cannot set shipping method. ' . $e->getMessage());
+            throw new CouldNotSaveException(__('Cannot set shipping method. %1', $e->getMessage()));
         }
         return true;
     }

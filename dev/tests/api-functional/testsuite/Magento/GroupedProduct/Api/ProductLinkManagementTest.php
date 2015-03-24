@@ -6,8 +6,6 @@
  */
 namespace Magento\GroupedProduct\Api;
 
-use Magento\Webapi\Model\Rest\Config as RestConfig;
-
 class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductLinkManagementV1';
@@ -25,7 +23,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -34,7 +32,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             ],
         ];
 
-        $actual = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'type' => $linkType]);
+        $actual = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'type' => $linkType]);
 
         $expected = [
             [
@@ -57,14 +55,14 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             array_walk(
                 $expected,
                 function (&$item) {
-                    $item['custom_attributes'] = [['attribute_code' => 'qty', 'value' => 1.0000]];
+                    $item['extension_attributes'] = ['qty' => 1.0000];
                 }
             );
         } else {
             array_walk(
                 $expected,
                 function (&$item) {
-                    $item['custom_attributes'] = [['attribute_code' => 'qty', 'value' => 1.0000]];
+                    $item['extension_attributes'] = ['qty' => 1.0000];
                 }
             );
         }

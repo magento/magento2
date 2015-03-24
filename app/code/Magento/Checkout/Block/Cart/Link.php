@@ -83,7 +83,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * Create link label based on cart item quantity
      *
      * @param int $count
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _createLabel($count)
     {

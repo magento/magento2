@@ -9,16 +9,16 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Resource\Eav\Attribute;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
-use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
-use Magento\CatalogSearch\Model\Resource\ResourceProvider;
-use Magento\Directory\Model\Currency;
+use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Model\Resource\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\CatalogSearch\Model\Resource\Advanced\Collection as ProductCollection;
+use Magento\CatalogSearch\Model\Resource\AdvancedFactory;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Framework\Store\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
@@ -53,9 +53,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     protected $_searchCriterias = [];
 
     /**
-     * Found products collection
+     * Product collection
      *
-     * @var Collection
+     * @var ProductCollection
      */
     protected $_productCollection;
 
@@ -76,14 +76,14 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Attribute collection factory
      *
-     * @var CollectionFactory
+     * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -102,37 +102,40 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     protected $_currencyFactory;
 
     /**
-     * Resources factory
+     * Advanced Collection Factory
      *
-     * @var ResourceProvider
+     * @var ProductCollectionFactory
      */
-    protected $_resourceProvider;
+    protected $productCollectionFactory;
 
     /**
      * Construct
      *
      * @param Context $context
      * @param Registry $registry
-     * @param CollectionFactory $attributeCollectionFactory
+     * @param AttributeCollectionFactory $attributeCollectionFactory
      * @param Visibility $catalogProductVisibility
      * @param Config $catalogConfig
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param ResourceProvider $resourceProvider
+     * @param StoreManagerInterface $storeManager
+     * @param ProductCollectionFactory $productCollectionFactory
+     * @param AdvancedFactory $advancedFactory
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        CollectionFactory $attributeCollectionFactory,
+        AttributeCollectionFactory $attributeCollectionFactory,
         Visibility $catalogProductVisibility,
         Config $catalogConfig,
         CurrencyFactory $currencyFactory,
         ProductFactory $productFactory,
         StoreManagerInterface $storeManager,
-        ResourceProvider $resourceProvider,
+        ProductCollectionFactory $productCollectionFactory,
+        AdvancedFactory $advancedFactory,
         array $data = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
@@ -141,12 +144,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         $this->_currencyFactory = $currencyFactory;
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
-        $this->_resourceProvider = $resourceProvider;
+        $this->productCollectionFactory = $productCollectionFactory;
         parent::__construct(
             $context,
             $registry,
-            $this->_resourceProvider->getResource(),
-            $this->_resourceProvider->getResourceCollection(),
+            $advancedFactory->create(),
+            $this->productCollectionFactory->create(),
             $data
         );
     }
@@ -156,7 +159,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @param   array $values
      * @return  $this
-     * @throws Exception
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -172,7 +175,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 continue;
             }
             $value = $values[$attribute->getAttributeCode()];
-            $this->_addSearchCriteria($attribute, $value);
+            $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
+            if (false === $preparedSearchValue) {
+                continue;
+            }
+            $this->addSearchCriteria($attribute, $preparedSearchValue);
 
             if ($attribute->getAttributeCode() == 'price') {
                 $rate = 1;
@@ -187,6 +194,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     : '';
                 $value['to'] = (isset($value['to']) && is_numeric($value['to']))
                     ? (float)$value['to'] / $rate
+                    : '';
+            }
+
+            if ($attribute->getBackendType() == 'datetime') {
+                $value['from'] = (isset($value['from']) && !empty($value['from']))
+                    ? date('Y-m-d\TH:i:s\Z', strtotime($value['from']))
+                    : '';
+                $value['to'] = (isset($value['to']) && !empty($value['to']))
+                    ? date('Y-m-d\TH:i:s\Z', strtotime($value['to']))
                     : '';
             }
             $condition = $this->_getResource()->prepareCondition(
@@ -210,7 +226,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->_registry->register('advanced_search_conditions', $allConditions);
             $this->getProductCollection()->addFieldsToFilter($allConditions);
         } elseif (!$hasConditions) {
-            throw new Exception(__('Please specify at least one search term.'));
+            throw new LocalizedException(__('Please specify at least one search term.'));
         }
 
         return $this;
@@ -224,7 +240,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getAttributes()
     {
         $attributes = $this->getData('attributes');
-        if (is_null($attributes)) {
+        if ($attributes === null) {
             $product = $this->_productFactory->create();
             $attributes = $this->_attributeCollectionFactory
                 ->create()
@@ -248,8 +264,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      */
     public function getProductCollection()
     {
-        if (is_null($this->_productCollection)) {
-            $collection = $this->_resourceProvider->getAdvancedResultCollection();
+        if ($this->_productCollection === null) {
+            $collection = $this->productCollectionFactory->create();
             $this->prepareProductCollection($collection);
             if (!$collection) {
                 return $collection;
@@ -280,20 +296,30 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @param EntityAttribute $attribute
+     * @param mixed $value
+     * @return void
+     */
+    protected function addSearchCriteria($attribute, $value)
+    {
+        if (!empty($value)) {
+            $this->_searchCriterias[] = ['name' => $attribute->getStoreLabel(), 'value' => $value];
+        }
+    }
+
+    /**
      * Add data about search criteria to object state
      *
      * @todo: Move this code to block
      *
      * @param   EntityAttribute $attribute
      * @param   mixed $value
-     * @return  $this
+     * @return  string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _addSearchCriteria($attribute, $value)
+    protected function getPreparedSearchCriteria($attribute, $value)
     {
-        $name = $attribute->getStoreLabel();
-
         if (is_array($value)) {
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
@@ -321,7 +347,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                         $value = __('up to %1', $currencyModel ? $to : $value['to']);
                     }
                 } else {
-                    return $this;
+                    return '';
                 }
             }
         }
@@ -347,10 +373,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 ? __('Yes')
                 : __('No');
         }
-        if (!empty($value)) {
-            $this->_searchCriterias[] = ['name' => $name, 'value' => $value];
-        }
-        return $this;
+
+        return $value;
     }
 
     /**

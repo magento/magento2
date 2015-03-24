@@ -65,7 +65,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($filter, $this->_model->getTemplateFilter());
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $filter->getStoreId()
         );
@@ -89,7 +89,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetProcessedTemplate()
     {
@@ -106,7 +106,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             [
                 'area' => 'frontend',
                 'store' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\Store\StoreManagerInterface'
+                    'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
                 )->getId()
@@ -130,14 +130,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $theme->getId(),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             'fixturestore'
         );
     }
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      */
     public function testGetProcessedTemplateSubject()
     {
@@ -154,7 +154,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             [
                 'area' => 'frontend',
                 'store' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\Store\StoreManagerInterface'
+                    'Magento\Store\Model\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
                 )->getId()
@@ -185,7 +185,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDesignConfigException($config)
     {
-        // \Magento\Core\Model\Template is an abstract class
+        // \Magento\Email\Model\Template is an abstract class
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Email\Model\Template');
         $model->setDesignConfig($config);
@@ -194,7 +194,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function setDesignConfigExceptionDataProvider()
     {
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getId();
+            ->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
         return [
             [[]],
             [['area' => 'frontend']],

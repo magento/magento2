@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\Data\Form\Filter;
 
+use Magento\Framework\Stdlib\DateTime;
+
 class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
     /**
@@ -23,23 +25,23 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
     /**
      * Local
      *
-     * @var \Zend_Locale
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $localeResolver;
 
     /**
      * Initialize filter
      *
-     * @param string $format    \Magento\Framework\Stdlib\DateTime\Date input/output format
-     * @param \Zend_Locale $locale
+     * @param string $format \DateTime input/output format
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
-    public function __construct($format = null, $locale = null)
+    public function __construct($format = null, $localeResolver = null)
     {
-        if (is_null($format)) {
-            $format = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+        if ($format === null) {
+            $format = DateTime::DATE_INTERNAL_FORMAT;
         }
         $this->_dateFormat = $format;
-        $this->_locale = $locale;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -51,10 +53,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
     public function inputFilter($value)
     {
         $filterInput = new \Zend_Filter_LocalizedToNormalized(
-            ['date_format' => $this->_dateFormat, 'locale' => $this->_locale]
+            ['date_format' => $this->_dateFormat, 'locale' => $this->localeResolver->getLocale()]
         );
         $filterInternal = new \Zend_Filter_NormalizedToLocalized(
-            ['date_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->_locale]
+            ['date_format' => DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
         );
 
         $value = $filterInput->filter($value);
@@ -71,10 +73,10 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
     public function outputFilter($value)
     {
         $filterInput = new \Zend_Filter_LocalizedToNormalized(
-            ['date_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->_locale]
+            ['date_format' => DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
         );
         $filterInternal = new \Zend_Filter_NormalizedToLocalized(
-            ['date_format' => $this->_dateFormat, 'locale' => $this->_locale]
+            ['date_format' => $this->_dateFormat, 'locale' => $this->localeResolver->getLocale()]
         );
 
         $value = $filterInput->filter($value);

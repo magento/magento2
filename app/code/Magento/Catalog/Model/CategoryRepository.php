@@ -19,7 +19,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $instances = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -41,26 +41,18 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
 
     /**
-     * @var \Magento\Catalog\Api\Data\CategoryDataBuilder
-     */
-    protected $categoryBuilder;
-
-    /**
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\Data\CategoryDataBuilder $dataBuilder
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
-        $this->categoryBuilder = $dataBuilder;
     }
 
     /**
@@ -85,6 +77,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
             $parentCategory = $this->get($parentId);
+            $existingData['include_in_menu'] =
+                isset($existingData['include_in_menu']) ? (bool)$existingData['include_in_menu'] : false;
             /** @var  $category Category */
             $category->setData($existingData);
             $category->setPath($parentCategory->getPath());
@@ -93,7 +87,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $this->validateCategory($category);
             $this->categoryResource->save($category);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save category: %message', ['message' => $e->getMessage()], $e);
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save category: %1',
+                    $e->getMessage()
+                ),
+                $e
+            );
         }
         unset($this->instances[$category->getId()]);
         return $category;
@@ -129,10 +129,10 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $this->categoryResource->delete($category);
         } catch (\Exception $e) {
             throw new StateException(
-                'Cannot delete category with id %category_id',
-                [
-                    'category_id' => $category->getId()
-                ],
+                __(
+                    'Cannot delete category with id %1',
+                    $category->getId()
+                ),
                 $e
             );
         }
@@ -154,7 +154,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      *
      * @param  Category $category
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateCategory(Category $category)
     {
@@ -170,9 +170,11 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             foreach ($validate as $code => $error) {
                 if ($error === true) {
                     $attribute = $this->categoryResource->getAttribute($code)->getFrontend()->getLabel();
-                    throw new \Magento\Framework\Model\Exception(__('Attribute "%1" is required.', $attribute));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Attribute "%1" is required.', $attribute)
+                    );
                 } else {
-                    throw new \Magento\Framework\Model\Exception($error);
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
             }
         }

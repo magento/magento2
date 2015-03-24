@@ -8,7 +8,7 @@ namespace Magento\Persistent\Helper;
 /**
  * Persistent Shopping Cart Data Helper
  */
-class Session extends \Magento\Core\Helper\Data
+class Session extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Instance of Session Model
@@ -47,37 +47,22 @@ class Session extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Persistent\Model\SessionFactory $sessionFactory,
-        $dbCompatibleMode = true
+        \Magento\Persistent\Model\SessionFactory $sessionFactory
     ) {
         $this->_persistentData = $persistentData;
         $this->_checkoutSession = $checkoutSession;
         $this->_sessionFactory = $sessionFactory;
 
         parent::__construct(
-            $context,
-            $scopeConfig,
-            $storeManager,
-            $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $context
         );
     }
 
@@ -88,7 +73,7 @@ class Session extends \Magento\Core\Helper\Data
      */
     public function getSession()
     {
-        if (is_null($this->_sessionModel)) {
+        if ($this->_sessionModel === null) {
             $this->_sessionModel = $this->_sessionFactory->create();
             $this->_sessionModel->loadByCookieKey();
         }
@@ -124,10 +109,10 @@ class Session extends \Magento\Core\Helper\Data
      */
     public function isRememberMeChecked()
     {
-        if (is_null($this->_isRememberMeChecked)) {
+        if ($this->_isRememberMeChecked === null) {
             //Try to get from checkout session
             $isRememberMeChecked = $this->_checkoutSession->getRememberMeChecked();
-            if (!is_null($isRememberMeChecked)) {
+            if ($isRememberMeChecked !== null) {
                 $this->_isRememberMeChecked = $isRememberMeChecked;
                 $this->_checkoutSession->unsRememberMeChecked();
                 return $isRememberMeChecked;

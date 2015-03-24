@@ -36,7 +36,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Store list manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -71,7 +71,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
@@ -80,7 +80,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param array $themes
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
@@ -172,7 +172,7 @@ class Design implements \Magento\Framework\View\DesignInterface
             } else {
                 $theme = (string) $this->_scopeConfig->getValue(
                     self::XML_PATH_THEME_ID,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $store
                 );
             }
@@ -247,7 +247,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         if (null === $this->_locale) {
             $this->_locale = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
         }
-        return $this->_locale->getLocaleCode();
+        return $this->_locale->getLocale();
     }
 
     /**

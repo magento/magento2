@@ -7,9 +7,9 @@
 @gallery-sprite-svg: '../images/sprite-gallery.svg';
 @gallery-sprite-png: '../images/sprite-gallery.png';
 @gallery-lightbox-offset: 20px;
-@gallery-lightbox-border-color: @border-color-base;
+@gallery-lightbox-border-color: @border-color__base;
 @gallery-lightbox-border-width: 1px;
-@gallery-overlay-bg: rgba(204, 204, 204, .5);
+@gallery-overlay-background-color: rgba(204, 204, 204, .5);
 @gallery-close-position-top: 20px;
 @gallery-close-position-right: 20px;
 @gallery-close-height: 13px;
@@ -30,19 +30,12 @@
 @gallery-main-img-margin-bottom: @gallery-thumbnails-padding-top + @gallery-thumbnails-padding-bottom + (2 * @gallery-thumb-border-width) + 40px;
 @gallery-main-img-margin-left: 20px;
 @gallery-main-img-margin-right: 20px;
-@gallery-lens-border-color: @border-color-base;
-@gallery-lens-border-width: @border-width-base;
+@gallery-lens-border-color: @border-color__base;
+@gallery-lens-border-width: @border-width__base;
 
-@import "../css/source/lib/lib.less";
-@import "../css/source/theme.less";
-
-.loading-mask {
-    .loading();
-    z-index: @loader-overlay-z-index;
-    .loader > p {
-        display: none;
-    }
-}
+@import '../css/source/lib/_lib.less'; // Global lib
+@import '../css/source/_theme.less'; // Theme overrides
+@import '../css/source/_variables.less'; // Local theme variables
 
 .ui-widget-overlay {
     position: fixed !important;
@@ -50,15 +43,15 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: @gallery-overlay-bg;
-    z-index: @loader-overlay-z-index - 1;
+    background: @gallery-overlay-background-color;
+    z-index: @loader-overlay__z-index - 1;
 }
 
 .zoom.lense {
     position: absolute;
     z-index: 9999;
     overflow: hidden;
-    background: @page-bg-color;
+    background: @page__background-color;
     .zoom.inner > img {
         position: absolute;
         max-width: none;
@@ -74,9 +67,9 @@
     right: @gallery-lightbox-offset;
     bottom: @gallery-lightbox-offset;
     border: @gallery-lightbox-border-width solid @gallery-lightbox-border-color;
-    background-color: @page-bg-color;
+    background-color: @page__background-color;
     box-shadow: 0 5px 5px rgba(0,0,0,.2);
-    z-index: @loader-overlay-z-index;
+    z-index: @loader-overlay__z-index;
 
     .img.photo.container img {
         position: absolute;
@@ -91,7 +84,7 @@
     }
 
     .ui-dialog-titlebar {
-        background-color: @page-bg-color;
+        background-color: @page__background-color;
     }
 
     .ui-dialog-titlebar-close {
@@ -164,7 +157,7 @@
     .product.photo.thumbs {
         width: 95%;
         padding: @gallery-thumbnails-padding;
-        background: @page-bg-color;
+        background: @page__background-color;
         position: absolute;
         bottom:0;
         box-sizing: border-box;
@@ -198,4 +191,4 @@
     }
 }
 
-@import "../css/source/lib/responsive.less";
+@import '../css/source/lib/_responsive.less';

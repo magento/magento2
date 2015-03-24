@@ -15,68 +15,80 @@
             data-url="<?php echo $block->getConfig()->getUrl() ?>" multiple>
     </span>
     <div class="clear"></div>
-    <div class="no-display" id="<?php echo $block->getHtmlId() ?>-template">
-        <div id="{{id}}" class="file-row">
-            <span class="file-info">{{name}} ({{size}})</span>
+    <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
+        <div id="<%- data.id %>" class="file-row">
+            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
             <div class="progressbar-container">
                 <div class="progressbar upload-progress" style="width: 0%;"></div>
             </div>
             <div class="clear"></div>
         </div>
-    </div>
+    </script>
 </div>
 
 <script>
-require(['jquery', "jquery/file-uploader"], function($){
+require([
+    'jquery',
+    'mage/template',
+    'jquery/file-uploader',
+    'domReady!'
+], function ($, mageTemplate) {
 
-//<![CDATA[
-    $(function () {
-        $('#fileupload').fileupload({
-            dataType: 'json',
-            formData: {
-                isAjax: 'true',
-                form_key: FORM_KEY
-            },
-            sequentialUploads: true,
-            maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize()?>,
-            add: function(e, data) {
-                $.each(data.files, function (index, file) {
-                    data.fileId =  Math.random().toString(36).substr(2,9);
-                    var progressTmpl = $('#<?php echo $block->getHtmlId(); ?>-template').children(':first').clone();
-                    progressTmpl.attr('id', data.fileId);
-                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
-                        .replace('{{name}}', file.name);
-                    progressTmpl.html(fileInfoHtml) ;
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        formData: {
+            isAjax: 'true',
+            form_key: FORM_KEY
+        },
+        sequentialUploads: true,
+        maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize() ?> ,
+        add: function (e, data) {
+            var progressTmpl = mageTemplate('#<?php echo $block->getHtmlId(); ?>-template'),
+                fileSize,
+                tmpl;
 
-                    progressTmpl.appendTo('#<?php echo $block->getHtmlId() ?>');
+            $.each(data.files, function (index, file) {
+                fileSize = typeof file.size == "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
 
+                data.fileId = Math.random().toString(36).substr(2, 9);
+
+                tmpl = progressTmpl({
+                    data: {
+                        name: file.name,
+                        size: fileSize,
+                        id: data.fileId
+                    }
                 });
-                $(this).fileupload('process', data).done(function () {
-                    data.submit();
-                });
-            },
-            done: function(e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width','100%');
-                if (data.result && !data.result.hasOwnProperty('errorcode')) {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-                    MediabrowserInstance.handleUploadComplete();
-                } else {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-                }
-            },
-            progress: function(e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width', progress + '%');
-            },
-            fail: function(e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+
+                $(tmpl).appendTo('#<?php echo $block->getHtmlId() ?>');
+            });
+
+            $(this).fileupload('process', data).done(function () {
+                data.submit();
+            });
+        },
+        done: function (e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', '100%');
+            if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                MediabrowserInstance.handleUploadComplete();
+            } else {
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
             }
-        });
+        },
+        progress: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', progress + '%');
+        },
+        fail: function (e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+        }
     });
-//]]>
 
 });
 </script>

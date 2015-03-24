@@ -9,7 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -21,13 +21,13 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         parent::__construct($context, $resultRedirectFactory);
@@ -49,7 +49,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($storeId) {
             if (!$categoryId) {
                 $store = $this->_objectManager
-                    ->get('Magento\Framework\Store\StoreManagerInterface')
+                    ->get('Magento\Store\Model\StoreManagerInterface')
                     ->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
                 $this->getRequest()->setParam('id', $rootId);
@@ -65,7 +65,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $block = $this->layoutFactory->create()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Tree');
         $root = $block->getRoot();
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([
             'data' => $block->getTree(),

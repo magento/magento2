@@ -9,7 +9,7 @@ namespace Magento\Customer\Model\Data;
 /**
  * Customer attribute metadata class.
  */
-class AttributeMetadata extends \Magento\Framework\Api\AbstractExtensibleObject implements
+class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\AttributeMetadataInterface
 {
     /**
@@ -146,5 +146,192 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractExtensibleObject 
     public function getBackendType()
     {
         return $this->_get(self::BACKEND_TYPE);
+    }
+
+    /**
+     * Set attribute code
+     *
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function setAttributeCode($attributeCode)
+    {
+        return $this->setData(self::ATTRIBUTE_CODE, $attributeCode);
+    }
+
+    /**
+     * Set frontend HTML for input element.
+     *
+     * @param string $frontendInput
+     * @return $this
+     */
+    public function setFrontendInput($frontendInput)
+    {
+        return $this->setData(self::FRONTEND_INPUT, $frontendInput);
+    }
+
+    /**
+     * Set template used for input (e.g. "date")
+     *
+     * @param string $inputFilter
+     * @return $this
+     */
+    public function setInputFilter($inputFilter)
+    {
+        return $this->setData(self::INPUT_FILTER, $inputFilter);
+    }
+
+    /**
+     * Set label of the store.
+     *
+     * @param string $storeLabel
+     * @return $this
+     */
+    public function setStoreLabel($storeLabel)
+    {
+        return $this->setData(self::STORE_LABEL, $storeLabel);
+    }
+
+    /**
+     * Set validation rules.
+     *
+     * @param \Magento\Customer\Api\Data\ValidationRuleInterface[] $validationRules
+     * @return $this
+     */
+    public function setValidationRules(array $validationRules)
+    {
+        return $this->setData(self::VALIDATION_RULES, $validationRules);
+    }
+
+    /**
+     * Set number of lines of the attribute value.
+     *
+     * @param int $multilineCount
+     * @return $this
+     */
+    public function setMultilineCount($multilineCount)
+    {
+        return $this->setData(self::MULTILINE_COUNT, $multilineCount);
+    }
+
+    /**
+     * Set whether attribute is visible on frontend.
+     *
+     * @param bool $isVisible
+     * @return $this
+     */
+    public function setIsVisible($isVisible)
+    {
+        return $this->setData(self::VISIBLE, $isVisible);
+    }
+
+    /**
+     * Whether attribute is required.
+     *
+     * @param bool $isRequired
+     * @return $this
+     */
+    public function setIsRequired($isRequired)
+    {
+        return $this->setData(self::REQUIRED, $isRequired);
+    }
+
+    /**
+     * Get data model for attribute.
+     *
+     * @param string $dataModel
+     * @return $this
+     */
+    public function setDataModel($dataModel)
+    {
+        return $this->setData(self::DATA_MODEL, $dataModel);
+    }
+
+    /**
+     * Set options of the attribute (key => value pairs for select)
+     *
+     * @param \Magento\Customer\Api\Data\OptionInterface[] $options
+     * @return $this
+     */
+    public function setOptions(array $options = null)
+    {
+        return $this->setData(self::OPTIONS, $options);
+    }
+
+    /**
+     * Set class which is used to display the attribute on frontend.
+     *
+     * @param string $frontendClass
+     * @return $this
+     */
+    public function setFrontendClass($frontendClass)
+    {
+        return $this->setData(self::FRONTEND_CLASS, $frontendClass);
+    }
+
+    /**
+     * Set whether current attribute has been defined by a user.
+     *
+     * @param bool $isUserDefined
+     * @return $this
+     */
+    public function setIsUserDefined($isUserDefined)
+    {
+        return $this->setData(self::USER_DEFINED, $isUserDefined);
+    }
+
+    /**
+     * Get attributes sort order.
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set label which supposed to be displayed on frontend.
+     *
+     * @param string $frontendLabel
+     * @return $this
+     */
+    public function setFrontendLabel($frontendLabel)
+    {
+        return $this->setData(self::FRONTEND_LABEL, $frontendLabel);
+    }
+
+    /**
+     * Set the note attribute for the element.
+     *
+     * @param string $note
+     * @return $this
+     */
+    public function setNote($note)
+    {
+        return $this->setData(self::NOTE, $note);
+    }
+
+    /**
+     * Set whether this is a system attribute.
+     *
+     * @param bool $isSystem
+     * @return $this
+     */
+    public function setIsSystem($isSystem)
+    {
+        return $this->setData(self::SYSTEM, $isSystem);
+    }
+
+    /**
+     * Set backend type.
+     *
+     * @param string $backendType
+     * @return $this
+     */
+    public function setBackendType($backendType)
+    {
+        return $this->setData(self::BACKEND_TYPE, $backendType);
     }
 }

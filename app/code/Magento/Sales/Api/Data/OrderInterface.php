@@ -1069,6 +1069,14 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the external customer ID for the order.
      *
      * @return string External customer ID.
@@ -1527,11 +1535,27 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getItems();
 
     /**
+     * Sets items for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderItemInterface[] $items
+     * @return $this
+     */
+    public function setItems($items);
+
+    /**
      * Gets the billing address, if any, for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderAddressInterface|null Billing address. Otherwise, null.
      */
     public function getBillingAddress();
+
+    /**
+     * Sets the billing address, if any, for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
+     * @return $this
+     */
+    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
 
     /**
      * Gets the shipping address, if any, for the order.
@@ -1541,11 +1565,27 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getShippingAddress();
 
     /**
+     * Sets the shipping address, if any, for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @return $this
+     */
+    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
+
+    /**
      * Gets the payments for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface[] Array of payments.
      */
     public function getPayments();
+
+    /**
+     * Sets the payments for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface[] $payments
+     * @return $this
+     */
+    public function setPayments(array $payments = null);
 
     /**
      * Gets addresses for the order.
@@ -1555,9 +1595,1096 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getAddresses();
 
     /**
+     * Sets addresses for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface[] $addresses
+     * @return $this
+     */
+    public function setAddresses(array $addresses = null);
+
+    /**
      * Gets status histories for the order.
      *
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] Array of status histories.
      */
     public function getStatusHistories();
+
+    /**
+     * Sets status histories for the order.
+     *
+     * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] $statusHistories
+     * @return $this
+     */
+    public function setStatusHistories(array $statusHistories = null);
+
+    /**
+     * Sets the state for the order.
+     *
+     * @param string $state
+     * @return $this
+     */
+    public function setState($state);
+
+    /**
+     * Sets the status for the order.
+     *
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status);
+
+    /**
+     * Sets the coupon code for the order.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setCouponCode($code);
+
+    /**
+     * Sets the protect code for the order.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setProtectCode($code);
+
+    /**
+     * Sets the shipping description for the order.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setShippingDescription($description);
+
+    /**
+     * Sets the is-virtual flag value for the order.
+     *
+     * @param int $isVirtual
+     * @return $this
+     */
+    public function setIsVirtual($isVirtual);
+
+    /**
+     * Sets the store ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setStoreId($id);
+
+    /**
+     * Sets the customer ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setCustomerId($id);
+
+    /**
+     * Sets the base discount amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseDiscountAmount($amount);
+
+    /**
+     * Sets the base discount canceled for the order.
+     *
+     * @param float $baseDiscountCanceled
+     * @return $this
+     */
+    public function setBaseDiscountCanceled($baseDiscountCanceled);
+
+    /**
+     * Sets the base discount invoiced amount for the order.
+     *
+     * @param float $baseDiscountInvoiced
+     * @return $this
+     */
+    public function setBaseDiscountInvoiced($baseDiscountInvoiced);
+
+    /**
+     * Sets the base discount refunded amount for the order.
+     *
+     * @param float $baseDiscountRefunded
+     * @return $this
+     */
+    public function setBaseDiscountRefunded($baseDiscountRefunded);
+
+    /**
+     * Sets the base grand total for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseGrandTotal($amount);
+
+    /**
+     * Sets the base shipping amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingAmount($amount);
+
+    /**
+     * Sets the base shipping canceled for the order.
+     *
+     * @param float $baseShippingCanceled
+     * @return $this
+     */
+    public function setBaseShippingCanceled($baseShippingCanceled);
+
+    /**
+     * Sets the base shipping invoiced amount for the order.
+     *
+     * @param float $baseShippingInvoiced
+     * @return $this
+     */
+    public function setBaseShippingInvoiced($baseShippingInvoiced);
+
+    /**
+     * Sets the base shipping refunded amount for the order.
+     *
+     * @param float $baseShippingRefunded
+     * @return $this
+     */
+    public function setBaseShippingRefunded($baseShippingRefunded);
+
+    /**
+     * Sets the base shipping tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingTaxAmount($amount);
+
+    /**
+     * Sets the base shipping tax refunded amount for the order.
+     *
+     * @param float $baseShippingTaxRefunded
+     * @return $this
+     */
+    public function setBaseShippingTaxRefunded($baseShippingTaxRefunded);
+
+    /**
+     * Sets the base subtotal for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseSubtotal($amount);
+
+    /**
+     * Sets the base subtotal canceled for the order.
+     *
+     * @param float $baseSubtotalCanceled
+     * @return $this
+     */
+    public function setBaseSubtotalCanceled($baseSubtotalCanceled);
+
+    /**
+     * Sets the base subtotal invoiced amount for the order.
+     *
+     * @param float $baseSubtotalInvoiced
+     * @return $this
+     */
+    public function setBaseSubtotalInvoiced($baseSubtotalInvoiced);
+
+    /**
+     * Sets the base subtotal refunded amount for the order.
+     *
+     * @param float $baseSubtotalRefunded
+     * @return $this
+     */
+    public function setBaseSubtotalRefunded($baseSubtotalRefunded);
+
+    /**
+     * Sets the base tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseTaxAmount($amount);
+
+    /**
+     * Sets the base tax canceled for the order.
+     *
+     * @param float $baseTaxCanceled
+     * @return $this
+     */
+    public function setBaseTaxCanceled($baseTaxCanceled);
+
+    /**
+     * Sets the base tax invoiced amount for the order.
+     *
+     * @param float $baseTaxInvoiced
+     * @return $this
+     */
+    public function setBaseTaxInvoiced($baseTaxInvoiced);
+
+    /**
+     * Sets the base tax refunded amount for the order.
+     *
+     * @param float $baseTaxRefunded
+     * @return $this
+     */
+    public function setBaseTaxRefunded($baseTaxRefunded);
+
+    /**
+     * Sets the base-to-global rate for the order.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setBaseToGlobalRate($rate);
+
+    /**
+     * Sets the base-to-order rate for the order.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setBaseToOrderRate($rate);
+
+    /**
+     * Sets the base total canceled for the order.
+     *
+     * @param float $baseTotalCanceled
+     * @return $this
+     */
+    public function setBaseTotalCanceled($baseTotalCanceled);
+
+    /**
+     * Sets the base total invoiced amount for the order.
+     *
+     * @param float $baseTotalInvoiced
+     * @return $this
+     */
+    public function setBaseTotalInvoiced($baseTotalInvoiced);
+
+    /**
+     * Sets the base total invoiced cost for the order.
+     *
+     * @param float $baseTotalInvoicedCost
+     * @return $this
+     */
+    public function setBaseTotalInvoicedCost($baseTotalInvoicedCost);
+
+    /**
+     * Sets the base total offline refunded amount for the order.
+     *
+     * @param float $baseTotalOfflineRefunded
+     * @return $this
+     */
+    public function setBaseTotalOfflineRefunded($baseTotalOfflineRefunded);
+
+    /**
+     * Sets the base total online refunded amount for the order.
+     *
+     * @param float $baseTotalOnlineRefunded
+     * @return $this
+     */
+    public function setBaseTotalOnlineRefunded($baseTotalOnlineRefunded);
+
+    /**
+     * Sets the base total paid for the order.
+     *
+     * @param float $baseTotalPaid
+     * @return $this
+     */
+    public function setBaseTotalPaid($baseTotalPaid);
+
+    /**
+     * Sets the base total quantity ordered for the order.
+     *
+     * @param float $baseTotalQtyOrdered
+     * @return $this
+     */
+    public function setBaseTotalQtyOrdered($baseTotalQtyOrdered);
+
+    /**
+     * Sets the base total refunded amount for the order.
+     *
+     * @param float $baseTotalRefunded
+     * @return $this
+     */
+    public function setBaseTotalRefunded($baseTotalRefunded);
+
+    /**
+     * Sets the discount amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setDiscountAmount($amount);
+
+    /**
+     * Sets the discount canceled for the order.
+     *
+     * @param float $discountCanceled
+     * @return $this
+     */
+    public function setDiscountCanceled($discountCanceled);
+
+    /**
+     * Sets the discount invoiced amount for the order.
+     *
+     * @param float $discountInvoiced
+     * @return $this
+     */
+    public function setDiscountInvoiced($discountInvoiced);
+
+    /**
+     * Sets the discount refunded amount for the order.
+     *
+     * @param float $discountRefunded
+     * @return $this
+     */
+    public function setDiscountRefunded($discountRefunded);
+
+    /**
+     * Sets the grand total for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setGrandTotal($amount);
+
+    /**
+     * Sets the shipping amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingAmount($amount);
+
+    /**
+     * Sets the shipping canceled amount for the order.
+     *
+     * @param float $shippingCanceled
+     * @return $this
+     */
+    public function setShippingCanceled($shippingCanceled);
+
+    /**
+     * Sets the shipping invoiced amount for the order.
+     *
+     * @param float $shippingInvoiced
+     * @return $this
+     */
+    public function setShippingInvoiced($shippingInvoiced);
+
+    /**
+     * Sets the shipping refunded amount for the order.
+     *
+     * @param float $shippingRefunded
+     * @return $this
+     */
+    public function setShippingRefunded($shippingRefunded);
+
+    /**
+     * Sets the shipping tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingTaxAmount($amount);
+
+    /**
+     * Sets the shipping tax refunded amount for the order.
+     *
+     * @param float $shippingTaxRefunded
+     * @return $this
+     */
+    public function setShippingTaxRefunded($shippingTaxRefunded);
+
+    /**
+     * Sets the store-to-base rate for the order.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setStoreToBaseRate($rate);
+
+    /**
+     * Sets the store-to-order rate for the order.
+     *
+     * @param float $rate
+     * @return $this
+     */
+    public function setStoreToOrderRate($rate);
+
+    /**
+     * Sets the subtotal for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setSubtotal($amount);
+
+    /**
+     * Sets the subtotal canceled amount for the order.
+     *
+     * @param float $subtotalCanceled
+     * @return $this
+     */
+    public function setSubtotalCanceled($subtotalCanceled);
+
+    /**
+     * Sets the subtotal invoiced amount for the order.
+     *
+     * @param float $subtotalInvoiced
+     * @return $this
+     */
+    public function setSubtotalInvoiced($subtotalInvoiced);
+
+    /**
+     * Sets the subtotal refunded amount for the order.
+     *
+     * @param float $subtotalRefunded
+     * @return $this
+     */
+    public function setSubtotalRefunded($subtotalRefunded);
+
+    /**
+     * Sets the tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setTaxAmount($amount);
+
+    /**
+     * Sets the tax canceled amount for the order.
+     *
+     * @param float $taxCanceled
+     * @return $this
+     */
+    public function setTaxCanceled($taxCanceled);
+
+    /**
+     * Sets the tax invoiced amount for the order.
+     *
+     * @param float $taxInvoiced
+     * @return $this
+     */
+    public function setTaxInvoiced($taxInvoiced);
+
+    /**
+     * Sets the tax refunded amount for the order.
+     *
+     * @param float $taxRefunded
+     * @return $this
+     */
+    public function setTaxRefunded($taxRefunded);
+
+    /**
+     * Sets the total canceled for the order.
+     *
+     * @param float $totalCanceled
+     * @return $this
+     */
+    public function setTotalCanceled($totalCanceled);
+
+    /**
+     * Sets the total invoiced amount for the order.
+     *
+     * @param float $totalInvoiced
+     * @return $this
+     */
+    public function setTotalInvoiced($totalInvoiced);
+
+    /**
+     * Sets the total offline refunded amount for the order.
+     *
+     * @param float $totalOfflineRefunded
+     * @return $this
+     */
+    public function setTotalOfflineRefunded($totalOfflineRefunded);
+
+    /**
+     * Sets the total online refunded amount for the order.
+     *
+     * @param float $totalOnlineRefunded
+     * @return $this
+     */
+    public function setTotalOnlineRefunded($totalOnlineRefunded);
+
+    /**
+     * Sets the total paid for the order.
+     *
+     * @param float $totalPaid
+     * @return $this
+     */
+    public function setTotalPaid($totalPaid);
+
+    /**
+     * Sets the total quantity ordered for the order.
+     *
+     * @param float $totalQtyOrdered
+     * @return $this
+     */
+    public function setTotalQtyOrdered($totalQtyOrdered);
+
+    /**
+     * Sets the total amount refunded amount for the order.
+     *
+     * @param float $totalRefunded
+     * @return $this
+     */
+    public function setTotalRefunded($totalRefunded);
+
+    /**
+     * Sets the can-ship-partially flag value for the order.
+     *
+     * @param int $flag
+     * @return $this
+     */
+    public function setCanShipPartially($flag);
+
+    /**
+     * Sets the can-ship-partially-item flag value for the order.
+     *
+     * @param int $flag
+     * @return $this
+     */
+    public function setCanShipPartiallyItem($flag);
+
+    /**
+     * Sets the customer-is-guest flag value for the order.
+     *
+     * @param int $customerIsGuest
+     * @return $this
+     */
+    public function setCustomerIsGuest($customerIsGuest);
+
+    /**
+     * Sets the customer-note-notify flag value for the order.
+     *
+     * @param int $customerNoteNotify
+     * @return $this
+     */
+    public function setCustomerNoteNotify($customerNoteNotify);
+
+    /**
+     * Sets the billing address ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setBillingAddressId($id);
+
+    /**
+     * Sets the customer group ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setCustomerGroupId($id);
+
+    /**
+     * Sets the edit increment value for the order.
+     *
+     * @param int $editIncrement
+     * @return $this
+     */
+    public function setEditIncrement($editIncrement);
+
+    /**
+     * Sets the email-sent flag value for the order.
+     *
+     * @param int $emailSent
+     * @return $this
+     */
+    public function setEmailSent($emailSent);
+
+    /**
+     * Sets the forced-shipment-with-invoice flag value for the order.
+     *
+     * @param int $forcedShipmentWithInvoice
+     * @return $this
+     */
+    public function setForcedShipmentWithInvoice($forcedShipmentWithInvoice);
+
+    /**
+     * Sets the payment authorization expiration date for the order.
+     *
+     * @param int $paymentAuthExpiration
+     * @return $this
+     */
+    public function setPaymentAuthExpiration($paymentAuthExpiration);
+
+    /**
+     * Sets the quote address ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setQuoteAddressId($id);
+
+    /**
+     * Sets the quote ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setQuoteId($id);
+
+    /**
+     * Sets the shipping address ID for the order.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setShippingAddressId($id);
+
+    /**
+     * Sets the negative adjustment value for the order.
+     *
+     * @param float $adjustmentNegative
+     * @return $this
+     */
+    public function setAdjustmentNegative($adjustmentNegative);
+
+    /**
+     * Sets the positive adjustment value for the order.
+     *
+     * @param float $adjustmentPositive
+     * @return $this
+     */
+    public function setAdjustmentPositive($adjustmentPositive);
+
+    /**
+     * Sets the base negative adjustment value for the order.
+     *
+     * @param float $baseAdjustmentNegative
+     * @return $this
+     */
+    public function setBaseAdjustmentNegative($baseAdjustmentNegative);
+
+    /**
+     * Sets the base positive adjustment value for the order.
+     *
+     * @param float $baseAdjustmentPositive
+     * @return $this
+     */
+    public function setBaseAdjustmentPositive($baseAdjustmentPositive);
+
+    /**
+     * Sets the base shipping discount amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingDiscountAmount($amount);
+
+    /**
+     * Sets the base subtotal including tax for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseSubtotalInclTax($amount);
+
+    /**
+     * Sets the base total due for the order.
+     *
+     * @param float $baseTotalDue
+     * @return $this
+     */
+    public function setBaseTotalDue($baseTotalDue);
+
+    /**
+     * Sets the payment authorization amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setPaymentAuthorizationAmount($amount);
+
+    /**
+     * Sets the shipping discount amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingDiscountAmount($amount);
+
+    /**
+     * Sets the subtotal including tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setSubtotalInclTax($amount);
+
+    /**
+     * Sets the total due for the order.
+     *
+     * @param float $totalDue
+     * @return $this
+     */
+    public function setTotalDue($totalDue);
+
+    /**
+     * Sets the weight for the order.
+     *
+     * @param float $weight
+     * @return $this
+     */
+    public function setWeight($weight);
+
+    /**
+     * Sets the customer date-of-birth (DOB) for the order.
+     *
+     * @param string $customerDob
+     * @return $this
+     */
+    public function setCustomerDob($customerDob);
+
+    /**
+     * Sets the increment ID for the order.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setIncrementId($id);
+
+    /**
+     * Sets the applied rule IDs for the order.
+     *
+     * @param string $appliedRuleIds
+     * @return $this
+     */
+    public function setAppliedRuleIds($appliedRuleIds);
+
+    /**
+     * Sets the base currency code for the order.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setBaseCurrencyCode($code);
+
+    /**
+     * Sets the customer email address for the order.
+     *
+     * @param string $customerEmail
+     * @return $this
+     */
+    public function setCustomerEmail($customerEmail);
+
+    /**
+     * Sets the customer first name for the order.
+     *
+     * @param string $customerFirstname
+     * @return $this
+     */
+    public function setCustomerFirstname($customerFirstname);
+
+    /**
+     * Sets the customer last name for the order.
+     *
+     * @param string $customerLastname
+     * @return $this
+     */
+    public function setCustomerLastname($customerLastname);
+
+    /**
+     * Sets the customer middle name for the order.
+     *
+     * @param string $customerMiddlename
+     * @return $this
+     */
+    public function setCustomerMiddlename($customerMiddlename);
+
+    /**
+     * Sets the customer prefix for the order.
+     *
+     * @param string $customerPrefix
+     * @return $this
+     */
+    public function setCustomerPrefix($customerPrefix);
+
+    /**
+     * Sets the customer suffix for the order.
+     *
+     * @param string $customerSuffix
+     * @return $this
+     */
+    public function setCustomerSuffix($customerSuffix);
+
+    /**
+     * Sets the customer value-added tax (VAT) for the order.
+     *
+     * @param string $customerTaxvat
+     * @return $this
+     */
+    public function setCustomerTaxvat($customerTaxvat);
+
+    /**
+     * Sets the discount description for the order.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setDiscountDescription($description);
+
+    /**
+     * Sets the external customer ID for the order.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setExtCustomerId($id);
+
+    /**
+     * Sets the external order ID for the order.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setExtOrderId($id);
+
+    /**
+     * Sets the global currency code for the order.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setGlobalCurrencyCode($code);
+
+    /**
+     * Sets the hold before state for the order.
+     *
+     * @param string $holdBeforeState
+     * @return $this
+     */
+    public function setHoldBeforeState($holdBeforeState);
+
+    /**
+     * Sets the hold before status for the order.
+     *
+     * @param string $holdBeforeStatus
+     * @return $this
+     */
+    public function setHoldBeforeStatus($holdBeforeStatus);
+
+    /**
+     * Sets the order currency code for the order.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setOrderCurrencyCode($code);
+
+    /**
+     * Sets the original increment ID for the order.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setOriginalIncrementId($id);
+
+    /**
+     * Sets the relation child ID for the order.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setRelationChildId($id);
+
+    /**
+     * Sets the relation child real ID for the order.
+     *
+     * @param string $realId
+     * @return $this
+     */
+    public function setRelationChildRealId($realId);
+
+    /**
+     * Sets the relation parent ID for the order.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setRelationParentId($id);
+
+    /**
+     * Sets the relation parent real ID for the order.
+     *
+     * @param string $realId
+     * @return $this
+     */
+    public function setRelationParentRealId($realId);
+
+    /**
+     * Sets the remote IP address for the order.
+     *
+     * @param string $remoteIp
+     * @return $this
+     */
+    public function setRemoteIp($remoteIp);
+
+    /**
+     * Sets the shipping method for the order.
+     *
+     * @param string $shippingMethod
+     * @return $this
+     */
+    public function setShippingMethod($shippingMethod);
+
+    /**
+     * Sets the store currency code for the order.
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setStoreCurrencyCode($code);
+
+    /**
+     * Sets the store name for the order.
+     *
+     * @param string $storeName
+     * @return $this
+     */
+    public function setStoreName($storeName);
+
+    /**
+     * Sets the X-Forwarded-For HTTP header field for the order.
+     *
+     * @param string $xForwardedFor
+     * @return $this
+     */
+    public function setXForwardedFor($xForwardedFor);
+
+    /**
+     * Sets the customer note for the order.
+     *
+     * @param string $customerNote
+     * @return $this
+     */
+    public function setCustomerNote($customerNote);
+
+    /**
+     * Sets the updated-at timestamp for the order.
+     *
+     * @param string $timestamp
+     * @return $this
+     */
+    public function setUpdatedAt($timestamp);
+
+    /**
+     * Sets the total item count for the order.
+     *
+     * @param int $totalItemCount
+     * @return $this
+     */
+    public function setTotalItemCount($totalItemCount);
+
+    /**
+     * Sets the customer gender for the order.
+     *
+     * @param int $customerGender
+     * @return $this
+     */
+    public function setCustomerGender($customerGender);
+
+    /**
+     * Sets the hidden tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setHiddenTaxAmount($amount);
+
+    /**
+     * Sets the base hidden tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseHiddenTaxAmount($amount);
+
+    /**
+     * Sets the shipping hidden tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingHiddenTaxAmount($amount);
+
+    /**
+     * Sets the base shipping hidden tax amount for the order.
+     *
+     * @param float $amnt
+     * @return $this
+     */
+    public function setBaseShippingHiddenTaxAmnt($amnt);
+
+    /**
+     * Sets the hidden tax invoiced amount for the order.
+     *
+     * @param float $hiddenTaxInvoiced
+     * @return $this
+     */
+    public function setHiddenTaxInvoiced($hiddenTaxInvoiced);
+
+    /**
+     * Sets the base hidden tax invoiced amount for the order.
+     *
+     * @param float $baseHiddenTaxInvoiced
+     * @return $this
+     */
+    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced);
+
+    /**
+     * Sets the hidden tax refunded amount for the order.
+     *
+     * @param float $hiddenTaxRefunded
+     * @return $this
+     */
+    public function setHiddenTaxRefunded($hiddenTaxRefunded);
+
+    /**
+     * Sets the base hidden tax refunded amount for the order.
+     *
+     * @param float $baseHiddenTaxRefunded
+     * @return $this
+     */
+    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded);
+
+    /**
+     * Sets the shipping including tax amount for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingInclTax($amount);
+
+    /**
+     * Sets the base shipping including tax for the order.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingInclTax($amount);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\OrderExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes);
 }

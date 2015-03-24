@@ -152,10 +152,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
                 'extension' => $this->_helper->getExtensionByType($backupData->getType()),
                 'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),
                 'name' => $backupData->getName(),
-                'date_object' => new \Magento\Framework\Stdlib\DateTime\Date(
-                    (int)$backupData->getTime(),
-                    $this->_localeResolver->getLocaleCode()
-                ),
+                'date_object' => (new \DateTime())->setTimestamp($backupData->getTime()),
             ]
         );
 
@@ -226,12 +223,14 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      *
      * @param string &$content
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setFile(&$content)
     {
         if (!$this->hasData('time') || !$this->hasData('type') || !$this->hasData('path')) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the order of creation for a new backup.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the order of creation for a new backup.')
+            );
         }
 
         $this->varDirectory->writeFile($this->_getFilePath(), $content);
@@ -242,12 +241,12 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      * Return content of backup file
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function &getFile()
     {
         if (!$this->exists()) {
-            throw new \Magento\Framework\Model\Exception(__("The backup file does not exist."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
         return $this->varDirectory->read($this->_getFilePath());
@@ -257,12 +256,12 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      * Delete backup file
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteFile()
     {
         if (!$this->exists()) {
-            throw new \Magento\Framework\Model\Exception(__("The backup file does not exist."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
         $this->varDirectory->delete($this->_getFilePath());
@@ -279,7 +278,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     public function open($write = false)
     {
-        if (is_null($this->getPath())) {
+        if ($this->getPath() === null) {
             throw new \Magento\Backup\Exception(__('The backup file path was not specified.'));
         }
 
@@ -316,7 +315,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     protected function _getStream()
     {
-        if (is_null($this->_stream)) {
+        if ($this->_stream === null) {
             throw new \Magento\Backup\Exception(__('The backup file handler was unspecified.'));
         }
         return $this->_stream;
@@ -379,7 +378,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     /**
      * Print output
      *
-     * @return void
+     * @return string
      */
     public function output()
     {
@@ -391,7 +390,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
         $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $directory = $directory->readFile($this->_getFilePath());
 
-        echo $directory;
+        return $directory;
     }
 
     /**
@@ -399,7 +398,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      */
     public function getSize()
     {
-        if (!is_null($this->getData('size'))) {
+        if ($this->getData('size') !== null) {
             return $this->getData('size');
         }
 

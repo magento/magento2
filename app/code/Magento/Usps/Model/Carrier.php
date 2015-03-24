@@ -278,7 +278,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setOrigPostal(
                 $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -290,7 +290,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setOrigCountryId(
                 $this->_scopeConfig->getValue(
                     \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -512,7 +512,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         $response
                     );
                 }
-                $xml = simplexml_load_string($response);
+                $xml = $this->parseXml($response);
 
                 if (is_object($xml)) {
                     $allowedMethods = explode(',', $this->getConfigData('allowed_methods'));
@@ -1042,7 +1042,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $resultArr = [];
         if (strlen(trim($response)) > 0) {
             if (strpos(trim($response), '<?xml') === 0) {
-                $xml = simplexml_load_string($response);
+                $xml = $this->parseXml($response);
                 if (is_object($xml)) {
                     if (isset($xml->Number) && isset($xml->Description) && (string)$xml->Description != '') {
                         $errorTitle = (string)$xml->Description;
@@ -1869,7 +1869,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $client->setParameterGet('XML', $requestXml);
         $response = $client->request()->getBody();
 
-        $response = simplexml_load_string($response);
+        $response = $this->parseXml($response);
         if ($response === false || $response->getName() == 'Error') {
             $debugData['result'] = [
                 'error' => $response->Description,

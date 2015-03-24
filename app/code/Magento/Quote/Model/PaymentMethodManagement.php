@@ -58,14 +58,14 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
 
         if ($quote->isVirtual()) {
             // check if billing address is set
-            if (is_null($quote->getBillingAddress()->getCountryId())) {
-                throw new InvalidTransitionException('Billing address is not set');
+            if ($quote->getBillingAddress()->getCountryId() === null) {
+                throw new InvalidTransitionException(__('Billing address is not set'));
             }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
         } else {
             // check if shipping address is set
-            if (is_null($quote->getShippingAddress()->getCountryId())) {
-                throw new InvalidTransitionException('Shipping address is not set');
+            if ($quote->getShippingAddress()->getCountryId() === null) {
+                throw new InvalidTransitionException(__('Shipping address is not set'));
             }
             $quote->getShippingAddress()->setPaymentMethod($payment->getMethod());
         }
@@ -74,7 +74,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
         }
 
         if (!$this->zeroTotalValidator->isApplicable($payment->getMethodInstance(), $quote)) {
-            throw new InvalidTransitionException('The requested Payment Method is not available.');
+            throw new InvalidTransitionException(__('The requested Payment Method is not available.'));
         }
 
         $quote->setTotalsCollectedFlag(false)->collectTotals()->save();

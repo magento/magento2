@@ -6,11 +6,12 @@
 define([
     "jquery",
     "underscore",
-    "handlebars",
+    "mage/template",
+    "priceUtils",
+    "priceBox",
     "jquery/ui",
-    "jquery/jquery.parsequery",
-    "Magento_Catalog/js/price-box"
-], function($, _){
+    "jquery/jquery.parsequery"
+], function($, _, mageTemplate, utils){
 
     function getPrices(elems){
         var prices = {};
@@ -32,10 +33,11 @@ define([
             superSelector: '.super-attribute-select',
             priceHolderSelector: '.price-box',
             state: {},
-            optionTemplate: '{{label}}' +
-                            '{{#if finalPrice.value}}' +
-                                ' {{finalPrice.formatted}}' +
-                            '{{/if}}',
+            priceFormat: {},
+            optionTemplate: '<%- data.label %>' +
+                            '<% if (data.finalPrice.value) { %>' +
+                                ' <%- data.finalPrice.formatted %>' +
+                            '<% } %>',
             mediaGallerySelector: '[data-role=media-gallery]'
         },
 
@@ -65,10 +67,15 @@ define([
          */
         _initializeOptions: function() {
             var priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option');
+
             if(priceBoxOptions.priceConfig && priceBoxOptions.priceConfig.optionTemplate) {
                 this.options.optionTemplate = priceBoxOptions.priceConfig.optionTemplate;
             }
-            this.options.optionTemplate = Handlebars.compile(this.options.optionTemplate);
+
+            if(priceBoxOptions.priceConfig && priceBoxOptions.priceConfig.priceFormat) {
+                this.options.priceFormat = priceBoxOptions.priceConfig.priceFormat;
+            }
+            this.options.optionTemplate = mageTemplate(this.options.optionTemplate);
 
             this.options.settings = (this.options.spConfig.containerId) ?
                 $(this.options.spConfig.containerId).find(this.options.superSelector) :
@@ -371,7 +378,9 @@ define([
 
             data.label = option.label;
 
-            return this.options.optionTemplate(data);
+            return this.options.optionTemplate({
+                data: data
+            });
         },
 
         _parsePrice: function(option, selOption, price, name){
@@ -386,35 +395,8 @@ define([
             return {
                 value:      price,
                 name:       name,
-                formatted:  this._formatPrice(price, true)
+                formatted:  utils.formatPrice(price, this.options.priceFormat, true)
             };
-        },
-
-        /**
-         * Format's the price of a configurable option's choice. Add sign as needed, round,
-         * and format the rounded price with the appropriate sign.
-         * @private
-         * @param price An option choice's price
-         * @param showSign Whether to show the sign as '-' or '+' in the formatted price.
-         * @return {String} Returns the formatted price with or without the sign.
-         */
-        _formatPrice: function(price, showSign) {
-            var str = '';
-            price = parseFloat(price);
-            if (showSign) {
-                if (price < 0) {
-                    str += '-';
-                    price = -price;
-                }
-                else {
-                    str += '+';
-                }
-            }
-            var roundedPrice = (Math.round(price * 100) / 100).toString();
-            str = (this.options.spConfig.prices && this.options.spConfig.prices[roundedPrice]) ?
-                str + this.options.spConfig.prices[roundedPrice] :
-                str + this.options.spConfig.template.replace(/#\{(.*?)\}/, price.toFixed(2));
-            return str;
         },
 
         /**

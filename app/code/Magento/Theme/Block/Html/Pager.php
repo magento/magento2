@@ -96,6 +96,13 @@ class Pager extends \Magento\Framework\View\Element\Template
     protected $_frameEnd;
 
     /**
+     * Url Fragment for pagination
+     *
+     * @var string|null
+     */
+    protected $_fragment = null;
+
+    /**
      * Set pager data
      *
      * @return void
@@ -246,11 +253,12 @@ class Pager extends \Magento\Framework\View\Element\Template
      * Set pager limit
      *
      * @param array $limits
-     * @return void
+     * @return $this
      */
     public function setAvailableLimit(array $limits)
     {
         $this->_availableLimit = $limits;
+        return $this;
     }
 
     /**
@@ -435,9 +443,18 @@ class Pager extends \Magento\Framework\View\Element\Template
         $urlParams['_current'] = true;
         $urlParams['_escape'] = true;
         $urlParams['_use_rewrite'] = true;
+        $urlParams['_fragment'] = $this->getFragment();
         $urlParams['_query'] = $params;
 
-        return $this->getUrl('*/*/*', $urlParams);
+        return $this->getUrl($this->getPath(), $urlParams);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPath()
+    {
+        return $this->_getData('path') ?: '*/*/*';
     }
 
     /**
@@ -699,7 +716,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/pagination/anchor_text_for_previous',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -712,7 +729,7 @@ class Pager extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'design/pagination/anchor_text_for_next',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -739,5 +756,27 @@ class Pager extends \Magento\Framework\View\Element\Template
             return parent::_toHtml();
         }
         return '';
+    }
+
+    /**
+     * Get the URL fragment
+     *
+     * @return string|null
+     */
+    public function getFragment()
+    {
+        return $this->_fragment;
+    }
+
+    /**
+     * Set the URL fragment
+     *
+     * @param string|null $fragment
+     * @return $this
+     */
+    public function setFragment($fragment)
+    {
+        $this->_fragment = $fragment;
+        return $this;
     }
 }

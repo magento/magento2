@@ -20,6 +20,9 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /** @var int */
+    protected $maxFileSizeInMb;
+
     /**
      * @var \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -28,6 +31,10 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\File\Size $fileSize */
+        $fileSize = $this->objectManager->create('Magento\Framework\File\Size');
+        $this->maxFileSizeInMb = $fileSize->getMaxFileSizeInMb();
+
         $this->validateFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory',
             ['create']
@@ -46,11 +53,14 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     public function testExceptionWithErrors()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Model\Exception',
+            '\Magento\Framework\Exception\LocalizedException',
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "Maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
-            . "The file 'test.jpg' you uploaded is larger than the 2 megabytes allowed by our server."
+            . sprintf(
+                "The file 'test.jpg' you uploaded is larger than the %s megabytes allowed by our server.",
+                $this->maxFileSizeInMb
+            )
         );
 
         $validateMock = $this->getMock('Zend_Validate', ['isValid', 'getErrors']);
@@ -77,7 +87,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     public function testExceptionWithoutErrors()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Model\Exception',
+            '\Magento\Framework\Exception\LocalizedException',
             "Please specify the product's required option(s)."
         );
 

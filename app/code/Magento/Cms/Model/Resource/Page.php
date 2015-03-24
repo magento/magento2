@@ -28,7 +28,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -40,18 +40,20 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
@@ -87,7 +89,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -103,11 +105,15 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (!$this->isValidPageIdentifier($object)) {
-            throw new \Magento\Framework\Model\Exception(__('The page URL key contains capital letters or disallowed symbols.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The page URL key contains capital letters or disallowed symbols.')
+            );
         }
 
         if ($this->isNumericPageIdentifier($object)) {
-            throw new \Magento\Framework\Model\Exception(__('The page URL key cannot be made of only numbers.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The page URL key cannot be made of only numbers.')
+            );
         }
 
         if ($object->isObjectNew() && !$object->hasCreationTime()) {

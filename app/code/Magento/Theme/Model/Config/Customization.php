@@ -11,7 +11,7 @@ namespace Magento\Theme\Model\Config;
 class Customization
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -42,12 +42,12 @@ class Customization
     protected $_unassignedTheme;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
     ) {
@@ -64,7 +64,7 @@ class Customization
      */
     public function getAssignedThemeCustomizations()
     {
-        if (is_null($this->_assignedTheme)) {
+        if ($this->_assignedTheme === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_assignedTheme;
@@ -78,7 +78,7 @@ class Customization
      */
     public function getUnassignedThemeCustomizations()
     {
-        if (is_null($this->_unassignedTheme)) {
+        if ($this->_unassignedTheme === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_unassignedTheme;

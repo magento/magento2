@@ -6,8 +6,9 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Store model
@@ -54,7 +55,7 @@ class Store extends AbstractModel implements
     const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
     const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
-
+    
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
@@ -245,14 +246,14 @@ class Store extends AbstractModel implements
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\Resource\Config\Data
      */
     protected $_configDataResource;
 
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -304,14 +305,14 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\Resource\Store $resource
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -328,14 +329,14 @@ class Store extends AbstractModel implements
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\Resource\Store $resource,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Http\RequestInterface $request,
-        \Magento\Core\Model\Resource\Config\Data $configDataResource,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Config\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -385,7 +386,7 @@ class Store extends AbstractModel implements
     {
         parent::__wakeup();
         $this->_coreFileStorageDatabase = \Magento\Framework\App\ObjectManager::getInstance()->get(
-            'Magento\Core\Helper\File\Storage\Database'
+            'Magento\MediaStorage\Helper\File\Storage\Database'
         );
         $this->_config = \Magento\Framework\App\ObjectManager::getInstance()->get(
             'Magento\Framework\App\Config\ReinitableConfigInterface'
@@ -451,7 +452,7 @@ class Store extends AbstractModel implements
      */
     public function load($key, $field = null)
     {
-        if (!is_numeric($key) && is_null($field)) {
+        if (!is_numeric($key) && $field === null) {
             $this->_getResource()->load($this, $key, 'code');
             return $this;
         }
@@ -501,7 +502,7 @@ class Store extends AbstractModel implements
      */
     public function getWebsite()
     {
-        if (is_null($this->getWebsiteId())) {
+        if ($this->getWebsiteId() === null) {
             return false;
         }
         return $this->_storeManager->getWebsite($this->getWebsiteId());
@@ -537,12 +538,14 @@ class Store extends AbstractModel implements
      */
     public function getBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure = null)
     {
-        $cacheKey = $type . '/' . (is_null($secure) ? 'null' : ($secure ? 'true' : 'false'));
+        $cacheKey = $type . '/' . ($secure === null ? 'null' : ($secure ? 'true' : 'false'));
         if (!isset($this->_baseUrlCache[$cacheKey])) {
-            $secure = is_null($secure) ? $this->isCurrentlySecure() : (bool)$secure;
+            $secure = $secure === null ? $this->isCurrentlySecure() : (bool)$secure;
             switch ($type) {
                 case \Magento\Framework\UrlInterface::URL_TYPE_WEB:
-                    $path = $secure ? self::XML_PATH_SECURE_BASE_URL : self::XML_PATH_UNSECURE_BASE_URL;
+                    $path = $secure
+                        ? self::XML_PATH_SECURE_BASE_URL
+                        : self::XML_PATH_UNSECURE_BASE_URL;
                     $url = $this->_getConfig($path);
                     break;
 
@@ -721,7 +724,7 @@ class Store extends AbstractModel implements
         if ($this->_isFrontSecure === null) {
             $this->_isFrontSecure = $this->_config->isSetFlag(
                 self::XML_PATH_SECURE_IN_FRONTEND,
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->getId()
             );
         }
@@ -749,7 +752,7 @@ class Store extends AbstractModel implements
 
         $secureBaseUrl = $this->_config->getValue(
             self::XML_PATH_SECURE_BASE_URL,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         if (!$secureBaseUrl) {
@@ -758,9 +761,10 @@ class Store extends AbstractModel implements
 
         $uri = \Zend_Uri::factory($secureBaseUrl);
         $port = $uri->getPort();
-        $isSecure = $uri->getScheme() == 'https' && isset(
-            $_SERVER['SERVER_PORT']
-        ) && $port == $_SERVER['SERVER_PORT'];
+        $serverPort = $this->_request->getServer('SERVER_PORT');
+        $isSecure = $uri->getScheme() == 'https'
+            && isset($serverPort)
+            && $port == $serverPort;
         return $isSecure;
     }
 
@@ -840,7 +844,7 @@ class Store extends AbstractModel implements
             $this->_getSession()->setCurrencyCode($code);
 
             $this->_httpContext->setValue(
-                \Magento\Core\Helper\Data::CONTEXT_CURRENCY,
+                Context::CONTEXT_CURRENCY,
                 $code,
                 $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode()
             );
@@ -856,8 +860,8 @@ class Store extends AbstractModel implements
     public function getCurrentCurrencyCode()
     {
         // try to get currently set code among allowed
-        $code = $this->_httpContext->getValue(\Magento\Core\Helper\Data::CONTEXT_CURRENCY);
-        $code = is_null($code) ? $this->_getSession()->getCurrencyCode() : $code;
+        $code = $this->_httpContext->getValue(Context::CONTEXT_CURRENCY);
+        $code = $code === null ? $this->_getSession()->getCurrencyCode() : $code;
         if (empty($code)) {
             $code = $this->getDefaultCurrencyCode();
         }
@@ -930,7 +934,7 @@ class Store extends AbstractModel implements
     {
         $currency = $this->getData('current_currency');
 
-        if (is_null($currency)) {
+        if ($currency === null) {
             $currency = $this->currencyFactory->create()->load($this->getCurrentCurrencyCode());
             $baseCurrency = $this->getBaseCurrency();
 
@@ -1065,7 +1069,7 @@ class Store extends AbstractModel implements
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
 
-        $currQuery = $this->_request->getQuery();
+        $currQuery = $this->_request->getQueryValue();
         if (isset(
             $currQuery[$sidQueryParam]
         ) && !empty($currQuery[$sidQueryParam]) && $this->_getSession()->getSessionIdForHost(
@@ -1126,7 +1130,7 @@ class Store extends AbstractModel implements
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
             $this->getId()
         );
 
@@ -1184,7 +1188,7 @@ class Store extends AbstractModel implements
         if (null === $this->_frontendName) {
             $storeGroupName = (string)$this->_config->getValue(
                 'general/store_information/name',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this
             );
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();

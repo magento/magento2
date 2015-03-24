@@ -68,7 +68,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
      * @param mixed $sourceData
      * @param mixed $store
@@ -78,7 +78,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         $sourceData = null,
         $store = null
@@ -117,13 +117,13 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param string $totalCode
      * @param array $totalConfig
      * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
         $model = $this->_totalFactory->create($class);
         if (!$model instanceof \Magento\Quote\Model\Quote\Address\Total\AbstractTotal) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
                 )
@@ -147,7 +147,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     {
         $sorts = $this->_scopeConfig->getValue(
             self::XML_PATH_SALES_TOTALS_SORT,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_store
         );
         foreach ($sorts as $code => $sortOrder) {

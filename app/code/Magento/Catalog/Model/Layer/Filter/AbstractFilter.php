@@ -36,7 +36,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
     /**
      * Store manager
      *
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,15 +58,15 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Constructor
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param array $data
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
         array $data = []
@@ -152,7 +152,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      */
     public function getItems()
     {
-        if (is_null($this->_items)) {
+        if ($this->_items === null) {
             $this->_initItems();
         }
         return $this->_items;
@@ -213,7 +213,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
     public function getLayer()
     {
         $layer = $this->_getData('layer');
-        if (is_null($layer)) {
+        if ($layer === null) {
             $layer = $this->_catalogLayer;
             $this->setData('layer', $layer);
         }
@@ -274,13 +274,13 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Get attribute model associated with filter
      *
      * @return \Magento\Catalog\Model\Resource\Eav\Attribute
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeModel()
     {
         $attribute = $this->getData('attribute_model');
-        if (is_null($attribute)) {
-            throw new \Magento\Framework\Model\Exception(__('The attribute model is not defined.'));
+        if ($attribute === null) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('The attribute model is not defined.'));
         }
         return $attribute;
     }
@@ -289,7 +289,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Get filter text label
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getName()
     {
@@ -304,7 +304,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
     public function getStoreId()
     {
         $storeId = $this->_getData('store_id');
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->_storeManager->getStore()->getId();
         }
         return $storeId;
@@ -329,7 +329,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
     public function getWebsiteId()
     {
         $websiteId = $this->_getData('website_id');
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->_storeManager->getStore()->getWebsiteId();
         }
         return $websiteId;
@@ -360,7 +360,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object implements Filte
      * Get option text from frontend model by option id
      *
      * @param   int $optionId
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return  string|bool
      */
     protected function getOptionText($optionId)

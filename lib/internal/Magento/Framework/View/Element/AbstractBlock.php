@@ -622,7 +622,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
         if ($this->_scopeConfig->getValue(
             'advanced/modules_disable_output/' . $this->getModuleName(),
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )) {
             return '';
         }
@@ -701,19 +701,19 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     public function getJsId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
         $args = [];
-        if (!is_null($arg1)) {
+        if ($arg1 !== null) {
             $args[] = $arg1;
         }
-        if (!is_null($arg2)) {
+        if ($arg2 !== null) {
             $args[] = $arg2;
         }
-        if (!is_null($arg3)) {
+        if ($arg3 !== null) {
             $args[] = $arg3;
         }
-        if (!is_null($arg4)) {
+        if ($arg4 !== null) {
             $args[] = $arg4;
         }
-        if (!is_null($arg5)) {
+        if ($arg5 !== null) {
             $args[] = $arg5;
         }
         $rawId = $this->_nameInLayout . '-' . implode('-', $args);
@@ -765,33 +765,43 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     /**
      * Retrieve formatting date
      *
-     * @param   \Zend_Date|string|null $date
-     * @param   string $format
+     * @param   \DateTime|string|null $date
+     * @param   int $format
      * @param   bool $showTime
      * @return  string
      */
     public function formatDate(
         $date = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $format = \IntlDateFormatter::SHORT,
         $showTime = false
     ) {
-        return $this->_localeDate->formatDate($date, $format, $showTime);
+        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
+        return $this->_localeDate->formatDateTime(
+            $date,
+            $format,
+            $showTime ? $format : \IntlDateFormatter::NONE
+        );
     }
 
     /**
      * Retrieve formatting time
      *
-     * @param   \Zend_Date|string|null $time
-     * @param   string $format
+     * @param   \DateTime|string|null $time
+     * @param   int $format
      * @param   bool $showDate
      * @return  string
      */
     public function formatTime(
         $time = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $format = \IntlDateFormatter::SHORT,
         $showDate = false
     ) {
-        return $this->_localeDate->formatTime($time, $format, $showDate);
+        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time);
+        return $this->_localeDate->formatDateTime(
+            $time,
+            $showDate ? $format : \IntlDateFormatter::NONE,
+            $format
+        );
     }
 
     /**
@@ -969,7 +979,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     protected function _loadCache()
     {
-        if (is_null($this->getCacheLifetime()) || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -992,7 +1002,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     protected function _saveCache($data)
     {
-        if (is_null($this->getCacheLifetime()) || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1014,7 +1024,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     protected function _getSidPlaceholder($cacheKey = null)
     {
-        if (is_null($cacheKey)) {
+        if ($cacheKey === null) {
             $cacheKey = $this->getCacheKey();
         }
 

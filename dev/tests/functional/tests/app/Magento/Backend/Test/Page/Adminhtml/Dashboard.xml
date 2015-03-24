@@ -4,28 +4,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="admin/dashboard" module="Magento_Backend">
-    <blocks>
-        <adminPanelHeader>
-            <class>Magento\Backend\Test\Block\Page\Header</class>
-            <locator>.page-header</locator>
-            <strategy>css selector</strategy>
-        </adminPanelHeader>
-        <titleBlock>
-            <class>Magento\Theme\Test\Block\Html\Title</class>
-            <locator>.page-title</locator>
-            <strategy>css selector</strategy>
-        </titleBlock>
-        <mainBlock>
-            <class>Magento\Backend\Test\Block\Page\Main</class>
-            <locator>.dashboard-main</locator>
-            <strategy>css selector</strategy>
-        </mainBlock>
-        <menuBlock>
-            <class>Magento\Backend\Test\Block\Menu</class>
-            <locator>.navigation</locator>
-            <strategy>css selector</strategy>
-        </menuBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="Dashboard" area="Adminhtml" mca="admin/dashboard" module="Magento_Backend">
+        <block name="adminPanelHeader" class="Magento\Backend\Test\Block\Page\Header" locator=".page-header" strategy="css selector" />
+        <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector" />
+        <block name="mainBlock" class="Magento\Backend\Test\Block\Page\Main" locator=".dashboard-main" strategy="css selector" />
+        <block name="menuBlock" class="Magento\Backend\Test\Block\Menu" locator=".admin__menu" strategy="css selector" />
+        <block name="storeStatsBlock" class="Magento\Backend\Test\Block\Dashboard\StoreStats" locator=".dashboard-store-stats" strategy="css selector" />
+        <block name="errorBlock" class="Magento\Backend\Test\Block\Page\Error" locator="[id='page:main-container']" strategy="css selector" />
+        <block name="accessDeniedBlock" class="Magento\Backend\Test\Block\Denied" locator="#anchor-content" strategy="css selector" />
+    </page>
+</config>

@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-use Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized;
+use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
 
 class Exceptions extends ArraySerialized
 {
@@ -44,7 +44,7 @@ class Exceptions extends ArraySerialized
      * Validate value
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * if there is no field value, search value is empty or regular expression is not valid
      */
     public function beforeSave()
@@ -60,7 +60,9 @@ class Exceptions extends ArraySerialized
             // Validate that all values have come
             foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
-                    throw new \Magento\Framework\Model\Exception(__("Exception does not contain field '{$fieldName}'"));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Exception does not contain field \'%1\'', $fieldName)
+                    );
                 }
             }
 
@@ -86,7 +88,7 @@ class Exceptions extends ArraySerialized
      *
      * @param string $search
      * @return string
-     * @throws \Magento\Framework\Model\Exception on invalid regular expression
+     * @throws \Magento\Framework\Exception\LocalizedException on invalid regular expression
      */
     protected function _composeRegexp($search)
     {
@@ -97,7 +99,7 @@ class Exceptions extends ArraySerialized
 
         // Find out - whether user wanted to enter regexp or normal string.
         if ($this->_isRegexp($search)) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid regular expression: "%1".', $search));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid regular expression: "%1".', $search));
         }
 
         return '/' . preg_quote($search, '/') . '/i';

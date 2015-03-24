@@ -6,7 +6,6 @@
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class OrderCommentsListTest extends WebapiAbstract
 {
@@ -29,8 +28,8 @@ class OrderCommentsListTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId() . '/comments',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/comments',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

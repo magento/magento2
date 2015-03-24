@@ -6,7 +6,7 @@
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 class SaveCssContent extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools
 {
@@ -42,7 +42,7 @@ class SaveCssContent extends \Magento\DesignEditor\Controller\Adminhtml\System\D
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response)
         );
     }
 }

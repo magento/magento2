@@ -7,7 +7,6 @@ namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Exception;
 use Magento\Wishlist\Model\Resource\Item\CollectionFactory;
 use Magento\Wishlist\Model\Resource\Wishlist as ResourceWishlist;
 use Magento\Wishlist\Model\Resource\Wishlist\Collection;
@@ -75,7 +74,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -126,7 +125,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param ResourceWishlist $resource
      * @param Collection $resourceCollection
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param ItemFactory $wishlistItemFactory
      * @param CollectionFactory $wishlistCollectionFactory
@@ -145,7 +144,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         \Magento\Wishlist\Helper\Data $wishlistData,
         ResourceWishlist $resource,
         Collection $resourceCollection,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         ItemFactory $wishlistItemFactory,
         CollectionFactory $wishlistCollectionFactory,
@@ -179,7 +178,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function loadByCustomerId($customerId, $create = false)
     {
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             return $this;
         }
         $customerId = (int)$customerId;
@@ -296,7 +295,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             $item = $this->_wishlistItemFactory->create();
             $item->setProductId($product->getId());
             $item->setWishlistId($this->getId());
-            $item->setAddedAt($this->dateTime->now());
+            $item->setAddedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
             $item->setStoreId($storeId);
             $item->setOptions($product->getCustomOptions());
             $item->setProduct($product);
@@ -322,7 +321,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getItemCollection()
     {
-        if (is_null($this->_itemCollection)) {
+        if ($this->_itemCollection === null) {
             $this->_itemCollection = $this->_wishlistCollectionFactory->create()->addWishlistFilter(
                 $this
             )->addStoreFilter(
@@ -370,7 +369,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param int|\Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\Object|array|string|null $buyRequest
      * @param bool $forciblySetQty
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return Item|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -398,7 +397,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         try {
             $product = $this->productRepository->getById($productId, false, $storeId);
         } catch (NoSuchEntityException $e) {
-            throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot specify product.'));
         }
 
         if ($buyRequest instanceof \Magento\Framework\Object) {
@@ -495,7 +494,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getSharedStoreIds()
     {
-        if (is_null($this->_storeIds) || !is_array($this->_storeIds)) {
+        if ($this->_storeIds === null || !is_array($this->_storeIds)) {
             if ($this->_useCurrentWebsite) {
                 $this->_storeIds = $this->getStore()->getWebsite()->getStoreIds();
             } else {
@@ -529,7 +528,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->setStore($this->_storeManager->getStore());
         }
         return $this->_store;
@@ -601,7 +600,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param \Magento\Framework\Object $buyRequest
      * @param null|array|\Magento\Framework\Object $params
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -616,7 +615,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             $item = $this->getItem((int)$itemId);
         }
         if (!$item) {
-            throw new Exception(__('We can\'t specify a wish list item.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t specify a wish list item.'));
         }
 
         $product = $item->getProduct();
@@ -648,7 +647,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
              * Error message
              */
             if (is_string($resultItem)) {
-                throw new Exception(__($resultItem));
+                throw new \Magento\Framework\Exception\LocalizedException(__($resultItem));
             }
 
             if ($resultItem->getId() != $itemId) {
@@ -662,7 +661,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
                 $resultItem->setOrigData('qty', 0);
             }
         } else {
-            throw new Exception(__('The product does not exist.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The product does not exist.'));
         }
         return $this;
     }

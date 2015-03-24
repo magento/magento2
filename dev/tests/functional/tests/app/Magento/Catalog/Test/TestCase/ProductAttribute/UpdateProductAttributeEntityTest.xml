@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateProductAttributeEntityTest">
+    <variation name="UpdateProductAttributeEntityTestVariation1">
+      <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+      <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_text_field</data>
+      <data name="attribute/data/frontend_label" xsi:type="string">Text_Field_%isolation%</data>
+      <data name="attribute/data/frontend_input" xsi:type="string">-</data>
+      <data name="attribute/data/options/preset" xsi:type="string">-</data>
+      <data name="attribute/data/is_required" xsi:type="string">Yes</data>
+      <data name="attribute/data/attribute_code" xsi:type="string">-</data>
+      <data name="attribute/data/is_global" xsi:type="string">Global</data>
+      <data name="attribute/data/default_value_text" xsi:type="string">attribute_edited%isolation%</data>
+      <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
+      <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
+      <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_comparable" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_filterable" xsi:type="string">-</data>
+      <data name="attribute/data/is_filterable_in_search" xsi:type="string">-</data>
+      <data name="attribute/data/is_used_for_promo_rules" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_visible_on_front" xsi:type="string">Yes</data>
+      <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
+      <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
+      <data name="isRequired" xsi:type="string">Yes</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+    </variation>
+    <variation name="UpdateProductAttributeEntityTestVariation2">
+      <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+      <data name="productAttributeOriginal/dataSet" xsi:type="string">attribute_type_dropdown</data>
+      <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
+      <data name="attribute/data/frontend_input" xsi:type="string">-</data>
+      <data name="attribute/data/options/preset" xsi:type="string">default</data>
+      <data name="attribute/data/is_required" xsi:type="string">Yes</data>
+      <data name="attribute/data/attribute_code" xsi:type="string">-</data>
+      <data name="attribute/data/is_global" xsi:type="string">Global</data>
+      <data name="attribute/data/default_value_text" xsi:type="string">-</data>
+      <data name="attribute/data/is_unique" xsi:type="string">Yes</data>
+      <data name="attribute/data/manage_frontend_label" xsi:type="string">-</data>
+      <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_comparable" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
+      <data name="attribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_used_for_promo_rules" xsi:type="string">No</data>
+      <data name="attribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
+      <data name="attribute/data/is_visible_on_front" xsi:type="string">Yes</data>
+      <data name="attribute/data/used_in_product_listing" xsi:type="string">Yes</data>
+      <data name="attribute/data/used_for_sort_by" xsi:type="string">Yes</data>
+      <data name="isRequired" xsi:type="string">Yes</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm"/>
+    </variation>
+  </testCase>
+</config>

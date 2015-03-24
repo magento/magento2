@@ -8,7 +8,6 @@ define([
     "jquery/ui",
     "loadingPopup",
     "mage/translate",
-    "jquery/template",
     "Magento_DesignEditor/js/dialog"
 ], function($){
 
@@ -72,7 +71,7 @@ define([
                 {
                     text: $.mage.__('Yes'),
                     click: callback,
-                    'class': 'primary'
+                    'class': 'action-primary'
                 }
             ];
 

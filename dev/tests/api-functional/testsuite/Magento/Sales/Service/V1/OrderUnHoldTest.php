@@ -7,7 +7,6 @@
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class OrderUnHoldTest extends WebapiAbstract
 {
@@ -28,8 +27,8 @@ class OrderUnHoldTest extends WebapiAbstract
         }
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId() . '/unhold',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'resourcePath' => '/V1/orders/' . $order->getId() . '/unhold',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 
 class Repository
@@ -42,22 +42,27 @@ class Repository
      *
      * @param string $algorithmType
      * @param array $data
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return AlgorithmInterface
      */
     public function get($algorithmType, array $data = [])
     {
         if (!isset($this->instances[$algorithmType])) {
             if (!isset($this->algorithms[$algorithmType])) {
-                throw new Exception($algorithmType . ' was not found in algorithms');
+                throw new LocalizedException(
+                    new \Magento\Framework\Phrase('%1 was not found in algorithms', [$algorithmType])
+                );
             }
 
             $className = $this->algorithms[$algorithmType];
             $model = $this->objectManager->create($className, $data);
 
             if (!$model instanceof AlgorithmInterface) {
-                throw new Exception(
-                    $className . ' doesn\'t extends \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface'
+                throw new LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        '%1 doesn\'t extends \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface',
+                        [$className]
+                    )
                 );
             }
             $this->instances[$algorithmType] = $model;

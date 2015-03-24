@@ -114,12 +114,12 @@ abstract class AbstractData
      * Return Attribute instance
      *
      * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttribute()
     {
         if (!$this->_attribute) {
-            throw new \Magento\Framework\Model\Exception(__('Attribute object is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Attribute object is undefined'));
         }
         return $this->_attribute;
     }
@@ -209,7 +209,7 @@ abstract class AbstractData
         if ($filterCode) {
             $filterClass = 'Magento\Framework\Data\Form\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver->getLocale());
+                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver);
             } else {
                 $filter = new $filterClass();
             }
@@ -229,7 +229,7 @@ abstract class AbstractData
         if (is_null($format)) {
             // get format
             if (is_null($this->_dateFilterFormat)) {
-                $this->_dateFilterFormat = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT;
+                $this->_dateFilterFormat = \IntlDateFormatter::SHORT;
             }
             return $this->_localeDate->getDateFormat($this->_dateFilterFormat);
         } elseif ($format === false) {
@@ -504,7 +504,7 @@ abstract class AbstractData
      *
      * @param array|string|null $value
      * @return array|bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     abstract public function validateValue($value);
 

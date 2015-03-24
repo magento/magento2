@@ -40,7 +40,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -66,7 +66,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\DB\Helper $coreResourceHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
@@ -82,7 +82,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Helper $coreResourceHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
@@ -116,7 +116,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     {
         $this->_isLive = (bool)(!$this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ));
         return $this;
     }
@@ -372,12 +372,16 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
         if (null == $tzTo) {
-            $tzTo = $this->_localeDate->scopeDate()->toString(\Zend_Date::GMT_DIFF_SEP);
+            $tzTo = $this->_localeDate->scopeDate()->format('P');
         }
         $adapter = $this->getConnection();
         $expression = $this->_getRangeExpression($range);
         $attribute = $adapter->quoteIdentifier($attribute);
-        $periodExpr = $adapter->getDateAddSql($attribute, $tzTo, \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_HOUR);
+        $periodExpr = $adapter->getDateAddSql(
+            $attribute,
+            $tzTo,
+            \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_HOUR
+        );
 
         return str_replace('{{attribute}}', $periodExpr, $expression);
     }
@@ -394,37 +398,35 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
-        $dateEnd = $this->_localeDate->date();
-        $dateStart = clone $dateEnd;
+        $dateEnd = new \DateTime();
+        $dateStart = new \DateTime();
 
         // go to the end of a day
-        $dateEnd->setHour(23);
-        $dateEnd->setMinute(59);
-        $dateEnd->setSecond(59);
+        $dateEnd->setTime(23, 59, 59);
 
-        $dateStart->setHour(0);
-        $dateStart->setMinute(0);
-        $dateStart->setSecond(0);
+        $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
             case '24h':
-                $dateEnd = $this->_localeDate->date();
-                $dateEnd->addHour(1);
+                $dateEnd = new \DateTime();
+                $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
-                $dateStart->subDay(1);
+                $dateStart->modify('-1 day');
                 break;
 
             case '7d':
                 // substract 6 days we need to include
                 // only today and not hte last one from range
-                $dateStart->subDay(6);
+                $dateStart->modify('-6 days');
                 break;
 
             case '1m':
-                $dateStart->setDay(
+                $dateStart->setDate(
+                    $dateStart->format('Y'),
+                    $dateStart->format('m'),
                     $this->_scopeConfig->getValue(
                         'reports/dashboard/mtd_start',
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     )
                 );
                 break;
@@ -440,21 +442,20 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                     ',',
                     $this->_scopeConfig->getValue(
                         'reports/dashboard/ytd_start',
-                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     )
                 );
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
                 $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
-                $dateStart->setMonth($startMonth);
-                $dateStart->setDay($startDay);
+                $dateStart->setDate($dateStart->format('Y'), $startMonth, $startDay);
                 if ($range == '2y') {
-                    $dateStart->subYear(1);
+                    $dateStart->modify('-1 year');
                 }
                 break;
         }
 
-        $dateStart->setTimezone('Etc/UTC');
-        $dateEnd->setTimezone('Etc/UTC');
+        $dateStart->setTimezone(new \DateTimeZone('Etc/UTC'));
+        $dateEnd->setTimezone(new \DateTimeZone('Etc/UTC'));
 
         if ($returnObjects) {
             return [$dateStart, $dateEnd];
@@ -591,7 +592,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
         if ($this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
             $this->setMainTable('sales_order_aggregated_created');
@@ -896,8 +897,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $this->addFieldToFilter(
             $fieldToFilter,
             [
-                'from' => $from->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT),
-                'to' => $to->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                'from' => $from->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT),
+                'to' => $to->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
             ]
         );
 

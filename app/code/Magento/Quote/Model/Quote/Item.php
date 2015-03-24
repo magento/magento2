@@ -8,8 +8,8 @@
 
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Framework\Api\AttributeDataBuilder;
-use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Sales Quote Item Model
@@ -52,7 +52,6 @@ use Magento\Framework\Api\MetadataServiceInterface;
  * @method \Magento\Quote\Model\Quote\Item setRowTotalWithDiscount(float $value)
  * @method float getRowWeight()
  * @method \Magento\Quote\Model\Quote\Item setRowWeight(float $value)
- * @method \Magento\Quote\Model\Quote\Item setProductType(string $value)
  * @method float getBaseTaxBeforeDiscount()
  * @method \Magento\Quote\Model\Quote\Item setBaseTaxBeforeDiscount(float $value)
  * @method float getTaxBeforeDiscount()
@@ -97,6 +96,8 @@ use Magento\Framework\Api\MetadataServiceInterface;
  * @method \Magento\Quote\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Quote\Model\Quote\Item unsHasConfigurationUnavailableError()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
@@ -180,8 +181,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
@@ -198,8 +199,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
@@ -219,8 +220,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $productRepository,
             $priceCurrency,
             $resource,
@@ -338,8 +339,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function setQty($qty)
     {
         $qty = $this->_prepareQty($qty);
-        $oldQty = $this->_getData('qty');
-        $this->setData('qty', $qty);
+        $oldQty = $this->_getData(self::KEY_QTY);
+        $this->setData(self::KEY_QTY, $qty);
 
         $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
 
@@ -348,7 +349,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         }
 
         if ($this->getUseOldQty()) {
-            $this->setData('qty', $oldQty);
+            $this->setData(self::KEY_QTY, $oldQty);
         }
 
         return $this;
@@ -512,7 +513,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getProductType()
     {
-        $option = $this->getOptionByCode('product_type');
+        $option = $this->getOptionByCode(self::KEY_PRODUCT_TYPE);
         if ($option) {
             return $option->getValue();
         }
@@ -521,7 +522,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             return $product->getTypeId();
         }
         // $product should always exist or there will be an error in getProduct()
-        return $this->_getData('product_type');
+        return $this->_getData(self::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -531,7 +532,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getRealProductType()
     {
-        return $this->_getData('product_type');
+        return $this->_getData(self::KEY_PRODUCT_TYPE);
     }
 
     /**
@@ -590,7 +591,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\Object $option
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addOption($option)
     {
@@ -610,7 +611,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         } elseif ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
             $option->setItem($this);
         } else {
-            throw new \Magento\Framework\Model\Exception(__('We found an invalid item option format.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We found an invalid item option format.'));
         }
 
         $exOption = $this->getOptionByCode($option->getCode());
@@ -671,14 +672,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      *
      * @param \Magento\Quote\Model\Quote\Item\Option $option
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addOptionCode($option)
     {
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('An item option with code %1 already exists.', $option->getCode())
             );
         }
@@ -910,7 +911,15 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getItemId()
     {
-        return $this->getData('item_id');
+        return $this->getData(self::KEY_ITEM_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setItemId($itemID)
+    {
+        return $this->setData(self::KEY_ITEM_ID, $itemID);
     }
 
     /**
@@ -918,7 +927,15 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getSku()
     {
-        return $this->getData('sku');
+        return $this->getData(self::KEY_SKU);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSku($sku)
+    {
+        return $this->setData(self::KEY_SKU, $sku);
     }
 
     /**
@@ -926,7 +943,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getQty()
     {
-        return $this->getData('qty');
+        return $this->getData(self::KEY_QTY);
     }
 
     /**
@@ -934,7 +951,15 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getName()
     {
-        return $this->getData('name');
+        return $this->getData(self::KEY_NAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::KEY_NAME, $name);
     }
 
     /**
@@ -942,7 +967,23 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getPrice()
     {
-        return $this->getData('price');
+        return $this->getData(self::KEY_PRICE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::KEY_PRICE, $price);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductType($productType)
+    {
+        return $this->setData(self::KEY_PRODUCT_TYPE, $productType);
     }
 
     /**
@@ -950,7 +991,36 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getQuoteId()
     {
-        return $this->getData('quote_id');
+        return $this->getData(self::KEY_QUOTE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteId($quoteId)
+    {
+        return $this->setData(self::KEY_QUOTE_ID, $quoteId);
     }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\CartItemExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

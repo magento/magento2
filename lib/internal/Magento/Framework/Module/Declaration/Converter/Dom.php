@@ -22,16 +22,16 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
             $moduleData = [];
             $moduleAttributes = $moduleNode->attributes;
             $nameNode = $moduleAttributes->getNamedItem('name');
-            if (is_null($nameNode)) {
+            if ($nameNode === null) {
                 throw new \Exception('Attribute "name" is required for module node.');
             }
             $moduleData['name'] = $nameNode->nodeValue;
             $name = $moduleData['name'];
-            $versionNode = $moduleAttributes->getNamedItem('schema_version');
-            if (is_null($versionNode)) {
-                throw new \Exception("Attribute 'schema_version' is missing for module '{$name}'.");
+            $versionNode = $moduleAttributes->getNamedItem('setup_version');
+            if ($versionNode === null) {
+                throw new \Exception("Attribute 'setup_version' is missing for module '{$name}'.");
             }
-            $moduleData['schema_version'] = $versionNode->nodeValue;
+            $moduleData['setup_version'] = $versionNode->nodeValue;
             $moduleData['sequence'] = [];
             /** @var $childNode \DOMNode */
             foreach ($moduleNode->childNodes as $childNode) {
@@ -62,7 +62,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
             switch ($childNode->nodeName) {
                 case 'module':
                     $nameNode = $childNode->attributes->getNamedItem('name');
-                    if (is_null($nameNode)) {
+                    if ($nameNode === null) {
                         throw new \Exception('Attribute "name" is required for module node.');
                     }
                     $result[] = $nameNode->nodeValue;

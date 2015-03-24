@@ -26,7 +26,7 @@ class AddComment extends \Magento\Backend\App\Action
     protected $pagePageFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -40,7 +40,7 @@ class AddComment extends \Magento\Backend\App\Action
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
@@ -48,7 +48,7 @@ class AddComment extends \Magento\Backend\App\Action
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         CreditmemoSender $creditmemoSender,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
@@ -70,7 +70,7 @@ class AddComment extends \Magento\Backend\App\Action
     /**
      * Add comment to creditmemo history
      *
-     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -78,7 +78,9 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('creditmemo_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Model\Exception(__('The Comment Text field cannot be empty.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The Comment Text field cannot be empty.')
+                );
             }
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
@@ -95,7 +97,7 @@ class AddComment extends \Magento\Backend\App\Action
             $this->creditmemoSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
             $resultPage = $this->resultPageFactory->create();
             $response = $resultPage->getLayout()->getBlock('creditmemo_comments')->toHtml();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];

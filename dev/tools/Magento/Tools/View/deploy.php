@@ -16,10 +16,7 @@ $options = getopt('', ['langs::', 'dry-run', 'verbose::', 'help']);
 define('USAGE', "USAGE:\n\tphp -f {$baseName} -- [--langs=en_US,de_DE,...] [--verbose=0|1] [--dry-run] [--help]\n");
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
-AutoloaderRegistry::getAutoloader()->addPsr4(
-    'Magento\\',
-    [BP . '/dev/tests/static/framework/Magento/', realpath(__DIR__ . '/../../../Magento/')]
-);
+AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', [BP . '/tools/Magento/']);
 
 // parse all options
 if (isset($options['help'])) {
@@ -42,26 +39,31 @@ if (isset($options['verbose'])) {
     $verbosity = 0 === (int)$options['verbose'] ? \Magento\Tools\View\Deployer\Log::SILENT
         : \Magento\Tools\View\Deployer\Log::ERROR | \Magento\Tools\View\Deployer\Log::DEBUG;
 }
-
-// run the deployment logic
-$filesUtil = new \Magento\Framework\Test\Utility\Files(BP);
-$omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []);
-$objectManager = $omFactory->create(
-    [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
-);
-
-/** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
-$deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
-$isAppInstalled = $deploymentConfig->isAvailable();
-if (!$isAppInstalled) {
-    throw new \Exception('Please install the Magento application before running this process.');
-}
-
 $logger = new \Magento\Tools\View\Deployer\Log($verbosity);
-/** @var \Magento\Tools\View\Deployer $deployer */
-$deployer = $objectManager->create(
-    'Magento\Tools\View\Deployer',
-    ['filesUtil' => $filesUtil, 'logger' => $logger, 'isDryRun' => $isDryRun]
-);
-$deployer->deploy($omFactory, $langs);
-exit(0);
+
+try {
+    // run the deployment logic
+    $filesUtil = new \Magento\Framework\App\Utility\Files(BP);
+    $omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []);
+    $objectManager = $omFactory->create(
+        [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
+    );
+
+    /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
+    $deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
+    $isAppInstalled = $deploymentConfig->isAvailable();
+    if (!$isAppInstalled) {
+        throw new \Exception('You need to install the Magento application before running this utility.');
+    }
+
+    /** @var \Magento\Tools\View\Deployer $deployer */
+    $deployer = $objectManager->create(
+        'Magento\Tools\View\Deployer',
+        ['filesUtil' => $filesUtil, 'logger' => $logger, 'isDryRun' => $isDryRun]
+    );
+    $deployer->deploy($omFactory, $langs);
+} catch (\Exception $e) {
+    $logger->logError($e->getMessage());
+    $logger->logDebug($e->getTraceAsString());
+    exit(1);
+}

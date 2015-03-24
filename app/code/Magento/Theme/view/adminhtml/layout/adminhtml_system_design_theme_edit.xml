@@ -10,7 +10,6 @@
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
         <css src="Magento_Theme::css/theme.css"/>
         <css src="prototype/windows/themes/default.css"/>
-        <css src="Magento_Core::prototype/magento.css"/>
         <link src="Magento_Theme::js/bootstrap.js"/>
     </head>
     <body>

@@ -9,7 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -22,13 +22,13 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context, $resultRedirectFactory);
         $this->resultPageFactory = $resultPageFactory;
@@ -49,7 +49,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if ($storeId && !$categoryId && !$parentId) {
-            $store = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface')->getStore($storeId);
+            $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
             $this->getRequest()->setParam('id', (int)$store->getRootCategoryId());
         }
 
@@ -106,7 +106,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                 'category_prepare_ajax_response',
                 ['response' => $eventResponse, 'controller' => $this]
             );
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setHeader('Content-type', 'application/json', true);
             $resultJson->setData($eventResponse->getData());

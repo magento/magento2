@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Price;
 class Observer
 {
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -43,7 +43,7 @@ class Observer
     protected $_connection;
 
     /**
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -51,7 +51,7 @@ class Observer
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
      */
     public function __construct(
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -94,7 +94,7 @@ class Observer
             $currDateExpr = $connection->quote($currDate);
 
             // timestamp is locale based
-            if (date(\Zend_Date::HOUR_SHORT, $timestamp) == '00') {
+            if (date('H', $timestamp) == '00') {
                 $format = '%Y-%m-%d %H:%i:%s';
                 $this->_refreshSpecialPriceByStore(
                     $store->getId(),

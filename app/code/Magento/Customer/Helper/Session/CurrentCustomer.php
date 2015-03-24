@@ -6,7 +6,7 @@
 namespace Magento\Customer\Helper\Session;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ViewInterface;
@@ -29,9 +29,9 @@ class CurrentCustomer
     protected $layout;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $customerBuilder;
+    protected $customerFactory;
 
     /**
      * @var CustomerRepositoryInterface
@@ -56,7 +56,7 @@ class CurrentCustomer
     /**
      * @param CustomerSession $customerSession
      * @param LayoutInterface $layout
-     * @param CustomerDataBuilder $customerBuilder
+     * @param CustomerInterfaceFactory $customerFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param RequestInterface $request
      * @param ModuleManager $moduleManager
@@ -65,7 +65,7 @@ class CurrentCustomer
     public function __construct(
         CustomerSession $customerSession,
         LayoutInterface $layout,
-        CustomerDataBuilder $customerBuilder,
+        CustomerInterfaceFactory $customerFactory,
         CustomerRepositoryInterface $customerRepository,
         RequestInterface $request,
         ModuleManager $moduleManager,
@@ -73,7 +73,7 @@ class CurrentCustomer
     ) {
         $this->customerSession = $customerSession;
         $this->layout = $layout;
-        $this->customerBuilder = $customerBuilder;
+        $this->customerFactory = $customerFactory;
         $this->customerRepository = $customerRepository;
         $this->request = $request;
         $this->moduleManager = $moduleManager;
@@ -87,7 +87,9 @@ class CurrentCustomer
      */
     protected function getDepersonalizedCustomer()
     {
-        return $this->customerBuilder->setGroupId($this->customerSession->getCustomerGroupId())->create();
+        $customer = $this->customerFactory->create();
+        $customer->setGroupId($this->customerSession->getCustomerGroupId());
+        return $customer;
     }
 
     /**

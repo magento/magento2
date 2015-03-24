@@ -41,7 +41,7 @@ class Config extends \Magento\Framework\Config\Data
     protected $_defaultTypes = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,7 +58,7 @@ class Config extends \Magento\Framework\Config\Data
     /**
      * @param \Magento\Customer\Model\Address\Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $cacheId
@@ -66,7 +66,7 @@ class Config extends \Magento\Framework\Config\Data
     public function __construct(
         \Magento\Customer\Model\Address\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $cacheId = 'address_format'
@@ -96,7 +96,7 @@ class Config extends \Magento\Framework\Config\Data
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore();
         }
         return $this->_store;
@@ -130,7 +130,7 @@ class Config extends \Magento\Framework\Config\Data
                 )->setTitle(
                     (string)$typeConfig['title']
                 )->setDefaultFormat(
-                    $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
+                    $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
                 )->setEscapeHtml(
                     $escapeHtml
                 );

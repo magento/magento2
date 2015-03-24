@@ -9,17 +9,17 @@ namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -28,7 +28,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
     /**
      * Retrieve validation result as JSON
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -38,7 +38,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
         // ID of the store where order is placed
         $storeId = $this->getRequest()->getParam('store_id');
         // Sanitize value if needed
-        if (!is_null($storeId)) {
+        if ($storeId !== null) {
             $storeId = (int)$storeId;
         }
 
@@ -49,7 +49,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
                 $storeId
             );
 
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['valid' => $valid, 'group' => $groupId, 'success' => $success]);
     }

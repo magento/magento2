@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertBundlePriceType extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Product price type
      *
@@ -79,6 +75,8 @@ class AssertBundlePriceType extends AbstractConstraint
             ? $originalProduct->getPriceType()
             : $product->getPriceType();
         $catalogProductView->getViewBlock()->addToCart($product);
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        $checkoutCartView->open();
         $cartItem = $checkoutCartView->getCartBlock()->getCartItem($product);
         $specialPrice = 0;
         if (isset($bundleData['group_price'])) {

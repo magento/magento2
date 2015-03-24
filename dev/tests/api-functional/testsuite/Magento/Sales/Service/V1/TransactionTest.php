@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 /**
  * Class TransactionReadTest
@@ -68,7 +67,7 @@ class TransactionTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $transaction->getId(),
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
@@ -114,7 +113,7 @@ class TransactionTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
@@ -147,7 +146,7 @@ class TransactionTest extends WebapiAbstract
 
         $expectedData = ['transaction_id' => (int)$transaction->getId()];
 
-        if (!is_null($transaction->getParentId())) {
+        if ($transaction->getParentId() !== null) {
             $expectedData['parent_id'] = (int)$transaction->getParentId();
         }
 

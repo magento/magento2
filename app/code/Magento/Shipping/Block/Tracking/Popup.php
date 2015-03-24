@@ -64,8 +64,8 @@ class Popup extends \Magento\Framework\View\Element\Template
      */
     public function formatDeliveryDate($date)
     {
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
-        return $this->_localeDate->date(strtotime($date), \Zend_Date::TIMESTAMP, null, false)->toString($format);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
+        return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($date)), $format);
     }
 
     /**
@@ -81,8 +81,8 @@ class Popup extends \Magento\Framework\View\Element\Template
             $time = $date . ' ' . $time;
         }
 
-        $format = $this->_localeDate->getTimeFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-        return $this->_localeDate->date(strtotime($time), \Zend_Date::TIMESTAMP, null, false)->toString($format);
+        $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
+        return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($time)), $format);
     }
 
     /**
@@ -95,7 +95,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     {
         return (bool)$this->_scopeConfig->getValue(
             'contacts/contacts/enabled',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -106,7 +106,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     {
         return $this->_scopeConfig->getValue(
             'trans_email/ident_support/email',
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 

@@ -285,6 +285,34 @@ class File implements DriverInterface
     }
 
     /**
+     * Create symlink on source and place it into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @param DriverInterface|null $targetDriver
+     * @return bool
+     * @throws FilesystemException
+     */
+    public function symlink($source, $destination, DriverInterface $targetDriver = null)
+    {
+        $result = false;
+        if (get_class($targetDriver) == get_class($this)) {
+            $result = @symlink($this->getScheme() . $source, $destination);
+        }
+        if (!$result) {
+            throw new FilesystemException(
+                sprintf(
+                    'Cannot create a symlink for "%s" and place it to "%s" %s',
+                    $source,
+                    $destination,
+                    $this->getWarningMessage()
+                )
+            );
+        }
+        return $result;
+    }
+
+    /**
      * Delete file
      *
      * @param string $path
@@ -712,5 +740,31 @@ class File implements DriverInterface
     public function getRealPath($path)
     {
         return realpath($path);
+    }
+
+    /**
+     * Return correct path for link
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function getRealPathSafety($path)
+    {
+        if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) === false) {
+            return $path;
+        }
+        $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+        $realPath = [];
+        foreach ($pathParts as $pathPart) {
+            if ($pathPart == '.') {
+                continue;
+            }
+            if ($pathPart == '..') {
+                array_pop($realPath);
+                continue;
+            }
+            $realPath[] = $pathPart;
+        }
+        return implode(DIRECTORY_SEPARATOR, $realPath);
     }
 }

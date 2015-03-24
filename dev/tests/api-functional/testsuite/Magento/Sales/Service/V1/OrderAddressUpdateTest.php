@@ -7,7 +7,6 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\OrderAddressInterface as OrderAddress;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * Class OrderAddressUpdateTest
@@ -60,8 +59,8 @@ class OrderAddressUpdateTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/order/' . $order->getId(),
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'resourcePath' => '/V1/orders/' . $order->getId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

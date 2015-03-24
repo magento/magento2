@@ -12,8 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -36,16 +35,6 @@ class AccountManagementTest extends WebapiAbstract
      * @var AccountManagementInterface
      */
     private $accountManagement;
-
-    /**
-     * @var \Magento\Customer\Api\Data\AddressDataBuilder
-     */
-    private $addressBuilder;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
-     */
-    private $customerBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
@@ -85,12 +74,6 @@ class AccountManagementTest extends WebapiAbstract
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
         );
-        $this->addressBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressDataBuilder'
-        );
-        $this->customerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\CustomerDataBuilder'
-        );
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Api\SearchCriteriaBuilder'
         );
@@ -114,7 +97,7 @@ class AccountManagementTest extends WebapiAbstract
                 $serviceInfo = [
                     'rest' => [
                         'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
-                        'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                        'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
                     ],
                     'soap' => [
                         'service' => CustomerRepositoryTest::SERVICE_NAME,
@@ -142,7 +125,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => RestConfig::HTTP_METHOD_POST, ],
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
@@ -164,8 +147,10 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
                 $expectedException->addError(
-                    InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => 'email', 'value' => $invalidEmail]
+                    __(
+                        InputException::INVALID_FIELD_VALUE,
+                        ['fieldName' => 'email', 'value' => $invalidEmail]
+                    )
                 );
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
@@ -202,7 +187,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $customerData[Customer::EMAIL] . '/activate',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -232,7 +217,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $customerData[Customer::EMAIL] . '/activate',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -267,7 +252,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $path,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -290,7 +275,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $path,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -330,14 +315,14 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/password',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ]
         ];
 
         try {
             $this->_webApiCall($serviceInfo);
         } catch (\Exception $e) {
-            $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
                 'message' => InputException::DEFAULT_MESSAGE,
@@ -367,7 +352,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/password',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -391,7 +376,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/password',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -441,7 +426,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $customerData[Customer::ID] . '/confirm',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -462,7 +447,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/confirm',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -485,7 +470,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/confirm',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -530,13 +515,12 @@ class AccountManagementTest extends WebapiAbstract
     public function testValidateCustomerData()
     {
         $customerData = $this->customerHelper->createSampleCustomerDataObject();
-        $customerData = $this->customerBuilder->populate($customerData)
-            ->setFirstname(null)->setLastname(null)->create();
-
+        $customerData->setFirstname(null);
+        $customerData->setLastname(null);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/validate',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -562,7 +546,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $customerData[Customer::ID] . '/permissions/readonly',
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -583,7 +567,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/isEmailAvailable',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -603,7 +587,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/isEmailAvailable',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -636,25 +620,14 @@ class AccountManagementTest extends WebapiAbstract
         $customerCustomAttributeValue = 'value3';
 
         $addresses = $customerData->getAddresses();
-        $address1 = $this->addressBuilder
-            ->populate($addresses[0])
-            ->setCustomAttribute($fixtureAddressAttributeCode, $address1CustomAttributeValue)
-            ->create();
-        $address2 = $this->addressBuilder
-            ->populate($addresses[1])
-            ->setCustomAttribute($fixtureAddressAttributeCode, $address2CustomAttributeValue)
-            ->create();
-
-        $customer = $this->customerBuilder
-            ->populate($customerData)
-            ->setAddresses([$address1, $address2])
-            ->setCustomAttribute($fixtureCustomerAttributeCode, $customerCustomAttributeValue)
-            ->create();
-
+        $addresses[0]->setCustomAttribute($fixtureAddressAttributeCode, $address1CustomAttributeValue);
+        $addresses[1]->setCustomAttribute($fixtureAddressAttributeCode, $address2CustomAttributeValue);
+        $customerData->setAddresses($addresses);
+        $customerData->setCustomAttribute($fixtureCustomerAttributeCode, $customerCustomAttributeValue);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -664,7 +637,7 @@ class AccountManagementTest extends WebapiAbstract
         ];
 
         $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
-            $customer,
+            $customerData,
             '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];
@@ -676,7 +649,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $customerId ,
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => CustomerRepositoryTest::SERVICE_NAME,
@@ -699,7 +672,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$fixtureCustomerId/billingAddress",
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -726,7 +699,7 @@ class AccountManagementTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$fixtureCustomerId/shippingAddress",
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

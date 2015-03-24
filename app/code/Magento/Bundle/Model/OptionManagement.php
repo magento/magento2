@@ -6,7 +6,7 @@
  */
 namespace Magento\Bundle\Model;
 
-use Magento\Webapi\Exception;
+use Magento\Framework\Exception\InputException;
 
 class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInterface
 {
@@ -39,7 +39,7 @@ class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInt
     {
         $product = $this->productRepository->get($option->getSku());
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new Exception('Only implemented for bundle product', Exception::HTTP_FORBIDDEN);
+            throw new InputException(__('Only implemented for bundle product'));
         }
         return $this->optionRepository->save($product, $option);
     }

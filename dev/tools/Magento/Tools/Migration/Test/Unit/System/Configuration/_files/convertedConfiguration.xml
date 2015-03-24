@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config>
+    <system>
+        <tab id="tab_1" sortOrder="10" class="css class">
+            <label>tab label</label>
+        </tab>
+        <section id="section_1" sortOrder="10" type="text">
+            <class>css class</class>
+            <label>section label</label>
+            <resource>Magento_Backend::acl</resource>
+            <header_css>some css class</header_css>
+            <tab>tab_1</tab>
+            <group id="group_1" sortOrder="10" type="text">
+                <label>group label</label>
+                <comment><![CDATA[group comment]]></comment>
+                <fieldset_css>some css class</fieldset_css>
+                <clone_fields>1</clone_fields>
+                <clone_model>Magento\Some\Model\Name</clone_model>
+                <help_url>some_url</help_url>
+                <hide_in_single_store_mode>1</hide_in_single_store_mode>
+                <expanded>1</expanded>
+                <field id="field_1">
+                    <comment><![CDATA[comment_test]]></comment>
+                    <tooltip>tooltip_test</tooltip>
+                    <frontend_class>frontend_class_test</frontend_class>
+                    <validate>validate_test</validate>
+                    <can_be_empty>1</can_be_empty>
+                    <if_module_enabled>Magento_Backend</if_module_enabled>
+                    <frontend_model>Magento\Some\Model\Name</frontend_model>
+                    <backend_model>Magento\Some\Model\Name</backend_model>
+                    <source_model>Magento\Some\Model\Name</source_model>
+                    <config_path>config/path/test</config_path>
+                    <base_url>some_url</base_url>
+                    <upload_dir>some_directory</upload_dir>
+                    <button_url>some_url</button_url>
+                    <button_label>some_label</button_label>
+                    <depends>
+                        <field id="module1">yes</field>
+                    </depends>
+                    <more_url>more_url_test</more_url>
+                    <demo_url>demo_url_test</demo_url>
+                    <attribute type="undefined" some="attribute">undefined_test</attribute>
+                    <attribute type="node">
+                        <label>
+                            <nodeLabel>nodeValue</nodeLabel>
+                        </label>
+                    </attribute>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Framework\Store\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -42,11 +42,12 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Core/_files/second_third_store.php
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      */
     public function testGetDefaultGroupWithNonDefaultStoreId()
-    {        /** @var \Magento\Framework\Store\StoreManagerInterface  $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get('Magento\Framework\Store\StoreManagerInterface');
+    {
+        /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
         $nonDefaultStore = $storeManager->getStore('secondstore');
         $nonDefaultStoreId = $nonDefaultStore->getId();
         /** @var \Magento\Framework\App\MutableScopeConfig $scopeConfig */
@@ -54,7 +55,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
         $scopeConfig->setValue(
             \Magento\Customer\Model\GroupManagement::XML_PATH_DEFAULT_ID,
             2,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             'secondstore'
         );
         $testGroup = ['id' => 2, 'code' => 'Wholesale', 'tax_class_id' => 3, 'tax_class_name' => 'Retail Customer'];
@@ -111,8 +112,8 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function getDefaultGroupDataProvider()
     {
-        /** @var \Magento\Framework\Store\StoreManagerInterface  $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get('Magento\Framework\Store\StoreManagerInterface');
+        /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
         $defaultStoreId = $storeManager->getStore()->getId();
         return [
             'no store id' => [

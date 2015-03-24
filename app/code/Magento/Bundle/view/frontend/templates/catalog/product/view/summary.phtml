@@ -39,34 +39,33 @@
             <strong class="subtitle"><?php echo __('Summary'); ?></strong>
             <div id="bundle-summary" data-container="product-summary">
                 <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
-                <script data-template="bundle-summary" type="text/x-jQuery-tmpl">
+                <script data-template="bundle-summary" type="text/x-magento-template">
                     <li>
-                        <strong class="label">${_label_}:</strong>
+                        <strong class="label"><%- data._label_ %>:</strong>
                         <div data-container="options"></div>
                     </li>
                 </script>
-                <script data-template="bundle-option" type="text/x-jQuery-tmpl">
-                    <div><?php echo __('%1 x %2', '${_quantity_}', '${_label_}') ?></div>
+                <script data-template="bundle-option" type="text/x-magento-template">
+                    <div><?php echo __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
                 </script>
             </div>
         </div>
     </div>
 </div>
-<script>
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($){
-        $('.product-add-form').mage('slide', {
-            'slideSpeed': 1500,
-            'slideSelector': '#bundle-slide',
-            'slideBackSelector': '.action.customization.back',
-            'bundleProductSelector': '#bundleProduct',
-            'bundleOptionsContainer': '.product-add-form',
-            <?php if ($block->isStartCustomization()): ?>
-            'autostart': true
-            <?php endif;?>
-        });
-    });
+<script type="text/x-magento-init">
+    {
+        ".product-add-form": {
+            "slide": {
+                "slideSpeed": 1500,
+                "slideSelector": "#bundle-slide",
+                "slideBackSelector": ".action.customization.back",
+                "bundleProductSelector": "#bundleProduct",
+                "bundleOptionsContainer": ".product-add-form"
+                <?php if ($block->isStartCustomization()): ?>
+                ,"autostart": true
+                <?php endif;?>
+            }
+        }
+    }
 </script>
 <?php endif; ?>

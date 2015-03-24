@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
+use Magento\Webapi\Model\Soap\WsdlFactory;
 
 /**
  * WSDL generator.
@@ -19,12 +20,12 @@ class Generator
     /**
      * WSDL factory instance.
      *
-     * @var Factory
+     * @var WsdlFactory
      */
     protected $_wsdlFactory;
 
     /**
-     * @var \Magento\Webapi\Model\Cache\Type
+     * @var \Magento\Framework\App\Cache\Type\Webapi
      */
     protected $_cache;
 
@@ -44,31 +45,39 @@ class Generator
     protected $_registeredTypes = [];
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
+
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     */
+    protected $customAttributeTypeLocator = null;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
-     * @param Factory $wsdlFactory
-     * @param \Magento\Webapi\Model\Cache\Type $cache
+     * @param WsdlFactory $wsdlFactory
+     * @param \Magento\Framework\App\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
-        Factory $wsdlFactory,
-        \Magento\Webapi\Model\Cache\Type $cache,
+        WsdlFactory $wsdlFactory,
+        \Magento\Framework\App\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
         $this->_cache = $cache;
         $this->_typeProcessor = $typeProcessor;
         $this->storeManager = $storeManager;
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
     }
 
     /**
@@ -95,7 +104,7 @@ class Generator
         }
 
         $wsdlContent = $this->_generate($services, $endPointUrl);
-        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Webapi\Model\Cache\Type::CACHE_TAG]);
+        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Framework\App\Cache\Type\Webapi::CACHE_TAG]);
 
         return $wsdlContent;
     }
@@ -106,7 +115,7 @@ class Generator
      * @param array $requestedServices
      * @param string $endPointUrl
      * @return string
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     protected function _generate($requestedServices, $endPointUrl)
     {
@@ -114,6 +123,8 @@ class Generator
         $wsdl = $this->_wsdlFactory->create(self::WSDL_NAME, $endPointUrl);
         $wsdl->addSchemaTypeSection();
         $faultMessageName = $this->_addGenericFaultComplexTypeNodes($wsdl);
+        $wsdl = $this->addCustomAttributeTypes($wsdl);
+
         foreach ($requestedServices as $serviceClass => $serviceData) {
             $portTypeName = $this->getPortTypeName($serviceClass);
             $bindingName = $this->getBindingName($serviceClass);
@@ -157,6 +168,21 @@ class Generator
             }
         }
         return $wsdl->toXML();
+    }
+
+    /**
+     * Create and add WSDL Types for complex custom attribute classes
+     *
+     * @param \Magento\Webapi\Model\Soap\Wsdl $wsdl
+     * @return \Magento\Webapi\Model\Soap\Wsdl
+     */
+    protected function addCustomAttributeTypes($wsdl)
+    {
+        foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
+            $typeName = $this->_typeProcessor->register($customAttributeClass);
+            $wsdl->addComplexType($typeName);
+        }
+        return $wsdl;
     }
 
     /**

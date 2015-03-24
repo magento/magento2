@@ -89,7 +89,7 @@ class OrderStatus implements DataProviderInterface
      */
     public function isAllowed()
     {
-        if ($this->config->getValue('rss/order/status', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)) {
+        if ($this->config->getValue('rss/order/status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             return true;
         }
         return false;
@@ -101,7 +101,7 @@ class OrderStatus implements DataProviderInterface
     public function getRssData()
     {
         $this->order = $this->getOrder();
-        if (is_null($this->order)) {
+        if ($this->order === null) {
             throw new \InvalidArgumentException('Order not found.');
         }
         return array_merge($this->getHeader(), $this->getEntries());

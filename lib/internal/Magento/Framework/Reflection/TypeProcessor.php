@@ -8,6 +8,7 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Exception\SerializationException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\ParameterReflection;
+use Magento\Framework\Phrase;
 
 /**
  * Type processor of config reader properties
@@ -57,17 +58,6 @@ class TypeProcessor
     protected $_types = [];
 
     /**
-     * Types class map.
-     * <pre>array(
-     *     $complexTypeName => $interfaceName,
-     *     ...
-     * )</pre>
-     *
-     * @var array
-     */
-    protected $_typeToClassMap = [];
-
-    /**
      * Retrieve processed types data.
      *
      * @return array
@@ -112,10 +102,10 @@ class TypeProcessor
      * Process type name. In case parameter type is a complex type (class) - process its properties.
      *
      * @param string $type
-     * @return string
+     * @return string Complex type name
      * @throws \LogicException
      */
-    public function process($type)
+    public function register($type)
     {
         $typeName = $this->normalizeType($type);
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
@@ -128,9 +118,6 @@ class TypeProcessor
             $complexTypeName = $this->translateTypeName($type);
             if (!isset($this->_types[$complexTypeName])) {
                 $this->_processComplexType($type);
-                if (!$this->isArrayType($complexTypeName)) {
-                    $this->_typeToClassMap[$complexTypeName] = $type;
-                }
             }
             $typeName = $complexTypeName;
         }
@@ -150,7 +137,7 @@ class TypeProcessor
         $typeName = $this->translateTypeName($class);
         $this->_types[$typeName] = [];
         if ($this->isArrayType($class)) {
-            $this->process($this->getArrayItemType($class));
+            $this->register($this->getArrayItemType($class));
         } else {
             if (!(class_exists($class) || interface_exists($class))) {
                 throw new \InvalidArgumentException(
@@ -189,7 +176,7 @@ class TypeProcessor
             $returnMetadata = $this->getGetterReturnType($methodReflection);
             $fieldName = $this->dataObjectGetterNameToFieldName($methodReflection->getName());
             $this->_types[$typeName]['parameters'][$fieldName] = [
-                'type' => $this->process($returnMetadata['type']),
+                'type' => $this->register($returnMetadata['type']),
                 'required' => $returnMetadata['isRequired'],
                 'documentation' => $returnMetadata['description'],
             ];
@@ -255,11 +242,17 @@ class TypeProcessor
     {
         $methodDocBlock = $methodReflection->getDocBlock();
         if (!$methodDocBlock) {
-            throw new \InvalidArgumentException('Each getter must have description with @return annotation.');
+            throw new \InvalidArgumentException(
+                "Each getter must have description with @return annotation. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
         }
         $returnAnnotations = $methodDocBlock->getTags('return');
         if (empty($returnAnnotations)) {
-            throw new \InvalidArgumentException('Getter return type must be specified using @return annotation.');
+            throw new \InvalidArgumentException(
+                "Getter return type must be specified using @return annotation. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
         }
         /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
         $returnAnnotation = current($returnAnnotations);
@@ -438,24 +431,30 @@ class TypeProcessor
             foreach (array_keys($value) as $key) {
                 if ($value !== null && !settype($value[$key], $arrayItemType)) {
                     throw new SerializationException(
-                        SerializationException::TYPE_MISMATCH,
-                        ['value' => $value, 'type' => $type]
+                        new Phrase(
+                            SerializationException::TYPE_MISMATCH,
+                            ['value' => $value, 'type' => $type]
+                        )
                     );
                 }
             }
-        } elseif ($isArrayType && is_null($value)) {
+        } elseif ($isArrayType && $value === null) {
             return null;
         } elseif (!$isArrayType && !is_array($value)) {
-            if ($value !== null && $type !== self::ANY_TYPE && !settype($value, $type)) {
+            if ($value !== null && $type !== self::ANY_TYPE && !$this->setType($value, $type)) {
                 throw new SerializationException(
-                    SerializationException::TYPE_MISMATCH,
-                    ['value' => (string)$value, 'type' => $type]
+                    new Phrase(
+                        SerializationException::TYPE_MISMATCH,
+                        ['value' => (string)$value, 'type' => $type]
+                    )
                 );
             }
         } else {
             throw new SerializationException(
-                SerializationException::TYPE_MISMATCH,
-                ['value' => (string)$value, 'type' => $type]
+                new Phrase(
+                    SerializationException::TYPE_MISMATCH,
+                    ['value' => gettype($value), 'type' => $type]
+                )
             );
         }
         return $value;
@@ -498,6 +497,52 @@ class TypeProcessor
             $methodName = $getterName;
         } elseif ($class->hasMethod($boolGetterName)) {
             $methodName = $boolGetterName;
+        } else {
+            throw new \Exception(
+                sprintf(
+                    'Property :"%s" does not exist in the provided class: "%s".',
+                    $camelCaseProperty,
+                    $class->getName()
+                )
+            );
+        }
+        return $methodName;
+    }
+
+    /**
+     * Set value to a particular type
+     *
+     * @param mixed $value
+     * @param string $type
+     * @return true on successful type cast
+     */
+    protected function setType(&$value, $type)
+    {
+        // settype doesn't work for boolean string values.
+        // ex: custom_attributes passed from SOAP client can have boolean values as string
+        if ($type == 'bool' || $type == 'boolean') {
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            return true;
+        }
+        return settype($value, $type);
+    }
+
+    /**
+     * Find the setter method name for a property from the given class
+     *
+     * @param ClassReflection $class
+     * @param string $camelCaseProperty
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     */
+    public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
+    {
+        $setterName = 'set' . $camelCaseProperty;
+        $boolSetterName = 'setIs' . $camelCaseProperty;
+        if ($class->hasMethod($setterName)) {
+            $methodName = $setterName;
+        } elseif ($class->hasMethod($boolSetterName)) {
+            $methodName = $boolSetterName;
         } else {
             throw new \Exception(
                 sprintf(

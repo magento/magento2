@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false" />
     <type name="Magento\Directory\Model\Currency\Import\Config">
         <arguments>
             <argument name="servicesConfig" xsi:type="array">
@@ -17,11 +16,15 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
+
+    <virtualType name="DirectoryHelperDataProxy" type="Magento\Directory\Helper\Data\Proxy">
         <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="directory_setup" xsi:type="string">Magento\Directory\Model\Resource\Setup</item>
-            </argument>
+            <argument name="instanceName" xsi:type="string">Magento\Directory\Helper\Data</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false">
+        <arguments>
+            <argument name="helperData" xsi:type="object">DirectoryHelperDataProxy</argument>
         </arguments>
     </type>
 </config>

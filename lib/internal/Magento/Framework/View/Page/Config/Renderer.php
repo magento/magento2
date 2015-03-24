@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Page\Config;
 
 use Magento\Framework\View\Asset\GroupedCollection;
@@ -11,8 +10,10 @@ use Magento\Framework\View\Page\Config;
 
 /**
  * Page config Renderer model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer
+class Renderer implements RendererInterface
 {
     /**
      * @var array
@@ -103,7 +104,7 @@ class Renderer
         $result .= $this->renderMetadata();
         $result .= $this->renderTitle();
         $this->prepareFavicon();
-        $result .= $this->renderAssets();
+        $result .= $this->renderAssets($this->getAvailableResultGroups());
         $result .= $this->pageConfig->getIncludes();
         return $result;
     }
@@ -214,11 +215,12 @@ class Renderer
     /**
      * Returns rendered HTML for all Assets (CSS before)
      *
+     * @param array $resultGroups
+     *
      * @return string
      */
-    public function renderAssets()
+    public function renderAssets($resultGroups = [])
     {
-        $resultGroups = array_fill_keys($this->assetTypeOrder, '');
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
         foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
             $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
@@ -366,5 +368,13 @@ class Renderer
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableResultGroups()
+    {
+        return array_fill_keys($this->assetTypeOrder, '');
     }
 }

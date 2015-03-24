@@ -30,7 +30,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addWebsiteFilter($website)
     {
-        if (is_null($website) || $website == 0) {
+        if ($website === null || $website == 0) {
             return $this;
         }
         if (is_array($website)) {

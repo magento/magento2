@@ -164,7 +164,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'currency',
                 'currency_code' => (string)$this->_scopeConfig->getValue(
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ),
                 'index' => 'price'
             ]
@@ -196,7 +196,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost('selected_products');
-        if (is_null($products)) {
+        if ($products === null) {
             $products = $this->getCategory()->getProductsPosition();
             return array_keys($products);
         }

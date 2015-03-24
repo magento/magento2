@@ -8,23 +8,23 @@
 
 ?>
 <?php /* @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses */ ?>
-<script data-template="tab-address-content" type="text/x-jquery-tmpl">
+<script data-template="tab-address-content" type="text/x-magento-template">
     <div>
-        {{if prefix || firstname || middlename || lastname || suffix}}
-        ${prefix} ${firstname} ${middlename} ${lastname} ${suffix}<br/>
-        {{/if}}
-        {{if company}}${company}<br/>{{/if}}
-        {{if street0}}${street0}<br/>{{/if}}
-        {{if street1}}${street1}<br/>{{/if}}
-        {{if street2}}${street2}<br/>{{/if}}
-        {{if street3}}${street3}<br/>{{/if}}
-        {{if city || region || postcode}}
-        {{if city}}${city}{{/if}}{{if region}}{{if city}}, {{/if}}${region}{{/if}}{{if postcode}}{{if city || region}}, {{/if}}${postcode}{{/if}}<br/>
-        {{/if}}
-        {{if country_id}}${country_id}<br/>{{/if}}
-        {{if telephone}}T: ${telephone}<br/>{{/if}}
-        {{if fax}}F: ${fax}<br/>{{/if}}
-        {{if vat_id}}VAT: ${vat_id}{{/if}}
+        <% if (data.prefix || data.firstname || data.middlename || data.lastname || data.suffix) { %>
+        <%- data.prefix %> <%- data.firstname %> <%- data.middlename %> <%- data.lastname %> <%- data.suffix %><br/>
+        <% } %>
+        <% if (data.company) { %><%- data.company %><br/><% } %>
+        <% if (data.street0) { %><%- data.street0 %><br/><% } %>
+        <% if (data.street1) { %><%- data.street1 %><br/><% } %>
+        <% if (data.street2) { %><%- data.street2 %><br/><% } %>
+        <% if (data.street3) { %><%- data.street3 %><br/><% } %>
+        <% if (data.city || data.region || data.postcode) { %>
+        <% if (data.city) { %><%- data.city %><% } %><% if (data.region) { %><% if (data.city) { %>, <% } %><%- data.region %><% } %><% if (data.postcode) { %><% if (data.city || data.region) { %>, <% } %><%- data.postcode %><% } %><br/>
+        <% } %>
+        <% if (data.country_id) { %><%- data.country_id %><br/><% } %>
+        <% if (data.telephone) { %>T: <%- data.telephone %><br/><% } %>
+        <% if (data.fax) { %>F: <%- data.fax %><br/><% } %>
+        <% if (data.vat_id) { %>VAT: <%- data.vat_id %><% } %>
     </div>
 </script>
 
@@ -93,13 +93,13 @@
         </ul>
 
         <!-- Template for adding address item to list -->
-        <script data-template="address-tab" type="text/x-jquery-tmpl">
+        <script data-template="address-tab" type="text/x-magento-template">
             <div id="address_item_template" class="hidden template">
-                <li class="address-list-item" id="address_item_${itemId}" data-item="${itemId}">
-                    <a href="#form_new_item${itemId}" data-mage-init='{"dataItemDeleteButton": {}}'>
+                <li class="address-list-item" id="address_item_<%- data.itemId %>" data-item="<%- data.itemId %>">
+                    <a href="#form_new_item<%- data.itemId %>" data-mage-init='{"dataItemDeleteButton": {}}'>
                         <?php if (!$block->isReadonly()): ?>
                             <div class="address-list-item-actions">
-                                <button class="action-delete" type="button" title="Remove address" id="delete_button${itemId}" data-role="delete">
+                                <button class="action-delete" type="button" title="Remove address" id="delete_button<%- data.itemId %>" data-role="delete">
                                     <span>Remove address</span>
                                 </button>
                                 <button class="action-edit" type="button" title="Edit address">
@@ -113,14 +113,14 @@
                         </address>
                     </a>
                     <div class="field choice field-address-item-billing">
-                        <input type="checkbox" <?php if ($block->isReadonly()):?> disabled="disabled"<?php endif;?> value="_item${itemId}" id="address_item_billing_item${itemId}" name="account[default_billing]" title="<?php echo __('Set as Default Billing Address') ?>" />
-                        <label class="label" for="address_item_billing_item${itemId}">
+                        <input type="checkbox" <?php if ($block->isReadonly()):?> disabled="disabled"<?php endif;?> value="_item<%- data.itemId %>" id="address_item_billing_item<%- data.itemId %>" name="account[default_billing]" title="<?php echo __('Set as Default Billing Address') ?>" />
+                        <label class="label" for="address_item_billing_item<%- data.itemId %>">
                             <span><?php echo __('Default Billing Address') ?></span>
                         </label>
                     </div>
                     <div class="field choice field-address-item-shipping">
-                        <input type="checkbox" <?php if ($block->isReadonly()):?> disabled="disabled"<?php endif;?> value="_item${itemId}" id="address_item_shipping_item${itemId}" name="account[default_shipping]" title="<?php echo __('Set as Default Shipping Address') ?>"/>
-                        <label class="label" for="address_item_shipping_item${itemId}">
+                        <input type="checkbox" <?php if ($block->isReadonly()):?> disabled="disabled"<?php endif;?> value="_item<%- data.itemId %>" id="address_item_shipping_item<%- data.itemId %>" name="account[default_shipping]" title="<?php echo __('Set as Default Shipping Address') ?>"/>
+                        <label class="label" for="address_item_shipping_item<%- data.itemId %>">
                             <span><?php echo __('Default Shipping Address') ?></span>
                         </label>
                     </div>
@@ -130,10 +130,10 @@
 
         <!-- Address form template -->
         <?php $_templatePrefix = $block->getTemplatePrefix() ?>
-        <script data-template="address-form" type="text/x-jquery-tmpl">
+        <script data-template="address-form" type="text/x-magento-template">
             <div id="address_form_template" class="no-display template"><!-- Don`t delete class no-display, save customer stops work  -->
-                <div id="form_${formName}" data-item="${itemCount}" class="address-item-edit-content"
-                     data-mage-init='{"observableInputs":{"name": "${formName}"}}'>
+                <div id="form_<%- data.formName %>" data-item="<%- data.itemCount %>" class="address-item-edit-content"
+                     data-mage-init='{"observableInputs":{"name": "<%- data.formName %>"}}'>
                     <?php
                     // Set form template elements prefix
                     $block->getForm()->setHtmlIdPrefix($_templatePrefix)

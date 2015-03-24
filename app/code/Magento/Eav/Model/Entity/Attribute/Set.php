@@ -19,8 +19,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Eav\Exception as EavException;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -28,6 +29,15 @@ use Magento\Framework\Api\AttributeDataBuilder;
 class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeSetInterface
 {
+    /**#@+
+     * Constants
+     */
+    const KEY_ATTRIBUTE_SET_ID = 'attribute_set_id';
+    const KEY_ATTRIBUTE_SET_NAME = 'attribute_set_name';
+    const KEY_SORT_ORDER = 'sort_order';
+    const KEY_ENTITY_TYPE_ID = 'entity_type_id';
+    /**#@-*/
+
     /**
      * Resource instance
      *
@@ -37,6 +47,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
     /**
      * Prefix of model events names
+     *
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute_set';
@@ -64,8 +75,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
@@ -78,8 +89,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
@@ -91,8 +102,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
@@ -244,19 +255,17 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Validate attribute set name
      *
      * @return bool
-     * @throws \Magento\Eav\Exception
+     * @throws EavException
      */
     public function validate()
     {
         $attributeSetName = $this->getAttributeSetName();
         if ($attributeSetName == '') {
-            throw new \Magento\Eav\Exception(__('Attribute set name is empty.'));
+            throw new EavException(__('Attribute set name is empty.'));
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new \Magento\Eav\Exception(
-                __('An attribute set with the "%1" name already exists.', $attributeSetName)
-            );
+            throw new EavException(__('An attribute set with the "%1" name already exists.', $attributeSetName));
         }
 
         return true;
@@ -350,7 +359,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getAttributeSetId()
     {
-        return $this->getData('attribute_set_id');
+        return $this->getData(self::KEY_ATTRIBUTE_SET_ID);
     }
 
     /**
@@ -358,7 +367,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getAttributeSetName()
     {
-        return $this->getData('attribute_set_name');
+        return $this->getData(self::KEY_ATTRIBUTE_SET_NAME);
     }
 
     /**
@@ -366,7 +375,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getSortOrder()
     {
-        return $this->getData('sort_order');
+        return $this->getData(self::KEY_SORT_ORDER);
     }
 
     /**
@@ -374,7 +383,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getEntityTypeId()
     {
-        return $this->getData('entity_type_id');
+        return $this->getData(self::KEY_ENTITY_TYPE_ID);
     }
 
     /**
@@ -386,6 +395,71 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setName($name)
     {
         $this->setData('attribute_set_name', $name);
+    }
+
+    /**
+     * Set attribute set ID
+     *
+     * @param int $attributeSetId
+     * @return $this
+     */
+    public function setAttributeSetId($attributeSetId)
+    {
+        return $this->setData(self::KEY_ATTRIBUTE_SET_ID, $attributeSetId);
+    }
+
+    /**
+     * Set attribute set name
+     *
+     * @param string $attributeSetName
+     * @return $this
+     */
+    public function setAttributeSetName($attributeSetName)
+    {
+        return $this->setData(self::KEY_ATTRIBUTE_SET_NAME, $attributeSetName);
+    }
+
+    /**
+     * Set attribute set sort order index
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set attribute set entity type id
+     *
+     * @param int $entityTypeId
+     * @return $this
+     */
+    public function setEntityTypeId($entityTypeId)
+    {
+        return $this->setData(self::KEY_ENTITY_TYPE_ID, $entityTypeId);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeSetExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

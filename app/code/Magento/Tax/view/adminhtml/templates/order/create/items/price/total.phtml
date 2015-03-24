@@ -26,6 +26,6 @@ $_item = $block->getItem();
     <?php if ($block->displayBothPrices($block->getStore())): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php $_incl = $_item->getPriceInclTax() * $_item->getQty() - $_item->getTotalDiscountAmount(); ?>
+    <?php $_incl = $block->getTotalAmount($_item); ?>
     <?php echo $block->formatPrice($_incl) ?>
 <?php endif; ?>

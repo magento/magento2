@@ -6,16 +6,24 @@
 
 namespace Magento\Catalog\Test\Block\Product;
 
+use Magento\Catalog\Test\Block\Product\ProductList\ProductItem;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Product list.
+ * Product list block.
  */
 class ListProduct extends Block
 {
+    /**
+     * Locator for product item block.
+     *
+     * @var string
+     */
+    protected $productItem = './/*[contains(@class,"product-item-link") and .//*[text()="%s"]]/ancestor::li';
+
     /**
      * This member holds the class name of the regular price block.
      *
@@ -35,14 +43,14 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productDetailsSelector = '//*[contains(@class, "product details") and .//*[@title="%s"]]';
+    protected $productDetailsSelector = '//*[contains(@class, "product details") and .//*[text()="%s"]]';
 
     /**
      * Product name.
      *
      * @var string
      */
-    protected $productTitle = '.product.name [title="%s"]';
+    protected $productTitle = './/*[@class="product name product-item-name"]/a[text()="%s"]';
 
     /**
      * Click for Price link on category page.
@@ -57,13 +65,6 @@ class ListProduct extends Block
      * @var string
      */
     protected $oldPrice = ".old-price .price-container";
-
-    /**
-     * 'Add to Card' button.
-     *
-     * @var string
-     */
-    protected $addToCard = "button.action.tocart";
 
     /**
      * Price box CSS selector.
@@ -87,15 +88,34 @@ class ListProduct extends Block
     protected $sorter = '#sorter';
 
     /**
+     * Return product item block.
+     *
+     * @param InjectableFixture $product
+     * @return ProductItem
+     */
+    public function getProductItem(InjectableFixture $product)
+    {
+        $locator = sprintf($this->productItem, $product->getName());
+
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
+            ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
      * This method returns the price box block for the named product.
      *
-     * @param string $productName String containing the name of the product to find.
+     * @param string $productName
      * @return Price
      */
     public function getProductPriceBlock($productName)
     {
-        return Factory::getBlockFactory()->getMagentoCatalogProductPrice(
-            $this->getProductDetailsElement($productName)->find($this->priceBlockClass, Locator::SELECTOR_CLASS_NAME)
+        $productDetails = $this->getProductDetailsElement($productName);
+
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\Price',
+            ['element' => $productDetails->find($this->priceBlockClass, Locator::SELECTOR_CLASS_NAME)]
         );
     }
 
@@ -153,7 +173,7 @@ class ListProduct extends Block
      */
     protected function getProductNameElement($productName)
     {
-        return $this->_rootElement->find(sprintf($this->productTitle, $productName));
+        return $this->_rootElement->find(sprintf($this->productTitle, $productName), Locator::SELECTOR_XPATH);
     }
 
     /**
@@ -186,18 +206,7 @@ class ListProduct extends Block
      */
     public function getPrice($productId)
     {
-        return $this->_rootElement->find(sprintf($this->priceBox, $productId), Locator::SELECTOR_CSS)
-            ->getText();
-    }
-
-    /**
-     * Check 'Add To Card' button availability.
-     *
-     * @return bool
-     */
-    public function checkAddToCardButton()
-    {
-        return $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->isVisible();
+        return $this->_rootElement->find(sprintf($this->priceBox, $productId), Locator::SELECTOR_CSS)->getText();
     }
 
     /**

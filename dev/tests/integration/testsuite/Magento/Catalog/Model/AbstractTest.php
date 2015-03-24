@@ -27,7 +27,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (!self::$_isStubClass) {
-            $this->getMockForAbstractClass('Magento\Catalog\Model\AbstractModel', [], self::STUB_CLASS, false);
+            $this->getMockForAbstractClass('Magento\Catalog\Model\AbstractModel\Stub', [], self::STUB_CLASS, false);
             self::$_isStubClass = true;
         }
 
@@ -137,7 +137,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $store,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()
         );
     }
@@ -146,7 +146,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $ids = $this->_model->getWebsiteStoreIds();
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Store\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId();
         $this->assertEquals([$storeId => $storeId], $ids);
     }

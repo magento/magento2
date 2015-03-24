@@ -5,7 +5,7 @@
  */
 namespace Magento\Sendfriend\Model;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 
 /**
  * SendFriend Log
@@ -84,7 +84,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -111,7 +111,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
@@ -127,7 +127,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
@@ -167,7 +167,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     public function send()
     {
         if ($this->isExceedLimit()) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('You\'ve met your limit of %1 sends in an hour.', $this->getMaxSendsToFriend())
             );
         }
@@ -340,14 +340,14 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Product instance
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()
     {
         $product = $this->_getData('_product');
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            throw new \Magento\Framework\Model\Exception(__('Please define a correct Product instance.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please define a correct Product instance.'));
         }
         return $product;
     }
@@ -370,14 +370,16 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Sender Information Object
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Object
      */
     public function getSender()
     {
         $sender = $this->_getData('_sender');
         if (!$sender instanceof \Magento\Framework\Object) {
-            throw new \Magento\Framework\Model\Exception(__('Please define the correct Sender information.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please define the correct Sender information.')
+            );
         }
         return $sender;
     }
@@ -430,7 +432,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
      */
     public function getSentCount($useCache = true)
     {
-        if ($useCache && !is_null($this->_sentCount)) {
+        if ($useCache && $this->_sentCount !== null) {
             return $this->_sentCount;
         }
 

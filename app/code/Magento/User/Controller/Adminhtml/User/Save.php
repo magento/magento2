@@ -1,10 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
+
+use Magento\Framework\Exception\AuthenticationException;
 
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
@@ -16,7 +17,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     public function execute()
     {
         $userId = (int)$this->getRequest()->getParam('user_id');
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if (!$data) {
             $this->_redirect('adminhtml/*/');
             return;
@@ -55,26 +56,34 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
             if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
-                throw new \Magento\Backend\Model\Auth\Exception(
-                    __('You have entered an invalid password for current user.')
-                );
+                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $this->messageManager->addMessages($e->getMessages());
+        } catch (\Magento\Framework\Validator\Exception $e) {
             $messages = $e->getMessages();
-            if (empty($messages)) {
-                if ($e->getMessage()) {
-                    $this->messageManager->addError($e->getMessage());
-                }
+            $this->messageManager->addMessages($messages);
+            $this->redirectToEdit($model, $data);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            if ($e->getMessage()) {
+                $this->messageManager->addError($e->getMessage());
             }
-            $this->_getSession()->setUserData($data);
-            $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];
-            $arguments = array_merge($arguments, ['_current' => true]);
-            $this->_redirect('adminhtml/*/edit', $arguments);
+            $this->redirectToEdit($model, $data);
         }
+    }
+
+    /**
+     * @param \Magento\User\Model\User $model
+     * @param array $data
+     * @return void
+     */
+    protected function redirectToEdit(\Magento\User\Model\User $model, array $data)
+    {
+        $this->_getSession()->setUserData($data);
+        $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];
+        $arguments = array_merge($arguments, ['_current' => true]);
+        $this->_redirect('adminhtml/*/edit', $arguments);
     }
 }

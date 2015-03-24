@@ -5,16 +5,16 @@
 /*jshint browser:true jquery:true*/
 /*global FORM_KEY*/
 define([
-    "jquery",
-    "jquery/ui",
-    "jquery/template",
-    "mage/translate",
-    "mage/backend/tree-suggest",
-    "mage/backend/validation"
-], function($){
+    'jquery',
+    'jquery/ui',
+    'mage/translate',
+    'mage/backend/tree-suggest',
+    'mage/backend/validation'
+], function ($) {
     'use strict';
+
     var clearParentCategory = function () {
-        $('#new_category_parent').find('option').each(function(){
+        $('#new_category_parent').find('option').each(function () {
             $('#new_category_parent-suggest').treeSuggest('removeOption', null, this);
         });
     };
@@ -34,7 +34,7 @@ define([
                     $('#new_category_name').focus();
                 });
 
-            $.validator.addMethod('validate-parent-category', function() {
+            $.validator.addMethod('validate-parent-category', function () {
                 return $('#new_category_parent').val() || $('#new_category_parent-suggest').val() === '';
             }, $.mage.__('Choose existing category.'));
             var newCategoryForm = $('#new_category_form');
@@ -55,12 +55,17 @@ define([
             this.element.dialog({
                 title: $.mage.__('Create Category'),
                 autoOpen: false,
-                minWidth: 560,
+                width: '75%',
                 dialogClass: 'mage-new-category-dialog form-inline',
                 modal: true,
                 multiselect: true,
                 resizable: false,
-                open: function() {
+                position: {
+                    my: 'left top',
+                    at: 'center top',
+                    of: 'body'
+                },
+                open: function () {
                     // fix for suggest field - overlapping dialog z-index
                     $('#new_category_parent-suggest').css('z-index', $.ui.dialog.maxZ + 1);
                     var enteredName = $('#category_ids-suggest').val();
@@ -69,20 +74,25 @@ define([
                         $('#new_category_name').focus();
                     }
                     $('#new_category_messages').html('');
+                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 15;
+                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
                 },
-                close: function() {
+                close: function () {
                     $('#new_category_name, #new_category_parent-suggest').val('');
                     var validationOptions = newCategoryForm.validation('option');
                     validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
                         validationOptions.errorClass, validationOptions.validClass || '');
                     newCategoryForm.validation('clearError');
                     $('#category_ids-suggest').focus();
+                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 },
                 buttons: [{
                     text: $.mage.__('Create Category'),
-                    'class': 'action-create primary',
+                    'class': 'action-primary',
                     'data-action': 'save',
-                    click: function(event) {
+                    click: function (event) {
                         if (!newCategoryForm.valid()) {
                             return;
                         }
@@ -121,17 +131,17 @@ define([
                                         $('#new_category_messages').html(data.messages);
                                     }
                                 }
-                            )
+                        )
                             .complete(
                                 function () {
                                     thisButton.prop('disabled', false);
                                 }
-                            );
+                        );
                     }
                 }]
             });
         }
     });
-    
+
     return $.mage.newCategoryDialog;
 });

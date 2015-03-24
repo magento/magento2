@@ -24,19 +24,21 @@ class Source extends AbstractEav
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Catalog\Model\Resource\Helper $resourceHelper
+        \Magento\Catalog\Model\Resource\Helper $resourceHelper,
+        $resourcePrefix = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($resource, $eavConfig, $eventManager);
+        parent::__construct($context, $eavConfig, $eventManager, $resourcePrefix);
     }
 
     /**
@@ -104,7 +106,7 @@ class Source extends AbstractEav
         $adapter = $this->_getWriteAdapter();
         $idxTable = $this->getIdxTable();
         // prepare select attributes
-        if (is_null($attributeId)) {
+        if ($attributeId === null) {
             $attrIds = $this->_getIndexableAttributes(false);
         } else {
             $attrIds = [$attributeId];
@@ -140,7 +142,7 @@ class Source extends AbstractEav
             's.store_id', 's.website_id', 'd.entity_id', 'd.attribute_id', 'd.value',
         ]);
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $subSelect->where('d.entity_id IN(?)', $entityIds);
         }
 
@@ -202,7 +204,7 @@ class Source extends AbstractEav
         $adapter = $this->_getWriteAdapter();
 
         // prepare multiselect attributes
-        if (is_null($attributeId)) {
+        if ($attributeId === null) {
             $attrIds = $this->_getIndexableAttributes(true);
         } else {
             $attrIds = [$attributeId];
@@ -253,7 +255,7 @@ class Source extends AbstractEav
         $statusCond = $adapter->quoteInto('=?', ProductStatus::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pvd.entity_id', 'cs.store_id', $statusCond);
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('pvd.entity_id IN(?)', $entityIds);
         }
 
@@ -315,6 +317,7 @@ class Source extends AbstractEav
      *
      * @param string|null $table
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdxTable($table = null)
     {

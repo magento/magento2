@@ -13,7 +13,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 /**
  * Login controller
  *
- * @method \Zend_Controller_Request_Http getRequest()
+ * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
 class Login extends \Magento\Framework\App\Action\Action
@@ -29,12 +29,12 @@ class Login extends \Magento\Framework\App\Action\Action
     protected $customerAccountManagement;
 
     /**
-     * @var \Magento\Core\Helper\Data $helper
+     * @var \Magento\Framework\Json\Helper\Data $helper
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -48,17 +48,17 @@ class Login extends \Magento\Framework\App\Action\Action
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Json\Helper\Data $helper
      * @param AccountManagementInterface $customerAccountManagement
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Helper\Data $helper,
+        \Magento\Framework\Json\Helper\Data $helper,
         AccountManagementInterface $customerAccountManagement,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         parent::__construct($context);
@@ -85,7 +85,7 @@ class Login extends \Magento\Framework\App\Action\Action
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         try {
-            $credentials = $this->helper->jsonDecode($this->getRequest()->getRawBody());
+            $credentials = $this->helper->jsonDecode($this->getRequest()->getContent());
         } catch (\Exception $e) {
             return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
@@ -112,7 +112,7 @@ class Login extends \Magento\Framework\App\Action\Action
         } else {
             $responseText = __('Login successful.');
         }
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData(['message' => $responseText]);
     }

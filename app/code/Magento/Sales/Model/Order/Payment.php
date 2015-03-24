@@ -8,7 +8,6 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Payment\Model\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -18,58 +17,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment getResource()
- * @method \Magento\Sales\Model\Order\Payment setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseShippingCaptured(float $value)
- * @method \Magento\Sales\Model\Order\Payment setShippingCaptured(float $value)
- * @method \Magento\Sales\Model\Order\Payment setAmountRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountPaid(float $value)
- * @method \Magento\Sales\Model\Order\Payment setAmountCanceled(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountAuthorized(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountPaidOnline(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountRefundedOnline(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order\Payment setShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order\Payment setAmountPaid(float $value)
- * @method \Magento\Sales\Model\Order\Payment setAmountAuthorized(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountOrdered(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseShippingRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Payment setShippingRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountRefunded(float $value)
- * @method \Magento\Sales\Model\Order\Payment setAmountOrdered(float $value)
- * @method \Magento\Sales\Model\Order\Payment setBaseAmountCanceled(float $value)
- * @method \Magento\Sales\Model\Order\Payment setQuotePaymentId(int $value)
- * @method \Magento\Sales\Model\Order\Payment setAdditionalData(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcExpMonth(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcSsStartYear(string $value)
- * @method \Magento\Sales\Model\Order\Payment setEcheckBankName(string $value)
- * @method \Magento\Sales\Model\Order\Payment setMethod(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcDebugRequestBody(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcSecureVerify(string $value)
- * @method \Magento\Sales\Model\Order\Payment setProtectionEligibility(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcApproval(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcLast4(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcStatusDescription(string $value)
- * @method \Magento\Sales\Model\Order\Payment setEcheckType(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcDebugResponseSerialized(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcSsStartMonth(string $value)
- * @method \Magento\Sales\Model\Order\Payment setEcheckAccountType(string $value)
- * @method \Magento\Sales\Model\Order\Payment setLastTransId(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcCidStatus(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcOwner(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcType(string $value)
- * @method \Magento\Sales\Model\Order\Payment setPoNumber(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcExpYear(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcStatus(string $value)
- * @method \Magento\Sales\Model\Order\Payment setEcheckRoutingNumber(string $value)
- * @method \Magento\Sales\Model\Order\Payment setAccountStatus(string $value)
- * @method \Magento\Sales\Model\Order\Payment setAnetTransMethod(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcDebugResponseBody(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcSsIssue(string $value)
- * @method \Magento\Sales\Model\Order\Payment setEcheckAccountName(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcAvsStatus(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcNumberEnc(string $value)
- * @method \Magento\Sales\Model\Order\Payment setCcTransId(string $value)
- * @method \Magento\Sales\Model\Order\Payment setAddressStatus(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -141,7 +88,7 @@ class Payment extends Info implements OrderPaymentInterface
     protected $_transactionCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Store\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -153,14 +100,14 @@ class Payment extends Info implements OrderPaymentInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
      * @param Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -170,14 +117,14 @@ class Payment extends Info implements OrderPaymentInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -191,8 +138,8 @@ class Payment extends Info implements OrderPaymentInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $paymentData,
             $encryptor,
             $resource,
@@ -409,7 +356,7 @@ class Payment extends Info implements OrderPaymentInterface
      * TODO: eliminate logic duplication with registerCaptureNotification()
      *
      * @param null|Invoice $invoice
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function capture($invoice)
@@ -486,7 +433,7 @@ class Payment extends Info implements OrderPaymentInterface
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
         }
-        throw new \Magento\Framework\Model\Exception(
+        throw new \Magento\Framework\Exception\LocalizedException(
             __('The transaction "%1" cannot be captured yet.', $invoice->getTransactionId())
         );
     }
@@ -700,7 +647,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param Creditmemo $creditmemo
      * @return $this
      * @throws \Exception
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -739,11 +686,11 @@ class Payment extends Info implements OrderPaymentInterface
                         $creditmemo,
                         $this
                     );
-                } catch (\Magento\Framework\Model\Exception $e) {
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if (!$captureTxn) {
-                        $e->setMessage(
-                            ' ' . __('If the invoice was created offline, try creating an offline credit memo.'),
-                            true
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('If the invoice was created offline, try creating an offline credit memo.'),
+                            $e
                         );
                     }
                     throw $e;
@@ -2206,4 +2153,443 @@ class Payment extends Info implements OrderPaymentInterface
     {
         return $this->getData(OrderPaymentInterface::SHIPPING_REFUNDED);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(OrderPaymentInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingCaptured($baseShippingCaptured)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_SHIPPING_CAPTURED, $baseShippingCaptured);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingCaptured($shippingCaptured)
+    {
+        return $this->setData(OrderPaymentInterface::SHIPPING_CAPTURED, $shippingCaptured);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAmountRefunded($amountRefunded)
+    {
+        return $this->setData(OrderPaymentInterface::AMOUNT_REFUNDED, $amountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountPaid($baseAmountPaid)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_PAID, $baseAmountPaid);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAmountCanceled($amountCanceled)
+    {
+        return $this->setData(OrderPaymentInterface::AMOUNT_CANCELED, $amountCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountAuthorized($baseAmountAuthorized)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_AUTHORIZED, $baseAmountAuthorized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountPaidOnline($baseAmountPaidOnline)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_PAID_ONLINE, $baseAmountPaidOnline);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountRefundedOnline($baseAmountRefundedOnline)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_REFUNDED_ONLINE, $baseAmountRefundedOnline);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingAmount($amount)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAmount($amount)
+    {
+        return $this->setData(OrderPaymentInterface::SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAmountPaid($amountPaid)
+    {
+        return $this->setData(OrderPaymentInterface::AMOUNT_PAID, $amountPaid);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAmountAuthorized($amountAuthorized)
+    {
+        return $this->setData(OrderPaymentInterface::AMOUNT_AUTHORIZED, $amountAuthorized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountOrdered($baseAmountOrdered)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_ORDERED, $baseAmountOrdered);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingRefunded($baseShippingRefunded)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_SHIPPING_REFUNDED, $baseShippingRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingRefunded($shippingRefunded)
+    {
+        return $this->setData(OrderPaymentInterface::SHIPPING_REFUNDED, $shippingRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountRefunded($baseAmountRefunded)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_REFUNDED, $baseAmountRefunded);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAmountOrdered($amountOrdered)
+    {
+        return $this->setData(OrderPaymentInterface::AMOUNT_ORDERED, $amountOrdered);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAmountCanceled($baseAmountCanceled)
+    {
+        return $this->setData(OrderPaymentInterface::BASE_AMOUNT_CANCELED, $baseAmountCanceled);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuotePaymentId($id)
+    {
+        return $this->setData(OrderPaymentInterface::QUOTE_PAYMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(OrderPaymentInterface::ADDITIONAL_DATA, $additionalData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcExpMonth($ccExpMonth)
+    {
+        return $this->setData(OrderPaymentInterface::CC_EXP_MONTH, $ccExpMonth);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcSsStartYear($ccSsStartYear)
+    {
+        return $this->setData(OrderPaymentInterface::CC_SS_START_YEAR, $ccSsStartYear);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEcheckBankName($echeckBankName)
+    {
+        return $this->setData(OrderPaymentInterface::ECHECK_BANK_NAME, $echeckBankName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMethod($method)
+    {
+        return $this->setData(OrderPaymentInterface::METHOD, $method);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcDebugRequestBody($ccDebugRequestBody)
+    {
+        return $this->setData(OrderPaymentInterface::CC_DEBUG_REQUEST_BODY, $ccDebugRequestBody);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcSecureVerify($ccSecureVerify)
+    {
+        return $this->setData(OrderPaymentInterface::CC_SECURE_VERIFY, $ccSecureVerify);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProtectionEligibility($protectionEligibility)
+    {
+        return $this->setData(OrderPaymentInterface::PROTECTION_ELIGIBILITY, $protectionEligibility);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcApproval($ccApproval)
+    {
+        return $this->setData(OrderPaymentInterface::CC_APPROVAL, $ccApproval);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcLast4($ccLast4)
+    {
+        return $this->setData(OrderPaymentInterface::CC_LAST_4, $ccLast4);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcStatusDescription($description)
+    {
+        return $this->setData(OrderPaymentInterface::CC_STATUS_DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEcheckType($echeckType)
+    {
+        return $this->setData(OrderPaymentInterface::ECHECK_TYPE, $echeckType);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcDebugResponseSerialized($ccDebugResponseSerialized)
+    {
+        return $this->setData(OrderPaymentInterface::CC_DEBUG_RESPONSE_SERIALIZED, $ccDebugResponseSerialized);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcSsStartMonth($ccSsStartMonth)
+    {
+        return $this->setData(OrderPaymentInterface::CC_SS_START_MONTH, $ccSsStartMonth);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEcheckAccountType($echeckAccountType)
+    {
+        return $this->setData(OrderPaymentInterface::ECHECK_ACCOUNT_TYPE, $echeckAccountType);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLastTransId($id)
+    {
+        return $this->setData(OrderPaymentInterface::LAST_TRANS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcCidStatus($ccCidStatus)
+    {
+        return $this->setData(OrderPaymentInterface::CC_CID_STATUS, $ccCidStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcOwner($ccOwner)
+    {
+        return $this->setData(OrderPaymentInterface::CC_OWNER, $ccOwner);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcType($ccType)
+    {
+        return $this->setData(OrderPaymentInterface::CC_TYPE, $ccType);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPoNumber($poNumber)
+    {
+        return $this->setData(OrderPaymentInterface::PO_NUMBER, $poNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcExpYear($ccExpYear)
+    {
+        return $this->setData(OrderPaymentInterface::CC_EXP_YEAR, $ccExpYear);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcStatus($ccStatus)
+    {
+        return $this->setData(OrderPaymentInterface::CC_STATUS, $ccStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEcheckRoutingNumber($echeckRoutingNumber)
+    {
+        return $this->setData(OrderPaymentInterface::ECHECK_ROUTING_NUMBER, $echeckRoutingNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAccountStatus($accountStatus)
+    {
+        return $this->setData(OrderPaymentInterface::ACCOUNT_STATUS, $accountStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAnetTransMethod($anetTransMethod)
+    {
+        return $this->setData(OrderPaymentInterface::ANET_TRANS_METHOD, $anetTransMethod);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcDebugResponseBody($ccDebugResponseBody)
+    {
+        return $this->setData(OrderPaymentInterface::CC_DEBUG_RESPONSE_BODY, $ccDebugResponseBody);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcSsIssue($ccSsIssue)
+    {
+        return $this->setData(OrderPaymentInterface::CC_SS_ISSUE, $ccSsIssue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEcheckAccountName($echeckAccountName)
+    {
+        return $this->setData(OrderPaymentInterface::ECHECK_ACCOUNT_NAME, $echeckAccountName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcAvsStatus($ccAvsStatus)
+    {
+        return $this->setData(OrderPaymentInterface::CC_AVS_STATUS, $ccAvsStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcNumberEnc($ccNumberEnc)
+    {
+        return $this->setData(OrderPaymentInterface::CC_NUMBER_ENC, $ccNumberEnc);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCcTransId($id)
+    {
+        return $this->setData(OrderPaymentInterface::CC_TRANS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAddressStatus($addressStatus)
+    {
+        return $this->setData(OrderPaymentInterface::ADDRESS_STATUS, $addressStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

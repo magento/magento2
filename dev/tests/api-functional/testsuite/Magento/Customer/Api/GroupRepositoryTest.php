@@ -33,6 +33,11 @@ class GroupRepositoryTest extends WebapiAbstract
     private $groupRepository;
 
     /**
+     * @var \Magento\Customer\Api\Data\groupInterfaceFactory
+     */
+    private $customerGroupFactory;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -40,6 +45,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         $this->groupRegistry = $objectManager->get('Magento\Customer\Model\GroupRegistry');
         $this->groupRepository = $objectManager->get('Magento\Customer\Model\Resource\GroupRepository');
+        $this->customerGroupFactory = $objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
     }
 
     /**
@@ -69,7 +75,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -136,7 +142,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 
@@ -165,23 +171,20 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public function testCreateGroupDuplicateGroupRest()
     {
-        $builder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\GroupDataBuilder');
         $this->_markTestAsRestOnly();
 
         $duplicateGroupCode = 'Duplicate Group Code REST';
 
-        $this->createGroup(
-            $builder->populateWithArray([
-                CustomerGroup::ID => null,
-                CustomerGroup::CODE => $duplicateGroupCode,
-                CustomerGroup::TAX_CLASS_ID => 3,
-            ])->create()
-        );
+        $group = $this->customerGroupFactory->create();
+        $group->setId(null);
+        $group->setCode($duplicateGroupCode);
+        $group->setTaxClassId(3);
+        $this->createGroup($group);
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 
@@ -216,7 +219,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 
@@ -250,7 +253,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 
@@ -287,7 +290,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 
@@ -321,7 +324,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
 
@@ -384,19 +387,16 @@ class GroupRepositoryTest extends WebapiAbstract
     public function testUpdateGroupRest()
     {
         $this->_markTestAsRestOnly();
-        $builder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\GroupDataBuilder');
-        $groupId = $this->createGroup(
-            $builder->populateWithArray([
-                CustomerGroup::ID => null,
-                CustomerGroup::CODE => 'New Group REST',
-                CustomerGroup::TAX_CLASS_ID => 3,
-            ])->create()
-        );
+        $group = $this->customerGroupFactory->create();
+        $group->setId(null);
+        $group->setCode('New Group REST');
+        $group->setTaxClassId(3);
+        $groupId = $this->createGroup($group);
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
 
@@ -430,7 +430,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$nonExistentGroupId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
 
@@ -496,16 +496,13 @@ class GroupRepositoryTest extends WebapiAbstract
     public function testCreateGroupDuplicateGroupSoap()
     {
         $this->_markTestAsSoapOnly();
-        $builder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\GroupDataBuilder');
+        $group = $this->customerGroupFactory->create();
         $duplicateGroupCode = 'Duplicate Group Code SOAP';
 
-        $this->createGroup(
-            $builder->populateWithArray([
-                CustomerGroup::ID => null,
-                CustomerGroup::CODE => $duplicateGroupCode,
-                CustomerGroup::TAX_CLASS_ID => 3,
-            ])->create()
-        );
+        $group->setId(null);
+        $group->setCode($duplicateGroupCode);
+        $group->setTaxClassId(3);
+        $this->createGroup($group);
 
         $serviceInfo = [
             'soap' => [
@@ -651,14 +648,11 @@ class GroupRepositoryTest extends WebapiAbstract
     public function testUpdateGroupSoap()
     {
         $this->_markTestAsSoapOnly();
-        $builder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\GroupDataBuilder');
-        $groupId = $this->createGroup(
-            $builder->populateWithArray([
-                    CustomerGroup::ID => null,
-                    CustomerGroup::CODE => 'New Group SOAP',
-                    CustomerGroup::TAX_CLASS_ID => 3,
-                ])->create()
-        );
+        $group = $this->customerGroupFactory->create();
+        $group->setId(null);
+        $group->setCode('New Group SOAP');
+        $group->setTaxClassId(3);
+        $groupId = $this->createGroup($group);
 
         $serviceInfo = [
             'soap' => [
@@ -726,19 +720,16 @@ class GroupRepositoryTest extends WebapiAbstract
      */
     public function testDeleteGroupExists()
     {
-        $builder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\GroupDataBuilder');
-        $groupId = $this->createGroup(
-            $builder->populateWithArray([
-                CustomerGroup::ID => null,
-                CustomerGroup::CODE => 'Delete Group',
-                CustomerGroup::TAX_CLASS_ID => 3,
-            ])->create()
-        );
+        $group = $this->customerGroupFactory->create();
+        $group->setId(null);
+        $group->setCode('Delete Group');
+        $group->setTaxClassId(3);
+        $groupId = $this->createGroup($group);
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -774,7 +765,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -809,7 +800,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$groupIdAssignedDefault",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -938,13 +929,12 @@ class GroupRepositoryTest extends WebapiAbstract
                     ->create();
         $searchCriteriaBuilder->addFilter([$filter]);
 
-
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/search" . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -991,7 +981,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search?' . $searchQueryString,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
         $searchResult = $this->_webApiCall($serviceInfo);

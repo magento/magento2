@@ -17,7 +17,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
 
@@ -37,13 +37,13 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $mimeTypes
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
         array $mimeTypes = []
     ) {
@@ -61,10 +61,10 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Upload file from temporary folder.
      * @param string $tmpPath
-     * @param \Magento\Core\Model\File\Uploader $uploader
+     * @param \Magento\MediaStorage\Model\File\Uploader $uploader
      * @return array
      */
-    public function uploadFromTmp($tmpPath, \Magento\Core\Model\File\Uploader $uploader)
+    public function uploadFromTmp($tmpPath, \Magento\MediaStorage\Model\File\Uploader $uploader)
     {
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(true);
@@ -80,7 +80,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $basePath
      * @param string $file
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -90,7 +90,9 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Model\Exception(__('Something went wrong while saving the file(s).'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Something went wrong while saving the file(s).')
+                    );
                 }
             }
             return $fileName;
@@ -129,7 +131,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
         $destFile = dirname(
             $file
-        ) . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+        ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
             $this->getFilePath($basePath, $file)
         );
 

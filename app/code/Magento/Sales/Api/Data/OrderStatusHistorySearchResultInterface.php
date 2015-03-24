@@ -20,4 +20,12 @@ interface OrderStatusHistorySearchResultInterface extends \Magento\Framework\Api
      * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Set collection items.
+     *
+     * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

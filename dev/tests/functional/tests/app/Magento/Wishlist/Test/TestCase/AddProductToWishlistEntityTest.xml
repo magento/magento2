@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Wishlist\Test\TestCase\AddProductToWishlistEntityTest">
+    <variation name="AddProductToWishlistEntityTestVariation1" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation2" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation3" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation4" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation5" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation6" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
+    </variation>
+    <variation name="AddProductToWishlistEntityTestVariation7" firstConstraint="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" method="test">
+      <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
+      <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" prev="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist"/>
+    </variation>
+  </testCase>
+</config>

@@ -28,4 +28,47 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         return $this->getData(self::KEY_ITEMS);
     }
+
+    /**
+     * Set applied taxes at order level
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
+     * @return $this
+     */
+    public function setAppliedTaxes(array $appliedTaxes = null)
+    {
+        return $this->setData(self::KEY_APPLIED_TAXES, $appliedTaxes);
+    }
+
+    /**
+     * Set order item tax details
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null)
+    {
+        return $this->setData(self::KEY_ITEMS, $items);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\OrderTaxDetailsExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

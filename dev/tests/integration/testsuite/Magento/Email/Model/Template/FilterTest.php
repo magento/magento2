@@ -139,7 +139,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $themeId,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
         /** @var $layout \Magento\Framework\View\LayoutInterface */
@@ -176,7 +176,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'custom parameter' => [
                 'frontend',
-                'handle="email_template_test_handle" template="Magento_Core::sample_email_content_custom.phtml"',
+                'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
                 'Custom E-mail content for frontend/test_default theme',
             ],
         ];

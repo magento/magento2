@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Customer\Test\TestCase\CreateCustomerBackendEntityTest">
+    <variation name="CreateCustomerBackendEntityTestVariation1" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">General customer without address</data>
+      <data name="customerAction" xsi:type="string">save</data>
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation2" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">Customer with prefix</data>
+      <data name="customerAction" xsi:type="string">save</data>
+      <data name="customer/data/website_id" xsi:type="string">Admin</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">Wholesale</data>
+      <data name="customer/data/prefix" xsi:type="string">M</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">Jack</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">S</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">03/16/2004</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">Male</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation3" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">General customer from USA</data>
+      <data name="customerAction" xsi:type="string">save</data>
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">Joe</data>
+      <data name="address/data/lastname" xsi:type="string">Doe</data>
+      <data name="address/data/street" xsi:type="string">1 Main Street</data>
+      <data name="address/data/city" xsi:type="string">Culver City</data>
+      <data name="address/data/country_id" xsi:type="string">United States</data>
+      <data name="address/data/region_id" xsi:type="string">California</data>
+      <data name="address/data/postcode" xsi:type="string">90230</data>
+      <data name="address/data/telephone" xsi:type="string">3109450345</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation4" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail" method="test">
+      <data name="description" xsi:type="string">Retailer customer without address</data>
+      <data name="customerAction" xsi:type="string">save</data>
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">Retailer</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.ccc</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation5" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">General customer from Poland</data>
+      <data name="customerAction" xsi:type="string">save</data>
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">Thomas%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Oster%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">Thomas%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">5250008057</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">Thomas</data>
+      <data name="address/data/lastname" xsi:type="string">Oster</data>
+      <data name="address/data/street" xsi:type="string">Chmielna 113</data>
+      <data name="address/data/city" xsi:type="string">Bielsko-Biala</data>
+      <data name="address/data/country_id" xsi:type="string">Poland</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">43-310 </data>
+      <data name="address/data/telephone" xsi:type="string">799885616</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm"/>
+    </variation>
+    <variation name="CreateCustomerBackendEntityTestVariation6" firstConstraint="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12516: Create New Customer on Backend</data>
+      <data name="customerAction" xsi:type="string">saveAndContinue</data>
+      <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+      <data name="customer/data/group_id/dataSet" xsi:type="string">General</data>
+      <data name="customer/data/prefix" xsi:type="string">-</data>
+      <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+      <data name="customer/data/middlename" xsi:type="string">-</data>
+      <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+      <data name="customer/data/suffix" xsi:type="string">-</data>
+      <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+      <data name="customer/data/dob" xsi:type="string">-</data>
+      <data name="customer/data/taxvat" xsi:type="string">-</data>
+      <data name="customer/data/gender" xsi:type="string">-</data>
+      <data name="address/data/firstname" xsi:type="string">-</data>
+      <data name="address/data/lastname" xsi:type="string">-</data>
+      <data name="address/data/street" xsi:type="string">-</data>
+      <data name="address/data/city" xsi:type="string">-</data>
+      <data name="address/data/country_id" xsi:type="string">-</data>
+      <data name="address/data/region_id" xsi:type="string">-</data>
+      <data name="address/data/postcode" xsi:type="string">-</data>
+      <data name="address/data/telephone" xsi:type="string">-</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" next="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle" prev="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage"/>
+    </variation>
+  </testCase>
+</config>

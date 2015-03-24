@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php echo $this->doctype(); ?>
+<!--[if IE 9]>
+<html class="ie9" lang="en" ng-app="magentoSetup"><![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" ng-app="magentoSetup">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Magento Setup Tool</title>
+    <?php echo $this->headLink()
+        ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
+    ?>
+    <?php echo $this->headScript()
+        ->appendFile('pub/angular/angular.min.js')
+        ->appendFile('pub/angular-ng-storage/angular-ng-storage.min.js')
+        ->appendFile('pub/angular-ui-router/angular-ui-router.min.js')
+        ->appendFile('pub/angular-ui-bootstrap/angular-ui-bootstrap.min.js')
+        ->appendFile('pub/angular-sanitize/angular-sanitize.min.js')
+        ->appendFile('pub/magento/setup/app.js')
+        ->appendFile('pub/magento/setup/main.js')
+        ->appendFile('pub/magento/setup/landing.js')
+        ->appendFile('pub/magento/setup/readiness-check.js')
+        ->appendFile('pub/magento/setup/add-database.js')
+        ->appendFile('pub/magento/setup/web-configuration.js')
+        ->appendFile('pub/magento/setup/customize-your-store.js')
+        ->appendFile('pub/magento/setup/create-admin-account.js')
+        ->appendFile('pub/magento/setup/install.js')
+        ->appendFile('pub/magento/setup/success.js');
+    ?>
+    <link
+        rel="icon"
+        type="image/x-icon"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon.ico"
+        sizes="16x16">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-96x96.png"
+        sizes="96x96">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-32x32.png"
+        sizes="32x32">
+    <link
+        rel="icon"
+        type="image/png"
+        href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
+        sizes="16x16">
+    <?php echo $this->inlineScript() ?>
+</head>
+<body>
+<main class="container">
+    <?php echo $this->content; ?>
+</main>
+</body>
+</html>

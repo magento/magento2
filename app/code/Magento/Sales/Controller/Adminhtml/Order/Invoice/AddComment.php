@@ -7,12 +7,12 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
-use Magento\Framework\Controller\Result\JSONFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
@@ -24,7 +24,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $invoiceCommentSender;
 
     /**
-     * @var JSONFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -43,7 +43,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * @param Registry $registry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param InvoiceCommentSender $invoiceCommentSender
-     * @param JSONFactory $resultJsonFactory
+     * @param JsonFactory $resultJsonFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
      */
@@ -52,7 +52,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         Registry $registry,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         InvoiceCommentSender $invoiceCommentSender,
-        JSONFactory $resultJsonFactory,
+        JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory
     ) {
@@ -74,7 +74,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $this->getRequest()->setParam('invoice_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new Exception(__('The Comment Text field cannot be empty.'));
+                throw new LocalizedException(__('The Comment Text field cannot be empty.'));
             }
             $invoice = $this->getInvoice();
             if (!$invoice) {
@@ -95,13 +95,13 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $resultPage = $this->resultPageFactory->create();
             $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
             $response = $resultPage->getLayout()->getBlock('invoice_comments')->toHtml();
-        } catch (Exception $e) {
+        } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setData($response);
             return $resultJson;

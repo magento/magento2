@@ -93,14 +93,14 @@ class Fault extends \RuntimeException
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Server $soapServer
-     * @param \Magento\Webapi\Exception $previousException
+     * @param \Magento\Framework\Webapi\Exception $previousException
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param State $appState
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         Server $soapServer,
-        \Magento\Webapi\Exception $previousException,
+        \Magento\Framework\Webapi\Exception $previousException,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState
     ) {
@@ -196,7 +196,7 @@ class Fault extends \RuntimeException
      */
     public function getLanguage()
     {
-        return $this->_localeResolver->getLocale()->getLanguage();
+        return \Locale::getPrimaryLanguage($this->_localeResolver->getLocale());
     }
 
     /**
@@ -301,7 +301,6 @@ FAULT_MESSAGE;
         if (!is_array($parameters)) {
             return $result;
         }
-
         $paramsXml = '';
         foreach ($parameters as $parameterName => $parameterValue) {
             if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {

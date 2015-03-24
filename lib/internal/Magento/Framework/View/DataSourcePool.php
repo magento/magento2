@@ -55,7 +55,9 @@ class DataSourcePool
     {
         if (!isset($this->dataSources[$name])) {
             if (!class_exists($class)) {
-                throw new \InvalidArgumentException(__('Invalid Data Source class name: ' . $class));
+                throw new \InvalidArgumentException(
+                    (string)new \Magento\Framework\Phrase('Invalid Data Source class name: %1', [$class])
+                );
             }
 
             $data = $this->blockFactory->createBlock($class);

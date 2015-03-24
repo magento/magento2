@@ -13,10 +13,10 @@
 ?>
 
 <div class="categories-side-col">
-    <button data-folder="create" class="action-folder-create" title="<?php echo __('Create Folder'); ?>">
+    <button type="button" data-folder="create" class="action-folder-create" title="<?php echo __('Create Folder'); ?>">
         <span><?php echo __('Create Folder'); ?></span>
     </button>
-    <button data-folder="delete" class="action-delete">
+    <button type="button" data-folder="delete" class="action-delete">
         <span><?php echo __('Delete Folder'); ?></span>
     </button>
     <p></p>
@@ -28,15 +28,16 @@
 </div>
 
 <div id="tree" style="width:100%; overflow:auto;"></div>
-
+<!--[if IE]>
+<script id="ie-deferred-loader" defer="defer" src=""></script>
+<![endif]-->
 <script>
 require([
     'jquery',
     "extjs/ext-tree-checkbox",
     'Magento_DesignEditor/js/tools-files'
 ], function(jQuery){
-
-Ext.onReady(function(){
+jQuery(function(){
     var Tree = Ext.tree;
     var tree = new Tree.TreePanel('tree', {
         animate:true,

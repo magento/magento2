@@ -9,7 +9,8 @@
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Webapi\Model\Rest\Config;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\TestFramework\Authentication\OauthHelper;
 
 class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {
@@ -53,7 +54,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             'Magento\TestFramework\TestCase\Webapi\Adapter\Rest\DocumentationGenerator'
         );
         $this->defaultStoreCode = Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Store\StoreManagerInterface')
+            ->get('Magento\Store\Model\StoreManagerInterface')
             ->getStore()
             ->getCode();
     }
@@ -64,13 +65,13 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function call($serviceInfo, $arguments = [], $storeCode = null)
+    public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
-        $storeCode = !is_null($storeCode) ? (string)$storeCode : $this->defaultStoreCode;
+        $storeCode = $storeCode !== null ? (string)$storeCode : $this->defaultStoreCode;
         $resourcePath = '/' . $storeCode . $this->_getRestResourcePath($serviceInfo);
         $httpMethod = $this->_getRestHttpMethod($serviceInfo);
         //Get a valid token
-        $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials();
+        $accessCredentials = OauthHelper::getApiAccessCredentials(null, $integration);
         /** @var $oAuthClient \Magento\TestFramework\Authentication\Rest\OauthClient */
         $oAuthClient = $accessCredentials['oauth_client'];
         $urlFormEncoded = false;
@@ -90,16 +91,16 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         }
         $authHeader = array_merge($authHeader, ['Accept: application/json', 'Content-Type: application/json']);
         switch ($httpMethod) {
-            case Config::HTTP_METHOD_GET:
+            case Request::HTTP_METHOD_GET:
                 $response = $this->curlClient->get($resourcePath, [], $authHeader);
                 break;
-            case Config::HTTP_METHOD_POST:
+            case Request::HTTP_METHOD_POST:
                 $response = $this->curlClient->post($resourcePath, $arguments, $authHeader);
                 break;
-            case Config::HTTP_METHOD_PUT:
+            case Request::HTTP_METHOD_PUT:
                 $response = $this->curlClient->put($resourcePath, $arguments, $authHeader);
                 break;
-            case Config::HTTP_METHOD_DELETE:
+            case Request::HTTP_METHOD_DELETE:
                 $response = $this->curlClient->delete($resourcePath, $authHeader);
                 break;
             default:

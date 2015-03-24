@@ -1,0 +1,54 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Temporary migration overrides
+//  _____________________________________________
+
+@import (reference) 'override.less';
+
+.ie9 #html-body[class][data-container="body"] .admin__scope:extend(.ie9 all) {}
+#html-body[class][data-container="body"].keyfocus:extend(.keyfocus all) {}
+
+//  Including popups styles
+#html-body[class][data-container="body"] {
+    .popup-window:extend(.popup-window all) {}
+
+    .overlay_magento:extend(.overlay_magento all) {}
+
+    .ui-dialog:extend(.ui-dialog all) {}
+
+    .ui-widget-overlay:extend(.ui-widget-overlay all) {}
+
+    .fade:extend(.fade all) {}
+
+    .insert-variable:extend(.insert-variable all) {}
+
+    .magento_message:extend(.magento_message all) {}
+
+    .ui-popup-message:extend(.ui-popup-message all) {}
+
+}
+
+#html-body[class][data-container="body"] .admin__scope {
+    box-sizing: border-box;
+    @import (multiple) 'override.less';
+}
+
+// ToDo UI: Hidding menu (should be fixed in layouts)
+.attribute-popup {
+    .page-wrapper {
+        margin-left: 0;
+    }
+    .menu-wrapper,
+    .page-header-hgroup,
+    .page-header-actions {
+        display: none;
+    }
+}
+
+// ToDo UI: Temporary. Should be changed
+@import 'source/_calendar-temp.less';
+@import 'source/_tooltip-temp.less';

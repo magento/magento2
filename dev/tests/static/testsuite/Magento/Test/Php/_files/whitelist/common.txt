@@ -6,4 +6,4 @@ dev/tests/functional
 dev/tests/integration
 dev/tests/performance
 dev/tests/static
-dev/tests/unit
+setup

@@ -3,54 +3,47 @@
 //  * See COPYING.txt for license details.
 //  */
 
-@import "formelements.less";
-
 //colors
-
 @admin__color1: #adadad;
 @admin__color2: #d3d3d3;
 @admin__color3: #e0e0e0;
 @admin__color4: #666;
 
 //Spacing
-@spacing-base: 10px;
-@spacing-xs: @spacing-base;
-@spacing-s: @spacing-base;
+@spacing__base: 10px;
+@spacing-xs: @spacing__base;
+@spacing-s: @spacing__base;
 @spacing-m: 15px;
-@spacing-l: @spacing-base;
-@spacing-xl: @spacing-base;
+@spacing-l: @spacing__base;
+@spacing-xl: @spacing__base;
 
 //Fonts
-@size-base: 1rem;
-@size-xs: @size-base;
-@size-s: @size-base;
-@size-m: @size-base * 1.2;
-@size-l: @size-base;
-@size-xl: @size-base;
+@size__base: 1rem;
+@size-xs: @size__base;
+@size-s: @size__base;
+@size-m: @size__base * 1.2;
+@size-l: @size__base;
+@size-xl: @size__base;
+
+@field-date-icon--color: #514943;
 
 [class*="tab-nav-item"]:not(ul):active,
 [class*="tab-nav-item"]:not(ul):focus {
     box-shadow: none;
     outline: none;
 }
+
 .customer-index-edit {
-.col-2-left-layout, .col-1-layout {
-    background: #fff;
-}
-}
-.customer-index-edit {
-    background: #fff;
+    .page-wrapper {
+        background: #fff;
+    }
     .col-2-left-layout {
         background: #fff;
     }
     .main-col {
         padding-left: 40px;
     }
-    .page-main-actions {
-        background: transparent;
-    }
 }
-
 
 .tab-nav {
     &.block {
@@ -100,8 +93,7 @@
                 display: block;
                 position: absolute;
                 z-index: 2;
-                .url('images/loader-2.gif');
-                background: url("@{url}") no-repeat 50% 50%;
+                background: url('../images/loader-2.gif') no-repeat 50% 50%;
                 background-size: 120px;
                 width: 20px;
                 height: 20px;
@@ -136,8 +128,6 @@
         }
     }
 }
-
-
 
 .listing-tiles {
   overflow: hidden;
@@ -235,39 +225,89 @@
 }
 
 .grid {
-  .actions-split .dropdown-menu {
-    right: auto;
-    left: auto;
-    text-align: left;
-    color: #676056;
-    font-weight: normal;
-
-    &:after  {
-      right: auto;
-      left: 9px;
+    .actions-split {
+        .clearfix();
+        display: inline-block;
+        position: relative;
+        z-index: 100;
+        &.active {
+            .dropdown-menu {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+        .action-toggle,
+        .action-default {
+            float: left;
+            margin: 0;
+        }
+        .action-default {
+            margin-right: 3rem;
+        }
+        .action-toggle {
+            border-left-color: rgba(0, 0, 0, .2);
+            bottom: 0;
+            padding-left: 0;
+            padding-right: 3rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+            &.active {
+                &:after {
+                    transform: rotate(180deg);
+                }
+            }
+            &:after {
+                border-color: #645d53 transparent transparent transparent;
+                border-style: solid;
+                border-width: .5rem .5rem 0 .5rem;
+                content: '';
+                height: 0;
+                margin-top: -.25rem;
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                width: 0;
+            }
+            &:hover {
+                &:after {
+                    border-color: darken(#645d53, 10%) transparent transparent transparent;
+                }
+            }
+            > span {
+                .visually-hidden();
+            }
+        }
+        .dropdown-menu {
+            > li {
+                padding: 4px 15px;
+                &:hover {
+                    background-color: #e8e8e8;
+                }
+                span {
+                    display: block;
+                }
+            }
+        }
     }
-    &:before {
-      right: auto;
-      left: 10px;
+
+    .grid-actions {
+        padding: 10px 0;
     }
-  }
 
-  .grid-actions {
-    padding: 10px 0;
-  }
+    .hor-scroll {
+        padding-top: 10px;
+    }
 
-  .hor-scroll {
-    padding-top: 10px;
-  }
-
-  .select-box {
-    display: inline-block;
-    vertical-align: top;
-    margin: -12px -10px -7px;
-    padding: 12px 10px 7px;
-    width: 100%;
-  }
+    .select-box {
+        display: inline-block;
+        vertical-align: top;
+        margin: -12px -10px -7px;
+        padding: 12px 10px 7px;
+        width: 100%;
+    }
 }
+
 .filters {
     &-toggle {
         .button(
@@ -497,7 +537,7 @@
         li {
           margin: 0;
           padding: 4px 15px;
-          border-bottom: 1px solid #E5E5E5;
+          border-bottom: 1px solid #e5e5e5;
         }
         li:hover {
           background: #e8e8e8;
@@ -506,7 +546,7 @@
         span {
             font-weight: normal;
             font-size: 13px;
-            color: #645D53;
+            color: #645d53;
         }
         &.active {
             display: block;
@@ -536,61 +576,23 @@
     }
 }
 
-
 //
 // Form Component
 //
-
-/* Price field */
-
-.addon {
-  input {
-    border-width: 1px 0 1px 1px;
-    ~ .addafter strong {
-      display: inline-block;
-      background: #fff;
-      line-height: 24px;
-      margin: 0 3px 0 -2px;
-      padding-left: 4px;
-      padding-right: 4px;
-      position: relative;
-      font-size: 12px;
-      top: 0;
-    }
-    &:focus ~ .addafter {
-      border-color: #75b9f0;
-      box-shadow: 0 0 8px rgba(82, 168, 236, .6);
-      strong {
-        margin-top: 0;
-      }
-    }
-  }
-  .addafter {
-    background: none;
-    color: #a6a6a6;
-    border-width: 1px 1px 1px 0;
-    border-radius: 2px 2px 0 0;
-    padding: 0;
-    border-color: #ada89e;
-  }
-  .pager input {
-    border-width: 1px;
-  }
-}
 
 .field .control input[type='text'][disabled],
 .field .control input[type='text'][disabled] ~ .addafter,
 .field .control select[disabled],
 .field .control select[disabled] ~ .addafter {
-  background-color: #fff;
-  border-color: #eee;
-  box-shadow: none;
-  color: #999;
+    background-color: #f4f4f4;
+    border-color: #ddd;
+    box-shadow: none;
+    color: #999;
 }
 
 .field .control input[type='text'][disabled] ~ .addafter strong,
 .field .control select[disabled] ~ .addafter strong {
-  background-color: #fff;
+  background-color: #f4f4f4;
 }
 
 .field-price.addon {
@@ -610,16 +612,8 @@
   border-radius: 0 2px 2px 0;
 }
 
-.field-price input {
+.field-price input[type="text"] {
   border-width: 1px 1px 1px 0;
-}
-
-.field-price input:focus {
-  box-shadow: 0 0 8px rgba(82, 168, 236, .6);
-}
-
-.field-price input:focus ~ label.addafter {
-  box-shadow: 0 0 8px rgba(82, 168, 236, .6);
 }
 
 .field-price input ~ label.addafter strong {

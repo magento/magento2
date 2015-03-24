@@ -19,4 +19,12 @@ interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\Sea
      * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[] Array of collection items.
      */
     public function getItems();
+
+    /**
+     * Sets collection items.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null);
 }

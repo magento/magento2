@@ -52,7 +52,7 @@ abstract class Validator
     {
         return $this->scopeConfig->getValue(
             'catalog/custom_options/' . $key,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -125,7 +125,7 @@ abstract class Validator
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param array $fileFullPath
      * @return \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
-     * @throws NotImageException
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function buildImageValidator($object, $option, $fileFullPath = null)
     {
@@ -138,8 +138,10 @@ abstract class Validator
             $dimensions['maxheight'] = $option->getImageSizeY();
         }
         if (count($dimensions) > 0) {
-            if (!is_null($fileFullPath) && !$this->isImage($fileFullPath)) {
-                throw new NotImageException();
+            if ($fileFullPath !== null && !$this->isImage($fileFullPath)) {
+                throw new \Magento\Framework\Exception\InputException(
+                    __('File \'%1\' is not an image.', $option->getTitle())
+                );
             }
             $object->addValidator(new \Zend_Validate_File_ImageSize($dimensions));
         }

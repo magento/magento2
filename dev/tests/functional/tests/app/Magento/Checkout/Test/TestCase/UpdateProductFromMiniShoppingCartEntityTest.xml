@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Checkout\Test\TestCase\UpdateProductFromMiniShoppingCartEntityTest">
+    <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation1">
+      <data name="description" xsi:type="string">Update Simple</data>
+      <data name="originalProduct" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
+      <data name="checkoutData/preset" xsi:type="string">forUpdateMiniShoppingCart</data>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
+    </variation>
+    <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation2">
+      <data name="description" xsi:type="string">Update Configurable and verify previous product was updated to new one in shopping cart and mini shopping cart</data>
+      <data name="originalProduct" xsi:type="string">configurableProduct::default</data>
+      <data name="checkoutData/preset" xsi:type="string">forUpdateMiniShoppingCart</data>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart"/>
+    </variation>
+    <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation3">
+      <data name="description" xsi:type="string">Update Bundle and verify  previous product was updated to new one in shopping cart and mini shopping cart</data>
+      <data name="originalProduct" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+      <data name="checkoutData/preset" xsi:type="string">forUpdateMiniShoppingCart</data>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart"/>
+    </variation>
+    <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation4">
+      <data name="description" xsi:type="string">Update Downloadable and check previous link was updated to new one in shopping cart and mini shopping cart</data>
+      <data name="originalProduct" xsi:type="string">downloadableProduct::with_two_separately_links</data>
+      <data name="checkoutData/preset" xsi:type="string">forUpdateMiniShoppingCart</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-24195</data>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart"/>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart"/>
+    </variation>
+  </testCase>
+</config>

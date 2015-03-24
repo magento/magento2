@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -27,11 +27,11 @@ class AssertWrongPassConfirmationMessage extends AbstractConstraint
     /**
      * Assert that conformation message is present.
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CustomerAccountEdit $customerAccountEdit
      * @return void
      */
-    public function processAssert(CustomerInjectable $customer, CustomerAccountEdit $customerAccountEdit)
+    public function processAssert(Customer $customer, CustomerAccountEdit $customerAccountEdit)
     {
         $validationMessages = $customerAccountEdit->getAccountInfoForm()->getValidationMessages($customer);
         if (isset($validationMessages['password_confirmation'])) {

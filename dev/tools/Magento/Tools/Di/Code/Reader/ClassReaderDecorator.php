@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -34,7 +33,7 @@ class ClassReaderDecorator implements \Magento\Framework\Code\Reader\ClassReader
     public function getConstructor($className)
     {
         $unmappedArguments = $this->classReader->getConstructor($className);
-        if (is_null($unmappedArguments)) {
+        if ($unmappedArguments === null) {
             return $unmappedArguments;
         }
 

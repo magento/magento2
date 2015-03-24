@@ -73,8 +73,8 @@ $product = $block->getSaleableItem();
                     );
                 ?><?php echo __('each') ?>
                 <?php if ($block->getShowDetailedPrice() !== false): ?>
-                    <?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>
-                        <span class="percent tier-<?php echo $index ?>"><?php echo $tierPriceModel->getSavePercent($price['price']) ?></span>%
+                    &nbsp;<?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>
+                        <span class="percent tier-<?php echo $index ?>">&nbsp;<?php echo $tierPriceModel->getSavePercent($price['price']) ?></span>%
                     </strong>
                 <?php endif ?>
             <?php endif; ?>
@@ -82,15 +82,15 @@ $product = $block->getSaleableItem();
     <?php endforeach; ?>
     </ul>
     <?php if ($msrpShowOnGesture):?>
-        <script>
-        require(["jquery", "mage/mage"], function($){
-
-            $('.product-info-main').mage('tierPrice', {
-                inputQty: '#qty',
-                productForm: '#product_addtocart_form'
-            });
-
-        });
-</script>
+        <script type="text/x-magento-init">
+            {
+                ".product-info-main": {
+                    "tierPrice": {
+                        "inputQty": "#qty",
+                        "productForm": "#product_addtocart_form"
+                    }
+                }
+            }
+        </script>
     <?php endif;?>
 <?php endif; ?>

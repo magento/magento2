@@ -42,7 +42,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
             [
                 'label' => __('Add New Row'),
                 'class' => 'add add-select-row',
-                'id' => 'product_option_${option_id}_add_select_row'
+                'id' => 'product_option_<%- data.option_id %>_add_select_row'
             ]
         );
 
@@ -52,7 +52,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
             [
                 'label' => __('Delete Row'),
                 'class' => 'delete delete-select-row icon-btn',
-                'id' => 'product_option_${id}_select_${select_id}_delete'
+                'id' => 'product_option_<%- data.id %>_select_<%- data.select_id %>_delete'
             ]
         );
 
@@ -87,9 +87,9 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
             'option_price_type'
         )->setData(
             'id',
-            'product_option_${id}_select_${select_id}_price_type'
+            'product_option_<%- data.id %>_select_<%- data.select_id %>_price_type'
         )->setName(
-            'product[options][${id}][values][${select_id}][price_type]'
+            'product[options][<%- data.id %>][values][<%- data.select_id %>][price_type]'
         )->setExtraParams($extraParams);
 
         return parent::getPriceTypeSelectHtml();

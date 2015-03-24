@@ -36,13 +36,6 @@
             <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="cataloginventory_setup" xsi:type="string">Magento\Eav\Model\Entity\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Layer">
         <plugin name="addStockStatusOnPrepareFrontCollection" type="Magento\CatalogInventory\Model\Plugin\Layer"/>
     </type>
@@ -55,5 +48,8 @@
     </type>
     <type name="Magento\Store\Model\Resource\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="\Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\View">
+        <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
 </config>

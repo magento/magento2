@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUrlRewriteCustomRedirect extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert check URL rewrite custom redirect
      *
@@ -33,7 +29,7 @@ class AssertUrlRewriteCustomRedirect extends AbstractConstraint
     {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());
         $entity = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity();
-        $title = $entity->hasData('name') ? $entity->getName() : $entity->getTitle();
+        $title = $entity->hasData('name') ? $entity->getName() : $entity->getContentHeading();
         $pageTitle = $cmsIndex->getTitleBlock()->getTitle();
         \PHPUnit_Framework_Assert::assertEquals(
             $pageTitle,

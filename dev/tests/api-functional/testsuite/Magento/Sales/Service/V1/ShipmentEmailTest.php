@@ -7,7 +7,6 @@
 namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * Class ShipmentEmailTest
@@ -28,8 +27,8 @@ class ShipmentEmailTest extends WebapiAbstract
         $shipment = $shipmentCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/shipment/' . $shipment->getId() . '/email',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'resourcePath' => '/V1/shipment/' . $shipment->getId() . '/emails',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

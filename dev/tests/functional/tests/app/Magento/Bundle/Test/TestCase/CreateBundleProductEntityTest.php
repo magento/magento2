@@ -13,8 +13,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateBundleProductEntity
- *
  * Test Flow:
  * 1. Login as admin
  * 2. Navigate to the Products>Inventory>Catalog
@@ -29,6 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateBundleProductEntityTest extends Injectable
 {
     /* tags */
+    const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */

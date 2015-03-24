@@ -45,7 +45,7 @@ class Config
      * Retrieve translated label of an email template
      *
      * @param string $templateId
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTemplateLabel($templateId)
     {

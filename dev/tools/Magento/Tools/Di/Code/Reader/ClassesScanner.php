@@ -1,33 +1,41 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tools\Di\Code\Reader;
 
 use Magento\Framework\Filesystem\FilesystemException;
 use Zend\Code\Scanner\FileScanner;
 
-class ClassesScanner
+class ClassesScanner implements ClassesScannerInterface
 {
     /**
-     * @var ClassReaderDecorator
+     * @var array
      */
-    private $classReaderDecorator;
+    protected $excludePatterns = [];
 
     /**
-     * @param ClassReaderDecorator $classReaderDecorator
+     * @param array $excludePatterns
      */
-    public function __construct(ClassReaderDecorator $classReaderDecorator)
+    public function __construct(array $excludePatterns = [])
     {
-        $this->classReaderDecorator = $classReaderDecorator;
+        $this->excludePatterns = $excludePatterns;
     }
 
     /**
-     * Retrieves list of classes and arguments for given path
-     * [CLASS NAME => ConstructorArgument[]]
+     * Adds exclude patterns
+     *
+     * @param array $excludePatterns
+     * @return void
+     */
+    public function addExcludePatterns(array $excludePatterns)
+    {
+        $this->excludePatterns = array_merge($this->excludePatterns, $excludePatterns);
+    }
+
+    /**
+     * Retrieves list of classes for given path
      *
      * @param string $path
      * @return array
@@ -39,15 +47,22 @@ class ClassesScanner
         if (!(bool)$realPath) {
             throw new FilesystemException();
         }
-        $classes = [];
+
         $recursiveIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($realPath, \FilesystemIterator::FOLLOW_SYMLINKS),
             \RecursiveIteratorIterator::SELF_FIRST
         );
-        /** @var $fileItem \SplFileInfo */
+
+        $classes = [];
         foreach ($recursiveIterator as $fileItem) {
-            if (!$this->isPhpFile($fileItem)) {
+            /** @var $fileItem \SplFileInfo */
+            if ($fileItem->getExtension() !== 'php') {
                 continue;
+            }
+            foreach ($this->excludePatterns as $excludePattern) {
+                if (preg_match($excludePattern, $fileItem->getRealPath())) {
+                    continue 2;
+                }
             }
             $fileScanner = new FileScanner($fileItem->getRealPath());
             $classNames = $fileScanner->getClassNames();
@@ -55,20 +70,9 @@ class ClassesScanner
                 if (!class_exists($className)) {
                     require_once $fileItem->getRealPath();
                 }
-                $classes[$className] =  $this->classReaderDecorator->getConstructor($className);
+                $classes[] = $className;
             }
         }
         return $classes;
-    }
-
-    /**
-     * Whether file is .php file
-     *
-     * @param \SplFileInfo $item
-     * @return bool
-     */
-    private function isPhpFile(\SplFileInfo $item)
-    {
-        return $item->isFile() && pathinfo($item->getRealPath(), PATHINFO_EXTENSION) == 'php';
     }
 }

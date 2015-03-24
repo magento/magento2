@@ -15,20 +15,15 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
 <?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
-<script>
-require([
-    'jquery',
-    'mage/mage',
-    'Magento_Bundle/js/price-bundle'
-], function($){
-    $(function() {
-        $('#product_addtocart_form').priceBundle({
-            optionConfig:<?php echo $block->getJsonConfig()?>,
-            controlContainer: '.field.option',
-            qtyFieldSelector: '.input-text.qty'
-        });
-    });
-});
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "priceBundle": {
+                "optionConfig": <?php echo $block->getJsonConfig()?>,
+                "controlContainer": ".field.option"
+            }
+        }
+    }
 </script>
         <fieldset class="fieldset bundle options">
             <legend id="customizeTitle" class="legend title">

@@ -89,7 +89,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -150,7 +150,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         )->setColspan(
             $colspan
         )->setRenderingArea(
-            is_null($area) ? -1 : $area
+            $area === null ? -1 : $area
         )->toHtml();
     }
 
@@ -192,7 +192,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function getNoteNotify()
     {
         $notify = $this->getQuote()->getCustomerNoteNotify();
-        if (is_null($notify) || $notify) {
+        if ($notify === null || $notify) {
             return true;
         }
         return false;

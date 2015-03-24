@@ -185,9 +185,8 @@ class Create extends \Magento\Backend\App\Action
         if (!$this->_getOrderCreateModel()->getQuote()->isVirtual()) {
             $syncFlag = $this->getRequest()->getPost('shipping_as_billing');
             $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()->getShippingMethod();
-            if (is_null(
-                $syncFlag
-            ) && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
+            if ($syncFlag === null
+            && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
                 $this->_getOrderCreateModel()->setShippingAsBilling(1);
             } else {
@@ -224,7 +223,7 @@ class Create extends \Magento\Backend\App\Action
          * Adding product to quote from shopping cart, wishlist etc.
          */
         if ($productId = (int)$this->getRequest()->getPost('add_product')) {
-            $this->_getOrderCreateModel()->addProduct($productId, $this->getRequest()->getPost());
+            $this->_getOrderCreateModel()->addProduct($productId, $this->getRequest()->getPostValue());
         }
 
         /**
@@ -271,7 +270,7 @@ class Create extends \Magento\Backend\App\Action
 
         $eventData = [
             'order_create_model' => $this->_getOrderCreateModel(),
-            'request' => $this->getRequest()->getPost(),
+            'request' => $this->getRequest()->getPostValue(),
         ];
 
         $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data', $eventData);
@@ -295,7 +294,7 @@ class Create extends \Magento\Backend\App\Action
          */
         if ($data = $this->getRequest()->getPost('add_products')) {
             $this->_getGiftmessageSaveModel()->importAllowQuoteItemsFromProducts(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonDecode($data)
+                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonDecode($data)
             );
         }
 

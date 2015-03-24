@@ -8,17 +8,17 @@
 /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content\Uploader */
 ?>
 <div class="scroll-assets">
-    <div class="no-display" data-template="<?php echo $block->getHtmlId() ?>-template">
+    <script data-template="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="progressbar-container">
-           <div class="file-row" data-upload-id="${id}">
-              <span class="file-info-name">${name}</span>
+           <div class="file-row" data-upload-id="<%- data.id %>">
+              <span class="file-info-name"><%- data.name %></span>
               <span class="file-info-details">
-                  <span class="file-info-size">(${size})</span>
+                  <span class="file-info-size">(<%- data.size %>)</span>
                   <span class="file-info-error hidden">&nbsp;</span>
               </span>
               <span class="file-icon">
                   <span class="file-info-cancel">
-                      <button class="action-delete" data-delete-file="${id}">
+                      <button type="button" class="action-delete" data-delete-file="<%- data.id %>">
                           <span><?php echo __('Remove'); ?></span>
                       </button>
                   </span>
@@ -32,20 +32,20 @@
               <div class="progressbar upload-progress"></div>
            </div>
         </div>
-    </div>
+    </script>
     <div id="<?php echo $block->getHtmlId() ?>" class="uploader no-display">
     </div>
     <div id="contents"></div>
 </div>
 <div class="form-buttons">
     <span class="fileinput-button">
-            <button class="action-default primary" data-action="browse" type="submit">
+            <button type="button" class="action-default primary" data-action="browse" type="submit">
                 <?php echo __('Browse Files'); ?>
             </button>
             <input data-action="fileinput" type="file" name="<?php echo $block->getConfig()->getFileField() ?>"
                    data-url="<?php echo $block->getConfig()->getUrl() ?>" multiple>
     </span>
-    <button class="no-display action-default primary" data-action="upload">
+    <button type="button" class="no-display action-default primary" data-action="upload">
         <?php echo __('Upload Files'); ?>
     </button>
 </div>
@@ -53,170 +53,177 @@
 <script>
 require([
     'jquery',
+    'mage/template',
     'jquery/ui',
-    'jquery/template',
     'jquery/file-uploader',
     'mage/mage',
-    'mage/translate'
-], function($){
+    'mage/translate',
+    'domReady!'
+], function ($, mageTemplate) {
 
-//<![CDATA[
-    $(function () {
-        $('[data-action="upload"]').on('click', function() {
-            $('[data-action="browse"]').prop('disabled', true);
-            $('[data-action="upload"]').prop('disabled', true);
-            $('[data-action="fileinput"]').prop('disabled', true);
-            var queuedFiles = $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles');
+    $('[data-action="upload"]').on('click', function () {
+        $('[data-action="browse"]').prop('disabled', true);
+        $('[data-action="upload"]').prop('disabled', true);
+        $('[data-action="fileinput"]').prop('disabled', true);
+        var queuedFiles = $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles');
 
-            for (var c = 0; c < queuedFiles.length; c++) {
-                queuedFiles[c].submit();
-            }
+        for (var c = 0; c < queuedFiles.length; c++) {
+            queuedFiles[c].submit();
+        }
 
-            $('[data-upload-id]').find('button').addClass('hidden');
+        $('[data-upload-id]').find('button').addClass('hidden');
 
-            queuedFiles = $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles', []);
-        });
+        queuedFiles = $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles', []);
+    });
 
-        $('[data-action="fileinput"]').on('click', function() {
-            $('[data-upload-id]').each(function(index, row) {
-                if ($(row).data('upload-status') === 'failure') {
-                    $(row).remove();
-                }
-            });
-        });
-
-        $.widget('mage.assetfileupload', $.blueimpFP.fileupload, {
-            switchToUploadQueueView: function() {
-                $('[data-action="upload"]').removeProp('disabled');
-                $('[data-action="upload"]').removeClass('no-display');
-                $('[data-action="browse"]').removeClass('primary');
-                $('.uploaded').addClass('no-display');
-                $('[data-action="fileinput"]').assetfileupload('option', 'uploadCount', 0);
-            },
-
-            switchToRegularView: function() {
-                $('[data-action="upload"]').addClass('no-display');
-                $('[data-action="browse"]').removeProp('disabled');
-                $('[data-action="fileinput"]').removeProp('disabled');
-                $('[data-action="browse"]').addClass('primary');
-                MediabrowserInstance.handleUploadComplete();
-
-                $('[data-upload-id]').each(function(index, row) {
-                    if ($(row).data('upload-status') === 'success') {
-                        $(row).remove();
-                    }
-                });
-            },
-
-            fileUploadsWithStatus: function(uploadStatus) {
-                var arr = [];
-                $('[data-upload-id]').each(function(index, row) {
-                    if ($(row).data('upload-status') === uploadStatus) {
-                        arr.push(row);
-                    }
-                });
-
-                return arr;
-            }
-        });
-
-        $('[data-action="fileinput"]').assetfileupload({
-            dataType: 'json',
-            formData: {
-                isAjax: 'true',
-                form_key: FORM_KEY
-            },
-            queuedFiles : [],
-            sequentialUploads: true,
-            maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize()?>,
-            uploadCount: 0,
-            add: function(e, data) {
-                $(this).assetfileupload('switchToUploadQueueView');
-
-                var that = this;
-                $.each(data.files, function (index, file) {
-                    data.fileId =  Math.random().toString(36).substr(2,9);
-                    var fileSize = typeof(file.size) == "undefined"
-                        ? $.mage.__('We could not detect a size.')
-                        : byteConvert(file.size);
-                    var fileRowTmpl = $.tmpl($('[data-template="<?php echo $block->getHtmlId(); ?>-template"]'), {
-                        size: fileSize,
-                        name : file.name,
-                        id : data.fileId
-                    });
-                    fileRowTmpl.appendTo('#<?php echo $block->getHtmlId() ?>');
-                    fileRowTmpl.find('[data-upload-id]').data('upload-status', 'pending');
-
-                    $('[data-delete-file="' + data.fileId + '"]').on('click', function() {
-                        $('[data-upload-id="' + data.fileId + '"]').remove();
-                        var origQueuedFiles = $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles');
-                        var newQueuedFiles = [];
-
-                        for (var c = 0; c < origQueuedFiles.length; c++) {
-                            var queuedFile = origQueuedFiles[c];
-                            if (queuedFile.fileId != data.fileId) {
-                                newQueuedFiles.push(queuedFile);
-                            }
-                        }
-
-                        $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles', newQueuedFiles);
-                        if (newQueuedFiles.length === 0) {
-                            $(that).assetfileupload('switchToRegularView');
-                        }
-                    });
-                });
-
-                $(this).assetfileupload('process', data).done(function() {
-                    var queuedFiles = $(that).assetfileupload('option', 'queuedFiles');
-                    queuedFiles.push(data);
-                    $(that).assetfileupload('option', 'queuedFiles', queuedFiles);
-                });
-            },
-            done: function(e, data) {
-                var progressSelector = '[data-upload-id="' + data.fileId + '"] .progressbar';
-                var uploadCount = $(this).assetfileupload('option', 'uploadCount');
-                $(progressSelector).css('width','100%');
-
-                var fileRow = $('[data-upload-id="' + data.fileId + '"]');
-                fileRow.find('.file-info-cancel').addClass('hidden');
-                if (data.result && !data.result.hasOwnProperty('errorcode')) {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-                    fileRow.data('upload-status', 'success');
-                    fileRow.find('.file-upload-success').removeClass('hidden');
-                    uploadCount++;
-                } else {
-                    fileRow.find('.file-info-size').addClass('hidden');
-                    fileRow.find('.file-info-error').html(data.result.error).removeClass('hidden');
-                    fileRow.find('.file-upload-failure').removeClass('hidden');
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-                    fileRow.data('upload-status', 'failure');
-                }
-
-                var fileUploadRows = $(this).assetfileupload('fileUploadsWithStatus', 'pending');
-                if (fileUploadRows.length === 0) {
-                    $(this).assetfileupload('switchToRegularView');
-                }
-
-                /** Display and update number of files uploaded */
-                $('.uploaded span').html(uploadCount);
-                $('.uploaded').removeClass('no-display');
-                $(this).assetfileupload('option', 'uploadCount', uploadCount);
-            },
-            progress: function(e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                var progressSelector = '[data-upload-id="' + data.fileId + '"] .progressbar';
-                $(progressSelector).css('width', progress + '%');
-            },
-            fail: function(e, data) {
-                var progressSelector = '[data-upload-id="' + data.fileId + '"] .progressbar';
-                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-
-                var fileRow = $('[data-upload-id="' + data.fileId + '"]');
-                fileRow.data('upload-status', 'failure');
+    $('[data-action="fileinput"]').on('click', function () {
+        $('[data-upload-id]').each(function (index, row) {
+            if ($(row).data('upload-status') === 'failure') {
+                $(row).remove();
             }
         });
     });
-//]]>
 
+    $.widget('mage.assetfileupload', $.blueimpFP.fileupload, {
+        switchToUploadQueueView: function () {
+            $('[data-action="upload"]').removeProp('disabled');
+            $('[data-action="upload"]').removeClass('no-display');
+            $('[data-action="browse"]').removeClass('primary');
+            $('.uploaded').addClass('no-display');
+            $('[data-action="fileinput"]').assetfileupload('option', 'uploadCount', 0);
+        },
+
+        switchToRegularView: function () {
+            $('[data-action="upload"]').addClass('no-display');
+            $('[data-action="browse"]').removeProp('disabled');
+            $('[data-action="fileinput"]').removeProp('disabled');
+            $('[data-action="browse"]').addClass('primary');
+            MediabrowserInstance.handleUploadComplete();
+
+            $('[data-upload-id]').each(function (index, row) {
+                if ($(row).data('upload-status') === 'success') {
+                    $(row).remove();
+                }
+            });
+        },
+
+        fileUploadsWithStatus: function (uploadStatus) {
+            var arr = [];
+            $('[data-upload-id]').each(function (index, row) {
+                if ($(row).data('upload-status') === uploadStatus) {
+                    arr.push(row);
+                }
+            });
+
+            return arr;
+        }
+    });
+
+    $('[data-action="fileinput"]').assetfileupload({
+        dataType: 'json',
+        formData: {
+            isAjax: 'true',
+            form_key: FORM_KEY
+        },
+        queuedFiles: [],
+        sequentialUploads: true,
+        maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize() ?> ,
+        uploadCount: 0,
+        add: function (e, data) {
+            var tmpl = mageTemplate('[data-template="<?php echo $block->getHtmlId(); ?>-template"]'),
+                fileSize,
+                fileRowTmpl;
+
+            $(this).assetfileupload('switchToUploadQueueView');
+
+            var that = this;
+            $.each(data.files, function (index, file) {
+                data.fileId = Math.random().toString(36).substr(2, 9);
+                
+                fileSize = typeof file.size === "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(file.size);
+                
+                fileRowTmpl = tmpl({
+                    data: {
+                        size: fileSize,
+                        name: file.name,
+                        id: data.fileId
+                    }
+                })
+
+                fileRowTmpl = $(fileRowTmpl);
+
+                fileRowTmpl.appendTo('#<?php echo $block->getHtmlId() ?>');
+                fileRowTmpl.find('[data-upload-id]').data('upload-status', 'pending');
+
+                $('[data-delete-file="' + data.fileId + '"]').on('click', function () {
+                    $('[data-upload-id="' + data.fileId + '"]').remove();
+                    var origQueuedFiles = $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles');
+                    var newQueuedFiles = [];
+
+                    for (var c = 0; c < origQueuedFiles.length; c++) {
+                        var queuedFile = origQueuedFiles[c];
+                        if (queuedFile.fileId != data.fileId) {
+                            newQueuedFiles.push(queuedFile);
+                        }
+                    }
+
+                    $('[data-action="fileinput"]').assetfileupload('option', 'queuedFiles', newQueuedFiles);
+                    if (newQueuedFiles.length === 0) {
+                        $(that).assetfileupload('switchToRegularView');
+                    }
+                });
+            });
+
+            $(this).assetfileupload('process', data).done(function () {
+                var queuedFiles = $(that).assetfileupload('option', 'queuedFiles');
+                queuedFiles.push(data);
+                $(that).assetfileupload('option', 'queuedFiles', queuedFiles);
+            });
+        },
+        done: function (e, data) {
+            var progressSelector = '[data-upload-id="' + data.fileId + '"] .progressbar';
+            var uploadCount = $(this).assetfileupload('option', 'uploadCount');
+            $(progressSelector).css('width', '100%');
+
+            var fileRow = $('[data-upload-id="' + data.fileId + '"]');
+            fileRow.find('.file-info-cancel').addClass('hidden');
+            if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                fileRow.data('upload-status', 'success');
+                fileRow.find('.file-upload-success').removeClass('hidden');
+                uploadCount++;
+            } else {
+                fileRow.find('.file-info-size').addClass('hidden');
+                fileRow.find('.file-info-error').html(data.result.error).removeClass('hidden');
+                fileRow.find('.file-upload-failure').removeClass('hidden');
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                fileRow.data('upload-status', 'failure');
+            }
+
+            var fileUploadRows = $(this).assetfileupload('fileUploadsWithStatus', 'pending');
+            if (fileUploadRows.length === 0) {
+                $(this).assetfileupload('switchToRegularView');
+            }
+
+            /** Display and update number of files uploaded */
+            $('.uploaded span').html(uploadCount);
+            $('.uploaded').removeClass('no-display');
+            $(this).assetfileupload('option', 'uploadCount', uploadCount);
+        },
+        progress: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            var progressSelector = '[data-upload-id="' + data.fileId + '"] .progressbar';
+            $(progressSelector).css('width', progress + '%');
+        },
+        fail: function (e, data) {
+            var progressSelector = '[data-upload-id="' + data.fileId + '"] .progressbar';
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+
+            var fileRow = $('[data-upload-id="' + data.fileId + '"]');
+            fileRow.data('upload-status', 'failure');
+        }
+    });
 });
 </script>

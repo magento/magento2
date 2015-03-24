@@ -8,38 +8,42 @@
 
 /** @var $block \Magento\Backend\Block\GlobalSearch */
 ?>
-<div class="search-global miniform" data-mage-init='{"globalSearch": {}}'>
+<div class="search-global" data-mage-init='{"globalSearch": {}}'>
     <form action="#" id="form-search">
-        <div class="field search-global-field">
-            <label class="label" for="search-global"><span><?php echo __('Search')?></span></label>
-            <div class="control">
-                <input  type="text"
-                        class="search-global-input"
-                        id="search-global"
-                        placeholder="<?php echo __('Search')?>"
-                        name="query"
-                        data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getWidgetInitOptions()))?>'>
-            </div>
-        </div>
-        <div class="actions search-global-actions">
-            <button type="submit" class="action search-global-action" title="<?php echo __('Search') ?>"><span><?php echo __('Search') ?></span></button>
+        <div class="search-global-field">
+            <label class="search-global-label" for="search-global"></label>
+            <input
+                    type="text"
+                    class="search-global-input"
+                    id="search-global"
+                    name="query"
+                    data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()))?>'>
+            <button
+                type="submit"
+                class="search-global-action"
+                title="<?php echo __('Search') ?>"
+                ></button>
         </div>
     </form>
-    <script data-template="search-suggest" type="text/x-jquery-tmpl">
-        <ul class="dropdown-menu search-global-menu">
-        {{if items.length}}
-            {{each items}}
+    <script data-template="search-suggest" type="text/x-magento-template">
+        <ul class="search-global-menu">
+        <% if (data.items.length) { %>
+            <% _.each(data.items, function(value){ %>
             <li class="item"
-                {{html optionData($value)}}
+                <%- data.optionData(value) %>
                 >
-                <a href="${$value.url}" class="title">${$value.name}</a>
-                <div class="type">${$value.type}</div>
-                ${$value.description || ""}
+                <a href="<%- value.url %>" class="title"><%- value.name %></a>
+                <span class="type"><%- value.type %></span>
+                <%- value.description || "" %>
             </li>
-            {{/each}}
-        {{else}}
-            <li><span class="mage-suggest-no-records"><?php echo __('No records found.') ?></span></li>
-        {{/if}}
+            <% }); %>
+        <% } else { %>
+            <li>
+                <span class="mage-suggest-no-records">
+                    <?php echo __('No records found.') ?>
+                </span>
+            </li>
+        <% } %>
         </ul>
     </script>
 </div>

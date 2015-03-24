@@ -49,7 +49,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Retrieve available order
      *
      * @return Order
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getOrder()
     {
@@ -62,7 +62,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
         if ($this->_coreRegistry->registry('order')) {
             return $this->_coreRegistry->registry('order');
         }
-        throw new \Magento\Framework\Model\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Framework\Exception\LocalizedException(__('We cannot get the order instance.'));
     }
 
     /**
@@ -73,7 +73,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     public function getPriceDataObject()
     {
         $obj = $this->getData('price_data_object');
-        if (is_null($obj)) {
+        if ($obj === null) {
             return $this->getOrder();
         }
         return $obj;

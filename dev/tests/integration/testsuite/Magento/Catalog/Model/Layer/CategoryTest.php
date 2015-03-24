@@ -131,7 +131,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             );
             $model->setCurrentCategory(new \Magento\Framework\Object());
             $this->fail('Assign category of invalid class.');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
         }
 
         try {
@@ -142,7 +142,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category')
             );
             $this->fail('Assign category with invalid id.');
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
         }
     }
 
@@ -150,7 +150,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Store\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore(),
             $this->_model->getCurrentStore()
         );

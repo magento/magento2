@@ -22,7 +22,7 @@ class Curl extends Adapter\Rest\CurlClient
      */
     public function constructResourceUrl($resourcePath)
     {
-        return rtrim(TESTS_BASE_URL, '/') . ltrim($resourcePath, '/');
+        return rtrim(TESTS_BASE_URL, '/') . '/' . ltrim($resourcePath, '/');
     }
 
     /**
@@ -41,7 +41,7 @@ class Curl extends Adapter\Rest\CurlClient
         }
 
         $curlOpts = [];
-        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET;
+        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
         $curlOpts[CURLOPT_SSLVERSION] = 3;
         $response = $this->_invokeApi($url, $curlOpts, $headers);
         $response['cookies'] = $this->cookieParse($response['header']);

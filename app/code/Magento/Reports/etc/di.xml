@@ -9,13 +9,6 @@
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="reports_setup" xsi:type="string">Magento\Reports\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">reports</argument>
@@ -36,4 +29,5 @@
             <argument name="modulePrefix" xsi:type="string">reports</argument>
         </arguments>
     </type>
+    <preference for="Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface" type="Magento\Reports\Model\Resource\Quote\CollectionFactory"/>
 </config>

@@ -9,7 +9,7 @@ namespace Magento\Wishlist\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
@@ -99,12 +99,12 @@ class ShareWishlistEntityTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CatalogProductSimple $product
      * @return array
      */
     public function __prepare(
-        CustomerInjectable $customer,
+        Customer $customer,
         CatalogProductSimple $product
     ) {
         $customer->persist();
@@ -150,14 +150,14 @@ class ShareWishlistEntityTest extends Injectable
      * Share wish list
      *
      * @param BrowserInterface $browser
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CatalogProductSimple $product
      * @param array $sharingInfo
      * @return void
      */
     public function test(
         BrowserInterface $browser,
-        CustomerInjectable $customer,
+        Customer $customer,
         CatalogProductSimple $product,
         array $sharingInfo
     ) {
@@ -165,7 +165,9 @@ class ShareWishlistEntityTest extends Injectable
         $this->loginCustomer($customer);
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $this->catalogProductView->getViewBlock()->clickAddToWishlist();
+        $this->wishlistIndex->getMessagesBlock()->waitSuccessMessage();
         $this->wishlistIndex->getWishlistBlock()->clickShareWishList();
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->wishlistShare->getSharingInfoForm()->fillForm($sharingInfo);
         $this->wishlistShare->getSharingInfoForm()->shareWishlist();
     }
@@ -173,10 +175,10 @@ class ShareWishlistEntityTest extends Injectable
     /**
      * Login customer
      *
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @return void
      */
-    protected function loginCustomer(CustomerInjectable $customer)
+    protected function loginCustomer(Customer $customer)
     {
         $this->cmsIndex->open();
         if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Log Out')) {

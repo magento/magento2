@@ -5,7 +5,8 @@
  */
 namespace Magento\Test\Integrity\Library;
 
-use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
@@ -36,7 +37,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckDependencies()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
@@ -64,6 +65,27 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 }
             },
             $this->libraryDataProvider()
+        );
+    }
+
+    public function testAppCodeUsage()
+    {
+        $files = Files::init();
+        $path = $files->getPathToSource();
+        $invoker = new AggregateInvoker($this);
+        $invoker(
+            function ($file) use ($path) {
+                $content = file_get_contents($file);
+                if (strpos($file, $path . '/lib/') === 0) {
+                    $this->assertSame(
+                        0,
+                        preg_match('~(?<![a-z\\d_:]|->|function\\s)__\\s*\\(~iS', $content),
+                        'Function __() is defined outside of the library and must not be used there. ' .
+                        'Replacement suggestion: new \\Magento\\Framework\\Phrase()'
+                    );
+                }
+            },
+            $files->getPhpFiles(false, true, false)
         );
     }
 

@@ -131,14 +131,22 @@ class Observer
             return;
         }
 
-        $getTaxesForItems = $order->getItemAppliedTaxes();
-        $taxes = $order->getAppliedTaxes();
+        $taxesAttr = $order->getCustomAttribute('applied_taxes');
+        if (is_null($taxesAttr) || !is_array($taxesAttr->getValue())) {
+            $taxes = [];
+        } else {
+            $taxes = $taxesAttr->getValue();
+        }
+
+        $getTaxesForItemsAttr = $order->getCustomAttribute('item_applied_taxes');
+        if (is_null($getTaxesForItemsAttr) || !is_array($getTaxesForItemsAttr->getValue())) {
+            $getTaxesForItems = [];
+        } else {
+            $getTaxesForItems = $getTaxesForItemsAttr->getValue();
+        }
 
         $ratesIdQuoteItemId = [];
-        if (!is_array($getTaxesForItems)) {
-            $getTaxesForItems = [];
-        }
-        foreach ($getTaxesForItems as $quoteItemId => $taxesArray) {
+        foreach ($getTaxesForItems as $taxesArray) {
             foreach ($taxesArray as $rates) {
                 if (count($rates['rates']) == 1) {
                     $ratesIdQuoteItemId[$rates['id']][] = [
@@ -153,7 +161,6 @@ class Observer
                         'real_base_amount' => $rates['base_amount'],
                     ];
                 } else {
-                    $percentDelta = $rates['percent'];
                     $percentSum = 0;
                     foreach ($rates['rates'] as $rate) {
                         $real_amount = $rates['amount'] * $rate['percent'] / $rates['percent'];
@@ -171,20 +178,12 @@ class Observer
                         ];
                         $percentSum += $rate['percent'];
                     }
-
-                    if ($percentDelta != $percentSum) {
-                        $delta = $percentDelta - $percentSum;
-                        foreach ($ratesIdQuoteItemId[$rates['id']] as &$rateTax) {
-                            if ($rateTax['id'] == $quoteItemId) {
-                                $rateTax['percent'] = $rateTax['percent'] / $percentSum * $delta + $rateTax['percent'];
-                            }
-                        }
-                    }
                 }
             }
         }
 
-        foreach ($taxes as $id => $row) {
+        foreach ($taxes as $row) {
+            $id = $row['id'];
             foreach ($row['rates'] as $tax) {
                 if (is_null($row['percent'])) {
                     $baseRealAmount = $row['base_amount'];
@@ -265,7 +264,7 @@ class Observer
     {
         $this->_localeResolver->emulate(0);
         $currentDate = $this->_localeDate->date();
-        $date = $currentDate->subHour(25);
+        $date = $currentDate->modify('-25 hours');
         /** @var $reportTax \Magento\Tax\Model\Resource\Report\Tax */
         $reportTax = $this->_reportTaxFactory->create();
         $reportTax->aggregate($date);
@@ -310,9 +309,20 @@ class Observer
         $options['calculationAlgorithm'] = $algorithm;
         // prepare correct template for options render
         if ($this->_taxData->displayBothPrices()) {
-            $options['optionTemplate'] =
-                '{{label}}{{#if finalPrice.value}} {{finalPrice.formatted}} ('
-                . __('Excl. tax:') . ' {{basePrice.formatted}}){{/if}}';
+            $options['optionTemplate'] = sprintf(
+                '<%%= data.label %%>'
+                . '<%% if (data.finalPrice.value) { %%>'
+                . ' <%%= data.finalPrice.formatted %%> (%1$s <%%= data.basePrice.formatted %%>)'
+                . '<%% } %%>',
+                __('Excl. tax:')
+            );
+        } elseif ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax()) {
+            $options['optionTemplate'] = sprintf(
+                '<%%= data.label %%>'
+                . '<%% if (data.basePrice.value) { %%>'
+                . ' <%%= data.basePrice.formatted %%>'
+                . '<%% } %%>'
+            );
         }
 
         $response->setAdditionalOptions($options);

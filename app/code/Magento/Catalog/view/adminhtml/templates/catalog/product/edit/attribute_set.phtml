@@ -8,20 +8,20 @@
 
  /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
 ?>
-<script id="product-template-selector-template" type="text/x-jquery-tmpl">
-{{if !term && items.length && !$data.allShown()}}
+<script id="product-template-selector-template" type="text/x-magento-template">
+<% if (!data.term && data.items.length && !data.allShown()) { %>
 <h5 class="title">Recent Items</h5>
-{{/if}}
+<% } %>
 <ul data-mage-init='{"menu":[]}'>
-    {{each items}}
-    <li {{html optionData($value)}}><a href="#">${$value.label}</a></li>
-    {{/each}}
+    <% _.each(data.items, function(value) { %>
+    <li <%- data.optionData(value) %>><a href="#"><%- value.label %></a></li>
+    <% }); %>
 </ul>
-{{if !term && items.length && !$data.allShown()}}
-<button data-mage-init='{"actionLink":{"event":"showAll"}}' class="action-show-all">
+<% if (!data.term && data.items.length && !data.allShown()) { %>
+<button type="button" data-mage-init='{"actionLink":{"event":"showAll"}}' class="action-show-all">
     <span>Show all Templates...</span>
 </button>
-{{/if}}
+<% } %>
 </script>
 <script>
     require(["jquery","mage/mage","mage/backend/suggest"],function ($) {
@@ -32,7 +32,7 @@
             }
         });
         $suggest
-            .mage('suggest',<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
+            .mage('suggest',<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
             .on('suggestselect', function (e, ui) {
                 if (ui.item.id) {
                     $('[data-form=edit-product]').trigger('changeAttributeSet', ui.item);

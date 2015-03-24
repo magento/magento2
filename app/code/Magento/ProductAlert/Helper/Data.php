@@ -12,7 +12,7 @@ use Magento\Store\Model\Store;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Helper\Url
+class Data extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Current product instance (override registry one)
@@ -29,35 +29,29 @@ class Data extends \Magento\Core\Helper\Url
     protected $_coreRegistry = null;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    private $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Store\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\View\LayoutInterface $layout
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_layout = $layout;
-        $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context, $storeManager);
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -67,7 +61,7 @@ class Data extends \Magento\Core\Helper\Url
      */
     public function getProduct()
     {
-        if (!is_null($this->_product)) {
+        if ($this->_product !== null) {
             return $this->_product;
         }
         return $this->_coreRegistry->registry('product');
@@ -113,7 +107,7 @@ class Data extends \Magento\Core\Helper\Url
      *
      * @param string|\Magento\Framework\View\Element\AbstractBlock $block
      * @return \Magento\Framework\View\Element\AbstractBlock
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createBlock($block)
     {
@@ -123,7 +117,7 @@ class Data extends \Magento\Core\Helper\Url
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid block type: %1', $block));
         }
         return $block;
     }
@@ -135,9 +129,9 @@ class Data extends \Magento\Core\Helper\Url
      */
     public function isStockAlertAllowed()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_STOCK_ALLOW,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -148,9 +142,9 @@ class Data extends \Magento\Core\Helper\Url
      */
     public function isPriceAlertAllowed()
     {
-        return $this->_scopeConfig->isSetFlag(
+        return $this->scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_PRICE_ALLOW,
-            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\Integration\Service\V1;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Integration\Helper\Validator;
+use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\Oauth\Token as Token;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory as TokenCollectionFactory;
@@ -30,7 +30,7 @@ class CustomerTokenService implements CustomerTokenServiceInterface
     private $accountManagement;
 
     /**
-     * @var \Magento\Integration\Helper\Validator
+     * @var \Magento\Integration\Model\CredentialsValidator
      */
     private $validatorHelper;
 
@@ -47,13 +47,13 @@ class CustomerTokenService implements CustomerTokenServiceInterface
      * @param TokenModelFactory $tokenModelFactory
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
-     * @param \Magento\Integration\Helper\Validator $validatorHelper
+     * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
-        Validator $validatorHelper
+        CredentialsValidator $validatorHelper
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
@@ -66,7 +66,7 @@ class CustomerTokenService implements CustomerTokenServiceInterface
      */
     public function createCustomerAccessToken($username, $password)
     {
-        $this->validatorHelper->validateCredentials($username, $password);
+        $this->validatorHelper->validate($username, $password);
         $customerDataObject = $this->accountManagement->authenticate($username, $password);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
     }
@@ -78,14 +78,14 @@ class CustomerTokenService implements CustomerTokenServiceInterface
     {
         $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByCustomerId($customerId);
         if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException("This customer has no tokens.");
+            throw new LocalizedException(__('This customer has no tokens.'));
         }
         try {
             foreach ($tokenCollection as $token) {
                 $token->setRevoked(1)->save();
             }
         } catch (\Exception $e) {
-            throw new LocalizedException("The tokens could not be revoked.");
+            throw new LocalizedException(__('The tokens could not be revoked.'));
         }
         return true;
     }

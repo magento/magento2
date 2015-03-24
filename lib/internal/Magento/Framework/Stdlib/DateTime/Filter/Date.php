@@ -37,7 +37,7 @@ class Date implements \Zend_Filter_Interface
     {
         $this->_localeDate = $localeDate;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
-            ['date_format' => $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT)]
+            ['date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)]
         );
         $this->_normalToLocalFilter = new \Zend_Filter_NormalizedToLocalized(
             ['date_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT]

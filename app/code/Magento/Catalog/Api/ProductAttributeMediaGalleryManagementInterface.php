@@ -16,26 +16,18 @@ interface ProductAttributeMediaGalleryManagementInterface
     /**
      * Create new gallery entry
      *
-     * @param string $productSku
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface $entryContent
-     * @param int $storeId
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return int gallery entry ID
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function create(
-        $productSku,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface $entryContent,
-        $storeId = 0
-    );
+    public function create($product);
 
     /**
      * Update gallery entry
      *
-     * @param string $productSku
+     * @param string $sku
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
      * @param int $storeId
      * @return bool
@@ -43,7 +35,7 @@ interface ProductAttributeMediaGalleryManagementInterface
      * @throws \Magento\Framework\Exception\StateException
      */
     public function update(
-        $productSku,
+        $sku,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry,
         $storeId = 0
     );
@@ -51,29 +43,29 @@ interface ProductAttributeMediaGalleryManagementInterface
     /**
      * Remove gallery entry
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $entryId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function remove($productSku, $entryId);
+    public function remove($sku, $entryId);
 
     /**
      * Return information about gallery entry
      *
-     * @param string $productSku
+     * @param string $sku
      * @param int $imageId
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
      */
-    public function get($productSku, $imageId);
+    public function get($sku, $imageId);
 
     /**
      * Retrieve the list of gallery entries associated with given product
      *
-     * @param string $productSku
+     * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
      */
-    public function getList($productSku);
+    public function getList($sku);
 }

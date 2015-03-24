@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Model;
  * AdminNotification Feed model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -51,15 +52,28 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_deploymentConfig;
 
     /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    protected $productMetadata;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param InboxFactory $inboxFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Framework\HTTP\Adapter\curlFactory $curlFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -68,15 +82,19 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_backendConfig = $backendConfig;
-        $this->_inboxFactory = $inboxFactory;
-        $this->curlFactory = $curlFactory;
+        $this->_backendConfig    = $backendConfig;
+        $this->_inboxFactory     = $inboxFactory;
+        $this->curlFactory       = $curlFactory;
         $this->_deploymentConfig = $deploymentConfig;
+        $this->productMetadata   = $productMetadata;
+        $this->urlBuilder        = $urlBuilder;
     }
 
     /**
@@ -96,7 +114,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     public function getFeedUrl()
     {
         $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-        if (is_null($this->_feedUrl)) {
+        if ($this->_feedUrl === null) {
             $this->_feedUrl = $httpPath . $this->_backendConfig->getValue(self::XML_FEED_URL_PATH);
         }
         return $this->_feedUrl;
@@ -191,7 +209,15 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     public function getFeedData()
     {
         $curl = $this->curlFactory->create();
-        $curl->setConfig(['timeout' => 2]);
+        $curl->setConfig(
+            [
+                'timeout'   => 2,
+                'useragent' => $this->productMetadata->getName()
+                    . '/' . $this->productMetadata->getVersion()
+                    . ' (' . $this->productMetadata->getEdition() . ')',
+                'referer'   => $this->urlBuilder->getUrl('*/*/*')
+            ]
+        );
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();
         if ($data === false) {

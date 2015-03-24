@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnCreationTest">
+    <variation name="ProductTypeSwitchingOnCreationTestVariation1">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
+      <data name="createProduct" xsi:type="string">simple</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation2">
+      <data name="createProduct" xsi:type="string">simple</data>
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation3">
+      <data name="createProduct" xsi:type="string">configurable</data>
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation4">
+      <data name="createProduct" xsi:type="string">configurable</data>
+      <data name="product" xsi:type="string">catalogProductVirtual::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation5">
+      <data name="createProduct" xsi:type="string">virtual</data>
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation6">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
+      <data name="createProduct" xsi:type="string">virtual</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation7">
+      <data name="createProduct" xsi:type="string">virtual</data>
+      <data name="product" xsi:type="string">downloadableProduct::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation8">
+      <data name="createProduct" xsi:type="string">downloadable</data>
+      <data name="product" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+    </variation>
+    <variation name="ProductTypeSwitchingOnCreationTestVariation9">
+      <data name="issue" xsi:type="string">Bug: MAGETWO-34630</data>
+      <data name="createProduct" xsi:type="string">downloadable</data>
+      <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
+    </variation>
+  </testCase>
+</config>

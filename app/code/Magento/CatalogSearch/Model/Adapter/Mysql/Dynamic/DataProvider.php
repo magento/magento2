@@ -7,7 +7,6 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic;
 
 use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -15,17 +14,12 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface as 
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Framework\Store\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {
-    const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
-    const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
-    const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
-
     /**
      * @var Resource
      */
@@ -35,11 +29,6 @@ class DataProvider implements DataProviderInterface
      * @var Range
      */
     private $range;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
 
     /**
      * @var Session
@@ -58,7 +47,6 @@ class DataProvider implements DataProviderInterface
 
     /**
      * @param Resource $resource
-     * @param ScopeConfigInterface $scopeConfig
      * @param Range $range
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
@@ -66,7 +54,6 @@ class DataProvider implements DataProviderInterface
      */
     public function __construct(
         Resource $resource,
-        ScopeConfigInterface $scopeConfig,
         Range $range,
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,
@@ -74,7 +61,6 @@ class DataProvider implements DataProviderInterface
     ) {
         $this->resource = $resource;
         $this->range = $range;
-        $this->scopeConfig = $scopeConfig;
         $this->customerSession = $customerSession;
         $this->dataProvider = $dataProvider;
         $this->intervalFactory = $intervalFactory;
@@ -97,7 +83,7 @@ class DataProvider implements DataProviderInterface
             'count' => 'count(DISTINCT entity_id)',
             'max' => 'MAX(min_price)',
             'min' => 'MIN(min_price)',
-            'std' => 'STDDEV_SAMP(min_price)',
+            'std' => 'STDDEV_SAMP(min_price)'
         ];
 
         $select = $this->getSelect();
@@ -113,28 +99,6 @@ class DataProvider implements DataProviderInterface
             ->fetchRow($select);
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOptions()
-    {
-        return [
-            'interval_division_limit' => (int)$this->scopeConfig->getValue(
-                self::XML_PATH_INTERVAL_DIVISION_LIMIT,
-                ScopeInterface::SCOPE_STORE
-            ),
-            'range_step' => (double)$this->scopeConfig->getValue(
-                self::XML_PATH_RANGE_STEP,
-                ScopeInterface::SCOPE_STORE
-            ),
-            'min_range_power' => 10,
-            'max_intervals_number' => (int)$this->scopeConfig->getValue(
-                self::XML_PATH_RANGE_MAX_INTERVALS,
-                ScopeInterface::SCOPE_STORE
-            )
-        ];
     }
 
     /**
@@ -190,7 +154,7 @@ class DataProvider implements DataProviderInterface
                 $data[] = [
                     'from' => $fromPrice,
                     'to' => $toPrice,
-                    'count' => $count,
+                    'count' => $count
                 ];
             }
         }

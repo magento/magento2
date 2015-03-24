@@ -14,7 +14,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
     /**
      * Update product configuration for a cart item
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -29,22 +29,22 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocaleCode()]
+                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Framework\Model\Exception(__("We can't find the quote item."));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the quote item.'));
             }
 
             $item = $this->cart->updateItem($id, new \Magento\Framework\Object($params));
             if (is_string($item)) {
-                throw new \Magento\Framework\Model\Exception($item);
+                throw new \Magento\Framework\Exception\LocalizedException(__($item));
             }
             if ($item->getHasError()) {
-                throw new \Magento\Framework\Model\Exception($item->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
             }
 
             $related = $this->getRequest()->getParam('related_product');
@@ -53,8 +53,6 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
             }
 
             $this->cart->save();
-
-            $this->_checkoutSession->setCartWasUpdated(true);
 
             $this->_eventManager->dispatch(
                 'checkout_cart_update_item_complete',
@@ -68,9 +66,9 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                     );
                     $this->messageManager->addSuccess($message);
                 }
-                $this->_goBack();
+                return $this->_goBack();
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice($e->getMessage());
             } else {
@@ -82,16 +80,16 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
             if ($url) {
-                $this->getResponse()->setRedirect($url);
+                return $this->resultRedirectFactory->create()->setUrl($url);
             } else {
                 $cartUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
-                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($cartUrl));
+                return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot update the item.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_goBack();
+            return $this->_goBack();
         }
-        $this->_redirect('*/*');
+        return $this->resultRedirectFactory->create()->setPath('*/*');
     }
 }

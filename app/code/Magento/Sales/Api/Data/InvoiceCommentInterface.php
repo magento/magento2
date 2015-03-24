@@ -63,6 +63,14 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the is-customer-notified flag value for the invoice.
      *
      * @return int Is-customer-notified flag value.
@@ -82,4 +90,53 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return int Parent ID.
      */
     public function getParentId();
+
+    /**
+     * Sets the parent ID for the invoice.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the is-customer-notified flag value for the invoice.
+     *
+     * @param int $isCustomerNotified
+     * @return $this
+     */
+    public function setIsCustomerNotified($isCustomerNotified);
+
+    /**
+     * Sets the is-visible-on-storefront flag value for the invoice.
+     *
+     * @param int $isVisibleOnFront
+     * @return $this
+     */
+    public function setIsVisibleOnFront($isVisibleOnFront);
+
+    /**
+     * Sets the comment for the invoice.
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function setComment($comment);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\InvoiceCommentExtensionInterface $extensionAttributes
+    );
 }

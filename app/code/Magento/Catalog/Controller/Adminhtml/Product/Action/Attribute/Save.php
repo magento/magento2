@@ -32,9 +32,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemDataBuilder
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
      */
-    protected $stockItemBuilder;
+    protected $stockItemFactory;
 
     /**
      * Stock Indexer
@@ -49,14 +49,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $resultRedirectFactory;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder
+     * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         Action\Context $context,
@@ -65,16 +71,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_catalogProduct = $catalogProduct;
-        $this->stockItemBuilder = $stockItemBuilder;
+        $this->stockItemFactory = $stockItemFactory;
         parent::__construct($context, $attributeHelper);
         $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -110,7 +118,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $storeId = $this->attributeHelper->getSelectedStoreId();
             if ($attributesData) {
                 $dateFormat = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
-                    ->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+                    ->getDateFormat(\IntlDateFormatter::SHORT);
 
                 foreach ($attributesData as $attributeCode => $value) {
                     $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')
@@ -166,10 +174,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                     }
 
                     $stockItemId = $stockItemDo->getId();
-                    $stockItemBuilder = $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData);
-                    $stockItemToSave = $stockItemBuilder->create();
-                    $stockItemToSave->setItemId($stockItemId);
-                    $stockItemRepository->save($stockItemToSave);
+                    $this->dataObjectHelper->populateWithArray(
+                        $stockItemDo,
+                        $inventoryData,
+                        '\Magento\CatalogInventory\Api\Data\StockItemInterface'
+                    );
+                    $stockItemDo->setItemId($stockItemId);
+                    $stockItemRepository->save($stockItemDo);
                 }
                 $this->_stockIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }
@@ -201,7 +212,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             ) {
                 $this->_productPriceIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException(

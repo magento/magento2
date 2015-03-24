@@ -130,7 +130,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         if ($isActive === null) {
             $isActive = $this->_scopeConfig->getValue(
                 'wishlist/general/active',
-                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ) && $this->httpContext->getValue(
                 Context::CONTEXT_AUTH
             );
@@ -153,7 +153,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     public function getContinueShoppingUrl()
     {
         $url = $this->getData('continue_shopping_url');
-        if (is_null($url)) {
+        if ($url === null) {
             $url = $this->_checkoutSession->getContinueShoppingUrl(true);
             if (!$url) {
                 $url = $this->_urlBuilder->getUrl();
@@ -192,13 +192,13 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @param string $name Block name in layout
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMethodHtml($name)
     {
         $block = $this->getLayout()->getBlock($name);
         if (!$block) {
-            throw new \Magento\Framework\Model\Exception(__('Invalid method: %1', $name));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid method: %1', $name));
         }
         return $block->toHtml();
     }

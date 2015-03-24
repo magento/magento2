@@ -24,13 +24,13 @@ interface ProductRepositoryInterface
     /**
      * Get info about product by product SKU
      *
-     * @param string $productSku
+     * @param string $sku
      * @param bool $editMode
      * @param null|int $storeId
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($productSku, $editMode = false, $storeId = null);
+    public function get($sku, $editMode = false, $storeId = null);
 
     /**
      * Get info about product by product id
@@ -53,12 +53,12 @@ interface ProductRepositoryInterface
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product);
 
     /**
-     * @param string $productSku
+     * @param string $sku
      * @return bool Will returned True if deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function deleteById($productSku);
+    public function deleteById($sku);
 
     /**
      * Get product list

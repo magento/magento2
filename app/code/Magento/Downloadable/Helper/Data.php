@@ -15,25 +15,6 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context);
-    }
-
-    /**
      * Check is link shareable or not
      *
      * @param \Magento\Downloadable\Model\Link|Item $link
@@ -49,9 +30,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $shareable = (bool)$link->getIsShareable();
                 break;
             case \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG:
-                $shareable = (bool)$this->_scopeConfig->isSetFlag(
+                $shareable = (bool)$this->scopeConfig->isSetFlag(
                     \Magento\Downloadable\Model\Link::XML_PATH_CONFIG_IS_SHAREABLE,
-                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
         }
         return $shareable;

@@ -1,0 +1,29 @@
+{
+    "name": "magento/module-config",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0",
+        "magento/framework": "0.74.0-beta1",
+        "magento/module-store": "0.74.0-beta1",
+        "magento/module-cron": "0.74.0-beta1",
+        "magento/module-email": "0.74.0-beta1",
+        "magento/module-directory": "0.74.0-beta1",
+        "magento/module-backend": "0.74.0-beta1",
+        "magento/module-media-storage": "0.74.0-beta1",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+    "version": "0.74.0-beta1",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/Config"
+            ]
+        ]
+    }
+}

@@ -72,11 +72,11 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
 
         if ($productAttribute->getFrontendInput() == 'date' || $productAttribute->getBackendType() == 'date') {
             $value = $product->getData($productAttribute->getAttributeCode());
-            if (empty($value) || !\Zend_Date::isDate($value, \Zend_Date::ISO_8601)) {
+            if (empty($value)) {
                 return null;
             }
-            $date = new \Magento\Framework\Stdlib\DateTime\Date($value, \Zend_Date::ISO_8601);
-            $value = $date->toString(\Zend_Date::ATOM);
+            $date = new \DateTime($value);
+            $value = $date->format('c');
         } else {
             $value = $productAttribute->getFrontend()->getValue($product);
         }
@@ -114,7 +114,7 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
     protected function _setAttribute($entry, $name, $type = self::ATTRIBUTE_TYPE_TEXT, $value = '', $unit = null)
     {
         if (is_object($value) || (string)$value != $value) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Please correct the attribute "%1" type for Google Shopping. The product with this attribute hasn\'t been updated in Google Content.',
                     $name
