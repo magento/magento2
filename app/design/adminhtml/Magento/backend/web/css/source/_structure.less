@@ -17,6 +17,7 @@
 @page-wrapper__background-color: @color-white;
 
 @page-content__padding-horizontal: @content__indent;
+@page-content__padding-vertical: @content__indent;
 
 @notices-wrapper__border-color: @color-gray83;
 
@@ -33,6 +34,7 @@ body {
 
 .page-content {
     .extend__clearfix();
+    padding-bottom: @page-content__padding-vertical;
     padding-left: @page-content__padding-horizontal;
     padding-right: @page-content__padding-horizontal;
 }
