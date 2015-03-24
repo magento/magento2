@@ -9,7 +9,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\Resource\Sequence\Profile as ResourceProfile;
 use Magento\SalesSequence\Model\Sequence\MetaFactory;
-use Magento\SalesSequence\Model\Sequence\Profile;
+use Magento\SalesSequence\Model\Sequence\Profile as ModelProfile;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**
@@ -113,7 +113,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!$object->getData('active_profile') instanceof Profile) {
+        if (!$object->getData('active_profile') instanceof ModelProfile) {
             throw new NoSuchEntityException(__('Entity Sequence profile not added to meta active profile'));
         }
 
