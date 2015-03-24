@@ -11,6 +11,12 @@ class Renderer extends Topmenu
 {
     protected $_template = 'html/topmenu/renderer.phtml';
 
+    /**
+     * Renders block html
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception
+     */
     protected function _toHtml()
     {
         $menuTree = $this->getMenuTree();
@@ -27,6 +33,16 @@ class Renderer extends Topmenu
         return $this->render($menuTree,$childrenWrapClass);
     }
 
+    /**
+     * Render menu node via a template file
+     *
+     * @param       $menuTree
+     * @param       $childrenWrapClass
+     * @param int   $limit
+     * @param array $colBreaks
+     *
+     * @return string
+     */
     public function render($menuTree,$childrenWrapClass,$limit=0,$colBreaks = [])
     {
         $this->assign('menuTree',$menuTree);
