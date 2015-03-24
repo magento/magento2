@@ -101,7 +101,7 @@ class OrderStatus implements DataProviderInterface
     public function getRssData()
     {
         $this->order = $this->getOrder();
-        if (is_null($this->order)) {
+        if ($this->order === null) {
             throw new \InvalidArgumentException('Order not found.');
         }
         return array_merge($this->getHeader(), $this->getEntries());

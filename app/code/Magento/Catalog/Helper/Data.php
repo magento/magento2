@@ -484,7 +484,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $store = $this->_storeManager->getStore($store);
         if ($this->_taxConfig->needPriceConversion($store)) {
-            if (is_null($priceIncludesTax)) {
+            if ($priceIncludesTax === null) {
                 $priceIncludesTax = $this->_taxConfig->priceIncludesTax($store);
             }
 
@@ -530,7 +530,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $items = $taxDetails->getItems();
             $taxDetailsItem = array_shift($items);
 
-            if (!is_null($includingTax)) {
+            if ($includingTax !== null) {
                 if ($includingTax) {
                     $price = $taxDetailsItem->getPriceInclTax();
                 } else {

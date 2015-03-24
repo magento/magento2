@@ -32,7 +32,7 @@
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="product_name">
                     <arguments>
-                        <argument name="header" xsi:type="string" translate="true">Product</argument>
+                        <argument name="header" xsi:type="string" translate="true">Product Name</argument>
                         <argument name="id" xsi:type="string">product_name</argument>
                         <argument name="index" xsi:type="string">product_name</argument>
                         <argument name="filter" xsi:type="string">Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text</argument>
@@ -43,7 +43,7 @@
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="description">
                     <arguments>
-                        <argument name="header" xsi:type="string" translate="true">User description</argument>
+                        <argument name="header" xsi:type="string" translate="true">User Description</argument>
                         <argument name="index" xsi:type="string">description</argument>
                         <argument name="id" xsi:type="string">description</argument>
                         <argument name="renderer" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\Tab\Wishlist\Grid\Renderer\Description</argument>

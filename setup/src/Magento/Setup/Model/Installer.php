@@ -644,30 +644,32 @@ class Installer
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
     ) {
-        $table = $connection->newTable(
-            $setup->getTable('session')
-        )->addColumn(
-            'session_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            ['nullable' => false, 'primary' => true],
-            'Session Id'
-        )->addColumn(
-            'session_expires',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Date of Session Expiration'
-        )->addColumn(
-            'session_data',
-            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
-            '2M',
-            ['nullable' => false],
-            'Session Data'
-        )->setComment(
-            'Database Sessions Storage'
-        );
-        $connection->createTable($table);
+        if (!$connection->isTableExists($setup->getTable('session'))) {
+            $table = $connection->newTable(
+                $setup->getTable('session')
+            )->addColumn(
+                'session_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                255,
+                ['nullable' => false, 'primary' => true],
+                'Session Id'
+            )->addColumn(
+                'session_expires',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Date of Session Expiration'
+            )->addColumn(
+                'session_data',
+                \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+                '2M',
+                ['nullable' => false],
+                'Session Data'
+            )->setComment(
+                'Database Sessions Storage'
+            );
+            $connection->createTable($table);
+        }
     }
 
     /**
@@ -681,45 +683,47 @@ class Installer
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
     ) {
-        $table = $connection->newTable(
-            $setup->getTable('cache')
-        )->addColumn(
-            'id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            200,
-            ['nullable' => false, 'primary' => true],
-            'Cache Id'
-        )->addColumn(
-            'data',
-            \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
-            '2M',
-            [],
-            'Cache Data'
-        )->addColumn(
-            'create_time',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Cache Creation Time'
-        )->addColumn(
-            'update_time',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Time of Cache Updating'
-        )->addColumn(
-            'expire_time',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            [],
-            'Cache Expiration Time'
-        )->addIndex(
-            $setup->getIdxName('cache', ['expire_time']),
-            ['expire_time']
-        )->setComment(
-            'Caches'
-        );
-        $connection->createTable($table);
+        if (!$connection->isTableExists($setup->getTable('cache'))) {
+            $table = $connection->newTable(
+                $setup->getTable('cache')
+            )->addColumn(
+                'id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                200,
+                ['nullable' => false, 'primary' => true],
+                'Cache Id'
+            )->addColumn(
+                'data',
+                \Magento\Framework\DB\Ddl\Table::TYPE_BLOB,
+                '2M',
+                [],
+                'Cache Data'
+            )->addColumn(
+                'create_time',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                [],
+                'Cache Creation Time'
+            )->addColumn(
+                'update_time',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                [],
+                'Time of Cache Updating'
+            )->addColumn(
+                'expire_time',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                [],
+                'Cache Expiration Time'
+            )->addIndex(
+                $setup->getIdxName('cache', ['expire_time']),
+                ['expire_time']
+            )->setComment(
+                'Caches'
+            );
+            $connection->createTable($table);
+        }
     }
 
     /**
@@ -733,27 +737,29 @@ class Installer
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
     ) {
-        $table = $connection->newTable(
-            $setup->getTable('cache_tag')
-        )->addColumn(
-            'tag',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            100,
-            ['nullable' => false, 'primary' => true],
-            'Tag'
-        )->addColumn(
-            'cache_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            200,
-            ['nullable' => false, 'primary' => true],
-            'Cache Id'
-        )->addIndex(
-            $setup->getIdxName('cache_tag', ['cache_id']),
-            ['cache_id']
-        )->setComment(
-            'Tag Caches'
-        );
-        $connection->createTable($table);
+        if (!$connection->isTableExists($setup->getTable('cache_tag'))) {
+            $table = $connection->newTable(
+                $setup->getTable('cache_tag')
+            )->addColumn(
+                'tag',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                100,
+                ['nullable' => false, 'primary' => true],
+                'Tag'
+            )->addColumn(
+                'cache_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                200,
+                ['nullable' => false, 'primary' => true],
+                'Cache Id'
+            )->addIndex(
+                $setup->getIdxName('cache_tag', ['cache_id']),
+                ['cache_id']
+            )->setComment(
+                'Tag Caches'
+            );
+            $connection->createTable($table);
+        }
     }
 
     /**
@@ -767,45 +773,47 @@ class Installer
         SchemaSetupInterface $setup,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection
     ) {
-        $table = $connection->newTable(
-            $setup->getTable('flag')
-        )->addColumn(
-            'flag_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-            null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-            'Flag Id'
-        )->addColumn(
-            'flag_code',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
-            ['nullable' => false],
-            'Flag Code'
-        )->addColumn(
-            'state',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Flag State'
-        )->addColumn(
-            'flag_data',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            '64k',
-            [],
-            'Flag Data'
-        )->addColumn(
-            'last_update',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-            null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
-            'Date of Last Flag Update'
-        )->addIndex(
-            $setup->getIdxName('flag', ['last_update']),
-            ['last_update']
-        )->setComment(
-            'Flag'
-        );
-        $connection->createTable($table);
+        if (!$connection->isTableExists($setup->getTable('flag'))) {
+            $table = $connection->newTable(
+                $setup->getTable('flag')
+            )->addColumn(
+                'flag_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Flag Id'
+            )->addColumn(
+                'flag_code',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                255,
+                ['nullable' => false],
+                'Flag Code'
+            )->addColumn(
+                'state',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Flag State'
+            )->addColumn(
+                'flag_data',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                '64k',
+                [],
+                'Flag Data'
+            )->addColumn(
+                'last_update',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+                'Date of Last Flag Update'
+            )->addIndex(
+                $setup->getIdxName('flag', ['last_update']),
+                ['last_update']
+            )->setComment(
+                'Flag'
+            );
+            $connection->createTable($table);
+        }
     }
 
     /**

@@ -30,7 +30,7 @@ class Instructions extends \Magento\Payment\Block\Info
      */
     public function getInstructions()
     {
-        if (is_null($this->_instructions)) {
+        if ($this->_instructions === null) {
             $this->_instructions = $this->getInfo()->getAdditionalInformation(
                 'instructions'
             ) ?: $this->getMethod()->getConfigData('instructions');

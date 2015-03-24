@@ -147,9 +147,8 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($customerBeforeAuthUrl)
         );
-        $expectedCustomerBeforeAuthUrl = !is_null(
-            $customerBeforeAuthUrl
-        ) ? $customerBeforeAuthUrl : $customerBeforeAuthUrlDefault;
+        $expectedCustomerBeforeAuthUrl = $customerBeforeAuthUrl !== null
+        ? $customerBeforeAuthUrl : $customerBeforeAuthUrlDefault;
         if ($expectedCustomerBeforeAuthUrl) {
             $this->_customerSession->expects(
                 $this->once()

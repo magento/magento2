@@ -157,6 +157,7 @@ return [
     ['_parseDescription', 'Magento\Sales\Model\Order\Pdf\Items\AbstractItems'],
     ['_parsePackageTheme', 'Magento\Widget\Model\Widget\Instance'],
     ['_parseXmlTrackingResponse', 'Magento\Fedex\Model\Carrier'],
+    ['_parseXml', 'Magento\Fedex\Model\Carrier'],
     ['_prepareCondition', 'Magento\CatalogSearch\Model\Advanced'],
     ['_prepareConfigurableProductData', 'Magento\CatalogImportExport\Model\Export\Product'],
     ['_prepareConfigurableProductPrice', 'Magento\CatalogImportExport\Model\Export\Product'],
@@ -2148,4 +2149,5 @@ return [
     ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
+    ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
 ];

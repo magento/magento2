@@ -147,7 +147,7 @@ class Db extends \Magento\Framework\Data\Tree
      */
     public function load($parentNode = null, $recursionLevel = 100)
     {
-        if (is_null($parentNode)) {
+        if ($parentNode === null) {
             $this->_loadFullTree();
             return $this;
         } elseif ($parentNode instanceof Node) {
@@ -231,7 +231,7 @@ class Db extends \Magento\Framework\Data\Tree
         $data[$this->_parentField] = $parentNode->getId();
         $data[$this->_levelField] = $parentNode->getData($this->_levelField) + 1;
         // New node order
-        if (is_null($prevNode) || is_null($prevNode->getData($this->_orderField))) {
+        if ($prevNode === null || $prevNode->getData($this->_orderField) === null) {
             $data[$this->_orderField] = 1;
         } else {
             $data[$this->_orderField] = $prevNode->getData($this->_orderField) + 1;

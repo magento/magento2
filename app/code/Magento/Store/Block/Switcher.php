@@ -184,7 +184,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
      */
     public function isStoreInUrl()
     {
-        if (is_null($this->_storeInUrl)) {
+        if ($this->_storeInUrl === null) {
             $this->_storeInUrl = $this->_storeManager->getStore()->isUseStoreInUrl();
         }
         return $this->_storeInUrl;

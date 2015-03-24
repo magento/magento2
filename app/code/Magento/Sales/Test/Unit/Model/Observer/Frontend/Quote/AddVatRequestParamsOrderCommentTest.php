@@ -71,7 +71,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects($this->any())
             ->method('getShippingAddress')
             ->will($this->returnValue($orderAddressMock));
-        if (is_null($orderHistoryComment)) {
+        if ($orderHistoryComment === null) {
             $orderMock->expects($this->never())
                 ->method('addStatusHistoryComment');
         } else {

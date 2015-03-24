@@ -81,31 +81,24 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->ioObjectMock->expects($this->once())
-            ->method('makeGenerationDirectory')
-            ->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->once())
             ->method('makeResultFileDirectory')
             ->with(self::RESULT_CLASS_NAME)
             ->will($this->returnValue(true));
-        $this->ioObjectMock->expects($this->once())
-            ->method('fileExists')
-            ->with($resultFileName)
-            ->will($this->returnValue(false));
 
         //Mocking _generateCode call
         $this->classGenerator->expects($this->once())
             ->method('setName')
             ->with(self::RESULT_CLASS_NAME)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('addProperties')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('addMethods')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('setClassDocBlock')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('generate')
             ->will($this->returnValue($generatedCode));

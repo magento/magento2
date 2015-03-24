@@ -61,7 +61,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Shipping\Model\Shipping::composePackagesForCarrier
+     * @covers \Magento\Shipping\Model\Shipping::composePackagesForCarrier
      */
     public function testComposePackages()
     {
@@ -103,5 +103,16 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->carrier->proccessAdditionalValidation($request);
+    }
+
+    public function testParseXml()
+    {
+        $xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><GetResponse><value>42</value>></GetResponse>";
+        $simpleXmlElement = $this->carrier->parseXml($xmlString);
+        $this->assertEquals('GetResponse', $simpleXmlElement->getName());
+        $this->assertEquals(42, (int)$simpleXmlElement->value);
+        $this->assertInstanceOf('SimpleXMLElement', $simpleXmlElement);
+        $customSimpleXmlElement = $this->carrier->parseXml($xmlString, 'Magento\Shipping\Model\Simplexml\Element');
+        $this->assertInstanceOf('Magento\Shipping\Model\Simplexml\Element', $customSimpleXmlElement);
     }
 }

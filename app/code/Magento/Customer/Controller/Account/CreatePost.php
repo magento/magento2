@@ -169,7 +169,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
         foreach ($allowedAttributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $value = $this->getRequest()->getParam($attributeCode);
-            if (is_null($value)) {
+            if ($value === null) {
                 continue;
             }
             switch ($attributeCode) {
@@ -224,7 +224,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
 
         try {
             $address = $this->extractAddress();
-            $addresses = is_null($address) ? [] : [$address];
+            $addresses = $address === null ? [] : [$address];
 
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);
             $customer->setAddresses($addresses);

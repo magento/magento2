@@ -315,7 +315,7 @@ class File
      */
     public function getMediaBaseDirectory()
     {
-        if (is_null($this->_mediaBaseDirectory)) {
+        if ($this->_mediaBaseDirectory === null) {
             $this->_mediaBaseDirectory = $this->_storageHelper->getMediaBaseDir();
         }
         return $this->_mediaBaseDirectory;

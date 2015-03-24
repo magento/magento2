@@ -12,8 +12,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**  @var \Magento\Webapi\Model\Soap\Wsdl\Generator */
     protected $_wsdlGenerator;
 
-    /**  @var \Magento\Framework\Object */
-    protected $customAttributeMap;
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customAttributeTypeLocator = null;
 
     /**  @var \Magento\Webapi\Model\Soap\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $_soapConfigMock;
@@ -93,7 +95,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->customAttributeMap = $objectManager->getObject('Magento\Framework\Object');
+        $this->customAttributeTypeLocator = $objectManager
+            ->getObject('Magento\Eav\Model\EavCustomAttributeTypeLocator');
+
         $this->_wsdlGenerator = $objectManager->getObject(
             'Magento\Webapi\Model\Soap\Wsdl\Generator',
             [
@@ -102,7 +106,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->_cacheMock,
                 'typeProcessor' => $this->_typeProcessor,
                 'storeManagerMock' => $this->storeManagerMock,
-                'customAttributeMap' => $this->customAttributeMap
+                'customAttributeTypeLocator' => $this->customAttributeTypeLocator
             ]
         );
 
@@ -196,7 +200,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 $this->_cacheMock,
                 $this->_typeProcessor,
                 $this->storeManagerMock,
-                $this->customAttributeMap
+                $this->customAttributeTypeLocator
             ]
         )->getMock();
 

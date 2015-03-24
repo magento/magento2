@@ -84,7 +84,7 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     public function getCurrency()
     {
-        if (is_null($this->_currentCurrencyCode)) {
+        if ($this->_currentCurrencyCode === null) {
             if ($this->getRequest()->getParam('store')) {
                 $this->_currentCurrencyCode = $this->_storeManager->getStore(
                     $this->getRequest()->getParam('store')

@@ -247,7 +247,7 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $previouslyAppliedTaxes[$row['id']] = $row;
             }
 
-            if (!is_null($row['percent'])) {
+            if ($row['percent'] !== null) {
                 $row['percent'] = $row['percent'] ? $row['percent'] : 1;
                 $rate = $rate ? $rate : 1;
 
