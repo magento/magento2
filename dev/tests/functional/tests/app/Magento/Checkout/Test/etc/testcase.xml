@@ -20,4 +20,18 @@
         <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder"/>
         <step name="placeOrder" module="Magento_Checkout"/>
     </scenario>
+
+    <scenario name="OnePageCheckoutWithOnlineShippingMethodsTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Core" next="createProducts"/>
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart"/>
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax"/>
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="proceedToCheckout"/>
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer"/>
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod"/>
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillBillingInformation"/>
+        <step name="fillBillingInformation" module="Magento_Checkout" next="fillShippingMethod"/>
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod"/>
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder"/>
+        <step name="placeOrder" module="Magento_Checkout"/>
+    </scenario>
 </config>

@@ -80,21 +80,24 @@ class Curl extends AbstractCurl implements ConfigDataInterface
         $path = explode('/', $input['path']);
         foreach ($path as $position => $subPath) {
             if ($position === 0) {
-                $resultArray.= $subPath;
+                $resultArray .= $subPath;
                 continue;
             } elseif ($position === (count($path) - 1)) {
-                $resultArray.= '[fields]';
+                $resultArray .= '[fields]';
             } else {
-                $resultArray.= '[groups]';
+                $resultArray .= '[groups]';
             }
-            $resultArray.= '[' . $subPath .']';
+            $resultArray .= '[' . $subPath . ']';
         }
-        $resultArray.= '[value]';
+        $resultArray .= '[value]';
         if (is_array($input['value'])) {
-            $resultArray.= '[' . key($input['value']) . ']';
-            $resultArray.= '=' . current($input['value']);
+            $values = [];
+            foreach ($input['value'] as $key => $value) {
+                $values[] = $resultArray . "[$key]=$value";
+            }
+            $resultArray = implode('&', $values);
         } else {
-            $resultArray.= '=' . $input['value'];
+            $resultArray .= '=' . $input['value'];
         }
         return $resultArray;
     }

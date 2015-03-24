@@ -19,7 +19,7 @@
             <field path="carriers/ups/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_PASSWORD</field>
             <field path="carriers/ups/username" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_USERNAME</field>
             <field path="carriers/ups/mode_xml" scope="carriers" scope_id="1" label="Development" xsi:type="string">0</field>
-            <field path="carriers/ups/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Rate</field>
+            <field path="carriers/ups/gateway_xml_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Rate</field>
             <field path="carriers/ups/origin_shipment" scope="carriers" scope_id="1" label="" xsi:type="string">Shipments Originating in United States</field>
             <field path="carriers/ups/access_license_number" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_ACCESS_LICENSE_NUMBER</field>
             <field path="carriers/ups/negotiated_active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
