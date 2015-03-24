@@ -19,17 +19,17 @@
                     <dl class="items methods-payment">
                         <!-- ko foreach: getAvailablePaymentMethods() -->
                         <dt data-bind='attr: {class: "item-title " + $data.code}'>
-                            <!-- ko if: $parent.getAvailablePaymentMethodCount() == 1 -->
+                            <!-- ko if: $parent.getAvailablePaymentMethods().length == 1 -->
                             <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code}' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
                             <!-- /ko -->
-                            <!-- ko ifnot: $parent.getAvailablePaymentMethodCount() == 1 -->
+                            <!-- ko ifnot: $parent.getAvailablePaymentMethods().length == 1 -->
                             <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code, title: $data.title}' type="radio" name="payment[method]" class="radio" />
                             <!-- /ko -->
                             <label data-bind='attr: {for: "p_method_" + $data.code}, text: $data.title'></label>
                         </dt>
                         <dd data-bind='attr: {class: "item-content $data.code"}'><!-- TODO Additional payment content is inserted here --></dd>
                         <!-- /ko -->
-                        <!-- ko ifnot: getAvailablePaymentMethodCount() > 0 -->
+                        <!-- ko ifnot: getAvailablePaymentMethods().length > 0 -->
                         <dt class="item-title">No Payment Methods</dt>
                         <!-- /ko -->
                     </dl>

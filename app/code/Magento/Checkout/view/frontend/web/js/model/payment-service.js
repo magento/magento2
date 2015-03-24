@@ -8,23 +8,26 @@
 /*global alert*/
 define(
     [
-        'jquery',
+        'ko',
         '../model/quote',
-        'mage/url',
+        'mage/storage'
     ],
-    function($, quote, urlBuilder) {
+
+    function (ko, quote, storage) {
+        var availablePaymentMethods = ko.observableArray([]);
+        quote.getBillingAddress().subscribe(function () {
+            storage.get('rest/default/V1/carts/' + quote.getQuoteId() + '/payment-methods').
+                success(function (data) {
+                    availablePaymentMethods(data);
+                }).
+                error(function (data) {
+                    availablePaymentMethods([]);
+                }
+            )
+
+        });
         return {
-            getAvailablePaymentMethods: function(quote) {
-                var availablePaymentMethods = [];
-                $.ajax({
-                    type: "GET",
-                    dataType: 'json',
-                    url: urlBuilder.build('rest/default/V1/carts/' + quote.getQuoteId() + '/payment-methods'),
-                    async: false,
-                    success: function(data) {
-                        availablePaymentMethods = data;
-                    }
-                });
+            getAvailablePaymentMethods: function () {
                 return availablePaymentMethods;
             }
         }

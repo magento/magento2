@@ -11,19 +11,14 @@ define(
         'ko',
         'jquery',
         'mage/storage',
-        'Magento_Checkout/js/model/quote',
-        'mage/url'
+        'Magento_Checkout/js/model/quote'
     ],
-    function (ko, $, storage, quote, urlBuilder) {
+    function (ko, $, storage, quote) {
         var rates = ko.observableArray([]);
 
         quote.getShippingAddress().subscribe(function () {
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: urlBuilder.build('rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods'),
-                async: false,
-                success: function (data) {
+            storage.get('rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods', 'json').
+                success(function (data) {
                     var ratesData = [];
                     rates.removeAll();
                     $.each(data, function (key, entity) {
@@ -39,11 +34,13 @@ define(
                     for (var i in ratesData) {
                         rates.push(ratesData[i]);
                     }
-                },
-                error: function (data) {
+                }
+            ).
+                error(function (data) {
                     rates([]);
                 }
-            });
+            )
+
         });
         return {
             getRates: function () {
