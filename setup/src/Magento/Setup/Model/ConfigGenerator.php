@@ -57,28 +57,47 @@ class ConfigGenerator
     /**
      * Creates install segment config data
      *
+     * @param array $currentConfig
      * @return ConfigData
      */
-    public function createInstallConfig()
+    public function createInstallConfig(array $currentConfig)
     {
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', [InstallConfig::KEY_DATE => date('r')]);
+        $installConfig = [];
+        if (!isset($currentConfig['install']['date'])) {
+            $installConfig = [InstallConfig::KEY_DATE => date('r')];
+        }
+        return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', $installConfig);
     }
 
     /**
      * Creates encryption key config data
      * @param array $data
+     * @param array $currentData
      * @return ConfigData
      */
-    public function createCryptConfig(array $data)
+    public function createCryptConfig(array $data, array $currentData)
     {
-        $cryptData = [];
-        if (!isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
-                md5($this->random->getRandomString(10));
-        } else {
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
-                $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+        $currentKey = false;
+        if (isset($currentData['crypt'][ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
+            $currentKey = $currentData['crypt'][ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
         }
+
+        $cryptData = [];
+        if (isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
+            if ($currentKey) {
+                $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+            } else {
+                $key = $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+            }
+
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = $key;
+        } else {
+            if (!$currentKey) {
+                $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
+                    md5($this->random->getRandomString(10));
+            }
+        }
+
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
     }
 
@@ -112,10 +131,8 @@ class ConfigGenerator
         if (isset($data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
             $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
                 $data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE];
-        } else {
-            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
-                ConfigOptionsList::SESSION_SAVE_FILES;
         }
+
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
     }
 

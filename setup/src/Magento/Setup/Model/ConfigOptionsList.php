@@ -74,9 +74,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 'crypt/key',
                 'Encryption key'
-                // TODO: find right place for it
-                //md5($this->random->getRandomString(10))
-
             ),
             new SelectConfigOption(
                 self::INPUT_KEY_SESSION_SAVE,
@@ -150,8 +147,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function createConfig(array $data, array $currentConfig = [])
     {
         $configData = [];
-        $configData[] = $this->configGenerator->createInstallConfig();
-        $configData[] = $this->configGenerator->createCryptConfig($data);
+        $configData[] = $this->configGenerator->createInstallConfig($currentConfig);
+        $configData[] = $this->configGenerator->createCryptConfig($data, $currentConfig);
         $modulesConfig = $this->configGenerator->createModuleConfig();
         if (isset($modulesConfig)) {
             $configData[] = $modulesConfig;
