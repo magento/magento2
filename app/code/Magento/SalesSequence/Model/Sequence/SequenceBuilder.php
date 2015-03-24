@@ -14,14 +14,19 @@ use Magento\SalesSequence\Model\SequenceFactory;
 class SequenceBuilder
 {
     /**
+     * MySql maximal integer for sequences
+     */
+    const MYSQL_MAX_UNSIGNED_INT = 4294967295;
+
+    /**
+     * Sequence warning value
+     */
+    const SEQUENCE_UNSIGNED_INT_WARNING_VALUE = 4294966295;
+
+    /**
      * @var resourceMetadata
      */
     protected $resourceMetadata;
-
-    /**
-     * @var SequenceFactory
-     */
-    protected $sequenceFactory;
 
     /**
      * @var ProfileFactory
@@ -68,18 +73,15 @@ class SequenceBuilder
 
     /**
      * @param ResourceMetadata $resourceMetadata
-     * @param SequenceFactory $sequenceFactory
      * @param MetaFactory $metaFactory
      * @param ProfileFactory $profileFactory
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
-        SequenceFactory $sequenceFactory,
         MetaFactory $metaFactory,
         ProfileFactory $profileFactory
     ) {
         $this->resourceMetadata = $resourceMetadata;
-        $this->sequenceFactory = $sequenceFactory;
         $this->metaFactory = $metaFactory;
         $this->profileFactory = $profileFactory;
         $this->data = array_flip($this->pattern);

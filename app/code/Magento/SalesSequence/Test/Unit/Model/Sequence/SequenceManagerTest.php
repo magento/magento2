@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
 
 /**
- * Class SequenceReaderTest
+ * Class SequenceManagerTest
  */
-class SequenceReaderTest extends \PHPUnit_Framework_TestCase
+class SequenceManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\SalesSequence\Model\Resource\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
@@ -21,9 +21,9 @@ class SequenceReaderTest extends \PHPUnit_Framework_TestCase
     private $sequenceFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\SequenceReader
+     * @var \Magento\SalesSequence\Model\Sequence\SequenceManager
      */
-    private $sequenceReader;
+    private $sequenceManager;
 
     /**
      * @var \Magento\Store\Model\Store | \PHPUnit_Framework_MockObject_MockObject
@@ -62,7 +62,7 @@ class SequenceReaderTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceSequenceMeta = $this->getMock(
             'Magento\SalesSequence\Model\Resource\Sequence\Meta',
-            ['loadBy'],
+            ['loadByEntityTypeAndStore'],
             [],
             '',
             false
@@ -95,8 +95,8 @@ class SequenceReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->sequenceReader = $helper->getObject(
-            'Magento\SalesSequence\Model\Sequence\SequenceReader',
+        $this->sequenceManager = $helper->getObject(
+            'Magento\SalesSequence\Model\Sequence\SequenceManager',
             [
                 'resourceSequenceMeta' => $this->resourceSequenceMeta,
                 'sequenceFactory' => $this->sequenceFactory
@@ -109,15 +109,13 @@ class SequenceReaderTest extends \PHPUnit_Framework_TestCase
         $entityType = 'order';
         $storeId = 1;
         $this->order->expects($this->once())->method('getEntityType')->willReturn($entityType);
-        $this->order->expects($this->once())->method('getStore')->willReturn($this->store);
-        $this->store->expects($this->once())->method('getId')->willReturn($storeId);
         $this->resourceSequenceMeta->expects($this->once())
-            ->method('loadBy')
+            ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
             ->willReturn($this->meta);
         $this->sequenceFactory->expects($this->once())->method('create')->with([
             'meta' => $this->meta
         ])->willReturn($this->sequence);
-        $this->assertSame($this->sequence, $this->sequenceReader->getSequence($this->order));
+        $this->assertSame($this->sequence, $this->sequenceManager->getSequence($this->order, $storeId));
     }
 }

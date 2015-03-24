@@ -3,9 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model\Resource\Sequence;
 
 use Magento\Framework\App\Resource;
+use Magento\SalesSequence\Model\Resource\Sequence\Meta;
 
 /**
  * Class MetaTest
@@ -56,6 +57,11 @@ class MetaTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
      */
     private $select;
+
+    /**
+     * @var \Magento\Framework\DB\Ddl\Sequence | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $ddlSequence;
 
     /**
      * Initialization
@@ -114,6 +120,13 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->ddlSequence = $this->getMock(
+            'Magento\Framework\DB\Ddl\Sequence',
+            [],
+            [],
+            '',
+            false
+        );
         $this->profile = $this->getMock(
             'Magento\SalesSequence\Model\Sequence\Profile',
             [],
@@ -124,7 +137,8 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         $this->resource = new Meta(
             $this->dbContext,
             $this->metaFactory,
-            $this->resourceProfile
+            $this->resourceProfile,
+            $this->ddlSequence
         );
     }
 
@@ -160,7 +174,20 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->willReturn($metaId);
         $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
         $this->stepCheckSaveWithActiveProfile($metaData);
-        $this->assertEquals($this->meta, $this->resource->loadBy($entityType, $storeId));
+        $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
+    }
+
+    public function testCreateSequence()
+    {
+        $sequenceName = "sequence_order_777";
+        $startNumber = 1;
+        $sql = "some sql";
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->adapter);
+        $this->ddlSequence->expects($this->once())->method('getCreateSequenceDdl')->with($sequenceName, $startNumber)->willReturn($sql);
+        $this->adapter->expects($this->once())->method('query')->with($sql);
+        $this->resource->createSequence($sequenceName, $startNumber);
     }
 
     /**
@@ -177,6 +204,6 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         $this->adapter->expects($this->once())->method('fetchRow')->willReturn($metaData);
         $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
         $this->meta->expects($this->at(0))->method('setData')->with($metaData);
-        $this->meta->expects($this->at(1))->method('setData')->with('active_profile', $this->profile);
+        $this->meta->expects($this->at(2))->method('setData')->with('active_profile', $this->profile);
     }
 }

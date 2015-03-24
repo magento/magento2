@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
 
 /**
- * Class SequenceWriterTest
+ * Class SequenceBuilderTest
  */
-class SequenceWriterTest extends \PHPUnit_Framework_TestCase
+class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\SequenceWriter
+     * @var \Magento\SalesSequence\Model\Sequence\SequenceBuilder
      */
-    private $sequenceWriter;
+    private $sequenceBuilder;
 
     /**
      * @var \Magento\SalesSequence\Model\Resource\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
@@ -63,7 +63,7 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceSequenceMeta = $this->getMock(
             'Magento\SalesSequence\Model\Resource\Sequence\Meta',
-            ['loadBy', 'getReadConnection'],
+            ['loadByEntityTypeAndStore', 'save', 'createSequence'],
             [],
             '',
             false
@@ -106,13 +106,12 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->sequenceWriter = $helper->getObject(
-            'Magento\SalesSequence\Model\Sequence\SequenceWriter',
+        $this->sequenceBuilder = $helper->getObject(
+            'Magento\SalesSequence\Model\Sequence\SequenceBuilder',
             [
-                'resourceSequenceMeta' => $this->resourceSequenceMeta,
+                'resourceMetadata' => $this->resourceSequenceMeta,
                 'metaFactory' => $this->metaFactory,
-                'profileFactory' => $this->profileFactory,
-                'sequence'  => $this->sequence
+                'profileFactory' => $this->profileFactory
             ]
         );
     }
@@ -122,14 +121,22 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
         $entityType = 'lalalka';
         $storeId = 1;
         $this->resourceSequenceMeta->expects($this->once())
-            ->method('loadBy')
+            ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
             ->willReturn($this->meta);
         $this->meta->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $this->setExpectedException('Magento\Framework\Exception\AlreadyExistsException');
-        $this->sequenceWriter->addSequence($entityType, $storeId, 'PREF', 'SUFF', 1, 1, 9999999, 912992192);
+        $this->sequenceBuilder->setEntityType($entityType)
+            ->setStoreId($storeId)
+            ->setSuffix('SUFF')
+            ->setPrefix('PREF')
+            ->setStartValue(1)
+            ->setStep(1)
+            ->setWarningValue(9999999)
+            ->setMaxValue(912992192)
+            ->create();
     }
 
     public function testAddSequence()
@@ -145,54 +152,46 @@ class SequenceWriterTest extends \PHPUnit_Framework_TestCase
         $tableName = 'sequence_order_1';
         $sql = 'CREATE sequence_order_1 (sequence_value INTEGER AUTO_INCREMENT PRIMARY KEY)';
         $this->resourceSequenceMeta->expects($this->once())
-            ->method('loadBy')
+            ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
             ->willReturn($this->meta);
         $this->meta->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $this->meta->expects($this->at(1))
-            ->method('setData')
+        $this->profileFactory->expects($this->once())
+            ->method('create')
             ->with([
-                'entity_type' => $entityType,
-                'store_id' => $storeId,
-                'sequence_table' => sprintf('sequence_%s_%s', $entityType, $storeId)
-            ])
-            ->willReturn($this->meta);
-        $this->profile->expects($this->once())
-            ->method('setData')
+                'data' => [
+                    'prefix' => $prefix,
+                    'suffix' => $suffix,
+                    'start_value' => $startValue,
+                    'step' => $step,
+                    'max_value' => $maxValue,
+                    'warning_value' => $warningValue,
+                    'is_active' => 1
+                ]
+            ])->willReturn($this->profile);
+        $sequenceTable = sprintf('sequence_%s_%s', $entityType, $storeId);
+        $this->metaFactory->expects($this->once())
+            ->method('create')
             ->with([
-                'prefix' => $prefix,
-                'suffix' => $suffix,
-                'start_value' => $startValue,
-                'step' => $step,
-                'max_value' => $maxValue,
-                'warning_value' => $warningValue
-            ])
-            ->willReturn($this->profile);
-        $this->meta->expects($this->at(2))
-            ->method('setData')
-            ->with('active_profile', $this->profile)
-            ->willReturn($this->meta);
-        $this->meta->expects($this->once())->method('save')->willReturn($this->meta);
-        $this->meta->expects($this->once())->method('getSequenceTable')->willReturn($tableName);
-        $this->meta->expects($this->once())->method('getData')->with('active_profile')->willReturn($this->profile);
-        $this->profile->expects($this->once())->method('getStartValue')->willReturn($startValue);
-        $this->sequence->expects($this->once())
-            ->method('getCreateSequenceDdl')
-            ->with($tableName, $startValue)
-            ->willReturn($sql);
-        $this->resourceSequenceMeta->expects($this->once())->method('getReadConnection')->willReturn($this->adapter);
-        $this->adapter->expects($this->once())->method('query')->with($sql);
-        $this->sequenceWriter->addSequence(
-            $entityType,
-            $storeId,
-            $prefix,
-            $suffix,
-            $startValue,
-            $step,
-            $maxValue,
-            $warningValue
-        );
+                'data' => [
+                    'entity_type' => $entityType,
+                    'store_id' => $storeId,
+                    'sequence_table' => $sequenceTable,
+                    'active_profile' => $this->profile
+                ]
+            ])->willReturn($this->meta);
+        $this->resourceSequenceMeta->expects($this->once())->method('save')->willReturn($this->meta);
+        $this->resourceSequenceMeta->expects($this->once())->method('createSequence')->with($sequenceTable);
+        $this->sequenceBuilder->setEntityType($entityType)
+            ->setStoreId($storeId)
+            ->setPrefix($prefix)
+            ->setSuffix($suffix)
+            ->setStartValue($startValue)
+            ->setStep($step)
+            ->setMaxValue($maxValue)
+            ->setWarningValue($warningValue)
+            ->create();
     }
 }

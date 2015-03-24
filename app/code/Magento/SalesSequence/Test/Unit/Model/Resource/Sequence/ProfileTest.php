@@ -3,7 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model\Resource\Sequence;
+
+use Magento\SalesSequence\Model\Resource\Sequence\Profile;
 
 /**
  * Class ProfileTest
@@ -131,7 +133,6 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->willReturn($profileTableName);
         $this->adapter->expects($this->any())->method('select')->willReturn($this->select);
-        $this->meta->expects($this->once())->method('getId')->willReturn($metaId);
         $this->select->expects($this->at(0))
             ->method('from')
             ->with($profileTableName, [$profileIdFieldName])
@@ -156,6 +157,6 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ->method('quoteIdentifier');
         $this->adapter->expects($this->once())->method('fetchRow')->willReturn($profileData);
         $this->profile->expects($this->at(0))->method('setData')->with($profileData);
-        $this->assertEquals($this->profile, $this->resource->loadActiveProfile($this->meta));
+        $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }
 }
