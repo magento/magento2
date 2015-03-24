@@ -80,13 +80,17 @@ class Info extends AbstractModel implements InfoInterface
     public function getData($key = '', $index = null)
     {
         if ('cc_number' === $key) {
-            if (empty($this->_data['cc_number']) && !empty($this->_data['cc_number_enc'])) {
-                $this->_data['cc_number'] = $this->decrypt($this->getCcNumberEnc());
+            $ccNumber = parent::getData('cc_number');
+            $ccNumberEnc = parent::getData('cc_number_enc');
+            if (empty($ccNumber) && !empty($ccNumberEnc)) {
+                $this->setData('cc_number', $this->decrypt($ccNumberEnc));
             }
         }
         if ('cc_cid' === $key) {
-            if (empty($this->_data['cc_cid']) && !empty($this->_data['cc_cid_enc'])) {
-                $this->_data['cc_cid'] = $this->decrypt($this->getCcCidEnc());
+            $ccCid = parent::getData('cc_cid');
+            $ccCidEnc = parent::getData('cc_cid_enc');
+            if (empty($ccCid) && !empty($ccCidEnc)) {
+                $this->setData('cc_cid', $this->decrypt($ccCidEnc));
             }
         }
         return parent::getData($key, $index);
@@ -106,17 +110,14 @@ class Info extends AbstractModel implements InfoInterface
                     __('The payment method you requested is not available.')
                 );
             }
-
             try {
                 $instance = $this->_paymentData->getMethodInstance($this->getMethod());
             } catch (\UnexpectedValueException $e) {
                 $instance = $this->_paymentData->getMethodInstance(Substitution::CODE);
             }
-
             $instance->setInfoInstance($this);
             $this->setMethodInstance($instance);
         }
-
         return $this->getData('method_instance');
     }
 
@@ -219,7 +220,7 @@ class Info extends AbstractModel implements InfoInterface
      */
     protected function initAdditionalInformation()
     {
-        $additionalInfo = $this->_getData('additional_information');
+        $additionalInfo = $this->getData('additional_information');
         if (empty($this->_additionalInformation) && $additionalInfo) {
             if (!is_array($additionalInfo)) {
                 $additionalInfo = unserialize($additionalInfo);

@@ -256,6 +256,8 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Get object created at date affected with object store timezone
      *
+     * @param mixed $store
+     * @param string $createdAt
      * @return \DateTime
      */
     public function getCreatedAtStoreDate($store, $createdAt)
@@ -263,6 +265,12 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         return $this->_localeDate->scopeDate($store, $createdAt, true);
     }
 
+    /**
+     * Get object created at date
+     *
+     * @param string $createdAt
+     * @return \DateTime
+     */
     public function getOrderAdminDate($createdAt)
     {
         return $this->_localeDate->date(new \DateTime($createdAt));

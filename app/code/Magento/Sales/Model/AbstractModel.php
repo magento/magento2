@@ -203,4 +203,25 @@ abstract class AbstractModel extends AbstractExtensibleModel
     {
         return !empty($this->rawData);
     }
+
+    /**
+     * Wrapper for "has" attributes methods
+     *
+     * @param string $method
+     * @param array $args
+     * @return bool|mixed
+     * @throws \Magento\Framework\Exception
+     */
+    public function __call($method, $args)
+    {
+        switch (substr($method, 0, 3)) {
+            case 'has':
+                $key = $this->_underscore(substr($method, 3));
+                return ((isset($this->_data[$key]) || isset($this->rawData[$key]))
+                    && !(isset($this->rawData[$key]) && $this->rawData[$key] === null)
+                );
+            default:
+                return parent::__call($method, $args);
+        }
+    }
 }
