@@ -34,10 +34,10 @@ define([
 
     return Tab.extend({
         defaults: {
-            template:           'ui/form/components/collection/item',
-            label:              '',
-            uniqueNs:           'activeCollectionItem',
-            previewTpl:         'ui/form/components/collection/preview'
+            template: 'ui/form/components/collection/item',
+            label: '',
+            uniqueNs: 'activeCollectionItem',
+            previewTpl: 'ui/form/components/collection/preview'
         },
 
         /**
@@ -76,7 +76,7 @@ define([
 
             this.observe({
                 'noPreview': true,
-                'indexed':   {}
+                'indexed': {}
             });
 
             return this;
@@ -130,7 +130,7 @@ define([
          */
         buildPreview: function (data) {
             var preview = this.getPreview(data.items),
-                prefix  = data.prefix;
+                prefix = data.prefix;
 
             return prefix + preview.join(data.separator);
         },
@@ -153,15 +153,17 @@ define([
          * @returns {Array} An array of previews.
          */
         getPreview: function (items) {
-            var elems       = this.indexed(),
-                displayed   = this.displayed,
+            var elems = this.indexed(),
+                displayed = this.displayed,
                 preview;
 
             items = items.map(function (index) {
                 var elem = elems[index];
 
-                preview = elem ? elem.delegate('getPreview') : [];
-                preview = _.compact(preview).join(', ');
+                preview = elem ? elem.delegate('getPreview') : '';
+                preview = Array.isArray(preview) ?
+                    _.compact(preview).join(', ') :
+                    preview;
 
                 utils.toggle(displayed, index, !!preview);
 

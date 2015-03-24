@@ -116,7 +116,7 @@ define([
             node = this.build.apply(this, arguments);
 
             if (node) {
-                this.addChild(parent, node.name)
+                this.addChild(parent, node)
                     .manipulate(node)
                     .initComponent(node)
                     .run(node.children, node);
@@ -230,8 +230,14 @@ define([
         },
 
         addChild: function (parent, child) {
+            var name,
+                position;
+
             if (parent && parent.component) {
-                this.insert(child, parent.name);
+                name = child.name || child;
+                position = child.sortOrder;
+
+                this.insert(name, parent.name, position);
             }
 
             return this;

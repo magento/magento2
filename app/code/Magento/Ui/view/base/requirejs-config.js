@@ -10,7 +10,8 @@ var config = {
     },
     map: {
         '*': {
-            uiComponent: 'Magento_Ui/js/lib/component/main'
+            uiComponent: 'Magento_Ui/js/lib/component/main',
+            uiRegistry: 'Magento_Ui/js/lib/registry/registry'
         }
     }
 };

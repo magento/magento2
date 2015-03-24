@@ -40,6 +40,11 @@ define([
     }
 
     return {
+        defaults: {
+            parentName: '<%= $data.getPart(name, -2) %>',
+            parentScope: '<%= $data.getPart(dataScope, -2) %>'
+        },
+
         initialize: function (options, additional) {
             _.bindAll(this, '_insert');
 
@@ -71,8 +76,6 @@ define([
          */
         initProperties: function () {
             _.extend(this, {
-                'parentName': this.getPart(this.name, -2),
-                'parentScope': this.getPart(this.dataScope, -2),
                 'source': registry.get(this.provider),
                 'renderer': registry.get('globalStorage').renderer,
                 'containers': [],

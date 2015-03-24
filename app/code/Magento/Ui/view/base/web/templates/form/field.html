@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" data-bind="css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
+<div class="admin__field" data-bind="visible: !hidden(), css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
 
     <!-- ko if: element.label -->
     <label class="admin__field-label" data-bind="attr: { for: element.uid }">
@@ -39,8 +39,9 @@
             <div class="admin__field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="text: element.notice"></span></div>
         <!-- /ko -->
 
-        <!-- ko if: element.error() && !element.hidden() -->
+        <!-- ko if: element.error() -->
             <label class="admin__field-error" data-bind="attr: { for: element.uid }, text: element.error"></label>
         <!-- /ko -->
     </div>
 </div>
+<!-- /ko -->

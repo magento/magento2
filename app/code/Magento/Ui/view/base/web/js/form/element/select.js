@@ -5,28 +5,23 @@
 define([
     'underscore',
     'mageUtils',
+    'uiRegistry',
     './abstract'
-], function (_, utils, Abstract) {
+], function (_, utils, registry, Abstract) {
     'use strict';
 
     var inputNode = {
-        name: '{index}_input',
-        type: 'input',
-        parent: '{parentName}',
-        dataScope: '{customEntry}',
+        name: '<%= $data.index %>_input',
+        type: 'form.input',
+        parent: '<%= $data.parentName %>',
+        dataScope: '<%= $data.customEntry %>',
+        sortOrder: {
+            after: '<%= $data.name %>'
+        },
         config: {
-            hidden: true,
-            label: '{label}',
-            listeners: {
-                "params:{parentName}.{index}.hidden": {
-                    "hide": {
-                        "conditions": false
-                    },
-                    "show": {
-                        "conditions": true
-                    }
-                }
-            }
+            displayArea: 'body',
+            hidden: false,
+            label: '<%= $data.label %>'
         }
     };
 
@@ -81,7 +76,29 @@ define([
         return value;
     }
 
+    function indexOptions(data, result) {
+        var value;
+
+        result = result || {};
+
+        data.forEach(function (item) {
+            value = item.value;
+
+            if (Array.isArray(value)) {
+                indexOptions(value, result);
+            } else {
+                result[value] = item;
+            }
+        });
+
+        return result;
+    }
+
     return Abstract.extend({
+        defaults: {
+            customName: '<%= parentName %>.<%= index %>_input'
+        },
+
         /**
          * Extends instance with defaults, extends config with formatted values
          *     and options, and invokes initialize method of AbstractElement class.
@@ -92,6 +109,10 @@ define([
 
             if (this.customEntry) {
                 this.initInput();
+            }
+
+            if (this.filterBy) {
+                this.initFilter();
             }
 
             return this;
@@ -134,6 +155,16 @@ define([
             return this;
         },
 
+        initFilter: function () {
+            var filter = this.filterBy;
+
+            this.setLinks({
+                filter: filter.target
+            }, 'imports');
+
+            return this;
+        },
+
         /**
          * Creates input from template, renders it via renderer.
          *
@@ -141,7 +172,7 @@ define([
          */
         initInput: function () {
             this.renderer.render({
-                layout: [
+                components: [
                     utils.template(inputNode, this)
                 ]
             });
@@ -171,18 +202,26 @@ define([
          * Filters 'initialOptions' property by 'field' and 'value' passed,
          * calls 'setOptions' passing the result to it
          *
-         * @param {String} field
          * @param {*} value
+         * @param {String} field
          */
-        filter: function (field, value) {
+        filter: function (value, field) {
             var source = this.initialOptions,
                 result;
+
+            field = field || this.filterBy.field;
 
             result = _.filter(source, function (item) {
                 return item[field] === value;
             });
 
             this.setOptions(result);
+        },
+
+        toggleInput: function (isHidden) {
+            registry.get(this.customName, function (input) {
+                input.setHidden(isHidden);
+            });
         },
 
         /**
@@ -194,12 +233,17 @@ define([
          * @returns {Select} Chainable.
          */
         setOptions: function (data) {
-            this.indexedOptions = _.indexBy(data, 'value');
+            var visibility;
+
+            this.indexedOptions = indexOptions(data);
 
             this.options(data);
 
             if (this.customEntry) {
-                this.setHidden(!data.length);
+                visibility = !!data.length;
+
+                this.setHidden(!visibility);
+                this.toggleInput(visibility);
             }
 
             return this;
