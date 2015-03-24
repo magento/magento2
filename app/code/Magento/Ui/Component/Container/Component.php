@@ -43,6 +43,7 @@ class Component extends Template implements ContainerInterface
     ) {
         $this->component = $component;
         $this->containerFactory = $containerFactory;
+        $this->setNameInLayout($this->component->getName());
         parent::__construct($context, $data);
     }
 

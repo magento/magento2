@@ -5,7 +5,9 @@
  */
 namespace Magento\Ui\Component\Layout;
 
+use Magento\Framework\Exception;
 use Magento\Framework\View\Element\Template;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
@@ -40,11 +42,6 @@ class TabsEx extends Generic implements LayoutInterface
      * @var int
      */
     protected $sortIncrement = 10;
-
-    /**
-     * @var array
-     */
-    protected $meta = [];
 
     /**
      * @var UiComponentFactory
@@ -83,6 +80,11 @@ class TabsEx extends Generic implements LayoutInterface
         return parent::build($component);
     }
 
+    protected function prepareChildCollectionComponents()
+    {
+
+    }
+
     /**
      * Add children data
      *
@@ -90,15 +92,19 @@ class TabsEx extends Generic implements LayoutInterface
      * @param UiComponentInterface $component
      * @param string $componentType
      * @return void
+     * @throws Exception
      */
     protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
     {
         $childrenAreas = [];
+        $collectedComponents = [];
+
         foreach ($component->getContext()->getDataProvider()->getMeta() as $name => $meta) {
             $childComponent = $component->getComponent($name);
             if (null === $childComponent) {
                 continue;
             }
+            $collectedComponents[$childComponent->getName()] = true;
 
             if (isset($meta['is_collection']) && $meta['is_collection'] === true) {
                 $label = $childComponent->getData('config/label');
@@ -149,17 +155,9 @@ class TabsEx extends Generic implements LayoutInterface
                  */
                 list($childComponent, $structure) = $this->prepareChildComponents($childComponent, $name);
             }
-            $tabComponent = $this->uiComponentFactory->create(
-                $name,
-                'tab',
-                [
-                    'context' => $component->getContext(),
-                    'components' => [$childComponent->getName() => $childComponent]
-                ]
-            );
-            $tabComponent->prepare();
 
-            $component->addComponent($name, $tabComponent);
+            $tabComponent = $this->createTabComponent($childComponent, $name);
+
             $childrenAreas[$name] = [
                 'type' => $tabComponent->getComponentName(),
                 'dataScope' => $name,
@@ -173,8 +171,84 @@ class TabsEx extends Generic implements LayoutInterface
             ];
         }
 
+        /** @var \Magento\Ui\Component\Container\Block $childComponent */
+        foreach ($component->getChildComponents() as $name => $childComponent) {
+            /** @var TabInterface $block */
+            $block = $childComponent->getBlock();
+            if (isset($collectedComponents[$name])
+                || !($block instanceof TabInterface)
+                || !$block->canShowTab()
+            ) {
+                continue;
+            }
+            $block->setData('target_form', $this->namespace);
+            $sortOrder = $block->hasSortOrder()
+                ? $block->getSortOrder()
+                : $this->getNextSortIncrement();
+
+            $config = [];
+            if ($block->isAjaxLoaded()) {
+                $config['url'] = $block->getTabUrl();
+            } else {
+                $config['content'] = $block->toHtml();
+            }
+
+            $tabComponent = $this->createTabComponent($childComponent, $name);
+            $childrenAreas[$name] = [
+                'type' => $tabComponent->getComponentName(),
+                'dataScope' => $name,
+                'insertTo' => [
+                    $this->namespace . '.sections' => [
+                        'position' => $this->getNextSortIncrement()
+                    ]
+                ],
+                'config' => [
+                    'label' => $block->getTabTitle()
+                ],
+                'children' => [
+                    $name => [
+                        'type' => 'html_content',
+                        'dataScope' => $name,
+                        'config' => $config,
+                    ]
+                ],
+            ];
+        }
+
+        $this->component->getContext()->addComponentDefinition(
+            'html_content',
+            [
+                'component' => 'Magento_Ui/js/form/components/html',
+                'extends' => $this->namespace
+            ]
+        );
+
         $this->structure[static::AREAS_KEY]['children'] = $childrenAreas;
         $topNode = $this->structure;
+    }
+
+    /**
+     * Create tab component
+     *
+     * @param UiComponentInterface $childComponent
+     * @param string $name
+     * @return UiComponentInterface
+     * @throws Exception
+     */
+    protected function createTabComponent(UiComponentInterface $childComponent, $name)
+    {
+        $tabComponent = $this->uiComponentFactory->create(
+            $name,
+            'tab',
+            [
+                'context' => $this->component->getContext(),
+                'components' => [$childComponent->getName() => $childComponent]
+            ]
+        );
+        $tabComponent->prepare();
+        $this->component->addComponent($name, $tabComponent);
+
+        return $tabComponent;
     }
 
     /**
@@ -188,7 +262,6 @@ class TabsEx extends Generic implements LayoutInterface
     {
         $name = $component->getName();
         $childComponents = $component->getChildComponents();
-        uasort($childComponents, [$this, 'sortChildren']);
 
         $childrenStructure = [];
         foreach ($childComponents as $childName => $child) {
@@ -214,17 +287,36 @@ class TabsEx extends Generic implements LayoutInterface
         ];
 
         /** @var JsConfigInterface $component */
-        $config = (array) $component->getJsConfig();
-        if (isset($config['dataScope'])) {
-            $structure[$name]['dataScope'] = $config['dataScope'];
-            unset($config['dataScope']);
-        } else if ($name !== $parentName) {
-            $structure[$name]['dataScope'] = $name;
-        }
+        list($config, $dataScope) = $this->prepareConfig((array) $component->getJsConfig(), $name, $parentName);
 
+        $structure[$name]['dataScope'] = $dataScope;
         $structure[$name]['config'] = $config;
 
         return [$component, $structure];
+    }
+
+    /**
+     * Prepare config
+     *
+     * @param array $config
+     * @param string $name
+     * @param string $parentName
+     * @return array
+     */
+    protected function prepareConfig(array $config, $name, $parentName)
+    {
+        $dataScope = '';
+        if (!isset($config['displayArea'])) {
+            $config['displayArea'] = 'body';
+        }
+        if (isset($config['dataScope'])) {
+            $dataScope = $config['dataScope'];
+            unset($config['dataScope']);
+        } else if ($name !== $parentName) {
+            $dataScope = $name;
+        }
+
+        return [$config, $dataScope];
     }
 
     /**
@@ -312,12 +404,14 @@ class TabsEx extends Generic implements LayoutInterface
      */
     public function sortChildren(UiComponentInterface $one, UiComponentInterface $two)
     {
-        if (!$one->getData('config/sortOrder')) {
+        $oneSortOrder = $one->getData('config/sortOrder');
+        $twoSortOrder = $two->getData('config/sortOrder');
+        if ($oneSortOrder === null) {
             return 1;
         }
-        if (!$two->getData('config/sortOrder')) {
+        if ($twoSortOrder === null) {
             return -1;
         }
-        return intval($one->getData('config/sortOrder')) - intval($two->getData('config/sortOrder'));
+        return intval($oneSortOrder) - intval($twoSortOrder);
     }
 }

@@ -40,6 +40,16 @@ class Block extends AbstractComponent
     }
 
     /**
+     * Get wrapped block
+     *
+     * @return BlockInterface
+     */
+    public function getBlock()
+    {
+        return $this->block;
+    }
+
+    /**
      * Get component name
      *
      * @return string
