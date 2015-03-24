@@ -6,49 +6,55 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(["jquery", 'mage/storage', '../model/quote', 'mage/url'], function($, storage, quote, urlBuilder) {
-    return {
-        getAvailableShippingMethods: function(quote) {
-            var availableShipmentMethods = [];
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: urlBuilder.build('rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods'),
-                async: false,
-                success: function(data) {
-                    availableShipmentMethods = data;
-                },
-                error: function(data) {
-                    availableShipmentMethods = [];
+define(["ko", "jquery", 'mage/storage', 'Magento_Checkout/js/model/quote', 'mage/url'], function(ko, $, storage, quote, urlBuilder) {
+    var rates = ko.observableArray([]);
+    var shippingCodePrice = ko.observable('');
+    var selectedShippingMethod =  ko.observableArray(false);
+
+    quote.getShippingAddress().subscribe(function () {
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            url: urlBuilder.build('rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods'),
+            async: false,
+            success: function(data) {
+                var ratesData = [];
+                var prices = [];
+                rates.removeAll();
+                $.each(data, function(key, entity){
+                    if(!ratesData.hasOwnProperty(entity.carrier_code)){
+                        ratesData[entity.carrier_code] = [];
+                        ratesData[entity.carrier_code]['items'] = [];
+                        ratesData[entity.carrier_code]['carrier_code'] = [];
+                        ratesData[entity.carrier_code]['carrier_code'] = entity.carrier_code;
+                        ratesData[entity.carrier_code]['carrier_title'] = [];
+                        ratesData[entity.carrier_code]['carrier_title'] = entity.carrier_title;
+                    }
+                    ratesData[entity.carrier_code]['items'].push(entity);
+                    prices.push('"' + entity.method_code + '":' + entity.amount);
+
+                });
+                for (var i in ratesData){
+                    rates.push(ratesData[i]);
                 }
-            });
-            //sort by carrier_code
-            return availableShipmentMethods;
+                shippingCodePrice(prices.toString());
+            },
+            error: function(data) {
+                rates([]);
+            }
+        });
+    });
+    return {
+        getRates: function() {
+            return rates;
+        },
+        getShippingPrices: function() {
+
+            return shippingCodePrice;
         },
 
-        sortRates: function(data) {
-            var rates = [];
-            var filteredRates = [];
-            $.each(data, function(key, entity){
-                if(!rates.hasOwnProperty(entity.carrier_code)){
-                    rates[entity.carrier_code] = [];
-                    rates[entity.carrier_code]['items'] = [];
-                    rates[entity.carrier_code]['carrier_code'] = [];
-                    rates[entity.carrier_code]['carrier_code'] = entity.carrier_code;
-                    rates[entity.carrier_code]['carrier_title'] = [];
-                    rates[entity.carrier_code]['carrier_title'] = entity.carrier_title;
-                }
-                rates[entity.carrier_code]['items'].push(entity);
-            });
-            for (var i in rates)
-            {
-                filteredRates.push(rates[i]);
-            }
-            return filteredRates;
-        },
         getSelectedShippingMethod: function(quote) {
             var selectedShipmentMethod = [];
-            var methodCode = null;
             $.ajax({
                 type: "GET",
                 dataType: 'json',
@@ -56,21 +62,16 @@ define(["jquery", 'mage/storage', '../model/quote', 'mage/url'], function($, sto
                 async: false,
                 success: function(data) {
                     selectedShipmentMethod = data;
+                },
+                error: function(data) {
+                    selectedShipmentMethod = [];
                 }
             });
             if (selectedShipmentMethod.hasOwnProperty('method_code')) {
-                methodCode = selectedShipmentMethod.method_code;
+                selectedShippingMethod(selectedShipmentMethod.method_code);
             }
-            return methodCode;
-        },
-        getShippingCodePrice: function(data) {
-            var shippingCodePrice = [];
-            $.each(data, function(key, entity){
-                var priceString = '"' + entity.method_code + '":' + entity.amount;
-                shippingCodePrice.push(priceString);
-            });
-
-            return shippingCodePrice.toString();
+            return selectedShippingMethod;
         }
+
     }
 });

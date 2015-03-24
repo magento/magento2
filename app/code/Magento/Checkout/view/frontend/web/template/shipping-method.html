@@ -8,11 +8,11 @@
          data-role="content"
          role="tabpanel"
          aria-hidden="false"
-         data-bind="fadeVisible: isVisible() && isLoggedIn() && quoteHasShippingAddress()">
-        <!-- ko if: isShippingRateGroupsAvailable() -->
+         data-bind="fadeVisible: isVisible() && quoteHasShippingAddress()">
+        <!-- ko if: rates().length == 0 -->
         Sorry, no quotes are available for this order at this time
         <!-- /ko -->
-        <!-- ko ifnot: isShippingRateGroupsAvailable() -->
+        <!-- ko if: rates().length  -->
         <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingMethod" novalidate="novalidate">
             <div id="checkout-shipping-method-load">
                 <dl class="items methods-shipping">
@@ -63,7 +63,7 @@
 
                     <!-- /ko -->
                 </dl>
-                <div class="no-display" data-bind="attr: {'data-shipping-code-price': shippingCodePrice()}"></div>
+                <div class="no-display" data-bind="attr: {'data-shipping-code-price': shippingCodePrice}"></div>
                 <!--todo add gift message block-->
                 <fieldset class="fieldset gift-message"></fieldset>
             </div>

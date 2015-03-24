@@ -15,7 +15,7 @@ define(
     ],
     function($, ko, storage, navigator) {
         var billingAddress,
-            shippingAddress,
+            shippingAddress = ko.observable(null),
             shippingMethod,
             paymentMethod;
 
@@ -45,8 +45,8 @@ define(
                 return quoteHasBillingAddress;
             },
             setShippingAddress: function (address) {
-                shippingAddress = address;
-                quoteHasShippingAddress((shippingAddress != null));
+                shippingAddress(address);
+                quoteHasShippingAddress((shippingAddress() != null));
                 navigator.setStepVisible('shippingAddress', false);
                 navigator.setStepVisible('shippingMethod', true);
             },

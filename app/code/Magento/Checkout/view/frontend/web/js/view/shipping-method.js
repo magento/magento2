@@ -18,24 +18,16 @@ define(
         'Magento_Checkout/js/model/step-navigator'
     ],
     function ($, Component, quote, shippingService, selectShippingMethod, customer, priceUtils, navigator) {
-        var loadedRates = shippingService.getAvailableShippingMethods(quote);
 
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-method',
                 isLoggedIn: customer.isLoggedIn(),
                 quoteHasShippingAddress: quote.hasShippingAddress(),
-
-                rates: function () {
-                    return shippingService.sortRates(loadedRates)
-                },
-
-                isShippingRateGroupsAvailable: function () {
-                    return loadedRates.length == 0
-                },
+                rates: shippingService.getRates(),
 
                 getRatesQty: function (data) {
-                    return data.length && loadedRates.length == 1;
+                    return data.length && this.rates().length == 1;
                 },
 
                 selectedMethodCode: shippingService.getSelectedShippingMethod(quote),
@@ -43,10 +35,7 @@ define(
                 verifySelectedMethodCode: function (data) {
                     return this.selectedMethodCode == data;
                 },
-                shippingCodePrice: function () {
-
-                    return shippingService.getShippingCodePrice(loadedRates);
-                },
+                shippingCodePrice: shippingService.getShippingPrices(),
                 isErrorMessagePresent: function (data) {
                     return !data.available;
                 },
@@ -59,13 +48,13 @@ define(
                     selectShippingMethod(shippingMethodCode);
                 },
 
-                getFormatedPrice: function(price) {
+                getFormatedPrice: function (price) {
                     //todo add format data
                     return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
                 },
                 isVisible: navigator.isShippingMethodVisible(),
                 // Checkout step navigation
-                backToShippingAddress: function() {
+                backToShippingAddress: function () {
                     navigator.toStep('shippingAddress');
                 }
             }
