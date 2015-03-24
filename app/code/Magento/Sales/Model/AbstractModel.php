@@ -75,8 +75,9 @@ abstract class AbstractModel extends AbstractExtensibleModel
     /**
      * Set data by key
      *
-     * @param $key
-     * @param $value
+     * @param mixed $key
+     * @param mixed $value
+     * @return void
      */
     protected function _setDataByKey($key, $value)
     {
@@ -184,6 +185,8 @@ abstract class AbstractModel extends AbstractExtensibleModel
 
     /**
      * Push data from wrapper source in original model
+     *
+     * @return void
      */
     public function flushDataIntoModel()
     {

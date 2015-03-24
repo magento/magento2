@@ -7,8 +7,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Model\Order\Address;
+
 /**
  * Order history block
  * Class Info

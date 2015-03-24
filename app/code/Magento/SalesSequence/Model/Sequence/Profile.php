@@ -13,7 +13,7 @@ use Magento\Sales\Model\AbstractModel;
 class Profile extends AbstractModel
 {
     /**
-     * Initialization
+     * @inheritdoc
      */
     protected function _construct()
     {

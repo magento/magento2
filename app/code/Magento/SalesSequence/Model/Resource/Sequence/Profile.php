@@ -53,7 +53,7 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load active profile
      *
-     * @param $metadataId
+     * @param int $metadataId
      * @return \Magento\SalesSequence\Model\Sequence\Profile
      * @throws \Magento\Framework\Exception\LocalizedException
      */

@@ -13,7 +13,7 @@ use Magento\Sales\Model\AbstractModel;
 class Meta extends AbstractModel
 {
     /**
-     * Initialization
+     * @inheritdoc
      */
     protected function _construct()
     {
