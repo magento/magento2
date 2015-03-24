@@ -16,6 +16,10 @@ define(['jquery'], function($) {
             $(document).bind('ajaxComplete', function() {
                 $('#checkout').trigger("processStop");
             });
+
+            $(document).bind('ajaxError', function() {
+                $('#checkout').trigger("processStop");
+            });
         }
     };
 });
