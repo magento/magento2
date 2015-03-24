@@ -7,13 +7,14 @@
 namespace Magento\Sales\Model\Order\Payment;
 
 use Magento\Sales\Model\AbstractModel;
+use Magento\Payment\Model\Method\Substitution;
+use Magento\Payment\Model\InfoInterface;
 
 /**
- * TODO: Refactor to avoid code duplication with \Magento\Payment\Model\Info
  *
  * Payment information model
  */
-class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
+class Info extends AbstractModel implements InfoInterface
 {
     /**
      * Additional information container
@@ -109,7 +110,7 @@ class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
             try {
                 $instance = $this->_paymentData->getMethodInstance($this->getMethod());
             } catch (\UnexpectedValueException $e) {
-                $instance = $this->_paymentData->getMethodInstance(Method\Substitution::CODE);
+                $instance = $this->_paymentData->getMethodInstance(Substitution::CODE);
             }
 
             $instance->setInfoInstance($this);
@@ -156,7 +157,7 @@ class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
         if (is_object($value)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The payment disallows storing objects.'));
         }
-        $this->_initAdditionalInformation();
+        $this->initAdditionalInformation();
         if (is_array($key) && is_null($value)) {
             $this->_additionalInformation = $key;
         } else {
@@ -173,7 +174,7 @@ class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
      */
     public function getAdditionalInformation($key = null)
     {
-        $this->_initAdditionalInformation();
+        $this->initAdditionalInformation();
         if (null === $key) {
             return $this->_additionalInformation;
         }
@@ -204,7 +205,7 @@ class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
      */
     public function hasAdditionalInformation($key = null)
     {
-        $this->_initAdditionalInformation();
+        $this->initAdditionalInformation();
         return null === $key ? !empty($this->_additionalInformation) : array_key_exists(
             $key,
             $this->_additionalInformation
@@ -216,7 +217,7 @@ class Info extends AbstractModel implements \Magento\Payment\Model\InfoInterface
      *
      * @return void
      */
-    protected function _initAdditionalInformation()
+    protected function initAdditionalInformation()
     {
         $additionalInfo = $this->_getData('additional_information');
         if (empty($this->_additionalInformation) && $additionalInfo) {

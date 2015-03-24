@@ -157,7 +157,7 @@ $orderStoreDate = $block->formatDate(
                 <div class="actions"><?php echo $block->getAddressEditLink($_order->getBillingAddress()); ?></div>
                 <span class="title"><?php echo __('Billing Address') ?></span>
             </div>
-            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+            <address><?php echo $block->getFormattedAddress($_order->getBillingAddress()); ?></address>
         </div>
     </div>
 
@@ -169,7 +169,7 @@ $orderStoreDate = $block->formatDate(
                 <div class="actions"><?php echo $block->getAddressEditLink($_order->getShippingAddress()); ?></div>
                 <span class="title"><?php echo __('Shipping Address') ?></span>
             </div>
-            <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+            <address><?php echo $block->getFormattedAddress($_order->getShippingAddress()); ?></address>
         </div>
     </div>
 </div>

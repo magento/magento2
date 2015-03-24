@@ -111,17 +111,22 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     protected $inlineTranslation;
 
     /**
+     * @var \Magento\Sales\Model\Order\Address\Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Config $pdfConfig
-     * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
-     * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
+     * @param Total\Factory $pdfTotalFactory
+     * @param ItemsFactory $pdfItemsFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -134,8 +139,10 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = []
     ) {
+        $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
         $this->_localeDate = $localeDate;
         $this->string = $string;
@@ -414,7 +421,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         /* Calculate blocks info */
 
         /* Billing Address */
-        $billingAddress = $this->_formatAddress($order->getBillingAddress()->format('pdf'));
+        $billingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'pdf');
 
         /* Payment */
         $paymentInfo = $this->_paymentData->getInfoBlock($order->getPayment())->setIsSecureMode(true)->toPdf();
@@ -430,7 +437,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         /* Shipping Address and Method */
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
-            $shippingAddress = $this->_formatAddress($order->getShippingAddress()->format('pdf'));
+            $shippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'pdf');
             $shippingMethod = $order->getShippingDescription();
         }
 
