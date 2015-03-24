@@ -62,7 +62,7 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
         );
         $this->resourceSequenceMeta = $this->getMock(
             'Magento\SalesSequence\Model\Resource\Sequence\Meta',
-            ['loadBy'],
+            ['loadByEntityTypeAndStore'],
             [],
             '',
             false
@@ -109,15 +109,13 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
         $entityType = 'order';
         $storeId = 1;
         $this->order->expects($this->once())->method('getEntityType')->willReturn($entityType);
-        $this->order->expects($this->once())->method('getStore')->willReturn($this->store);
-        $this->store->expects($this->once())->method('getId')->willReturn($storeId);
         $this->resourceSequenceMeta->expects($this->once())
-            ->method('loadBy')
+            ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
             ->willReturn($this->meta);
         $this->sequenceFactory->expects($this->once())->method('create')->with([
             'meta' => $this->meta
         ])->willReturn($this->sequence);
-        $this->assertSame($this->sequence, $this->sequenceManager->getSequence($this->order));
+        $this->assertSame($this->sequence, $this->sequenceManager->getSequence($this->order, $storeId));
     }
 }
