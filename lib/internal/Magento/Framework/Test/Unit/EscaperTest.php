@@ -23,7 +23,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeHtml
+     * @covers \Magento\Framework\Escaper::escapeHtml
      * @dataProvider escapeHtmlDataProvider
      */
     public function testEscapeHtml($data, $expected, $allowedTags = null)
@@ -58,7 +58,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeUrl
+     * @covers \Magento\Framework\Escaper::escapeUrl
      */
     public function testEscapeUrl()
     {
@@ -69,7 +69,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeJsQuote
+     * @covers \Magento\Framework\Escaper::escapeJsQuote
      */
     public function testEscapeJsQuote()
     {
@@ -80,7 +80,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Escaper::escapeQuote
+     * @covers \Magento\Framework\Escaper::escapeQuote
      */
     public function testEscapeQuote()
     {
