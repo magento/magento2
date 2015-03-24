@@ -11,7 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectFactory;
 
@@ -128,7 +128,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * Customer view file action
      *
      * @return void
-     * @throws NotFoundException
+     * @throws NoSuchEntityException
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
@@ -148,7 +148,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             );
             $plain = true;
         } else {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
 
         /** @var \Magento\Framework\Filesystem $filesystem */
@@ -159,7 +159,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         if (!$directory->isFile($fileName)
             && !$this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage')->processStorageFile($path)
         ) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
 
         if ($plain) {

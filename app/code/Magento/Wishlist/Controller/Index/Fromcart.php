@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\IndexInterface;
 
 class Fromcart extends Action\Action implements IndexInterface
@@ -33,14 +33,14 @@ class Fromcart extends Action\Action implements IndexInterface
      * Add cart item to wishlist and remove from cart
      *
      * @return \Magento\Framework\App\Response\Http
-     * @throws NotFoundException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
         $itemId = (int)$this->getRequest()->getParam('item');
 

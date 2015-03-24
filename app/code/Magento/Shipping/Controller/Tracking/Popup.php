@@ -6,7 +6,7 @@
  */
 namespace Magento\Shipping\Controller\Tracking;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Popup extends \Magento\Framework\App\Action\Action
 {
@@ -50,14 +50,14 @@ class Popup extends \Magento\Framework\App\Action\Action
      * Shows tracking info if it's present, otherwise redirects to 404
      *
      * @return void
-     * @throws NotFoundException
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
         $shippingInfoModel = $this->_shippingInfoFactory->create()->loadByHash($this->getRequest()->getParam('hash'));
         $this->_coreRegistry->register('current_shipping_info', $shippingInfoModel);
         if (count($shippingInfoModel->getTrackingInfo()) == 0) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
         $this->_view->loadLayout();
         $this->_view->getPage()->getConfig()->getTitle()->set(__('Tracking Information'));

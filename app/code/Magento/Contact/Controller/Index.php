@@ -5,7 +5,7 @@
  */
 namespace Magento\Contact\Controller;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -80,12 +80,12 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function dispatch(RequestInterface $request)
     {
         if (!$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
         return parent::dispatch($request);
     }

@@ -80,7 +80,7 @@ class Action extends AbstractAction
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @throws NotFoundException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function dispatch(RequestInterface $request)
     {

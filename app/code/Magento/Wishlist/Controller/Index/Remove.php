@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\IndexInterface;
 
 class Remove extends Action\Action implements IndexInterface
@@ -33,18 +33,18 @@ class Remove extends Action\Action implements IndexInterface
      * Remove item
      *
      * @return void
-     * @throws NotFoundException
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
         $id = (int)$this->getRequest()->getParam('item');
         $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($id);
         if (!$item->getId()) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
         $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
         if (!$wishlist) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
         try {
             $item->delete();

@@ -40,7 +40,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
     /**
      * {@inheritdoc}
      */
-    public function resourceNotFoundException()
+    public function resourceNoSuchEntityException()
     {
         throw new NoSuchEntityException(
             __(

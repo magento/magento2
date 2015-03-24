@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class FrontControllerTest extends \PHPUnit_Framework_TestCase
 {
@@ -102,7 +102,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($response, $this->model->dispatch($this->request));
     }
 
-    public function testDispatchedNotFoundException()
+    public function testDispatchedNoSuchEntityException()
     {
         $this->routerList->expects($this->any())
             ->method('valid')
@@ -120,7 +120,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $this->router->expects($this->at(0))
             ->method('match')
             ->with($this->request)
-            ->will($this->throwException(new NotFoundException()));
+            ->will($this->throwException(new NoSuchEntityException()));
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)

@@ -105,7 +105,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithoutWishlist()
     {
-        $this->setExpectedException('Magento\Framework\App\Action\NotFoundException');
+        $this->setExpectedException('Magento\Framework\Exception\NoSuchEntityException');
 
         $this->wishlistProvider
             ->expects($this->once())

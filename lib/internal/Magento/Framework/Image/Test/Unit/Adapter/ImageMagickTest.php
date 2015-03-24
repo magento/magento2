@@ -44,7 +44,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue(  $this->writeMock));
+            ->will($this->returnValue($this->writeMock));
 
         $this->imageMagic = $objectManager
             ->getObject(

@@ -7,7 +7,7 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -141,7 +141,7 @@ class Onepage extends Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function dispatch(RequestInterface $request)
     {
@@ -158,7 +158,7 @@ class Onepage extends Action
         }
 
         if (!$this->_canShowForUnregisteredUsers()) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
         return parent::dispatch($request);
     }

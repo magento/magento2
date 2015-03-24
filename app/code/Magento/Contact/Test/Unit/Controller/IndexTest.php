@@ -61,7 +61,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\App\Action\NotFoundException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDispatch()
     {

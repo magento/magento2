@@ -24,7 +24,7 @@ interface ActionInterface
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function dispatch(RequestInterface $request);
 

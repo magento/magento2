@@ -17,7 +17,7 @@ interface ErrorInterface
     /**
      * @return int Status
      */
-    public function resourceNotFoundException();
+    public function resourceNoSuchEntityException();
 
     /**
      * @return int Status

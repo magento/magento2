@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 
@@ -85,7 +85,7 @@ class Send extends Action\Action implements IndexInterface
      * Share wishlist
      *
      * @return ResponseInterface|void
-     * @throws NotFoundException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -98,7 +98,7 @@ class Send extends Action\Action implements IndexInterface
 
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
-            throw new NotFoundException();
+            throw new NoSuchEntityException();
         }
 
         $sharingLimit = $this->_wishlistConfig->getSharingEmailLimit();
