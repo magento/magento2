@@ -295,13 +295,13 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         $this->y = $this->y ? $this->y : 815;
         $top = 815;
         foreach (explode(
-            "\n",
-            $this->_scopeConfig->getValue(
-                'sales/identity/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
-        ) as $value) {
+                     "\n",
+                     $this->_scopeConfig->getValue(
+                         'sales/identity/address',
+                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                         $store
+                     )
+                 ) as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
@@ -348,7 +348,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
     protected function _calcAddressHeight($address)
     {
         $y = 0;
-        foreach ($address as $value) {
+        foreach ([$address] as $value) {
             if ($value !== '') {
                 $text = [];
                 foreach ($this->string->split($value, 55, true, true) as $_value) {
@@ -463,7 +463,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         $this->y = $top - 40;
         $addressesStartY = $this->y;
 
-        foreach ($billingAddress as $value) {
+        foreach ([$billingAddress] as $value) {
             if ($value !== '') {
                 $text = [];
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
@@ -480,7 +480,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
 
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
-            foreach ($shippingAddress as $value) {
+            foreach ([$shippingAddress] as $value) {
                 if ($value !== '') {
                     $text = [];
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
@@ -551,10 +551,10 @@ abstract class AbstractPdf extends \Magento\Framework\Object
 
             $yShipments = $this->y;
             $totalShippingChargesText = "(" . __(
-                'Total Shipping Charges'
-            ) . " " . $order->formatPriceTxt(
-                $order->getShippingAmount()
-            ) . ")";
+                    'Total Shipping Charges'
+                ) . " " . $order->formatPriceTxt(
+                    $order->getShippingAmount()
+                ) . ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;

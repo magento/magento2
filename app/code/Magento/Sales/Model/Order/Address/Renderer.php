@@ -48,6 +48,6 @@ class Renderer
             return null;
         }
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
-        return $formatType->getRenderer()->render($address);
+        return $formatType->getRenderer()->renderArray($address->getData());
     }
 }

@@ -66,6 +66,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = []
     ) {
         $this->_carrierHelper = $carrierHelper;
@@ -83,6 +84,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $pdfItemsFactory,
             $localeDate,
             $inlineTranslation,
+            $addressRenderer,
             $data
         );
     }

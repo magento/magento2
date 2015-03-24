@@ -49,6 +49,7 @@ class Invoice extends AbstractPdf
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -63,6 +64,7 @@ class Invoice extends AbstractPdf
             $pdfItemsFactory,
             $localeDate,
             $inlineTranslation,
+            $addressRenderer,
             $data
         );
     }
