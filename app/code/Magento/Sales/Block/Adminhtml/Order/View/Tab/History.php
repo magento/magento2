@@ -304,6 +304,8 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
+     * Get order admin date
+     * 
      * @param int $createdAt
      * @return \DateTime
      */
