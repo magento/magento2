@@ -91,7 +91,8 @@ class Http extends File
         if (false === $result) {
             throw new FilesystemException(
                 new \Magento\Framework\Phrase(
-                    'Cannot read contents from file "%1" %2', [$path, $this->getWarningMessage()]
+                    'Cannot read contents from file "%1" %2',
+                    [$path, $this->getWarningMessage()]
                 )
             );
         }
@@ -114,7 +115,8 @@ class Http extends File
         if (!$result) {
             throw new FilesystemException(
                 new \Magento\Framework\Phrase(
-                    'The specified "%1" file could not be written %2', [$path, $this->getWarningMessage()]
+                    'The specified "%1" file could not be written %2',
+                    [$path, $this->getWarningMessage()]
                 )
             );
         }

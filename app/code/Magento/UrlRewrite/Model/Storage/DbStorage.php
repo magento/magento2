@@ -113,7 +113,9 @@ class DbStorage extends AbstractStorage
             if ($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
-                throw new \Magento\Framework\Exception\AlreadyExistsException(__());
+                throw new \Magento\Framework\Exception\AlreadyExistsException(
+                    __('URL key for specified store already exists.')
+                );
             }
             throw $e;
         }

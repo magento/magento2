@@ -141,7 +141,8 @@ class InterfaceValidator
         if (count($pluginParameters) != count($originParameters)) {
             throw new ValidatorException(
                 new Phrase(
-                    'Invalid method signature. Invalid method parameters count in %1::%2', [$class, $method]
+                    'Invalid method signature. Invalid method parameters count in %1::%2',
+                    [$class, $method]
                 )
             );
         }

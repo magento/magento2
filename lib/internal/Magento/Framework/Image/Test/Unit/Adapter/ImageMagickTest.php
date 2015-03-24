@@ -32,8 +32,8 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $objectManager = new ObjectManager($this);
-        $this->loggerMock = $this->getMockBuilder( 'Psr\Log\LoggerInterface')->getMock();
-        $this->writeMock =  $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')->getMock();
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $this->writeMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')->getMock();
         $this->filesystemMock = $this->getMock(
             'Magento\Framework\Filesystem',
             ['getDirectoryWrite'],
