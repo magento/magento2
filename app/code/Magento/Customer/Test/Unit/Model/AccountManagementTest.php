@@ -10,6 +10,10 @@ use Magento\Framework\App\Area;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AccountManagementTest extends \PHPUnit_Framework_TestCase
 {
     /** @var AccountManagement */
