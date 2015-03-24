@@ -3,14 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Form\Element;
+namespace Magento\Ui\Component\Layout\Tabs;
+
+use Magento\Ui\Component\AbstractComponent;
 
 /**
- * Class Textarea
+ * Class Tab
  */
-class Textarea extends AbstractFormElement
+class Tab extends AbstractComponent
 {
-    const NAME = 'textarea';
+    const NAME = 'tab';
 
     /**
      * Get component name
@@ -31,7 +33,7 @@ class Textarea extends AbstractFormElement
     {
         parent::prepare();
 
-        $jsConfig = $this->getConfiguration($this, Input::NAME);
+        $jsConfig = $this->getConfiguration($this);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

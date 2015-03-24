@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Framework\Exception;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -56,28 +57,39 @@ class Field extends AbstractComponent
      */
     public function getComponentName()
     {
-        return static::NAME;
+        return 'form.' . $this->wrappedComponent->getComponentName();
     }
 
     /**
      * Prepare component configuration
      *
      * @return void
+     * @throws Exception
      */
     public function prepare()
     {
         parent::prepare();
-        $dataType = $this->getData('config/dataType');
-        if ($dataType) {
-            $this->wrappedComponent = $this->uiComponentFactory->create(
-                $this->getName(),
-                $dataType,
-                ['context' => $this->getContext()]
+        $formElement = $this->getData('config/formElement');
+        if (null === $formElement) {
+            throw new Exception(
+                'The configuration parameter "formElement" is a required for "' . $this->getName() . '" field.'
             );
-            $this->wrappedComponent->prepare();
-            $jsConfig = $this->getConfiguration($this->wrappedComponent);
-            $this->getContext()->addComponentDefinition($this->wrappedComponent->getComponentName(), $jsConfig);
         }
+        // Create of wrapped component
+        $this->wrappedComponent = $this->uiComponentFactory->create(
+            $this->getName(),
+            $formElement,
+            array_merge(['context' => $this->getContext()], (array) $this->getData())
+        );
+        $this->wrappedComponent->prepare();
+
+        // To prepare the component configuration
+        $wrappedComponentConfig = $this->getConfiguration($this->wrappedComponent);
+        $jsConfig = array_replace_recursive(
+            $wrappedComponentConfig,
+            $this->getConfiguration($this, $this->wrappedComponent->getComponentName())
+        );
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
     /**
@@ -87,6 +99,13 @@ class Field extends AbstractComponent
      */
     public function getJsConfig()
     {
-        return $this->wrappedComponent->getJsConfig();
+        if (isset($this->wrappedComponent)) {
+            return array_replace_recursive(
+                (array) $this->wrappedComponent->getData('config'),
+                (array) $this->getData('config')
+            );
+        }
+
+        return (array) $this->getData('config');
     }
 }

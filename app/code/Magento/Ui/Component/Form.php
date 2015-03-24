@@ -54,18 +54,23 @@ class Form extends AbstractComponent
                     $preparedData = [];
                     $data = $dataProvider->getData();
                     if (!empty($data['items'])) {
-                        $preparedData[$namespace] = $data['items'][0];
+                        $preparedData[$namespace] = reset($data['items']);
                     }
                 } else {
                     $preparedData = [];
                 }
-                $dataSources[] = [
+                $config = $dataProvider->getConfigData();
+                if (isset($config['submit_url'])) {
+                    $config['submit_url'] = $this->getContext()->getUrl($config['submit_url']);
+                }
+                if (isset($config['validate_url'])) {
+                    $config['validate_url'] = $this->getContext()->getUrl($config['validate_url']);
+                }
+                $dataSources[$component->getName()] = [
                     'type' => $component->getComponentName(),
                     'name' => $component->getName(),
                     'dataScope' => $component->getContext()->getNamespace(),
-                    'config' => [
-                        'data' => $preparedData
-                    ]
+                    'config' => array_merge(['data' => $preparedData], $config)
                 ];
             }
         }

@@ -5,10 +5,9 @@
  */
 namespace Magento\Cms\Model\Page;
 
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-
-use \Magento\Cms\Model\Resource\Page\Grid\Collection;
+use Magento\Cms\Model\Resource\Page\Grid\Collection;
 use Magento\Cms\Model\Resource\Page\Grid\CollectionFactory;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
  * Class DataProvider
@@ -41,16 +40,25 @@ class DataProvider implements DataProviderInterface
     protected $meta = [];
 
     /**
+     * Provider configuration data
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param array $meta
+     * @param array $data
      */
     public function __construct(
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        array $meta = []
+        array $meta = [],
+        array $data = []
     ) {
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
@@ -58,6 +66,7 @@ class DataProvider implements DataProviderInterface
         $this->collection = $collectionFactory->create();
         $this->collection->setFirstStoreFlag(true);
         $this->meta = $meta;
+        $this->data = $data;
     }
 
     /**
@@ -85,7 +94,9 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName][$fieldName]) ? $this->meta[$fieldSetName][$fieldName] : [];
+        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
+            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+            : [];
     }
 
     /**
@@ -183,5 +194,35 @@ class DataProvider implements DataProviderInterface
     public function count()
     {
         return $this->collection->count();
+    }
+
+    /**
+     * Get config data
+     *
+     * @return mixed
+     */
+    public function getConfigData()
+    {
+        return isset($this->data['config']) ? $this->data['config'] : [];
+    }
+
+    /**
+     * Set data
+     *
+     * @param mixed $config
+     * @return void
+     */
+    public function setConfigData($config)
+    {
+        $this->data['config'] = $config;
+    }
+
+    /**
+     * @param string $fieldSetName
+     * @return array
+     */
+    public function getFieldsMetaInfo($fieldSetName)
+    {
+        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
     }
 }

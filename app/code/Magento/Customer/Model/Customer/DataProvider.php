@@ -5,11 +5,11 @@
  */
 namespace Magento\Customer\Model\Customer;
 
-use Magento\Customer\Model\Resource\Customer\Collection;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
 
 /**
  * Class DataProvider
@@ -42,6 +42,13 @@ class DataProvider implements DataProviderInterface
     protected $meta = [];
 
     /**
+     * Provider configuration data
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * EAV attribute properties to fetch from meta storage
      * @var array
      */
@@ -57,31 +64,46 @@ class DataProvider implements DataProviderInterface
     ];
 
     /**
+     * Form element mapping
+     *
+     * @var array
+     */
+    protected $formElement = [
+        'text' => 'input',
+        'hidden' => 'input',
+        'boolean' => 'checkbox',
+    ];
+
+    /**
+     * Constructor
+     *
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param array $meta
+     * @param array $data
      */
     public function __construct(
         $primaryFieldName,
         $requestFieldName,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
-        array $meta = []
+        array $meta = [],
+        array $data = []
     ) {
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->collection = $customerCollectionFactory->create();
         $this->eavConfig = $eavConfig;
         $this->meta = $meta;
-
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
         $this->meta['address']['fields'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer_address')
         );
+        $this->data = $data;
     }
 
     /**
@@ -99,7 +121,9 @@ class DataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName][$fieldName]) ? $this->meta[$fieldSetName][$fieldName] : [];
+        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
+            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+            : [];
     }
 
     /**
@@ -116,13 +140,40 @@ class DataProvider implements DataProviderInterface
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
-                $meta[$code][$metaName] = $attribute->getDataUsingMethod($origName);
+                $value = $attribute->getDataUsingMethod($origName);;
+                $meta[$code][$metaName] = $value;
+                if ('frontend_input' === $origName) {
+                    $meta[$code]['formElement'] = isset($this->formElement[$value])
+                        ? $this->formElement[$value]
+                        : $value;
+                }
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
                 }
             }
         }
         return $meta;
+    }
+
+    /**
+     * Get config data
+     *
+     * @return mixed
+     */
+    public function getConfigData()
+    {
+        return isset($this->data['config']) ? $this->data['config'] : [];
+    }
+
+    /**
+     * Set data
+     *
+     * @param mixed $config
+     * @return void
+     */
+    public function setConfigData($config)
+    {
+        $this->data['config'] = $config;
     }
 
     /**
@@ -230,5 +281,14 @@ class DataProvider implements DataProviderInterface
     public function count()
     {
         return $this->collection->count();
+    }
+
+    /**
+     * @param string $fieldSetName
+     * @return array
+     */
+    public function getFieldsMetaInfo($fieldSetName)
+    {
+        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
     }
 }

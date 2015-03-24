@@ -21,4 +21,17 @@ class Checkbox extends AbstractFormElement
     {
         return static::NAME;
     }
+
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+
+        $jsConfig = $this->getConfiguration($this, Input::NAME);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+    }
 }

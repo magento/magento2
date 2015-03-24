@@ -18,7 +18,6 @@
         </xs:annotation>
         <xs:all>
             <!-- Components list -->
-            <xs:element type="layout" name="layout"/>
             <xs:element type="tab" name="tab"/>
             <xs:element type="dataSource" name="dataSource"/>
             <xs:element type="paging" name="paging"/>
