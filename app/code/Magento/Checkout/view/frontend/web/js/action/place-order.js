@@ -8,12 +8,13 @@
 /*global alert*/
 define(
     [
+        'jquery',
         '../model/quote',
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist'
     ],
-    function(quote, storage, url, errorList) {
+    function($, quote, storage, url, errorList) {
         return function() {
             storage.put(
                 'rest/default/V1/carts/' + quote.getQuoteId() + '/order'
