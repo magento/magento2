@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Textarea
  */
-class Textarea extends AbstractFormElement
+class Textarea extends AbstractElement
 {
     const NAME = 'textarea';
 

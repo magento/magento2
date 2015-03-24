@@ -23,7 +23,7 @@ class Paging extends AbstractComponent
     }
 
     /**
-     * Prepare component data
+     * Register component and apply paging settings to Data Provider
      *
      * @return void
      */

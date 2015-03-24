@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Radio
  */
-class Radio extends AbstractFormElement
+class Radio extends AbstractElement
 {
     const NAME = 'radio';
 

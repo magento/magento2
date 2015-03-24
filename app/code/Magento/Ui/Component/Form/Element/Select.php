@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class Select
  */
-class Select extends AbstractFormElement
+class Select extends AbstractElement
 {
     const NAME = 'select';
 

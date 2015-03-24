@@ -290,6 +290,9 @@ class TabsEx extends Generic implements LayoutInterface
         list($config, $dataScope) = $this->prepareConfig((array) $component->getJsConfig(), $name, $parentName);
 
         $structure[$name]['dataScope'] = $dataScope;
+        if (isset($config['sortOrder'])) {
+            $structure[$name]['sortOrder'] = intval($config['sortOrder']);
+        }
         $structure[$name]['config'] = $config;
 
         return [$component, $structure];

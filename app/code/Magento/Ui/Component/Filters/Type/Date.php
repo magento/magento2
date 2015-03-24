@@ -5,8 +5,6 @@
  */
 namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\Filters\AbstractFilter;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
@@ -91,18 +89,6 @@ class Date extends AbstractFilter
      * @return array|null
      */
     protected function getCondition()
-    {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        return $this->convertValue($value);
-    }
-
-    /**
-     * Convert value
-     *
-     * @param array|string $value
-     * @return array|null
-     */
-    public function convertValue($value)
     {
         $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
         if (!empty($value['from']) || !empty($value['to'])) {

@@ -16,15 +16,15 @@
     <xs:element type="formConfiguration" name="form"/>
     <xs:element type="listingConfiguration" name="listing"/>
     <!-- Custom configuration -->
-    <xs:complexType name="wrapperConfiguration">
+    <xs:complexType name="containerConfiguration">
         <xs:complexContent>
-            <xs:extension base="wrapper">
+            <xs:extension base="container">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="paging" name="paging"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
                     <xs:element type="massaction" name="massaction"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
-                    <xs:element type="wrapperConfiguration" name="wrapper"/>
+                    <xs:element type="containerConfiguration" name="container"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -38,7 +38,7 @@
                     <xs:element type="massaction" name="massaction"/>
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
-                    <xs:element type="wrapperConfiguration" name="wrapper"/>
+                    <xs:element type="containerConfiguration" name="container"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -50,7 +50,7 @@
                     <xs:element name="fieldset" type="fieldset" />
                     <xs:element name="field" type="field" />
                     <xs:element type="dataSource" name="dataSource"/>
-                    <xs:element type="wrapperConfiguration" name="wrapper"/>
+                    <xs:element type="containerConfiguration" name="container"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -72,7 +72,7 @@
                     <xs:element name="filterInput" type="filterInput" />
                     <xs:element name="filterRange" type="filterRangeConfiguration" />
                     <xs:element name="filterSelect" type="filterSelect" />
-                    <xs:element name="wrapperConfiguration" type="wrapper" />
+                    <xs:element name="containerConfiguration" type="container" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

@@ -5,8 +5,6 @@
  */
 namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\Filters\AbstractFilter;
-
 /**
  * Class Range
  */

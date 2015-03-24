@@ -6,11 +6,11 @@
 namespace Magento\Ui\Component;
 
 /**
- * Class Wrapper
+ * Class Container
  */
-class Wrapper extends AbstractComponent
+class Container extends AbstractComponent
 {
-    const NAME = 'wrapper';
+    const NAME = 'container';
 
     /**
      * Get component name
@@ -23,7 +23,7 @@ class Wrapper extends AbstractComponent
     }
 
     /**
-     * Prepare component configuration
+     * Register component
      *
      * @return void
      */
