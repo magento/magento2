@@ -185,7 +185,10 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
-        $this->ddlSequence->expects($this->once())->method('getCreateSequenceDdl')->with($sequenceName, $startNumber)->willReturn($sql);
+        $this->ddlSequence->expects($this->once())
+            ->method('getCreateSequenceDdl')
+            ->with($sequenceName, $startNumber)
+            ->willReturn($sql);
         $this->adapter->expects($this->once())->method('query')->with($sql);
         $this->resource->createSequence($sequenceName, $startNumber);
     }

@@ -24,7 +24,10 @@ class Observer
     private $salesSetup;
 
     /**
+     * Initialization
+     *
      * @param SequenceBuilder $sequenceBuilder
+     * @param SalesSetup $salesSetup
      */
     public function __construct(
         SequenceBuilder $sequenceBuilder,

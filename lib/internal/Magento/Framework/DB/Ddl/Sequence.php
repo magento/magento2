@@ -30,7 +30,7 @@ class Sequence
     /**
      * Return SQL for drop sequence
      *
-     * @param $name
+     * @param string $name
      * @return string
      */
     public function dropSequence($name)

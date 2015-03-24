@@ -35,13 +35,17 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected $metaFactory;
 
+    /**
+     * @var DdlSequence
+     */
     protected $ddlSequence;
 
     /**
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
-     * @param string|null $resourcePrefix
+     * @param DdlSequence $ddlSequence
+     * @param string $resourcePrefix
      */
     public function __construct(
         DatabaseContext $context,
@@ -130,8 +134,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * @inheritdoc
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -144,8 +147,9 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Shortcut for sequence creation
      *
-     * @param $sequenceName
-     * @param $startNumber
+     * @param string $sequenceName
+     * @param int $startNumber
+     * @return void
      */
     public function createSequence($sequenceName, $startNumber)
     {

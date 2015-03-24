@@ -176,8 +176,11 @@ class SequenceBuilder
     }
 
     /**
+     * Create Sequences With meta and profile
+     *
      * @throws \Exception
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return void
      */
     public function create()
     {
