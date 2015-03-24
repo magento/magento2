@@ -14,6 +14,16 @@ use Magento\SalesSequence\Model\SequenceFactory;
 class SequenceBuilder
 {
     /**
+     * MySql maximal integer for sequences
+     */
+    const MYSQL_MAX_UNSIGNED_INT = 4294967295;
+
+    /**
+     * Sequence warning value
+     */
+    const SEQUENCE_UNSIGNED_INT_WARNING_VALUE = 4294966295;
+
+    /**
      * @var resourceMetadata
      */
     protected $resourceMetadata;

@@ -9,6 +9,7 @@ namespace Magento\Sales\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
 
 /**
  * Class InstallData
@@ -25,13 +26,20 @@ class InstallData implements InstallDataInterface
     private $salesSetupFactory;
 
     /**
+     * @var SequenceBuilder
+     */
+    private $sequenceBuilder;
+
+    /**
      * Init
      *
+     * @param SequenceBuilder $sequenceBuilder
      * @param SalesSetupFactory $salesSetupFactory
      */
-    public function __construct(SalesSetupFactory $salesSetupFactory)
+    public function __construct(SalesSetupFactory $salesSetupFactory, SequenceBuilder $sequenceBuilder)
     {
         $this->salesSetupFactory = $salesSetupFactory;
+        $this->sequenceBuilder = $sequenceBuilder;
     }
 
     /**
@@ -155,6 +163,17 @@ class InstallData implements InstallDataInterface
                 ['visible_on_front' => 1],
                 ['state = ?' => $state]
             );
+        }
+        $defaultEntityTypes = array_keys($salesSetup->getDefaultEntities());
+        foreach ($defaultEntityTypes as $entityType) {
+            $this->sequenceBuilder->setPrefix('')
+                ->setSuffix('')
+                ->setStartValue(1)
+                ->setStoreId(1)
+                ->setStep(1)
+                ->setWarningValue(SequenceBuilder::SEQUENCE_UNSIGNED_INT_WARNING_VALUE)
+                ->setMaxValue(SequenceBuilder::MYSQL_MAX_UNSIGNED_INT)
+                ->setEntityType($entityType)->create();
         }
     }
 }

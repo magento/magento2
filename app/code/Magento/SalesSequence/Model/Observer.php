@@ -14,16 +14,6 @@ use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
 class Observer
 {
     /**
-     * MySql maximal integer for sequences
-     */
-    const MYSQL_MAX_UNSIGNED_INT = 4294967295;
-
-    /**
-     * Sequence warning value
-     */
-    const SEQUENCE_UNSIGNED_INT_WARNING_VALUE = 4294966295;
-
-    /**
      * @var SequenceBuilder
      */
     private $sequenceBuilder;
@@ -51,15 +41,14 @@ class Observer
     {
         $storeId = $observer->getData('store')->getId();
         $defaultEntities = array_keys($this->salesSetup->getDefaultEntities());
-
         foreach ($defaultEntities as $entityType) {
             $this->sequenceBuilder->setPrefix('')
                 ->setSuffix('')
                 ->setStartValue(1)
                 ->setStoreId($storeId)
                 ->setStep(1)
-                ->setWarningValue(static::SEQUENCE_UNSIGNED_INT_WARNING_VALUE)
-                ->setMaxValue(static::MYSQL_MAX_UNSIGNED_INT)
+                ->setWarningValue(SequenceBuilder::SEQUENCE_UNSIGNED_INT_WARNING_VALUE)
+                ->setMaxValue(SequenceBuilder::MYSQL_MAX_UNSIGNED_INT)
                 ->setEntityType($entityType)->create();
         }
         return $this;
