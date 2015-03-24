@@ -84,9 +84,11 @@ abstract class AbstractModel extends AbstractExtensibleModel
             $this->setId($value);
             return;
         }
-        if (isset($this->_data[$key]) && $this->getData($key) != $value) {
+        if (isset($this->_data[$key]) && $this->getData($key) != $value && $this->_data[$key] != $value) {
             $this->rawData[$key] = $value;
             return;
+        } else if (isset($this->_data[$key]) && $this->getData($key) != $value && $this->_data[$key] == $value) {
+            unset($this->rawData[$key]);
         } else if (!isset($this->_data[$key])) {
             $this->rawData[$key] = $value;
             return;
@@ -153,11 +155,24 @@ abstract class AbstractModel extends AbstractExtensibleModel
         return isset($this->_data[$this->_idFieldName]) ? $this->_data[$this->_idFieldName] : null;
     }
 
+    /**
+     * Set Id into model
+     *
+     * @param mixed $value
+     * @return $this
+     */
     public function setId($value)
     {
-        return $this->_data[$this->_idFieldName] = $value;
+        $this->_data[$this->_idFieldName] = $value;
+        return $this;
     }
 
+    /**
+     * Check if data available
+     *
+     * @param string $key
+     * @return bool
+     */
     public function hasData($key = '')
     {
         if (empty($key) || !is_string($key)) {
@@ -167,12 +182,20 @@ abstract class AbstractModel extends AbstractExtensibleModel
         return ($this->getData($key) !== null);
     }
 
+    /**
+     * Push data from wrapper source in original model
+     */
     public function flushDataIntoModel()
     {
         $this->_data = array_merge($this->_data, $this->rawData);
         $this->rawData = [];
     }
 
+    /**
+     * Returns flag is model changed
+     *
+     * @return bool
+     */
     public function hasDataChanges()
     {
         return !empty($this->rawData);
