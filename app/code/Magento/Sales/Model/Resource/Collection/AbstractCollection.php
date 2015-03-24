@@ -152,25 +152,6 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     }
 
     /**
-     * Backward compatibility with EAV collection
-     *
-     * @param string $alias
-     * @param string $attribute
-     * @param string $bind
-     * @param string $filter
-     * @param string $joinType
-     * @param int $storeId
-     * @return $this
-     *
-     * @todo implement join functionality if necessary
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
-    {
-        return $this;
-    }
-
-    /**
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
@@ -229,6 +210,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     /**
      * Returns a collection item that corresponds to the fetched row
      * and moves the internal data pointer ahead
+     * All returned rows marked as non changed to prevent unnecessary persistence operations
      *
      * @return  \Magento\Framework\Object|bool
      */
@@ -255,6 +237,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
 
     /**
      * Load data with filter in place
+     * All returned rows marked as non changed to prevent unnecessary persistence operations
      *
      * @param   bool $printQuery
      * @param   bool $logQuery

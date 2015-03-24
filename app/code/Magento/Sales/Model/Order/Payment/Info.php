@@ -21,19 +21,19 @@ class Info extends AbstractModel implements InfoInterface
      *
      * @var array
      */
-    protected $_additionalInformation = [];
+    protected $additionalInformation = [];
 
     /**
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData;
+    protected $paymentData;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
-    protected $_encryptor;
+    protected $encryptor;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -57,8 +57,8 @@ class Info extends AbstractModel implements InfoInterface
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->_paymentData = $paymentData;
-        $this->_encryptor = $encryptor;
+        $this->paymentData = $paymentData;
+        $this->encryptor = $encryptor;
         parent::__construct(
             $context,
             $registry,
@@ -111,9 +111,9 @@ class Info extends AbstractModel implements InfoInterface
                 );
             }
             try {
-                $instance = $this->_paymentData->getMethodInstance($this->getMethod());
+                $instance = $this->paymentData->getMethodInstance($this->getMethod());
             } catch (\UnexpectedValueException $e) {
-                $instance = $this->_paymentData->getMethodInstance(Substitution::CODE);
+                $instance = $this->paymentData->getMethodInstance(Substitution::CODE);
             }
             $instance->setInfoInstance($this);
             $this->setMethodInstance($instance);
@@ -129,7 +129,7 @@ class Info extends AbstractModel implements InfoInterface
      */
     public function encrypt($data)
     {
-        return $this->_encryptor->encrypt($data);
+        return $this->encryptor->encrypt($data);
     }
 
     /**
@@ -140,7 +140,7 @@ class Info extends AbstractModel implements InfoInterface
      */
     public function decrypt($data)
     {
-        return $this->_encryptor->decrypt($data);
+        return $this->encryptor->decrypt($data);
     }
 
     /**
@@ -160,11 +160,11 @@ class Info extends AbstractModel implements InfoInterface
         }
         $this->initAdditionalInformation();
         if (is_array($key) && is_null($value)) {
-            $this->_additionalInformation = $key;
+            $this->additionalInformation = $key;
         } else {
-            $this->_additionalInformation[$key] = $value;
+            $this->additionalInformation[$key] = $value;
         }
-        return $this->setData('additional_information', $this->_additionalInformation);
+        return $this->setData('additional_information', $this->additionalInformation);
     }
 
     /**
@@ -177,9 +177,9 @@ class Info extends AbstractModel implements InfoInterface
     {
         $this->initAdditionalInformation();
         if (null === $key) {
-            return $this->_additionalInformation;
+            return $this->additionalInformation;
         }
-        return isset($this->_additionalInformation[$key]) ? $this->_additionalInformation[$key] : null;
+        return isset($this->additionalInformation[$key]) ? $this->additionalInformation[$key] : null;
     }
 
     /**
@@ -190,11 +190,11 @@ class Info extends AbstractModel implements InfoInterface
      */
     public function unsAdditionalInformation($key = null)
     {
-        if ($key && isset($this->_additionalInformation[$key])) {
-            unset($this->_additionalInformation[$key]);
-            return $this->setData('additional_information', $this->_additionalInformation);
+        if ($key && isset($this->additionalInformation[$key])) {
+            unset($this->additionalInformation[$key]);
+            return $this->setData('additional_information', $this->additionalInformation);
         }
-        $this->_additionalInformation = [];
+        $this->additionalInformation = [];
         return $this->unsetData('additional_information');
     }
 
@@ -207,25 +207,26 @@ class Info extends AbstractModel implements InfoInterface
     public function hasAdditionalInformation($key = null)
     {
         $this->initAdditionalInformation();
-        return null === $key ? !empty($this->_additionalInformation) : array_key_exists(
+        return null === $key ? !empty($this->additionalInformation) : array_key_exists(
             $key,
-            $this->_additionalInformation
+            $this->additionalInformation
         );
     }
 
     /**
-     * Initialize _additionalInformation with $this->_data['additional_information'] if empty
+     * Initialize _additionalInformation with data from model aka $this->_data['additional_information']
+     * if property empty
      *
      * @return void
      */
     protected function initAdditionalInformation()
     {
         $additionalInfo = $this->getData('additional_information');
-        if (empty($this->_additionalInformation) && $additionalInfo) {
+        if (empty($this->additionalInformation) && $additionalInfo) {
             if (!is_array($additionalInfo)) {
                 $additionalInfo = unserialize($additionalInfo);
             }
-            $this->_additionalInformation = $additionalInfo;
+            $this->additionalInformation = $additionalInfo;
         }
     }
 }

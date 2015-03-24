@@ -122,8 +122,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw new NoSuchEntityException(__('Entity Sequence profile not added to meta active profile'));
         }
 
-        if (
-            !$object->getData('entity_type')
+        if (!$object->getData('entity_type')
             || $object->getData('store_id') === null
             || !$object->getData('sequence_table')
         ) {

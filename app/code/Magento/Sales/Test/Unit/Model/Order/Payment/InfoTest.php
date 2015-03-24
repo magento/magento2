@@ -144,7 +144,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->info->getMethodInstance();
     }
 
-
     public function testGetMethodInstanceRequestedMethod()
     {
         $code = 'real_method';

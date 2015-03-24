@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
-use Magento\Sales\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Meta

@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
+use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceMetadata;
 use Magento\SalesSequence\Model\SequenceFactory;
 
@@ -168,15 +169,26 @@ class SequenceBuilder
         return $this;
     }
 
+    /**
+     * Validate sequence before save
+     *
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     */
     protected function validate()
     {
-        if (1!==1) {
-            throw new \Magento\Framework\Exception\InputException('');
+        $metadata = $this->resourceMetadata->loadByEntityTypeAndStore(
+            $this->data['entity_type'],
+            $this->data['store_id']
+        );
+        if ($metadata->getId()) {
+            throw new \Magento\Framework\Exception\AlreadyExistsException(
+                __('Sequence with this metadata already exists')
+            );
         }
     }
 
     /**
-     * Create Sequences With meta and profile
+     * Create sequence with metadata and profile
      *
      * @throws \Exception
      * @throws \Magento\Framework\Exception\AlreadyExistsException
@@ -185,15 +197,6 @@ class SequenceBuilder
     public function create()
     {
         $this->validate();
-        $meta = $this->resourceMetadata->loadByEntityTypeAndStore(
-            $this->data['entity_type'],
-            $this->data['store_id']
-        );
-        if ($meta->getId()) {
-            throw new \Magento\Framework\Exception\AlreadyExistsException(
-                __('Sequence with this metadata already exists')
-            );
-        }
         $this->data['sequence_table'] = sprintf(
             'sequence_%s_%s',
             $this->data['entity_type'],
@@ -213,6 +216,7 @@ class SequenceBuilder
                 )
             ]
         );
+        $profile->setHasDataChanges(true);
         $this->data['active_profile'] = $profile;
         $metadata = $this->metaFactory->create(
             [
@@ -222,11 +226,17 @@ class SequenceBuilder
                 )
             ]
         );
-        $this->resourceMetadata->save($metadata);
-        $this->resourceMetadata->createSequence(
-            $this->data['sequence_table'],
-            $this->data['start_value']
-        );
+        $metadata->setHasDataChanges(true);
+        try {
+            $this->resourceMetadata->save($metadata);
+            $this->resourceMetadata->createSequence(
+                $this->data['sequence_table'],
+                $this->data['start_value']
+            );
+        } catch (Exception $e) {
+            $this->resourceMetadata->delete($metadata);
+            throw $e;
+        }
         $this->data = array_flip($this->pattern);
     }
 }
