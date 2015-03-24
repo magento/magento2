@@ -141,7 +141,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
         if ('' === $key) {
             return array_merge($this->_data, $this->rawData);
         } else {
-            return isset($this->rawData[$key]) ? $this->rawData[$key] :
+            return array_key_exists($key, $this->rawData) ? $this->rawData[$key] :
                 (isset($this->_data[$key]) ? $this->_data[$key] : null);
         }
     }
