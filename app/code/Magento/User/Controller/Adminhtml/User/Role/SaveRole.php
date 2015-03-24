@@ -78,34 +78,27 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             return;
         }
 
-        try {
-            $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
+        $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
+        $role->setName($roleName)
+            ->setPid($this->getRequest()->getParam('parent_id', false))
+            ->setRoleType(RoleGroup::ROLE_TYPE)
+            ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
+        $this->_eventManager->dispatch(
+            'admin_permissions_role_prepare_save',
+            ['object' => $role, 'request' => $this->getRequest()]
+        );
+        $role->save();
 
-            $role->setName($roleName)
-                ->setPid($this->getRequest()->getParam('parent_id', false))
-                ->setRoleType(RoleGroup::ROLE_TYPE)
-                ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
-            $this->_eventManager->dispatch(
-                'admin_permissions_role_prepare_save',
-                ['object' => $role, 'request' => $this->getRequest()]
-            );
-            $role->save();
+        $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
 
-            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
-
-            foreach ($oldRoleUsers as $oUid) {
-                $this->_deleteUserFromRole($oUid, $role->getId());
-            }
-
-            foreach ($roleUsers as $nRuid) {
-                $this->_addUserToRole($nRuid, $role->getId());
-            }
-            $this->messageManager->addSuccess(__('You saved the role.'));
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('An error occurred while saving this role.'));
+        foreach ($oldRoleUsers as $oUid) {
+            $this->_deleteUserFromRole($oUid, $role->getId());
         }
+
+        foreach ($roleUsers as $nRuid) {
+            $this->_addUserToRole($nRuid, $role->getId());
+        }
+        $this->messageManager->addSuccess(__('You saved the role.'));
         $this->_redirect('adminhtml/*/');
         return;
     }
