@@ -57,6 +57,9 @@ class Reader implements UiReaderInterface
     protected function readFiles(array $fileList)
     {
         foreach ($fileList as $fileContent) {
+            if (empty($fileContent)) {
+                continue;
+            }
             $this->domMerger->merge($fileContent);
         }
     }
