@@ -80,7 +80,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Creditmemo $object */
         if (null !== $object->getItems()) {

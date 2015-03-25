@@ -77,7 +77,7 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Invoice $object */
         if (null !== $object->getItems()) {
@@ -96,6 +96,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
                 $comment->save();
             }
         }
-        return parent::_afterSave($object);
+        return parent::processRelations($object);
     }
 }

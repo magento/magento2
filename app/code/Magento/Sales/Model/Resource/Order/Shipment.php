@@ -91,7 +91,7 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Shipment $object */
         if (null !== $object->getItems()) {
@@ -113,6 +113,6 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
             }
         }
 
-        return parent::_afterSave($object);
+        return parent::processRelations($object);
     }
 }

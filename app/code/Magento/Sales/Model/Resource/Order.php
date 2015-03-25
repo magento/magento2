@@ -168,7 +168,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
         $this->addressHandler->process($object);
@@ -201,6 +201,6 @@ class Order extends SalesResource implements OrderResourceInterface
             $relatedObject->save();
             $relatedObject->setOrder($object);
         }
-        return parent::_afterSave($object);
+        return parent::processRelations($object);
     }
 }
