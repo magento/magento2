@@ -17,7 +17,7 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 
-class UpdateItemQty extends Cart
+class RemoveItem extends Cart
 {
     /**
      * @var Sidebar
@@ -62,11 +62,9 @@ class UpdateItemQty extends Cart
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = (int)$this->getRequest()->getParam('item_qty');
-
         try {
             $this->sidebar->checkQuoteItem($itemId);
-            $this->sidebar->updateQuoteItem($itemId, $itemQty);
+            $this->sidebar->removeQuoteItem($itemId);
             return $this->jsonResponse();
         } catch (LocalizedException $e) {
             return $this->jsonResponse($e->getMessage());
