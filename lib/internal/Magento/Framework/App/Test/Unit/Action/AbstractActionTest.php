@@ -26,8 +26,6 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    protected $expectedResult = '/index';
-
     public function setUp()
     {
         $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
@@ -44,7 +42,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->redirectFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->redirect));
+            ->willReturn($this->redirect);
 
         $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
             ->disableOriginalConstructor()
@@ -60,11 +58,13 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultRedirect()
     {
+        $expectedResult = '/index';
+
         $this->redirect->expects($this->once())
             ->method('setRefererOrBaseUrl')
             ->willReturn('/index');
 
         $result = $this->action->getDefaultRedirect();
-        $this->assertSame($this->expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 }

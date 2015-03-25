@@ -13,14 +13,6 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 class Email extends \Magento\Backend\App\Action
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
      * @return bool
      */
     protected function _isAllowed()

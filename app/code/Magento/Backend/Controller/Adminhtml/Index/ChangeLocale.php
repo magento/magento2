@@ -9,17 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\Index;
 class ChangeLocale extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**
-     * Constructor
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context
-    ) {
-        parent::__construct($context);
-    }
-
-    /**
      * Change locale action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

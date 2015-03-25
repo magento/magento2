@@ -9,23 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * Constructor
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    ) {
-        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
-    }
-
-    /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
