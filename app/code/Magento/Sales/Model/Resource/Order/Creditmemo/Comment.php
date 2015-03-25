@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Creditmemo;
 
-use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntityAbstract;
 use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
 
@@ -14,7 +14,7 @@ use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Comment extends Entity implements CreditmemoCommentResourceInterface
+class Comment extends EntityAbstract implements CreditmemoCommentResourceInterface
 {
     /**
      * Event prefix

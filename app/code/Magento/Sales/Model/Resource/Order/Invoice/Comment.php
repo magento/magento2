@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Invoice;
 
-use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntityAbstract;
 use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
@@ -14,7 +14,7 @@ use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Comment extends Entity implements InvoiceCommentResourceInterface
+class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
 {
     /**
      * Event prefix
