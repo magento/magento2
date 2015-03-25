@@ -27,7 +27,7 @@ class Renderer extends Topmenu
         }
 
         if (!$this->isTemplateFileValid($this->getTemplateFile())) {
-            throw new \Magento\Framework\Exception('Not valid template file:' . $this->_templateFile);
+            throw new \Magento\Framework\Exception('Not valid template file:' . $this->getTemplateFile());
         }
 
         return $this->render($menuTree,$childrenWrapClass);
