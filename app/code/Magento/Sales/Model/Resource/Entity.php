@@ -109,7 +109,7 @@ abstract class Entity extends AbstractDb
         if ($object instanceof EntityInterface && $object->getIncrementId() == null) {
             $object->setIncrementId(
                 $this->sequenceManager->getSequence(
-                    $object,
+                    $object->getEntityType(),
                     $object->getStore()->getId()
                 )->getNextValue()
             );

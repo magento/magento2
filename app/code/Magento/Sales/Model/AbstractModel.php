@@ -16,13 +16,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 abstract class AbstractModel extends AbstractExtensibleModel
 {
     /**
-     * Raw object data
-     *
-     * @var array
-     */
-    protected $rawData = [];
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -40,7 +33,6 @@ abstract class AbstractModel extends AbstractExtensibleModel
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->rawData = $data;
         parent::__construct(
             $context,
             $registry,
@@ -48,7 +40,7 @@ abstract class AbstractModel extends AbstractExtensibleModel
             $customAttributeFactory,
             $resource,
             $resourceCollection,
-            []
+            $data
         );
     }
 
