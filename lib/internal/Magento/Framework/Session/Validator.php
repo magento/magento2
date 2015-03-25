@@ -139,7 +139,6 @@ class Validator implements ValidatorInterface
                 new Phrase(
                     'Invalid session %1 value.',
                     [self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY]
-
                 )
             );
         }
