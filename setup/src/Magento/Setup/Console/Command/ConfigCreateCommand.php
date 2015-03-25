@@ -47,8 +47,8 @@ class ConfigCreateCommand extends Command
     public function __construct(
         ConfigModel $configModel,
         ModuleList $moduleList,
-        DeploymentConfig $deploymentConfig)
-    {
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->configModel = $configModel;
         $this->moduleList = $moduleList;
         $this->deploymentConfig = $deploymentConfig;

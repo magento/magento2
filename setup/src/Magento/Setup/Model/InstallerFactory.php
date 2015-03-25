@@ -68,7 +68,8 @@ class InstallerFactory
                 $this->getResource(),
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager'),
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
-            )
+            ),
+            $this->serviceLocator->get('Magento\Setup\Model\ConfigModel')
         );
     }
 

@@ -25,9 +25,6 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
-use Magento\Setup\Module\ConnectionFactory;
-use Magento\Setup\Module\Setup;
-use Magento\Store\Model\Store;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -35,6 +32,10 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Model\Resource\Db\Context;
+use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Module\Setup;
+use Magento\Store\Model\Store;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -223,6 +224,11 @@ class Installer
     private $context;
 
     /**
+     * @var SetupConfigModel
+     */
+    private $setupConfigModel;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -242,6 +248,7 @@ class Installer
      * @param SampleData $sampleData
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Context $context
+     * @param SetupConfigModel $setupConfigModel
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -262,7 +269,8 @@ class Installer
         Filesystem $filesystem,
         SampleData $sampleData,
         ObjectManagerProvider $objectManagerProvider,
-        Context $context
+        Context $context,
+        SetupConfigModel $setupConfigModel
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -283,6 +291,7 @@ class Installer
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
         $this->context = $context;
+        $this->setupConfigModel = $setupConfigModel;
     }
 
     /**
@@ -359,122 +368,6 @@ class Installer
             $result[$module] = false !== $key;
         }
         return $this->deploymentConfigFactory->create($result);
-    }
-
-    /**
-     * Creates backend deployment configuration segment
-     *
-     * @param \ArrayObject|array $data
-     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
-     * @throws \InvalidArgumentException
-     */
-    private function createBackendConfig($data)
-    {
-        $key = DeploymentConfigMapper::KEY_BACKEND_FRONTNAME;
-        if (empty($data[$key])) {
-            throw new \InvalidArgumentException("Missing value for: '{$key}'");
-        }
-        return new BackendConfig([DeploymentConfigMapper::$paramMap[$key] => $data[$key]]);
-    }
-
-    /**
-     * Creates encrypt deployment configuration segment
-     * No new encryption key will be added if there is an existing deployment config file unless user provides one.
-     * Old encryption keys will persist.
-     * A new encryption key will be generated if there is no existing deployment config file.
-     *
-     * @param \ArrayObject|array $data
-     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
-     */
-    private function createEncryptConfig($data)
-    {
-        $key = '';
-        if (isset($data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY])) {
-            $key = $data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY];
-        }
-        // retrieve old encryption keys
-        if ($this->deploymentConfig->isAvailable()) {
-            $encryptInfo = $this->deploymentConfig->getSegment(EncryptConfig::CONFIG_KEY);
-            $oldKeys = $encryptInfo[EncryptConfig::KEY_ENCRYPTION_KEY];
-            $key = empty($key) ? $oldKeys : $oldKeys . "\n" . $key;
-        } else if (empty($key)) {
-            $key = md5($this->random->getRandomString(10));
-        }
-        $cryptConfigData =
-            [DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_ENCRYPTION_KEY] => $key];
-
-        // find the latest key to display
-        $keys = explode("\n", $key);
-        $this->installInfo[EncryptConfig::KEY_ENCRYPTION_KEY] = array_pop($keys);
-        return new EncryptConfig($cryptConfigData);
-    }
-
-    /**
-     * Creates db deployment configuration segment
-     *
-     * @param \ArrayObject|array $data
-     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
-     * @throws \InvalidArgumentException
-     */
-    private function createDbConfig($data)
-    {
-        $connection = [];
-        $required = [
-            DeploymentConfigMapper::KEY_DB_HOST,
-            DeploymentConfigMapper::KEY_DB_NAME,
-            DeploymentConfigMapper::KEY_DB_USER,
-        ];
-        foreach ($required as $key) {
-            if (!isset($data[$key])) {
-                throw new \InvalidArgumentException("Missing value: {$key}");
-            }
-            $connection[DeploymentConfigMapper::$paramMap[$key]] = $data[$key];
-        }
-        $optional = [
-            DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS,
-            DeploymentConfigMapper::KEY_DB_MODEL,
-            DeploymentConfigMapper::KEY_DB_PASS,
-        ];
-        foreach ($optional as $key) {
-            $connection[DeploymentConfigMapper::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : null;
-        }
-        $prefixKey = DeploymentConfigMapper::KEY_DB_PREFIX;
-        $config = [
-            DeploymentConfigMapper::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
-            'connection' => ['default' => $connection],
-        ];
-        return new DbConfig($config);
-    }
-
-    /**
-     * Creates session deployment configuration segment
-     *
-     * @param \ArrayObject|array $data
-     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
-     */
-    private function createSessionConfig($data)
-    {
-        $sessionConfigData = [
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_SESSION_SAVE] =>
-                isset($data[DeploymentConfigMapper::KEY_SESSION_SAVE]) ?
-                    $data[DeploymentConfigMapper::KEY_SESSION_SAVE] : null
-        ];
-        return new SessionConfig($sessionConfigData);
-    }
-
-    /**
-     * Creates install deployment configuration segment
-     *
-     * @param \ArrayObject|array $data
-     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
-     */
-    private function createInstallConfig($data)
-    {
-        $installConfigData = [
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DATE] =>
-                $data[DeploymentConfigMapper::KEY_DATE]
-        ];
-        return new InstallConfig($installConfigData);
     }
 
     /**
@@ -560,18 +453,9 @@ class Installer
     public function installDeploymentConfig($data)
     {
         $this->checkInstallationFilePermissions();
-        $data[InstallConfig::KEY_DATE] = date('r');
-
-        $configs = [
-            $this->createBackendConfig($data),
-            $this->createDbConfig($data),
-            $this->createEncryptConfig($data),
-            $this->createInstallConfig($data),
-            $this->createSessionConfig($data),
-            new ResourceConfig(),
-            $this->createModulesConfig($data),
-        ];
-        $this->deploymentConfigWriter->create($configs);
+        /* * @var \Magento\Setup\Model\ConfigModel $configModel */
+       // $configModel = $this->objectManagerProvider->get()->get('Magento\Setup\Model\ConfigModel');
+       $this->setupConfigModel->process($data->getArrayCopy());
     }
 
     /**

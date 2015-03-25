@@ -22,17 +22,27 @@ class ConfigModel
     protected $writer;
 
     /**
+     * File permissions checker
+     *
+     * @var FilePermissions
+     */
+   // private $filePermissions;
+
+    /**
      * Constructor
      *
      * @param ConfigOptionsListCollector $collector
      * @param Writer $writer
+     * param FilePermissions $filePermissions
      */
     public function __construct(
         ConfigOptionsListCollector $collector,
-        Writer $writer
+        Writer $writer //,
+        // FilePermissions $filePermissions
     ) {
         $this->collector = $collector;
         $this->writer = $writer;
+        // $this->filePermissions = $filePermissions;
     }
 
     /**
@@ -61,8 +71,9 @@ class ConfigModel
      */
     public function process($inputOptions)
     {
-        $fileConfigStorage = [];
+        $this->checkInstallationFilePermissions();
 
+        $fileConfigStorage = [];
         $options = $this->collector->collectOptions();
 
         foreach ($options as $moduleName => $option) {
@@ -125,5 +136,20 @@ class ConfigModel
         }
 
         return $errors;
+    }
+
+    /**
+     * Check permissions of directories that are expected to be writable for installation
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function checkInstallationFilePermissions()
+    {
+        $results = false; // pdltest $this->filePermissions->getMissingWritableDirectoriesForInstallation();
+        if ($results) {
+            $errorMsg = "Missing writing permissions to the following directories: '" . implode("' '", $results) . "'";
+            throw new \Exception($errorMsg);
+        }
     }
 }

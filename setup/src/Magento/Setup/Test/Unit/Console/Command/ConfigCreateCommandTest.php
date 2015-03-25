@@ -12,7 +12,7 @@ use Magento\Setup\Console\Command\ConfigCreateCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigCreateCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
@@ -132,5 +132,4 @@ class ConfigInstallCommandTest extends \PHPUnit_Framework_TestCase
         $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $command->initialize($this->input, $this->output);
     }
-
 }

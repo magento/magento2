@@ -184,8 +184,7 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $resourceData[self::$paramMap[ConfigOptionsList::INPUT_KEY_RESOURCE]] =
-            ['default_setup' => ['connection' => 'default']];
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'resource', $resourceData);
+        $resourceData = ['default_setup' => ['connection' => 'default']];
+        return new ConfigData(ConfigFilePool::APP_CONFIG, ConfigOptionsList::INPUT_KEY_RESOURCE, $resourceData);
     }
 }
