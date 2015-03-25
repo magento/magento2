@@ -18,7 +18,6 @@
         </xs:annotation>
         <xs:all>
             <!-- Components list -->
-            <xs:element type="layout" name="layout"/>
             <xs:element type="tab" name="tab"/>
             <xs:element type="dataSource" name="dataSource"/>
             <xs:element type="paging" name="paging"/>
@@ -34,7 +33,7 @@
             <xs:element type="filterRange" name="filterRange"/>
             <xs:element type="filterInput" name="filterInput"/>
             <xs:element type="filterDate" name="filterDate"/>
-            <xs:element type="wrapper" name="wrapper"/>
+            <xs:element type="container" name="container"/>
             <xs:element type="input" name="input"/>
             <xs:element type="checkbox" name="checkbox"/>
             <xs:element type="select" name="select"/>

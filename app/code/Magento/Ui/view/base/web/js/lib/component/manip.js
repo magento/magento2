@@ -5,18 +5,44 @@
 define([
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/registry/registry'
+    'uiRegistry'
 ], function (_, utils, registry) {
     'use strict';
 
-    function getOffsetFor(elems, offset) {
-        if (typeof offset === 'undefined') {
-            offset = -1;
+    function getIndex(container, target) {
+        var result;
+
+        container.some(function (item, index) {
+            result = index;
+
+            return item && (item.name === target || item === target);
+        });
+
+        return result;
+    }
+
+    function compact(container) {
+        return container.filter(utils.isObject);
+    }
+
+    function reserve(container, elem, position) {
+        var offset = position,
+            target;
+
+        if (_.isObject(position)) {
+            target = position.after || position.before;
+            offset = getIndex(container, target);
+
+            if (position.after) {
+                offset++;
+            }
         }
 
-        if (offset < 0) {
-            offset += elems.length + 1;
-        }
+        offset = utils.formatOffset(container, offset);
+
+        container[offset] ?
+            container.splice(offset, 0, elem) :
+            container[offset] = elem;
 
         return offset;
     }
@@ -27,20 +53,13 @@ define([
          * them into 'elems' array starting from provided position.
          *
          * @param {String} elem - Name of the component to insert.
-         * @param {Number} [offset=-1] - Position at which to insert elements.
+         * @param {Number} [position=-1] - Position at which to insert elements.
          * @returns {Component} Chainable.
          */
-        insert: function (elem, offset) {
-            var _elems = this._elems,
-                insert = this._insert;
+        insert: function (elem, position) {
+            reserve(this._elems, elem, position);
 
-            offset = getOffsetFor(_elems, offset);
-
-            _elems.splice(offset, 0, false);
-
-            registry.get(elem, function (elem) {
-                insert(elem, offset);
-            });
+            registry.get(elem, this._insert);
 
             return this;
         },
@@ -124,9 +143,14 @@ define([
          * @private
          *
          * @param {Object} elem - Element to insert.
-         * @param {Number} index - Position of the element.
          */
-        _insert: function (elem, index) {
+        _insert: function (elem) {
+            var index = this._elems.indexOf(elem.name);
+
+            if (!~index) {
+                return;
+            }
+
             this._elems[index] = elem;
 
             this._update()
@@ -141,7 +165,7 @@ define([
          * @returns {Component} Chainable.
          */
         _update: function () {
-            var _elems = _.compact(this._elems),
+            var _elems = compact(this._elems),
                 grouped = _.groupBy(_elems, 'displayArea'),
                 group;
 

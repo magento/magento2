@@ -62,7 +62,7 @@ define([
     }
 
     function links(owner, target, ownerProp, direction) {
-        if (!ko.isObservable(owner[ownerProp])) {
+        if (!ko.isObservable(owner[ownerProp]) && !_.isFunction(owner[ownerProp])) {
             owner.observe(ownerProp);
         }
 

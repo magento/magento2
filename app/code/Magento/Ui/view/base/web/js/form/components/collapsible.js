@@ -3,22 +3,22 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/component'
-], function(Component) {
+    'uiComponent'
+], function (Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            collapsible:    false,
-            opened:         true
+            collapsible: false,
+            opened: true
         },
 
         /**
          * Initializes 'opened' observable, calls 'initObservable' of parent
-         * 
+         *
          * @return {Object} - reference to instance
          */
-        initObservable: function(){
+        initObservable: function () {
             this._super()
                 .observe('opened');
 
@@ -27,10 +27,10 @@ define([
 
         /**
          * Toggles 'active' observable, triggers 'active' event
-         * 
+         *
          * @return {Object} - reference to instance
          */
-        toggle: function() {
+        toggle: function () {
             var opened = this.opened,
                 active = opened(!opened());
 
@@ -42,8 +42,8 @@ define([
         /**
          * Invokes 'toggle' method if instance has 'collapsible' property set to true
          */
-        onClick: function(){
-            if(this.collapsible){
+        onClick: function () {
+            if (this.collapsible) {
                 this.toggle();
             }
         }

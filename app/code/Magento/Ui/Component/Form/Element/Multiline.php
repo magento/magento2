@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Multiline
  */
-class Multiline extends AbstractFormElement
+class Multiline extends AbstractElement
 {
     const NAME = 'multiline';
 
@@ -31,10 +31,15 @@ class Multiline extends AbstractFormElement
     }
 
     /**
+     * Prepare component configuration
+     *
      * @return void
      */
     public function prepare()
     {
         parent::prepare();
+
+        $jsConfig = $this->getConfiguration($this, Input::NAME);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

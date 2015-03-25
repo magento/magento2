@@ -25,7 +25,7 @@ class MassAction extends AbstractComponent
     }
 
     /**
-     * Prepare component data
+     * Register component
      *
      * @return void
      */

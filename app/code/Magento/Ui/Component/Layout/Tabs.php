@@ -5,15 +5,16 @@
  */
 namespace Magento\Ui\Component\Layout;
 
+use Magento\Framework\Exception;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\BlockInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
+use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
 
 /**
- * Class Layout
+ * Class Tabs
  */
 class Tabs extends Generic implements LayoutInterface
 {
@@ -43,13 +44,20 @@ class Tabs extends Generic implements LayoutInterface
     protected $sortIncrement = 10;
 
     /**
+     * @var UiComponentFactory
+     */
+    protected $uiComponentFactory;
+
+    /**
      * Constructor
      *
+     * @param UiComponentFactory $uiComponentFactory
      * @param null|string $navContainerName
      */
-    public function __construct($navContainerName = null)
+    public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null)
     {
         $this->navContainerName = $navContainerName;
+        $this->uiComponentFactory = $uiComponentFactory;
     }
 
     /**
@@ -64,29 +72,12 @@ class Tabs extends Generic implements LayoutInterface
         $this->namespace = $component->getContext()->getNamespace();
 
         $this->addNavigationBlock();
-        return parent::build($component);
-    }
 
-    /**
-     * Add navigation block
-     *
-     * @return void
-     */
-    protected function addNavigationBlock()
-    {
-        $pageLayout = $this->component->getContext()->getPageLayout();
-        /** @var \Magento\Ui\Component\Layout\Tabs\Nav $navBlock */
-        if ($this->navContainerName) {
-            $navBlock = $pageLayout->addBlock(
-                'Magento\Ui\Component\Layout\Tabs\Nav',
-                'tabs_nav',
-                $this->navContainerName
-            );
-        } else {
-            $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', 'content');
-        }
-        $navBlock->setTemplate('Magento_Ui::layout/tabs/nav/default.phtml');
-        $navBlock->setData('data_scope', $this->namespace);
+        // Initialization of structure components
+        $this->initSections();
+        $this->initAreas();
+
+        return parent::build($component);
     }
 
     /**
@@ -96,22 +87,239 @@ class Tabs extends Generic implements LayoutInterface
      * @param UiComponentInterface $component
      * @param string $componentType
      * @return void
+     * @throws Exception
      */
-    protected function addChildren(
-        array &$topNode,
-        UiComponentInterface $component,
-        $componentType
-    ) {
-        $this->initSections();
-        $this->initAreas();
-        $this->initGroups();
-        $this->initElements();
+    protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
+    {
+        $childrenAreas = [];
+        $collectedComponents = [];
 
-        $this->processDataSource();
+        foreach ($component->getContext()->getDataProvider()->getMeta() as $name => $meta) {
+            $childComponent = $component->getComponent($name);
+            if (null === $childComponent) {
+                continue;
+            }
+            $collectedComponents[$childComponent->getName()] = true;
 
-        $this->processChildBlocks();
+            if (isset($meta['is_collection']) && $meta['is_collection'] === true) {
+                $label = $childComponent->getData('config/label');
+                $this->component->getContext()->addComponentDefinition(
+                    'collection',
+                    [
+                        'component' => 'Magento_Ui/js/form/components/collection',
+                        'extends' => $this->namespace
+                    ]
+                );
 
+                /**
+                 * @var UiComponentInterface $childComponent
+                 * @var array $structure
+                 */
+                list($childComponent, $structure) = $this->prepareChildComponents($childComponent, $name);
+
+                $childrenStructure = $structure[$name]['children'];
+
+                $structure[$name]['children'] = [
+                    $name . '_collection' => [
+                        'type' => 'collection',
+                        'config' => [
+                            'active' => 1,
+                            'removeLabel' => __('Remove ' . $label),
+                            'addLabel' => __('Add New ' . $label),
+                            'removeMessage' => $childComponent->getData('config/removeMessage'),
+                            'itemTemplate' => 'item_template',
+                        ],
+                        'children' => [
+                            'item_template' => ['type' => $this->namespace,
+                                'isTemplate' => true,
+                                'component' => 'Magento_Ui/js/form/components/collection/item',
+                                'childType' => 'group',
+                                'config' => [
+                                    'label' => __('New ' . $label),
+                                ],
+                                'children' => $childrenStructure
+                            ]
+                        ]
+                    ]
+                ];
+            } else {
+                /**
+                 * @var UiComponentInterface $childComponent
+                 * @var array $structure
+                 */
+                list($childComponent, $structure) = $this->prepareChildComponents($childComponent, $name);
+            }
+
+            $tabComponent = $this->createTabComponent($childComponent, $name);
+
+            $childrenAreas[$name] = [
+                'type' => $tabComponent->getComponentName(),
+                'dataScope' => 'data.' . $name,
+                'config' => isset($meta['config']) ? $meta['config'] : [],
+                'insertTo' => [
+                    $this->namespace . '.sections' => [
+                        'position' => $this->getNextSortIncrement()
+                    ]
+                ],
+                'children' => $structure,
+            ];
+        }
+
+        $this->addWrappedBlock($childrenAreas, $component, $collectedComponents);
+
+        $this->structure[static::AREAS_KEY]['children'] = $childrenAreas;
         $topNode = $this->structure;
+    }
+
+    /**
+     * Add wrapped layout block
+     *
+     * @param array $areas
+     * @param UiComponentInterface $component
+     * @param array $collectedComponents
+     * @return void
+     */
+    protected function addWrappedBlock(array &$areas, UiComponentInterface $component, array $collectedComponents)
+    {
+        /** @var \Magento\Ui\Component\Wrapper\Block $childComponent */
+        foreach ($component->getChildComponents() as $name => $childComponent) {
+            /** @var TabInterface $block */
+            $block = $childComponent->getBlock();
+            if (isset($collectedComponents[$name]) || !($block instanceof TabInterface) || !$block->canShowTab()) {
+                continue;
+            }
+            $block->setData('target_form', $this->namespace);
+
+            $config = [];
+            if ($block->isAjaxLoaded()) {
+                $config['url'] = $block->getTabUrl();
+            } else {
+                $config['content'] = $block->toHtml();
+            }
+
+            $tabComponent = $this->createTabComponent($childComponent, $name);
+            $areas[$name] = [
+                'type' => $tabComponent->getComponentName(),
+                'dataScope' => $name,
+                'insertTo' => [
+                    $this->namespace . '.sections' => [
+                        'position' => $this->getNextSortIncrement()
+                    ]
+                ],
+                'config' => [
+                    'label' => $block->getTabTitle()
+                ],
+                'children' => [
+                    $name => [
+                        'type' => 'html_content',
+                        'dataScope' => $name,
+                        'config' => $config,
+                    ]
+                ],
+            ];
+        }
+
+        $this->component->getContext()->addComponentDefinition(
+            'html_content',
+            [
+                'component' => 'Magento_Ui/js/form/components/html',
+                'extends' => $this->namespace
+            ]
+        );
+    }
+
+    /**
+     * Create tab component
+     *
+     * @param UiComponentInterface $childComponent
+     * @param string $name
+     * @return UiComponentInterface
+     * @throws Exception
+     */
+    protected function createTabComponent(UiComponentInterface $childComponent, $name)
+    {
+        $tabComponent = $this->uiComponentFactory->create(
+            $name,
+            'tab',
+            [
+                'context' => $this->component->getContext(),
+                'components' => [$childComponent->getName() => $childComponent]
+            ]
+        );
+        $tabComponent->prepare();
+        $this->component->addComponent($name, $tabComponent);
+
+        return $tabComponent;
+    }
+
+    /**
+     * To prepare the structure of child components
+     *
+     * @param UiComponentInterface $component
+     * @param string $parentName
+     * @return array
+     */
+    protected function prepareChildComponents(UiComponentInterface $component, $parentName)
+    {
+        $name = $component->getName();
+        $childComponents = $component->getChildComponents();
+
+        $childrenStructure = [];
+        foreach ($childComponents as $childName => $child) {
+            $isVisible = $child->getData('config/visible');
+            if ($isVisible !== null && $isVisible == 0) {
+                continue;
+            }
+            /**
+             * @var UiComponentInterface $childComponent
+             * @var array $childStructure
+             */
+            list($childComponent, $childStructure) = $this->prepareChildComponents($child, $component->getName());
+            $childrenStructure = array_merge($childrenStructure, $childStructure);
+            $component->addComponent($childName, $childComponent);
+        }
+
+        $structure = [
+            $name => [
+                'type' => $component->getComponentName(),
+                'name' => $component->getName(),
+                'children' => $childrenStructure
+            ]
+        ];
+
+        /** @var JsConfigInterface $component */
+        list($config, $dataScope) = $this->prepareConfig((array) $component->getJsConfig(), $name, $parentName);
+
+        if ($dataScope !== false) {
+            $structure[$name]['dataScope'] = $dataScope;
+        }
+        $structure[$name]['config'] = $config;
+
+        return [$component, $structure];
+    }
+
+    /**
+     * Prepare config
+     *
+     * @param array $config
+     * @param string $name
+     * @param string $parentName
+     * @return array
+     */
+    protected function prepareConfig(array $config, $name, $parentName)
+    {
+        $dataScope = false;
+        if (!isset($config['displayArea'])) {
+            $config['displayArea'] = 'body';
+        }
+        if (isset($config['dataScope'])) {
+            $dataScope = $config['dataScope'];
+            unset($config['dataScope']);
+        } else if ($name !== $parentName) {
+            $dataScope = $name;
+        }
+
+        return [$config, $dataScope];
     }
 
     /**
@@ -138,7 +346,7 @@ class Tabs extends Generic implements LayoutInterface
     protected function initAreas()
     {
         $this->structure[static::AREAS_KEY] = [
-            'type' => 'form',
+            'type' => $this->namespace,
             'config' => [
                 'namespace' => $this->namespace,
             ],
@@ -147,330 +355,36 @@ class Tabs extends Generic implements LayoutInterface
     }
 
     /**
-     * Prepare initial structure for groups
+     * Add navigation block
      *
      * @return void
      */
-    protected function initGroups()
+    protected function addNavigationBlock()
     {
-        $this->structure[static::GROUPS_KEY] = [
-            'children' => [],
-        ];
-    }
-
-    /**
-     * Prepare initial structure for elements
-     *
-     * @return void
-     */
-    protected function initElements()
-    {
-        $this->structure[static::ELEMENTS_KEY] = [
-            'children' => [],
-        ];
-    }
-
-    /**
-     * Process data source
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function processDataSource()
-    {
-        $dataProvider = $this->component->getContext()->getDataProvider();
-
-        foreach ($dataProvider->getMeta() as $name => $meta) {
-            $areName = $groupName = $name;
-            $areaConfig = $groupConfig = [
-                'config' => isset($meta['config']) ? $meta['config'] : []
-            ];
-            $areaConfig['insertTo'] = [
-                "{$this->namespace}.sections" => ['position' => $this->getNextSortIncrement()]
-            ];
-            $this->addArea($areName, $areaConfig);
-
-            $groupReferenceName = $this->addGroup($groupName, $groupConfig);
-            $this->addToArea($name, $groupReferenceName);
-            $fieldSet = $this->component->getComponent($name);
-            if (!$fieldSet) {
-                continue;
-            }
-
-            $elements = $fieldSet->getChildComponents();
-            uasort($elements, [$this, 'sortChildren']);
-
-            $collection = & $this->structure[static::ELEMENTS_KEY];
-
-            if (isset($meta['is_collection'])) {
-                $templateGroupName = $groupName . '_template';
-                $groupConfig['type'] = 'collection';
-                $groupConfig['dataScope'] = "{$this->namespace}.{$name}";
-                $groupConfig['config']['active'] = 1;
-                $groupConfig['config']['removeLabel'] = __('Remove ' . $groupConfig['config']['label']);
-                $groupConfig['config']['removeMessage'] = __('Are you sure you want to delete this item?');
-                $groupConfig['config']['addLabel'] = __('Add New ' . $groupConfig['config']['label']);
-                $groupConfig['config']['itemTemplate'] = 'item_template';
-
-                $itemTemplate = [
-                    'type' => $this->namespace,
-                    'isTemplate' => true,
-                    'component' => 'Magento_Ui/js/form/components/collection/item',
-                    'childType' => 'group',
-                    'config' => [
-                        'label' => __('New ' . $groupConfig['config']['label']),
-                    ],
-                ];
-
-                foreach ($elements as $elementName => $component) {
-                    if ($component instanceof DataSourceInterface) {
-                        continue;
-                    }
-                    $visibility = $component->getData('visible');
-                    if (isset($visibility) && $visibility === 'false') {
-                        continue;
-                    }
-
-                    $this->addToCollection(
-                        $itemTemplate,
-                        $elementName,
-                        "{$this->namespace}.{$elementName}",
-                        $component->getData()
-                    );
-
-                    $referenceName = "{$name}.elements.{$elementName}";
-                    $this->addToGroup($templateGroupName, $elementName, $referenceName, $component->getData());
-                }
-                $groupConfig['children']['item_template'] = $itemTemplate;
-                $templateGroupReferenceName = $this->addGroup($templateGroupName, $groupConfig);
-                $this->addToGroup($groupName, $templateGroupName, $templateGroupReferenceName);
-            } else {
-                foreach ($elements as $elementName => $component) {
-                    if ($component instanceof DataSourceInterface) {
-                        continue;
-                    }
-                    $visibility = $component->getData('config/visible');
-                    if (isset($visibility) && $visibility === 'false') {
-                        continue;
-                    }
-
-                    $this->addToCollection(
-                        $collection,
-                        $elementName,
-                        "{$this->namespace}.{$elementName}",
-                        $component->getData()
-                    );
-
-                    $referenceName = "{$name}.elements.{$elementName}";
-                    $this->addToGroup($groupName, $elementName, $referenceName, $component->getData());
-                }
-            }
-        }
-    }
-
-    /**
-     * Process child blocks
-     *
-     * @throws \Exception
-     * @return void
-     */
-    protected function processChildBlocks()
-    {
-        // Add child blocks content
-        foreach ($this->component->getChildComponents() as $blockName => $childBlock) {
-            /** @var BlockInterface $childBlock */
-            if ($childBlock instanceof UiComponentInterface) {
-                continue;
-            }
-            /** @var TabInterface $childBlock */
-            if (!($childBlock instanceof TabInterface)) {
-                throw new \Exception(__('"%1" tab should implement TabInterface', $blockName));
-            }
-            if (!$childBlock->canShowTab()) {
-                continue;
-            }
-            $childBlock->setData('target_form', $this->namespace);
-            $sortOrder = $childBlock->hasSortOrder() ? $childBlock->getSortOrder() : $this->getNextSortIncrement();
-            $this->addArea(
-                $blockName,
-                [
-                    'insertTo' => [
-                        "{$this->namespace}.sections" => ['position' => (int)$sortOrder]
-                    ],
-                    'config' => ['label' => $childBlock->getTabTitle()]
-                ]
+        $pageLayout = $this->component->getContext()->getPageLayout();
+        /** @var \Magento\Ui\Component\Layout\Tabs\Nav $navBlock */
+        if (isset($this->navContainerName)) {
+            $navBlock = $pageLayout->addBlock(
+                'Magento\Ui\Component\Layout\Tabs\Nav',
+                'tabs_nav',
+                $this->navContainerName
             );
+        } else {
+            $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', 'content');
+        }
+        $navBlock->setTemplate('Magento_Ui::layout/tabs/nav/default.phtml');
+        $navBlock->setData('data_scope', $this->namespace);
 
-            $config = [
+        $this->component->getContext()->addComponentDefinition(
+            'nav',
+            [
+                'component' => 'Magento_Ui/js/form/components/tab_group',
                 'config' => [
-                    'label' => $childBlock->getTabTitle()
-                ]
-            ];
-            if ($childBlock->isAjaxLoaded()) {
-                $config['config']['source'] = $childBlock->getTabUrl();
-            } else {
-                $config['config']['content'] = $childBlock->toHtml();
-            }
-            $config['type'] = 'html_content';
-            $referenceGroupName = $this->addGroup($blockName, $config);
-            $this->addToArea($blockName, $referenceGroupName);
-        }
-    }
-
-    /**
-     * Add area
-     *
-     * @param string $name
-     * @param array $config
-     * @return string
-     */
-    public function addArea($name, array $config = [])
-    {
-        $config['type'] = 'tab';
-        $this->structure[static::AREAS_KEY]['children'][$name] = $config;
-
-        return "{$this->namespace}.areas.{$name}";
-    }
-
-    /**
-     * Add item to area
-     *
-     * @param string $areaName
-     * @param string $itemName
-     * @return void
-     */
-    public function addToArea($areaName, $itemName)
-    {
-        $this->structure[static::AREAS_KEY]['children'][$areaName]['children'][] = $itemName;
-    }
-
-    /**
-     * Add group
-     *
-     * @param string $groupName
-     * @param array $config
-     * @return string
-     */
-    public function addGroup($groupName, array $config = [])
-    {
-        $this->structure[static::GROUPS_KEY]['children'][$groupName] = $config;
-
-        return "{$this->namespace}.groups.{$groupName}";
-    }
-
-    /**
-     * Add element to group
-     *
-     * @param string $groupName
-     * @param string $elementName
-     * @param string $referenceElementName
-     * @param array $element
-     * @return void
-     */
-    public function addToGroup($groupName, $elementName, $referenceElementName, array $element = [])
-    {
-        $groups = & $this->structure[static::GROUPS_KEY];
-        if (isset($element['fieldGroup'])) {
-            if ($elementName === $element['fieldGroup']) {
-                $groups['children'][$groupName]['children'][] = $referenceElementName;
-            }
-        } else {
-            $groups['children'][$groupName]['children'][] = $referenceElementName;
-        }
-    }
-
-    /**
-     * Add collection
-     *
-     * @param string $collectionName
-     * @param string $dataScope
-     * @param array $config
-     * @return string
-     */
-    public function addCollection($collectionName, $dataScope, array $config = [])
-    {
-        $this->structure[static::GROUPS_KEY]['children'][$collectionName] = [
-            'type' => 'collection',
-            'dataScope' => $dataScope,
-            'config' => $config,
-        ];
-
-        return "{$this->namespace}.groups.{$collectionName}";
-    }
-
-    /**
-     * Add element to collection
-     *
-     * @param array $collection
-     * @param string $elementName
-     * @param string $dataScope
-     * @param array $element
-     * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    public function addToCollection(array & $collection, $elementName, $dataScope, array $element)
-    {
-        $collection['children'][$elementName] = ['type' => 'group'];
-
-        if (isset($element['fieldGroup'])) {
-            $elementName = $element['fieldGroup'];
-            if (isset($element['displayArea']) && $elementName === $element['fieldGroup']) {
-                $collection['children'][$elementName]['config'] = ['displayArea' => $element['displayArea']];
-            }
-        } else {
-            if (isset($element['displayArea'])) {
-                $collection['children'][$elementName]['config'] = ['displayArea' => $element['displayArea']];
-            }
-        }
-
-        if (isset($element['constraints'])) {
-            if (isset($element['constraints']['validate'])) {
-                $element['validation'] = $element['constraints']['validate'];
-            }
-            if (isset($element['constraints']['filter'])) {
-                foreach ($element['constraints']['filter'] as $filter) {
-                    $element['listeners'] = [
-                        "data:{$filter['on']}" => ['filter' => [$filter['by']]],
-                    ];
-                }
-            }
-            unset($element['constraints']);
-        }
-
-        if (isset($element['size'])) {
-            $collection['children'][$elementName]['dataScope'] = $dataScope;
-            $size = (int) @$element['size'];
-            for ($i = 0; $i < $size; ++$i) {
-                $collection['children'][$elementName]['children'][] = [
-                    'type' => @$element['formElement'],
-                    'dataScope' => strval($i),
-                    'config' => $element,
-                ];
-                if (isset($element['validation']['required-entry'])) {
-                    unset($element['validation']['required-entry']);
-                }
-            }
-        } else {
-            $collection['children'][$elementName]['children'][] = [
-                'type' => @$element['formElement'],
-                'dataScope' => $dataScope,
-                'config' => $element,
-            ];
-        }
-    }
-
-    /**
-     * Add template to collection
-     *
-     * @param string $collectionName
-     * @param string $templateName
-     * @param array $template
-     * @return void
-     */
-    protected function addTemplateToCollection($collectionName, $templateName, $template)
-    {
-        $groups = & $this->structure[static::GROUPS_KEY];
-        $groups['children'][$collectionName]['children'][$templateName] = $template;
+                    'template' => 'ui/tab'
+                ],
+                'extends' => $this->namespace
+            ]
+        );
     }
 
     /**
@@ -481,25 +395,6 @@ class Tabs extends Generic implements LayoutInterface
     protected function getNextSortIncrement()
     {
         $this->sortIncrement += 10;
-
         return $this->sortIncrement;
-    }
-
-    /**
-     * Sort child elements
-     *
-     * @param UiComponentInterface $one
-     * @param UiComponentInterface $two
-     * @return int
-     */
-    public function sortChildren(UiComponentInterface $one, UiComponentInterface $two)
-    {
-        if (!$one->getData('config/sortOrder')) {
-            return 1;
-        }
-        if (!$two->getData('config/sortOrder')) {
-            return -1;
-        }
-        return intval($one->getData('config/sortOrder')) - intval($two->getData('config/sortOrder'));
     }
 }

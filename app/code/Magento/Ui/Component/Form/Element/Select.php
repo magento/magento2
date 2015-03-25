@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 /**
  * Class Select
  */
-class Select extends AbstractFormElement
+class Select extends AbstractElement
 {
     const NAME = 'select';
 
@@ -70,7 +70,7 @@ class Select extends AbstractFormElement
         }
         $this->setData('config', (array)$config);
 
-        $jsConfig = $this->getConfiguration($this);
+        $jsConfig = $this->getConfiguration($this, Input::NAME);
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 

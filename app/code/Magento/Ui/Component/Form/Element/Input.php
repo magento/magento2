@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Input
  */
-class Input extends AbstractFormElement
+class Input extends AbstractElement
 {
     const NAME = 'input';
 

@@ -5,21 +5,48 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Framework\Exception;
+use Magento\Ui\Component\Container;
 use Magento\Ui\Component\AbstractComponent;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Fieldset
  */
 class Fieldset extends AbstractComponent
 {
-    const UI_ELEMENT_FIELDSET = 'fieldset';
-
-    const NAME = 'date';
+    const NAME = 'fieldset';
 
     /**
      * @var bool
      */
     protected $collapsible = false;
+
+    /**
+     * @var UiComponentInterface[]
+     */
+    protected $fieldsInContainers = [];
+
+    /**
+     * Constructor
+     *
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param UiComponentInterface[] $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->uiComponentFactory = $uiComponentFactory;
+        parent::__construct($context, $components, $data);
+    }
+
 
     /**
      * Get component name
@@ -39,56 +66,84 @@ class Fieldset extends AbstractComponent
     public function prepare()
     {
         parent::prepare();
-        foreach ($this->getChildComponents() as $field) {
-            if ($field instanceof Field) {
-                $meta = $this->getContext()->getDataProvider()->getFieldMetaInfo($this->getName(), $field->getName());
-                if ($meta) {
-                    $config = $field->getData('config');
-                    $config = array_replace_recursive($config, $meta);
-                    $field->setData('config', $config);
-                }
+        foreach ($this->getChildComponents() as $name => $child) {
+            if ($child instanceof Container) {
+                $this->fieldsInContainers += $child->getChildComponents();
             }
+        }
+
+        $fieldsMeta = $this->getContext()->getDataProvider()->getFieldsMetaInfo($this->getName());
+        foreach ($fieldsMeta as $name => $fieldData) {
+            if (empty($fieldData)) {
+                continue;
+            }
+            $fieldComponent = $this->getComponent($name);
+            $this->prepareField($fieldData, $name, $fieldComponent);
+        }
+
+        $jsConfig = $this->getConfiguration($this);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+    }
+
+    /**
+     * Prepare field component
+     *
+     * @param array $fieldData
+     * @param string $name
+     * @param UiComponentInterface|null $fieldComponent
+     * @return void
+     * @throws Exception
+     */
+    protected function prepareField(array $fieldData, $name, UiComponentInterface $fieldComponent = null)
+    {
+        if ($fieldComponent === null) {
+            if (isset($this->fieldsInContainers[$name])) {
+                $this->updateField($fieldData, $this->fieldsInContainers[$name]);
+                return;
+            }
+            $fieldData = $this->updateDataScope($fieldData, $name);
+            $argument = [
+                'context' => $this->getContext(),
+                'data' => [
+                    'name' => $name,
+                    'config' => $fieldData
+                ]
+            ];
+            $fieldComponent = $this->uiComponentFactory->create($name, 'field', $argument);
+            $fieldComponent->prepare();
+            $this->addComponent($name, $fieldComponent);
+        } else {
+            $this->updateField($fieldData, $fieldComponent);
         }
     }
 
     /**
-     * @return string
+     * Update field data
+     *
+     * @param array $fieldData
+     * @param UiComponentInterface $component
+     * @return void
      */
-    public function getLegendText()
+    protected function updateField(array $fieldData, UiComponentInterface $component)
     {
-        return $this->getData('config/label');
+        $config = $component->getData('config');
+        $config = array_replace_recursive($config, $fieldData);
+        $config = $this->updateDataScope($config, $component->getName());
+        $component->setData('config', $config);
     }
 
     /**
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getIsCollapsible()
-    {
-        return $this->getData('config/collapsible', $this->collapsible);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAjaxUrl()
-    {
-        return $this->getData('config/source');
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->getData('config/content');
-    }
-
-    /**
+     * Update DataScope
+     *
+     * @param array $data
+     * @param string $name
      * @return array
      */
-    public function getChildren()
+    protected function updateDataScope(array $data, $name)
     {
-        return $this->getData('children');
+        if (!isset($data['dataScope'])) {
+            $data['dataScope'] = $name;
+        }
+        return $data;
     }
 }

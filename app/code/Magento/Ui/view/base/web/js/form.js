@@ -4,19 +4,19 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/form/component',
+    'uiComponent',
     'Magento_Ui/js/lib/spinner',
     './form/adapter'
 ], function (_, Component, loader, adapter) {
     'use strict';
 
-    function collectData(selector){
+    function collectData(selector) {
         var items = document.querySelectorAll(selector),
             result = {};
 
         items = Array.prototype.slice.call(items);
 
-        items.forEach(function(item){
+        items.forEach(function (item) {
             result[item.name] = item.value;
         });
 
@@ -25,7 +25,7 @@ define([
 
     return Component.extend({
 
-        initialize: function(){
+        initialize: function () {
             this._super()
                 .initAdapter()
                 .initSelector()
@@ -34,18 +34,18 @@ define([
             return this;
         },
 
-        initAdapter: function(){
+        initAdapter: function () {
             adapter.on({
-                'reset':            this.reset.bind(this),
-                'save':             this.save.bind(this, true),
-                'saveAndContinue':  this.save.bind(this, false)
+                'reset': this.reset.bind(this),
+                'save': this.save.bind(this, true),
+                'saveAndContinue': this.save.bind(this, false)
             });
 
             return this;
         },
-        
-        initSelector: function(){
-            this.selector = '[data-form-part='+ this.namespace +']';
+
+        initSelector: function () {
+            this.selector = '[data-form-part=' + this.namespace + ']';
 
             return this;
         },
@@ -56,12 +56,10 @@ define([
             return this;
         },
 
-        save: function(redirect){
-            var params = this.provider.params;
-
+        save: function (redirect) {
             this.validate();
 
-            if (!params.get('invalid')) {
+            if (!this.source.get('params.invalid')) {
                 this.submit(redirect);
             }
         },
@@ -70,14 +68,13 @@ define([
          * Submits form
          */
         submit: function (redirect) {
-            var additional  = collectData(this.selector),
-                provider    = this.provider;
+            var additional = collectData(this.selector);
 
-            _.each(additional, function(value, name){
-                provider.data.set(name, value);
+            _.each(additional, function (value, name) {
+                this.source.set('data.' + name, value);
             });
 
-            provider.save({
+            this.source.save({
                 redirect: redirect
             });
         },
@@ -86,16 +83,12 @@ define([
          * Validates each element and returns true, if all elements are valid.
          */
         validate: function () {
-            var provider = this.provider;
-
-            provider.params.set('invalid', false);
-            provider.data.trigger('validate');
+            this.source.set('params.invalid', false);
+            this.source.trigger('data.validate');
         },
 
-        reset: function(){
-            var data = this.provider.data;
-
-            data.trigger('reset');
+        reset: function () {
+            this.source.trigger('data.reset');
         }
     });
 });

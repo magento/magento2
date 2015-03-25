@@ -3,9 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    './abstract',
-    'mageUtils'
-], function (Abstract, utils) {
+    './abstract'
+], function (Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -25,14 +24,12 @@ define([
          * @param  {*} value
          * @return {Object} - reference to instance
          */
-        store: function () {
-            this._super();
-
+        onUpdate: function () {
             if (this.hasUnique) {
                 this.setUnique();
             }
 
-            return this;
+            return this._super();
         }
     });
 });

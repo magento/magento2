@@ -23,7 +23,7 @@ class Filters extends AbstractComponent
     }
 
     /**
-     * Prepare component configuration
+     * Register component.
      *
      * @return void
      */

@@ -8,7 +8,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Range
  */
-class Range extends AbstractFormElement
+class Range extends AbstractElement
 {
     const NAME = 'range';
 

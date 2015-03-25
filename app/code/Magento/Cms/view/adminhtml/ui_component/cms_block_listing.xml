@@ -27,17 +27,14 @@
             </item>
         </item>
     </argument>
-    <wrapper name="block_listing_top">
+    <container name="block_listing_top">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/header</item>
             </item>
-        </argument>
+        </argument>        
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/filters</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">top</item>
                     <item name="dataScope" xsi:type="string">params.filters</item>
@@ -45,9 +42,6 @@
             </argument>
             <filterRange name="block_id">
                 <argument name="data" xsi:type="array">
-                    <item name="js_config" xsi:type="array">
-                        <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
-                    </item>
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">block_id</item>
                         <item name="label" xsi:type="string" translate="true">ID</item>
@@ -94,7 +88,6 @@
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="dataScope" xsi:type="string">store_id</item>
-                        <item name="template" xsi:type="string" translate="true">ui/grid/filters/elements/select</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
                     </item>
                 </argument>
@@ -103,7 +96,6 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="template" xsi:type="string" translate="true">ui/grid/filters/elements/select</item>
                         <item name="label" xsi:type="string" translate="true">Status</item>
                         <item name="dataScope" xsi:type="string">is_active</item>
                         <item name="options" xsi:type="array">
@@ -121,9 +113,6 @@
             </filterSelect>
             <filterRange name="creation_time"  class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
-                    <item name="js_config" xsi:type="array">
-                        <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
-                    </item>
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">creation_time</item>
                         <item name="label" xsi:type="string" translate="true">Created</item>
@@ -133,7 +122,6 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataScope" xsi:type="string">from</item>
-                            <item name="template" xsi:type="string">ui/grid/filters/elements/date</item>
                             <item name="label" xsi:type="string" translate="true">From</item>
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
                         </item>
@@ -143,7 +131,6 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataScope" xsi:type="string">to</item>
-                            <item name="template" xsi:type="string">ui/grid/filters/elements/date</item>
                             <item name="label" xsi:type="string" translate="true">To</item>
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
                         </item>
@@ -152,9 +139,6 @@
             </filterRange>
             <filterRange name="update_time" class="Magento\Ui\Component\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
-                    <item name="js_config" xsi:type="array">
-                        <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
-                    </item>
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">update_time</item>
                         <item name="label" xsi:type="string" translate="true">Created</item>
@@ -164,7 +148,6 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataScope" xsi:type="string">from</item>
-                            <item name="template" xsi:type="string">ui/grid/filters/elements/date</item>
                             <item name="label" xsi:type="string" translate="true">From</item>
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
                         </item>
@@ -174,7 +157,6 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataScope" xsi:type="string">to</item>
-                            <item name="template" xsi:type="string">ui/grid/filters/elements/date</item>
                             <item name="label" xsi:type="string" translate="true">To</item>
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
                         </item>
@@ -185,21 +167,21 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="delete" xsi:type="array">
-                            <item name="confirm" xsi:type="string" translate="true">cscscscscscs!!!!!!!!</item>
+                            <item name="confirm" xsi:type="string" translate="true">Are you sure you want to perform this action?</item>
                             <item name="type" xsi:type="string">delete</item>
                             <item name="label" xsi:type="string" translate="true">Delete</item>
                             <item name="url" xsi:type="string">cms/block/massDelete</item>
                         </item>
+                        <item name="indexField" xsi:type="string">block_id</item>
                     </item>
                     <item name="indexField" xsi:type="string">block_id</item>
                 </item>
             </argument>
         </massaction>
-        <paging name="listing_paging" />
-    </wrapper>
+        <paging name="listing_paging"/>
+    </container>    
     <dataSource name="cms_block_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Cms\Model\Block\DataProvider</argument>
