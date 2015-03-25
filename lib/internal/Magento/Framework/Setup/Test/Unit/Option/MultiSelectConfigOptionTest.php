@@ -16,7 +16,7 @@ class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructInvalidFrontendType()
     {
-        new MultiSelectConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, ['a', 'b']);
+        new MultiSelectConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, ['a', 'b'], 'path/to/value');
     }
 
     /**
@@ -25,18 +25,28 @@ class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructNoOptions()
     {
-        new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, []);
+        new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, [], 'path/to/value');
     }
 
     public function testGetFrontendType()
     {
-        $option = new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, ['a', 'b']);
+        $option = new MultiSelectConfigOption(
+            'test',
+            MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT,
+            ['a', 'b'],
+            'path/to/value'
+        );
         $this->assertEquals(MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, $option->getFrontendType());
     }
 
     public function testGetSelectOptions()
     {
-        $option = new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, ['a', 'b']);
+        $option = new MultiSelectConfigOption(
+            'test',
+            MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT,
+            ['a', 'b'],
+            'path/to/value'
+        );
         $this->assertEquals(['a', 'b'], $option->getSelectOptions());
     }
 
@@ -46,7 +56,12 @@ class MultiSelectConfigOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateException()
     {
-        $option = new MultiSelectConfigOption('test', MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT, ['a', 'b']);
+        $option = new MultiSelectConfigOption(
+            'test',
+            MultiSelectConfigOption::FRONTEND_WIZARD_MULTISELECT,
+            ['a', 'b'],
+            'path/to/value'
+        );
         $option->validate(['c', 'd']);
     }
 }
