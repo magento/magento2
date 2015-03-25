@@ -170,7 +170,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         }
 
         if (!empty($rulesFilterSqlParts)) {
-            $this->getSelect()->where(implode($rulesFilterSqlParts, ' OR '));
+            $this->getSelect()->where(implode(' OR ', $rulesFilterSqlParts));
         }
         return $this;
     }
