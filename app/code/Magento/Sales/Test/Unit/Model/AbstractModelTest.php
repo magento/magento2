@@ -30,4 +30,17 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('order', $this->model->getEventObject());
     }
+
+    public function testDataManagement()
+    {
+        $this->model->setData('code-1', 'value-1');
+        $this->assertEquals('value-1', $this->model->getData('code-1'));
+        $this->model->flushDataIntoModel();
+        $this->model->setData('code-1', 'value-2');
+        $this->assertEquals('value-2', $this->model->getData('code-1'));
+        $this->model->setData('code-2', 'value-3');
+        $this->assertEquals(['code-1' => 'value-2', 'code-2' => 'value-3'], $this->model->getData());
+        $this->model->unsetData('code-1');
+        $this->assertEquals(null, $this->model->getData('code-1'));
+    }
 }
