@@ -159,7 +159,7 @@ class Info extends AbstractModel implements InfoInterface
             throw new \Magento\Framework\Exception\LocalizedException(__('The payment disallows storing objects.'));
         }
         $this->initAdditionalInformation();
-        if (is_array($key) && is_null($value)) {
+        if (is_array($key) && $value === null) {
             $this->additionalInformation = $key;
         } else {
             $this->additionalInformation[$key] = $value;
