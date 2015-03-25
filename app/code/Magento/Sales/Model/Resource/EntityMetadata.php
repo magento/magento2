@@ -27,12 +27,12 @@ class EntityMetadata
      */
     public function getFields(AbstractModel $entity)
     {
-        if (!isset($this->metadataInfo[$entity->getEntityType()])) {
-            $this->metadataInfo[$entity->getEntityType()] =
+        if (!isset($this->metadataInfo[get_class($entity)])) {
+            $this->metadataInfo[get_class($entity)] =
                 $entity->getResource()->getReadConnection()->describeTable(
                     $entity->getResource()->getMainTable()
                 );
         }
-        return $this->metadataInfo[$entity->getEntityType()];
+        return $this->metadataInfo[get_class($entity)];
     }
 }

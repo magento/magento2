@@ -144,7 +144,7 @@ abstract class Entity extends AbstractDb
                 $object->setUpdatedAt($row['updated_at']);
             }
         }
-        $object->flushDataIntoModel();
+//        $object->flushDataIntoModel();
         parent::_afterSave($object);
         return $this;
     }
@@ -173,7 +173,8 @@ abstract class Entity extends AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->flushDataIntoModel();
+//        $object->flushDataIntoModel();
+        $this->entitySnapshot->registerSnapshot($object);
         return $this;
     }
 
@@ -194,7 +195,7 @@ abstract class Entity extends AbstractDb
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-        if ($this->entitySnapshot->isModified($object)) {
+        if (!$this->entitySnapshot->isModified($object)) {
             $this->processRelations($object);
             return $this;
         }
@@ -226,6 +227,7 @@ abstract class Entity extends AbstractDb
                 }
                 $this->unserializeFields($object);
                 $this->_afterSave($object);
+                $this->entitySnapshot->registerSnapshot($object);
                 $object->afterSave();
                 $this->processRelations($object);
             }

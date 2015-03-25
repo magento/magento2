@@ -36,7 +36,7 @@ class EntitySnapshot
     public function registerSnapshot(AbstractModel $entity)
     {
         $data = array_intersect_key($entity->getData(), $this->entityMetadata->getFields($entity));
-        $this->snapshotData[$entity->getEntityType()][$entity->getId()] = $data;
+        $this->snapshotData[get_class($entity)][$entity->getId()] = $data;
     }
 
     /**
@@ -49,7 +49,7 @@ class EntitySnapshot
             return true;
         }
         $data = array_intersect_key($entity->getData(), $this->entityMetadata->getFields($entity));
-        if ($data !== $this->snapshotData[$entity->getEntityType()][$entity->getId()]) {
+        if ($data !== $this->snapshotData[get_class($entity)][$entity->getId()]) {
             return true;
         }
         return false;

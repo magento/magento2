@@ -18,6 +18,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Invoice\Grid\Collec
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $registryManager
+     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -27,11 +28,20 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Invoice\Grid\Collec
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Registry $registryManager,
+        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->registryManager = $registryManager;
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $entitySnapshot,
+            $connection,
+            $resource
+        );
     }
 
     /**

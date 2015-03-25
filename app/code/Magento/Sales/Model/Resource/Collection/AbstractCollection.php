@@ -18,6 +18,34 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     protected $_countSelect;
 
     /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot
+     */
+    protected $entitySnapshot;
+
+    /**
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param null $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @throws \Zend_Exception
+     */
+    public function __construct(
+        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
+        $connection = null,
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
+    ) {
+        $this->entitySnapshot = $entitySnapshot;
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+    }
+
+    /**
      * Set select count sql
      *
      * @param \Zend_Db_Select $countSelect
@@ -228,8 +256,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
             if ($this->getIdFieldName()) {
                 $item->setIdFieldName($this->getIdFieldName());
             }
-            $item->setData($data)->flushDataIntoModel();
-
+            $item->setData($data);
+            $this->entitySnapshot->registerSnapshot($item);
             return $item;
         }
         return false;
@@ -256,7 +284,8 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
                 if ($this->getIdFieldName()) {
                     $item->setIdFieldName($this->getIdFieldName());
                 }
-                $item->setData($row)->flushDataIntoModel();
+                $item->setData($row);
+                $this->entitySnapshot->registerSnapshot($item);
                 $this->addItem($item);
             }
         }

@@ -40,7 +40,8 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\DB\Helper $coreResourceHelper
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -49,10 +50,19 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Helper $coreResourceHelper,
+        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $entitySnapshot,
+            $connection,
+            $resource
+        );
         $this->_coreResourceHelper = $coreResourceHelper;
     }
 

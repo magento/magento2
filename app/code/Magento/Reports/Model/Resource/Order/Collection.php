@@ -70,7 +70,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
-     * @param mixed $connection
+     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -86,6 +87,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
+        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -95,6 +97,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             $fetchStrategy,
             $eventManager,
             $coreResourceHelper,
+            $entitySnapshot,
             $connection,
             $resource
         );
