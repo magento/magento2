@@ -14,6 +14,7 @@ define([
         options: {
             isRecursive: true,
             maxItemsVisible: 3,
+            selectorItem: '#mini-cart > li.product-item',
             selectorItemQty: ':input.cart-item-qty',
             selectorItemButton: ':button.update-cart-item',
             selectorSummaryQty: 'div.content > div.items-total',
@@ -34,12 +35,14 @@ define([
             }, this));
 
             // Add event on "Close" button click
-            $(this.options.closeButton).on('click', $.proxy(function() {
-                $(this.options.targetElement).dropdownDialog("close");
-            }, this));
+            $(this.options.closeButton).click(function(event) {
+                event.stopPropagation();
+                $(self.options.targetElement).dropdownDialog("close");
+            });
 
             // Add event on "Remove item" click
-            $(this.options.removeButton).click(function() {
+            $(this.options.removeButton).click(function(event) {
+                event.stopPropagation();
                 if (confirm(self.options.confirmMessage)) {
                     self._removeItem($(this));
                 }
@@ -75,7 +78,16 @@ define([
             this._ajax(this.options.updateItemQtyUrl, {
                 item_id: itemId,
                 item_qty: $('#cart-item-' + itemId + '-qty').val()
-            });
+            }, elem, this._updateQtyAfter);
+
+        },
+
+        _updateQtyAfter: function(elem, response) {
+            if ($.type(response.data) === 'object') {
+                this._refreshSummaryQty(response.data.summary_qty, response.data.summary_text);
+                this._refreshSubtotal(response.data.subtotal);
+                this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
+            }
             this._hideButton(elem);
         },
 
@@ -83,36 +95,46 @@ define([
             var itemId = elem.data('cart-item');
             this._ajax(this.options.removeItemUrl, {
                 item_id: itemId
-            })
+            }, elem, this._removeItemAfter);
+        },
+
+        _removeItemAfter: function(elem, response) {
+            if ($.type(response.data) === 'object') {
+                this._refreshSummaryQty(response.data.summary_qty, response.data.summary_text);
+                this._refreshSubtotal(response.data.subtotal);
+                this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
+            }
+            elem.parents(this.options.selectorItem).remove();
+            this._calcHeight();
         },
 
         /**
          * @param url - ajax url
          * @param data - post data for ajax call
+         * @param elem - element
+         * @param callback - callback method to execute after AJAX success
          */
-        _ajax: function(url, data) {
+        _ajax: function(url, data, elem, callback) {
             $.ajax({
                 url: url,
                 data: data,
                 type: 'post',
                 dataType: 'json',
-                context: this,
-                success: function (response) {
-                    if (response.success && $.type(response.data) === 'object') {
-                        this._refreshSummaryQty(response.data.summary_qty, response.data.summary_text);
-                        this._refreshSubtotal(response.data.subtotal);
-                        this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
+                context: this
+            })
+                .done(function(response) {
+                    if (response.success) {
+                        callback.call(this, elem, response);
                     } else {
                         var msg = response.error_message;
                         if (msg) {
                             window.alert($.mage.__(msg));
                         }
                     }
-                },
-                error: function (error) {
+                })
+                .fail(function(error) {
                     console.log(JSON.stringify(error));
-                }
-            });
+                });
         },
 
         _refreshSummaryQty: function(qty, text) {
