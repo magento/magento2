@@ -42,7 +42,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->pageCriteriaFactoryMock = $this->getMock(
-            'Magento\Cms\Model\Resource\PageCriteriaFactory',
+            '\Magento\Framework\Api\SearchCriteriaInterfaceFactory',
             ['create'],
             [],
             '',

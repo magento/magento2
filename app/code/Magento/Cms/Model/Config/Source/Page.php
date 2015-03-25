@@ -21,17 +21,17 @@ class Page implements \Magento\Framework\Option\ArrayInterface
     protected $pageRepository;
 
     /**
-     * @var \Magento\Cms\Model\Resource\PageCriteria
+     * @var \Magento\Framework\Api\SearchCriteriaInterfaceFactory
      */
     protected $pageCriteriaFactory;
 
     /**
      * @param \Magento\Cms\Model\PageRepository $pageRepository
-     * @param \Magento\Cms\Model\Resource\PageCriteriaFactory $pageCriteriaFactory
+     * @param \Magento\Framework\Api\SearchCriteriaInterfaceFactory $pageCriteriaFactory
      */
     public function __construct(
         \Magento\Cms\Model\PageRepository $pageRepository,
-        \Magento\Cms\Model\Resource\PageCriteriaFactory $pageCriteriaFactory
+        \Magento\Framework\Api\SearchCriteriaInterfaceFactory $pageCriteriaFactory
     ) {
         $this->pageRepository = $pageRepository;
         $this->pageCriteriaFactory = $pageCriteriaFactory;
