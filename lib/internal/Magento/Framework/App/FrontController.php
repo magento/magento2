@@ -80,10 +80,8 @@ class FrontController implements FrontControllerInterface
      * Handle exception
      *
      * @param \Exception $e
-     * @param \Magento\Framework\App\ActionInterface $actionInstance
-     * @return \Magento\Framework\Controller\Result\Redirect
      */
-    protected function handleException($e, $actionInstance)
+    protected function handleException($e)
     {
         $needToMaskDisplayMessage = !($e instanceof \Magento\Framework\Exception\LocalizedException)
             && ($this->appState->getMode() != State::MODE_DEVELOPER);
@@ -92,7 +90,6 @@ class FrontController implements FrontControllerInterface
             : $e->getMessage();
         $this->messageManager->addError($displayMessage);
         $this->logger->critical($e->getMessage());
-        return $actionInstance->getDefaultRedirect();
     }
 
     /**
@@ -116,7 +113,8 @@ class FrontController implements FrontControllerInterface
                     } catch (Action\NotFoundException $e) {
                         throw $e;
                     } catch (\Exception $e) {
-                        $result = $this->handleException($e, $actionInstance);
+                        $this->handleException($e);
+                        $result = $actionInstance->getDefaultRedirect();
                     }
                     break;
                 }
