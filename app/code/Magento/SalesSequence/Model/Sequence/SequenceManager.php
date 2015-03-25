@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
-use Magento\Sales\Model\AbstractModel;
 use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceSequenceMeta;
 use Magento\SalesSequence\Model\SequenceFactory;
 
@@ -39,16 +38,16 @@ class SequenceManager
     /**
      * Returns sequence for given entityType and store
      *
-     * @param AbstractModel $entity
+     * @param string $entityType
      * @param int $storeId
      * @return \Magento\Framework\DB\Sequence\SequenceInterface
      */
-    public function getSequence(AbstractModel $entity, $storeId)
+    public function getSequence($entityType, $storeId)
     {
         return $this->sequenceFactory->create(
             [
                 'meta' => $this->resourceSequenceMeta->loadByEntityTypeAndStore(
-                    $entity->getEntityType(),
+                    $entityType,
                     $storeId
                 )
             ]
