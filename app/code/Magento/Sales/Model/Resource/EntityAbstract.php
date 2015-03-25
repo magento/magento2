@@ -13,7 +13,7 @@ use Magento\SalesSequence\Model\Sequence\SequenceManager;
  * Flat sales resource abstract
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class Entity extends AbstractDb
+abstract class EntityAbstract extends AbstractDb
 {
     /**
      * Event prefix

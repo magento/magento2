@@ -18,6 +18,8 @@ class EntityMetadata
     protected $metadataInfo = [];
 
     /**
+     * Returns list of entity fields that are applicable for persistence operations
+     *
      * @param AbstractModel $entity
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException

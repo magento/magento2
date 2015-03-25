@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Resource;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\SalesSequence\Model\Sequence\SequenceManager;
-use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;

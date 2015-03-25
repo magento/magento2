@@ -5,12 +5,13 @@
  */
 namespace Magento\Sales\Model\Resource;
 
-
 use Magento\Framework\Model\AbstractModel;
 
 class EntitySnapshot
 {
     /**
+     * Array of snapshots of entities data
+     *
      * @var array
      */
     protected $snapshotData = [];
@@ -27,6 +28,8 @@ class EntitySnapshot
     }
 
     /**
+     * Register snapshot of entity data, for tracking changes
+     *
      * @param AbstractModel $entity
      * @return void
      */

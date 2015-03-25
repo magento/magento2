@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order\Status;
 
 use Magento\Sales\Model\Order\Status\History\Validator;
-use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntityAbstract;
 use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
 
@@ -15,7 +15,7 @@ use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class History extends Entity implements OrderStatusHistoryResourceInterface
+class History extends EntityAbstract implements OrderStatusHistoryResourceInterface
 {
     /**
      * @var Validator

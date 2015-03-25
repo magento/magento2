@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
-use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntityAbstract;
 use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 
@@ -14,7 +14,7 @@ use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Comment extends Entity implements ShipmentCommentResourceInterface
+class Comment extends EntityAbstract implements ShipmentCommentResourceInterface
 {
     /**
      * Event prefix

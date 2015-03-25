@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Resource\Order;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\SalesSequence\Model\Sequence\SequenceManager;
 use Magento\Sales\Model\Resource\Attribute;
-use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
 use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
