@@ -24,12 +24,19 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
             $this->messageManager->addError(__('This rule no longer exists.'));
             $this->_redirect('tax/*/');
             return;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('Something went wrong deleting this tax rule.'));
         }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 }
