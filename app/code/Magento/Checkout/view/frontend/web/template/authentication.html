@@ -1,6 +1,6 @@
 <li id="opc-billing" class="section allow active">
     <div class="step-title" data-role="title">
-        <span class="number">1</span>
+        <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Authentication')"></h2>
     </div>
     <div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="fadeVisible: !isLoggedIn()">

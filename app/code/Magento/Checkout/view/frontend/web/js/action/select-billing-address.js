@@ -31,7 +31,7 @@ define(
                 function (response) {
                     billingAddress.id = response;
                     quote.setBillingAddress(billingAddress, useForShipping);
-                    if (useForShipping === '1') {
+                    if (useForShipping === '1' && !quote.isVirtual()) {
                         //TODO: need to use use_for_shipping key in saveBilling request instead additional request
                         selectShippingAddress(billingAddressId, true);
                     } else {

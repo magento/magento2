@@ -6,7 +6,7 @@
 -->
 <li id="opc-billing" class="section allow active">
     <div class="step-title" data-role="title">
-        <span class="number">2</span>
+        <span class="number" data-bind="text: stepNumber()"></span>
         <h2>Billing Information</h2>
     </div>
     <div id="checkout-step-billing" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()">
@@ -22,6 +22,8 @@
                     "></select>
                 </div>
             </div>
+
+            <!-- ko if: quoteIsVirtual == 0 -->
             <div class="field choice">
                 <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" data-bind="checked: useForShipping" />
                 <label class="label" for="billing:use_for_shipping_yes"><span>Ship to this address</span></label>
@@ -30,6 +32,8 @@
                 <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" class="radio" data-bind="checked: useForShipping" />
                 <label class="label" for="billing:use_for_shipping_no"><span>Ship to different address</span></label>
             </div>
+            <!-- /ko -->
+
             <input type="hidden" name="billing[use_for_shipping]" value="1" />
             <div class="actions" id="billing-buttons-container">
                 <div class="primary">

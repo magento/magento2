@@ -1,6 +1,6 @@
-<li id="opc-shipping" class="section allow active">
+<li id="opc-shipping" class="section allow active" data-bind="fadeVisible: isActive()">
     <div class="step-title" data-role="title">
-        <span class="number">3</span>
+        <span class="number" data-bind="text: stepNumber()"></span>
         <h2>Shipping Information</h2>
     </div>
     <div id="checkout-step-shipping"

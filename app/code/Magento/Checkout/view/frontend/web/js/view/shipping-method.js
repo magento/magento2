@@ -17,12 +17,17 @@ define(
         'Magento_Checkout/js/model/step-navigator'
     ],
     function ($, Component, quote, shippingService, selectShippingMethod, priceUtils, navigator) {
-
+        var stepName = 'shippingMethod';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-method',
+                stepNumber: function(){
+                    return navigator.getStepNumber(stepName);
+                },
                 rates: shippingService.getRates(),
-                quoteHasShippingAddress: quote.getShippingAddress(),
+                quoteHasShippingAddress: function() {
+                    return quote.isVirtual() || quote.getShippingAddress();
+                },
 
                 verifySelectedMethodCode: function (data, value) {
                     if (quote.getSelectedShippingMethod() == data) {
@@ -45,10 +50,17 @@ define(
                     //todo add format data
                     return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
                 },
-                isVisible: navigator.isStepVisible('shippingMethod'),
+
                 // Checkout step navigation
+                isVisible: navigator.isStepVisible(stepName),
+                isActive: function() {
+                    if (quote.isVirtual()) {
+                        navigator.setStepEnabled(stepName, false);
+                    }
+                    return !quote.isVirtual();
+                },
                 backToShippingAddress: function () {
-                    navigator.setCurrent('shippingMethod').goBack();
+                    navigator.setCurrent(stepName).goBack();
                 }
             }
         });

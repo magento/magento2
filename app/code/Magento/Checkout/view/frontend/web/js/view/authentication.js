@@ -11,10 +11,15 @@ define(
         'ko',
         'Magento_Ui/js/form/component',
         'Magento_Customer/js/action/login',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function(ko, Component, login, customer) {
+    function(ko, Component, login, customer, navigator) {
+        var stepName = 'authentication';
         return Component.extend({
+            stepNumber: function(){
+                return navigator.getStepNumber(stepName);
+            },
             isLoggedIn: customer.isLoggedIn(),
             isAllowedGuestCheckout: true,
             isRegistrationAllowed: true,

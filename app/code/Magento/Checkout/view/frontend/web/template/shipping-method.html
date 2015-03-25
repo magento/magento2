@@ -1,6 +1,6 @@
-<li id="opc-shipping_method" class="section allow active" role="presentation" data-collapsible="true">
+<li id="opc-shipping_method" class="section allow active" data-bind="fadeVisible: isActive()">
     <div class="step-title" data-role="title" aria-controls="checkout-step-shipping_method" role="tab" aria-selected="true" aria-expanded="true" tabindex="0">
-        <span class="number">4</span>
+        <span class="number" data-bind="text: stepNumber()"></span>
         <h2>Shipping Method</h2>
     </div>
     <div id="checkout-step-shipping_method"

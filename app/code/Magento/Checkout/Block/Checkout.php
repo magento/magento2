@@ -219,12 +219,16 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @return string|bool
      */
     public function getSelectedShippingMethod()
-    {   $selectedShippingMethod = false;
+    {
+        $selectedShippingMethod = false;
         $quoteId = $this->getQuote()->getId();
         try {
-            $selectedShippingMethod = $this->shippingMethodManagement->get($quoteId)->getMethodCode();
+            $shippingMethod = $this->shippingMethodManagement->get($quoteId);
+            if ($shippingMethod) {
+                $selectedShippingMethod = $shippingMethod->getMethodCode();
+            }
         } catch( \Exception $e) {
-
+            //do nothing
         }
         return \Zend_Json::encode($selectedShippingMethod);
     }

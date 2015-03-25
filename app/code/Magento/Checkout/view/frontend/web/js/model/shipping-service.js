@@ -15,10 +15,11 @@ define(
     ],
     function (ko, $, storage, quote) {
         var rates = ko.observableArray([]);
-
         quote.getShippingAddress().subscribe(function () {
-            storage.get('rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods', 'json').
-                success(function (data) {
+            storage.get(
+                'rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods', 'json'
+            ).success(
+                function (data) {
                     var ratesData = [];
                     rates.removeAll();
                     $.each(data, function (key, entity) {
@@ -35,8 +36,8 @@ define(
                         rates.push(ratesData[i]);
                     }
                 }
-            ).
-                error(function (data) {
+            ).error(
+                function (data) {
                     rates([]);
                 }
             )
@@ -47,4 +48,5 @@ define(
                 return rates;
             }
         }
-    });
+    }
+);

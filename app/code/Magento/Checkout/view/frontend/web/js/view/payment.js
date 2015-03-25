@@ -16,12 +16,17 @@ define(
         'Magento_Checkout/js/model/step-navigator'
     ],
     function ($, Component, quote, paymentService, selectPaymentMethod, navigator) {
+        var stepName = 'paymentMethod';
         var paymentMethods = paymentService.getAvailablePaymentMethods();
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',
-                quoteHasShippingMethod: quote.getShippingMethod(),
-
+                stepNumber: function(){
+                    return navigator.getStepNumber(stepName);
+                },
+                quoteHasShippingMethod: function() {
+                    return quote.isVirtual() || quote.getShippingMethod();
+                },
                 setPaymentMethod: function(form) {
                     var paymentMethodCode = $("input[name='payment[method]']:checked", form).val();
                     if (!paymentMethodCode) {
@@ -32,9 +37,9 @@ define(
                 getAvailablePaymentMethods: function() {
                     return paymentMethods();
                 },
-                isVisible: navigator.isStepVisible('paymentMethod'),
+                isVisible: navigator.isStepVisible(stepName),
                 backToShippingMethod: function() {
-                    navigator.setCurrent('paymentMethod').goBack();
+                    navigator.setCurrent(stepName).goBack();
                 }
             }
         });

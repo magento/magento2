@@ -16,14 +16,24 @@ define(
         'Magento_Checkout/js/model/step-navigator'
     ],
     function(Component, ko, selectShippingAddress, customer, quote, navigator) {
+        var stepName = 'shippingAddress';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',
+                stepNumber: function(){
+                    return navigator.getStepNumber(stepName);
+                },
                 addresses: customer.getShippingAddressList(),
                 selectedAddressId: ko.observable(null),
                 sameAsBilling: ko.observable(null),
-                isVisible: navigator.isStepVisible('shippingAddress'),
                 quoteHasBillingAddress: quote.getBillingAddress(),
+                isVisible: navigator.isStepVisible(stepName),
+                isActive: function() {
+                    if (quote.isVirtual()) {
+                        navigator.setStepEnabled(stepName, false);
+                    }
+                    return !quote.isVirtual();
+                },
                 selectShippingAddress: function() {
                     selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());
                 },
@@ -42,7 +52,7 @@ define(
                 },
                 // Checkout step navigation
                 backToBilling: function() {
-                    navigator.setCurrent('shippingAddress').goBack();
+                    navigator.setCurrent(stepName).goBack();
                 }
             }
         });
