@@ -173,6 +173,7 @@ class SequenceBuilder
      * Validate sequence before save
      *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return void
      */
     protected function validate()
     {

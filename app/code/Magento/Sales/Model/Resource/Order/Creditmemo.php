@@ -43,6 +43,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SequenceManager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
      * @param CreditmemoGrid $gridAggregator
      * @param string|null $resourcePrefix
      */

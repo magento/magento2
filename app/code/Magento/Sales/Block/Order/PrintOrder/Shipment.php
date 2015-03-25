@@ -42,10 +42,12 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      * @var \Magento\Sales\Model\Order\Address\Renderer
      */
     protected $addressRenderer;
+
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      */
     public function __construct(

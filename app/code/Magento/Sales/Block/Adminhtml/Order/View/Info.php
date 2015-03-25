@@ -50,6 +50,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Customer\Api\CustomerMetadataInterface $metadata
      * @param \Magento\Customer\Model\Metadata\ElementFactory $elementFactory
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      */
     public function __construct(

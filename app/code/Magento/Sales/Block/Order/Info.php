@@ -35,6 +35,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     protected $paymentHelper;
 
+    /**
+     * @var AddressRenderer
+     */
     protected $addressRenderer;
 
     /**

@@ -7,6 +7,9 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class EntitySnapshot
+ */
 class EntitySnapshot
 {
     /**
@@ -21,6 +24,11 @@ class EntitySnapshot
      */
     protected $entityMetadata;
 
+    /**
+     * Initialization
+     *
+     * @param EntityMetadata $entityMetadata
+     */
     public function __construct(
         EntityMetadata $entityMetadata
     ) {

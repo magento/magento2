@@ -26,6 +26,8 @@ class Renderer
     protected $eventManager;
 
     /**
+     * Constructor
+     *
      * @param AddressConfig $addressConfig
      * @param EventManager $eventManager
      */
@@ -40,6 +42,7 @@ class Renderer
     /**
      * Format address in a specific way
      *
+     * @param Address $address
      * @param string $type
      * @return string|null
      */

@@ -6,6 +6,9 @@
 
 namespace Magento\Payment\Model;
 
+/**
+ * Interface InfoInterface
+ */
 interface InfoInterface
 {
     /**
@@ -27,7 +30,7 @@ interface InfoInterface
     /**
      * Set Additional information about payment into Payment model
      *
-     * @param $key
+     * @param mixed $key
      * @param null $value
      * @return mixed
      */
