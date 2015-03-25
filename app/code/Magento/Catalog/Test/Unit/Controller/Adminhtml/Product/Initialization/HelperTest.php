@@ -105,7 +105,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testInitialize()
