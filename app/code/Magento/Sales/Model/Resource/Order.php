@@ -59,15 +59,17 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SequenceManager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
      * @param OrderGrid $gridAggregator
-     * @param string|null $resourcePrefix
+     * @param null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SequenceManager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
         OrderGrid $gridAggregator,
@@ -75,7 +77,7 @@ class Order extends SalesResource implements OrderResourceInterface
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
     }
 
     /**

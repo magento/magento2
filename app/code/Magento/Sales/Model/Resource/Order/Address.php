@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Sales\Model\Resource\Entity as SalesResource;
 use Magento\Sales\Model\Spi\OrderAddressResourceInterface;
+use Magento\Sales\Model\Resource\EntitySnapshot;
 
 /**
  * Flat sales order address resource
@@ -43,6 +44,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
         $resourcePrefix = null,
@@ -50,7 +52,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
     }
 
     /**

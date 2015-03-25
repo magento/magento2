@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Resource\Order\Status;
 
 use Magento\Sales\Model\Order\Status\History\Validator;
 use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
 
 /**
@@ -33,12 +34,13 @@ class History extends Entity implements OrderStatusHistoryResourceInterface
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         Validator $validator,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
     }
 
     /**

@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order\Invoice;
 
 use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
 /**
@@ -33,20 +34,22 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
+     * @param null $resourcePrefix
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
-     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
     }
 
     /**

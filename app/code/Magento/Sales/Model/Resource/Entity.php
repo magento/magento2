@@ -57,6 +57,10 @@ abstract class Entity extends AbstractDb
     protected $gridAggregator;
 
     /**
+     * @var EntitySnapshot
+     */
+    protected $entitySnapshot;
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SequenceManager $sequenceManager
@@ -67,12 +71,14 @@ abstract class Entity extends AbstractDb
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         SequenceManager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->attribute = $attribute;
         $this->sequenceManager = $sequenceManager;
         $this->gridAggregator = $gridAggregator;
+        $this->entitySnapshot = $entitySnapshot;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -109,21 +115,6 @@ abstract class Entity extends AbstractDb
             );
         }
         parent::_beforeSave($object);
-        return $this;
-    }
-
-    /**
-     * Save object data
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if (!$object->getForceObjectSave()) {
-            parent::save($object);
-        }
-
         return $this;
     }
 
@@ -183,6 +174,68 @@ abstract class Entity extends AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         $object->flushDataIntoModel();
+        return $this;
+    }
+
+    /**
+     * Process entity relations
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $this;
+    }
+
+
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+        if ($this->entitySnapshot->isModified($object)) {
+            $this->processRelations($object);
+            return $this;
+        }
+        $this->beginTransaction();
+
+        try {
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                $this->_serializeFields($object);
+                $this->_beforeSave($object);
+                $this->_checkUnique($object);
+                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
+                if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
+                    $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+                    $data = $this->_prepareDataForSave($object);
+                    unset($data[$this->getIdFieldName()]);
+                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                } else {
+                    $bind = $this->_prepareDataForSave($object);
+                    unset($bind[$this->getIdFieldName()]);
+                    $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
+
+                    $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+
+                    if ($this->_useIsObjectNew) {
+                        $object->isObjectNew(false);
+                    }
+                }
+                $this->unserializeFields($object);
+                $this->_afterSave($object);
+                $object->afterSave();
+                $this->processRelations($object);
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
         return $this;
     }
 }

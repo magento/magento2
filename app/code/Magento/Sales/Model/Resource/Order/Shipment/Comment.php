@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
 use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntitySnapshot;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 
 /**
@@ -41,12 +42,13 @@ class Comment extends Entity implements ShipmentCommentResourceInterface
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Shipment\Comment\Validator $validator,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
     }
 
     /**
