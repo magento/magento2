@@ -30,8 +30,6 @@
                 "timeout": "2000",
                 "closeOnMouseLeave": false,
                 "closeOnEscape": true,
-                "height": 200,
-                "maxHeight": 600,
                 "triggerClass":"active",
                 "parentClass":"active",
                 "buttons":[]}}'>
@@ -75,7 +73,7 @@
                 <?php if (count($_items)): ?>
                     <strong class="subtitle"><?php echo __('Recently added item(s)') ?></strong>
                     <div data-action="scroll" class="products minilist">
-                        <ol id="mini-cart" class="minilist items">
+                        <ol id="mini-cart" class="minilist items" style="overflow: auto">
                             <?php foreach ($_items as $_item): ?>
                             <?php echo $block->getItemHtml($_item) ?>
                             <?php endforeach; ?>

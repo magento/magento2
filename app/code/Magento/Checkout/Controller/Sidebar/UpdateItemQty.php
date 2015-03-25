@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Controller\Cart;
+namespace Magento\Checkout\Controller\Sidebar;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -28,12 +28,12 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Cart
             $this->updateQuoteItem($itemId, $itemQty);
             return $this->jsonResponse();
         } catch (LocalizedException $e) {
-//            $this->messageManager->addError(
-//                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
-//            );
+            $this->messageManager->addError(
+                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
+            );
             return $this->jsonResponse(false);
         } catch (\Exception $e) {
-//            $this->messageManager->addException($e, __('We cannot update the shopping cart.'));
+            $this->messageManager->addException($e, __('We cannot update the shopping cart.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return $this->jsonResponse(false);
         }
@@ -144,8 +144,10 @@ class UpdateItemQty extends \Magento\Checkout\Controller\Cart
      */
     protected function getSubtotalHtml()
     {
-        $this->_view->loadLayout(['default'], true, true, false);
-        $layout = $this->_view->getLayout();
-        return $layout->getBlock('checkout.cart.minicart.totals')->toHtml();
+        $totals = $this->cart->getQuote()->getTotals();
+        $subtotal = isset($totals['subtotal']) ? $totals['subtotal']->getValue() : 0;
+
+        return $this->_objectManager->get('Magento\Checkout\Helper\Data')
+            ->formatPrice($subtotal);
     }
 }

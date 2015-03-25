@@ -187,7 +187,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
      */
     public function getUpdateItemQtyUrl()
     {
-        return $this->getUrl('checkout/cart/updateItemQty');
+        return $this->getUrl('checkout/sidebar/updateItemQty');
     }
 
     /**

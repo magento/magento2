@@ -13,15 +13,19 @@ define([
     $.widget('mage.sidebar', {
         options: {
             isRecursive: true,
+            maxItemsVisible: 3,
             selectorItemQty: ':input.cart-item-qty',
             selectorItemButton: ':button.update-cart-item',
             selectorSummaryQty: 'div.content > div.items-total',
-            selectorSubtotal: 'div.content > div.subtotal > div.amount',
+            selectorSubtotal: 'div.content > div.subtotal > div.amount span.price',
             selectorShowcartNumber: 'a.showcart > span.counter > span.counter-number',
-            selectorShowcartLabel: 'a.showcart > span.counter > span.counter-label'
+            selectorShowcartLabel: 'a.showcart > span.counter > span.counter-label',
+            selectorList: '#mini-cart'
         },
 
         _create: function() {
+            var self = this;
+
             this.element.decorate('list', this.options.isRecursive);
 
             $(this.options.checkoutButton).on('click', $.proxy(function() {
@@ -37,9 +41,6 @@ define([
                 $(this.options.targetElement).dropdownDialog("close");
             }, this));
 
-            // TODO:
-            var self = this;
-
             $(this.options.selectorItemQty).change(function(event) {
                 event.stopPropagation();
                 self._showButton($(this));
@@ -49,6 +50,8 @@ define([
                 event.stopPropagation();
                 self._updateQty($(this))
             });
+
+            this._calcHeight();
         },
 
         _showButton: function(elem) {
@@ -71,7 +74,6 @@ define([
         },
 
         /**
-         *
          * @param url - ajax url
          * @param data - post data for ajax call
          */
@@ -114,6 +116,26 @@ define([
                 $(this.options.selectorShowcartNumber).text(qty);
                 $(this.options.selectorShowcartLabel).text(text);
             }
+        },
+
+        _calcHeight: function() {
+            var height = 0,
+                counter = this.options.maxItemsVisible,
+                target = $(this.options.selectorList)
+                    .clone()
+                    .attr('style', 'position: absolute !important; top: -10000 !important;')
+                    .appendTo('body');
+
+            target.children().each(function() {
+                if (counter-- == 0) {
+                    return false;
+                }
+                height += $(this).height() - 15;    // Fix height for each item!
+            });
+
+            target.remove();
+
+            $(this.options.selectorList).css('height', height);
         }
     });
 
