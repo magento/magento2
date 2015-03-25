@@ -125,6 +125,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_options = null;
 
     /**
+     * @var array
+     */
+    protected $_links = [];
+    
+    /**
      * Flag for available duplicate function
      *
      * @var boolean
@@ -247,6 +252,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $linkManagement;
 
+    /*
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
+     */
+    protected $productLinkFactory;
+
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
@@ -281,6 +291,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
      * @param \Magento\Catalog\Model\ProductLink\Management $linkManagement
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
      *
@@ -315,6 +326,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
         \Magento\Catalog\Model\ProductLink\Management $linkManagement,
+        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
@@ -339,6 +351,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
         $this->linkManagement = $linkManagement;
+        $this->productLinkFactory = $productLinkFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct(
             $context,
@@ -757,7 +770,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $websiteIds = $this->_getResource()->getWebsiteIds($this);
             $this->setOrigData('website_ids', $websiteIds);
         }
-
         parent::beforeSave();
     }
 
@@ -919,7 +931,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $this->addOption($option);
             }
         }
-
         return $this;
     }
 
@@ -1264,13 +1275,31 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductLinks()
     {
-        $relatedProducts = $this->linkManagement->getLinkedItemsByType($this->getSku(), "related");
-        $upSellProducts = $this->linkManagement->getLinkedItemsByType($this->getSku(), "upsell");
-        $crossSellProducts = $this->linkManagement->getLinkedItemsByType($this->getSku(), "crosssell");
+        if (empty($this->_links)) {
+            $productLinks = [];
 
-        $productLinks = array_merge($relatedProducts, $upSellProducts);
-        $productLinks = array_merge($productLinks, $crossSellProducts);
-        return $productLinks;
+            $productLinks['related'] = $this->getRelatedProducts();
+            $productLinks['upsell'] = $this->getUpSellProducts();
+            $productLinks['crosssell'] = $this->getCrossSellProducts();
+
+            $output = [];
+            foreach ($productLinks as $type => $linkTypeArray) {
+                foreach ($linkTypeArray as $link) {
+                    /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+                    $productLink = $this->productLinkFactory->create();
+                    $productLink->setProductSku($this->getSku())
+                        ->setLinkType($type)
+                        ->setLinkedProductSku($link['sku'])
+                        ->setLinkedProductType($link['type_id'])
+                        ->setPosition($link['position']);
+
+                    $output[] = $productLink;
+                }
+            }
+            $this->_links = $output;
+        }
+
+        return $this->_links;
     }
 
     /**
@@ -1281,37 +1310,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setProductLinks(array $links = null)
     {
-        // Gather each linktype
-        $relatedLinks = array();
-        $upSellLinks = array();
-        $crossSellLinks = array();
-        foreach ($links as $link) {
-            switch ($link->getLinkType()) {
-                case "related":
-                    $relatedLinks[] =  $link;
-                    break;
-                case "upsell":
-                    $upSellLinks[] = $link;
-                    break;
-                case "crosssell":
-                    $crossSellLinks[] = $link;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (!empty($relatedLinks)) {
-            $this->linkManagement->setProductLinks($this->getSku(), "related", $relatedLinks);
-        }
-
-        if (!empty($upSellLinks)) {
-            $this->linkManagement->setProductLinks($this->getSku(), "upsell", $upSellLinks);
-        }
-
-        if (!empty($crossSellLinks)) {
-            $this->linkManagement->setProductLinks($this->getSku(), "crosssell", $crossSellLinks);
-        }
+        $this->_links = $links;
         return $this;
     }
 

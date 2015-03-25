@@ -61,6 +61,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected $resourceModel;
 
+    /*
+     * @var \Magento\Catalog\Model\Resource\Product
+     */
+    protected $productResource;
+
+    /*
+     * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
+     */
+    protected $linkInitializer;
+
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
@@ -94,6 +104,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param Resource\Product $resourceModel
+     * @param \Magento\Catalog\Model\Resource\Product $productResource
+     * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
@@ -109,6 +121,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\Resource\Product $resourceModel,
+        \Magento\Catalog\Model\Resource\Product $productResource,
+        \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
@@ -121,6 +135,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
+        $this->productResource = $productResource;
+        $this->linkInitializer = $linkInitializer;
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
@@ -283,6 +299,52 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         return $this;
     }
 
+    /*
+     * Process product links, creating new links, updating and deleting existing links
+     *
+     * @return $this
+     * @throws NoSuchEntityException
+     */
+    private function processLinks(\Magento\Catalog\Api\Data\ProductInterface $product, $newLinks)
+    {
+        // Gather each linktype info
+        if (!empty($newLinks)) {
+            $productLinks = [];
+            foreach ($newLinks as $link) {
+                $productLinks[$link->getLinkType()][] = $link;
+            }
+
+            //$linkTypes = $this->linkTypeProvider->getLinkTypes();
+            foreach ($productLinks as $type => $linksByType) {
+                $assignedSkuList = [];
+                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
+                foreach ($linksByType as $link) {
+                    $assignedSkuList[] = $link->getLinkedProductSku();
+                }
+                $linkedProductIds = $this->productResource->getProductsIdsBySkus($assignedSkuList);
+
+                $linksToInitialize = [];
+                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface[] $items */
+                foreach ($linksByType as $link) {
+                    $data = $link->__toArray();
+                    $linkedSku = $link->getLinkedProductSku();
+                    if (!isset($linkedProductIds[$linkedSku])) {
+                        throw new NoSuchEntityException(
+                            __('Product with SKU "%1" does not exist', $linkedSku)
+                        );
+                    }
+                    $data['product_id'] = $linkedProductIds[$linkedSku];
+                    $linksToInitialize[$linkedProductIds[$linkedSku]] = $data;
+                }
+
+                $this->linkInitializer->initializeLinks($product, [$type => $linksToInitialize]);
+            }
+        }
+
+        $product->setProductLinks($newLinks);
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -297,11 +359,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productId = $this->resourceModel->getIdBySku($product->getSku());
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
+
+        $productLinks = $product->getProductLinks();
         $product = $this->initializeProductData($productDataArray, empty($productId));
 
         if (isset($productDataArray['options'])) {
             $this->processOptions($product, $productDataArray['options']);
             $product->setCanSaveCustomOptions(true);
+        }
+        if (isset($productDataArray['product_links'])) {
+            $this->processLinks($product, $productLinks);
+
         }
 
         $validationResult = $this->resourceModel->validate($product);
