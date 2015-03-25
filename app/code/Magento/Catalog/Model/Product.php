@@ -122,7 +122,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @var array
      */
-    protected $_options = [];
+    protected $_options = null;
 
     /**
      * Flag for available duplicate function
@@ -1780,11 +1780,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get all options of product
      *
-     * @return array
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
      */
     public function getOptions()
     {
         return $this->_options;
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
+     * @return $this
+     */
+    public function setOptions(array $options = null)
+    {
+        $this->_options = $options;
+        return $this;
     }
 
     /**

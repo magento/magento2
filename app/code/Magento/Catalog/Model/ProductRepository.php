@@ -82,6 +82,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensibleDataObjectConverter;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Option\Converter
+     */
+    protected $optionConverter;
+
+    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -93,6 +98,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Catalog\Model\Product\Option\Converter $optionConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,6 +112,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Catalog\Model\Product\Option\Converter $optionConverter,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->productFactory = $productFactory;
@@ -118,6 +125,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->optionConverter = $optionConverter;
         $this->eavConfig = $eavConfig;
     }
 
@@ -214,6 +222,68 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
+     * Process product options, creating new options, updating and deleting existing options
+     *
+     * @return $this
+     * @throws NoSuchEntityException
+     */
+    private function processOptions(\Magento\Catalog\Api\Data\ProductInterface $product, $newOptions)
+    {
+        //existing options by option_id
+        /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $existingOptions */
+        $existingOptions = $product->getOptions();
+        if ($existingOptions === null) {
+            $existingOptions = [];
+        }
+
+        $newOptionIds = [];
+        foreach ($newOptions as $key => $option) {
+            if (isset($option['option_id'])) {
+                //updating existing option
+                $optionId = $option['option_id'];
+                if (!isset($existingOptions[$optionId])) {
+                    throw new NoSuchEntityException(__('Product option with id %1 does not exist', $optionId));
+                }
+                $existingOption = $existingOptions[$optionId];
+                $newOptionIds[] = $option['option_id'];
+                if (isset($option['values'])) {
+                    //updating option values
+                    $optionValues = $option['values'];
+                    $valueIds = [];
+                    foreach ($optionValues as $optionValue) {
+                        if (isset($optionValue['option_type_id'])) {
+                            $valueIds[] = $optionValue['option_type_id'];
+                        }
+                    }
+                    $originalValues = $existingOption->getValues();
+                    foreach ($originalValues as $originalValue) {
+                        if (!in_array($originalValue->getOptionTypeId(), $valueIds)) {
+                            $originalValue->setData('is_delete', 1);
+                            $optionValues[] = $originalValue->getData();
+                        }
+                    }
+                    $newOptions[$key]['values'] = $optionValues;
+                } else {
+                    $existingOptionData = $this->optionConverter->toArray($existingOption);
+                    if (isset($existingOptionData['values'])) {
+                        $newOptions[$key]['values'] = $existingOptionData['values'];
+                    }
+                }
+            }
+        }
+
+        $optionIdsToDelete = array_diff(array_keys($existingOptions), $newOptionIds);
+        foreach ($optionIdsToDelete as $optionId) {
+            $optionToDelete = $existingOptions[$optionId];
+            $optionDataArray = $this->optionConverter->toArray($optionToDelete);
+            $optionDataArray['is_delete'] = 1;
+            $newOptions[] = $optionDataArray;
+        }
+        $product->setProductOptions($newOptions);
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function save(\Magento\Catalog\Api\Data\ProductInterface $product, $saveOptions = false)
@@ -228,6 +298,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
         $product = $this->initializeProductData($productDataArray, empty($productId));
+
+        if (isset($productDataArray['options'])) {
+            $this->processOptions($product, $productDataArray['options']);
+            $product->setCanSaveCustomOptions(true);
+        }
+
         $validationResult = $this->resourceModel->validate($product);
         if (true !== $validationResult) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
