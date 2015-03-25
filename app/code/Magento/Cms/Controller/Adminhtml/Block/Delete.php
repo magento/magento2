@@ -9,17 +9,6 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Delete extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry
-    ) {
-        parent::__construct($context, $coreRegistry);
-    }
-
-    /**
      * Delete action
      *
      * @return \Magento\Framework\Controller\ResultInterface

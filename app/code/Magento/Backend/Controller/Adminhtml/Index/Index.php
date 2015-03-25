@@ -9,14 +9,6 @@ namespace Magento\Backend\Controller\Adminhtml\Index;
 class Index extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
      * Admin area entry point
      * Always redirects to the startup page url
      *

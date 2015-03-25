@@ -11,14 +11,6 @@ use Exception;
 class Update extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
      * IFrame handler for submitted configuration for wishlist item.
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

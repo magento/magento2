@@ -144,22 +144,22 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())
             ->method('getRedirect')
-            ->will($this->returnValue($this->redirectMock));
+            ->willReturn($this->redirectMock);
         $this->contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($viewMock));
+            ->willReturn($viewMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->will($this->returnValue($redirectFactoryMock));
+            ->willReturn($redirectFactoryMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

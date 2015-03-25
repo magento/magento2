@@ -6,20 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Index;
 
-use Magento\Framework\App\Action\Context;
 class Index extends \Magento\Framework\App\Action\Action
 {
-    /**
-     * Constructor
-     *
-     * @param Context $context
-     */
-    public function __construct(
-        Context $context
-    ) {
-        parent::__construct($context);
-    }
-
     /**
      * Index action
      *
