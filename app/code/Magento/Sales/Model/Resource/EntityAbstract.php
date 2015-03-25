@@ -184,6 +184,7 @@ abstract class EntityAbstract extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {

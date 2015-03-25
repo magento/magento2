@@ -149,8 +149,6 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
         $step = 1;
         $maxValue = 120000;
         $warningValue = 110000;
-        $tableName = 'sequence_order_1';
-        $sql = 'CREATE sequence_order_1 (sequence_value INTEGER AUTO_INCREMENT PRIMARY KEY)';
         $this->resourceSequenceMeta->expects($this->once())
             ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)

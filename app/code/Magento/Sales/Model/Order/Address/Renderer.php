@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Order\Address;
 use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\Order\Address;
+
 /**
  * Class Renderer
  */
