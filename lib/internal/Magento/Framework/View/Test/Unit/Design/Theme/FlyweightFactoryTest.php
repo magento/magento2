@@ -29,7 +29,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
      * @param string $path
      * @param int $expectedId
      * @dataProvider createByIdDataProvider
-     * covers \Magento\Framework\View\Design\Theme\FlyweightFactory::create
+     * @covers \Magento\Framework\View\Design\Theme\FlyweightFactory::create
      */
     public function testCreateById($path, $expectedId)
     {
@@ -63,7 +63,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\FlyweightFactory::create
+     * @covers \Magento\Framework\View\Design\Theme\FlyweightFactory::create
      */
     public function testCreateByPath()
     {
