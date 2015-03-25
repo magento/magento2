@@ -65,6 +65,7 @@ abstract class EntityAbstract extends AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SequenceManager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
      * @param string|null $resourcePrefix
      * @param GridInterface|null $gridAggregator
      */
