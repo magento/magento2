@@ -6,12 +6,7 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig\BackendConfig;
 use Magento\Framework\App\DeploymentConfig\DbConfig;
-use Magento\Framework\App\DeploymentConfig\EncryptConfig;
-use Magento\Framework\App\DeploymentConfig\InstallConfig;
-use Magento\Framework\App\DeploymentConfig\ResourceConfig;
-use Magento\Framework\App\DeploymentConfig\SessionConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -453,9 +448,10 @@ class Installer
     public function installDeploymentConfig($data)
     {
         $this->checkInstallationFilePermissions();
-        /* * @var \Magento\Setup\Model\ConfigModel $configModel */
-       // $configModel = $this->objectManagerProvider->get()->get('Magento\Setup\Model\ConfigModel');
-       $this->setupConfigModel->process($data->getArrayCopy());
+        $this->setupConfigModel->process(is_array($data) ? $data : $data->getArrayCopy());
+
+        // reset object manager now that there is a deployment config
+        $this->objectManagerProvider->reset();
     }
 
     /**

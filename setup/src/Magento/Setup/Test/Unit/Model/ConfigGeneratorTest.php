@@ -134,6 +134,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $returnValue = $this->configGeneratorObject->createResourceConfig();
         $this->assertEquals('resource', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());
+        $this->assertEquals(['default_setup' => ['connection' => 'default']], $returnValue->getData());
     }
 }

@@ -111,6 +111,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
+     * @var \Magento\Setup\Model\ConfigModel|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configModel;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -171,6 +176,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->sampleData = $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -209,7 +215,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->sampleData,
             $objectManagerProvider,
-            $this->contextMock
+            $this->contextMock,
+            $this->configModel
         );
     }
 

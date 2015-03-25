@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
 
 /**
  * Collects all ConfigOptionsList class in modules and setup
@@ -91,7 +92,7 @@ class ConfigOptionsListCollector
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptionsList';
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);
-                if ($optionsClass instanceof \Magento\Framework\Setup\ConfigOptionsListInterface) {
+                if ($optionsClass instanceof ConfigOptionsListInterface) {
                     $optionsList[$moduleName] = $optionsClass;
                 }
             }
@@ -101,7 +102,7 @@ class ConfigOptionsListCollector
         $setupOptionsClassName = 'Magento\Setup\Model\ConfigOptionsList';
         if (class_exists($setupOptionsClassName)) {
             $setupOptionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
-            if ($setupOptionsClass instanceof \Magento\Framework\Setup\ConfigOptionsListInterface) {
+            if ($setupOptionsClass instanceof ConfigOptionsListInterface) {
                 $optionsList['setup'] = $setupOptionsClass;
             }
         }
