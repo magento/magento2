@@ -67,10 +67,7 @@ define([
          * @returns {Component} Chainable.
          */
         initProperties: function () {
-            _.extend(this, {
-                'source': registry.get(this.provider),
-                'renderer': registry.get('globalStorage').renderer
-            });
+            this.source = registry.get(this.provider);
 
             return this;
         },

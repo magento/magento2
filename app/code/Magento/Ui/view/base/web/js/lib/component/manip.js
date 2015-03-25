@@ -106,12 +106,8 @@ define([
          * @returns {Component} Chainable.
          */
         _clearData: function () {
-            var layout = this.renderer.layout;
-
             this.source.remove('data.' + this.dataScope);
             this.source.remove('params.' + this.name);
-
-            layout.clear(this.name);
 
             return this;
         },

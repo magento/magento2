@@ -6,8 +6,9 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    './abstract'
-], function (_, utils, registry, Abstract) {
+    './abstract',
+    'Magento_Ui/js/core/renderer/layout'
+], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
     var inputNode = {
@@ -168,11 +169,7 @@ define([
          * @returns {Select} Chainable.
          */
         initInput: function () {
-            this.renderer.render({
-                components: [
-                    utils.template(inputNode, this)
-                ]
-            });
+            layout([utils.template(inputNode, this)]);
 
             return this;
         },

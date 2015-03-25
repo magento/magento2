@@ -1,15 +1,14 @@
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
 define([
     'underscore',
     'jquery',
     'mageUtils',
-    'Magento_Ui/js/lib/class',
-    'Magento_Ui/js/lib/registry/registry'
-], function (_, $, utils, Class, registry) {
+    'uiRegistry',
+    './types'
+], function (_, $, utils, registry, types) {
     'use strict';
+
+    var templates = registry.create(),
+        layout = {};
 
     function getNodeName(parent, node, name) {
         var parentName = parent && parent.name;
@@ -63,20 +62,11 @@ define([
         registry.set(node.name, component);
     }
 
-    function Layout(nodes, types) {
-        this.types = types;
-        this.registry = registry.create();
-
-        this.run(nodes);
+    function run(nodes, parent) {
+        _.each(nodes || [], layout.iterator.bind(layout, parent));
     }
 
-    _.extend(Layout.prototype, {
-        run: function (nodes, parent) {
-            _.each(nodes || [], this.iterator.bind(this, parent));
-
-            return this;
-        },
-
+    _.extend(layout, {
         iterator: function (parent, node) {
             var action = _.isString(node) ?
                 this.addChild :
@@ -99,8 +89,9 @@ define([
             if (node) {
                 this.addChild(parent, node)
                     .manipulate(node)
-                    .initComponent(node)
-                    .run(node.children, node);
+                    .initComponent(node);
+
+                run(node.children, node);
             }
 
             return this;
@@ -109,14 +100,12 @@ define([
         build: function (parent, node, name) {
             var defaults = parent && parent.childDefaults || {},
                 children = node.children,
-                type;
-
-            type = getNodeType.apply(null, arguments);
+                type = getNodeType(parent, node);
 
             node.children = false;
 
             node = utils.extend({
-            }, this.types.get(type), defaults, node);
+            }, types.get(type), defaults, node);
 
             _.extend(node, node.config || {}, {
                 index: node.name || name,
@@ -132,7 +121,7 @@ define([
             if (node.isTemplate) {
                 node.isTemplate = false;
 
-                this.registry.set(node.name, node);
+                templates.set(node.name, node);
 
                 return false;
             }
@@ -153,11 +142,11 @@ define([
         }
     });
 
-    _.extend(Layout.prototype, {
+    _.extend(layout, {
         waitTemplate: function (parent, node) {
             var args = _.toArray(arguments);
 
-            this.registry.get(node.template, function () {
+            templates.get(node.template, function () {
                 this.applyTemplate.apply(this, args);
             }.bind(this));
 
@@ -175,7 +164,7 @@ define([
         },
 
         applyTemplate: function (parent, node, name) {
-            var template = this.registry.get(node.template);
+            var template = templates.get(node.template);
 
             node = utils.extend({}, template, node);
 
@@ -185,7 +174,7 @@ define([
         }
     });
 
-    _.extend(Layout.prototype, {
+    _.extend(layout, {
         manipulate: function (node) {
             var name = node.name;
 
@@ -205,8 +194,8 @@ define([
         },
 
         insert: function (item, target, position) {
-            registry.get(target, function (target) {
-                target.insert(item, position);
+            registry.get(target, function (container) {
+                container.insert(item, position);
             });
 
             return this;
@@ -230,12 +219,8 @@ define([
             }
 
             return this;
-        },
-
-        clear: function (name) {
-            this.registry.remove(name);
         }
     });
 
-    return Layout;
+    return run;
 });
