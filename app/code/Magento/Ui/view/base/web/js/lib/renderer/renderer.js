@@ -6,7 +6,7 @@ define([
     '../loader',
     'jquery',
     'underscore'
-], function(loader, $, _) {
+], function (loader, $, _) {
     'use strict';
 
     return {
@@ -15,8 +15,7 @@ define([
          * Loads all extenders then merges them and wraps into div[data-template-extend="parent"] where parent is target template.
          * If no extenders provider, simply loads target template and passes execution to _parse.
          * @param {String} template - string, representing path to core template and it's extenders.
-         * @param {Array} extenders - array of strings
-         * @return {Deferred} - Promise of template to be rendered. Is being resolved with array of HTML elements.
+         * @returns {Deferred} - Promise of template to be rendered. Is being resolved with array of HTML elements.
          */
         render: function (template) {
             var isRendered = $.Deferred(),

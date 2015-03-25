@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="form">
+        <referenceBlock name="customer_form">
             <block acl="Magento_Sales::actions_view" class="Magento\Sales\Block\Adminhtml\CustomerOrdersTab" name="orders" />
         </referenceBlock>
     </body>

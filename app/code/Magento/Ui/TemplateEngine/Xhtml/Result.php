@@ -108,7 +108,7 @@ class Result
     protected function wrapContent($content)
     {
         return '<script type="text/x-magento-init"><![CDATA['
-        . '{"*": {"Magento_Ui/js/core/app": ' . $content . '}}'
+        . '{"*": {"Magento_Ui/js/core/app": ' . str_replace(['<![CDATA[', ']]>'], '', $content) . '}}'
         . ']]></script>';
     }
 }
