@@ -32,9 +32,14 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $jsLayout;
 
     /**
-     * @var \Magento\Quote\Api\Data\CartInterface
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $cartRepositoryInterface;
+
+    /**
+     * @var \Magento\Quote\Api\CartItemRepositoryInterface
+     */
+    protected $cartItemRepository;
 
     /**
      * @var \Magento\Quote\Api\Data\CartInterface
@@ -66,6 +71,8 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+     * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement
+     * @param \Magento\Quote\Api\CartItemRepositoryInterface $cartItemRepository
      * @param array $data
      */
     public function __construct(
@@ -84,6 +91,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Quote\Api\CartRepositoryInterface $cartRepositoryInterface,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
+        \Magento\Quote\Api\CartItemRepositoryInterface $cartItemRepository,
         array $data = []
     ) {
         parent::__construct(
@@ -106,6 +114,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->cartRepositoryInterface = $cartRepositoryInterface;
         $this->localeCurrency = $localeCurrency;
         $this->shippingMethodManagement = $shippingMethodManagement;
+        $this->cartItemRepository = $cartItemRepository;
     }
 
 
@@ -195,6 +204,22 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             return \Zend_Json::encode($this->getCartData());
         }
         return '{}';
+    }
+
+    /**
+     * Cart items as array
+     *
+     * @return array
+     */
+    public function getCartItems()
+    {
+        $itemData = [];
+        $itemObjects = $this->cartItemRepository->getList($this->getQuote()->getId());
+        /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
+        foreach($itemObjects as $item) {
+            $itemData[] = $item->toArray();
+        }
+        return $itemData;
     }
 
     /**

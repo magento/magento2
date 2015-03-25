@@ -27,7 +27,9 @@ define(
                 quoteHasPaymentMethod: quote.getPaymentMethod(),
                 itemsBefore: itemsBefore,
                 itemsAfter: itemsAfter,
-                getItems: function() {},
+                getItems: function() {
+                    return window.cartItems;
+                },
                 getAgreementsTemplate: function() {},
                 isVisible: navigator.isStepVisible(stepName),
                 cartUrl: url.build('checkout/cart/'),

@@ -25,8 +25,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- ko foreach: getItems() -->
-                    <!-- ko template: review/item.html --><!-- /ko -->
+                    <!-- ko foreach: { data: getItems(), as: 'item' } -->
+                        <!-- ko template: 'Magento_Checkout/review/item' --><!-- /ko -->
                     <!-- /ko -->
                     </tbody>
                     <tfoot>

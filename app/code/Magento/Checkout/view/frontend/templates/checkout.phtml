@@ -20,6 +20,7 @@
         <script>
             window.customerData = <?php echo $this->getCustomerData(); ?>;
             window.cartData = <?php echo $this->getCart(); ?>;
+            window.cartItems = JSON.parse('<?php echo json_encode($this->getCartItems()); ?>');
             window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
             window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
             window.selectedShippingMethod = <?php echo $this->getSelectedShippingMethod()?>;

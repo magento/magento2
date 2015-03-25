@@ -1,1 +1,13 @@
-
+<tr>
+    <td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: item.name"></strong>
+        <!-- options block skipped -->
+        <!-- additional info block skipped -->
+    </td>
+    <td class="col price" data-th="Price">
+        <span data-bind="text: item.price"></span>
+    </td>
+    <td class="col qty" data-th="Qty"><span class="qty" data-bind="text: item.qty"></span></td>
+    <td class="col subtotal" data-th="Subtotal">
+        <span data-bind="text: item.row_total"></span>
+    </td>
+</tr>
