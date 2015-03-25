@@ -9,7 +9,7 @@ namespace Magento\Webapi\Model\Soap;
 
 use Magento\Framework\App\State;
 
-class Fault extends \RuntimeException
+class Fault
 {
     const FAULT_REASON_INTERNAL = 'Internal Error.';
 
@@ -91,23 +91,28 @@ class Fault extends \RuntimeException
     protected $appState;
 
     /**
+     * @var null|string
+     */
+    protected $stackTrace;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Server $soapServer
-     * @param \Magento\Framework\Webapi\Exception $previousException
+     * @param \Magento\Framework\Webapi\Exception $exception
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param State $appState
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         Server $soapServer,
-        \Magento\Framework\Webapi\Exception $previousException,
+        \Magento\Framework\Webapi\Exception $exception,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState
     ) {
-        parent::__construct($previousException->getMessage(), $previousException->getCode(), $previousException);
-        $this->_soapCode = $previousException->getOriginator();
-        $this->_parameters = $previousException->getDetails();
-        $this->_wrappedErrors = $previousException->getErrors();
+        $this->_soapCode = $exception->getOriginator();
+        $this->_parameters = $exception->getDetails();
+        $this->_wrappedErrors = $exception->getErrors();
+        $this->stackTrace = $exception->getStackTrace() ?: $exception->getTraceAsString();
         $this->_request = $request;
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
@@ -122,10 +127,7 @@ class Fault extends \RuntimeException
     public function toXml()
     {
         if ($this->appState->getMode() == State::MODE_DEVELOPER) {
-            $traceDetail = $this->getPrevious()->getStackTrace()
-                ? $this->getPrevious()->getStackTrace()
-                : $this->getTraceAsString();
-            $this->addDetails([self::NODE_DETAIL_TRACE => "<![CDATA[{$traceDetail}]]>"]);
+            $this->addDetails([self::NODE_DETAIL_TRACE => "<![CDATA[{$this->stackTrace}]]>"]);
         }
         if ($this->getParameters()) {
             $this->addDetails([self::NODE_DETAIL_PARAMETERS => $this->getParameters()]);
