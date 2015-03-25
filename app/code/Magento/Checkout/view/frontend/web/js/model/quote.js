@@ -16,6 +16,7 @@ define(
         var quoteData = window.cartData;
         var currencySymbol = window.currencySymbol;
         var selectedShippingMethod = window.selectedShippingMethod;
+        var storeCode = window.storeCode;
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -52,6 +53,9 @@ define(
             },
             getSelectedShippingMethod: function() {
                 return selectedShippingMethod;
+            },
+            getStoreCode: function() {
+                return storeCode;
             }
         };
     }

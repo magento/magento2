@@ -23,6 +23,7 @@
             window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
             window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
             window.selectedShippingMethod = <?php echo $this->getSelectedShippingMethod()?>;
+            window.storeCode = <?php echo $this->getStoreCode()?>;
         </script>
         <script>
             require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {

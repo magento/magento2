@@ -228,4 +228,13 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         }
         return \Zend_Json::encode($selectedShippingMethod);
     }
+
+    /**
+     *  Retrieve quote store code
+     *  @return string
+     */
+    public function getStoreCode()
+    {
+        return \Zend_Json::encode($this->getQuote()->getStore()->getCode());
+    }
 }
