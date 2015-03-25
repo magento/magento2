@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Test\Block;
 
 use Magento\Mtf\Block\Block;
@@ -18,21 +19,21 @@ class Menu extends Block
      *
      * @var string
      */
-    protected $mainMenu = './/li/a[span="%s"]';
+    protected $mainMenu = './/li[@role="menu-item"]/a[span="%s"]';
 
     /**
      * Submenu selector.
      *
      * @var string
      */
-    protected $subMenu = './/li[a[span="%s"]]/div[@class="submenu" and @style="display: block;"]';
+    protected $subMenu = './/li[@role="menu-item" and a[span="%s"]]/div[@class="submenu"]';
 
     /**
      * Submenu item selector.
      *
      * @var string
      */
-    protected $subMenuItem = './/a[span="%s"]';
+    protected $subMenuItem = './/li[@role="menu-item"]//a[span="%s"]';
 
     /**
      * Parent menu item.

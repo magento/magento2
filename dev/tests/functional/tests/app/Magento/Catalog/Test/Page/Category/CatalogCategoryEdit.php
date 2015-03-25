@@ -12,53 +12,54 @@ use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Page\Page;
 
 /**
- * Class CatalogCategoryEdit
- * Edit category page in backend
+ * Edit category page in backend.
  */
 class CatalogCategoryEdit extends Page
 {
     /**
-     * URL for edit category page
+     * URL for edit category page.
      */
     const MCA = 'catalog/category/edit/id/';
 
     /**
-     * Category Edit Form on the Backend
+     * Category Edit Form on the Backend.
      *
      * @var string
      */
     protected $formBlock = '#category-edit-container';
 
     /**
-     * Categories tree block
+     * Categories tree block.
      *
      * @var string
      */
     protected $treeBlock = '.categories-side-col';
 
     /**
-     * Get messages block
+     * Get messages block.
      *
      * @var string
      */
     protected $messagesBlock = '#messages .messages';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Form page actions block
+     * Form page actions block.
      *
      * @var string
      */
     protected $pageActionsBlock = '.page-main-actions';
 
     /**
-     * Init page. Set page url
+     * Init page. Set page url.
+     *
+     * @return void
      */
     protected function _init()
     {
@@ -66,7 +67,7 @@ class CatalogCategoryEdit extends Page
     }
 
     /**
-     * Open page using browser and waiting until loader will be disappeared
+     * Open page using browser and waiting until loader will be disappeared.
      *
      * @param array $params
      * @return $this
@@ -80,7 +81,7 @@ class CatalogCategoryEdit extends Page
     }
 
     /**
-     * Get Category edit form
+     * Get Category edit form.
      *
      * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm
      */
@@ -92,7 +93,7 @@ class CatalogCategoryEdit extends Page
     }
 
     /**
-     * Category Tree container on the Backend
+     * Category Tree container on the Backend.
      *
      * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Tree
      */
@@ -105,19 +106,19 @@ class CatalogCategoryEdit extends Page
     }
 
     /**
-     * Get messages block
+     * Get messages block.
      *
-     * @return \Magento\Core\Test\Block\Messages
+     * @return \Magento\Backend\Test\Block\Messages
      */
     public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages(
+        return Factory::getBlockFactory()->getMagentoBackendMessages(
             $this->_browser->find($this->messagesBlock, Locator::SELECTOR_CSS)
         );
     }
 
     /**
-     * Get abstract block
+     * Get abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */
@@ -129,7 +130,7 @@ class CatalogCategoryEdit extends Page
     }
 
     /**
-     * Get Form page actions block
+     * Get Form page actions block.
      *
      * @return FormPageActions
      */
