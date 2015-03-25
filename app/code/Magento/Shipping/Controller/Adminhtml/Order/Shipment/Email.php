@@ -45,27 +45,32 @@ class Email extends \Magento\Backend\App\Action
     /**
      * Send email with shipment data to customer
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        try {
-            $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
-            $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
-            $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
-            $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
-            $shipment = $this->shipmentLoader->load();
-            if ($shipment) {
-                $this->_objectManager->create('Magento\Shipping\Model\ShipmentNotifier')
-                    ->notify($shipment);
-                $shipment->save();
-                $this->messageManager->addSuccess(__('You sent the shipment.'));
-            }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('Cannot send shipment information.'));
+        $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
+        $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
+        $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+        $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
+        $shipment = $this->shipmentLoader->load();
+        if ($shipment) {
+            $this->_objectManager->create('Magento\Shipping\Model\ShipmentNotifier')
+                ->notify($shipment);
+            $shipment->save();
+            $this->messageManager->addSuccess(__('You sent the shipment.'));
         }
-        $this->_redirect('*/*/view', ['shipment_id' => $this->getRequest()->getParam('shipment_id')]);
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('*/*/view', ['shipment_id' => $this->getRequest()->getParam('shipment_id')]);
     }
 }

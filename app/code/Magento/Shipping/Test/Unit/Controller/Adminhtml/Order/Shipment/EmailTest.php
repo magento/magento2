@@ -64,6 +64,16 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirect;
+
+    /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $shipmentLoader;
@@ -88,7 +98,8 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getObjectManager',
                 'getSession',
                 'getActionFlag',
-                'getHelper'
+                'getHelper',
+                'getResultRedirectFactory'
             ],
             [],
             '',
@@ -129,6 +140,15 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
         $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
+        $this->resultRedirect = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+        $this->resultRedirectFactory = $this->getMock(
+            'Magento\Framework\Controller\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($this->resultRedirect);
         $this->context->expects($this->once())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManager));
@@ -150,6 +170,9 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getHelper')
             ->will($this->returnValue($this->helper));
+        $this->context->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
         $this->shipmentEmail = $objectManagerHelper->getObject(
             'Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email',
             [
@@ -240,14 +263,8 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->any())
             ->method('setIsUrlNotice')
             ->with(true);
-
-        $url = $path . '/' . (!empty($arguments) ? $arguments['shipment_id'] : '');
-        $this->helper->expects($this->at($index))
-            ->method('getUrl')
-            ->with($path, $arguments)
-            ->will($this->returnValue($url));
-        $this->response->expects($this->at($index))
-            ->method('setRedirect')
-            ->with($url);
+        $this->resultRedirect->expects($this->at($index))
+            ->method('setPath')
+            ->with($path, ['shipment_id' => $arguments['shipment_id']]);
     }
 }
