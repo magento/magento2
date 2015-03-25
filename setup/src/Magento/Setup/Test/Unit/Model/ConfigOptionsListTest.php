@@ -20,9 +20,15 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
      */
     private $generator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
     protected function setUp()
     {
         $this->generator = $this->getMock('Magento\Setup\Model\ConfigGenerator', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->object = new ConfigOptionsList($this->generator);
     }
 
@@ -62,7 +68,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createDefinitionsConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
-        $configData = $this->object->createConfig([]);
+        $configData = $this->object->createConfig([], $this->deploymentConfig);
         $this->assertEquals(7, count($configData));
     }
 
@@ -76,7 +82,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createDefinitionsConfig')->willReturn(null);
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
-        $configData = $this->object->createConfig([]);
+        $configData = $this->object->createConfig([], $this->deploymentConfig);
         $this->assertEquals(5, count($configData));
     }
 }

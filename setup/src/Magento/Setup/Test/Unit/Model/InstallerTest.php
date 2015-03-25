@@ -347,8 +347,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
-        $this->deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
-            ->willReturn($this->deploymentConfig);
 
         $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')

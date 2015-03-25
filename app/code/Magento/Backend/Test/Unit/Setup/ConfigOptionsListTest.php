@@ -15,9 +15,15 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
     protected function setUp()
     {
         $this->object = new ConfigOptionsList();
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
     }
 
     public function testGetOptions()
@@ -32,7 +38,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     public function testCreateConfig()
     {
         $options = [ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
-        $actualConfig = $this->object->createConfig($options);
+        $actualConfig = $this->object->createConfig($options, $this->deploymentConfig);
         $expectedData = [
             ['file' => ConfigFilePool::APP_CONFIG, 'segment' => 'backend', 'data' => ['frontName' => 'admin']]
         ];

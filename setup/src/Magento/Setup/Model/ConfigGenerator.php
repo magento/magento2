@@ -52,14 +52,13 @@ class ConfigGenerator
     /**
      * Creates install segment config data
      *
-     * @param DeploymentConfig $deploymentConfig
      * @return ConfigData
      * @internal param array $currentConfig
      */
-    public function createInstallConfig(DeploymentConfig $deploymentConfig)
+    public function createInstallConfig()
     {
         $installConfig = [];
-        if (!$deploymentConfig->get('install/date')) {
+        if (!$this->deploymentConfig->get('install/date')) {
             $installConfig = [ConfigOptionsList::INPUT_KEY_DATE => date('r')];
         }
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', $installConfig);
@@ -68,13 +67,12 @@ class ConfigGenerator
     /**
      * Creates encryption key config data
      * @param array $data
-     * @param DeploymentConfig $deploymentConfig
      * @return ConfigData
      * @internal param array $currentData
      */
-    public function createCryptConfig(array $data, DeploymentConfig $deploymentConfig)
+    public function createCryptConfig(array $data)
     {
-        $currentKey = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
+        $currentKey = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
 
         $cryptData = [];
         if (isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
