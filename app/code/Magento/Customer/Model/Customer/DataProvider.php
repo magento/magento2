@@ -7,6 +7,8 @@ namespace Magento\Customer\Model\Customer;
 
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -47,6 +49,11 @@ class DataProvider implements DataProviderInterface
      * @var array
      */
     protected $data = [];
+
+    /**
+     * @var array
+     */
+    protected $loadedData;
 
     /**
      * EAV attribute properties to fetch from meta storage
@@ -140,7 +147,7 @@ class DataProvider implements DataProviderInterface
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
-                $value = $attribute->getDataUsingMethod($origName);;
+                $value = $attribute->getDataUsingMethod($origName);
                 $meta[$code][$metaName] = $value;
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])
@@ -183,7 +190,28 @@ class DataProvider implements DataProviderInterface
      */
     public function getData()
     {
-        return $this->collection->toArray();
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+
+        $items = $this->collection->getItems();
+        /** @var Customer $customer */
+        foreach ($items as $customer) {
+            $customer->load($customer->getId());
+            $result['customer'] = $customer->getData();
+
+            $addresses = [];
+            /** @var Address $address */
+            foreach ($customer->getAddresses() as $address) {
+                $address->load($address->getId());
+                $addresses[$address->getId()] = $address->getData();
+            }
+            $result['address'] = $addresses;
+
+            $this->loadedData[$customer->getId()] = $result;
+        }
+
+        return $this->loadedData;
     }
 
     /**

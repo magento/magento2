@@ -27,7 +27,7 @@
             </item>
         </item>
     </argument>
-    <wrapper name="block_listing_top">
+    <container name="block_listing_top">
         <paging name="listing_paging"/>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
@@ -159,7 +159,7 @@
                 </filterDate>
             </filterRange>
         </filters>
-    </wrapper>
+    </container>
     <massaction name="listing_massaction">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

@@ -129,26 +129,39 @@
                 </item>
             </argument>
         </field>
-        <field name="group_id">
+        <container name="container_group">
             <argument name="data" xsi:type="array">
+                <item name="type" xsi:type="string">group</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                </item>
                 <item name="config" xsi:type="array">
-                    <item name="fieldGroup" xsi:type="string">group_id</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                    <item name="source" xsi:type="string">customer</item>
+                    <item name="label" xsi:type="string" translate="true">Group</item>
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="dataScope" xsi:type="boolean">false</item>
                 </item>
             </argument>
-        </field>
-        <field name="disable_auto_group_change">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="fieldGroup" xsi:type="string">group_id</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="source" xsi:type="string">customer</item>
-                </item>
-            </argument>
-        </field>
+            <field name="group_id">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="fieldGroup" xsi:type="string">group_id</item>
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="source" xsi:type="string">customer</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="disable_auto_group_change">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="fieldGroup" xsi:type="string">group_id</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="source" xsi:type="string">customer</item>
+                    </item>
+                </argument>
+            </field>
+        </container>
         <field name="firstname">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
