@@ -10,7 +10,8 @@ use Magento\Sales\Model\EntityInterface;
 use Magento\SalesSequence\Model\Sequence\SequenceManager;
 
 /**
- * Flat sales resource abstract
+ * Abstract sales entity provides to its children knowledge about eventPrefix and eventObject
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class EntityAbstract extends AbstractDb
