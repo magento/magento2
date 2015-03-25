@@ -9,7 +9,6 @@ namespace Magento\Setup\Model;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Setup\Model;
 
 class ConfigModel
 {

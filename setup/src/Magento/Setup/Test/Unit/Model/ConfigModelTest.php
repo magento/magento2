@@ -27,14 +27,19 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Reader
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
      */
-    private $reader;
+    private $deploymentConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Config\Data\ConfigData
      */
     private $configData;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\FilePermissions
+     */
+    private $filePermissions;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Setup\ConfigOptionsList
@@ -45,13 +50,19 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     {
         $this->collector = $this->getMock('Magento\Setup\Model\ConfigOptionsListCollector', [], [], '', false);
         $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->configOptionsList = $this->getMock('Magento\Backend\Setup\ConfigOptionsList', [], [], '', false);
         $this->configData = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
+        $this->filePermissions = $this->getMock('\Magento\Setup\Model\FilePermissions', [], [], '', false);
 
-        $this->reader->expects($this->once())->method('loadConfig')->will($this->returnValue([]));
+        $this->deploymentConfig->expects($this->any())->method('get');
 
-        $this->configModel = new ConfigModel($this->collector, $this->writer, $this->reader);
+        $this->configModel = new ConfigModel(
+            $this->collector,
+            $this->writer,
+            $this->deploymentConfig,
+            $this->filePermissions
+        );
     }
 
     public function testValidate()
