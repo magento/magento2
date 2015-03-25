@@ -166,7 +166,7 @@ class Tabs extends Generic implements LayoutInterface
             ];
         }
 
-        $this->addWrappedBlock($childrenAreas, $component);
+        $this->addWrappedBlock($childrenAreas, $component, $collectedComponents);
 
         $this->structure[static::AREAS_KEY]['children'] = $childrenAreas;
         $topNode = $this->structure;
@@ -177,9 +177,10 @@ class Tabs extends Generic implements LayoutInterface
      *
      * @param array $areas
      * @param UiComponentInterface $component
+     * @param array $collectedComponents
      * @return void
      */
-    protected function addWrappedBlock(array &$areas, UiComponentInterface $component)
+    protected function addWrappedBlock(array &$areas, UiComponentInterface $component, array $collectedComponents)
     {
         /** @var \Magento\Ui\Component\Wrapper\Block $childComponent */
         foreach ($component->getChildComponents() as $name => $childComponent) {

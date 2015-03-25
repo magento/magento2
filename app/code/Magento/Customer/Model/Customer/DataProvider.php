@@ -140,7 +140,7 @@ class DataProvider implements DataProviderInterface
             $code = $attribute->getAttributeCode();
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
-                $value = $attribute->getDataUsingMethod($origName);;
+                $value = $attribute->getDataUsingMethod($origName);
                 $meta[$code][$metaName] = $value;
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])

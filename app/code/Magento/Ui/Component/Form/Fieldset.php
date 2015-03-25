@@ -122,6 +122,7 @@ class Fieldset extends AbstractComponent
      *
      * @param array $fieldData
      * @param UiComponentInterface $component
+     * @return void
      */
     protected function updateField(array $fieldData, UiComponentInterface $component)
     {
