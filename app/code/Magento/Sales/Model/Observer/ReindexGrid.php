@@ -45,10 +45,10 @@ class ReindexGrid
      *
      * Used in the next events:
      *
-     *  - sales_order_resource_save_after
-     *  - sales_order_invoice_resource_save_after
-     *  - sales_order_shipment_resource_save_after
-     *  - sales_order_creditmemo_resource_save_after
+     *  - sales_order_save_after
+     *  - sales_order_invoice_save_after
+     *  - sales_order_shipment_save_after
+     *  - sales_order_creditmemo_save_after
      *
      * Works only if synchronous grid re-indexing is enabled
      * in global settings.
@@ -60,7 +60,7 @@ class ReindexGrid
     {
         //TODO: Replace path to real configuration path after MAGETWO-35147 is complete.
         if (!$this->globalConfig->getValue('path/to/value/sync_grid_indexing')) {
-            $this->entityGrid->refresh($observer->getEntity()->getId());
+            $this->entityGrid->refresh($observer->getDataObject()->getId());
         }
     }
 
@@ -70,17 +70,17 @@ class ReindexGrid
      *
      * Used in the next events:
      *
-     *  - sales_order_resource_delete_after
-     *  - sales_order_invoice_resource_delete_after
-     *  - sales_order_shipment_resource_delete_after
-     *  - sales_order_creditmemo_resource_delete_after
+     *  - sales_order_delete_after
+     *  - sales_order_invoice_delete_after
+     *  - sales_order_shipment_delete_after
+     *  - sales_order_creditmemo_delete_after
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function syncRemove(\Magento\Framework\Event\Observer $observer)
     {
-        $this->entityGrid->purge($observer->getEntity()->getId());
+        $this->entityGrid->purge($observer->getDataObject()->getId());
     }
 
     /**

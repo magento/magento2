@@ -45,13 +45,6 @@ class Order extends SalesResource implements OrderResourceInterface
     protected $addressHandler;
 
     /**
-     * Events manager.
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
      * Model Initialization
      *
      * @return void
@@ -67,7 +60,6 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param SalesIncrement $salesIncrement
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string|null $resourcePrefix
      */
     public function __construct(
@@ -76,12 +68,10 @@ class Order extends SalesResource implements OrderResourceInterface
         SalesIncrement $salesIncrement,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        $this->eventManager = $eventManager;
         parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
@@ -207,25 +197,6 @@ class Order extends SalesResource implements OrderResourceInterface
             $relatedObject->setOrder($object);
         }
 
-        $this->eventManager->dispatch(
-            $this->_eventPrefix . '_save_after', ['entity' => $object]
-        );
-
         return parent::_afterSave($object);
-    }
-
-    /**
-     * Dispatches corresponding event after the deletion of the order.
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->eventManager->dispatch(
-            $this->_eventPrefix . '_delete_after', ['entity' => $object]
-        );
-
-        return parent::_afterDelete($object);
     }
 }

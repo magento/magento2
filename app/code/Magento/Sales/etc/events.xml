@@ -9,28 +9,28 @@
     <event name="sales_order_place_after">
         <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment" method="execute" />
     </event>
-    <event name="sales_order_resource_save_after">
+    <event name="sales_order_save_after">
         <observer name="sales_grid_order_insert" instance="Magento\Sales\Model\Observer\Order\ReindexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_invoice_resource_save_after">
+    <event name="sales_order_invoice_save_after">
         <observer name="sales_grid_order_invoice_insert" instance="Magento\Sales\Model\Observer\Order\Invoice\ReindexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_shipment_resource_save_after">
+    <event name="sales_order_shipment_save_after">
         <observer name="sales_grid_order_shipment_insert" instance="Magento\Sales\Model\Observer\Order\Shipment\ReindexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_creditmemo_resource_save_after">
+    <event name="sales_order_creditmemo_save_after">
         <observer name="sales_grid_order_creditmemo_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\ReindexGrid" method="syncInsert" />
     </event>
-    <event name="sales_order_resource_delete_after">
+    <event name="sales_order_delete_after">
         <observer name="sales_grid_order_remove" instance="Magento\Sales\Model\Observer\Order\ReindexGrid" method="syncRemove" />
     </event>
-    <event name="sales_order_invoice_resource_delete_after">
+    <event name="sales_order_invoice_delete_after">
         <observer name="sales_grid_order_invoice_remove" instance="Magento\Sales\Model\Observer\Order\Invoice\ReindexGrid" method="syncRemove" />
     </event>
-    <event name="sales_order_shipment_resource_delete_after">
+    <event name="sales_order_shipment_delete_after">
         <observer name="sales_grid_order_shipment_remove" instance="Magento\Sales\Model\Observer\Order\Shipment\ReindexGrid" method="syncRemove" />
     </event>
-    <event name="sales_order_creditmemo_resource_delete_after">
+    <event name="sales_order_creditmemo_delete_after">
         <observer name="sales_grid_order_creditmemo_remove" instance="Magento\Sales\Model\Observer\Order\Creditmemo\ReindexGrid" method="syncRemove" />
     </event>
 </config>

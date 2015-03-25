@@ -24,13 +24,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
     protected $_eventPrefix = 'sales_order_invoice_resource';
 
     /**
-     * Events manager.
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
      * Model initialization
      *
      * @return void
@@ -44,17 +37,14 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
         $resourcePrefix = null
     ) {
-        $this->eventManager = $eventManager;
         parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
@@ -101,25 +91,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
             }
         }
 
-        $this->eventManager->dispatch(
-            $this->_eventPrefix . '_save_after', ['entity' => $object]
-        );
-
         return parent::_afterSave($object);
-    }
-
-    /**
-     * Dispatches corresponding event after the deletion of the order invoice.
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
-     */
-    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->eventManager->dispatch(
-            $this->_eventPrefix . '_delete_after', ['entity' => $object]
-        );
-
-        return parent::_afterDelete($object);
     }
 }
