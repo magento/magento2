@@ -96,6 +96,11 @@ class Fault
     protected $stackTrace;
 
     /**
+     * @var string
+     */
+    protected $message;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Server $soapServer
      * @param \Magento\Framework\Webapi\Exception $exception
@@ -113,6 +118,7 @@ class Fault
         $this->_parameters = $exception->getDetails();
         $this->_wrappedErrors = $exception->getErrors();
         $this->stackTrace = $exception->getStackTrace() ?: $exception->getTraceAsString();
+        $this->message = $exception->getMessage();
         $this->_request = $request;
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
@@ -199,6 +205,14 @@ class Fault
     public function getLanguage()
     {
         return \Locale::getPrimaryLanguage($this->_localeResolver->getLocale());
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 
     /**
