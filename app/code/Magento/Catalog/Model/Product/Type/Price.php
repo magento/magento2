@@ -70,6 +70,16 @@ class Price
     protected $_groupManagement;
 
     /**
+     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
+     */
+    protected $groupPriceFactory;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $config;
+
+    /**
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -77,6 +87,8 @@ class Price
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
@@ -85,7 +97,9 @@ class Price
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -94,6 +108,8 @@ class Price
         $this->_eventManager = $eventManager;
         $this->priceCurrency = $priceCurrency;
         $this->_groupManagement = $groupManagement;
+        $this->groupPriceFactory = $groupPriceFactory;
+        $this->config = $config;
     }
 
     /**
@@ -181,13 +197,32 @@ class Price
     }
 
     /**
-     * Get product group price
+     * Gets list of product group prices
      *
      * @param Product $product
-     * @return float
-     * @deprecated see \Magento\Catalog\Pricing\Price\GroupPrice (MAGETWO-31468)
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
      */
-    public function getGroupPrice($product)
+    public function getGroupPrices($product)
+    {
+        $prices = [];
+        $groupPrices = $this->getExistingGroupPrices($product);
+        foreach ($groupPrices as $price) {
+            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
+            $groupPrice = $this->groupPriceFactory->create();
+            $groupPrice->setCustomerGroupId($price['cust_group'])
+                ->setValue($price['website_price']);
+            $prices[] = $groupPrice;
+        }
+        return $prices;
+    }
+
+    /**
+     * Gets the 'group_price' array from the product
+     *
+     * @param Product $product
+     * @return array
+     */
+    protected function getExistingGroupPrices($product)
     {
         $groupPrices = $product->getData('group_price');
 
@@ -200,6 +235,62 @@ class Price
         }
 
         if ($groupPrices === null || !is_array($groupPrices)) {
+            return [];
+        }
+
+        return $groupPrices;
+    }
+
+    /**
+     * Sets list of product group prices
+     *
+     * @param Product $product
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
+     * @return $this
+     */
+    public function setGroupPrices($product, array $groupPrices = null)
+    {
+        if ($groupPrices === null) {
+            // null array means leave everything as is
+            return $this;
+        }
+
+        // determine which website we are setting group prices for
+        $websiteId = 0;
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
+            // use the website associated with the current store
+            $websiteId = $this->_storeManager->getWebsite()->getId();
+        }
+
+        // build the new array of group prices
+        $prices = [];
+        foreach ($groupPrices as $price) {
+            $prices[] = [
+                'website_id' => $websiteId,
+                'cust_group' => $price->getCustomerGroupId(),
+                'website_price' => $price->getValue(),
+                'price' => $price->getValue(),
+                'all_groups' => 0
+            ];
+        }
+        $product->setData('group_price', $prices);
+
+        return $this;
+    }
+
+    /**
+     * Get product group price for the customer
+     *
+     * @param Product $product
+     * @return float
+     * @deprecated see \Magento\Catalog\Pricing\Price\GroupPrice (MAGETWO-31468)
+     */
+    public function getGroupPrice($product)
+    {
+        $groupPrices = $this->getGroupPrices($product);
+
+        if (empty($groupPrices)) {
             return $product->getPrice();
         }
 
@@ -207,8 +298,9 @@ class Price
 
         $matchedPrice = $product->getPrice();
         foreach ($groupPrices as $groupPrice) {
-            if ($groupPrice['cust_group'] == $customerGroup && $groupPrice['website_price'] < $matchedPrice) {
-                $matchedPrice = $groupPrice['website_price'];
+            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
+            if ($groupPrice->getCustomerGroupId() == $customerGroup && $groupPrice->getValue() < $matchedPrice) {
+                $matchedPrice = $groupPrice->getValue();
                 break;
             }
         }
