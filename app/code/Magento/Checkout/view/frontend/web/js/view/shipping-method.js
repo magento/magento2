@@ -25,43 +25,41 @@ define(
                     return navigator.getStepNumber(stepName);
                 },
                 rates: shippingService.getRates(),
-                quoteHasShippingAddress: function() {
-                    return quote.isVirtual() || quote.getShippingAddress();
-                },
-
-                verifySelectedMethodCode: function (data, value) {
-                    if (quote.getSelectedShippingMethod() == data) {
-                        return value;
-                    }
-                    return false;
-                },
-
-                isErrorMessagePresent: function (data) {
-                    return !data.available;
-                },
-                setShippingMethod: function (form) {
-                    form = $(form);
-                    var code = form.find("input[name='shipping_method']:checked").val();
-                    var shippingMethodCode = code ? code.split("_") : null;
-                    selectShippingMethod(shippingMethodCode);
-                },
-
-                getFormatedPrice: function (price) {
-                    //todo add format data
-                    return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
-                },
-
                 // Checkout step navigation
                 isVisible: navigator.isStepVisible(stepName),
-                isActive: function() {
-                    if (quote.isVirtual()) {
-                        navigator.setStepEnabled(stepName, false);
-                    }
-                    return !quote.isVirtual();
-                },
-                backToShippingAddress: function () {
-                    navigator.setCurrent(stepName).goBack();
+            },
+            quoteHasShippingAddress: function() {
+                return quote.isVirtual() || quote.getShippingAddress();
+            },
+
+            verifySelectedMethodCode: function (data, value) {
+                if (quote.getSelectedShippingMethod() == data) {
+                    return value;
                 }
+                return false;
+            },
+
+            setShippingMethod: function (form) {
+                form = $(form);
+                var code = form.find("input[name='shipping_method']:checked").val();
+                var shippingMethodCode = code ? code.split("_") : null;
+                selectShippingMethod(shippingMethodCode);
+            },
+
+            getFormatedPrice: function (price) {
+                //todo add format data
+                return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
+            },
+
+
+            isActive: function() {
+                if (quote.isVirtual()) {
+                    navigator.setStepEnabled(stepName, false);
+                }
+                return !quote.isVirtual();
+            },
+            backToShippingAddress: function () {
+                navigator.setCurrent(stepName).goBack();
             }
         });
     }

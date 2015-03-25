@@ -43,6 +43,11 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     const KEY_AVAILABLE = 'available';
 
     /**
+     * Shipping error message.
+     */
+    const KEY_ERROR_MESSAGE = 'error_message';
+
+    /**
      * Returns the shipping carrier code.
      *
      * @return string Shipping carrier code.
@@ -164,4 +169,19 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
     );
+
+    /**
+     * Returns an error message.
+     *
+     * @return string Shipping Error message.
+     */
+    public function getErrorMessage();
+
+    /**
+     * Set an error message.
+     *
+     * @param string $errorMessage
+     * @return $this
+     */
+    public function setErrorMessage($errorMessage);
 }

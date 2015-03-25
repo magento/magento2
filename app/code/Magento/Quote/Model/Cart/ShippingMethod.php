@@ -164,6 +164,27 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     }
 
     /**
+     * Returns the error message.
+     *
+     * @return string|null Shipping Error message.
+     */
+    public function getErrorMessage()
+    {
+        return $this->_get(self::KEY_ERROR_MESSAGE);
+    }
+
+    /**
+     * Set an error message.
+     *
+     * @param string|null $errorMessage
+     * @return $this
+     */
+    public function setErrorMessage($errorMessage)
+    {
+        return $this->setData(self::KEY_ERROR_MESSAGE, $errorMessage);
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\ShippingMethodExtensionInterface|null

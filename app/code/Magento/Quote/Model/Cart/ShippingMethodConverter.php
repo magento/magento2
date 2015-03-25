@@ -52,6 +52,7 @@ class ShippingMethodConverter
             ->setMethodTitle($rateModel->getMethodTitle())
             ->setAmount($currency->convert($rateModel->getPrice(), $quoteCurrencyCode))
             ->setBaseAmount($rateModel->getPrice())
-            ->setAvailable(empty($errorMessage));
+            ->setAvailable(empty($errorMessage))
+            ->setErrorMessage(empty($errorMessage) ? false : $errorMessage);
     }
 }

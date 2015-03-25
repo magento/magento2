@@ -15,6 +15,9 @@
                     <span>Payment Information</span>
                 </legend>
                 <br>
+                <!-- ko foreach: elems() -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
                 <div id="checkout-payment-method-load" class="opc-payment">
                     <dl class="items methods-payment">
                         <!-- ko foreach: getAvailablePaymentMethods() -->
