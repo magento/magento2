@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource;
 
 
-use Magento\Sales\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 
 class EntitySnapshot
 {
@@ -37,12 +37,17 @@ class EntitySnapshot
     }
 
     /**
+     * Check is current entity has changes, by comparing current object state with stored snapshot
+     *
      * @param AbstractModel $entity
      * @return bool
      */
     public function isModified(AbstractModel $entity)
     {
         if (!$entity->getId()) {
+            return true;
+        }
+        if (!isset($this->snapshotData[get_class($entity)][$entity->getId()])) {
             return true;
         }
         $data = array_intersect_key($entity->getData(), $this->entityMetadata->getFields($entity));
