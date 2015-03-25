@@ -84,6 +84,15 @@
                 </item>
             </argument>
         </field>
+        <field name="created_in">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                </item>
+            </argument>
+        </field>
         <field name="default_billing">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

@@ -203,7 +203,7 @@ class Tabs extends Generic implements LayoutInterface
                 'dataScope' => $name,
                 'insertTo' => [
                     $this->namespace . '.sections' => [
-                        'position' => $this->getNextSortIncrement()
+                        'position' => $block->hasSortOrder() ? $block->getSortOrder() : $this->getNextSortIncrement()
                     ]
                 ],
                 'config' => [
