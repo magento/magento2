@@ -22,11 +22,13 @@ define(
                 alert('Currently adding a new address is not supported.');
                 return false;
             }
+
             storage.post(
                 urlBuilder.createUrl('/carts/:quoteId/billing-address', {quoteId: quote.getQuoteId()}),
                 JSON.stringify({
                     "cartId": quote.getQuoteId(),
-                    "address": billingAddress
+                    "address": billingAddress,
+                    "useForShipping": useForShipping
                 })
             ).success(
                 function (response) {
@@ -34,7 +36,9 @@ define(
                     quote.setBillingAddress(billingAddress, useForShipping);
                     if (useForShipping === '1' && !quote.isVirtual()) {
                         //TODO: need to use use_for_shipping key in saveBilling request instead additional request
-                        selectShippingAddress(billingAddressId, true);
+                        quote.setShippingAddress(1);
+                        navigator.setCurrent('shippingAddress').goNext();
+                        //selectShippingAddress(billingAddressId, true);
                     } else {
                         navigator.setCurrent('billingAddress').goNext();
                     }

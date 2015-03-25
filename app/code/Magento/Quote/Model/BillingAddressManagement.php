@@ -9,6 +9,7 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Quote\Api\BillingAddressManagementInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /** Quote billing address write service object. */
 class BillingAddressManagement implements BillingAddressManagementInterface
@@ -62,17 +63,33 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     /**
      * {@inheritDoc}
      */
-    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
+    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $this->addressValidator->validate($address);
         // TODO: Draft implementation. Should be improved when checkout ui rendering will be able to process addresses.
         $customerAddressId = $address->getCustomerAddressId();
-        if ($customerAddressId) {
-            $address = $this->addressRepository->getById($customerAddressId);
-            $address = $quote->getBillingAddress()->importCustomerAddressData($address);
+        if ($useForShipping) {
+            $shippingAddress = $address;
         }
+        if ($customerAddressId) {
+            try {
+                $addressData = $this->addressRepository->getById($customerAddressId);
+            }  catch (NoSuchEntityException $e) {
+                // do nothing if customer is not found by id
+            }
+            $address = $quote->getBillingAddress()->importCustomerAddressData($addressData);
+            if ($useForShipping) {
+                $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
+            }
+        }
+
         $quote->setBillingAddress($address);
+        if ($useForShipping) {
+            $shippingAddress->setSameAsBilling(1);
+            $shippingAddress->setCollectShippingRates(true);
+            $quote->setShippingAddress($shippingAddress);
+        }
         $quote->setDataChanges(true);
         try {
             $this->quoteRepository->save($quote);
