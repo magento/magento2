@@ -17,13 +17,13 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
     /**
      * @var \Magento\Integration\Controller\Adminhtml\Integration\Delete
      */
-    protected $integrationContr;
+    protected $integrationController;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->integrationContr = $this->_createIntegrationController('Delete');
+        $this->integrationController = $this->_createIntegrationController('Delete');
 
         $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
@@ -59,7 +59,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
-        $this->integrationContr->execute();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionWithConsumer()
@@ -88,7 +88,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
-        $this->integrationContr->execute();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionConfigSetUp()
@@ -116,7 +116,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         // verify success message
         $this->_messageManager->expects($this->never())->method('addSuccess');
 
-        $this->integrationContr->execute();
+        $this->integrationController->execute();
     }
 
     public function testDeleteActionMissingId()
@@ -130,7 +130,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addError')
             ->with(__('Integration ID is not specified or is invalid.'));
 
-        $this->integrationContr->execute();
+        $this->integrationController->execute();
     }
 
     /**
@@ -156,7 +156,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willThrowException($invalidIdException);
         $this->_messageManager->expects($this->never())->method('addError');
 
-        $this->integrationContr->execute();
+        $this->integrationController->execute();
     }
 
     /**
@@ -182,6 +182,6 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willThrowException($invalidIdException);
         $this->_messageManager->expects($this->never())->method('addError');
 
-        $this->integrationContr->execute();
+        $this->integrationController->execute();
     }
 }

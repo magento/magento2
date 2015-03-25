@@ -399,7 +399,8 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
+            ->with(
+                Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
                 ScopeInterface::SCOPE_STORE
             )
             ->willReturn($isSetFlag);
