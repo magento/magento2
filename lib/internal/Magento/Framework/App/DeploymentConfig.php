@@ -98,7 +98,7 @@ class DeploymentConfig
     {
         $this->load();
         if (isset($this->data[$key])) {
-            $this->data[$key];
+            return $this->data[$key];
         }
 
         return $this->data;
