@@ -1,11 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 25.03.15
- * Time: 15:01
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Resource;
 
 
