@@ -13,7 +13,7 @@
     </head>
     <update handle="editor"/>
     <body>
-        <referenceContainer name="admin.scope.col.wrap" htmlClass="" /> <!-- @todo ui: Removes .admin__scope-old class for edit product -->
+        <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
         <referenceContainer name="content">
             <block class="Magento\Catalog\Block\Adminhtml\Product\Edit" name="product_edit">
                 <container name="product-type-tabs" label="Tabs">
