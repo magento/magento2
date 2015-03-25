@@ -557,13 +557,6 @@
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
-        <arguments>
-            <argument name="fileGeneratorTypes" xsi:type="array">
-                <item name="less" xsi:type="object">Magento\Framework\Less\FileGenerator</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="developerPublisher" type="Magento\Framework\App\View\Asset\Publisher">
         <arguments>
             <argument name="materializationStrategyFactory" xsi:type="object">developerMaterialization</argument>
@@ -577,24 +570,23 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="lessFileGeneratorMaterialization" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
+    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
         <arguments>
-            <argument name="strategiesList" xsi:type="array">
-                <item name="view_preprocessed" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink</item>
-                <item name="default" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Copy</item>
+            <argument name="fileGeneratorTypes" xsi:type="array">
+                <item name="less" xsi:type="object">fileassemblerFileGenerator</item>
             </argument>
         </arguments>
-    </virtualType>
-    <virtualType name="lessFileGeneratorPublisher" type="Magento\Framework\App\View\Asset\Publisher">
-        <arguments>
-            <argument name="materializationStrategyFactory" xsi:type="object">lessFileGeneratorMaterialization</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\Less\FileGenerator">
-        <arguments>
-            <argument name="publisher" xsi:type="object">lessFileGeneratorPublisher</argument>
-        </arguments>
     </type>
+    <virtualType name="fileassemblerFileGenerator" type="Magento\Framework\Less\FileGenerator">
+        <arguments>
+            <argument name="relatedGenerator" xsi:type="object">fileassemblerRelatedFilesGenerator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="fileassemblerRelatedFilesGenerator" type="Magento\Developer\Model\Less\FileGenerator\PublicationDecorator">
+        <arguments>
+            <argument name="publisher" xsi:type="object">developerPublisher</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>
