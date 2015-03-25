@@ -31,11 +31,6 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
     private $store;
 
     /**
-     * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $order;
-
-    /**
      * @var \Magento\SalesSequence\Model\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $meta;
@@ -81,13 +76,6 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->order = $this->getMock(
-            'Magento\Sales\Model\Order',
-            ['getEntityType', 'getStore'],
-            [],
-            '',
-            false
-        );
         $this->store = $this->getMock(
             'Magento\Store\Model\Store',
             ['getId'],
@@ -108,7 +96,6 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
     {
         $entityType = 'order';
         $storeId = 1;
-        $this->order->expects($this->once())->method('getEntityType')->willReturn($entityType);
         $this->resourceSequenceMeta->expects($this->once())
             ->method('loadByEntityTypeAndStore')
             ->with($entityType, $storeId)
@@ -116,6 +103,6 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
         $this->sequenceFactory->expects($this->once())->method('create')->with([
             'meta' => $this->meta
         ])->willReturn($this->sequence);
-        $this->assertSame($this->sequence, $this->sequenceManager->getSequence($this->order, $storeId));
+        $this->assertSame($this->sequence, $this->sequenceManager->getSequence($entityType, $storeId));
     }
 }
