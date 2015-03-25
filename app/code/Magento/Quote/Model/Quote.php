@@ -2042,9 +2042,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             return $this;
         }
 
-        if (is_string($message)) {
-            $message = $this->messageFactory->create(\Magento\Framework\Message\MessageInterface::TYPE_ERROR, $message);
-        }
+        $message = $this->messageFactory->create(\Magento\Framework\Message\MessageInterface::TYPE_ERROR, $message);
 
         $messages[$index] = $message;
         $this->setData('messages', $messages);
