@@ -21,10 +21,10 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Init context object
      *
-     * @param null|array $additionalParams
+     * @param array $additionalParams
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function initContext($additionalParams = [])
+    protected function initContext(array $additionalParams = [])
     {
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', [], [], '', false);
         $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
