@@ -28,7 +28,7 @@ class OrderGetTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @magentoApiDataFixture Magento/GiftMessage/_files/order_with_message.php
      */
     public function testOrderGet()
     {
@@ -48,6 +48,13 @@ class OrderGetTest extends WebapiAbstract
             'telephone',
             'country_id',
             'firstname',
+        ];
+        $expectedExtensionAttributes = [
+            'gift_message' => [
+                'sender' => 'Romeo',
+                'recipient' => 'Mercutio',
+                'message' => 'I thought all for the best.'
+            ]
         ];
 
         /** @var \Magento\Sales\Model\Order $order */
@@ -85,5 +92,19 @@ class OrderGetTest extends WebapiAbstract
             $this->assertArrayHasKey($field, $result['billing_address']);
             $this->assertArrayHasKey($field, $result['shipping_address']);
         }
+
+        $this->assertArrayHasKey('gift_message', $result['extension_attributes']);
+        $expectedGiftMessage = $expectedExtensionAttributes['gift_message'];
+        $actualGiftMessage =  $result['extension_attributes']['gift_message'];
+        $this->assertEquals($expectedGiftMessage['sender'], $actualGiftMessage['sender']);
+        $this->assertEquals($expectedGiftMessage['recipient'], $actualGiftMessage['recipient']);
+        $this->assertEquals($expectedGiftMessage['message'], $actualGiftMessage['message']);
+
+        $this->assertArrayHasKey('gift_message', $result['items'][0]['extension_attributes']);
+        $expectedGiftMessage = $expectedExtensionAttributes['gift_message'];
+        $actualGiftMessage =  $result['items'][0]['extension_attributes']['gift_message'];
+        $this->assertEquals($expectedGiftMessage['sender'], $actualGiftMessage['sender']);
+        $this->assertEquals($expectedGiftMessage['recipient'], $actualGiftMessage['recipient']);
+        $this->assertEquals($expectedGiftMessage['message'], $actualGiftMessage['message']);
     }
 }
