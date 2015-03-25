@@ -127,6 +127,7 @@ location / {
     }
 
     location ~ (index|get|static|report|404|503)\.php$ {
+        expires -1;
         fastcgi_pass   fastcgi_backend;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
