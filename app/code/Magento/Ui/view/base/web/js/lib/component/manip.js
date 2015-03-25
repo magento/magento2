@@ -34,7 +34,7 @@ define([
             offset = getIndex(container, target);
 
             if (position.after) {
-                offset++;
+                ++offset;
             }
         }
 
@@ -58,7 +58,6 @@ define([
          */
         insert: function (elem, position) {
             reserve(this._elems, elem, position);
-
             registry.get(elem, this._insert);
 
             return this;

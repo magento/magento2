@@ -11,18 +11,15 @@ define([
     'use strict';
 
     var inputNode = {
-        name: '<%= $data.index %>_input',
-        type: 'form.input',
         parent: '<%= $data.parentName %>',
+        type: 'form.input',
+        name: '<%= $data.index %>_input',
         dataScope: '<%= $data.customEntry %>',
         sortOrder: {
             after: '<%= $data.name %>'
         },
-        config: {
-            displayArea: 'body',
-            hidden: false,
-            label: '<%= $data.label %>'
-        }
+        displayArea: 'body',
+        label: '<%= $data.label %>'
     };
 
     /**

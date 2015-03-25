@@ -108,20 +108,23 @@ define([
 
         build: function (parent, node, name) {
             var defaults = parent && parent.childDefaults || {},
+                children = node.children,
                 type;
 
             type = getNodeType.apply(null, arguments);
 
+            node.children = false;
+
             node = utils.extend({
             }, this.types.get(type), defaults, node);
 
-            _.extend(node, node.config || {});
-
-            _.extend(node, {
+            _.extend(node, node.config || {}, {
                 index: node.name || name,
                 name: getNodeName(parent, node, name),
                 dataScope: getDataScope(parent, node)
             });
+
+            node.children = children;
 
             delete node.type;
             delete node.config;
