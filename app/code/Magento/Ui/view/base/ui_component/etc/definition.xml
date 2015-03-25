@@ -194,7 +194,7 @@
             <item name="save_url" xsi:type="string">mui/form/save</item>
             <item name="validate_url" xsi:type="string">mui/form/validate</item>
             <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/form</item>
             </item>
             <item name="template" xsi:type="string">templates/form/default</item>
         </argument>

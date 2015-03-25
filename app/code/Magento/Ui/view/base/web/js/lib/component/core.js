@@ -37,10 +37,10 @@ define([
             _elems: []
         },
 
-        initialize: function (options, additional) {
+        initialize: function (options) {
             _.bindAll(this, '_insert');
 
-            this.initConfig(options, additional)
+            this.initConfig(options)
                 .initProperties()
                 .initObservable()
                 .initUnique()
@@ -50,9 +50,9 @@ define([
             return this;
         },
 
-        initConfig: function (options, additional) {
+        initConfig: function (options) {
             var defaults = this.constructor.defaults,
-                config = _.extend({}, defaults, options, additional);
+                config = utils.extend({}, defaults, options);
 
             config = utils.template(config, this);
 

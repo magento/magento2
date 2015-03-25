@@ -29,7 +29,8 @@ define([
             listens: {
                 value: 'onUpdate',
                 hidden: 'setPreview',
-                '<%= provider %>:data.reset': 'reset'
+                '<%= provider %>:data.reset': 'reset',
+                '<%= provider %>:data.validate': 'validate'
             },
 
             links: {
