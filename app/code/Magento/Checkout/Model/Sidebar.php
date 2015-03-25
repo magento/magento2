@@ -1,0 +1,180 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Checkout\Model;
+
+use Magento\Checkout\Helper\Data as HelperData;
+use Magento\Checkout\Model\Cart;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+
+class Sidebar
+{
+    /**
+     * @var Cart
+     */
+    protected $cart;
+
+    /**
+     * @var HelperData
+     */
+    protected $helperData;
+
+    /**
+     * @var ResolverInterface
+     */
+    protected $resolver;
+
+    /**
+     * @var int
+     */
+    protected $summaryQty;
+
+    /**
+     * @param Cart $cart
+     * @param HelperData $helperData
+     * @param ResolverInterface $resolver
+     */
+    public function __construct(
+        Cart $cart,
+        HelperData $helperData,
+        ResolverInterface $resolver
+    ) {
+        $this->cart = $cart;
+        $this->helperData = $helperData;
+        $this->resolver = $resolver;
+    }
+
+    /**
+     * Compile response data
+     *
+     * @param string $error
+     * @return array
+     */
+    public function getResponseData($error = '')
+    {
+        $response = [
+            'success' => empty($error) ? true : false,
+        ];
+        if ($response['success']) {
+            $response = array_merge($response, [
+                'data' => [
+                    'summary_qty' => $this->getSummaryQty(),
+                    'summary_text' => $this->getSummaryText(),
+                    'subtotal' => $this->getSubtotalHtml(),
+                ],
+            ]);
+        }
+        if (!empty($error)){
+            $response = array_merge($response, [
+                'error_message' => $error,
+            ]);
+        }
+        return $response;
+    }
+
+    /**
+     * Check if required quote item exist
+     *
+     * @param int $itemId
+     * @throws LocalizedException
+     * @return $this
+     */
+    public function checkQuoteItem($itemId)
+    {
+        $item = $this->cart->getQuote()->getItemById($itemId);
+        if (!$item instanceof CartItemInterface) {
+            throw new LocalizedException(__('We can\'t find the quote item.'));
+        }
+        return $this;
+    }
+
+    /**
+     * Remove quote item
+     *
+     * @param int $itemId
+     * @return $this
+     */
+    public function removeQuoteItem($itemId)
+    {
+        $this->cart->removeItem($itemId);
+        $this->cart->save();
+        return $this;
+    }
+
+    /**
+     * Update quote item
+     *
+     * @param int $itemId
+     * @param int $itemQty
+     * @throws LocalizedException
+     * @return $this
+     */
+    public function updateQuoteItem($itemId, $itemQty)
+    {
+        $item = $this->cart->updateItem($itemId, $this->normalize($itemQty));
+        if (is_string($item)) {
+            throw new LocalizedException(__($item));
+        }
+        if ($item->getHasError()) {
+            throw new LocalizedException(__($item->getMessage()));
+        }
+        $this->cart->save();
+        return $this;
+    }
+
+    /**
+     * Apply normalization filter to item qty value
+     *
+     * @param int $itemQty
+     * @return int|array
+     */
+    protected function normalize($itemQty)
+    {
+        if ($itemQty) {
+            $filter = new \Zend_Filter_LocalizedToNormalized(
+                ['locale' => $this->resolver->getLocale()]
+            );
+            return $filter->filter($itemQty);
+        }
+        return $itemQty;
+    }
+
+    /**
+     * Retrieve summary qty
+     *
+     * @return int
+     */
+    protected function getSummaryQty()
+    {
+        if (!$this->summaryQty) {
+            $this->summaryQty = $this->cart->getSummaryQty();
+        }
+        return $this->summaryQty;
+    }
+
+    /**
+     * Retrieve summary qty text
+     *
+     * @return string
+     */
+    protected function getSummaryText()
+    {
+        return ($this->getSummaryQty() == 1) ? __(' item') : __(' items');
+    }
+
+    /**
+     * Retrieve subtotal block html
+     *
+     * @return string
+     */
+    protected function getSubtotalHtml()
+    {
+        $totals = $this->cart->getQuote()->getTotals();
+        $subtotal = isset($totals['subtotal']) ? $totals['subtotal']->getValue() : 0;
+        return $this->helperData->formatPrice($subtotal);
+    }
+}

@@ -191,6 +191,16 @@ class Sidebar extends AbstractCart implements IdentityInterface
     }
 
     /**
+     * Get remove cart item url
+     *
+     * @return bool
+     */
+    public function getRemoveItemUrl()
+    {
+        return $this->getUrl('checkout/sidebar/removeItem');
+    }
+
+    /**
      * Define if Mini Shopping Cart Pop-Up Menu enabled
      *
      * @return bool

@@ -28,24 +28,30 @@ define([
 
             this.element.decorate('list', this.options.isRecursive);
 
+            // Add event on "Go to Checkout" button click
             $(this.options.checkoutButton).on('click', $.proxy(function() {
                 location.href = this.options.checkoutUrl;
             }, this));
 
-            // TODO:
-            $(this.options.removeButton).on('click', $.proxy(function() {
-                return confirm(this.options.confirmMessage);
-            }, this));
-
+            // Add event on "Close" button click
             $(this.options.closeButton).on('click', $.proxy(function() {
                 $(this.options.targetElement).dropdownDialog("close");
             }, this));
 
+            // Add event on "Remove item" click
+            $(this.options.removeButton).click(function() {
+                if (confirm(self.options.confirmMessage)) {
+                    self._removeItem($(this));
+                }
+            });
+
+            // Add event on "Qty" field changed
             $(this.options.selectorItemQty).change(function(event) {
                 event.stopPropagation();
                 self._showButton($(this));
             });
 
+            // Add event on "Update Qty" button click
             $(this.options.selectorItemButton).click(function(event) {
                 event.stopPropagation();
                 self._updateQty($(this))
@@ -66,18 +72,25 @@ define([
 
         _updateQty: function(elem) {
             var itemId = elem.data('cart-item');
-            this._ajaxUpdate(this.options.updateItemQtyUrl, {
+            this._ajax(this.options.updateItemQtyUrl, {
                 item_id: itemId,
                 item_qty: $('#cart-item-' + itemId + '-qty').val()
             });
             this._hideButton(elem);
         },
 
+        _removeItem: function(elem) {
+            var itemId = elem.data('cart-item');
+            this._ajax(this.options.removeItemUrl, {
+                item_id: itemId
+            })
+        },
+
         /**
          * @param url - ajax url
          * @param data - post data for ajax call
          */
-        _ajaxUpdate: function(url, data) {
+        _ajax: function(url, data) {
             $.ajax({
                 url: url,
                 data: data,
@@ -95,6 +108,9 @@ define([
                             window.alert($.mage.__(msg));
                         }
                     }
+                },
+                error: function (error) {
+                    console.log(JSON.stringify(error));
                 }
             });
         },
