@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\Resource\Config;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 use Magento\Framework\Math\Random;
@@ -20,9 +21,6 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
-use Magento\Setup\Module\ConnectionFactory;
-use Magento\Setup\Module\Setup;
-use Magento\Store\Model\Store;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -567,7 +565,14 @@ class Installer
     public function installDeploymentConfig($data)
     {
         $this->checkInstallationFilePermissions();
-        $this->setupConfigModel->process(is_array($data) ? $data : $data->getArrayCopy());
+        $userData = is_array($data) ? $data : $data->getArrayCopy();
+
+        // TODO: remove this when moving install command to symfony
+        if (!isset($userData['db_pass'])) {
+            $userData['db_pass'] = '';
+        }
+
+        $this->setupConfigModel->process($userData);
 
         // reset object manager now that there is a deployment config
         $this->objectManagerProvider->reset();
@@ -1164,8 +1169,9 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = new DbConfig($this->deploymentConfig->getConfigData(ModuleLoader::CONFIG_KEY));
-            $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
+            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_KEY);
+            $config = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
+
             if ($config) {
                 try {
                     $connection = $this->connectionFactory->create($config);
@@ -1255,17 +1261,16 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $segment = $this->deploymentConfig->getConfigData(ModuleLoader::CONFIG_KEY);
-        $dbConfig = new DbConfig($segment);
-        $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
+        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_KEY);
+        $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
         $this->checkDatabaseConnection(
-            $config[ModuleLoader::KEY_NAME],
-            $config[ModuleLoader::KEY_HOST],
-            $config[ModuleLoader::KEY_USER],
-            $config[ModuleLoader::KEY_PASS]
+            $connectionConfig[ConfigOptionsList::KEY_NAME],
+            $connectionConfig[ConfigOptionsList::KEY_HOST],
+            $connectionConfig[ConfigOptionsList::KEY_USER],
+            $connectionConfig[ConfigOptionsList::KEY_PASS]
         );
-        if (isset($config[ModuleLoader::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($config[ModuleLoader::KEY_PREFIX]);
+        if (isset($config[ConfigOptionsList::KEY_PREFIX])) {
+            $this->checkDatabaseTablePrefix($config[ConfigOptionsList::KEY_PREFIX]);
         }
     }
 

@@ -119,19 +119,19 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $dbConfig = [
-        DbConfig::KEY_PREFIX => '',
+        ConfigOptionsList::KEY_PREFIX => '',
         'connection' => [
             'default' => [
-                DbConfig::KEY_HOST => '127.0.0.1',
-                DbConfig::KEY_NAME => 'magento',
-                DbConfig::KEY_USER => 'magento',
-                DbConfig::KEY_PASS => '',
+                ConfigOptionsList::KEY_HOST => '127.0.0.1',
+                ConfigOptionsList::KEY_NAME => 'magento',
+                ConfigOptionsList::KEY_USER => 'magento',
+                ConfigOptionsList::KEY_PASS => '',
             ],
         ],
     ];
 
     /**
-     * @var Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextMock;
 
@@ -353,7 +353,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
-        $this->configWriter->expects($this->once())->method('update')->with($this->deploymentConfig);
+        $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
         $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
         $this->logger->expects($this->at(1))->method('log')
             ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
@@ -405,8 +405,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
-            ->method('getSegment')
-            ->with(DbConfig::CONFIG_KEY)
+            ->method('getConfigData')
+            ->with(ConfigOptionsList::CONFIG_KEY)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
