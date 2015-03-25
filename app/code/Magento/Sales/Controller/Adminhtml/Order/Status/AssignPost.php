@@ -6,20 +6,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
-use Magento\Framework\Registry;
-use Magento\Backend\App\Action\Context;
-
 class AssignPost extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
-    /**
-     * @param Context $context
-     * @param Registry $coreRegistry
-     */
-    public function __construct(Context $context, Registry $coreRegistry)
-    {
-        parent::__construct($context, $coreRegistry);
-    }
-
     /**
      * Save status assignment to state
      *

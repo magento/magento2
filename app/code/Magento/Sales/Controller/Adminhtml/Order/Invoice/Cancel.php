@@ -6,26 +6,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
-
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
-    /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     */
-    public function __construct(
-        Context $context,
-        Registry $registry,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-    ) {
-        parent::__construct($context, $registry, $resultForwardFactory);
-    }
-
     /**
      * Cancel invoice action
      *
@@ -50,7 +32,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
                 $invoice->getOrder()
             )->save();
             $this->messageManager->addSuccess(__('You canceled the invoice.'));
-        } catch (LocalizedException $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Invoice canceling error'));
