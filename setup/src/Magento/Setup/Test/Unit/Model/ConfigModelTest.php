@@ -135,26 +135,6 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
         $this->configModel->process([]);
     }
 
-    public function testGetConfigValueByPath()
-    {
-        $expectedValue = 'test';
-        $path = 'test/path/to/value';
-        $config = [
-            'test' => [
-                'path' => [
-                    'to' => [
-                        'value' => $expectedValue
-                    ]
-                ]
-            ]
-        ];
-
-        $reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
-        $reader->expects($this->once())->method('loadConfig')->will($this->returnValue($config));
-        $configModel = new ConfigModel($this->collector, $this->writer, $reader);
-        $this->assertEquals($expectedValue, $configModel->getConfigValueByPath($path));
-    }
-
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage In module : Fake_ModuleConfigOption::createConfig

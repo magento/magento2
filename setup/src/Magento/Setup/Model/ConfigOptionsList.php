@@ -20,11 +20,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Path to the values in the deployment config
      */
     const CONFIG_PATH_INSTALL_DATE = 'install/date';
+    const CONFIG_PATH_CRYPT_KEY = 'crypt/key';
     /**#@-*/
 
     /**#@+
      * Input keys for the options
      */
+    const INPUT_KEY_DATE = 'date';
     const INPUT_KEY_CRYPT_KEY = 'key';
     const INPUT_KEY_SESSION_SAVE = 'session_save';
     const INPUT_KEY_DEFINITION_FORMAT = 'definition_format';
@@ -198,11 +200,11 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      */
-    public function createConfig(array $data, array $currentConfig = [])
+    public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
         $configData = [];
-        $configData[] = $this->configGenerator->createInstallConfig($currentConfig);
-        $configData[] = $this->configGenerator->createCryptConfig($data, $currentConfig);
+        $configData[] = $this->configGenerator->createInstallConfig($deploymentConfig);
+        $configData[] = $this->configGenerator->createCryptConfig($data, $deploymentConfig);
         $modulesConfig = $this->configGenerator->createModuleConfig();
         if (isset($modulesConfig)) {
             $configData[] = $modulesConfig;

@@ -80,12 +80,6 @@ class Reader
         return $result ?: [];
     }
 
-    public function loadConfig()
-    {
-        // TODO: add multi config functionality here
-        return $this->load();
-    }
-
     /**
      *  Gets a value specified key from config data
      *

@@ -94,13 +94,14 @@ class DeploymentConfig
      * @param string $key
      * @return null|mixed
      */
-    public function getConfigData($key)
+    public function getConfigData($key = null)
     {
         $this->load();
-        if (!isset($this->data[$key])) {
-            return null;
+        if (isset($this->data[$key])) {
+            $this->data[$key];
         }
-        return $this->data[$key];
+
+        return $this->data;
     }
 
     /**

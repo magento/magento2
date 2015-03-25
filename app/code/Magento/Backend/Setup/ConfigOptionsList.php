@@ -9,6 +9,7 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\App\DeploymentConfig;
 
 /*
  * Deployment configuration options needed for Backend module
@@ -49,7 +50,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      */
-    public function createConfig(array $options, array $currentConfig = [])
+    public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $data = [];
         if (isset($options[self::INPUT_KEY_BACKEND_FRONTNAME])) {

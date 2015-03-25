@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Interface for handling options in deployment configuration tool
@@ -23,10 +24,10 @@ interface ConfigOptionsListInterface
      * Data in these objects will be stored in array form in deployment config file.
      *
      * @param array $options
-     * @param array $currentConfig
+     * @param DeploymentConfig $deploymentConfig
      * @return \Magento\Framework\Config\Data\ConfigData[]
      */
-    public function createConfig(array $options, array $currentConfig = []);
+    public function createConfig(array $options, DeploymentConfig $deploymentConfig);
 
     /**
      * Validates user input option values and returns error messages
