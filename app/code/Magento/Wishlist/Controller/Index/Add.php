@@ -91,33 +91,45 @@ class Add extends Action\Action implements IndexInterface
             return;
         }
 
-        $buyRequest = new \Magento\Framework\Object($requestParams);
+        try {
+            $buyRequest = new \Magento\Framework\Object($requestParams);
 
-        $result = $wishlist->addNewItem($product, $buyRequest);
-        if (is_string($result)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($result));
+            $result = $wishlist->addNewItem($product, $buyRequest);
+            if (is_string($result)) {
+                throw new \Magento\Framework\Exception\LocalizedException(__($result));
+            }
+            $wishlist->save();
+
+            $this->_eventManager->dispatch(
+                'wishlist_add_product',
+                ['wishlist' => $wishlist, 'product' => $product, 'item' => $result]
+            );
+
+            $referer = $session->getBeforeWishlistUrl();
+            if ($referer) {
+                $session->setBeforeWishlistUrl(null);
+            } else {
+                $referer = $this->_redirect->getRefererUrl();
+            }
+
+
+            /** @var $helper \Magento\Wishlist\Helper\Data */
+            $helper = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+            $message = __(
+                '%1 has been added to your wishlist. Click <a href="%2">here</a> to continue shopping.',
+                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName()),
+                $this->_objectManager->get('Magento\Framework\Escaper')->escapeUrl($referer)
+            );
+            $this->messageManager->addSuccess($message);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->messageManager->addError(
+                __('An error occurred while adding item to wish list: %1', $e->getMessage())
+            );
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__('An error occurred while adding item to wish list.'));
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        $wishlist->save();
 
-        $this->_eventManager->dispatch(
-            'wishlist_add_product',
-            ['wishlist' => $wishlist, 'product' => $product, 'item' => $result]
-        );
-
-        $referer = $session->getBeforeWishlistUrl();
-        if ($referer) {
-            $session->setBeforeWishlistUrl(null);
-        } else {
-            $referer = $this->_redirect->getRefererUrl();
-        }
-
-        $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-        $message = __(
-            '%1 has been added to your wishlist. Click <a href="%2">here</a> to continue shopping.',
-            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName()),
-            $this->_objectManager->get('Magento\Framework\Escaper')->escapeUrl($referer)
-        );
-        $this->messageManager->addSuccess($message);
         $this->_redirect('*', ['wishlist_id' => $wishlist->getId()]);
     }
 }

@@ -10,7 +10,7 @@ namespace Magento\Tax\Controller\Adminhtml\Rule;
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect|void
      */
     public function execute()
     {
@@ -25,7 +25,6 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
             $this->_redirect('tax/*/');
             return;
         }
-
         return $this->getDefaultRedirect();
     }
 

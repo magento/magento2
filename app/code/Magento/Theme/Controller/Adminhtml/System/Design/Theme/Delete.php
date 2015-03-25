@@ -30,11 +30,23 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $theme->delete();
             $this->messageManager->addSuccess(__('You deleted the theme.'));
         }
+        return $this->getDefaultRedirect();
+    }
 
-        $redirectBack = (bool)$this->getRequest()->getParam('back', false);
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
         /**
          * @todo Temporary solution. Theme module should not know about the existence of editor module.
          */
-        $redirectBack ? $this->_redirect('adminhtml/system_design_editor/index/') : $this->_redirect('adminhtml/*/');
+        $path = (bool)$this->getRequest()->getParam('back', false)
+            ? 'adminhtml/system_design_editor/index/'
+            : 'adminhtml/*/';
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath($path);
     }
 }

@@ -434,7 +434,6 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testExecuteWithProductAndCantAddProductToWishlist()
     {
@@ -444,10 +443,16 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->method('addNewItem')
             ->will($this->returnValue('Can\'t add product to wishlist'));
 
+        $wishlist
+            ->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(2));
+
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
             ->will($this->returnValue($wishlist));
+
 
         $request = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
         $request
@@ -460,8 +465,20 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
+        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
+        $redirect
+            ->expects($this->once())
+            ->method('redirect')
+            ->with($response, '*', ['wishlist_id' => 2])
+            ->will($this->returnValue(null));
 
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
+        $messageManager = $this->getMock('Magento\Framework\Message\Manager', ['addError'], [], '', false);
+        $messageManager
+            ->expects($this->once())
+            ->method('addError')
+            ->with('An error occurred while adding item to wish list: Can\'t add product to wishlist')
+            ->will($this->returnValue(null));
 
         $this->context
             ->expects($this->any())
@@ -489,8 +506,16 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($actionFlag));
         $this->context
             ->expects($this->any())
+            ->method('getRedirect')
+            ->will($this->returnValue($redirect));
+        $this->context
+            ->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($view));
+        $this->context
+            ->expects($this->any())
+            ->method('getMessageManager')
+            ->will($this->returnValue($messageManager));
 
         $this->customerSession
             ->expects($this->exactly(1))
@@ -612,6 +637,19 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->with('http://test-url.com')
             ->will($this->returnValue('http://test-url.com'));
 
+        $logger = $this->getMock(
+            'Magento\Framework\Logger\Monolog',
+            ['critical'],
+            [],
+            '',
+            false
+        );
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with($exception)
+            ->will($this->returnValue(true));
+
         $om = $this->getMock('Magento\Framework\App\ObjectManager', ['get'], [], '', false);
         $om
             ->expects($this->at(0))
@@ -628,6 +666,11 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Framework\Escaper')
             ->will($this->returnValue($escaper));
+        $om
+            ->expects($this->at(3))
+            ->method('get')
+            ->with('Psr\Log\LoggerInterface')
+            ->will($this->returnValue($logger));
 
         $response = $this->getMock('Magento\Framework\App\Response\Http', null, [], '', false);
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false);
@@ -657,7 +700,13 @@ class AddTest extends \PHPUnit_Framework_TestCase
         );
         $messageManager
             ->expects($this->once())
-            ->method('addSuccess');
+            ->method('addError')
+            ->with('An error occurred while adding item to wish list.')
+            ->will($this->returnValue(null));
+        $messageManager
+            ->expects($this->once())
+            ->method('addSuccess')
+            ->will($this->throwException($exception));
 
         $this->context
             ->expects($this->any())

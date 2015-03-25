@@ -30,11 +30,9 @@ class Fromcart extends Action\Action implements IndexInterface
     }
 
     /**
-     * Add cart item to wishlist and remove from cart
-     *
-     * @return \Magento\Framework\App\Response\Http
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -71,8 +69,17 @@ class Fromcart extends Action\Action implements IndexInterface
         $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
         $wishlist->save();
 
-        return $this->getResponse()->setRedirect(
-            $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl()
-        );
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setUrl($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
     }
 }
