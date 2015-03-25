@@ -63,7 +63,7 @@ $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
             <?php endif; ?>
 
             <?php // Prices ?>
-            <div class="product-item-pricing" style="float:left">
+            <div class="product-item-pricing">
                 <?php if ($canApplyMsrp): ?>
 
                     <div class="details-map">
@@ -81,33 +81,33 @@ $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                            value="<?php echo $block->getQty() ?>"
                            type="number"
                            size="4"
-                           title="<?php echo __('Qty'); ?>"
-                           class="input-text qty cart-item-qty"
-                           style="width:50px"
+                           class="item-qty"
                            data-cart-item="<?php echo $_item->getId() ?>"
                            maxlength="12"/>
                     <button id="update-cart-item-<?php echo $_item->getId() ?>"
-                           class="update-cart-item"
-                           data-cart-item="<?php echo $_item->getId() ?>"
-                           title="<?php echo __('Update'); ?>"
-                           style="display: none">
-                        <span>Update</span>
+                            class="item-update"
+                            data-cart-item="<?php echo $_item->getId() ?>"
+                            title="<?php echo $block->escapeHtml(__('Update')); ?>"
+                            style="display: none">
+                        <span><?php echo __('Update'); ?></span>
                     </button>
                 </div>
             </div>
 
-            <div class="product actions" style="margin-top:25px">
+            <div class="product actions">
                 <?php if ($product->isVisibleInSiteVisibility()):?>
-                <div class="primary" style="margin-right:0px">
+                <div class="primary">
                     <a href="<?php echo $block->getConfigureUrl() ?>"
-                       title="<?php echo __('Edit item') ?>"
-                       class="action edit"><span><?php echo __('Edit')?></span></a>
+                       title="<?php echo $block->escapeHtml(__('Edit item')); ?>"
+                       class="action edit">
+                       <span><?php echo __('Edit')?></span>
+                   </a>
                 </div>
                 <?php endif ?>
-                <div class="secondary" style="margin-right:10px">
+                <div class="secondary">
                     <a href="#"
                        data-cart-item="<?php echo $_item->getId() ?>"
-                       title="<?php echo __('Remove item') ?>"
+                       title="<?php echo $block->escapeHtml(__('Remove item')); ?>"
                        class="action delete">
                         <span><?php echo __('Remove')?></span>
                     </a>

@@ -14,8 +14,8 @@ define([
         options: {
             isRecursive: true,
             maxItemsVisible: 3,
-            selectorItemQty: ':input.cart-item-qty',
-            selectorItemButton: ':button.update-cart-item',
+            selectorItemQty: ':input.item-qty',
+            selectorItemButton: ':button.item-update',
             selectorSummaryQty: 'div.content > div.items-total',
             selectorSubtotal: 'div.content > div.subtotal > div.amount span.price',
             selectorShowcartNumber: 'a.showcart > span.counter > span.counter-number',
