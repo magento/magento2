@@ -224,7 +224,7 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleSessionException(\Exception $exception)
     {
-        if ($exception instanceof \Magento\Framework\Session\Exception) {
+        if ($exception instanceof \Magento\Framework\Exception\SessionException) {
             $this->_response->setRedirect($this->_request->getDistroBaseUrl());
             $this->_response->sendHeaders();
             return true;
