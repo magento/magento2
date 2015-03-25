@@ -83,6 +83,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapterMock;
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
 
     /**
      * Mock class dependencies
@@ -156,7 +160,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
+            [],
+            [],
+            '',
+            false
+        );
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
@@ -164,6 +174,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $contextMock,
             $this->attributeMock,
             $this->salesSequenceManagerMock,
+            $this->entitySnapshotMock,
             $this->addressHandlerMock,
             $this->stateHandlerMock,
             $this->gridAggregatorMock
