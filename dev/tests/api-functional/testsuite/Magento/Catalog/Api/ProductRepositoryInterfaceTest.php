@@ -36,9 +36,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testGet()
     {
         $productData = $this->productData[0];
+
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
+            $this->assertEquals($productData[$key], $response[$key]);
+        }
+    }
+
+    protected function getProduct($sku)
+    {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productData[ProductInterface::SKU],
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -48,10 +57,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, ['sku' => $productData[ProductInterface::SKU]]);
-        foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
-            $this->assertEquals($productData[$key], $response[$key]);
-        }
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku]);
+        return $response;
     }
 
     public function testGetNoSuchEntityException()
@@ -114,6 +121,91 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
+    protected function getOptionsData()
+    {
+        return [
+            [
+                "product_sku" => "simple",
+                "title" => "DropdownOption",
+                "type" => "drop_down",
+                "sort_order" => 0,
+                "is_require" => true,
+                "values" => [
+                    [
+                        "title" => "DropdownOption2_1",
+                        "sort_order" => 0,
+                        "price" => 3,
+                        "price_type" => "fixed",
+                    ],
+                ],
+            ],
+            [
+                "product_sku" => "simple",
+                "title" => "CheckboxOption",
+                "type" => "checkbox",
+                "values" => [
+                    [
+                        "title" => "CheckBoxValue1",
+                        "price" => 5,
+                        "price_type" => "fixed",
+                        "sort_order" => 1,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function testProductOptions()
+    {
+        $productData = $this->getSimpleProductData();
+        $optionsDataInput = $this->getOptionsData();
+        $productData['options'] = $optionsDataInput;
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey('options', $response);
+        $options = $response['options'];
+        $this->assertEquals(2, count($options));
+        $this->assertEquals(1, count($options[0]['values']));
+        $this->assertEquals(1, count($options[1]['values']));
+
+        //update the product options
+        //Adding a value to option 1, delete an option and create a new option
+        $options[0]['values'][] = [
+            "title" => "Value2",
+            "price" => 6,
+            "price_type" => "fixed",
+        ];
+        $option1Id = $options[0]['option_id'];
+        $option2Id = $options[1]['option_id'];
+        $options[1] = [
+            "product_sku" => "simple",
+            "title" => "DropdownOption2",
+            "type" => "drop_down",
+            "values" => [
+                [
+                    "title" => "Value3",
+                    "price" => 7,
+                    "price_type" => "fixed",
+                ],
+            ],
+        ];
+
+        $response['options'] = $options;
+        $this->updateProduct($response);
+
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertArrayHasKey('options', $response);
+        $options = $response['options'];
+        $this->assertEquals(2, count($options));
+        $this->assertEquals(2, count($options[0]['values']));
+        $this->assertEquals(1, count($options[1]['values']));
+        $this->assertEquals($option1Id, $options[0]['option_id']);
+        $this->assertTrue($option2Id < $options[1]['option_id']);
+
+        $this->deleteProduct($productData[ProductInterface::SKU]);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -124,13 +216,24 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::SKU => 'simple', //sku from fixture
         ];
         $product = $this->getSimpleProductData($productData);
+        $response =  $this->updateProduct($product);
+
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+        $this->assertArrayHasKey(ProductInterface::NAME, $response);
+        $this->assertEquals($productData[ProductInterface::NAME], $response[ProductInterface::NAME]);
+        $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
+    }
+
+    protected function updateProduct($product)
+    {
+        $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;
         }
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productData[ProductInterface::SKU],
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -141,11 +244,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $requestData = ['product' => $product];
         $response =  $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertArrayHasKey(ProductInterface::SKU, $response);
-        $this->assertArrayHasKey(ProductInterface::NAME, $response);
-        $this->assertEquals($productData[ProductInterface::NAME], $response[ProductInterface::NAME]);
-        $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
+        return $response;
     }
 
     /**

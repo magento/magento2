@@ -19,6 +19,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $initializedProductMock;
+
+    /**
      * @var \Magento\Catalog\Model\ProductRepository
      */
     protected $model;
@@ -90,6 +95,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->initializedProductMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['setProductOptions', 'load', 'getOptions', 'getSku'],
+            [],
+            '',
+            false
+        );
         $this->filterBuilderMock = $this->getMock('\Magento\Framework\Api\FilterBuilder', [], [], '', false);
         $this->initializationHelperMock = $this->getMock(
             '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
@@ -138,6 +150,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
             [
@@ -150,6 +163,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'metadataServiceInterface' => $this->metadataServiceMock,
                 'searchResultsFactory' => $this->searchResultsFactoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                'optionConverter' => $optionConverter,
                 'eavConfig' => $this->eavConfigMock,
             ]
         );
@@ -537,5 +551,176 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'storeId' => $anyObject,
             ],
         ];
+    }
+
+    /**
+     * @param array $newOptions
+     * @param array $existingOptions
+     * @param array $expectedData
+     * @dataProvider saveExistingWithOptionsDataProvider
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    public function testSaveExistingWithOptions(array $newOptions, array $existingOptions, array $expectedData)
+    {
+        $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')->will($this->returnValue(100));
+        $this->productFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->initializedProductMock));
+        $this->initializationHelperMock->expects($this->once())->method('initialize')
+            ->with($this->initializedProductMock);
+        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
+            ->willReturn(true);
+        $this->resourceModelMock->expects($this->once())->method('save')
+            ->with($this->initializedProductMock)->willReturn(true);
+        //option data
+        $this->productData['options'] = $newOptions;
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+
+        $this->initializedProductMock->expects($this->once())
+            ->method('getOptions')
+            ->willReturn($existingOptions);
+
+        $this->initializedProductMock->expects($this->once())
+            ->method('setProductOptions')
+            ->with($expectedData);
+
+        $this->assertEquals($this->initializedProductMock, $this->model->save($this->productMock));
+    }
+
+    public function saveExistingWithOptionsDataProvider()
+    {
+        $data = [];
+
+        //Scenario 1: new options contains one existing option and one new option
+        //there are two existing options, one will be updated and one will be deleted
+        $newOptionsData = [
+            [
+                "option_id" => 10,
+                "type" => "drop_down",
+                "values" => [
+                    [
+                        "title" => "DropdownOptions_1",
+                        "option_type_id" => 8, //existing
+                        "price" => 3,
+                    ],
+                    [ //new option value
+                        "title" => "DropdownOptions_3",
+                        "price" => 4,
+                    ]
+                ]
+            ],
+            [//new option
+                "type" => "checkbox",
+                "values" => [
+                    [
+                        "title" => "CheckBoxValue2",
+                        "price" => 5,
+                    ],
+                ]
+            ],
+        ];
+
+        /** @var \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject $existingOption1 */
+        $existingOption1 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        $existingOption1->setData(
+            [
+                "option_id" => 10,
+                "type" => "drop_down",
+            ]
+        );
+        /** @var \Magento\Catalog\Model\Product\Option\Value $existingOptionValue1 */
+        $existingOptionValue1 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option\Value')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        $existingOptionValue1->setData(
+            [
+                "option_type_id" => "8",
+                "title" => "DropdownOptions_1",
+                "price" => 5,
+            ]
+        );
+        $existingOptionValue2 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option\Value')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        $existingOptionValue2->setData(
+            [
+                "option_type_id" => "9",
+                "title" => "DropdownOptions_2",
+                "price" => 6,
+            ]
+        );
+        $existingOption1->setValues(
+            [
+                "8" => $existingOptionValue1,
+                "9" => $existingOptionValue2,
+            ]
+        );
+        $existingOption2 = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        $existingOption2->setData(
+            [
+                "option_id" => 11,
+                "type" => "drop_down",
+            ]
+        );
+        $data['scenario_1'] = [
+            'new_options' => $newOptionsData,
+            'existing_options' => [
+                "10" => $existingOption1,
+                "11" => $existingOption2,
+            ],
+            'expected_data' => [
+                [
+                    "option_id" => 10,
+                    "type" => "drop_down",
+                    "values" => [
+                        [
+                            "title" => "DropdownOptions_1",
+                            "option_type_id" => 8,
+                            "price" => 3,
+                        ],
+                        [
+                            "title" => "DropdownOptions_3",
+                            "price" => 4,
+                        ],
+                        [
+                            "option_type_id" => 9,
+                            "title" => "DropdownOptions_2",
+                            "price" => 6,
+                            "is_delete" => 1,
+                        ],
+                    ]
+                ],
+                [
+                    "type" => "checkbox",
+                    "values" => [
+                        [
+                            "title" => "CheckBoxValue2",
+                            "price" => 5,
+                        ]
+                    ]
+                ],
+                [
+                    "option_id" => 11,
+                    "type" => "drop_down",
+                    "values" => [],
+                    "is_delete" => 1,
+
+                ],
+            ],
+        ];
+
+        return $data;
     }
 }
