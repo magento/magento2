@@ -24,6 +24,10 @@
         </referenceContainer>
         <referenceContainer name="left">
             <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs" name="product_tabs">
+                <!-- @todo ui: remove arguments within .admin__scope-old -->
+                <arguments>
+                    <argument name="panels_class" xsi:type="string">admin__scope-old</argument>
+                </arguments>
                 <block class="Magento\Backend\Block\Widget\Tab" name="product_tabs.customer_options" as="customer_options">
                     <arguments>
                         <argument name="label" xsi:type="string" translate="true">Custom Options</argument>
