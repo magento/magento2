@@ -77,7 +77,19 @@ class ConfigCreateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $inputOptions = $input->getOptions();
-
+        $optionCollection = $this->configModel->getAvailableOptions();
+        foreach ($optionCollection as $option) {
+            $currentValue = $this->deploymentConfig->get($option->getConfigPath());
+            if (($currentValue !== null) && ($inputOptions[$option->getName()] !== null)) {
+                $dialog = $this->getHelperSet()->get('dialog');
+                if (!$dialog->askConfirmation(
+                    $output,
+                    '<question>Overwrite the existing configuration for ' . $option->getName() . '?</question>'
+                )) {
+                    $inputOptions[$option->getName()] = null;
+                }
+            }
+        }
         $inputOptions = array_filter($inputOptions,
             function ($value) {
                 return $value !== null;
