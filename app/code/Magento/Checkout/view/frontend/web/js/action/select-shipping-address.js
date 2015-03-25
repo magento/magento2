@@ -10,11 +10,12 @@ define(
     [
         '../model/quote',
         '../model/addresslist',
+        '../model/url-builder',
+        '../model/step-navigator',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Ui/js/model/errorlist'
     ],
-    function(quote, addressList, storage, errorList, navigator) {
+    function(quote, addressList, urlBuilder, navigator, storage, errorList) {
         return function(shippingAddressId, sameAsBilling) {
             if (!shippingAddressId) {
                 alert('Currently adding a new address is not supported.');
@@ -24,7 +25,7 @@ define(
             address.sameAsBilling = sameAsBilling;
 
             storage.post(
-                'rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-address',
+                urlBuilder.createUrl('/carts/:quoteId/shipping-address', {quoteId: quote.getQuoteId()}),
                 JSON.stringify({address: address})
             ).done(
                 function(quoteAddressId) {

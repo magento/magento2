@@ -8,12 +8,13 @@ define(
     [
         '../model/quote',
         '../model/addresslist',
+        '../model/step-navigator',
+        '../model/url-builder',
         'mage/storage',
         'Magento_Ui/js/model/errorlist',
-        './select-shipping-address',
-        'Magento_Checkout/js/model/step-navigator'
+        './select-shipping-address'
     ],
-    function(quote, addressList, storage, errorList, selectShippingAddress, navigator) {
+    function(quote, addressList, navigator, urlBuilder, storage, errorList, selectShippingAddress) {
         "use strict";
         return function(billingAddressId, useForShipping) {
             var billingAddress = addressList.getAddressById(billingAddressId);
@@ -22,7 +23,7 @@ define(
                 return false;
             }
             storage.post(
-                '/rest/default/V1/carts/' + quote.getQuoteId()  + '/billing-address',
+                urlBuilder.createUrl('/carts/:quoteId/billing-address', {quoteId: quote.getQuoteId()}),
                 JSON.stringify({
                     "cartId": quote.getQuoteId(),
                     "address": billingAddress

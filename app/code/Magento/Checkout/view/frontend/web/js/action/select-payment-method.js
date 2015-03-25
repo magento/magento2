@@ -9,11 +9,12 @@
 define(
     [
         '../model/quote',
+        '../model/url-builder',
+        '../model/step-navigator',
         'Magento_Ui/js/model/errorlist',
-        'mage/storage',
-        'Magento_Checkout/js/model/step-navigator'
+        'mage/storage'
     ],
-    function(quote, errorList, storage, navigator) {
+    function(quote, urlBuilder, navigator, errorList, storage) {
         return function (paymentMethodCode, additionalData) {
             // TODO add support of additional payment data for more complex payments
             var paymentMethodData = {
@@ -30,7 +31,7 @@ define(
                 }
             };
             return storage.put(
-                '/rest/default/V1/carts/' + quote.getQuoteId() + '/selected-payment-methods',
+                urlBuilder.createUrl('/carts/:quoteId/selected-payment-methods', {quoteId: quote.getQuoteId()}),
                 JSON.stringify(paymentMethodData)
             ).done(
                 function() {

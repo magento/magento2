@@ -8,23 +8,23 @@
 /*global alert*/
 define(
     [
-        'jquery',
         '../model/quote',
+        '../model/url-builder',
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist'
     ],
-    function($, quote, storage, url, errorList) {
+    function(quote, urlBuilder, storage, url, errorList) {
         return function() {
             storage.put(
-                'rest/default/V1/carts/' + quote.getQuoteId() + '/order'
+                urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()})
             ).done(
                 function() {
                     window.location.replace(url.build('checkout/onepage/success/'));
                 }
             ).error(
                 function(response) {
-                    var error = $.parseJSON(response.responseText);
+                    var error = JSON.parse(response.responseText);
                     errorList.add(error.message);
                 }
             );

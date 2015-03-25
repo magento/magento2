@@ -9,11 +9,12 @@
 define(
     [
         '../model/quote',
+        '../model/url-builder',
+        '../model/step-navigator',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Ui/js/model/errorlist'
     ],
-    function (quote, storage, errorList, navigator) {
+    function (quote, urlBuilder, navigator, storage, errorList) {
         return function (shippingMethodCode) {
             if (!shippingMethodCode) {
                 alert('Please specify a shipping method');
@@ -25,7 +26,7 @@ define(
 
             };
             return storage.put(
-                'rest/V1/carts/' + quote.getQuoteId() + '/selected-shipping-method',
+                urlBuilder.createUrl('/carts/:quoteId/selected-shipping-method', {quoteId: quote.getQuoteId()}),
                 JSON.stringify(shippingMethodData)
             ).done(
                 function(shippingMethodCode) {

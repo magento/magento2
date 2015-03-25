@@ -11,13 +11,14 @@ define(
         'ko',
         'jquery',
         'mage/storage',
-        'Magento_Checkout/js/model/quote'
+        '../model/quote',
+        '../model/url-builder'
     ],
-    function (ko, $, storage, quote) {
+    function (ko, $, storage, quote, urlBuilder) {
         var rates = ko.observableArray([]);
         quote.getShippingAddress().subscribe(function () {
             storage.get(
-                'rest/default/V1/carts/' + quote.getQuoteId() + '/shipping-methods', 'json'
+                urlBuilder.createUrl('/carts/:quoteId/shipping-methods', {quoteId: quote.getQuoteId()})
             ).success(
                 function (data) {
                     var ratesData = [];
