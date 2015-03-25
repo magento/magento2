@@ -48,11 +48,6 @@ class Observer
     protected $_customerSession;
 
     /**
-     * @var Price
-     */
-    protected $_productPrice;
-
-    /**
      * @var \Magento\CatalogRule\Model\Resource\Rule\CollectionFactory
      */
     protected $_ruleCollectionFactory;
@@ -86,7 +81,6 @@ class Observer
      * @param Resource\RuleFactory $resourceRuleFactory
      * @param Resource\Rule $resourceRule
      * @param Resource\Rule\CollectionFactory $ruleCollectionFactory
-     * @param Price $productPrice
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
@@ -100,7 +94,6 @@ class Observer
         Resource\RuleFactory $resourceRuleFactory,
         Resource\Rule $resourceRule,
         Resource\Rule\CollectionFactory $ruleCollectionFactory,
-        Rule\Product\Price $productPrice,
         StoreManagerInterface $storeManager,
         TimezoneInterface $localeDate,
         CustomerModelSession $customerSession,
@@ -111,7 +104,6 @@ class Observer
         $this->_resourceRuleFactory = $resourceRuleFactory;
         $this->_resourceRule = $resourceRule;
         $this->_ruleCollectionFactory = $ruleCollectionFactory;
-        $this->_productPrice = $productPrice;
         $this->_storeManager = $storeManager;
         $this->_localeDate = $localeDate;
         $this->_customerSession = $customerSession;
@@ -213,36 +205,6 @@ class Observer
     public function flushPriceCache()
     {
         $this->_rulePrices = [];
-    }
-
-    /**
-     * Calculate minimal final price with catalog rule price
-     *
-     * @param EventObserver $observer
-     * @return $this
-     */
-    public function prepareCatalogProductPriceIndexTable(EventObserver $observer)
-    {
-        $select = $observer->getEvent()->getSelect();
-
-        $indexTable = $observer->getEvent()->getIndexTable();
-        $entityId = $observer->getEvent()->getEntityId();
-        $customerGroupId = $observer->getEvent()->getCustomerGroupId();
-        $websiteId = $observer->getEvent()->getWebsiteId();
-        $websiteDate = $observer->getEvent()->getWebsiteDate();
-        $updateFields = $observer->getEvent()->getUpdateFields();
-
-        $this->_productPrice->applyPriceRuleToIndexTable(
-            $select,
-            $indexTable,
-            $entityId,
-            $customerGroupId,
-            $websiteId,
-            $updateFields,
-            $websiteDate
-        );
-
-        return $this;
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Magento\Tools\Webdev\App;
 use Magento\Framework\App;
 use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
+use Magento\Framework\Filesystem;
 use Magento\Tools\Webdev\CliParams;
 use Magento\Tools\View\Deployer\Log;
 use Magento\Framework\View\Asset\Source;
@@ -18,6 +19,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class FileAssembler
@@ -60,7 +62,7 @@ class FileAssembler implements AppInterface
     /**
      * @var \Magento\Framework\Less\FileGenerator
      */
-    private $sourceFileGeneratorPoll;
+    private $sourceFileGeneratorPool;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
@@ -78,6 +80,11 @@ class FileAssembler implements AppInterface
     private $chainFactory;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param Response $response
      * @param CliParams $params
@@ -88,6 +95,7 @@ class FileAssembler implements AppInterface
      * @param \Magento\Framework\View\Asset\SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param \Magento\Tools\View\Deployer\Log $logger
      * @param ChainFactoryInterface $chainFactory
+     * @param Filesystem $filesystem
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -101,7 +109,8 @@ class FileAssembler implements AppInterface
         Source $assetSource,
         SourceFileGeneratorPool $sourceFileGeneratorPoll,
         Log $logger,
-        ChainFactoryInterface $chainFactory
+        ChainFactoryInterface $chainFactory,
+        Filesystem $filesystem
     ) {
         $this->response = $response;
         $this->params = $params;
@@ -109,10 +118,11 @@ class FileAssembler implements AppInterface
         $this->objectManager = $objectManager;
         $this->configLoader = $configLoader;
         $this->assetRepo = $assetRepo;
-        $this->sourceFileGeneratorPoll = $sourceFileGeneratorPoll;
+        $this->sourceFileGeneratorPool = $sourceFileGeneratorPoll;
         $this->assetSource = $assetSource;
         $this->logger = $logger;
         $this->chainFactory = $chainFactory;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -125,7 +135,7 @@ class FileAssembler implements AppInterface
         $this->state->setAreaCode($this->params->getArea());
         $this->objectManager->configure($this->configLoader->load($this->params->getArea()));
 
-        $sourceFileGenerator = $this->sourceFileGeneratorPoll->create($this->params->getExt());
+        $sourceFileGenerator = $this->sourceFileGeneratorPool->create($this->params->getExt());
 
         foreach ($this->params->getFiles() as $file) {
             $file .= '.' . $this->params->getExt();
@@ -152,7 +162,13 @@ class FileAssembler implements AppInterface
                 ]
             );
 
-            $sourceFileGenerator->generateFileTree($chain);
+            $processedCoreFile = $sourceFileGenerator->generateFileTree($chain);
+
+            $targetDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+            $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+            $source = $rootDir->getRelativePath($processedCoreFile);
+            $destination = $asset->getPath();
+            $rootDir->copyFile($source, $destination, $targetDir);
 
             $this->logger->logMessage("Done");
         }

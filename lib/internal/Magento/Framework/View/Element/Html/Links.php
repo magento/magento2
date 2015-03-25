@@ -21,6 +21,35 @@ class Links extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Find link by path
+     *
+     * @param string $path
+     * @return \Magento\Framework\View\Element\Html\Link
+     */
+    protected function getLinkByPath($path)
+    {
+        foreach ($this->getLinks() as $link) {
+            if ($link->getPath() == $path) {
+                return $link;
+            }
+        }
+    }
+
+    /**
+     * Set active link
+     *
+     * @param string $path
+     * @return void
+     */
+    public function setActive($path)
+    {
+        $link = $this->getLinkByPath($path);
+        if ($link) {
+            $link->setIsHighlighted(true);
+        }
+    }
+
+    /**
      * Render Block
      *
      * @param \Magento\Framework\View\Element\AbstractBlock $link
