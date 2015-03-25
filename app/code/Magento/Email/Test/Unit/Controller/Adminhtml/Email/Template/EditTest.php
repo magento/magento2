@@ -110,6 +110,41 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->viewMock->expects($this->atLeastOnce())
+            ->method('getLayout')
+            ->willReturn($this->layoutMock);
+        $this->layoutMock->expects($this->any())
+            ->method('getBlock')
+            ->willReturnMap(
+                [
+                    ['menu', $this->menuBlockMock],
+                    ['breadcrumbs', $this->breadcrumbsBlockMock],
+                    ['edit', $this->editBlockMock]
+                ]
+            );
+        $this->menuBlockMock->expects($this->any())
+            ->method('getMenuModel')
+            ->will($this->returnSelf());
+        $this->menuBlockMock->expects($this->any())
+            ->method('getParentItems')
+            ->will($this->returnValue([]));
+        $this->viewMock->expects($this->any())
+            ->method('getPage')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->any())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
+        $this->layoutMock->expects($this->once())
+            ->method('createBlock')
+            ->with('Magento\Email\Block\Adminhtml\Template\Edit','template_edit',[])
+            ->willReturn($this->editBlockMock);
+        $this->editBlockMock->expects($this->once())
+            ->method('setEditMode')
+            ->willReturnSelf();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $templateMock = $this->getMockBuilder('Magento\Email\Model\Template')
             ->disableOriginalConstructor()
@@ -147,7 +182,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit::execute
      */
-    public function testExecuteNew()
+    public function testExecuteNewTemplate()
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -161,33 +196,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     ['current_email_template', true]
                 ]
             );
-        $this->viewMock->expects($this->atLeastOnce())
-            ->method('getLayout')
-            ->willReturn($this->layoutMock);
-        $this->layoutMock->expects($this->any())
-            ->method('getBlock')
-            ->willReturnMap(
-                [
-                    ['menu', $this->menuBlockMock],
-                    ['breadcrumbs', $this->breadcrumbsBlockMock],
-                    ['edit', $this->editBlockMock]
-                ]
-            );
-        $this->menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->will($this->returnSelf());
-        $this->menuBlockMock->expects($this->any())
-            ->method('getParentItems')
-            ->will($this->returnValue([]));
-        $this->viewMock->expects($this->any())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
-        $this->resultPageMock->expects($this->any())
-            ->method('getConfig')
-            ->willReturn($this->pageConfigMock);
-        $this->pageConfigMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($this->pageTitleMock);
         $this->pageTitleMock->expects($this->any())
             ->method('prepend')
             ->willReturnMap(
@@ -204,19 +212,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     ['New Template','New System Template', null, $this->returnSelf()]
                 ]
             );
-        $this->layoutMock->expects($this->once())
-            ->method('createBlock')
-            ->with('Magento\Email\Block\Adminhtml\Template\Edit','template_edit',[])
-            ->willReturn($this->editBlockMock);
-        $this->editBlockMock->expects($this->once())
-            ->method('setEditMode')
-            ->willReturnSelf();
 
         $this->assertNull($this->editController->execute());
     }
+
     /**
      * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Edit::execute
-     * @dataFixture
      */
     public function testExecuteEdit()
     {
@@ -232,33 +233,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     ['current_email_template', false]
                 ]
             );
-        $this->viewMock->expects($this->atLeastOnce())
-            ->method('getLayout')
-            ->willReturn($this->layoutMock);
-        $this->layoutMock->expects($this->any())
-            ->method('getBlock')
-            ->willReturnMap(
-                [
-                    ['menu', $this->menuBlockMock],
-                    ['breadcrumbs', $this->breadcrumbsBlockMock],
-                    ['edit', $this->editBlockMock]
-                ]
-            );
-        $this->menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->will($this->returnSelf());
-        $this->menuBlockMock->expects($this->any())
-            ->method('getParentItems')
-            ->will($this->returnValue([]));
-        $this->viewMock->expects($this->any())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
-        $this->resultPageMock->expects($this->any())
-            ->method('getConfig')
-            ->willReturn($this->pageConfigMock);
-        $this->pageConfigMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($this->pageTitleMock);
         $this->pageTitleMock->expects($this->any())
             ->method('prepend')
             ->willReturnMap(
@@ -275,13 +249,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     ['Edit Template','Edit System Template', null, $this->returnSelf()]
                 ]
             );
-        $this->layoutMock->expects($this->once())
-            ->method('createBlock')
-            ->with('Magento\Email\Block\Adminhtml\Template\Edit','template_edit',[])
-            ->willReturn($this->editBlockMock);
-        $this->editBlockMock->expects($this->once())
-            ->method('setEditMode')
-            ->willReturnSelf();
 
         $this->assertNull($this->editController->execute());
     }

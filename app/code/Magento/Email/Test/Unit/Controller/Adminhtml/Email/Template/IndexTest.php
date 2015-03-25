@@ -166,7 +166,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     public function testExecuteAjax()
     {
         $this->prepareExecute(true);
-        $this->assertNull($this->indexController->execute());
+        $indexController = $this->getMockBuilder('Magento\Email\Controller\Adminhtml\Email\Template\Index')
+            ->setMethods(['getRequest', '_forward'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $indexController->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($this->requestMock));
+        $indexController->expects($this->once())
+            ->method('_forward')
+            ->with('grid');
+        $this->assertNull($indexController->execute());
     }
 
     /**
