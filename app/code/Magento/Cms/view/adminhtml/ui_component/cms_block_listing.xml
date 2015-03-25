@@ -167,6 +167,7 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="delete" xsi:type="array">
                             <item name="confirm" xsi:type="string" translate="true">Are you sure you want to perform this action?</item>

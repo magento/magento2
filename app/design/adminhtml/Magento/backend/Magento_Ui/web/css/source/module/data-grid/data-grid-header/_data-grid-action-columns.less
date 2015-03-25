@@ -26,6 +26,9 @@
 
 .admin__data-grid-action-columns {
     z-index: @data-grid-action-columns__z-index;
+    &._active {
+        opacity: .98;
+    }
     .admin__action-dropdown {
         &:before {
             &:extend(.abs-icon all);

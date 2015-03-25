@@ -1076,8 +1076,8 @@ fieldset[disabled] .address-list .action-delete {
   font-weight: 700;
 }
 .admin__action-dropdown-wrap {
-  position: relative;
   display: inline-block;
+  position: relative;
 }
 .admin__action-dropdown-wrap.active .admin__action-dropdown,
 .admin__action-dropdown-wrap._active .admin__action-dropdown {
@@ -4082,6 +4082,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 }
 .store-switcher .admin__action-dropdown {
   margin-left: .5em;
+  background-color: #f8f8f8;
 }
 .store-switcher .dropdown {
   display: inline-block;
@@ -4710,12 +4711,12 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   right: 5px;
 }
 .filters .action-close {
-  top: 10px;
   right: 10px;
+  top: 10px;
 }
 .filters .filters-form {
-  width: 200%;
   padding: 1rem 2rem;
+  width: 200%;
 }
 .filters .admin__control-text {
   padding-right: 1.5rem;
@@ -4726,13 +4727,13 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   padding: 0;
 }
 .filters .ui-datepicker-trigger {
-  position: absolute;
   background-color: transparent;
   border: none;
   border-radius: 0;
   box-shadow: none;
   margin: 0;
   padding: 0;
+  position: absolute;
 }
 .filters .ui-datepicker-trigger:hover {
   background-color: transparent;
@@ -4755,9 +4756,9 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   margin: 0;
 }
 .admin__data-grid-pager .admin__control-input {
-  width: 4.4rem;
-  text-align: center;
   -moz-appearance: textfield;
+  text-align: center;
+  width: 4.4rem;
 }
 .action-previous,
 .action-next {
@@ -4790,6 +4791,9 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 .admin__data-grid-action-columns {
   z-index: 290;
 }
+.admin__data-grid-action-columns._active {
+  opacity: .98;
+}
 .admin__data-grid-action-columns .admin__action-dropdown:before {
   content: '\e610';
   font-size: 1.8rem;
@@ -4812,7 +4816,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 }
 .admin__data-grid-action-columns-menu .admin__field-option {
   height: 2rem;
-  display: inline-block;
+  float: left;
   margin-bottom: 1.5rem;
   padding: 0 1rem 0 0;
   width: 15.8rem;

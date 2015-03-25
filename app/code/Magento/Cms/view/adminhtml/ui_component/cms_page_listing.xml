@@ -54,7 +54,7 @@
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/header</item>
             </item>
-        </argument>        
+        </argument>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -199,9 +199,10 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="delete" xsi:type="array">
-                            <item name="confirm" xsi:type="string" translate="true">cscscscscscs!!!!!!!!</item>
+                            <item name="confirm" xsi:type="string" translate="true">Delete selected items?</item>
                             <item name="type" xsi:type="string">delete</item>
                             <item name="label" xsi:type="string" translate="true">Delete</item>
                             <item name="url" xsi:type="string">cms/page/massDelete</item>
@@ -214,6 +215,7 @@
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
                             <item name="value" xsi:type="number">20</item>
