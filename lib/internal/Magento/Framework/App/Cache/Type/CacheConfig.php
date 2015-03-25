@@ -4,10 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\DeploymentConfig;
+namespace Magento\Framework\App\Cache\Type;
 
-abstract class AbstractSegment implements SegmentInterface
+/**
+ * Deployment configuration for enabled cache types
+ */
+class CacheConfig
 {
+    /**
+     * Deployment config key
+     */
+    const CACHE_KEY = 'cache_types';
+
     /**
      * Data
      *
@@ -19,10 +27,36 @@ abstract class AbstractSegment implements SegmentInterface
      * Constructor
      *
      * @param array $data
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $data)
     {
+        foreach ($data as $key => $value) {
+            if (!preg_match('/^[a-z_]+$/i', $key)) {
+                throw new \InvalidArgumentException("Invalid cache type key: {$key}");
+            }
+            $data[$key] = (int)$value;
+        }
         $this->data = $data;
+    }
+
+    /**
+     * Returns current key.
+     *
+     */
+    public function getKey()
+    {
+        return self::CACHE_KEY;
+    }
+
+    /**
+     * Return current Cache config.
+     *
+     * @return array|mixed
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
@@ -61,16 +95,4 @@ abstract class AbstractSegment implements SegmentInterface
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function getKey();
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
 }

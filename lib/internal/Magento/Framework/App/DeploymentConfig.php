@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\App;
 
-
 /**
  * Application deployment configuration
  */
@@ -92,13 +91,10 @@ class DeploymentConfig
     /**
      * Gets a value specified key from config data
      *
-     * The key is conventionally called "segment". There can be arbitrary data within each segment.
-     * This class is agnostic of contents of segments.
-     *
      * @param string $key
      * @return null|mixed
      */
-    public function getSegment($key)
+    public function getConfigData($key)
     {
         $this->load();
         if (!isset($this->data[$key])) {

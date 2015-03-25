@@ -7,7 +7,6 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 use Magento\Framework\App\State\Cleanup;
 
 /**
@@ -60,13 +59,6 @@ class Status
     private $conflictChecker;
 
     /**
-     * Factory to create module deployment config object
-     *
-     * @var DeploymentConfigFactory
-     */
-    private $deploymentConfigFactory;
-
-    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
@@ -75,7 +67,6 @@ class Status
      * @param Cleanup $cleanup
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
-     * @param DeploymentConfigFactory $deploymentConfigFactory
      */
     public function __construct(
         ModuleList\Loader $loader,
@@ -83,8 +74,7 @@ class Status
         Writer $writer,
         Cleanup $cleanup,
         ConflictChecker $conflictChecker,
-        DependencyChecker $dependencyChecker,
-        DeploymentConfigFactory $deploymentConfigFactory
+        DependencyChecker $dependencyChecker
     ) {
         $this->loader = $loader;
         $this->list = $list;
@@ -92,7 +82,6 @@ class Status
         $this->cleanup = $cleanup;
         $this->conflictChecker = $conflictChecker;
         $this->dependencyChecker = $dependencyChecker;
-        $this->deploymentConfigFactory = $deploymentConfigFactory;
     }
 
     /**
@@ -172,8 +161,7 @@ class Status
                 $result[$name] = $currentStatus;
             }
         }
-        $segment = $this->deploymentConfigFactory->create($result);
-        $this->writer->update($segment);
+        $this->writer->saveConfig($result);
         $this->cleanup->clearCaches();
         $this->cleanup->clearCodeGeneratedFiles();
     }

@@ -145,7 +145,7 @@ class ModuleStatus
      */
     private function deselectDisabledModules()
     {
-        $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
+        $existingModules = $this->deploymentConfig->getConfigData(ModuleDeployment::KEY_MODULES);
         if (isset($existingModules)) {
             foreach ($existingModules as $module => $value) {
                 if (!$value) {

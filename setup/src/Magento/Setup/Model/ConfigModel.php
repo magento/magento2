@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\Reader;
 
 class ConfigModel
 {
@@ -29,19 +30,33 @@ class ConfigModel
    // private $filePermissions;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     */
+    protected $reader;
+
+    /**
+     * @var array
+     */
+    protected $currentConfig;
+
+    /**
      * Constructor
      *
      * @param ConfigOptionsListCollector $collector
      * @param Writer $writer
+     * @param Reader $reader
      * param FilePermissions $filePermissions
      */
     public function __construct(
         ConfigOptionsListCollector $collector,
-        Writer $writer //,
+        Writer $writer,
+        Reader $reader
         // FilePermissions $filePermissions
     ) {
         $this->collector = $collector;
         $this->writer = $writer;
+        $this->reader = $reader;
+        $this->currentConfig = $this->reader->loadConfig();
         // $this->filePermissions = $filePermissions;
     }
 
@@ -57,6 +72,13 @@ class ConfigModel
 
         foreach ($options as $option) {
             $optionCollection = array_merge($optionCollection, $option->getOptions());
+        }
+
+        foreach ($optionCollection as $option) {
+            $currentValue = $this->getConfigValueByPath($option->getConfigPath());
+            if ($currentValue !== null) {
+                $option->setDefault();
+            }
         }
 
         return $optionCollection;
@@ -78,7 +100,7 @@ class ConfigModel
 
         foreach ($options as $moduleName => $option) {
 
-            $configData = $option->createConfig($inputOptions);
+            $configData = $option->createConfig($inputOptions, $this->currentConfig);
 
             foreach ($configData as $config) {
                 if (!$config instanceof ConfigData) {
@@ -136,6 +158,33 @@ class ConfigModel
         }
 
         return $errors;
+    }
+
+    /**
+     * Gets config value by path
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function getConfigValueByPath($path)
+    {
+        $currentConfig = $this->currentConfig;
+        $chunks = explode('/', $path);
+        if (!empty($chunks)) {
+
+            $sizeOfPath = count($chunks);
+            for ($level = 0; $level < $sizeOfPath; $level++) {
+                if (isset($currentConfig[$chunks[$level]])) {
+                    if ($level === $sizeOfPath-1) {
+                        return $currentConfig[$chunks[$level]];
+                    }
+
+                    $currentConfig = $currentConfig[$chunks[$level]];
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

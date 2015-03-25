@@ -36,9 +36,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $model = new State($this->config, $this->writer, $banAll);
         if ($banAll) {
-            $this->config->expects($this->never())->method('getSegment');
+            $this->config->expects($this->never())->method('getConfigData');
         } else {
-            $this->config->expects($this->once())->method('getSegment')->willReturn($config);
+            $this->config->expects($this->once())->method('getConfigData')->willReturn($config);
         }
         $this->writer->expects($this->never())->method('update');
         $actualIsEnabled = $model->isEnabled($cacheType);
@@ -91,8 +91,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testPersist()
     {
         $model = new State($this->config, $this->writer);
-        $constraint = new \PHPUnit_Framework_Constraint_IsInstanceOf('Magento\Framework\App\Cache\Type\ConfigSegment');
-        $this->writer->expects($this->once())->method('update')->with($constraint);
+        $this->writer->expects($this->once())->method('saveConfig')->with([]);
         $model->persist();
     }
 }

@@ -20,6 +20,9 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
+use Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Module\Setup;
+use Magento\Store\Model\Store;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -363,6 +366,122 @@ class Installer
             $result[$module] = false !== $key;
         }
         return $this->deploymentConfigFactory->create($result);
+    }
+
+    /**
+     * Creates backend deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     * @throws \InvalidArgumentException
+     */
+    private function createBackendConfig($data)
+    {
+        $key = DeploymentConfigMapper::KEY_BACKEND_FRONTNAME;
+        if (empty($data[$key])) {
+            throw new \InvalidArgumentException("Missing value for: '{$key}'");
+        }
+        return new BackendConfig([DeploymentConfigMapper::$paramMap[$key] => $data[$key]]);
+    }
+
+    /**
+     * Creates encrypt deployment configuration segment
+     * No new encryption key will be added if there is an existing deployment config file unless user provides one.
+     * Old encryption keys will persist.
+     * A new encryption key will be generated if there is no existing deployment config file.
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createEncryptConfig($data)
+    {
+        $key = '';
+        if (isset($data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY])) {
+            $key = $data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY];
+        }
+        // retrieve old encryption keys
+        if ($this->deploymentConfig->isAvailable()) {
+            $encryptInfo = $this->deploymentConfig->getSegment(EncryptConfig::CONFIG_KEY);
+            $oldKeys = $encryptInfo[EncryptConfig::KEY_ENCRYPTION_KEY];
+            $key = empty($key) ? $oldKeys : $oldKeys . "\n" . $key;
+        } else if (empty($key)) {
+            $key = md5($this->random->getRandomString(10));
+        }
+        $cryptConfigData =
+            [DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_ENCRYPTION_KEY] => $key];
+
+        // find the latest key to display
+        $keys = explode("\n", $key);
+        $this->installInfo[EncryptConfig::KEY_ENCRYPTION_KEY] = array_pop($keys);
+        return new EncryptConfig($cryptConfigData);
+    }
+
+    /**
+     * Creates db deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     * @throws \InvalidArgumentException
+     */
+    private function createDbConfig($data)
+    {
+        $connection = [];
+        $required = [
+            DeploymentConfigMapper::KEY_DB_HOST,
+            DeploymentConfigMapper::KEY_DB_NAME,
+            DeploymentConfigMapper::KEY_DB_USER,
+        ];
+        foreach ($required as $key) {
+            if (!isset($data[$key])) {
+                throw new \InvalidArgumentException("Missing value: {$key}");
+            }
+            $connection[DeploymentConfigMapper::$paramMap[$key]] = $data[$key];
+        }
+        $optional = [
+            DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS,
+            DeploymentConfigMapper::KEY_DB_MODEL,
+            DeploymentConfigMapper::KEY_DB_PASS,
+        ];
+        foreach ($optional as $key) {
+            $connection[DeploymentConfigMapper::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : null;
+        }
+        $prefixKey = DeploymentConfigMapper::KEY_DB_PREFIX;
+        $config = [
+            DeploymentConfigMapper::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
+            'connection' => ['default' => $connection],
+        ];
+        return new DbConfig($config);
+    }
+
+    /**
+     * Creates session deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createSessionConfig($data)
+    {
+        $sessionConfigData = [
+            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_SESSION_SAVE] =>
+                isset($data[DeploymentConfigMapper::KEY_SESSION_SAVE]) ?
+                    $data[DeploymentConfigMapper::KEY_SESSION_SAVE] : null
+        ];
+        return new SessionConfig($sessionConfigData);
+    }
+
+    /**
+     * Creates install deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createInstallConfig($data)
+    {
+        $installConfigData = [
+            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DATE] =>
+                $data[DeploymentConfigMapper::KEY_DATE]
+        ];
+        return new InstallConfig($installConfigData);
     }
 
     /**
@@ -916,8 +1035,7 @@ class Installer
                 $result[$module] = 1;
             }
         }
-        $segment = $this->deploymentConfigFactory->create($result);
-        $this->deploymentConfigWriter->update($segment);
+        $this->deploymentConfigWriter->saveConfig($result);
     }
 
     /**
@@ -1046,7 +1164,7 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = new DbConfig($this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+            $dbConfig = new DbConfig($this->deploymentConfig->getConfigData(ModuleLoader::CONFIG_KEY));
             $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
             if ($config) {
                 try {
@@ -1137,17 +1255,17 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $segment = $this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY);
+        $segment = $this->deploymentConfig->getConfigData(ModuleLoader::CONFIG_KEY);
         $dbConfig = new DbConfig($segment);
         $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
         $this->checkDatabaseConnection(
-            $config[DbConfig::KEY_NAME],
-            $config[DbConfig::KEY_HOST],
-            $config[DbConfig::KEY_USER],
-            $config[DbConfig::KEY_PASS]
+            $config[ModuleLoader::KEY_NAME],
+            $config[ModuleLoader::KEY_HOST],
+            $config[ModuleLoader::KEY_USER],
+            $config[ModuleLoader::KEY_PASS]
         );
-        if (isset($config[DbConfig::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($config[DbConfig::KEY_PREFIX]);
+        if (isset($config[ModuleLoader::KEY_PREFIX])) {
+            $this->checkDatabaseTablePrefix($config[ModuleLoader::KEY_PREFIX]);
         }
     }
 

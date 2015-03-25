@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
 use \Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Setup\Model\ConfigOptionsList;
 
 class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +21,9 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_deploymentConfig;
+    protected $reader;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool|\PHPUnit_Framework_MockObject_MockObject
@@ -32,39 +33,33 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_deploymentConfig = $this->getMock(
-            'Magento\Framework\App\DeploymentConfig',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->_cachePool = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', [], [], '', false);
         $this->_model = new FrontendPool(
             $this->_objectManager,
-            $this->_deploymentConfig,
+            $this->reader,
             $this->_cachePool,
             ['fixture_cache_type' => 'fixture_frontend_id']
         );
     }
 
     /**
-     * @param string|null $fixtureSegment
+     * @param string|null $fixtureconfigData
      * @param string $inputCacheType
      * @param string $expectedFrontendId
      *
      * @dataProvider getDataProvider
      */
-    public function testGet($fixtureSegment, $inputCacheType, $expectedFrontendId)
+    public function testGet($fixtureconfigData, $inputCacheType, $expectedFrontendId)
     {
-        $this->_deploymentConfig->expects(
+        $this->reader->expects(
             $this->once()
         )->method(
-            'getSegment'
+            'getConfigData'
         )->with(
-            \Magento\Framework\App\DeploymentConfig\CacheConfig::CONFIG_KEY
+                ConfigOptionsList::KEY_CACHE
         )->will(
-            $this->returnValue($fixtureSegment)
+            $this->returnValue($fixtureconfigData)
         );
 
         $cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
@@ -97,17 +92,17 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 
     public function getDataProvider()
     {
-        $segment1 = [
+        $configData1 = [
             'frontend' => [],
             'type' => ['fixture_cache_type' => ['frontend' => 'configured_frontend_id']],
         ];
-        $segment2 = ['frontend' => [], 'type' => ['fixture_cache_type' => ['frontend' => null]]];
-        $segment3 = ['frontend' => [], 'type' => ['unknown_cache_type' => ['frontend' => null]]];
+        $configData2 = ['frontend' => [], 'type' => ['fixture_cache_type' => ['frontend' => null]]];
+        $configData3 = ['frontend' => [], 'type' => ['unknown_cache_type' => ['frontend' => null]]];
         return [
-            'retrieval from config' => [$segment1, 'fixture_cache_type', 'configured_frontend_id'],
-            'retrieval from map' => [$segment2, 'fixture_cache_type', 'fixture_frontend_id'],
+            'retrieval from config' => [$configData1, 'fixture_cache_type', 'configured_frontend_id'],
+            'retrieval from map' => [$configData2, 'fixture_cache_type', 'fixture_frontend_id'],
             'fallback to default id' => [
-                $segment3,
+                $configData3,
                 'unknown_cache_type',
                 \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID,
             ]

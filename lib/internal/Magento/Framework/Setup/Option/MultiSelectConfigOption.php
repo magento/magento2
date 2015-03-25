@@ -30,6 +30,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
      * @param string $name
      * @param string $frontendType
      * @param array $selectOptions
+     * @param string $configPath
      * @param string $description
      * @param array $defaultValue
      * @param string|array|null $shortCut
@@ -39,6 +40,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
         $name,
         $frontendType,
         array $selectOptions,
+        $configPath,
         $description = '',
         array $defaultValue = [],
         $shortCut = null
@@ -56,6 +58,7 @@ class MultiSelectConfigOption extends AbstractConfigOption
             $name,
             $frontendType,
             self::VALUE_REQUIRED | self::VALUE_IS_ARRAY,
+            $configPath,
             $description,
             $defaultValue,
             $shortCut

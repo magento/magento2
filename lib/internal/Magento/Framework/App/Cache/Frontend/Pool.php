@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\App\Cache\Frontend;
 
-use Magento\Framework\App\DeploymentConfig\CacheConfig;
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Setup\Model\ConfigOptionsList;
 
 /**
  * In-memory readonly pool of all cache front-end instances known to the system
@@ -18,9 +19,9 @@ class Pool implements \Iterator
     const DEFAULT_FRONTEND_ID = 'default';
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var Reader
      */
-    private $_deploymentConfig;
+    private $reader;
 
     /**
      * @var Factory
@@ -38,16 +39,13 @@ class Pool implements \Iterator
     private $_frontendSettings;
 
     /**
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param Reader $reader
      * @param Factory $frontendFactory
      * @param array $frontendSettings Format: array('<frontend_id>' => array(<cache_settings>), ...)
      */
-    public function __construct(
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        Factory $frontendFactory,
-        array $frontendSettings = []
-    ) {
-        $this->_deploymentConfig = $deploymentConfig;
+    public function __construct(Reader $reader, Factory $frontendFactory, array $frontendSettings = [])
+    {
+        $this->reader = $reader;
         $this->_factory = $frontendFactory;
         $this->_frontendSettings = $frontendSettings + [self::DEFAULT_FRONTEND_ID => []];
     }
@@ -79,10 +77,9 @@ class Pool implements \Iterator
          * Merging is intentionally implemented through array_merge() instead of array_replace_recursive()
          * to avoid "inheritance" of the default settings that become irrelevant as soon as cache storage type changes
          */
-        $cacheInfo = $this->_deploymentConfig->getSegment(CacheConfig::CONFIG_KEY);
+        $cacheInfo = $this->reader->getConfigData(ConfigOptionsList::KEY_CACHE);
         if (null !== $cacheInfo) {
-            $cacheConfig = new CacheConfig($cacheInfo);
-            return array_merge($this->_frontendSettings, $cacheConfig->getCacheFrontendSettings());
+            return array_merge($this->_frontendSettings, $cacheInfo[ConfigOptionsList::KEY_FRONTEND]);
         }
         return $this->_frontendSettings;
     }

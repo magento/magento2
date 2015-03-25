@@ -27,6 +27,11 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     private $writer;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Reader
+     */
+    private $reader;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Config\Data\ConfigData
      */
     private $configData;
@@ -40,10 +45,13 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     {
         $this->collector = $this->getMock('Magento\Setup\Model\ConfigOptionsListCollector', [], [], '', false);
         $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
+        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->configOptionsList = $this->getMock('Magento\Backend\Setup\ConfigOptionsList', [], [], '', false);
         $this->configData = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
 
-        $this->configModel = new ConfigModel($this->collector, $this->writer);
+        $this->reader->expects($this->once())->method('loadConfig')->will($this->returnValue([]));
+
+        $this->configModel = new ConfigModel($this->collector, $this->writer, $this->reader);
     }
 
     public function testValidate()
@@ -125,6 +133,26 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
         $this->writer->expects($this->once())->method('saveConfig')->with($testSetExpected);
 
         $this->configModel->process([]);
+    }
+
+    public function testGetConfigValueByPath()
+    {
+        $expectedValue = 'test';
+        $path = 'test/path/to/value';
+        $config = [
+            'test' => [
+                'path' => [
+                    'to' => [
+                        'value' => $expectedValue
+                    ]
+                ]
+            ]
+        ];
+
+        $reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $reader->expects($this->once())->method('loadConfig')->will($this->returnValue($config));
+        $configModel = new ConfigModel($this->collector, $this->writer, $reader);
+        $this->assertEquals($expectedValue, $configModel->getConfigValueByPath($path));
     }
 
     /**

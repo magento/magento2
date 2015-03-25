@@ -26,6 +26,11 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_BACKEND_FRONTNAME = 'backend/frontName';
 
     /**
+     * Key for config
+     */
+    const KEY_FRONTNAME = 'frontend';
+
+    /**
      * {@inheritdoc}
      */
     public function getOptions()
@@ -34,6 +39,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_BACKEND_FRONTNAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
+                'backend/frontName',
                 'Backend frontname',
                 'admin'
             )
@@ -43,12 +49,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      */
-    public function createConfig(array $options)
+    public function createConfig(array $options, array $currentConfig = [])
     {
+        $data = [];
+        if (isset($options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
+            $data = ['frontName' => $options[self::INPUT_KEY_BACKEND_FRONTNAME]];
+        }
         return [new ConfigData(
             ConfigFilePool::APP_CONFIG,
             'backend',
-            ['frontName' => $options[self::INPUT_KEY_BACKEND_FRONTNAME]]
+            $data
         )];
     }
 
@@ -58,7 +68,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function validate(array $options)
     {
         $errors = [];
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
+        if (isset($options[self::INPUT_KEY_BACKEND_FRONTNAME])
+            && !preg_match('/^[a-zA-Z0-9_]+$/', $options[self::INPUT_KEY_BACKEND_FRONTNAME])
+        ) {
             $errors[] = "Invalid backend frontname '{$options[self::INPUT_KEY_BACKEND_FRONTNAME]}'";
         }
 

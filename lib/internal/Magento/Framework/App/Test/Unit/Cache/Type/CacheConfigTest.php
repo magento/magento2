@@ -6,10 +6,9 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
-use \Magento\Framework\App\Cache\Type\ConfigSegment;
+use Magento\Framework\App\Cache\Type\CacheConfig;
 
-
-class ConfigSegmentTest extends \PHPUnit_Framework_TestCase
+class CacheConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param array $data
@@ -18,7 +17,7 @@ class ConfigSegmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetData($data, $expected)
     {
-        $object = new ConfigSegment($data);
+        $object = new CacheConfig($data);
         $this->assertSame($expected, $object->getData());
     }
 
@@ -46,7 +45,7 @@ class ConfigSegmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDataInvalidKeys($data)
     {
-        new ConfigSegment($data);
+        new CacheConfig($data);
     }
 
     /**

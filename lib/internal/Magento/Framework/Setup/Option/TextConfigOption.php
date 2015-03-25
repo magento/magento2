@@ -23,6 +23,7 @@ class TextConfigOption extends AbstractConfigOption
      *
      * @param string $name
      * @param string $frontendType
+     * @param string $configPath
      * @param string $description
      * @param string|null $defaultValue
      * @param string|array|null $shortCut
@@ -31,6 +32,7 @@ class TextConfigOption extends AbstractConfigOption
     public function __construct(
         $name,
         $frontendType,
+        $configPath,
         $description = '',
         $defaultValue = null,
         $shortCut = null
@@ -40,7 +42,15 @@ class TextConfigOption extends AbstractConfigOption
         ) {
             throw new \InvalidArgumentException("Frontend input type has to be 'text', 'textarea' or 'password'.");
         }
-        parent::__construct($name, $frontendType, self::VALUE_REQUIRED, $description, $defaultValue, $shortCut);
+        parent::__construct(
+            $name,
+            $frontendType,
+            self::VALUE_REQUIRED,
+            $configPath,
+            $description,
+            $defaultValue,
+            $shortCut
+        );
     }
 
     /**

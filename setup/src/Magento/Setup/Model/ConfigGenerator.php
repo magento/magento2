@@ -10,11 +10,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\DbConfig;
-use Magento\Framework\App\DeploymentConfig\EncryptConfig;
-use Magento\Framework\App\DeploymentConfig\InstallConfig;
-use Magento\Framework\App\DeploymentConfig\SessionConfig;
-use Magento\Framework\App\DeploymentConfig\ResourceConfig;
 
 /**
  * Creates deployment config data based on user input array
@@ -27,17 +22,17 @@ class ConfigGenerator
      * @var array
      */
     public static $paramMap = [
-        ConfigOptionsList::INPUT_KEY_DB_HOST => DbConfig::KEY_HOST,
-        ConfigOptionsList::INPUT_KEY_DB_NAME => DbConfig::KEY_NAME,
-        ConfigOptionsList::INPUT_KEY_DB_USER => DbConfig::KEY_USER,
-        ConfigOptionsList::INPUT_KEY_DB_PASS => DbConfig::KEY_PASS,
-        ConfigOptionsList::INPUT_KEY_DB_PREFIX => DbConfig::KEY_PREFIX,
-        ConfigOptionsList::INPUT_KEY_DB_MODEL => DbConfig::KEY_MODEL,
-        ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => DbConfig::KEY_INIT_STATEMENTS,
-        ConfigOptionsList::INPUT_KEY_ACTIVE => DbConfig::KEY_ACTIVE,
-        ConfigOptionsList::INPUT_KEY_CRYPT_KEY => EncryptConfig::KEY_ENCRYPTION_KEY,
-        ConfigOptionsList::INPUT_KEY_SESSION_SAVE => SessionConfig::KEY_SAVE,
-        ConfigOptionsList::INPUT_KEY_RESOURCE => ResourceConfig::CONFIG_KEY,
+        ConfigOptionsList::INPUT_KEY_DB_HOST => ConfigOptionsList::KEY_HOST,
+        ConfigOptionsList::INPUT_KEY_DB_NAME => ConfigOptionsList::KEY_NAME,
+        ConfigOptionsList::INPUT_KEY_DB_USER => ConfigOptionsList::KEY_USER,
+        ConfigOptionsList::INPUT_KEY_DB_PASS => ConfigOptionsList::KEY_PASS,
+        ConfigOptionsList::INPUT_KEY_DB_PREFIX => ConfigOptionsList::KEY_PREFIX,
+        ConfigOptionsList::INPUT_KEY_DB_MODEL => ConfigOptionsList::KEY_MODEL,
+        ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => ConfigOptionsList::KEY_INIT_STATEMENTS,
+        ConfigOptionsList::INPUT_KEY_ACTIVE => ConfigOptionsList::KEY_ACTIVE,
+        ConfigOptionsList::INPUT_KEY_CRYPT_KEY => ConfigOptionsList::KEY_ENCRYPTION_KEY,
+        ConfigOptionsList::INPUT_KEY_SESSION_SAVE => ConfigOptionsList::KEY_SAVE,
+        ConfigOptionsList::INPUT_KEY_RESOURCE => ConfigOptionsList::KEY_RESOURCE,
     ];
 
     /**
@@ -57,28 +52,47 @@ class ConfigGenerator
     /**
      * Creates install segment config data
      *
+     * @param array $currentConfig
      * @return ConfigData
      */
-    public function createInstallConfig()
+    public function createInstallConfig(array $currentConfig)
     {
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', [InstallConfig::KEY_DATE => date('r')]);
+        $installConfig = [];
+        if (!isset($currentConfig['install']['date'])) {
+            $installConfig = [InstallConfig::KEY_DATE => date('r')];
+        }
+        return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', $installConfig);
     }
 
     /**
      * Creates encryption key config data
      * @param array $data
+     * @param array $currentData
      * @return ConfigData
      */
-    public function createCryptConfig(array $data)
+    public function createCryptConfig(array $data, array $currentData)
     {
-        $cryptData = [];
-        if (!isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
-                md5($this->random->getRandomString(10));
-        } else {
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
-                $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+        $currentKey = false;
+        if (isset($currentData['crypt'][ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
+            $currentKey = $currentData['crypt'][ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
         }
+
+        $cryptData = [];
+        if (isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
+            if ($currentKey) {
+                $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+            } else {
+                $key = $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+            }
+
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = $key;
+        } else {
+            if (!$currentKey) {
+                $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
+                    md5($this->random->getRandomString(10));
+            }
+        }
+
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
     }
 
@@ -112,10 +126,8 @@ class ConfigGenerator
         if (isset($data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
             $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
                 $data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE];
-        } else {
-            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
-                ConfigOptionsList::SESSION_SAVE_FILES;
         }
+
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
     }
 
@@ -146,24 +158,19 @@ class ConfigGenerator
     {
         $connection = [];
 
-        $required = [
+        $optional = [
             ConfigOptionsList::INPUT_KEY_DB_HOST,
             ConfigOptionsList::INPUT_KEY_DB_NAME,
-            ConfigOptionsList::INPUT_KEY_DB_USER
+            ConfigOptionsList::INPUT_KEY_DB_USER,
+            ConfigOptionsList::INPUT_KEY_DB_PASS,
+            ConfigOptionsList::INPUT_KEY_DB_MODEL,
+            ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS,
         ];
 
-        foreach ($required as $key) {
-            $connection[ConfigGenerator::$paramMap[$key]] = $data[$key];
-        }
-
-        $optional = [
-            ConfigOptionsList::INPUT_KEY_DB_PASS => '',
-            ConfigOptionsList::INPUT_KEY_DB_MODEL => 'mysql4',
-            ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => 'SET NAMES utf8;'
-        ];
-
-        foreach ($optional as $key => $value) {
-            $connection[self::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : $value;
+        foreach ($optional as $key) {
+            if (isset($data[$key])) {
+                $connection[self::$paramMap[$key]] = $data[$key];
+            }
         }
 
         $connection[self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE]] = '1';

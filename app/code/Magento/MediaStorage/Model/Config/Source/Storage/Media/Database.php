@@ -9,22 +9,22 @@
  */
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\ResourceConfig;
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Setup\Model\ConfigOptionsList;
 
 class Database implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var DeploymentConfig
+     * @var Reader
      */
-    protected $_deploymentConfig;
+    protected $reader;
 
     /**
-     * @param DeploymentConfig $deploymentConfig
+     * @param Reader $reader
      */
-    public function __construct(DeploymentConfig $deploymentConfig)
+    public function __construct(Reader $reader)
     {
-        $this->_deploymentConfig = $deploymentConfig;
+        $this->reader = $reader;
     }
 
     /**
@@ -35,10 +35,9 @@ class Database implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         $resourceOptions = [];
-        $resourceInfo = $this->_deploymentConfig->getSegment(ResourceConfig::CONFIG_KEY);
-        if (null !== $resourceInfo) {
-            $resourceConfig = new ResourceConfig($resourceInfo);
-            foreach (array_keys($resourceConfig->getData()) as $resourceName) {
+        $resourceConfig = $this->reader->getConfigData(ConfigOptionsList::KEY_RESOURCE);
+        if (null !== $resourceConfig) {
+            foreach (array_keys($resourceConfig) as $resourceName) {
                 $resourceOptions[] = ['value' => $resourceName, 'label' => $resourceName];
             }
             sort($resourceOptions);

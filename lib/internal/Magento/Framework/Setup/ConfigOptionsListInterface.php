@@ -23,9 +23,10 @@ interface ConfigOptionsListInterface
      * Data in these objects will be stored in array form in deployment config file.
      *
      * @param array $options
+     * @param array $currentConfig
      * @return \Magento\Framework\Config\Data\ConfigData[]
      */
-    public function createConfig(array $options);
+    public function createConfig(array $options, array $currentConfig = []);
 
     /**
      * Validates user input option values and returns error messages
