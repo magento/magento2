@@ -122,7 +122,6 @@ class Tabs extends Generic implements LayoutInterface
                 $structure[$name]['children'] = [
                     $name . '_collection' => [
                         'type' => 'collection',
-                        'dataScope' => $this->namespace . '.' . $name,
                         'config' => [
                             'active' => 1,
                             'removeLabel' => __('Remove ' . $label),
@@ -155,7 +154,7 @@ class Tabs extends Generic implements LayoutInterface
 
             $childrenAreas[$name] = [
                 'type' => $tabComponent->getComponentName(),
-                'dataScope' => $name,
+                'dataScope' => 'data.' . $name,
                 'config' => isset($meta['config']) ? $meta['config'] : [],
                 'insertTo' => [
                     $this->namespace . '.sections' => [

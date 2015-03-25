@@ -45,7 +45,6 @@ class Form extends AbstractComponent
      */
     public function getDataSourceData()
     {
-        $namespace = $this->getContext()->getNamespace();
         $dataSources = [];
         foreach ($this->getChildComponents() as $component) {
             if ($component instanceof DataSourceInterface) {
@@ -53,11 +52,8 @@ class Form extends AbstractComponent
                 $id = $this->getContext()->getRequestParam($dataProvider->getRequestFieldName());
                 if ($id) {
                     $dataProvider->addFilter($dataProvider->getPrimaryFieldName(), $id);
-                    $preparedData = [];
-                    $data = $dataProvider->getData();
-                    if (!empty($data['items'])) {
-                        $preparedData[$namespace] = reset($data['items']);
-                    }
+                    $preparedData = $dataProvider->getData();
+                    $preparedData = isset($preparedData[$id]) ? $preparedData[$id] : [];
                 } else {
                     $preparedData = [];
                 }
