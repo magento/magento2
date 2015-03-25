@@ -30,6 +30,9 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->action = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action');
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action::render
+     */
     public function testRenderNoActions()
     {
         $this->columnMock->expects($this->once())
@@ -42,6 +45,9 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('&nbsp;', $this->action->render($row));
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action::render
+     */
     public function testRender()
     {
         $this->columnMock->expects($this->once())

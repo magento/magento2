@@ -89,4 +89,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
             $this->form->getVariables()
         );
     }
+
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Edit\Form::getEmailTemplate
+     */
+    public function testGetEmailTemplate()
+    {
+        $this->registryMock->expects($this->once())
+            ->method('registry');
+        $this->form->getEmailTemplate();
+    }
 } 

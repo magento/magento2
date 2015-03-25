@@ -21,6 +21,9 @@ class SenderTest extends \PHPUnit_Framework_TestCase
         $this->sender = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender');
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender::render
+     */
     public function testRenderName()
     {
         $row = new \Magento\Framework\Object();
@@ -28,6 +31,9 @@ class SenderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Sender Name ', $this->sender->render($row));
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender::render
+     */
     public function testRenderEmail()
     {
         $row = new \Magento\Framework\Object();
@@ -35,6 +41,9 @@ class SenderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('[Sender Email]', $this->sender->render($row));
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender::render
+     */
     public function testRenderNameAndEmail()
     {
         $row = new \Magento\Framework\Object();
@@ -43,6 +52,9 @@ class SenderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Sender Name [Sender Email]', $this->sender->render($row));
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender::render
+     */
     public function testRenderEmpty()
     {
         $row = new \Magento\Framework\Object();

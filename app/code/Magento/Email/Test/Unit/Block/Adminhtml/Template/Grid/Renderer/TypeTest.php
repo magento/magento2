@@ -21,6 +21,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->type = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type');
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type::render
+     */
     public function testRenderHtml()
     {
         $row = new \Magento\Framework\Object();
@@ -28,6 +31,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('HTML', $this->type->render($row));
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type::render
+     */
     public function testRenderText()
     {
         $row = new \Magento\Framework\Object();
@@ -35,6 +41,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Text', $this->type->render($row));
     }
 
+    /**
+     * @covers \Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type::render
+     */
     public function testRenderUnknown()
     {
         $row = new \Magento\Framework\Object();
