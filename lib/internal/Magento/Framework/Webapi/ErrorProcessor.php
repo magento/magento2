@@ -120,7 +120,7 @@ class ErrorProcessor
             }
 
             $maskedException = new WebapiException(
-                $exception->getRawMessage(),
+                new Phrase($exception->getRawMessage()),
                 $exception->getCode(),
                 $httpCode,
                 $exception->getParameters(),
@@ -141,7 +141,7 @@ class ErrorProcessor
                 $code = 0;
             }
             $maskedException = new WebapiException(
-                $message,
+                new Phrase($message),
                 $code,
                 WebapiException::HTTP_INTERNAL_ERROR,
                 [],

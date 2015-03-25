@@ -53,7 +53,7 @@ class DeserializerFactory
 
         if (!isset($deserializerClass) || empty($deserializerClass)) {
             throw new \Magento\Framework\Webapi\Exception(
-                'Server cannot understand Content-Type HTTP header media type ' . $contentType
+                new Phrase('Server cannot understand Content-Type HTTP header media type %1', [$contentType])
             );
         }
 
