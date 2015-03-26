@@ -31,7 +31,7 @@ interface InfoInterface
      * Set Additional information about payment into Payment model
      *
      * @param mixed $key
-     * @param null $value
+     * @param mixed|null $value
      * @return mixed
      */
     public function setAdditionalInformation($key, $value = null);

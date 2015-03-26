@@ -39,9 +39,9 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\DB\Helper $coreResourceHelper
      * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
-     * @param null $connection
+     * @param \Magento\Framework\DB\Helper $coreResourceHelper
+     * @param string|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -49,8 +49,8 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\DB\Helper $coreResourceHelper,
         \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
+        \Magento\Framework\DB\Helper $coreResourceHelper,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
