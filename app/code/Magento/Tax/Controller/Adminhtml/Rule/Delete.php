@@ -9,7 +9,7 @@ namespace Magento\Tax\Controller\Adminhtml\Rule;
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
     public function execute()
     {
