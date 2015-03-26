@@ -108,6 +108,8 @@ class ListingTest extends \PHPUnit_Framework_TestCase
      * Run test getDataSourceData method
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetDataSourceData()
     {

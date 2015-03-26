@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class ResetButton
- * @package Magento\Customer\Block\Adminhtml\Edit
  */
 class ResetButton implements ButtonProviderInterface
 {
@@ -21,7 +20,7 @@ class ResetButton implements ButtonProviderInterface
         return [
             'label' => __('Reset'),
             'class' => 'reset',
-            'on_click' => 'setLocation(window.location.href)',
+            'on_click' => 'location.reload();',
             'sort_order' => 30
         ];
     }

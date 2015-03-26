@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class BackButton
- * @package Magento\Customer\Block\Adminhtml\Edit
  */
 class BackButton extends GenericButton implements ButtonProviderInterface
 {
@@ -20,7 +19,7 @@ class BackButton extends GenericButton implements ButtonProviderInterface
     {
         return [
             'label' => __('Back'),
-            'on_click' => 'setLocation(\'' . $this->getBackUrl() . '\')',
+            'on_click' => sprintf("location.href = '%s';", $this->getBackUrl()),
             'class' => 'back',
             'sort_order' => 10
         ];
