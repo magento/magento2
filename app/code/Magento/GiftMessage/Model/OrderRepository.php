@@ -81,13 +81,15 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         /** @var \Magento\Sales\Api\Data\OrderInterface $order */
         $order = $this->orderFactory->create()->load($orderId);
 
-        if (!$this->helper->getIsMessagesAvailable('order', $order, $this->storeManager->getStore())) {
-            return null;
+        if (!$this->helper->getIsMessagesAllowed('order', $order, $this->storeManager->getStore())) {
+            throw new NoSuchEntityException(
+                __('There is no order with provided id or gift message isn\'t allowed')
+            );
         }
 
         $messageId = $order->getGiftMessageId();
         if (!$messageId) {
-            return null;
+            throw new NoSuchEntityException(__('There is no item with provided id in the order'));
         }
 
         return $this->messageFactory->create()->load($messageId);
@@ -111,7 +113,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         if ($order->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->getIsMessagesAvailable('order', $order, $this->storeManager->getStore())) {
+        if (!$this->helper->getIsMessagesAllowed('order', $order, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
 
@@ -127,7 +129,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         try {
             $this->giftMessageSaveModel->saveAllInOrder();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not add gift message to order'));
+            throw new CouldNotSaveException(__('Could not add gift message to order: "%1"', $e->getMessage()), $e);
         }
         return true;
     }

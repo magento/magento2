@@ -265,7 +265,7 @@ class Save extends \Magento\Framework\Object
      */
     public function isGiftMessagesAvailable($item)
     {
-        return $this->_giftMessageMessage->getIsMessagesAvailable('item', $item, $item->getStore());
+        return $this->_giftMessageMessage->getIsMessagesAllowed('item', $item, $item->getStore());
     }
 
     /**

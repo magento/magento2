@@ -93,10 +93,12 @@ class OrderGet
     protected function getOrderItemGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         if (null !== $order->getItems()) {
-            /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
-            foreach ($order->getItems() as $item) {
+            /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+            foreach ($order->getItems() as $orderItem) {
                 /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
-                $giftMessage = $this->giftMessageOrderItemRepository->get($order->getEntityId(), $item->getItemId());
+                $giftMessage = $this->giftMessageOrderItemRepository->get(
+                    $order->getEntityId(), $orderItem->getItemId()
+                );
 
                 if (!$giftMessage) {
                     continue;
@@ -105,7 +107,7 @@ class OrderGet
                 /** @var \Magento\Sales\Api\Data\OrderItemExtension $orderItemExtension */
                 $orderItemExtension = $this->orderItemExtensionFactory->create();
                 $orderItemExtension->setGiftMessage($giftMessage);
-                $item->setExtensionAttributes($orderItemExtension);
+                $orderItem->setExtensionAttributes($orderItemExtension);
             }
         }
         return $order;

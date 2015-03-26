@@ -75,19 +75,22 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     /**
      * {@inheritDoc}
      */
-    public function get($orderId, $itemId)
+    public function get($orderId, $orderItemId)
     {
-        if (!$item = $this->getItemById($orderId, $itemId)) {
-            return null;
+        /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+        if (!$orderItem = $this->getItemById($orderId, $orderItemId)) {
+            throw new NoSuchEntityException(__('There is no item with provided id in the order'));
         };
 
-        if (!$this->helper->getIsMessagesAvailable('order_item', $item, $this->storeManager->getStore())) {
-            return null;
+        if (!$this->helper->getIsMessagesAllowed('order_item', $orderItem, $this->storeManager->getStore())) {
+            throw new NoSuchEntityException(
+                __('There is no item with provided id in the order or gift message isn\'t allowed')
+            );
         }
 
-        $messageId = $item->getGiftMessageId();
+        $messageId = $orderItem->getGiftMessageId();
         if (!$messageId) {
-            return null;
+            throw new NoSuchEntityException(__('There is no item with provided id in the order'));
         }
 
         return $this->messageFactory->create()->load($messageId);
@@ -96,25 +99,25 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     /**
      * {@inheritDoc}
      */
-    public function save($orderId, $itemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
+    public function save($orderId, $orderItemId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage)
     {
         /** @var \Magento\Sales\Api\Data\OrderInterface $order */
         $order = $this->orderFactory->create()->load($orderId);
 
-        /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
-        if (!$item = $this->getItemById($orderId, $itemId)) {
+        /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+        if (!$orderItem = $this->getItemById($orderId, $orderItemId)) {
             throw new NoSuchEntityException(__('There is no item with provided id in the order'));
         };
 
         if ($order->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->getIsMessagesAvailable('order_item', $item, $this->storeManager->getStore())) {
+        if (!$this->helper->getIsMessagesAllowed('order_item', $orderItemId, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
 
         $message = [];
-        $message[$itemId] = [
+        $message[$orderItemId] = [
             'type' => 'order_item',
             'sender' => $giftMessage->getSender(),
             'recipient' => $giftMessage->getRecipient(),
@@ -125,7 +128,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
         try {
             $this->giftMessageSaveModel->saveAllInOrder();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not add gift message to order'));
+            throw new CouldNotSaveException(__('Could not add gift message to order: "%1"', $e->getMessage()), $e);
         }
         return true;
     }
@@ -134,16 +137,16 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      * Get order item by id
      *
      * @param int $orderId
-     * @param int $itemId
+     * @param int $orderItemId
      * @return \Magento\Sales\Api\Data\OrderItemInterface|bool
      */
-    protected function getItemById($orderId, $itemId)
+    protected function getItemById($orderId, $orderItemId)
     {
         /** @var \Magento\Sales\Api\Data\OrderInterface $order */
         $order = $this->orderFactory->create()->load($orderId);
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
         foreach ($order->getItems() as $item) {
-            if ($item->getItemId() === $itemId) {
+            if ($item->getItemId() === $orderItemId) {
                 return $item;
             }
         }

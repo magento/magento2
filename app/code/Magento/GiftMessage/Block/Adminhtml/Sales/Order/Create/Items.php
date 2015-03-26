@@ -52,7 +52,7 @@ class Items extends \Magento\Backend\Block\Template
         if (!$item) {
             return false;
         }
-        return $this->_messageHelper->getIsMessagesAvailable('item', $item, $item->getStoreId());
+        return $this->_messageHelper->getIsMessagesAllowed('item', $item, $item->getStoreId());
     }
 
     /**

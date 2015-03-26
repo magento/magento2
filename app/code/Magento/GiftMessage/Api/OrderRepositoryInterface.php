@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Api;
 interface OrderRepositoryInterface
 {
     /**
-     * Returns the gift message for a specified order.
+     * Return the gift message for a specified order.
      *
      * @param int $orderId The order ID.
      * @return \Magento\GiftMessage\Api\Data\MessageInterface|null Gift message.
@@ -16,7 +16,7 @@ interface OrderRepositoryInterface
     public function get($orderId);
 
     /**
-     * Sets the gift message for an entire order.
+     * Set the gift message for an entire order.
      *
      * @param int $orderId The order ID.
      * @param \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage The gift message.

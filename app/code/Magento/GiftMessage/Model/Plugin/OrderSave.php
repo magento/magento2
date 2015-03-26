@@ -75,18 +75,18 @@ class OrderSave
     protected function saveOrderItemGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         if (null !== $order->getItems()) {
-            /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
-            foreach ($order->getItems() as $item) {
+            /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+            foreach ($order->getItems() as $orderItem) {
                 /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
-                $giftMessage = $item->getExtensionAttributes()->getGiftMessage();
+                $giftMessage = $orderItem->getExtensionAttributes()->getGiftMessage();
                 try {
                     $this->giftMessageOrderItemRepository->save(
                         $order->getEntityId(),
-                        $item->getItemId(),
+                        $orderItem->getItemId(),
                         $giftMessage
                     );
                 } catch (\Exception $e) {
-                    $item->getExtensionAttributes()->setGiftMessage(null);
+                    $orderItem->getExtensionAttributes()->setGiftMessage(null);
                 }
             }
         }
