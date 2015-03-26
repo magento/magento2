@@ -96,8 +96,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             $logger,
             $fetchStrategy,
             $eventManager,
-            $coreResourceHelper,
             $entitySnapshot,
+            $coreResourceHelper,
             $connection,
             $resource
         );
