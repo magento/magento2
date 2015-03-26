@@ -124,7 +124,7 @@ define([
         countPages: function () {
             var pages = Math.ceil(this.totalRecords() / this.pageSize());
 
-            this.pages(pages);
+            this.pages(pages || 1);
         },
 
         /**

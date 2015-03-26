@@ -7,11 +7,11 @@
 
 <div class="col-xs-6 filters">
 
-    <button data-bind="click: toggleVisible, css: { active: isVisible }">
+    <button data-bind="click: toggleOpened, css: { active: opened }">
         <span data-bind="text: $t('Filter')"></span>
     </button>
 
-    <div class="form filters-form" data-bind="visible: isVisible" data-part="filter-form">
+    <div class="form filters-form" data-bind="visible: opened" data-part="filter-form">
         <fieldset class="filters-fieldset fieldset">
             <legend class="legend filters-legend">
                 <span data-bind="text: $t('Advanced filter')"></span>

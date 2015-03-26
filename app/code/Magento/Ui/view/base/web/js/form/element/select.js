@@ -212,9 +212,9 @@ define([
             this.setOptions(result);
         },
 
-        toggleInput: function (isHidden) {
+        toggleInput: function (isVisible) {
             registry.get(this.customName, function (input) {
-                input.setHidden(isHidden);
+                input.setVisible(isVisible);
             });
         },
 
@@ -227,17 +227,17 @@ define([
          * @returns {Select} Chainable.
          */
         setOptions: function (data) {
-            var visibility;
+            var isVisible;
 
             this.indexedOptions = indexOptions(data);
 
             this.options(data);
 
             if (this.customEntry) {
-                visibility = !!data.length;
+                isVisible = !!data.length;
 
-                this.setHidden(!visibility);
-                this.toggleInput(visibility);
+                this.setVisible(isVisible);
+                this.toggleInput(!isVisible);
             }
 
             return this;

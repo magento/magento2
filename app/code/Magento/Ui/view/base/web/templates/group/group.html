@@ -11,7 +11,7 @@
     <div class="admin__field-control" data-bind="css: {'admin__control-fields': element.breakLine, 'admin__control-grouped': !element.breakLine}">
         <!-- ko foreach: { data: elems, as: 'element' } -->
 
-            <!-- ko ifnot: element.hidden -->
+            <!-- ko if: element.visible() -->
 
                 <!-- ko ifnot: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
                     <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
@@ -26,7 +26,7 @@
         <!-- /ko -->
 
         <!-- ko foreach: { data: elems, as: 'element' } -->
-            <!-- ko if: element.error() && !element.hidden() -->
+            <!-- ko if: element.error() && element.visible() -->
                 <label class="admin__field-error" data-bind="attr: { for: uid }, text: element.error"></label>
             <!-- /ko -->
         <!-- /ko -->

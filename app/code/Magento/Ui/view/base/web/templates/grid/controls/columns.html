@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<div data-bind="css: {_active: active}, outerClick: hidePanel, stopPropagation: true" class="admin__action-dropdown-wrap admin__data-grid-action-columns">
+<div data-bind="css: {_active: opened}, outerClick: close, stopPropagation: true" class="admin__action-dropdown-wrap admin__data-grid-action-columns">
     <button
         class="admin__action-dropdown"
         type="button"
-        data-bind="click: togglePanel"
+        data-bind="click: toggleOpened"
         data-toggle="dropdown"
         aria-haspopup="true">
         <span class="admin__action-dropdown-text">Columns</span>
@@ -27,7 +27,7 @@
         </div>
         <div class="admin__action-dropdown-menu-footer">
             <div class="admin__action-dropdown-footer-secondary-actions">
-                <button class="action-tertiary" type="button">
+                <button data-bind="click: reset" class="action-tertiary" type="button">
                     <span>Reset</span>
                 </button>
             </div>

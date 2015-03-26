@@ -4,7 +4,7 @@
  */
 define([
     'underscore',
-    './collapsible'
+    'Magento_Ui/js/lib/collapsible'
 ], function (_, Collapsible) {
     'use strict';
 
@@ -12,7 +12,9 @@ define([
         defaults: {
             listens: {
                 '<%= provider %>:data.validate': 'onValidate'
-            }
+            },
+            collapsible: false,
+            opened: true
         },
 
         /**

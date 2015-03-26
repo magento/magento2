@@ -18,6 +18,20 @@ define([
             }
         },
 
+        initialize: function () {
+            this._super();
+
+            this.initialState = {
+                visible: this.visible()
+            };
+
+            return this;
+        },
+
+        resetVisible: function () {
+            this.visible(this.initialState.visible);
+        },
+
         getClickUrl: function (row) {
             var field = row[this.actionField],
                 action = field && field[this.clickAction];

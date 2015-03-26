@@ -5,22 +5,14 @@
 define([
     'underscore',
     'mageUtils',
-    'uiComponent'
-], function (_, utils, Component) {
+    'Magento_Ui/js/lib/collapsible'
+], function (_, utils, Collapsible) {
     'use strict';
 
-    return Component.extend({
+    return Collapsible.extend({
         defaults: {
             template: 'ui/grid/actions',
-            actionsVisible: false,
             noItems:  'You haven\'t selected any items!'
-        },
-
-        initObservable: function () {
-            this._super()
-                .observe('actionsVisible');
-
-            return this;
         },
 
         applyAction: function (action) {
@@ -43,14 +35,6 @@ define([
                     data: data
                 });
             }
-        },
-
-        toggleActions: function () {
-            this.actionsVisible(!this.actionsVisible());
-        },
-
-        hideActions: function () {
-            this.actionsVisible(false);
         }
     });
 });

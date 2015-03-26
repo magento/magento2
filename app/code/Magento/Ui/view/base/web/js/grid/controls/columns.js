@@ -3,35 +3,23 @@
  * See COPYING.txt for license details.
  */
 define([
-    'uiComponent'
-], function (Component) {
+    'Magento_Ui/js/lib/collapsible'
+], function (Collapsible) {
     'use strict';
 
-    return Component.extend({
+    return Collapsible.extend({
         defaults: {
-            template: 'ui/grid/controls/columns',
-            active: false
+            template: 'ui/grid/controls/columns'
         },
 
-        initObservable: function () {
-            this._super()
-                .observe('active');
-
-            return this;
+        reset: function () {
+            this.delegate('resetVisible');
         },
 
         countVisible: function () {
             return this.elems().filter(function (elem) {
                 return elem.visible();
             }).length;
-        },
-
-        togglePanel: function () {
-            this.active(!this.active());
-        },
-
-        hidePanel: function () {
-            this.active(false);
         }
     });
 });

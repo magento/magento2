@@ -9,8 +9,8 @@ define([
 
     return Component.extend({
         defaults: {
-            collapsible: false,
-            opened: true
+            opened: false,
+            collapsible: true
         },
 
         /**
@@ -30,21 +30,17 @@ define([
          *
          * @return {Object} - reference to instance
          */
-        toggle: function () {
-            var opened = this.opened,
-                active = opened(!opened());
-
-            this.trigger('active', active);
+        toggleOpened: function () {
+            if (this.collapsible) {
+                this.opened(!this.opened());
+            }
 
             return this;
         },
 
-        /**
-         * Invokes 'toggle' method if instance has 'collapsible' property set to true
-         */
-        onClick: function () {
+        close: function () {
             if (this.collapsible) {
-                this.toggle();
+                this.opened(false);
             }
         }
     });

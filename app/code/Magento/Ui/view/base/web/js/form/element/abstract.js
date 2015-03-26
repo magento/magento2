@@ -12,7 +12,7 @@ define([
 
     return Component.extend({
         defaults: {
-            hidden: false,
+            visible: true,
             preview: '',
             focused: false,
             required: false,
@@ -28,7 +28,7 @@ define([
 
             listens: {
                 value: 'onUpdate',
-                hidden: 'setPreview',
+                visible: 'setPreview',
                 '<%= provider %>:data.reset': 'reset',
                 '<%= provider %>:data.validate': 'validate'
             },
@@ -38,7 +38,7 @@ define([
             },
 
             exports: {
-                hidden: '<%= provider %>:config.<%= name %>.hidden'
+                visible: '<%= provider %>:config.<%= name %>.visible'
             },
 
             imports: {
@@ -74,7 +74,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview hidden')
+            this.observe('error disabled focused preview visible')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -123,7 +123,7 @@ define([
          * @returns {Abstract} Chainable.
          */
         setPreview: function (value) {
-            this.preview(this.hidden() ? '' : value);
+            this.preview(!this.visible() ? '' : value);
 
             return this;
         },
@@ -135,10 +135,10 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        setHidden: function (isHidden) {
-            this.hidden(isHidden);
+        setVisible: function (isVisible) {
+            this.visible(isVisible);
 
-            this.trigger('toggle', isHidden);
+            this.trigger('toggle', isVisible);
 
             return this;
         },
@@ -167,9 +167,9 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() !== this.initialValue;
+            var notEqual = this.value() != this.initialValue;
 
-            return this.hidden() ? false : notEqual;
+            return !this.visible() ? false : notEqual;
         },
 
         hasData: function () {
@@ -193,7 +193,7 @@ define([
         validate: function () {
             var value = this.value(),
                 msg = validator(this.validation, value),
-                isValid = this.hidden() || !msg;
+                isValid = !this.visible() || !msg;
 
             this.error(msg);
 

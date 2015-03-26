@@ -7,10 +7,10 @@
 <div class="col-xs-2">
     <div
         class="action-select-wrap"
-        data-bind="css: {'_active': actionsVisible},
-           click: toggleActions,
+        data-bind="css: {'_active': opened},
+           click: toggleOpened,
            stopPropagation: true,
-           outerClick: hideActions">
+           outerClick: close">
         <button
             class="action-select"
             data-bind="title: $t('Select Items')">
@@ -18,7 +18,7 @@
         </button>
         <ul
             class="action-menu"
-            data-bind="css: {'_active': actionsVisible},
+            data-bind="css: {'_active': opened},
                        foreach: {data: actions, as: 'action'}">
             <li data-bind="click: $parent.applyAction.bind($parent, action)">
             <span

@@ -4,8 +4,8 @@
  */
 define([
     'underscore',
-    'uiComponent'
-], function (_, Component) {
+    'Magento_Ui/js/lib/collapsible'
+], function (_, Collapsible) {
     'use strict';
 
     function extractPreview(elem) {
@@ -24,11 +24,9 @@ define([
         return elem.delegate('reset');
     }
 
-    return Component.extend({
+    return Collapsible.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
-            isVisible: false,
-
             listens: {
                 active: 'extractPreviews'
             }
@@ -36,21 +34,12 @@ define([
 
         initObservable: function () {
             this._super()
-                .observe('isVisible')
                 .observe({
                     active: [],
                     previews: []
                 });
 
             return this;
-        },
-
-        toggleVisible: function () {
-            this.isVisible(!this.isVisible());
-        },
-
-        close: function () {
-            this.isVisible(false);
         },
 
         apply: function () {

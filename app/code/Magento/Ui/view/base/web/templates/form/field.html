@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" data-bind="visible: !hidden(), css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
+<div class="admin__field" data-bind="visible: visible, css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
 
     <!-- ko if: element.label -->
     <label class="admin__field-label" data-bind="attr: { for: element.uid }">
