@@ -343,7 +343,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-
         return $productsInfo;
     }
 
