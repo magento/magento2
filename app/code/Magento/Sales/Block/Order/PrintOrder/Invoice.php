@@ -25,6 +25,11 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
     protected $_paymentHelper;
 
     /**
+     * @var \Magento\Sales\Model\Order\Address\Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
@@ -34,8 +39,10 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = []
     ) {
+        $this->addressRenderer = $addressRenderer;
         $this->_paymentHelper = $paymentHelper;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -116,5 +123,15 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
             $html = $totals->toHtml();
         }
         return $html;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Address $address
+     * @param string $format
+     * @return null|string
+     */
+    public function formatAddress(\Magento\Sales\Model\Order\Address $address, $format)
+    {
+        return $this->addressRenderer->format($address, $format);
     }
 }
