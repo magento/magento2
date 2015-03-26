@@ -198,7 +198,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->orderMock)
+            ->will($this->returnValue(true));
         $this->resource->save($this->orderMock);
     }
 }

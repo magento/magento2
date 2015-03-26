@@ -161,6 +161,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveValidationFailed()
     {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->addressMock)
+            ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
             ->will($this->returnValue(true));

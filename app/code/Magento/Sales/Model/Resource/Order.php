@@ -197,9 +197,11 @@ class Order extends SalesResource implements OrderResourceInterface
                 $statusHistory->setOrder($object);
             }
         }
-        foreach ($object->getRelatedObjects() as $relatedObject) {
-            $relatedObject->save();
-            $relatedObject->setOrder($object);
+        if (null !== $object->getRelatedObjects()) {
+            foreach ($object->getRelatedObjects() as $relatedObject) {
+                $relatedObject->save();
+                $relatedObject->setOrder($object);
+            }
         }
         return parent::processRelations($object);
     }

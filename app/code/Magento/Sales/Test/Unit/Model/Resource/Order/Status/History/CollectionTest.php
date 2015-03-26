@@ -47,6 +47,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityFactoryMock;
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
 
     public function setUp()
     {
@@ -68,6 +72,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+        );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
+            [],
+            [],
+            '',
+            false
         );
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
             'Magento\Framework\Data\Collection\Db\FetchStrategyInterface'
@@ -104,6 +115,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $logger,
             $this->fetchStrategyMock,
             $this->eventManagerMock,
+            $this->entitySnapshotMock,
             $this->connectionMock,
             $this->resourceMock
         );
