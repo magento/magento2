@@ -87,7 +87,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      */
     public function handleErrors($errorNumber, $errorMessage, $errorFile, $errorLine)
     {
-        if (is_null($this->_errorMessage)) {
+        if ($this->_errorMessage === null) {
             $this->_errorMessage = $errorMessage;
         } else {
             $this->_errorMessage .= $errorMessage;

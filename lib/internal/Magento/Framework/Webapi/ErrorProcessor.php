@@ -100,7 +100,9 @@ class ErrorProcessor
         $isDevMode = $this->_appState->getMode() === State::MODE_DEVELOPER;
         $stackTrace = $isDevMode ? $exception->getTraceAsString() : null;
 
-        if ($exception instanceof LocalizedException) {
+        if ($exception instanceof WebapiException) {
+            $maskedException = $exception;
+        } elseif ($exception instanceof LocalizedException) {
             // Map HTTP codes for LocalizedExceptions according to exception type
             if ($exception instanceof NoSuchEntityException) {
                 $httpCode = WebapiException::HTTP_NOT_FOUND;
@@ -128,8 +130,6 @@ class ErrorProcessor
                 $errors,
                 $stackTrace
             );
-        } elseif ($exception instanceof WebapiException) {
-            $maskedException = $exception;
         } else {
             $message = $exception->getMessage();
             $code = $exception->getCode();
