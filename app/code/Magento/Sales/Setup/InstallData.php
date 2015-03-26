@@ -10,6 +10,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
+use Magento\SalesSequence\Model\Config as SequenceConfig;
 
 /**
  * Class InstallData
@@ -31,13 +32,22 @@ class InstallData implements InstallDataInterface
     private $sequenceBuilder;
 
     /**
+     * @var SequenceConfig
+     */
+    private $sequenceConfig;
+
+    /**
      * Init
      *
-     * @param SequenceBuilder $sequenceBuilder
      * @param SalesSetupFactory $salesSetupFactory
+     * @param SequenceBuilder $sequenceBuilder
+     * @param SequenceConfig $sequenceConfig
      */
-    public function __construct(SalesSetupFactory $salesSetupFactory, SequenceBuilder $sequenceBuilder)
-    {
+    public function __construct(
+        SalesSetupFactory $salesSetupFactory,
+        SequenceBuilder $sequenceBuilder,
+        SequenceConfig $sequenceConfig
+    ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->sequenceBuilder = $sequenceBuilder;
     }
@@ -166,13 +176,13 @@ class InstallData implements InstallDataInterface
         }
         $defaultEntityTypes = array_keys($salesSetup->getDefaultEntities());
         foreach ($defaultEntityTypes as $entityType) {
-            $this->sequenceBuilder->setPrefix('')
-                ->setSuffix('')
-                ->setStartValue(1)
+            $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
+                ->setSuffix($this->sequenceConfig->get('suffix'))
+                ->setStartValue($this->sequenceConfig->get('startValue'))
                 ->setStoreId(1)
-                ->setStep(1)
-                ->setWarningValue(SequenceBuilder::SEQUENCE_UNSIGNED_INT_WARNING_VALUE)
-                ->setMaxValue(SequenceBuilder::MYSQL_MAX_UNSIGNED_INT)
+                ->setStep($this->sequenceConfig->get('step'))
+                ->setWarningValue($this->sequenceConfig->get('warningValue'))
+                ->setMaxValue($this->sequenceConfig->get('maxValue'))
                 ->setEntityType($entityType)->create();
         }
     }
