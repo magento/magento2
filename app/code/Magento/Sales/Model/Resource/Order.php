@@ -18,6 +18,7 @@ use Magento\Sales\Model\Spi\OrderResourceInterface;
  * Flat sales order resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends SalesResource implements OrderResourceInterface
 {
