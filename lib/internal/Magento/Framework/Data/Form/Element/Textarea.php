@@ -13,6 +13,13 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * @method Textarea setExtType($extType)
+ * @method mixed getCols()
+ * @method Textarea setCols($cols)
+ * @method mixed getRows()
+ * @method mixed setRows($rows)
+ */
 class Textarea extends AbstractElement
 {
     /**
@@ -83,8 +90,8 @@ class Textarea extends AbstractElement
     {
         $this->addClass('textarea');
         $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->serialize(
-            $this->getHtmlAttributes()
-        ) . $this->_getUiId() . ' >';
+                $this->getHtmlAttributes()
+            ) . $this->_getUiId() . ' >';
         $html .= $this->getEscapedValue();
         $html .= "</textarea>";
         $html .= $this->getAfterElementHtml();
