@@ -30,6 +30,7 @@
                     <container name="messages.wrapper" as="messages.wrapper" htmlTag="div" htmlId="messages">
                         <container name="page.messages" as="page.messages"/>
                     </container>
+                    <!-- ToDo UI: .col-gutter will be deprecated after #a0c2682 merged -->
                     <container name="page.main.container" as="page_main_container" htmlId="page:main-container" htmlTag="div" htmlClass="page-columns row row-gutter">
                         <!-- ToDo UI: remove 'main-col' & 'side-col' class names after new sidebar implemented -->
                         <container name="main.col" as="main-col" htmlId="container" htmlTag="div" htmlClass="main-col col-m-9 col-m-push-3 col-gutter">

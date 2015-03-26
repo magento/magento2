@@ -7,7 +7,7 @@
 @import 'source/lib/_utilities.less';
 @baseDir: "../"; // Default
 
-/* Backend */
+// Backend
 @import "../mui/clearless/all.less";
 @import "../mui/styles/vars.less";
 @import (reference) "../mui/styles/abstract.less"; // Import some abstract
@@ -15,13 +15,14 @@
 .admin__scope-old {
     box-sizing: content-box;
 
-    //    .normalize();
+    // .normalize();
     @import "../mui/styles/base.less";
     @import "../mui/styles/table.less"; // Import table styles
 
-    /*
-        Reset 'button view' for actions
-    -------------------------------------- */
+    //
+    //  Reset 'button view' for actions
+    //  --------------------------------------
+
     .customer-current-activity .action-refresh,
     .data-table .action-.delete,
     .data-table .action-.delete:hover,
@@ -170,9 +171,10 @@
         top: 200px;
     }
 
-    /*
-        Actions as links
-    -------------------------------------- */
+    //
+    //  Actions as links
+    //  --------------------------------------
+
     .notification-entry-dialog .action-close {
         background: none;
         border: none;
@@ -189,9 +191,10 @@
         filter: none;
     }
 
-    /*
-        Fileupload button
-    -------------------------------------- */
+    //
+    //  Fileupload button
+    //  --------------------------------------
+
     .action-upload {
         position: relative;
     }
@@ -206,9 +209,10 @@
         font-size: 10em;
     }
 
-    /*
-        Dropdown menu
-    -------------------------------------- */
+    //
+    //  Dropdown menu
+    //  --------------------------------------
+
     .dropdown-menu,
     .ui-autocomplete {
         position: absolute;
@@ -282,9 +286,10 @@
         display: block;
     }
 
-    /*
-        Actions Dropdown
-    -------------------------------------- */
+    //
+    //  Actions Dropdown
+    //  --------------------------------------
+
     .action-dropdown {
         text-align: left;
         position: relative;
@@ -318,12 +323,12 @@
         speak: none;
         font-weight: normal;
         -webkit-font-smoothing: antialiased;
-        content: '\e02c'; /* arrow down */
+        content: '\e02c'; // arrow down
         font-size: 11px;
     }
 
     .action-dropdown > .action-toggle.active:before {
-        content: '\e029'; /* arrow up */
+        content: '\e029'; // arrow up
     }
 
     .action-dropdown > .action-toggle.primary {
@@ -351,10 +356,11 @@
         text-decoration: none;
     }
 
-    /*
-        Action delete icon
-    -------------------------------------- */
-    /* TODO: replase ".action-.delete" to ".action-delete" after buttons refactoring */
+    //
+    //  Action delete icon
+    //  --------------------------------------
+
+    // TODO: replase ".action-.delete" to ".action-delete" after buttons refactoring
     .data-table .action-.delete span,
     .data-table .action-delete span,
     .data-table .action-locked span,
@@ -373,13 +379,14 @@
         font-weight: normal;
         font-size: 18px;
         -webkit-font-smoothing: antialiased;
-        content: '\e07f'; /* delete icon */
+        content: '\e07f'; // delete icon
         color: #b7b3ad;
     }
 
-    /*
-        Locked action icon
-    -------------------------------------- */
+    //
+    //  Locked action icon
+    //  --------------------------------------
+
     .data-table .action-locked:before {
         font-family: 'MUI-Icons';
         font-style: normal;
@@ -387,7 +394,7 @@
         font-weight: normal;
         font-size: 20px;
         -webkit-font-smoothing: antialiased;
-        content: '\e03e'; /* lock icon */
+        content: '\e03e'; // lock icon
         color: #b7b3ad;
     }
 
@@ -431,9 +438,10 @@
         color: #a5a29d;
     }
 
-    /*
-        Forms
-    -------------------------------------- */
+    //
+    //  Forms
+    //  --------------------------------------
+
 
     fieldset {
         border: 1px solid #ccc;
@@ -747,7 +755,7 @@
         margin-top: 4px;
     }
 
-    /* TODO: remove styles for images when images will be replaced by font icons */
+    // TODO: remove styles for images when images will be replaced by font icons
     .control .hasDatepicker + img {
         margin: -3px 0 0 5px;
         vertical-align: middle;
@@ -757,9 +765,10 @@
         white-space: nowrap;
     }
 
-    /*
-        Form Validation
-    -------------------------------------- */
+    //
+    //  Form Validation
+    //  --------------------------------------
+
     label.mage-error {
         border: 1px solid #e22626;
         display: block;
@@ -782,9 +791,10 @@
         border-color: #e22626 !important;
     }
 
-    /*
-        Forms for Store Scope
-    -------------------------------------- */
+    //
+    //  Forms for Store Scope
+    //  --------------------------------------
+
     .form-inline .field-store_id .label + .control,
     .form-inline .field-store_ids .label + .control,
     .form-inline .field-website_ids .label + .control,
@@ -794,9 +804,10 @@
         width: auto;
     }
 
-    /*
-        Forms styles
-    -------------------------------------- */
+    //
+    //  Forms styles
+    //  --------------------------------------
+
     .page-content-inner {
         position: relative;
         background: #f5f2ed;
@@ -837,8 +848,8 @@
     }
 
     //
-    //    Collapsable fieldset-wrapper
-    //--------------------------------------
+    //  Collapsable fieldset-wrapper
+    //  --------------------------------------
     .collapsable-wrapper {
         padding-bottom: 2px;
         > .fieldset-wrapper-title {
@@ -879,7 +890,7 @@
         }
     }
 
-    // Fieldset styles in another fieldset */
+    // Fieldset styles in another fieldset
     .fieldset .fieldset-wrapper,
     .fieldset-wrapper .fieldset-wrapper {
         border: 1px solid #cac3b4;
@@ -948,7 +959,7 @@
         padding: 0 10px;
     }
 
-    /* Sortable fieldsets */
+    // Sortable fieldsets
     .ui-sortable .entry-edit .fieldset-wrapper-title,
     #product_options_container_top .fieldset-wrapper-title {
         padding-left: 30px;
@@ -1171,7 +1182,7 @@
         width: 60px;
     }
 
-    /* "Use default" checkbox */
+    // "Use default" checkbox
     .use-default {
 
     }
@@ -1191,9 +1202,10 @@
         color: #7e7e7e;
     }
 
-    /*
-        Custom Multiselect
-    -------------------------------------- */
+    //
+    //  Custom Multiselect
+    //  --------------------------------------
+
     .multiselect-alt {
         margin: 0;
         padding: 0;
@@ -1239,7 +1251,7 @@
         speak: none;
         font-weight: normal;
         -webkit-font-smoothing: antialiased;
-        content: '\e01e'; /* checked icon */
+        content: '\e01e'; // checked icon
         text-align: center;
         color: #7ba4b1;
         font-size: 9px;
@@ -1255,8 +1267,8 @@
     }
 
     //
-    //    Form item with table
-    // --------------------------------------
+    //  Form item with table
+    //  --------------------------------------
 
     .with-table {
         .label {
@@ -1272,8 +1284,8 @@
     }
 
     //
-    //    Form currency label
-    // --------------------------------------
+    //  Form currency label
+    //  --------------------------------------
 
     .addon {
         input[type="text"] {
@@ -1389,9 +1401,10 @@
         margin-right: -2px;
     }
 
-    /*
-        Details element
-    -------------------------------------- */
+    //
+    //  Details element
+    //  --------------------------------------
+
     summary {
         cursor: pointer;
         display: inline-block;
@@ -1415,9 +1428,10 @@
         display: block;
     }
 
-    /*
-        Blockquotes
-    -------------------------------------- */
+    //
+    //  Blockquotes
+    //  --------------------------------------
+
     blockquote {
         border-left: 2px solid #ccc;
         padding-left: 5px;
@@ -1427,16 +1441,18 @@
         content: '\2014 \00A0';
     }
 
-    /*
-        Addresses
-    -------------------------------------- */
+    //
+    //  Addresses
+    //  --------------------------------------
+
     address {
         font-style: normal;
     }
 
-    /*
-        X-tree styles
-    -------------------------------------- */
+    //
+    //  X-tree styles
+    //  --------------------------------------
+
     .x-tree-node .leaf .x-tree-node-icon {
         background-image: url(../images/fam_leaf.png);
     }
@@ -1445,9 +1461,10 @@
         background-image: url(../images/fam_application_form_delete.png);
     }
 
-    /*
-        Styles for "js" tooltip with positionings
-    -------------------------------------- */
+    //
+    //  Styles for "js" tooltip with positionings
+    //  --------------------------------------
+
     .tipsy {
         padding: 11px;
     }
@@ -1631,26 +1648,26 @@
         font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* Backup popup */
-    /* TODO: remove after backups page js refactoring */
+    // Backup popup
+    // TODO: remove after backups page js refactoring
     .backup-dialog {
         margin-top: inherit !important;
     }
 //
-//    .side-col {
-//        box-sizing: border-box;
-//        padding-bottom: 20px;
-//        padding-right: 10px;
-//        position: relative;
-//        width: 25%;
-//    }
+//  .side-col {
+//      box-sizing: border-box;
+//      padding-bottom: 20px;
+//      padding-right: 10px;
+//      position: relative;
+//      width: 25%;
+//  }
 //
-//    .main-col {
-//        position: relative;
-//        width: 75%;
-//        padding: 0 20px 20px;
-//        box-sizing: border-box;
-//    }
+//  .main-col {
+//      position: relative;
+//      width: 75%;
+//      padding: 0 20px 20px;
+//      box-sizing: border-box;
+//  }
 
     .col-left {
         float: left;
@@ -1683,33 +1700,34 @@
             min-width: 730px;
             width: 80%;
         }
-//        .main-col {
-//            padding-right: 0;
-//            padding-left: 0;
-//            float: right;
-//        }
-//        .side-col {
-//            float: left;
-//        }
+//      .main-col {
+//          padding-right: 0;
+//          padding-left: 0;
+//          float: right;
+//      }
+//      .side-col {
+//          float: left;
+//      }
     }
 
-//    .col-2-right-layout {
-//        .side-col {
-//            float: right;
-//        }
-//        .main-col {
-//            float: left;
-//        }
-//    }
+//  .col-2-right-layout {
+//      .side-col {
+//          float: right;
+//      }
+//      .main-col {
+//          float: left;
+//      }
+//  }
 
     .col-2-left-layout .main-col,
     .col-2-right-layout .main-col {
         min-width: 730px;
     }
 
-    /*
-        Horizontal Tabs
-    -------------------------------------- */
+    //
+    //  Horizontal Tabs
+    //  --------------------------------------
+
     .ui-tabs {
         clear: both;
     }
@@ -1738,9 +1756,10 @@
         background: #fff;
     }
 
-    /*
-        Switcher
-    -------------------------------------- */
+    //
+    //  Switcher
+    //  --------------------------------------
+
     .switcher {
         -webkit-touch-callout: none;
         -webkit-user-select: none; // use in 41 Chrome
@@ -1798,12 +1817,13 @@
         content: attr(data-text-on);
     }
 
-    /*
-        Content actions panel (with buttons, switchers...)
-    -------------------------------------- */
+    //
+    //  Content actions panel (with buttons, switchers...)
+    //  --------------------------------------
+
     // .page-actions {
-    //     padding: 0 0 20px;
-    //     text-align: right;
+    //   padding: 0 0 20px;
+    //   text-align: right;
     // }
 
     .page-actions .buttons-group {
@@ -1818,7 +1838,7 @@
     }
 
     // .main-col .page-actions {
-    //     padding: 20px 0;
+    //   padding: 20px 0;
     // }
 
     .catalog-product-index .page-actions {
@@ -1851,8 +1871,8 @@
         white-space: nowrap;
     }
 
-    /* Dynamic Grid */
-    /* Used in pages like Catalog -> Attributes */
+    // Dynamic Grid
+    // Used in pages like Catalog -> Attributes
     .dynamic-grid th {
         padding: 2px;
         width: 100px;
@@ -1890,8 +1910,8 @@
     }
 
     //
-    //    Website store views tree
-    // --------------------------------------
+    //  Website store views tree
+    //  --------------------------------------
     .store-tree {
         .website-name {
             font-size: 14px;
@@ -1917,8 +1937,8 @@
     }
 
     //
-    //    Customer Reviews
-    // --------------------------------------
+    //  Customer Reviews
+    //  --------------------------------------
     .field-detailed_rating {
         .control-value {
             padding: 0;
@@ -1959,8 +1979,8 @@
     }
 
     //
-    //    Tree Store Scope
-    // --------------------------------------
+    //  Tree Store Scope
+    //  --------------------------------------
     .tree-store-scope {
         .buttons-set {
             margin-bottom: 9px;
@@ -1999,8 +2019,8 @@
     }
 
     //
-    //    Widgets
-    //--------------------------------------
+    //  Widgets
+    //  --------------------------------------
     .widget-layout-updates .fieldset-wrapper,
     .widget-layout-updates .data-table {
         margin: 0 0 18px;
@@ -2058,9 +2078,10 @@
         vertical-align: middle;
     }
 
-    /*
-        Preview window
-    -------------------------------------- */
+    //
+    //  Preview window
+    //  --------------------------------------
+
     .preview-window {
         background: #fff;
     }
@@ -2079,9 +2100,10 @@
         width: auto;
     }
 
-    /*
-        Global 'No Products found' block
-    -------------------------------------- */
+    //
+    //  Global 'No Products found' block
+    //  --------------------------------------
+
     .no-products-message {
         background: #fbfaf6;
         padding: 12px;
@@ -2091,9 +2113,10 @@
         margin-bottom: 13px;
     }
 
-    /*
-        WYSIWYG
-    -------------------------------------- */
+    //
+    //  WYSIWYG
+    //  --------------------------------------
+
     .action-wysiwyg {
         margin: 10px 0;
     }
@@ -2106,9 +2129,10 @@
         margin-right: 4px;
     }
 
-    /*
-        Add Attribute Popup
-    -------------------------------------- */
+    //
+    //  Add Attribute Popup
+    //  --------------------------------------
+
     #create_new_attribute {
         overflow: hidden;
     }
@@ -2327,9 +2351,10 @@
         }
     }
 
-    /*
-        Customer
-    ---------------------------------------*/
+    //
+    //  Customer
+    //  ---------------------------------------
+
 
     #customer_info_tabs_account_content #_accountsendemail {
         margin-top: 8px;
@@ -2369,9 +2394,10 @@
         float: left;
     }
 
-    /*
-        Configuration -> Design
-    -------------------------------------- */
+    //
+//      Configuration -> Design
+//  --------------------------------------
+
     #row_design_theme_ua_regexp .design_theme_ua_regexp {
         float: left;
         width: 100%;
@@ -2383,16 +2409,17 @@
         clear: both;
     }
 
-    /*
-        CMS -> Banners
-    -------------------------------------- */
+    //
+    //  CMS -> Banners
+    //  --------------------------------------
 
-    /* Banner Properties */
+
+    // Banner Properties
     #banner_properties_customer_segment_ids {
         min-width: 20%;
     }
 
-    /* Content */
+    // Content
 
     .field-store_default_content .buttons-set {
         margin-bottom: 9px;
@@ -2408,9 +2435,10 @@
         top: 2px;
     }
 
-    /*
-        CMS -> Manage Hierarchy
-    -------------------------------------- */
+    //
+    //  CMS -> Manage Hierarchy
+    //  --------------------------------------
+
 
     .cms-hierarchy .cms-scope {
         float: right;
@@ -2464,17 +2492,19 @@
         width: 30%;
     }
 
-    /*
-        CMS -> Widgets
-    -------------------------------------- */
+    //
+    //  CMS -> Widgets
+    //  --------------------------------------
+
 
     #widget_instace_tabs_properties_section_content .widget-option-label {
         margin-top: 6px;
     }
 
-    /*
-        CMS -> Static Blocks
-    -------------------------------------- */
+    //
+    //  CMS -> Static Blocks
+    //  --------------------------------------
+
 
     #buttonsblock_content.buttons-set {
         margin-bottom: 9px;
@@ -2484,11 +2514,12 @@
         margin-right: 4px;
     }
 
-    /*
-        CMS -> Manage Content
-    -------------------------------------- */
+    //
+    //  CMS -> Manage Content
+    //  --------------------------------------
 
-    /* Content */
+
+    // Content
 
     .cms-manage-content-actions .buttons-set {
         margin-bottom: 9px;
@@ -2502,9 +2533,10 @@
         width: 100%;
     }
 
-    /*
-        System -> Action Log -> Report
-    -------------------------------------- */
+    //
+    //  System -> Action Log -> Report
+    //  --------------------------------------
+
     .adminhtml-logging-details .log-details-grid table {
         th {
             border: 1px solid #c9c2b8;
@@ -2541,7 +2573,7 @@
     }
 
     //
-    //    System -> Roles
+    //  System -> Roles
     // --------------------------------------
 
     #gws_container ul {
@@ -2561,8 +2593,8 @@
     }
 
     //
-    //    Reports
-    // -------------------------------------- */
+    //  Reports
+    // --------------------------------------
     .reports-title .page-actions {
         float: right;
     }
@@ -2614,9 +2646,10 @@
         background: #fff;
     }
 
-    /*
-        System - Tax
-    --------------------------------------*/
+    //
+    //  System - Tax
+    //  --------------------------------------
+
 
 
     .mselect-hidden + .mage-error {
@@ -2624,9 +2657,10 @@
         top: 100%;
     }
 
-    /*
-        Tags
-    -------------------------------------- */
+    //
+    //  Tags
+    //  --------------------------------------
+
     .tag-title {
         overflow: hidden;
     }
@@ -2635,9 +2669,10 @@
         float: right;
     }
 
-    /*
-        Attribute Mapping
-    -------------------------------------- */
+    //
+    //  Attribute Mapping
+    //  --------------------------------------
+
     .field-attributes_box .control-value {
         width: 100%;
     }
@@ -2650,9 +2685,10 @@
         margin-top: -6px;
     }
 
-    /*
-        Sales
-    -------------------------------------- */
+    //
+    //  Sales
+    //  --------------------------------------
+
 
     #order-totals strong {
         .style28();
@@ -2819,7 +2855,7 @@
     }
 
     //
-    //    Sales -> Create Order
+    //  Sales -> Create Order
     // --------------------------------------
 
     .summary-total {
@@ -2869,7 +2905,6 @@
         background: #fff;
     }
 
-    // -----------------------------------
 
     #order-data .page-actions {
         padding-top: 0;
@@ -3007,7 +3042,7 @@
     }
 
     //
-    //    Order view
+    //  Order view
     // --------------------------------------
 
     .order-comments-history fieldset {
@@ -3041,7 +3076,7 @@
     }
 
     //
-    //    Orders comments
+    //  Orders comments
     //--------------------------------------
     .note-list {
         list-style: none;
@@ -3121,7 +3156,7 @@
     }
 
     //
-    //    Orders refund
+    //  Orders refund
     //--------------------------------------
     .field-refund-store-credit {
         .input-text {
@@ -3131,7 +3166,7 @@
     }
 
     //
-    //    Packaging for Shipping Popup
+    //  Packaging for Shipping Popup
     // --------------------------------------
     #popup-window-mask,
     .popup-window-mask {
@@ -3479,9 +3514,10 @@
         padding: 0;
     }
 
-    /*
-        Popup Configuration Popup
-    -------------------------------------- */
+    //
+    //  Popup Configuration Popup
+    //  --------------------------------------
+
     #product_composite_configure_messages {
         margin-left: 0 !important;
         padding: 10px 15px;
@@ -3573,16 +3609,18 @@
         background: #fff !important;
     }
 
-    /*
-        URL rewrite
-    -------------------------------------- */
+    //
+    //  URL rewrite
+    //  --------------------------------------
+
     .adminhtml-urlrewrite-edit .field-entity-type-selector .label {
         width: auto;
     }
 
-    /*
-        Shopping Cart Price Rule
-    -------------------------------------- */
+    //
+    //  Shopping Cart Price Rule
+    //  --------------------------------------
+
     .fieldset .field-coupon_code,
     .fieldset .field-rule_use_auto_generation {
         margin-bottom: 0;
@@ -3596,15 +3634,16 @@
         margin-bottom: 29px;
     }
 
-    /*
-        Product Image Placeholders
-    -------------------------------------- */
+    //
+    //  Product Image Placeholders
+    //  --------------------------------------
+
     #catalog_placeholder .input-file,
     #catalog_placeholder .delete-image > input {
         margin-right: 5px;
     }
 
-    /* Permanent Redirect for old URL */
+    // Permanent Redirect for old URL
     .control > [name="product[url_key_create_redirect]"],
     .control > [name="general[url_key_create_redirect]"] {
         float: left;
@@ -3617,9 +3656,10 @@
         padding-top: 8px;
     }
 
-    /*
-        New Product Attribute Set
-    -------------------------------------- */
+    //
+    //  New Product Attribute Set
+    //  --------------------------------------
+
     .field-skeleton_set .select {
         width: 100%;
     }
@@ -3632,16 +3672,18 @@
         }
     }
 
-    /*
-        Cache Management
-    -------------------------------------- */
+    //
+    //  Cache Management
+    //  --------------------------------------
+
     .additional-cache-management .label {
         margin-top: 5px;
     }
 
-    /*
-        Categories
-    -------------------------------------- */
+    //
+    //  Categories
+    //  --------------------------------------
+
     .category-content .form-inline.permissions-custom-options {
         .messages {
             li {
@@ -3653,16 +3695,18 @@
         }
     }
 
-    /*
-        Marketing - Email Reminders
-    -------------------------------------- */
+    //
+    //  Marketing - Email Reminders
+    //  --------------------------------------
+
     .lt-1280 .adminhtml-reminder-edit #customerGrid .grid .filter .range div.date {
         min-width: 0;
     }
 
-    /*
-        Customers - Manage Shopping Cart
-    -------------------------------------- */
+    //
+    //  Customers - Manage Shopping Cart
+    //  --------------------------------------
+
     .checkout-index-index {
         .products-search {
             margin-top: 35px;
@@ -3694,9 +3738,10 @@
         }
     }
 
-    /*
-        Clearfix
-    -------------------------------------- */
+    //
+    //  Clearfix
+    //  --------------------------------------
+
     .shopping-cart-items:before,
     .shopping-cart-items:after,
     .image-panel:before,
@@ -3721,24 +3766,27 @@
     #tab_content_downloadableInfo .data-table td .row:after {
         clear: both;
     }
-    /* ==========================================================================
-    pages.less (end)
-    ========================================================================== */
+    //
+    //  pages.less (end)
+    //  --------------------------------------
 
 
-    /* ==========================================================================
-    debug.less (begin)
-    ========================================================================== */
-    ///*
-    //    This file was created to debug old classes in order to indicate where we must replase it with new ones
+
+    //
+    //  debug.less (begin)
+    //  ==========================================================================
+
+    //
+    //  This file was created to debug old classes in order to indicate where we must replase it with new ones
 
     .debug {
         border: 1px solid red !important;
     }
 
-    /*
-        Accordion
-    ------------------------*/
+    //
+    //  Accordion
+    //  ------------------------
+
     .accordion {
         margin: 0 0 8px;
         padding: 0;
@@ -3805,14 +3853,14 @@
         font-size: 16px;
         font-weight: normal;
         -webkit-font-smoothing: antialiased;
-        content: '\e02a'; /* arrow right icon */
+        content: '\e02a'; // arrow right icon
         color: #b2b0ad;
     }
 
     .section-config.active > .collapseable > a:before,
     .accordion > dt.open a:before,
     .accordion .collapseable.open a:before {
-        content: '\e02c'; /* arrow down icon */
+        content: '\e02c'; // arrow down icon
     }
     .section-config > .collapseable > a:hover:before,
     .accordion > dt a:hover:before,
@@ -3820,7 +3868,7 @@
         color: #7e7e7e;
     }
 
-    /* PayPal connected */
+    // PayPal connected
 
     .section-config.complex .section-config.with-button {
         padding:20px 15px;
@@ -4003,7 +4051,7 @@
         height: 100px;
     }
 
-    /* TODO: arrange configuration tables */
+    // TODO: arrange configuration tables
     .accordion .collapseable.disabled {
         background: #f1f1f1;
     }
@@ -4203,9 +4251,10 @@
         margin: 0 0 20px;
     }
 
-    /*
-        Sales
-    -------------------------------------- */
+    //
+    //  Sales
+    //  --------------------------------------
+
 
     .order-items .entry-edit-head .form-buttons {
         float: right;
@@ -4229,9 +4278,10 @@
         clear: both;
     }
 
-    /*
-        Import-export tax rates
-    -------------------------------------- */
+    //
+    //  Import-export tax rates
+    //  --------------------------------------
+
     .import-export-tax-rates input[type=file] {
         margin-right: 10px;
     }
@@ -4256,16 +4306,18 @@
         clear: both;
     }
 
-    /*
-        Product
-    -------------------------------------- */
+    //
+    //  Product
+    //  --------------------------------------
+
     .tier {
         margin: 20px 0 0;
     }
 
-    /*
-        Edit attribute set
-    -------------------------------------- */
+    //
+    //  Edit attribute set
+    //  --------------------------------------
+
     .attribute-set-col {
         display: block;
         float: left;
@@ -4295,16 +4347,18 @@
         clear: both;
     }
 
-    /*
-        Manage Categories
-    -------------------------------------- */
+    //
+    //  Manage Categories
+    //  --------------------------------------
+
     .catalog-category-edit .category-edit-title {
         float: left;
     }
 
-    /*
-        Catalog Price Rule
-    -------------------------------------- */
+    //
+    //  Catalog Price Rule
+    //  --------------------------------------
+
     .rule-tree-wrapper {
         line-height: 28px;
     }
@@ -4400,23 +4454,25 @@
         padding-left: 20px;
     }
 
-    /*
-        URL Rewrite
-    -------------------------------------- */
+    //
+    //  URL Rewrite
+    //  --------------------------------------
+
     .field-entity-type-selector {
         padding-top: 13px;
     }
 
-    /* jstree */
+    // jstree
     .jstree-default .disabled > a {
         color: #a29c94;
     }
-    /* ==========================================================================
-    debug.less (end)
-    ========================================================================== */
+    //
+    //  debug.less (end)
+    //  --------------------------------------
 
-    //  Magento Import instructions
-    //@magento_import "source/module.less"; // import theme styles
+
+//  Magento Import instructions
+//@magento_import "source/module.less"; // import theme styles
 
     //
     //  WYSIWYG editor styles fixes
@@ -5204,7 +5260,7 @@
 
 
 //
-//    Products
+//  Products
 // --------------------------------------
 .catalog-product-index {
     .admin__scope-old {
@@ -5412,7 +5468,7 @@
     }
 }
 
-//    Reports -> Low Stock
+//  Reports -> Low Stock
 .reports-report-product-lowstock {
     .admin__scope-old {
         .grid {
@@ -5737,7 +5793,6 @@
     }
 }
 
-
 //
 //  Login page captcha reload @todo ui - remove after loader consistency
 //  _____________________________________________
@@ -5780,7 +5835,7 @@
                 border-radius: 5px 5px 0 0;
                 a {
                     &:before {
-                        content: '\e02c'; /* arrow down icon */
+                        content: '\e02c'; // arrow down icon
                     }
                 }
             }
@@ -5805,7 +5860,7 @@
                     font-size: 16px;
                     font-weight: normal;
                     -webkit-font-smoothing: antialiased;
-                    content: '\e02a'; /* arrow right icon */
+                    content: '\e02a'; // arrow right icon
                     color: #b2b0ad;
                 }
                 &:hover {
