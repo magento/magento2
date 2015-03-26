@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Product type price model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price
 {
