@@ -27,11 +27,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_BACKEND_FRONTNAME = 'backend/frontName';
 
     /**
-     * Key for config
-     */
-    const KEY_FRONTNAME = 'frontend';
-
-    /**
      * {@inheritdoc}
      */
     public function getOptions()

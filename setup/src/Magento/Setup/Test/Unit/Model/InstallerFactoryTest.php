@@ -30,14 +30,6 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false),
             ],
             [
-                'Magento\Setup\Module\Setup',
-                $this->getMock('Magento\Setup\Module\Setup', [], [], '', false),
-            ],
-            [
-                'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
-                $this->getMock('Magento\Framework\Module\ModuleList\DeploymentConfigFactory', [], [], '', false),
-            ],
-            [
                 'Magento\Framework\Module\ModuleList',
                 $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false),
             ],
@@ -46,16 +38,8 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false),
             ],
             [
-                'Magento\Framework\App\Filesystem\DirectoryList',
-                $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false),
-            ],
-            [
                 'Magento\Setup\Model\AdminAccountFactory',
                 $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false),
-            ],
-            [
-                'Magento\Framework\Math\Random',
-                $this->getMock('Magento\Framework\Math\Random', [], [], '', false),
             ],
             [
                 'Magento\Setup\Module\ConnectionFactory',
@@ -76,10 +60,6 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             [
                 'Magento\Setup\Model\ObjectManagerProvider',
                 $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false),
-            ],
-            [
-                'Magento\Framework\App\DeploymentConfig\Reader',
-                $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false),
             ],
             [
                 'Magento\Framework\Model\Resource\Db\TransactionManager',

@@ -26,7 +26,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**#@+
      * Input keys for the options
      */
-    const INPUT_KEY_DATE = 'date';
     const INPUT_KEY_ENCRYPTION_KEY = 'key';
     const INPUT_KEY_SESSION_SAVE = 'session_save';
     const INPUT_KEY_DEFINITION_FORMAT = 'definition_format';

@@ -116,25 +116,11 @@ class Installer
     private $moduleList;
 
     /**
-     * Factory for module deployment config
-     *
-     * @var DeploymentConfigFactory
-     */
-    private $deploymentConfigFactory;
-
-    /**
      * Module list loader
      *
      * @var ModuleLoader
      */
     private $moduleLoader;
-
-    /**
-     * List of directories of Magento application
-     *
-     * @var DirectoryList
-     */
-    private $directoryList;
 
     /**
      * Admin account factory
@@ -151,25 +137,11 @@ class Installer
     private $log;
 
     /**
-     * Random Generator
-     *
-     * @var Random
-     */
-    private $random;
-
-    /**
      * DB connection factory
      *
      * @var ConnectionFactory
      */
     private $connectionFactory;
-
-    /**
-     * Shell command renderer
-     *
-     * @var CommandRenderer
-     */
-    private $shellRenderer;
 
     /**
      * Progress indicator
@@ -231,13 +203,10 @@ class Installer
      * @param Writer $deploymentConfigWriter
      * @param Reader $deploymentConfigReader
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
-     * @param DeploymentConfigFactory $deploymentConfigFactory
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
-     * @param DirectoryList $directoryList
      * @param AdminAccountFactory $adminAccountFactory
      * @param LoggerInterface $log
-     * @param Random $random
      * @param ConnectionFactory $connectionFactory
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
@@ -253,13 +222,10 @@ class Installer
         Writer $deploymentConfigWriter,
         Reader $deploymentConfigReader,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
-        DeploymentConfigFactory $deploymentConfigFactory,
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
-        DirectoryList $directoryList,
         AdminAccountFactory $adminAccountFactory,
         LoggerInterface $log,
-        Random $random,
         ConnectionFactory $connectionFactory,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
@@ -271,15 +237,11 @@ class Installer
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
         $this->deploymentConfigReader = $deploymentConfigReader;
-        $this->deploymentConfigFactory = $deploymentConfigFactory;
         $this->moduleList = $moduleList;
         $this->moduleLoader = $moduleLoader;
-        $this->directoryList = $directoryList;
         $this->adminAccountFactory = $adminAccountFactory;
         $this->log = $log;
-        $this->random = $random;
         $this->connectionFactory = $connectionFactory;
-        $this->shellRenderer = new CommandRenderer;
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
         $this->sampleData = $sampleData;

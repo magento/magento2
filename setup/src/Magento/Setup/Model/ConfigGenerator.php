@@ -58,7 +58,7 @@ class ConfigGenerator
     {
         $installConfig = [];
         if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE)) {
-            $installConfig = [ConfigOptionsList::INPUT_KEY_DATE => date('r')];
+            $installConfig = [ConfigOptionsList::KEY_DATE => date('r')];
         }
         return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', $installConfig);
     }
