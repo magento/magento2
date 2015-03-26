@@ -37,6 +37,7 @@ class CreateSequence
         $this->sequenceBuilder = $sequenceBuilder;
         $this->salesSetup = $salesSetup;
     }
+    
     /**
      * @param Observer $observer
      * @return $this
