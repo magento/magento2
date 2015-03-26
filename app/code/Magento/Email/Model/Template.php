@@ -375,7 +375,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     {
         return !$this->_scopeConfig->isSetFlag(
             'system/smtp/disable',
-            ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
