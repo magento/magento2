@@ -45,13 +45,13 @@ class Factory
      *
      * @param ThemeInterface $theme
      * @return mixed
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create(ThemeInterface $theme)
     {
         if (!isset($this->_types[$theme->getType()])) {
-            throw new \Magento\Framework\Exception(
-                sprintf('Invalid type of theme domain model "%s"', $theme->getType())
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Invalid type of theme domain model "%1"', [$theme->getType()])
             );
         }
         $class = $this->_types[$theme->getType()];

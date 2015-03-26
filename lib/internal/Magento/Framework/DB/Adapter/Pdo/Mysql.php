@@ -2215,7 +2215,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param array $options
      * @param string $ddlType Table DDL Column type constant
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -3343,7 +3343,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
-            throw new \Magento\Framework\DB\DBException('Select object must have correct "FROM" part');
+            throw new \Magento\Framework\DB\DBException(
+                new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
+            );
         }
 
         $tableName = [];
@@ -3451,7 +3453,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         if (!$columns) {
-            throw new \Magento\Framework\DB\DBException('The columns for UPDATE statement are not defined');
+            throw new \Magento\Framework\DB\DBException(
+                new \Magento\Framework\Phrase('The columns for UPDATE statement are not defined')
+            );
         }
 
         $query = sprintf("%s\nSET %s", $query, implode(', ', $columns));

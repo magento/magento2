@@ -129,11 +129,13 @@ class Save extends \Magento\Backend\App\Action
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
             if (!$order->getId()) {
-                throw new \Magento\Framework\Exception(__('The order no longer exists.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
             }
 
             if (!$order->canInvoice()) {
-                throw new \Magento\Framework\Exception(__('The order does not allow an invoice to be created.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The order does not allow an invoice to be created.')
+                );
             }
 
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
@@ -145,7 +147,9 @@ class Save extends \Magento\Backend\App\Action
             }
 
             if (!$invoice->getTotalQty()) {
-                throw new \Magento\Framework\Exception(__('Cannot create an invoice without products.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Cannot create an invoice without products.')
+                );
             }
             $this->registry->register('current_invoice', $invoice);
             if (!empty($data['capture_case'])) {

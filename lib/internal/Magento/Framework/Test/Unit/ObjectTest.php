@@ -328,7 +328,7 @@ string',
     /**
      * Tests \Magento\Framework\Object->__call()
      *
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCall()
     {

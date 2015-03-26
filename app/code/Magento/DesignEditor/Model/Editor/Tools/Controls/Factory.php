@@ -75,12 +75,14 @@ class Factory
      * @param string $type
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getFilePathByType($type, $theme)
     {
         if (!isset($this->_fileNames[$type])) {
-            throw new \Magento\Framework\Exception("Unknown control configuration type: \"{$type}\"");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unknown control configuration type: "%1"', $type)
+            );
         }
         return $this->assetRepo->createAsset(
             $this->_fileNames[$type],
@@ -97,7 +99,7 @@ class Factory
      * @param \Magento\Framework\View\Design\ThemeInterface $parentTheme
      * @param string[] $files
      * @return \Magento\DesignEditor\Model\Editor\Tools\Controls\Configuration
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create(
         $type,
@@ -114,7 +116,9 @@ class Factory
                 $class = 'Magento\DesignEditor\Model\Config\Control\ImageSizing';
                 break;
             default:
-                throw new \Magento\Framework\Exception("Unknown control configuration type: \"{$type}\"");
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Unknown control configuration type: "%1"', $type)
+                );
         }
         $rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         $paths = [];

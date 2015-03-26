@@ -405,7 +405,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Load layout updates by handles
      *
      * @param array|string $handles
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function load($handles = [])
@@ -413,7 +413,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         if (is_string($handles)) {
             $handles = [$handles];
         } elseif (!is_array($handles)) {
-            throw new \Magento\Framework\Exception('Invalid layout update handle');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Invalid layout update handle')
+            );
         }
 
         $this->addHandle($handles);
@@ -666,7 +668,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Collect and merge layout updates from files
      *
      * @return \Magento\Framework\View\Layout\Element
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _loadFileLayoutUpdatesXml()
     {
@@ -688,8 +690,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
                 continue;
             }
             if (!$file->isBase() && $fileXml->xpath(self::XPATH_HANDLE_DECLARATION)) {
-                throw new \Magento\Framework\Exception(
-                    sprintf("Theme layout update file '%s' must not declare page types.", $file->getFileName())
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase("Theme layout update file '%1' must not declare page types.",
+                        [$file->getFileName()]
+                    )
                 );
             }
             $handleName = basename($file->getFilename(), '.xml');
@@ -730,7 +734,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @return \Magento\Theme\Model\Theme
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getPhysicalTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -739,8 +743,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $result = $result->getParentTheme();
         }
         if (!$result) {
-            throw new \Magento\Framework\Exception(
-                "Unable to find a physical ancestor for a theme '{$theme->getThemeTitle()}'."
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase("Unable to find a physical ancestor for a theme '%1'.",
+                    [$theme->getThemeTitle()]
+                )
             );
         }
         return $result;

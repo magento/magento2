@@ -68,7 +68,7 @@ abstract class AbstractXml
      *
      * @param array $configFiles
      * @return \DOMDocument
-     * @throws \Magento\Framework\Exception If a non-existing or invalid XML-file passed
+     * @throws \Magento\Framework\Exception\LocalizedException If a non-existing or invalid XML-file passed
      */
     protected function _merge($configFiles)
     {
@@ -76,7 +76,9 @@ abstract class AbstractXml
             try {
                 $this->_getDomConfigModel()->merge($content);
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
-                throw new \Magento\Framework\Exception("Invalid XML in file " . $key . ":\n" . $e->getMessage());
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
+                );
             }
         }
         if ($this->_isRuntimeValidated()) {
@@ -90,13 +92,15 @@ abstract class AbstractXml
      *
      * @param string $file
      * @return $this
-     * @throws \Magento\Framework\Exception If invalid XML-file passed
+     * @throws \Magento\Framework\Exception\LocalizedException If invalid XML-file passed
      */
     protected function _performValidate($file = null)
     {
         if (!$this->_getDomConfigModel()->validate($this->getSchemaFile(), $errors)) {
             $message = is_null($file) ? "Invalid Document \n" : "Invalid XML-file: {$file}\n";
-            throw new \Magento\Framework\Exception($message . implode("\n", $errors));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase($message . implode("\n", $errors))
+            );
         }
         return $this;
     }

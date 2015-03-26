@@ -411,7 +411,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->_shell->execute($this->_command, [$this->_generationDir, $this->_compilationDir]);
-        } catch (\Magento\Framework\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }
     }
