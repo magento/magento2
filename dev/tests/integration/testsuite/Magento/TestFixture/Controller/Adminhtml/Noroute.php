@@ -35,4 +35,13 @@ class Noroute implements \Magento\Framework\App\ActionInterface
     public function getResponse()
     {
     }
+
+    /**
+     * Get default redirect object
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+    }
 }
