@@ -11,7 +11,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Sales abstract model
  * Provide date processing functionality
- * @method string getEntityType() getEntityType()
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractModel extends AbstractExtensibleModel
 {
