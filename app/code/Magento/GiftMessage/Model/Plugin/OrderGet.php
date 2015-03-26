@@ -59,10 +59,6 @@ class OrderGet
         /** @var \Magento\Sales\Api\Data\OrderInterface $resultOrder */
         $resultOrder = $proceed($orderId);
 
-        if ($resultOrder->getExtensionAttributes() && $resultOrder->getExtensionAttributes()->getGiftMessage()) {
-            return $resultOrder;
-        }
-
         $resultOrder = $this->getOrderGiftMessage($resultOrder);
         $resultOrder = $this->getOrderItemGiftMessage($resultOrder);
 
@@ -77,6 +73,9 @@ class OrderGet
      */
     protected function getOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
+        if ($order->getExtensionAttributes() && $order->getExtensionAttributes()->getGiftMessage()) {
+            return $order;
+        }
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface|null $giftMessage */
         $giftMessage = $this->giftMessageOrderRepository->get($order->getEntityId());
 
@@ -103,6 +102,9 @@ class OrderGet
         if (null !== $order->getItems()) {
             /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
             foreach ($order->getItems() as $orderItem) {
+                if ($orderItem->getExtensionAttributes() && $orderItem->getExtensionAttributes()->getGiftMessage()) {
+                    continue;
+                }
                 /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
                 $giftMessage = $this->giftMessageOrderItemRepository->get(
                     $order->getEntityId(), $orderItem->getItemId()
