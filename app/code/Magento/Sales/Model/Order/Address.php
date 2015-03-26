@@ -210,8 +210,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function explodeStreetAddress()
     {
         $streetLines = $this->getStreet();
-        foreach ($streetLines as $i => $line) {
-            $this->setData(OrderAddressInterface::STREET . ($i + 1), $line);
+        foreach ($streetLines as $lineNumber => $lineValue) {
+            $this->setData(OrderAddressInterface::STREET . ($lineNumber + 1), $lineValue);
         }
         return $this;
     }
