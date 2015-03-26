@@ -48,38 +48,17 @@
                 <item name="update_url" xsi:type="string">mui/index/render</item>
             </item>
         </argument>
-    </dataSource><container name="page_listing_top">
-        <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="options" xsi:type="array">
-                        <item name="20" xsi:type="array">
-                            <item name="value" xsi:type="number">20</item>
-                            <item name="label" xsi:type="string" translate="true">20</item>
-                        </item>
-                        <item name="30" xsi:type="array">
-                            <item name="value" xsi:type="number">30</item>
-                            <item name="label" xsi:type="string" translate="true">30</item>
-                        </item>
-                        <item name="50" xsi:type="array">
-                            <item name="value" xsi:type="number">50</item>
-                            <item name="label" xsi:type="string" translate="true">50</item>
-                        </item>
-                        <item name="100" xsi:type="array">
-                            <item name="value" xsi:type="number">100</item>
-                            <item name="label" xsi:type="string" translate="true">100</item>
-                        </item>
-                        <item name="200" xsi:type="array">
-                            <item name="value" xsi:type="number">200</item>
-                            <item name="label" xsi:type="string" translate="true">200</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </paging>
+    </dataSource>
+    <container name="page_listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/header</item>
+            </item>
+        </argument>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">top</item>
                     <item name="dataScope" xsi:type="string">params.filters</item>
                 </item>
             </argument>
@@ -217,22 +196,52 @@
                 </filterDate>
             </filterRange>
         </filters>
-    </container>
-    <massaction name="listing_massaction">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="actions" xsi:type="array">
-                    <item name="delete" xsi:type="array">
-                        <item name="confirm" xsi:type="string" translate="true">Are you sure you want to perform this action?</item>
-                        <item name="type" xsi:type="string">delete</item>
-                        <item name="label" xsi:type="string" translate="true">Delete</item>
-                        <item name="url" xsi:type="string">cms/page/massDelete</item>
+        <massaction name="listing_massaction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="actions" xsi:type="array">
+                        <item name="delete" xsi:type="array">
+                            <item name="confirm" xsi:type="string" translate="true">Delete selected items?</item>
+                            <item name="type" xsi:type="string">delete</item>
+                            <item name="label" xsi:type="string" translate="true">Delete</item>
+                            <item name="url" xsi:type="string">cms/page/massDelete</item>
+                        </item>
+                    </item>
+                    <item name="indexField" xsi:type="string">page_id</item>
+                </item>
+            </argument>
+        </massaction>
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="options" xsi:type="array">
+                        <item name="20" xsi:type="array">
+                            <item name="value" xsi:type="number">20</item>
+                            <item name="label" xsi:type="string" translate="true">20</item>
+                        </item>
+                        <item name="30" xsi:type="array">
+                            <item name="value" xsi:type="number">30</item>
+                            <item name="label" xsi:type="string" translate="true">30</item>
+                        </item>
+                        <item name="50" xsi:type="array">
+                            <item name="value" xsi:type="number">50</item>
+                            <item name="label" xsi:type="string" translate="true">50</item>
+                        </item>
+                        <item name="100" xsi:type="array">
+                            <item name="value" xsi:type="number">100</item>
+                            <item name="label" xsi:type="string" translate="true">100</item>
+                        </item>
+                        <item name="200" xsi:type="array">
+                            <item name="value" xsi:type="number">200</item>
+                            <item name="label" xsi:type="string" translate="true">200</item>
+                        </item>
                     </item>
                 </item>
-                <item name="indexField" xsi:type="string">page_id</item>
-            </item>
-        </argument>
-    </massaction>
+            </argument>
+        </paging>
+    </container>    
     <columns name="cms_page_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

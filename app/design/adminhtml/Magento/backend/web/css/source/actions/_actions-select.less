@@ -7,15 +7,16 @@
 //  Actions -> Action select
 //  _____________________________________________
 
+//  Action select have the same visual styles and functionality as native <select>
 .action-select-wrap {
     @_action-select__border-color: @button__border-color;
     @_action-select__active__border-color: @action__active__border-color;
-    @_action-select-toggle__size: @button__height;
+    @_action-select-toggle__size: @action__height;
 
     display: inline-block;
     position: relative;
     .action-select {
-        .dropdown-triangle(
+        .action-toggle-triangle(
             @_dropdown__padding-right: @_action-select-toggle__size;
             @_triangle__height: @button-marker-triangle__height;
             @_triangle__width: @button-marker-triangle__width;
@@ -24,6 +25,12 @@
         background-color: transparent;
         font-weight: @font-weight__regular;
         text-align: left;
+        &:hover {
+            border-color: @field-control__hover__border-color;
+            &:before {
+                border-color: @field-control__hover__border-color;
+            }
+        }
         //  Toggle action
         &:before {
             background-color: @button__background-color;
@@ -40,6 +47,17 @@
             &:before {
                 border-color: @_action-select__active__border-color;
                 border-left-color: @_action-select__border-color;
+            }
+        }
+    }
+    &._active {
+        .action-select {
+            border-color: @field-control__active__border-color;
+            &:before {
+                border-color: @field-control__active__border-color;
+            }
+            &:after {
+                transform: rotate(180deg);
             }
         }
     }

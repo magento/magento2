@@ -207,7 +207,6 @@
     }
 }
 
-
 .grid {
     .col-title {
         min-width: 90px;
@@ -296,6 +295,10 @@
     }
 }
 
+.admin__data-grid {
+    padding-top: 0;
+}
+
 .filters {
     .filters-toggle {
         .button(
@@ -365,15 +368,6 @@
             position: absolute;
             top: 3px;
             right: 7px;
-            .button(
-            @_button-margin: 3px,
-            @_button-icon-use: true,
-            @_button-font-content: @icon-remove,
-            @_button-icon-font-size: 42px,
-            @_button-icon-font-line-height: 42px,
-            @_button-icon-font-text-hide: true
-            );
-            .button-reset();
         }
     }
     .filters-actions {
@@ -381,8 +375,10 @@
         text-align: right;
     }
     .filters-fieldset {
+        border: none;
         padding-bottom: 0;
         .field {
+            padding: 0;
             border: 0;
             .form-field(
             @_type: inline,

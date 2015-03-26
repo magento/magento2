@@ -7,6 +7,8 @@
 //  Actions -> Actions split
 //  _____________________________________________
 
+//  Actions split is a button aggregator with dropdown element
+
 //
 //  Extends
 //  ---------------------------------------------
@@ -36,7 +38,7 @@
 .actions-split {
     @_action-split__min-width: @_action-toggle__width + @_action-default__min-width;
     @_action-default__min-width: 9.3rem;
-    @_action-toggle__width: @button__height;
+    @_action-toggle__width: @action__height;
 
     .extend__clearfix();
     position: relative;
@@ -74,7 +76,7 @@
         min-width: @_action-default__min-width;
     }
     .action-toggle {
-        .dropdown-triangle(
+        .action-toggle-triangle(
             @_dropdown__padding-right: @_action-toggle__width;
             @_triangle__height: @button-marker-triangle__height;
             @_triangle__width: @button-marker-triangle__width;
@@ -101,10 +103,11 @@
             }
         }
         > span {
-            .visually-hidden();
+            .hidden();
         }
     }
-    .dropdown-menu {
+    .dropdown-menu,
+    .action-menu {
         &:extend(.abs-action-menu all);
     }
 }

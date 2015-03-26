@@ -8,6 +8,19 @@
 @import 'utilities/_animations.less';
 @import 'utilities/_spinner.less';
 
+.hidden() {
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    position: absolute;
+}
+
+.disabled() {
+    box-shadow: none;
+    cursor: default;
+    opacity: .5;
+    outline: 0;
+}
+
 .text-overflow-ellipsis() {
     overflow: hidden;
     text-overflow: ellipsis;

@@ -4,27 +4,33 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="filters">
-    <button class="action filters-toggle" data-bind="click: toggleVisible, css: { active: isVisible }">
+
+<div class="col-xs-6 filters">
+
+    <button data-bind="click: toggleVisible, css: { active: isVisible }">
         <span data-bind="text: $t('Filter')"></span>
     </button>
+
     <div class="form filters-form" data-bind="visible: isVisible" data-part="filter-form">
         <fieldset class="filters-fieldset fieldset">
             <legend class="legend filters-legend">
                 <span data-bind="text: $t('Advanced filter')"></span>
             </legend><br />
             <!-- ko foreach: elems -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
         </fieldset>
         <div class="actions filters-actions">
-            <button class="action secondary action-reset" type="button">
+            <button class="action-tertiary" type="button">
                 <span data-bind="click: reset, text: $t('Reset')"></span>
             </button>
-            <button class="action primary action-apply" type="button">
+            <button class="action-secondary" type="button">
                 <span data-bind="click: apply, text: $t('Apply')"></span>
             </button>
-            <button data-bind="click: close" class="action secondary action-close" type="button">
+            <button
+                class="action-close"
+                type="button"
+                data-bind="click: close" >
                 <span data-bind="text: $t('Close')"></span>
             </button>
         </div>

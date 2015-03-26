@@ -7,6 +7,8 @@
 //  Actions -> Actions multiselect
 //  _____________________________________________
 
+//  Action multiselect is a combining of checkbox and dropdown elements
+
 .action-multiselect-wrap {
     display: inline-block;
     position: relative;
@@ -16,7 +18,7 @@
     &:hover {
         .admin__control-checkbox + label:before,
         .action-multiselect-toggle {
-            border-color: @field-control__active__border-color;
+            border-color: @field-control__hover__border-color;
         }
     }
     &._active {
@@ -36,7 +38,7 @@
         vertical-align: top;
     }
     .action-multiselect-toggle {
-        .dropdown-triangle(
+        .action-toggle-triangle(
             @_triangle__height: @button-marker-triangle__height;
             @_triangle__width: @button-marker-triangle__width;
         );
