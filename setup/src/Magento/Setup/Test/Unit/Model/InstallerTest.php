@@ -6,8 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\Setup\Model\ConfigOptionsList as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
-use \Magento\Setup\Model\DeploymentConfigMapper;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
@@ -221,11 +222,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testInstall()
     {
         $request = [
-            DeploymentConfigMapper::KEY_DB_HOST => '127.0.0.1',
-            DeploymentConfigMapper::KEY_DB_NAME => 'magento',
-            DeploymentConfigMapper::KEY_DB_USER => 'magento',
-            DeploymentConfigMapper::KEY_ENCRYPTION_KEY => 'encryption_key',
-            DeploymentConfigMapper::KEY_BACKEND_FRONTNAME => 'backend',
+            SetupConfigOptionsList::INPUT_KEY_DB_HOST => '127.0.0.1',
+            SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',
+            SetupConfigOptionsList::INPUT_KEY_DB_USER => 'magento',
+            SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
+            BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([

@@ -21,7 +21,7 @@ class ConfigGenerator
      *
      * @var array
      */
-    public static $paramMap = [
+    private static $paramMap = [
         ConfigOptionsList::INPUT_KEY_DB_HOST => ConfigOptionsList::KEY_HOST,
         ConfigOptionsList::INPUT_KEY_DB_NAME => ConfigOptionsList::KEY_NAME,
         ConfigOptionsList::INPUT_KEY_DB_USER => ConfigOptionsList::KEY_USER,
@@ -30,7 +30,7 @@ class ConfigGenerator
         ConfigOptionsList::INPUT_KEY_DB_MODEL => ConfigOptionsList::KEY_MODEL,
         ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => ConfigOptionsList::KEY_INIT_STATEMENTS,
         ConfigOptionsList::INPUT_KEY_ACTIVE => ConfigOptionsList::KEY_ACTIVE,
-        ConfigOptionsList::INPUT_KEY_CRYPT_KEY => ConfigOptionsList::KEY_ENCRYPTION_KEY,
+        ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => ConfigOptionsList::KEY_ENCRYPTION_KEY,
         ConfigOptionsList::INPUT_KEY_SESSION_SAVE => ConfigOptionsList::KEY_SAVE,
         ConfigOptionsList::INPUT_KEY_RESOURCE => ConfigOptionsList::KEY_RESOURCE,
     ];
@@ -73,17 +73,17 @@ class ConfigGenerator
         $currentKey = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
 
         $cryptData = [];
-        if (isset($data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])) {
+        if (isset($data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])) {
             if ($currentKey) {
-                $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+                $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
             } else {
-                $key = $data[ConfigOptionsList::INPUT_KEY_CRYPT_KEY];
+                $key = $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
             }
 
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] = $key;
+            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]] = $key;
         } else {
             if (!$currentKey) {
-                $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]] =
+                $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]] =
                     md5($this->random->getRandomString(10));
             }
         }

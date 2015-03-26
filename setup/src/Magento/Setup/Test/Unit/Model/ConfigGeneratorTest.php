@@ -42,7 +42,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCryptConfigWithInput()
     {
-        $testData = [ConfigOptionsList::INPUT_KEY_CRYPT_KEY => 'some-test_key'];
+        $testData = [ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];
         $returnValue = $this->configGeneratorObject->createCryptConfig($testData, []);
         $this->assertEquals('crypt', $returnValue->getSegmentKey());
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());

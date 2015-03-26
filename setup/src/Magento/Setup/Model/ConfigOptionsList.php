@@ -27,7 +27,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Input keys for the options
      */
     const INPUT_KEY_DATE = 'date';
-    const INPUT_KEY_CRYPT_KEY = 'key';
+    const INPUT_KEY_ENCRYPTION_KEY = 'key';
     const INPUT_KEY_SESSION_SAVE = 'session_save';
     const INPUT_KEY_DEFINITION_FORMAT = 'definition_format';
     const INPUT_KEY_DB_HOST = 'db_host';
@@ -126,7 +126,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         return [
             new TextConfigOption(
-                self::INPUT_KEY_CRYPT_KEY,
+                self::INPUT_KEY_ENCRYPTION_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 'crypt/key',
                 'Encryption key'
@@ -226,8 +226,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY])
-            && !$options[ConfigOptionsList::INPUT_KEY_CRYPT_KEY]) {
+        if (isset($options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])
+            && !$options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]) {
             $errors[] = 'Invalid encryption key.';
         }
 

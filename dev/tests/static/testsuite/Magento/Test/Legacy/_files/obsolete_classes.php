@@ -3123,4 +3123,5 @@ return [
     ['Magento\Framework\App\DeploymentConfig\ResourceConfig'],
     ['Magento\Framework\App\DeploymentConfig\SessionConfig'],
     ['Magento\Framework\App\DeploymentConfig\CacheConfig'],
+    ['Magento\Setup\Model\DeploymentConfigMapper'],
 ];

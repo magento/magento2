@@ -8,11 +8,11 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\ModuleList;
-use Magento\Setup\Console\Command\ConfigCreateCommand;
+use Magento\Setup\Console\Command\ConfigSetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConfigCreateCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
@@ -77,7 +77,7 @@ class ConfigCreateCommandTest extends \PHPUnit_Framework_TestCase
             ->with('<info>No module configuration is available, so all modules are enabled.</info>');
         $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(false);
 
-        $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
+        $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $command->initialize($this->input, $this->output);
     }
 
@@ -108,7 +108,7 @@ class ConfigCreateCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($optionsSet));
         $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(false);
 
-        $command = new ConfigCreateCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
+        $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $command->initialize($this->input, $this->output);
     }
 }
