@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Observer;
 
 use Magento\Sales\Setup\SalesSetup;
 use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
+use Magento\Framework\Event\Observer;
 
 /**
  * Class Observer
@@ -37,10 +38,10 @@ class CreateSequence
         $this->salesSetup = $salesSetup;
     }
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute($observer)
+    public function execute(Observer $observer)
     {
         $storeId = $observer->getData('store')->getId();
         $defaultEntities = array_keys($this->salesSetup->getDefaultEntities());
