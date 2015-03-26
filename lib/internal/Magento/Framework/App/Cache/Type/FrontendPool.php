@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Setup\Model\ConfigOptionsList;
 
 /**
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types
@@ -19,9 +19,9 @@ class FrontendPool
     private $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     * @var \Magento\Framework\App\DeploymentConfig
      */
-    private $reader;
+    private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
@@ -40,18 +40,18 @@ class FrontendPool
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\DeploymentConfig\Reader $deploymentConfig
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param \Magento\Framework\App\Cache\Frontend\Pool $frontendPool
      * @param array $typeFrontendMap Format: array('<cache_type_id>' => '<cache_frontend_id>', ...)
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\DeploymentConfig\Reader $reader,
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         \Magento\Framework\App\Cache\Frontend\Pool $frontendPool,
         array $typeFrontendMap = []
     ) {
         $this->_objectManager = $objectManager;
-        $this->reader = $reader;
+        $this->deploymentConfig = $deploymentConfig;
         $this->_frontendPool = $frontendPool;
         $this->_typeFrontendMap = $typeFrontendMap;
     }
@@ -86,7 +86,7 @@ class FrontendPool
     protected function _getCacheFrontendId($cacheType)
     {
         $result = null;
-        $cacheInfo = $this->reader->getConfigData(ConfigOptionsList::KEY_CACHE);
+        $cacheInfo = $this->deploymentConfig->get(ConfigOptionsList::KEY_CACHE);
         if (null !== $cacheInfo) {
             $result = $cacheInfo[ConfigOptionsList::KEY_TYPE][$cacheType][ConfigOptionsList::KEY_FRONTEND];
         }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
-use \Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\Config\ConfigOptionsList;
 
 class PoolTest extends \PHPUnit_Framework_TestCase
@@ -41,11 +41,11 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $frontendFactory = $this->getMock('Magento\Framework\App\Cache\Frontend\Factory', [], [], '', false);
         $frontendFactory->expects($this->any())->method('create')->will($this->returnValueMap($frontendFactoryMap));
 
-        $reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
-        $reader->expects(
+        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig->expects(
             $this->any()
         )->method(
-            'getConfigData'
+            'get'
         )->with(
             ConfigOptionsList::KEY_CACHE
         )->will(
@@ -58,7 +58,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->_model = new \Magento\Framework\App\Cache\Frontend\Pool(
-            $reader,
+            $deploymentConfig,
             $frontendFactory,
             $frontendSettings
         );
@@ -69,10 +69,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNoInitialization()
     {
-        $reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $frontendFactory = $this->getMock('Magento\Framework\App\Cache\Frontend\Factory', [], [], '', false);
         $frontendFactory->expects($this->never())->method('create');
-        new \Magento\Framework\App\Cache\Frontend\Pool($reader, $frontendFactory);
+        new \Magento\Framework\App\Cache\Frontend\Pool($deploymentConfig, $frontendFactory);
     }
 
     /**
@@ -87,11 +87,11 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         array $frontendSettings,
         array $expectedFactoryArg
     ) {
-        $reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
-        $reader->expects(
+        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig->expects(
             $this->once()
         )->method(
-            'getConfigData'
+            'get'
         )->with(
              ConfigOptionsList::KEY_CACHE
         )->will(
@@ -101,7 +101,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $frontendFactory = $this->getMock('Magento\Framework\App\Cache\Frontend\Factory', [], [], '', false);
         $frontendFactory->expects($this->at(0))->method('create')->with($expectedFactoryArg);
 
-        $model = new \Magento\Framework\App\Cache\Frontend\Pool($reader, $frontendFactory, $frontendSettings);
+        $model = new \Magento\Framework\App\Cache\Frontend\Pool($deploymentConfig, $frontendFactory, $frontendSettings);
         $model->current();
     }
 

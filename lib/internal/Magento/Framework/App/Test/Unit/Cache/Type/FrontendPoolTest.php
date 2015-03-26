@@ -21,9 +21,9 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $reader;
+    protected $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool|\PHPUnit_Framework_MockObject_MockObject
@@ -33,33 +33,33 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->_cachePool = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', [], [], '', false);
         $this->_model = new FrontendPool(
             $this->_objectManager,
-            $this->reader,
+            $this->deploymentConfig,
             $this->_cachePool,
             ['fixture_cache_type' => 'fixture_frontend_id']
         );
     }
 
     /**
-     * @param string|null $fixtureconfigData
+     * @param string|null $fixtureConfigData
      * @param string $inputCacheType
      * @param string $expectedFrontendId
      *
      * @dataProvider getDataProvider
      */
-    public function testGet($fixtureconfigData, $inputCacheType, $expectedFrontendId)
+    public function testGet($fixtureConfigData, $inputCacheType, $expectedFrontendId)
     {
-        $this->reader->expects(
+        $this->deploymentConfig->expects(
             $this->once()
         )->method(
-            'getConfigData'
+            'get'
         )->with(
-                ConfigOptionsList::KEY_CACHE
+            ConfigOptionsList::KEY_CACHE
         )->will(
-            $this->returnValue($fixtureconfigData)
+            $this->returnValue($fixtureConfigData)
         );
 
         $cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');

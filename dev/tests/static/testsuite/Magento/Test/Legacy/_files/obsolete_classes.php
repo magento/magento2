@@ -3124,4 +3124,5 @@ return [
     ['Magento\Framework\App\DeploymentConfig\SessionConfig'],
     ['Magento\Framework\App\DeploymentConfig\CacheConfig'],
     ['Magento\Setup\Model\DeploymentConfigMapper'],
+    ['Magento\Framework\App\DeploymentConfig\EncryptConfig'],
 ];

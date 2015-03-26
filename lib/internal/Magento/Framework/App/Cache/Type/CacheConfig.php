@@ -43,6 +43,7 @@ class CacheConfig
     /**
      * Returns current key.
      *
+     * @return string
      */
     public function getKey()
     {
@@ -94,5 +95,4 @@ class CacheConfig
         }
         return $data;
     }
-
 }

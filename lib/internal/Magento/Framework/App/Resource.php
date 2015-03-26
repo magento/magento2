@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsList;
@@ -53,9 +53,9 @@ class Resource
     protected $_connectionFactory;
 
     /**
-     * @var Reader $reader
+     * @var DeploymentConfig $deploymentConfig
      */
-    private $reader;
+    private $deploymentConfig;
 
     /**
      * @var string
@@ -65,18 +65,18 @@ class Resource
     /**
      * @param ResourceConfigInterface $resourceConfig
      * @param ConnectionFactoryInterface $adapterFactory
-     * @param Reader $reader
+     * @param DeploymentConfig $deploymentConfig
      * @param string $tablePrefix
      */
     public function __construct(
         ResourceConfigInterface $resourceConfig,
         ConnectionFactoryInterface $adapterFactory,
-        Reader $reader,
+        DeploymentConfig $deploymentConfig,
         $tablePrefix = ''
     ) {
         $this->_config = $resourceConfig;
         $this->_connectionFactory = $adapterFactory;
-        $this->reader = $reader;
+        $this->deploymentConfig = $deploymentConfig;
         $this->_tablePrefix = $tablePrefix ?: null;
     }
 
@@ -104,7 +104,7 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->reader->getConfigData(ConfigOptionsList::CONFIG_KEY);
+        $dbInfo = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_KEY);
         if (null === $dbInfo) {
             return false;
         }
@@ -231,7 +231,7 @@ class Resource
     private function getTablePrefix()
     {
         if (null === $this->_tablePrefix) {
-            $this->_tablePrefix = (string)$this->reader->getConfigData(ConfigOptionsList::KEY_PREFIX);
+            $this->_tablePrefix = (string)$this->deploymentConfig->get(ConfigOptionsList::KEY_PREFIX);
         }
         return $this->_tablePrefix;
     }

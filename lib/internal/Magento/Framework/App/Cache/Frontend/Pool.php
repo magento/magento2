@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\App\Cache\Frontend;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Setup\Model\ConfigOptionsList;
 
 /**
  * In-memory readonly pool of all cache front-end instances known to the system
@@ -19,9 +19,9 @@ class Pool implements \Iterator
     const DEFAULT_FRONTEND_ID = 'default';
 
     /**
-     * @var Reader
+     * @var DeploymentConfig
      */
-    private $reader;
+    private $deploymentConfig;
 
     /**
      * @var Factory
@@ -39,13 +39,13 @@ class Pool implements \Iterator
     private $_frontendSettings;
 
     /**
-     * @param Reader $reader
+     * @param DeploymentConfig $deploymentConfig
      * @param Factory $frontendFactory
      * @param array $frontendSettings Format: array('<frontend_id>' => array(<cache_settings>), ...)
      */
-    public function __construct(Reader $reader, Factory $frontendFactory, array $frontendSettings = [])
+    public function __construct(DeploymentConfig $deploymentConfig, Factory $frontendFactory, array $frontendSettings = [])
     {
-        $this->reader = $reader;
+        $this->deploymentConfig = $deploymentConfig;
         $this->_factory = $frontendFactory;
         $this->_frontendSettings = $frontendSettings + [self::DEFAULT_FRONTEND_ID => []];
     }
@@ -77,7 +77,7 @@ class Pool implements \Iterator
          * Merging is intentionally implemented through array_merge() instead of array_replace_recursive()
          * to avoid "inheritance" of the default settings that become irrelevant as soon as cache storage type changes
          */
-        $cacheInfo = $this->reader->getConfigData(ConfigOptionsList::KEY_CACHE);
+        $cacheInfo = $this->deploymentConfig->get(ConfigOptionsList::KEY_CACHE);
         if (null !== $cacheInfo) {
             return array_merge($this->_frontendSettings, $cacheInfo[ConfigOptionsList::KEY_FRONTEND]);
         }

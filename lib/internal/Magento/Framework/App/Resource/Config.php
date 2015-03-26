@@ -24,7 +24,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
      * @param Config\Reader $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Framework\App\DeploymentConfig\Reader $configReader
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param string $cacheId
      * @throws \InvalidArgumentException
      */
@@ -32,12 +32,12 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
         Config\Reader $reader,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\App\DeploymentConfig\Reader $configReader,
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         $cacheId = 'resourcesCache'
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
 
-        foreach ($configReader->getConfigData('resource') as $resourceName => $resourceData) {
+        foreach ($deploymentConfig->get('resource') as $resourceName => $resourceData) {
             if (!isset($resourceData['connection'])) {
                 throw new \InvalidArgumentException('Invalid initial resource configuration');
             }

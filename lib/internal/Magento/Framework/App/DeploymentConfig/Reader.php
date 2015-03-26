@@ -83,8 +83,8 @@ class Reader
     /**
      *  Gets a value specified key from config data
      *
-     * @param $key
-     * @return null
+     * @param string $key
+     * @return array
      */
     public function getConfigData($key)
     {
