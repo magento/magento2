@@ -18,7 +18,7 @@ use Magento\Framework\Escaper;
  * @method mixed getCols()
  * @method Textarea setCols($cols)
  * @method mixed getRows()
- * @method mixed setRows($rows)
+ * @method Textarea setRows($rows)
  */
 class Textarea extends AbstractElement
 {
