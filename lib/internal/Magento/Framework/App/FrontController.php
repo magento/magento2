@@ -80,6 +80,7 @@ class FrontController implements FrontControllerInterface
      * Handle exception
      *
      * @param \Exception $e
+     * @return void
      */
     protected function handleException($e)
     {
