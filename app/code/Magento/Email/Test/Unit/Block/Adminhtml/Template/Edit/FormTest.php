@@ -27,7 +27,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
     protected $templateMock;
 
-
     public function setUp()
     {
         $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
@@ -96,7 +95,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetEmailTemplate()
     {
         $this->registryMock->expects($this->once())
-            ->method('registry');
+            ->method('registry')
+            ->with('current_email_template');
         $this->form->getEmailTemplate();
     }
 } 
