@@ -10,19 +10,16 @@ define(
     [
         'jquery',
         'mage/storage',
-        '../model/customer',
-        'Magento_Ui/js/model/errorlist',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Ui/js/model/errorlist'
     ],
-    function($, storage, customer, errorlist, navigator) {
+    function($, storage, errorlist) {
         return function(login, password) {
             return storage.post(
                 'customer/ajax/login',
                 JSON.stringify({'username': login, 'password': password})
             ).done(function (response) {
                 if (response) {
-                    customer.setIsLoggedIn(true);
-                    navigator.toStep('billingAddress');
+                    location.reload();
                 } else {
                     errorlist.add('Server returned no response');
                 }

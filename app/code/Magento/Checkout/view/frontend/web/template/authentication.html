@@ -1,9 +1,9 @@
-<li id="opc-billing" class="section allow active">
+<li id="opc-billing" class="section allow active" data-bind="visible: isActive()">
     <div class="step-title" data-role="title">
         <span class="number" data-bind="text: stepNumber()"></span>
-        <h2 data-bind="text: $t('Authentication')"></h2>
+        <h2 data-bind="text: $t('Checkout Method')"></h2>
     </div>
-    <div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="fadeVisible: !isLoggedIn()">
+    <div id="checkout-step-authentication" class="step-content" data-role="content">
         <div class="login-wrapper">
             <div class="block block-guest" data-bind="visible: (isAllowedGuestCheckout || isRegistrationAllowed)">
                 <div class="block-title">

@@ -20,14 +20,14 @@ define(
         var stepName = 'shippingMethod';
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/shipping-method',
-                stepNumber: function(){
-                    return navigator.getStepNumber(stepName);
-                },
-                rates: shippingService.getRates(),
-                // Checkout step navigation
-                isVisible: navigator.isStepVisible(stepName),
+                template: 'Magento_Checkout/shipping-method'
             },
+            stepNumber: function(){
+                return navigator.getStepNumber(stepName);
+            },
+            rates: shippingService.getRates(),
+            // Checkout step navigation
+            isVisible: navigator.isStepVisible(stepName),
             quoteHasShippingAddress: function() {
                 return quote.isVirtual() || quote.getShippingAddress();
             },

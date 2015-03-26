@@ -200,10 +200,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getCart()
     {
-        if ($this->_customerSession->isLoggedIn()) {
-            return \Zend_Json::encode($this->getCartData());
-        }
-        return '{}';
+        return \Zend_Json::encode($this->getCartData());
     }
 
     /**
@@ -229,13 +226,10 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getCurrencySymbol()
     {
-        if ($this->_customerSession->isLoggedIn()) {
-            $currencyCode = $this->getCartData()->getQuoteCurrencyCode();
-            $currency = $this->localeCurrency->getCurrency($currencyCode);
-            $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
-            return \Zend_Json::encode(['data' => $symbol]);
-        }
-        return '{}';
+        $currencyCode = $this->getCartData()->getQuoteCurrencyCode();
+        $currency = $this->localeCurrency->getCurrency($currencyCode);
+        $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
+        return \Zend_Json::encode(['data' => $symbol]);
     }
 
     /**

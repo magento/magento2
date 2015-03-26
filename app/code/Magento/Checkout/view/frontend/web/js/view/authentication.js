@@ -20,11 +20,10 @@ define(
             stepNumber: function(){
                 return navigator.getStepNumber(stepName);
             },
-            isLoggedIn: customer.isLoggedIn(),
             isAllowedGuestCheckout: true,
             isRegistrationAllowed: true,
             isMethodRegister: false,
-            isCustomerMustBeLoged: false,
+            isCustomerMustBeLogged: false,
             registerUrl: '',
             forgotPasswordUrl: '',
             username: '',
@@ -34,6 +33,12 @@ define(
             },
             login: function() {
                 login(this.username, this.password);
+            },
+            isActive: function() {
+                if (customer.isLoggedIn()()) {
+                    navigator.setStepEnabled(stepName, false);
+                }
+                return !customer.isLoggedIn()();
             }
         });
     }

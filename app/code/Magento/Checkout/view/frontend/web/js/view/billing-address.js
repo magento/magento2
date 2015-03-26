@@ -16,21 +16,21 @@ define(
         var stepName = 'billingAddress';
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/billing-address',
-                stepNumber: function(){
-                    return navigator.getStepNumber(stepName);
-                },
-                billingAddresses: customer.getBillingAddressList(),
-                selectedBillingAddressId: "1",
-                isVisible: navigator.isStepVisible(stepName),
-                useForShipping: "1",
-                quoteIsVirtual: quote.isVirtual(),
-                billingAddressesOptionsText: function (item) {
-                    return item.getFullAddress();
-                },
-                submitBillingAddress: function () {
-                    selectBillingAddress(this.selectedBillingAddressId, this.useForShipping);
-                }
+                template: 'Magento_Checkout/billing-address'
+            },
+            stepNumber: function(){
+                return navigator.getStepNumber(stepName);
+            },
+            billingAddresses: customer.getBillingAddressList(),
+            selectedBillingAddressId: "1",
+            isVisible: navigator.isStepVisible(stepName),
+            useForShipping: "1",
+            quoteIsVirtual: quote.isVirtual(),
+            billingAddressesOptionsText: function (item) {
+                return item.getFullAddress();
+            },
+            submitBillingAddress: function () {
+                selectBillingAddress(this.selectedBillingAddressId, this.useForShipping);
             }
         });
     }

@@ -20,22 +20,22 @@ define(
         var itemsAfter = [];
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review',
-                stepNumber: function(){
-                    return navigator.getStepNumber(stepName);
-                },
-                quoteHasPaymentMethod: quote.getPaymentMethod(),
-                itemsBefore: itemsBefore,
-                itemsAfter: itemsAfter,
-                getItems: function() {
-                    return quote.getItems();
-                },
-                getAgreementsTemplate: function() {},
-                isVisible: navigator.isStepVisible(stepName),
-                cartUrl: url.build('checkout/cart/'),
-                placeOrder: function() {
-                    orderAction();
-                }
+                template: 'Magento_Checkout/review'
+            },
+            stepNumber: function(){
+                return navigator.getStepNumber(stepName);
+            },
+            quoteHasPaymentMethod: quote.getPaymentMethod(),
+            itemsBefore: itemsBefore,
+            itemsAfter: itemsAfter,
+            getItems: function() {
+                return quote.getItems();
+            },
+            getAgreementsTemplate: function() {},
+            isVisible: navigator.isStepVisible(stepName),
+            cartUrl: url.build('checkout/cart/'),
+            placeOrder: function() {
+                orderAction();
             }
         });
     }
