@@ -166,10 +166,8 @@ class Attribute extends Form
 
         $this->_rootElement->find($this->createNewVariationSet)->click();
         $newAttribute = $this->getEditAttributeForm();
-        $newAttribute->fill($attributeFixture);
-        $newAttribute->_rootElement->find($this->saveAttribute)->click();
-
-        $this->browser->switchToFrame();
+        $this->getEditAttributeForm()->fill($attributeFixture);
+        $this->getEditAttributeForm()->saveAttributeForm();
     }
 
     /**

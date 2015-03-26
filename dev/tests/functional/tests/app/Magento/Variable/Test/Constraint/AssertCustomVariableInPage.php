@@ -15,7 +15,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Add created variable to page and assert that Custom Variable is displayed on frontend page.
-*/
+ */
 class AssertCustomVariableInPage extends AbstractConstraint
 {
     /**

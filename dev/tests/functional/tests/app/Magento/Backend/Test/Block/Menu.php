@@ -90,11 +90,8 @@ class Menu extends Block
         }
         $subMenuSelector = sprintf($this->subMenu, $mainMenu);
         $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
-        $subMenuItem = $this->_rootElement->find($subMenuSelector, Locator::SELECTOR_XPATH)
-            ->find(sprintf($this->subMenuItem, $subMenu), Locator::SELECTOR_XPATH);
-        if (!$subMenuItem->isVisible()) {
-            throw new \Exception('Submenu item "' . $subMenu . '" is not visible in "' . $mainMenu . '"');
-        }
+        $subMenuItem = $subMenuSelector . sprintf($this->subMenuItem, $subMenu);
+        $this->waitForElementVisible($subMenuItem, Locator::SELECTOR_XPATH);
         $subMenuItem->click();
         $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
     }

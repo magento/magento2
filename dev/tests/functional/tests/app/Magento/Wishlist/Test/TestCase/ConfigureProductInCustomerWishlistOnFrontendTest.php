@@ -61,7 +61,7 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
 
         // Steps
         $this->cmsIndex->getLinksBlock()->openLink('My Wish List');
-        $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->clickEdit();
+        $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->clickEdit();
         $this->catalogProductView->getViewBlock()->addToWishlist($product);
 
         return ['product' => $product];

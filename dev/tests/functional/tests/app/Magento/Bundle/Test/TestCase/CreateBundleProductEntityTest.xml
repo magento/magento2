@@ -99,6 +99,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation5">
+            <data name="issue" xsi:type="string">Bug: MAGETWO-35342</data>
             <data name="description" xsi:type="string">Create fixed bundle with all types options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -163,7 +164,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm" />
-            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView" />
         </variation>

@@ -68,7 +68,7 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      */
     protected function addToCart(array $products, $qty)
     {
-        $productBlock = $wishlistIndex->getWishlistBlock()->getProductItemsBlock();
+        $productBlock = $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock();
         foreach ($products as $product) {
             $this->cmsIndex->getLinksBlock()->openLink("My Wish List");
             if ($qty != '-') {
