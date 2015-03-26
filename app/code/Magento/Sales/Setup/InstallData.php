@@ -50,6 +50,7 @@ class InstallData implements InstallDataInterface
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->sequenceBuilder = $sequenceBuilder;
+        $this->sequenceConfig = $sequenceConfig;
     }
 
     /**
