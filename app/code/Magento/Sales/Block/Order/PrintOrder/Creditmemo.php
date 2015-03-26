@@ -33,6 +33,7 @@ class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      */
     public function __construct(
