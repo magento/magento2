@@ -226,7 +226,7 @@ class Environment extends AbstractActionController
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
             if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
-                $error = false;
+                $error = true;
             }
 
             $message = sprintf(
