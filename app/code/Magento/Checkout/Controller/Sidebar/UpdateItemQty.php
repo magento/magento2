@@ -5,19 +5,15 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
-use Magento\Checkout\Controller\Cart;
-use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Checkout\Model\Session;
 use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Response\Http;
-use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Json\Helper\Data;
+use Psr\Log\LoggerInterface;
 
-class UpdateItemQty extends Cart
+class UpdateItemQty extends Action
 {
     /**
      * @var Sidebar
@@ -25,35 +21,31 @@ class UpdateItemQty extends Cart
     protected $sidebar;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var Data
+     */
+    protected $jsonHelper;
+
+    /**
      * @param Context $context
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Session $checkoutSession
-     * @param StoreManagerInterface $storeManager
-     * @param Validator $formKeyValidator
-     * @param CustomerCart $cart
-     * @param RedirectFactory $resultRedirectFactory
      * @param Sidebar $sidebar
+     * @param LoggerInterface $logger
+     * @param Data $jsonHelper
      */
     public function __construct(
         Context $context,
-        ScopeConfigInterface $scopeConfig,
-        Session $checkoutSession,
-        StoreManagerInterface $storeManager,
-        Validator $formKeyValidator,
-        CustomerCart $cart,
-        RedirectFactory $resultRedirectFactory,
-        Sidebar $sidebar
+        Sidebar $sidebar,
+        LoggerInterface $logger,
+        Data $jsonHelper
     ) {
         $this->sidebar = $sidebar;
-        parent::__construct(
-            $context,
-            $scopeConfig,
-            $checkoutSession,
-            $storeManager,
-            $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
-        );
+        $this->logger = $logger;
+        $this->jsonHelper = $jsonHelper;
+        parent::__construct($context);
     }
 
     /**
@@ -71,7 +63,7 @@ class UpdateItemQty extends Cart
         } catch (LocalizedException $e) {
             return $this->jsonResponse($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->logger->critical($e);
             return $this->jsonResponse($e->getMessage());
         }
     }
@@ -82,11 +74,10 @@ class UpdateItemQty extends Cart
      * @param string $error
      * @return Http
      */
-    public function jsonResponse($error = '')
+    protected function jsonResponse($error = '')
     {
         return $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
-                ->jsonEncode($this->sidebar->getResponseData($error))
+            $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
         );
     }
 }

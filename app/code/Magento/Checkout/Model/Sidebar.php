@@ -115,14 +115,8 @@ class Sidebar
      */
     public function updateQuoteItem($itemId, $itemQty)
     {
-        $item = $this->cart->updateItem($itemId, $this->normalize($itemQty));
-        if (is_string($item)) {
-            throw new LocalizedException(__($item));
-        }
-        if ($item->getHasError()) {
-            throw new LocalizedException(__($item->getMessage()));
-        }
-        $this->cart->save();
+        $itemData = [$itemId => ['qty' => $this->normalize($itemQty)]];
+        $this->cart->updateItems($itemData)->save();
         return $this;
     }
 
