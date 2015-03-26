@@ -962,11 +962,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Gets list of product group prices
      *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
      */
     public function getGroupPrices()
     {
-        return $this->getPriceModel()->getGroupPrices($this);
+        $groupPrices = $this->getPriceModel()->getGroupPrices($this);
+        if (empty($groupPrices)) {
+            $groupPrices = null;
+        }
+        return $groupPrices;
     }
 
     /**

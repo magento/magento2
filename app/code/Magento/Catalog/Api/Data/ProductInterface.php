@@ -233,7 +233,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     /**
      * Gets list of product group prices
      *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
      */
     public function getGroupPrices();
 
