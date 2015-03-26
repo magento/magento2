@@ -36,11 +36,6 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $metaFactory;
 
     /**
-     * @var DdlSequence
-     */
-    protected $ddlSequence;
-
-    /**
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
@@ -51,10 +46,8 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
         DatabaseContext $context,
         MetaFactory $metaFactory,
         ResourceProfile $resourceProfile,
-        DdlSequence $ddlSequence,
         $resourcePrefix = null
     ) {
-        $this->ddlSequence = $ddlSequence;
         $this->metaFactory = $metaFactory;
         $this->resourceProfile = $resourceProfile;
         parent::__construct($context, $resourcePrefix);
@@ -141,19 +134,5 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->setMetaId($object->getId());
         $this->resourceProfile->save($profile);
         return $this;
-    }
-
-    /**
-     * Shortcut for sequence creation
-     *
-     * @param string $sequenceName
-     * @param int $startNumber
-     * @return void
-     */
-    public function createSequence($sequenceName, $startNumber)
-    {
-        $this->_getWriteAdapter()->query(
-            $this->ddlSequence->getCreateSequenceDdl($sequenceName, $startNumber)
-        );
     }
 }

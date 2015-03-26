@@ -8,6 +8,8 @@ namespace Magento\SalesSequence\Model\Sequence;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceMetadata;
 use Magento\SalesSequence\Model\SequenceFactory;
+use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**
  * Class SequenceBuilder
@@ -38,6 +40,16 @@ class SequenceBuilder
      * @var MetaFactory
      */
     protected $metaFactory;
+
+    /**
+     * @var AppResource
+     */
+    protected $appResource;
+
+    /**
+     * @var DdlSequence
+     */
+    protected $ddlSequence;
 
     /**
      * List of required sequence attribute
@@ -76,15 +88,21 @@ class SequenceBuilder
      * @param ResourceMetadata $resourceMetadata
      * @param MetaFactory $metaFactory
      * @param ProfileFactory $profileFactory
+     * @param AppResource $appResource
+     * @param DdlSequence $ddlSequence
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
         MetaFactory $metaFactory,
-        ProfileFactory $profileFactory
+        ProfileFactory $profileFactory,
+        AppResource $appResource,
+        DdlSequence $ddlSequence
     ) {
         $this->resourceMetadata = $resourceMetadata;
         $this->metaFactory = $metaFactory;
         $this->profileFactory = $profileFactory;
+        $this->appResource = $appResource;
+        $this->ddlSequence = $ddlSequence;
         $this->data = array_flip($this->pattern);
     }
 
@@ -230,9 +248,8 @@ class SequenceBuilder
         $metadata->setHasDataChanges(true);
         try {
             $this->resourceMetadata->save($metadata);
-            $this->resourceMetadata->createSequence(
-                $this->data['sequence_table'],
-                $this->data['start_value']
+            $this->appResource->getConnection('write')->query(
+                $this->ddlSequence->getCreateSequenceDdl($this->data['sequence_table'], $this->data['start_value'])
             );
         } catch (Exception $e) {
             $this->resourceMetadata->delete($metadata);

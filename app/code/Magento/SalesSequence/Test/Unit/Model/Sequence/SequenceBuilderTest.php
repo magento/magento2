@@ -50,6 +50,11 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $sequence;
 
+    /**
+     * @var \Magento\Framework\App\Resource | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceMock;
+
     protected function setUp()
     {
         $this->adapter = $this->getMockForAbstractClass(
@@ -76,7 +81,14 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->sequence = $this->getMock(
-            '\Magento\Framework\DB\Ddl\Sequence',
+            'Magento\Framework\DB\Ddl\Sequence',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->resourceMock = $this->getMock(
+            'Magento\Framework\App\Resource',
             [],
             [],
             '',
@@ -111,7 +123,9 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
             [
                 'resourceMetadata' => $this->resourceSequenceMeta,
                 'metaFactory' => $this->metaFactory,
-                'profileFactory' => $this->profileFactory
+                'profileFactory' => $this->profileFactory,
+                'appResource' => $this->resourceMock,
+                'ddlSequence' => $this->sequence
             ]
         );
     }
@@ -181,7 +195,7 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             ])->willReturn($this->meta);
         $this->resourceSequenceMeta->expects($this->once())->method('save')->willReturn($this->meta);
-        $this->resourceSequenceMeta->expects($this->once())->method('createSequence')->with($sequenceTable);
+        $this->stepCreateSequence($sequenceTable, $startValue);
         $this->sequenceBuilder->setEntityType($entityType)
             ->setStoreId($storeId)
             ->setPrefix($prefix)
@@ -191,5 +205,25 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMaxValue($maxValue)
             ->setWarningValue($warningValue)
             ->create();
+    }
+
+    /**
+     * Step create sequence
+     *
+     * @param $sequenceName
+     * @param $startNumber
+     */
+    private function stepCreateSequence($sequenceName, $startNumber)
+    {
+        $sql = "some sql";
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->with('write')
+            ->willReturn($this->adapter);
+        $this->sequence->expects($this->once())
+            ->method('getCreateSequenceDdl')
+            ->with($sequenceName, $startNumber)
+            ->willReturn($sql);
+        $this->adapter->expects($this->once())->method('query')->with($sql);
     }
 }
