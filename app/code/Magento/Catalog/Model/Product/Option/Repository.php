@@ -103,8 +103,12 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $product = $this->productRepository->get($sku, true);
         if (!$option->getOptionId()) {
             $currentOptions = $product->getOptions();
+            if ($currentOptions == null) {
+                $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
+            } else {
+                $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
+            }
 
-            $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
             if (empty($newID)) {
                 throw new CouldNotSaveException(__('Could not save product option'));
             }
