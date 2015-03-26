@@ -6,32 +6,27 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig\DbConfig;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
-use Magento\Framework\Math\Random;
-use Magento\Framework\Module\ModuleList\DeploymentConfig;
-use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
+use Magento\Framework\Model\Resource\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Shell;
-use Magento\Framework\Shell\CommandRenderer;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Model\Resource\Db\Context;
+use Magento\Framework\Shell;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
-use Magento\Store\Model\Store;
 
 /**
  * Class Installer contains the logic to install Magento application.
