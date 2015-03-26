@@ -16,14 +16,17 @@
                 id="mass-select-checkbox"
                 class="admin__control-checkbox"
                 type="checkbox"
-                data-bind="checked: showAllSelected,
-                           event: { change: toggleSelectAll }">
+                data-bind="checked: allSelected,
+                           event: { change: toggle },
+                           enable: totalRecords,
+                           css: { '_indeterminate': isIndeterminate() }">
             <label for="mass-select-checkbox"></label>
             <button
                 class="action-multiselect-toggle"
                 data-toggle="dropdown"
                 data-bind="css: { '_active': menuVisible },
-                           click: toggleMenu">
+                           click: toggleMenu,
+                           enable: totalRecords">
                 <span data-bind="text: $t('Options')"></span>
             </button>
             <ul

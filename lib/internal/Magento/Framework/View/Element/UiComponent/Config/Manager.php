@@ -14,6 +14,8 @@ use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definit
 
 /**
  * Class Manager
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
 {
@@ -56,13 +58,6 @@ class Manager implements ManagerInterface
      * @var ArrayObject
      */
     protected $componentsPool;
-
-    /**
-     * The name of the root component
-     *
-     * @var string
-     */
-    protected $rootName;
 
     /**
      * Factory for ArrayObject
