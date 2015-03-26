@@ -16,6 +16,19 @@ use Magento\Framework\Escaper;
 class Textarea extends AbstractElement
 {
     /**
+     * default number of rows
+     *
+     * @var int
+     */
+    const DEFAULT_ROWS = 2;
+    /**
+     * default number of cols
+     *
+     * @var int
+     */
+    const DEFAULT_COLS = 15;
+
+    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
@@ -30,8 +43,12 @@ class Textarea extends AbstractElement
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('textarea');
         $this->setExtType('textarea');
-        $this->setRows(2);
-        $this->setCols(15);
+        if (!$this->getRows()) {
+            $this->setRows(self::DEFAULT_ROWS);
+        }
+        if (!$this->getCols()) {
+            $this->setCols(self::DEFAULT_COLS);
+        }
     }
 
     /**
