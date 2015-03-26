@@ -45,7 +45,7 @@ class Email extends \Magento\Backend\App\Action
     /**
      * Send email with shipment data to customer
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -66,7 +66,7 @@ class Email extends \Magento\Backend\App\Action
     /**
      * @inheritdoc
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function getDefaultRedirect()
     {

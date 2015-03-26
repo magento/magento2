@@ -52,7 +52,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * Role form submit action to save or create new role
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -104,7 +104,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * @inheritdoc
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function getDefaultRedirect()
     {

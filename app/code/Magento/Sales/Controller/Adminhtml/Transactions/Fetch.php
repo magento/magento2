@@ -7,14 +7,13 @@
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\Model\View\Result\Redirect;
 
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
      * Fetch transaction details action
      *
-     * @return Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -31,7 +30,7 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
     }
 
     /**
-     * @return Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function getDefaultRedirect()
     {

@@ -11,7 +11,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     /**
      * Delete action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -36,7 +36,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     /**
      * @inheritdoc
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function getDefaultRedirect()
     {

@@ -11,7 +11,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * Remove role action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
     public function execute()
     {
@@ -33,7 +33,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
     /**
      * @inheritdoc
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function getDefaultRedirect()
     {

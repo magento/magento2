@@ -64,12 +64,12 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirect;
 
@@ -140,9 +140,9 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
         $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $this->resultRedirect = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
         $this->resultRedirectFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
+            'Magento\Backend\Model\View\Result\RedirectFactory',
             ['create'],
             [],
             '',

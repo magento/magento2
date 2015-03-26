@@ -13,7 +13,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Delete Rate and Data
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|void
+     * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
     public function execute()
     {
@@ -38,7 +38,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * @inheritdoc
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function getDefaultRedirect()
     {

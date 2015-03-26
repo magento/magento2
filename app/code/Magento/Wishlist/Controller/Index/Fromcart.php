@@ -30,6 +30,8 @@ class Fromcart extends Action\Action implements IndexInterface
     }
 
     /**
+     * Add cart item to wishlist and remove from cart
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      * @throws \Magento\Framework\Exception\LocalizedException
