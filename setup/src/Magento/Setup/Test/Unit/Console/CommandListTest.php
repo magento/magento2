@@ -30,7 +30,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceManager->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Setup\Console\Command\ConfigCreateCommand');
+            ->with('Magento\Setup\Console\Command\ConfigSetCommand');
         $this->commandList->getCommands();
     }
 }
