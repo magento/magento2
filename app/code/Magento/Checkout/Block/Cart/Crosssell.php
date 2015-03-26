@@ -86,7 +86,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     public function getItems()
     {
         $items = $this->getData('items');
-        if (is_null($items)) {
+        if ($items === null) {
             $items = [];
             $ninProductIds = $this->_getCartProductIds();
             if ($ninProductIds) {
@@ -145,7 +145,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected function _getCartProductIds()
     {
         $ids = $this->getData('_cart_product_ids');
-        if (is_null($ids)) {
+        if ($ids === null) {
             $ids = [];
             foreach ($this->getQuote()->getAllItems() as $item) {
                 $product = $item->getProduct();

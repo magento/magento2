@@ -100,7 +100,7 @@ class ExtendsMapper extends \Magento\Config\Model\Config\Structure\AbstractMappe
 
         foreach ($pathParts as $part) {
             $result = isset($result[$part]) ? $result[$part] : null;
-            if (is_null($result)) {
+            if ($result === null) {
                 return $result;
             }
         }

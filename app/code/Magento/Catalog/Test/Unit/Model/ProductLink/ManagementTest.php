@@ -158,7 +158,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->collectionProviderMock->expects($this->once())
             ->method('getCollection')
             ->with($this->productMock, $linkType)
-            ->willThrowException(new NoSuchEntityException('Collection provider is not registered'));
+            ->willThrowException(new NoSuchEntityException(__('Collection provider is not registered')));
 
         $this->model->getLinkedItemsByType($productSku, $linkType);
     }

@@ -75,14 +75,14 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             $sample = $this->sampleFactory->create()->load($sampleId);
 
             if (!$sample->getId()) {
-                throw new NoSuchEntityException('There is no downloadable sample with provided ID.');
+                throw new NoSuchEntityException(__('There is no downloadable sample with provided ID.'));
             }
 
             if ($sample->getProductId() != $product->getId()) {
-                throw new InputException('Provided downloadable sample is not related to given product.');
+                throw new InputException(__('Provided downloadable sample is not related to given product.'));
             }
             if (!$this->contentValidator->isValid($sampleContent)) {
-                throw new InputException('Provided sample information is invalid.');
+                throw new InputException(__('Provided sample information is invalid.'));
             }
             if ($isGlobalScopeContent) {
                 $product->setStoreId(0);
@@ -91,7 +91,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             $title = $sampleContent->getTitle();
             if (empty($title)) {
                 if ($isGlobalScopeContent) {
-                    throw new InputException('Sample title cannot be empty.');
+                    throw new InputException(__('Sample title cannot be empty.'));
                 }
                 // use title from GLOBAL scope
                 $sample->setTitle(null);
@@ -108,19 +108,19 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         } else {
 
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
-                throw new InputException('Product type of the product must be \'downloadable\'.');
+                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
             }
             if (!$this->contentValidator->isValid($sampleContent)) {
-                throw new InputException('Provided sample information is invalid.');
+                throw new InputException(__('Provided sample information is invalid.'));
             }
 
             if (!in_array($sampleContent->getSampleType(), ['url', 'file'])) {
-                throw new InputException('Invalid sample type.');
+                throw new InputException(__('Invalid sample type.'));
             }
 
             $title = $sampleContent->getTitle();
             if (empty($title)) {
-                throw new InputException('Sample title cannot be empty.');
+                throw new InputException(__('Sample title cannot be empty.'));
             }
 
             $sampleData = [
@@ -159,7 +159,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         /** @var $sample \Magento\Downloadable\Model\Sample */
         $sample = $this->sampleFactory->create()->load($sampleId);
         if (!$sample->getId()) {
-            throw new NoSuchEntityException('There is no downloadable sample with provided ID.');
+            throw new NoSuchEntityException(__('There is no downloadable sample with provided ID.'));
         }
         $sample->delete();
         return true;

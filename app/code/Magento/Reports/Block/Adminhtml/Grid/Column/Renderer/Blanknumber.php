@@ -20,7 +20,7 @@ class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Num
     protected function _getValue(\Magento\Framework\Object $row)
     {
         $data = parent::_getValue($row);
-        if (!is_null($data)) {
+        if ($data !== null) {
             $value = $data * 1;
             return $value ? $value : ''; // fixed for showing blank cell in grid
             /**

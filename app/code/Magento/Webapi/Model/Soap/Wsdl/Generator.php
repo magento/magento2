@@ -50,9 +50,9 @@ class Generator
     protected $storeManager;
 
     /**
-     * @var array
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
      */
-    protected $customAttributeMapArray = null;
+    protected $customAttributeTypeLocator = null;
 
     /**
      * Initialize dependencies.
@@ -62,7 +62,7 @@ class Generator
      * @param \Magento\Framework\App\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Object $customAttributeMap
+     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
@@ -70,14 +70,14 @@ class Generator
         \Magento\Framework\App\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Object $customAttributeMap
+        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
         $this->_cache = $cache;
         $this->_typeProcessor = $typeProcessor;
         $this->storeManager = $storeManager;
-        $this->customAttributeMapArray = array_values($customAttributeMap->getData());
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
     }
 
     /**
@@ -178,7 +178,7 @@ class Generator
      */
     protected function addCustomAttributeTypes($wsdl)
     {
-        foreach ($this->customAttributeMapArray as $customAttributeClass) {
+        foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
             $typeName = $this->_typeProcessor->register($customAttributeClass);
             $wsdl->addComplexType($typeName);
         }

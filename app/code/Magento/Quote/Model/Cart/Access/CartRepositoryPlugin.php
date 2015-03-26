@@ -48,7 +48,7 @@ class CartRepositoryPlugin
         $cartId
     ) {
         if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
-            throw new AuthorizationException('Access denied');
+            throw new AuthorizationException(__('Access denied'));
         }
     }
 
@@ -67,7 +67,7 @@ class CartRepositoryPlugin
         SearchCriteria $searchCriteria
     ) {
         if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
-            throw new AuthorizationException('Access denied');
+            throw new AuthorizationException(__('Access denied'));
         }
     }
 }

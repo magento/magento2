@@ -9,7 +9,7 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -21,13 +21,13 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->resultRawFactory = $resultRawFactory;
@@ -48,7 +48,7 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
             return $this->resultRawFactory->create();
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData($result);
         }

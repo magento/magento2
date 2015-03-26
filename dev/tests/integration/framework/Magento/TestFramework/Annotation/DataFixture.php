@@ -158,6 +158,7 @@ class DataFixture
      * Execute single fixture script
      *
      * @param string|array $fixture
+     * @throws \Exception
      */
     protected function _applyOneFixture($fixture)
     {
@@ -168,7 +169,9 @@ class DataFixture
                 require $fixture;
             }
         } catch (\Exception $e) {
-            echo 'Error in fixture: ', json_encode($fixture), PHP_EOL, $e;
+            throw new \Exception(
+                sprintf("Error in fixture: %s.\n %s", json_encode($fixture), $e->getMessage())
+            );
         }
     }
 
@@ -180,18 +183,14 @@ class DataFixture
      */
     protected function _applyFixtures(array $fixtures)
     {
-        try {
-            /* Execute fixture scripts */
-            foreach ($fixtures as $oneFixture) {
-                /* Skip already applied fixtures */
-                if (in_array($oneFixture, $this->_appliedFixtures, true)) {
-                    continue;
-                }
-                $this->_applyOneFixture($oneFixture);
-                $this->_appliedFixtures[] = $oneFixture;
+        /* Execute fixture scripts */
+        foreach ($fixtures as $oneFixture) {
+            /* Skip already applied fixtures */
+            if (in_array($oneFixture, $this->_appliedFixtures, true)) {
+                continue;
             }
-        } catch (\PDOException $e) {
-            echo $e;
+            $this->_applyOneFixture($oneFixture);
+            $this->_appliedFixtures[] = $oneFixture;
         }
     }
 

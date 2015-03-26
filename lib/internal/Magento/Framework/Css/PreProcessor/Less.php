@@ -38,7 +38,7 @@ class Less implements PreProcessorInterface
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
         $chain->setContentType('less');
-        $tmpLessFile = $this->fileGenerator->generateLessFileTree($chain);
+        $tmpLessFile = $this->fileGenerator->generateFileTree($chain);
         $cssContent = $this->adapter->process($tmpLessFile);
         $cssTrimmedContent = trim($cssContent);
         if (!empty($cssTrimmedContent)) {

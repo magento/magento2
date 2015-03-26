@@ -20,7 +20,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $this->setData('product', $this->_coreRegistry->registry('product'));
         }
         $product = $this->getData('product');
-        if (is_null($product->getTypeInstance()->getStoreFilter($product))) {
+        if ($product->getTypeInstance()->getStoreFilter($product) === null) {
             $product->getTypeInstance()->setStoreFilter(
                 $this->_storeManager->getStore($product->getStoreId()),
                 $product

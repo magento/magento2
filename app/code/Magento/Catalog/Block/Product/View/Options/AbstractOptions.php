@@ -162,7 +162,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      */
     public function getPrice($price, $includingTax = null)
     {
-        if (!is_null($includingTax)) {
+        if ($includingTax !== null) {
             $price = $this->_catalogHelper->getTaxPrice($this->getProduct(), $price, true);
         } else {
             $price = $this->_catalogHelper->getTaxPrice($this->getProduct(), $price);

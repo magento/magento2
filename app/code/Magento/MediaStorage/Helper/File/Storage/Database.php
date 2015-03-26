@@ -101,7 +101,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getStorageDatabaseModel()
     {
-        if (is_null($this->_databaseModel)) {
+        if ($this->_databaseModel === null) {
             $this->_databaseModel = $this->_dbStorageFactory->create();
         }
 
@@ -125,7 +125,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getResourceStorageModel()
     {
-        if (is_null($this->_resourceModel)) {
+        if ($this->_resourceModel === null) {
             $this->_resourceModel = $this->getStorageDatabaseModel()->getResource();
         }
         return $this->_resourceModel;

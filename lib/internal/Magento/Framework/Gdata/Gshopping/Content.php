@@ -232,7 +232,7 @@ class Content extends \Zend_Gdata
      */
     public function debugData($debugData)
     {
-        if ($this->_debug && !is_null($this->_logAdapter)) {
+        if ($this->_debug && $this->_logAdapter !== null) {
             $method = $this->_logAdapterLogAction;
             $this->_logAdapter->{$method}($debugData);
         }

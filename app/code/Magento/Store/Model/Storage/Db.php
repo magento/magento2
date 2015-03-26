@@ -416,7 +416,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      */
     public function getGroup($groupId = null)
     {
-        if (is_null($groupId)) {
+        if ($groupId === null) {
             $groupId = $this->getStore()->getGroupId();
         } elseif ($groupId instanceof Group) {
             return $groupId;
@@ -495,7 +495,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      */
     public function clearWebsiteCache($websiteId = null)
     {
-        if (is_null($websiteId)) {
+        if ($websiteId === null) {
             $websiteId = $this->getStore()->getWebsiteId();
         } elseif ($websiteId instanceof Website) {
             $websiteId = $websiteId->getId();

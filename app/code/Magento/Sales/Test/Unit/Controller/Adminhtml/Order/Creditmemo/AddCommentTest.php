@@ -51,7 +51,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonFactoryMock;
 
@@ -66,7 +66,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultJsonMock;
 
@@ -75,6 +75,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRawMock;
 
+    /**
+     * SetUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
@@ -112,7 +117,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+        $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -123,7 +128,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRawMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
@@ -144,10 +149,15 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute module exception
+     *
+     * @return void
+     */
     public function testExecuteModelException()
     {
         $message = 'Model exception';
-        $e = new \Magento\Framework\Exception\LocalizedException($message);
+        $e = new \Magento\Framework\Exception\LocalizedException(__($message));
         $response = ['error' => true, 'message' => $message];
 
         $this->requestMock->expects($this->any())
@@ -162,11 +172,16 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Framework\Controller\Result\JSON',
+            'Magento\Framework\Controller\Result\Json',
             $this->controller->execute()
         );
     }
 
+    /**
+     * Test execute exception
+     *
+     * @return void
+     */
     public function testExecuteException()
     {
         $message = 'Cannot add new comment.';
@@ -185,11 +200,16 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Framework\Controller\Result\JSON',
+            'Magento\Framework\Controller\Result\Json',
             $this->controller->execute()
         );
     }
 
+    /**
+     * Test execute no comment
+     *
+     * @return void
+     */
     public function testExecuteNoComment()
     {
         $message = 'The Comment Text field cannot be empty.';
@@ -209,11 +229,16 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Framework\Controller\Result\JSON',
+            'Magento\Framework\Controller\Result\Json',
             $this->controller->execute()
         );
     }
 
+    /**
+     * Test execute
+     *
+     * @return void
+     */
     public function testExecute()
     {
         $comment = 'Test comment';

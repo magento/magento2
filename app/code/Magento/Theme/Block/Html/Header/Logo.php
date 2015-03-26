@@ -94,7 +94,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         $logoUrl = $this->_urlBuilder
                 ->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
 
-        if (!is_null($storeLogoPath) && $this->_isFile($path)) {
+        if ($storeLogoPath !== null && $this->_isFile($path)) {
             $url = $logoUrl;
         } elseif ($this->getLogoFile()) {
             $url = $this->getViewFileUrl($this->getLogoFile());

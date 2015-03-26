@@ -117,7 +117,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     public function getCustomerSelectorDisplay()
     {
         $customerId = $this->getCustomerId();
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             return 'block';
         }
         return 'none';
@@ -132,7 +132,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $storeId = $this->getStoreId();
         $customerId = $this->getCustomerId();
-        if (!is_null($customerId) && !$storeId) {
+        if ($customerId !== null && !$storeId) {
             return 'block';
         }
         return 'none';
@@ -147,7 +147,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $storeId = $this->getStoreId();
         $customerId = $this->getCustomerId();
-        if (!is_null($customerId) && $storeId) {
+        if ($customerId !== null && $storeId) {
             return 'block';
         }
         return 'none';
@@ -178,7 +178,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 );
             }
         }
-        if (!is_null($this->getStoreId())) {
+        if ($this->getStoreId() !== null) {
             $data['store_id'] = $this->getStoreId();
             $currency = $this->_localeCurrency->getCurrency($this->getStore()->getCurrentCurrencyCode());
             $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();

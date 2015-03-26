@@ -31,13 +31,13 @@ class Multishipping
 
     /**
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $subject
-     * @param array $methods
+     * @param array|null $methods
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSetShippingMethods(
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $subject,
-        array $methods
+        $methods
     ) {
         $giftMessages = $this->request->getParam('giftmessage');
         $quote = $subject->getQuote();

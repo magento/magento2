@@ -472,7 +472,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['product_entity'])) {
             $this->_productEntity = $data['product_entity'];
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Option entity must have a parent product entity.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Option entity must have a parent product entity.')
+            );
         }
         if (isset($data['collection_by_pages_iterator'])) {
             $this->_byPagesIterator = $data['collection_by_pages_iterator'];

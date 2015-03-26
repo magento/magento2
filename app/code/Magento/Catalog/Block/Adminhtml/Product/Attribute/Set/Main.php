@@ -350,7 +350,7 @@ class Main extends \Magento\Backend\Block\Template
     public function getIsCurrentSetDefault()
     {
         $isDefault = $this->getData('is_current_set_default');
-        if (is_null($isDefault)) {
+        if ($isDefault === null) {
             $defaultSetId = $this->_typeFactory->create()->load(
                 $this->_coreRegistry->registry('entityType')
             )->getDefaultAttributeSetId();

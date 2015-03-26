@@ -75,7 +75,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         try {
             $this->attributeSetResource->save($attributeSet);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException('There was an error saving attribute set.');
+            throw new CouldNotSaveException(__('There was an error saving attribute set.'));
         }
         return $attributeSet;
     }
@@ -91,7 +91,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         /** The only possible/meaningful search criteria for attribute set is entity type code */
         $entityTypeCode = $this->getEntityTypeCode($searchCriteria);
 
-        if (!is_null($entityTypeCode)) {
+        if ($entityTypeCode !== null) {
             $collection->setEntityTypeFilter($this->eavConfig->getEntityType($entityTypeCode)->getId());
         }
 
@@ -146,9 +146,9 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         try {
             $this->attributeSetResource->delete($attributeSet);
         } catch (\Magento\Framework\Exception\StateException $exception) {
-            throw new CouldNotDeleteException('Default attribute set can not be deleted');
+            throw new CouldNotDeleteException(__('Default attribute set can not be deleted'));
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException('There was an error deleting attribute set.');
+            throw new CouldNotDeleteException(__('There was an error deleting attribute set.'));
         }
         return true;
     }
